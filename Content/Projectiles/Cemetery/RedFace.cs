@@ -1,0 +1,76 @@
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.Audio;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+
+using Spooky.Core;
+
+namespace Spooky.Content.Projectiles.Cemetery
+{
+    public class RedFace : ModProjectile
+    {
+        public int SaveDirection;
+        public float SaveRotation;
+
+        public override void SetDefaults()
+        {
+            Projectile.width = 88;
+			Projectile.height = 56;
+            Projectile.localNPCHitCooldown = 30;
+            Projectile.usesLocalNPCImmunity = true;
+			Projectile.friendly = true;
+			Projectile.tileCollide = false;
+            Projectile.timeLeft = 1000;
+            Projectile.penetrate = 3;
+            Projectile.alpha = 255;
+            Projectile.aiStyle = -1;
+        }
+
+        public override void AI()
+        {   
+            NPC target = Main.npc[(int)Projectile.ai[1]];
+
+            Projectile.ai[0]++;
+
+            if (Projectile.ai[0] < 30)
+            {
+                Vector2 vector = new Vector2(Projectile.Center.X, Projectile.Center.Y);
+                float RotateX = target.Center.X - vector.X;
+                float RotateY = target.Center.Y - vector.Y;
+                Projectile.rotation = (float)Math.Atan2((double)RotateY, (double)RotateX) + 4.71f;
+
+                Projectile.direction = Projectile.spriteDirection = target.Center.X < Projectile.Center.X ? -1 : 1;
+
+                Projectile.alpha -= 10;
+
+                if (Projectile.alpha <= 0)
+                {
+                    Projectile.alpha = 0;
+                }
+            }
+    
+            if (Projectile.ai[0] == 30)
+            {
+                SaveDirection = Projectile.direction;
+                SaveRotation = Projectile.rotation;
+
+                double Velocity = Math.Atan2(target.Center.Y - Projectile.Center.Y, target.Center.X - Projectile.Center.X);
+                Projectile.velocity = new Vector2((float)Math.Cos(Velocity), (float)Math.Sin(Velocity)) * 25;
+            }
+
+            if (Projectile.ai[0] > 30)
+            {
+                Projectile.alpha += 20;
+
+                if (Projectile.alpha >= 255)
+                {
+                    Projectile.Kill();
+                }
+            }
+        }
+    }
+}

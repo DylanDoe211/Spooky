@@ -1,0 +1,1905 @@
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
+using Terraria.DataStructures;
+using Terraria.GameInput;
+using Terraria.Localization;
+using Terraria.Audio;
+using ReLogic.Content;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+
+using Spooky.Content.Biomes;
+using Spooky.Content.Buffs;
+using Spooky.Content.Buffs.Debuff;
+using Spooky.Content.Dusts;
+using Spooky.Content.Items.BossBags.Accessory;
+using Spooky.Content.Items.Fishing;
+using Spooky.Content.Items.Fishing.Crate;
+using Spooky.Content.Items.Pets;
+using Spooky.Content.Items.SpookyBiome.Misc;
+using Spooky.Content.Items.SpiderCave;
+using Spooky.Content.Items.SpookyHell.Sentient;
+using Spooky.Content.NPCs.Boss.SpookFishron;
+using Spooky.Content.NPCs.SpookyHell;
+using Spooky.Content.Projectiles.Catacomb;
+using Spooky.Content.Projectiles.Cemetery;
+using Spooky.Content.Projectiles.Minibiomes.Christmas;
+using Spooky.Content.Projectiles.Minibiomes.Desert;
+using Spooky.Content.Projectiles.Minibiomes.Ocean;
+using Spooky.Content.Projectiles.Minibiomes.Vegetable;
+using Spooky.Content.Projectiles.Sentient;
+using Spooky.Content.Projectiles.SpiderCave;
+using Spooky.Content.Projectiles.SpookyBiome;
+using Spooky.Content.Projectiles.SpookyHell;
+using Spooky.Content.Tiles.Catacomb.Furniture;
+using Spooky.Content.Tiles.SpookyBiome.Furniture;
+using Spooky.Content.Tiles.SpookyHell;
+using Spooky.Content.Tiles.SpookyHell.Tree;
+using Spooky.Content.Tiles.SpookyHell.Furniture;
+
+namespace Spooky.Core
+{
+    public class SpookyPlayer : ModPlayer
+    {
+		//armor related stuff
+        public bool GourdSet = false;
+        public bool RootSet = false;
+        public bool SpiderSet = false;
+        public bool SpiderSpeed = false;
+		public bool BroccoliSet = false;
+		public bool GoldrushSet = false;
+		public bool SharkBoneSet = false;
+		public bool YuletideSet = false;
+		public bool HorsemanSet = false;
+        public bool EyeArmorSet = false;
+        public bool FlowerArmorSet = false;
+        public bool GoreArmorEye = false;
+        public bool GoreArmorMouth = false;
+        public bool HazmatSet = false;
+        public bool MortarSet = false;
+        public bool SporeShroomSet = false;
+        public bool SporeShroomHitEffect = false;
+        public bool TarCactusSet = false;
+        public bool HazmatMinionCrit = false;
+        public bool DrawHazmatBack = false;
+        public bool SentientCap = false;
+
+        //accessories
+        public bool BustlingGlowshroom = false;
+        public bool CandyBag = false;
+		public bool CandyBagJustHit = false;
+        public bool MagicCandle = false;
+        public bool SkullAmulet = false;
+        public bool CrossCharmShield = false;
+        public bool PandoraChalice = false;
+        public bool PandoraCross = false;
+        public bool PandoraCuffs = false;
+        public bool HasSpawnedCuffs = false;
+        public bool PandoraRosary = false;
+        public bool AnalogHorrorTape = false;
+        public bool CreepyPasta = false;
+        public bool BackroomsCorpse = false;
+        public bool CarnisFlavorEnhancer = false;
+        public bool GeminiEntertainmentGame = false;
+        public bool HerobrineAltar = false;
+        public bool Local58Telescope = false;
+        public bool MandelaCatalogueTV = false;
+        public bool MonumentMythosPyramid = false;
+        public bool PolybiusArcadeGame = false;
+        public bool RedGodzillaCartridge = false;
+        public bool RedMistClarinet = false;
+        public bool SlendermanPage = false;
+        public bool SmileDogPicture = false;
+		public bool GiantEar = false;
+		public bool GooChompers = false;
+		public bool PeptoStomach = false;
+		public bool SmokerLung = false;
+		public bool StonedKidney = false;
+		public bool VeinChain = false;
+		public bool GhostBookBlue = false;
+		public bool GhostBookGreen = false;
+		public bool GhostBookRed = false;
+		public bool MagicEyeOrb = false;
+		public bool SewingThread = false;
+		public bool StitchedCloak = false;
+        public bool AutumnLeaf = false;
+        public bool EggCarton = false;
+        public bool KrampusBricks = false;
+        public bool KrampusChimney = false;
+        public bool KrampusResolution = false;
+        public bool KrampusShapeBox = false;
+        public bool HallucigeniaSpine = false;
+
+		//expert accessories
+		public bool FlyAmulet = false;
+        public bool SpiritAmulet = false;
+        public bool MocoNose = false;
+        public bool DaffodilHairpin = false;
+        public bool HunterScarf = false;
+        public bool OrroboroEmbyro = false;
+        public bool FlowerPotShoe = false;
+
+        //pets
+        public bool ColumboPet = false;
+        public bool ColumbonePet = false;
+        public bool ColumbooPet = false;
+        public bool ColumborangePet = false;
+        public bool CatPet = false;
+        public bool FlyPet = false;
+        public bool GhostPet = false;
+        public bool InchwormPet = false;
+        public bool PandoraBeanPet = false;
+        public bool PetscopPet = false;
+        public bool PetscopMarvinPet = false;
+        public bool PetscopTiaraPet = false;
+        public bool ShroomHopperPet = false;
+        public bool SkullEmojiPet = false;
+        public bool SkullGoopPet = false;
+        public bool ValleyNautilusPet = false;
+        public bool RotGourdPet = false;
+        public bool SpookySpiritPet = false;
+        public bool StickyEyePet = false;
+        public bool MocoPet = false;
+        public bool BigBonePet = false;
+        public bool OrroboroPet = false;
+        public bool SinisterSnailPet = false;
+        public bool BeePet = false;
+        public bool FuzzBatPet  = false;
+        public bool PuttyPet = false;
+        public bool RatPet = false;
+        public bool ZombieCultistPet = false;
+        public bool LongisquamaPet = false;
+        public bool ChalupoPet = false;
+        public bool MushroomFriendPet = false;
+        public bool SludgePet = false;
+
+        //misc bools
+        public bool EatenByGooSlug = false;
+        public bool RaveyardGuardsHostile = false;
+        public bool WhipSpiderAggression = false;
+        public bool SpiderGrottoCompass = false;
+        public bool EyeValleyCompass = false;
+        public bool NoseCultistDisguise1 = false;
+		public bool NoseCultistDisguise2 = false;
+		public bool NoseBlessingBuff = false;
+        public bool DisablePlayerControls = false;
+		public bool AlsoDisableEscapeKey = false;
+		public bool RaveyardMonolithEquipped = false;
+		public bool SporeMonolithEquipped = false;
+
+		//misc timers
+		public float SpiderStealthAlpha = 0f;
+		public float YuletideFireAlpha = 0f;
+		public float StonedKidneyCharge = 0f;
+        public float KrampusChimneyCharge = 0f;
+		public int SpiderSpeedTimer = 0;
+        public int FlySpawnTimer = 0;
+        public int SkullFrenzyCharge = 0;
+        public int MocoBoogerCharge = 0;
+        public int SoulDrainCharge = 0;
+        public int CrossSoundTimer = 0;
+        public int PandoraCuffTimer = 0;
+        public int RosaryHandTimer = 0;
+        public int BoneWispTimer = 0;
+        public int BustlingHealTimer = 0;
+        public int GizaGlassHits = 0;
+        public int SlendermanPageDelay = 0;
+        public int CarnisSporeSpawnTimer = 0;
+        public int RedMistNoteSpawnDelay = 0;
+        public int RedGodzillaCartridgeHits = 0;
+        public int GooSlugEatCooldown = 0;
+		public int RootHealCooldown = 0;
+        public int CandyBagCooldown = 0;
+        public int DaffodilHairpinTimer = 0;
+		public int PotionSicknessCranberryTimer = 0;
+		public int PotionSicknessLatteTimer = 0;
+        public int SpearfishChargeCooldown = 0;
+        public int KrampusResolutionTimer = 0;
+        public int KrampusChimneyProjTimer = 0;
+		public int YuletideFireTimer = 0;
+        public int KrampusShapeBuffStacks = 0;
+
+		//dashing stuff
+		public const int dashDown = 0;
+		public const int dashUp = 1;
+		public const int dashRight = 2;
+		public const int dashLeft = 3;
+		public int dashCooldown = 30;
+		public int dashDuration = 15;
+		public float dashVelocityY = 22f;
+		public float dashVelocityX = 22f;
+		public int dashDir = -1;
+		public int dashDelay = 0;
+		public int dashTimer = 0;
+
+		public Vector2 MocoNoseUIPos = new Vector2(Main.screenWidth / 2 * Main.UIScale, Main.screenHeight / 1.75f * Main.UIScale);
+		public Vector2 KidneyUIPos = new Vector2(Main.screenWidth / 2 * Main.UIScale, Main.screenHeight / 1.75f * Main.UIScale);
+        public Vector2 ChimneyUIPos = new Vector2(Main.screenWidth / 2 * Main.UIScale, Main.screenHeight / 1.75f * Main.UIScale);
+
+		private static Asset<Texture2D> SentientLeafBlowerBackTex;
+        private static Asset<Texture2D> MiteVacuumBackTex;
+        private static Asset<Texture2D> HazmatArmorBackTex;
+
+		//sounds
+		public static readonly SoundStyle CrossBassSound = new("Spooky/Content/Sounds/CrossBass", SoundType.Sound) { Volume = 0.7f };
+        public static readonly SoundStyle ClarinetSound = new("Spooky/Content/Sounds/Clarinet", SoundType.Sound) { Volume = 0.7f, PitchVariance = 0.6f };
+        public static readonly SoundStyle CapSound1 = new("Spooky/Content/Sounds/SentientCap1", SoundType.Sound);
+        public static readonly SoundStyle CapSound2 = new("Spooky/Content/Sounds/SentientCap2", SoundType.Sound);
+        public static readonly SoundStyle CapSound3 = new("Spooky/Content/Sounds/SentientCap3", SoundType.Sound);
+
+		public override void SaveData(TagCompound tag)
+		{
+			tag[nameof(MocoNoseUIPos)] = MocoNoseUIPos;
+			tag[nameof(KidneyUIPos)] = KidneyUIPos;
+            tag[nameof(ChimneyUIPos)] = ChimneyUIPos;
+		}
+
+		public override void LoadData(TagCompound tag)
+		{
+			if (tag.ContainsKey(nameof(MocoNoseUIPos)))
+			{
+				MocoNoseUIPos = tag.Get<Vector2>(nameof(MocoNoseUIPos));
+			}
+            
+			if (tag.ContainsKey(nameof(KidneyUIPos)))
+			{
+				KidneyUIPos = tag.Get<Vector2>(nameof(KidneyUIPos));
+			}
+
+            if (tag.ContainsKey(nameof(ChimneyUIPos)))
+			{
+				ChimneyUIPos = tag.Get<Vector2>(nameof(ChimneyUIPos));
+			}
+		}
+
+		public override void OnEnterWorld()
+        {
+            //un-hide the sun if you enter the world with the spooky mod menu enabled since it hides the sun offscreen
+            if (ModContent.GetInstance<SpookyMenu>().IsSelected)
+            {
+                Main.sunModY = 0;
+            }
+        }
+
+        public override void ResetEffects()
+        {
+            //armors
+            GourdSet = false;
+            RootSet = false;
+            SpiderSet = false;
+            SpiderSpeed = false;
+			BroccoliSet = false;
+            SharkBoneSet = false;
+			YuletideSet = false;
+			GoldrushSet = false;
+			HorsemanSet = false;
+            EyeArmorSet = false;
+            FlowerArmorSet = false;
+            GoreArmorEye = false;
+            GoreArmorMouth = false;
+            HazmatSet = false;
+            MortarSet = false;
+            SporeShroomSet = false;
+            SporeShroomHitEffect = false;
+            TarCactusSet = false;
+            HazmatMinionCrit = false;
+            DrawHazmatBack = false;
+            SentientCap = false;
+
+            //accessories
+            BustlingGlowshroom = false;
+            CandyBag = false;
+			MagicCandle = false;
+            SkullAmulet = false;
+            CrossCharmShield = false;
+            PandoraChalice = false;
+            PandoraCross = false;
+            PandoraCuffs = false;
+            PandoraRosary = false;
+            AnalogHorrorTape = false;
+            CreepyPasta = false;
+            BackroomsCorpse = false;
+            CarnisFlavorEnhancer = false;
+            GeminiEntertainmentGame = false;
+            HerobrineAltar = false;
+            Local58Telescope = false;
+            MandelaCatalogueTV = false;
+            MonumentMythosPyramid = false;
+            PolybiusArcadeGame = false;
+            RedGodzillaCartridge = false;
+            RedMistClarinet = false;
+            SlendermanPage = false;
+            SmileDogPicture = false;
+			GiantEar = false;
+			GooChompers = false;
+			PeptoStomach = false;
+			SmokerLung = false;
+			StonedKidney = false;
+			VeinChain = false;
+			GhostBookBlue = false;
+			GhostBookGreen = false;
+			GhostBookRed = false;
+			MagicEyeOrb = false;
+			SewingThread = false;
+			StitchedCloak = false;
+            AutumnLeaf = false;
+            EggCarton = false;
+            KrampusBricks = false;
+            KrampusChimney = false;
+            KrampusResolution = false;
+            KrampusShapeBox = false;
+            HallucigeniaSpine = false;
+
+			//expert accessories
+			FlyAmulet = false;
+            SpiritAmulet = false;
+            MocoNose = false;
+            DaffodilHairpin = false;
+            HunterScarf = false;
+            OrroboroEmbyro = false;
+            FlowerPotShoe = false;
+
+            //pets
+            ColumboPet = false;
+            ColumbonePet = false;
+            ColumbooPet = false;
+            ColumborangePet = false;
+            CatPet = false;
+            FlyPet = false;
+            GhostPet = false;
+            InchwormPet = false;
+            PandoraBeanPet = false;
+            PetscopPet = false;
+            PetscopMarvinPet = false;
+            PetscopTiaraPet = false;
+            ShroomHopperPet = false;
+            SkullEmojiPet = false;
+            SkullGoopPet = false;
+            ValleyNautilusPet = false;
+            RotGourdPet = false;
+            SpookySpiritPet = false;
+            StickyEyePet = false;
+            MocoPet = false;
+            BigBonePet = false;
+            OrroboroPet = false;
+            SinisterSnailPet = false;
+            BeePet = false;
+            FuzzBatPet  = false;
+            PuttyPet = false;
+            RatPet = false;
+            ZombieCultistPet = false;
+            LongisquamaPet = false;
+            ChalupoPet = false;
+            MushroomFriendPet = false;
+            SludgePet = false;
+
+            //misc bools
+            WhipSpiderAggression = false;
+            EatenByGooSlug = false;
+            SpiderGrottoCompass = false;
+            EyeValleyCompass = false;
+            NoseCultistDisguise1 = false;
+			NoseCultistDisguise2 = false;
+			NoseBlessingBuff = false;
+            DisablePlayerControls = false;
+			AlsoDisableEscapeKey = false;
+			RaveyardMonolithEquipped = false;
+			SporeMonolithEquipped = false;
+
+			//dashing stuff
+			if (Player.controlUp && Player.releaseUp && Player.doubleTapCardinalTimer[dashUp] < 15)
+			{
+				dashDir = dashUp;
+			}
+			else if (Player.controlDown && Player.releaseDown && Player.doubleTapCardinalTimer[dashDown] < 15)
+			{
+				dashDir = dashDown;
+			}
+			else if (Player.controlRight && Player.releaseRight && Player.doubleTapCardinalTimer[dashRight] < 15)
+			{
+				dashDir = dashRight;
+			}
+			else if (Player.controlLeft && Player.releaseLeft && Player.doubleTapCardinalTimer[dashLeft] < 15)
+			{
+				dashDir = dashLeft;
+			}
+			else
+			{
+                if (dashTimer <= 0)
+                {
+				    dashDir = -1;
+                }
+			}
+		}
+
+		public override void ArmorSetBonusActivated()
+		{
+			//flower armor setbonus
+			if (FlowerArmorSet && !Player.HasBuff(ModContent.BuffType<FlowerArmorCooldown>()))
+			{
+				SoundEngine.PlaySound(SoundID.DD2_BookStaffCast, Player.Center);
+
+				for (int numProjectiles = 0; numProjectiles < 12; numProjectiles++)
+				{
+					Projectile.NewProjectile(null, Player.Center.X + Main.rand.Next(-30, 30),
+					Player.Center.Y + Main.rand.Next(-30, 30), 0, 0, ModContent.ProjectileType<FlowerArmorPollen>(), 55, 2f, Player.whoAmI);
+				}
+
+				Player.AddBuff(ModContent.BuffType<FlowerArmorCooldown>(), 1800);
+			}
+
+			//spider stealth
+			if (SpiderSet && !Player.HasBuff(ModContent.BuffType<SpiderStealthCooldown>()))
+			{
+				Player.AddBuff(ModContent.BuffType<SpiderArmorStealth>(), 600);
+				Player.AddBuff(ModContent.BuffType<SpiderStealthCooldown>(), 7200);
+			}
+
+			//yuletide combustion
+			if (YuletideSet && YuletideFireTimer <= 0 && !Player.HasBuff(ModContent.BuffType<YuletideArmorCooldown>()))
+			{
+				YuletideFireTimer = 300;
+			}
+		}
+
+		public override void ProcessTriggers(TriggersSet triggersSet)
+        {
+            //do not allow hotkeys to do anything if you are dead
+            if (Player.dead)
+            {
+                return;
+            }
+
+            //handle everything when the accessory hotkey is pressed
+            if (Spooky.AccessoryHotkey.JustPressed && Main.myPlayer == Player.whoAmI)
+            {
+                //create sound with the pandora cross
+                if (PandoraCross && !Player.HasBuff(ModContent.BuffType<PandoraCrossCooldown>()))
+                {
+                    SoundEngine.PlaySound(CrossBassSound, Player.Center);
+
+                    CrossSoundTimer = 300;
+                    Player.AddBuff(ModContent.BuffType<PandoraCrossCooldown>(), 2400);
+                }
+
+                //spawn alternate with the analog tv
+                if (MandelaCatalogueTV && !Player.HasBuff(ModContent.BuffType<AlternateCooldown>()))
+                {
+                    Projectile.NewProjectile(null, Player.Center.X, Player.Center.Y, 0f, 0f, ModContent.ProjectileType<Alternate>(), 0, 0f, Player.whoAmI, 0f, 0f);
+                    Player.AddBuff(ModContent.BuffType<AlternateCooldown>(), 3600);
+                }
+
+                //spawn lightning with the herobrine altar
+                if (HerobrineAltar && !Player.HasBuff(ModContent.BuffType<HerobrineAltarCooldown>()))
+                {
+                    SoundEngine.PlaySound(SoundID.Thunder with { Pitch = -0.5f }, Player.Center);
+
+					Screenshake.ShakeScreenWithIntensity(Player.Center, 10f, 100f);
+
+					Vector2 ShootSpeed = new Vector2(Player.Center.X, Player.Center.Y - Main.screenHeight) - Main.MouseWorld;
+                    ShootSpeed.Normalize();
+                    ShootSpeed *= -100f;
+
+                    //each lighting bolt is set to deal 1 damage, the actual final damage is handled in the projectile itself
+                    Projectile.NewProjectile(null, Player.Center.X, Player.Center.Y - Main.screenHeight, ShootSpeed.X, ShootSpeed.Y,
+                    ModContent.ProjectileType<HerobrineLightning>(), 1, 0f, Player.whoAmI, ShootSpeed.ToRotation(), 100);
+
+                    Main.NewLightning();
+
+                    Player.AddBuff(ModContent.BuffType<HerobrineAltarCooldown>(), 7200);
+                }
+
+				//spawn a stationary smoke cloud with the smoker lung
+				if (SmokerLung && !Player.HasBuff(ModContent.BuffType<SmokerLungCooldown>()))
+				{
+					SoundEngine.PlaySound(SoundID.NPCHit27 with { Pitch = -1f }, Player.Center);
+
+					Projectile.NewProjectile(null, Player.Center, Vector2.Zero, ModContent.ProjectileType<CoughSmokeCloud>(), 50, 0f, Player.whoAmI);
+
+					Player.AddBuff(ModContent.BuffType<SmokerLungCooldown>(), 3600);
+				}
+
+                //spawn lingering bricks with the krampus lego bricks
+				if (KrampusBricks && !Player.HasBuff(ModContent.BuffType<KrampusBricksCooldown>()))
+				{
+                    for (int numProjectiles = -2; numProjectiles <= 2; numProjectiles++)
+                    {
+                        Projectile.NewProjectile(null, Player.Center, new Vector2(numProjectiles * 2, Main.rand.NextFloat(-7f, -4f)),
+                        ModContent.ProjectileType<KrampusBricksProj>(), 25, 0f, Player.whoAmI, ai1: Main.rand.Next(0, 4));
+                    }
+
+					Player.AddBuff(ModContent.BuffType<KrampusBricksCooldown>(), 900);
+				}
+
+                if (KrampusChimney && KrampusChimneyCharge >= 10f && KrampusChimneyProjTimer <= 0)
+                {
+                    KrampusChimneyProjTimer = 120;
+                }
+            }
+        }
+
+        public override void GetHealMana(Item item, bool quickHeal, ref int healValue)
+        {
+            if (PandoraChalice && Player.ownedProjectileCounts[ModContent.ProjectileType<PandoraChaliceOrb>()] < 6)
+            {
+                Projectile.NewProjectile(Player.GetSource_ItemUse(item), Player.Center, Vector2.Zero,
+                ModContent.ProjectileType<PandoraChaliceOrb>(), healValue / 2, 0, Player.whoAmI);
+            }
+        }
+
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (target.active && target.CanBeChasedBy(this) && !target.friendly && !target.dontTakeDamage && !NPCID.Sets.CountsAsCritter[target.type])
+            {
+                //inflict enemies with gourd decay while wearing the rotten gourd armor
+                if (GourdSet && Main.rand.NextBool(8))
+                {
+                    target.AddBuff(ModContent.BuffType<GourdDecay>(), Main.rand.Next(600, 1200));
+                }
+
+                //spawn eyes when hitting enemies with whips with the living flesh armor
+                if (EyeArmorSet && hit.DamageType == DamageClass.SummonMeleeSpeed && Main.rand.NextBool(5))
+                {
+                    Vector2 SpawnPosition = target.Center + new Vector2(0, 85).RotatedByRandom(360);
+
+                    for (int numDusts = 0; numDusts < 10; numDusts++)
+                    {                                                                                  
+                        int dust = Dust.NewDust(SpawnPosition, 20, 20, DustID.Blood, 0f, -2f, 0, default, 1.5f);
+                        Main.dust[dust].noGravity = true;
+                        Main.dust[dust].position.X += Main.rand.Next(-50, 51) * .05f - 1.5f;
+                        Main.dust[dust].position.Y += Main.rand.Next(-50, 51) * .05f - 1.5f;
+                    }
+
+                    Projectile.NewProjectile(target.GetSource_OnHit(target), SpawnPosition, Vector2.Zero, 
+                    ModContent.ProjectileType<LivingFleshEye>(), damageDone / 2, hit.Knockback, Player.whoAmI, 0, target.whoAmI);
+                }
+
+                //drop booger charge item when hitting an enemy while wearing the snotty schnoz
+                if (MocoNose && MocoBoogerCharge < 15 && Main.rand.NextBool(12))
+                {
+                    int itemType = ModContent.ItemType<MocoNoseBooger>();
+                    int newItem = Item.NewItem(target.GetSource_OnHit(target), target.Hitbox, itemType);
+                    Main.item[newItem].noGrabDelay = 0;
+
+                    if (Main.netMode == NetmodeID.MultiplayerClient && newItem >= 0)
+                    {
+                        NetMessage.SendData(MessageID.SyncItem, -1, -1, null, newItem, 1f);
+                    }
+                }
+
+                //spawn an orbiting note on critical hits with the clarinet
+                if (RedMistClarinet && Main.rand.NextBool() && hit.Crit && Player.ownedProjectileCounts[ModContent.ProjectileType<RedMistNote>()] < 5)
+                {
+                    SoundEngine.PlaySound(ClarinetSound, Player.Center);
+
+                    //dont cap the damage if the player has the combined creepypasta accessory
+                    int damage = CreepyPasta ? hit.Damage : (hit.Damage >= 70 ? 70 : hit.Damage);
+
+                    Projectile.NewProjectile(target.GetSource_OnHit(target), Player.Center, Vector2.Zero, ModContent.ProjectileType<RedMistNote>(), damage, hit.Knockback, Player.whoAmI, 0, 0, Main.rand.Next(0, 2));
+                }
+
+                //spawn red face every 25 hits with the nes cartridge
+                if (RedGodzillaCartridge)
+                {
+                    RedGodzillaCartridgeHits++;
+
+                    if (RedGodzillaCartridgeHits >= 25)
+                    {
+                        RedGodzillaCartridgeHits = 0;
+
+                        //dont spawn a red apparition if one already exists
+                        if (Player.ownedProjectileCounts[ModContent.ProjectileType<RedFace>()] <= 0)
+                        {
+                            Vector2 SpawnPosition = target.Center + new Vector2(0, 85).RotatedByRandom(360);
+
+                            Projectile.NewProjectile(target.GetSource_OnHit(target), SpawnPosition, Vector2.Zero, ModContent.ProjectileType<RedFace>(), damageDone * 5, hit.Knockback, Player.whoAmI, 0, target.whoAmI);
+                        }
+                    }
+                }
+
+                //inflict enemies with stomach ache debuff with the pepto stomach
+                if (PeptoStomach && !target.boss && !target.IsTechnicallyBoss() && Main.rand.NextBool(20))
+                {
+                    target.AddBuff(ModContent.BuffType<PeptoDebuff>(), int.MaxValue);
+                }
+
+                //attach a chain to an enemy with the vein chain
+                if (VeinChain && Main.rand.NextBool(10) && target.active && target.CanBeChasedBy(this) && !target.friendly && !target.dontTakeDamage && !NPCID.Sets.CountsAsCritter[target.type] && Vector2.Distance(Player.Center, target.Center) <= 370f)
+                {
+                    int MaxChains = Player.statLife < (Player.statLifeMax / 4) ? 1 : (Player.statLife < (Player.statLifeMax / 2) ? 2 : 3);
+
+                    if (Player.ownedProjectileCounts[ModContent.ProjectileType<VeinChainProj>()] < MaxChains && !target.GetGlobalNPC<NPCGlobal>().HasVeinChainAttached)
+                    {
+                        Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, ModContent.ProjectileType<VeinChainProj>(), 35, 0, Player.whoAmI, 0, 0, target.whoAmI);
+                        target.GetGlobalNPC<NPCGlobal>().HasVeinChainAttached = true;
+                    }
+                }
+
+                //spawn goo jaws on enemies when you hit them with the goo chompers
+                if (GooChompers && Main.rand.NextBool(15) && !target.GetGlobalNPC<NPCGlobal>().HasGooChompterAttached)
+                {
+                    Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, ModContent.ProjectileType<GooChomperProj>(), hit.Damage, 0, Player.whoAmI, target.whoAmI);
+                    target.GetGlobalNPC<NPCGlobal>().HasGooChompterAttached = true;
+                }
+
+                //if the player has the nose blessing buff and hits an npc with the nose blessing debuff
+                if (NoseBlessingBuff && Main.rand.NextBool(10) && Player.ownedProjectileCounts[ModContent.ProjectileType<SnotBlessingOrbiter>()] < 10 && !target.HasBuff(ModContent.BuffType<NoseBlessingDebuffCooldown>()))
+                {
+                    if (!target.HasBuff(ModContent.BuffType<NoseBlessingDebuff>()))
+                    {
+                        target.AddBuff(ModContent.BuffType<NoseBlessingDebuff>(), 360);
+                    }
+                    
+                    if (target.HasBuff(ModContent.BuffType<NoseBlessingDebuff>()))
+                    {
+                        int distance = Main.rand.Next(0, 360);
+
+                        Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, ModContent.ProjectileType<SnotBlessingOrbiter>(), damageDone * 2, 3, Player.whoAmI, target.whoAmI, distance);
+                    }
+                }
+
+                //make candy bag shoot out homing candy when an enemy is hit with a summon item or whip
+                if (CandyBag && (hit.DamageType == DamageClass.Summon || hit.DamageType == DamageClass.SummonMeleeSpeed))
+                { 
+                    CandyBagJustHit = true;
+                }
+
+				//goldrush set inflicts midas forever
+				if (GoldrushSet)
+				{
+					target.AddBuff(BuffID.Midas, int.MaxValue);
+				}
+
+				//spawn friendly ghosts on hit with spirit amulet
+				if (SpiritAmulet && Main.rand.NextBool(5) && Player.ownedProjectileCounts[ModContent.ProjectileType<AmuletGhost>()] < 5)
+				{
+                    Projectile.NewProjectile(target.GetSource_OnHurt(Player), Player.Center, Vector2.Zero, ModContent.ProjectileType<AmuletGhost>(), damageDone / 2, 0, ai2: Main.rand.Next(0, 6));
+				}
+
+                //spawn rockets on hit with mortar armor
+                if (MortarSet && Main.rand.NextBool(5) && Player.ownedProjectileCounts[ModContent.ProjectileType<MortarArmorRocket>()] < 5)
+                {
+                    SoundEngine.PlaySound(SoundID.Item42 with { Volume = 0.5f }, Player.Center);
+                    SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode with { Volume = 0.5f }, Player.Center);
+
+                    Vector2 Velocity = new Vector2(0, Main.rand.Next(-18, -7)).RotatedByRandom(MathHelper.ToRadians(40));
+
+                    int RealDamage = damageDone < 50 ? 50 : damageDone;
+
+                    Projectile.NewProjectile(target.GetSource_OnHurt(Player), Player.Center, Velocity, ModContent.ProjectileType<MortarArmorRocket>(), RealDamage, 0, Player.whoAmI);
+                }
+            }
+        }
+
+		public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
+		{
+            //broccoli armor spawns broccolis on enemies when hit by summons
+			if (BroccoliSet && !proj.npcProj && !proj.trap && (proj.minion || ProjectileID.Sets.MinionShot[proj.type]) && proj.type != ModContent.ProjectileType<GrowingBroccoli>() && Main.rand.NextBool(5))
+			{
+				Vector2 projPos = target.Center + new Vector2(1, 0).RotatedByRandom(360);
+
+				Vector2 Direction = target.Center - projPos;
+				Direction.Normalize();
+
+				Vector2 lineDirection = new Vector2(Direction.X, Direction.Y);
+
+				Projectile.NewProjectile(target.GetSource_OnHurt(Player), target.Center, Vector2.Zero,
+				ModContent.ProjectileType<GrowingBroccoli>(), damageDone, 0, Player.whoAmI, ai0: lineDirection.ToRotation() + MathHelper.Pi, ai2: target.whoAmI);
+			}
+		}
+
+		public override void OnHurt(Player.HurtInfo info)
+        {
+            //set maximum damage cap based on difficulties due to damage scaling
+            int damageToActivateSpeedBoost1 = Main.masterMode ? 100 : Main.expertMode ? 70 : 40;
+            int damageToActivateSpeedBoost2 = Main.masterMode ? 150 : Main.expertMode ? 100 : 50;
+
+            //give players the spider armor speed boosts when they get hit by a strong enough attack
+            if (SpiderSpeed && info.Damage >= damageToActivateSpeedBoost1)
+            {
+                SpiderSpeedTimer = 45;
+            }
+
+            //give the player monument mythos shatter and cooldown if they get hit 3 times
+            if (MonumentMythosPyramid)
+            {
+                GizaGlassHits++;
+
+                if (GizaGlassHits == 5)
+                {
+                    SoundEngine.PlaySound(SoundID.Shatter, Player.Center);
+                    
+                    Player.AddBuff(ModContent.BuffType<MonumentMythosShatter>(), 600);
+                    Player.AddBuff(ModContent.BuffType<MonumentMythosCooldown>(), 3600);
+
+                    for (int numGores = 1; numGores <= 4; numGores++)
+                    {
+                        if (Main.netMode != NetmodeID.Server)
+                        {
+                            Gore.NewGore(Player.GetSource_OnHurt(info.DamageSource), Player.Center, Player.velocity, ModContent.Find<ModGore>("Spooky/GizaGlassGore" + numGores).Type);
+                        }
+                    }
+
+                    GizaGlassHits = 0;
+                }
+            }
+
+            //player takes twice as much damage with the monument mythos shatter debuff
+            if (Player.HasBuff(ModContent.BuffType<MonumentMythosShatter>()))
+            {
+                info.Damage *= 2;
+            }
+
+            //add fly cooldown when hit and the player has flies
+            if (FlyAmulet)
+            {
+                if (Player.ownedProjectileCounts[ModContent.ProjectileType<SwarmFly>()] > 0)
+                {
+                    Player.AddBuff(ModContent.BuffType<FlyCooldown>(), 1800);
+                }
+            }
+
+            //cross charm damage reduction cooldown
+            if (CrossCharmShield && !Player.HasBuff(ModContent.BuffType<CrossCooldown>()))
+            {
+                Player.AddBuff(ModContent.BuffType<CrossCooldown>(), 600);
+
+                for (int numDust = 0; numDust < 20; numDust++)
+                {
+                    int dustEffect = Dust.NewDust(Player.position, Player.width, Player.height, DustID.OrangeTorch, 0f, 0f, 100, default, 2f);
+                    Main.dust[dustEffect].velocity *= 3f;
+                    Main.dust[dustEffect].noGravity = true;
+
+                    if (Main.rand.NextBool(2))
+                    {
+                        Main.dust[dustEffect].scale = 0.5f;
+                        Main.dust[dustEffect].fadeIn = 1f + Main.rand.Next(10) * 0.1f;
+                    }
+                }
+            }
+
+            //activate pandora rosary hands healing AI
+            if (PandoraRosary && !Player.HasBuff(ModContent.BuffType<PandoraHandCooldown>()))
+            {
+                Player.AddBuff(ModContent.BuffType<PandoraHandCooldown>(), 720);
+
+                for (int i = 0; i <= Main.maxProjectiles; i++)
+                {
+                    if (Main.projectile[i].type == ModContent.ProjectileType<PandoraRosaryHand>() && Main.projectile[i].owner == Player.whoAmI)
+                    {
+                        Main.projectile[i].ai[0] = 1;
+                    }
+                }
+            }
+
+			//activate daffodil hairpin petal projectiles
+			if (DaffodilHairpin)
+			{
+				for (int i = 0; i <= Main.maxProjectiles; i++)
+				{
+					if (Main.projectile[i].type == ModContent.ProjectileType<DaffodilHairpinPetal>() && Main.projectile[i].owner == Player.whoAmI)
+					{
+						Main.projectile[i].damage = info.Damage < 40 ? 40 : info.Damage;
+						Main.projectile[i].ai[1] = 1;
+					}
+				}
+			}
+
+            if (HallucigeniaSpine)
+            {
+                int[] Types = { ModContent.ProjectileType<HallucigeniaSpineProj1>(), ModContent.ProjectileType<HallucigeniaSpineProj2>() };
+
+                int MinDamage = 40; //minimum damage
+				float Damage = (info.Damage / 2) < MinDamage ? MinDamage : info.Damage / 2;
+
+				float maxAmount = 3;
+				int currentAmount = 0;
+
+                float RandomRotation = MathHelper.ToRadians(Main.rand.NextFloat(0f, 360f));
+
+				while (currentAmount < maxAmount)
+				{
+					Vector2 velocity = new Vector2(3f, 3f);
+					Vector2 Bounds = new Vector2(3f, 3f);
+					float intensity = 3f;
+
+					Vector2 vector12 = Vector2.UnitX * 0f;
+					vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
+					vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
+					Vector2 ShootVelocity = (velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity).RotatedBy(RandomRotation);
+
+					Projectile.NewProjectile(Player.GetSource_OnHurt(info.DamageSource), Player.Center, ShootVelocity, Main.rand.Next(Types), (int)Damage, 4.5f, Player.whoAmI);
+
+					currentAmount++;
+				}
+            }
+
+            if (TarCactusSet)
+            {
+				int MinDamage = 20;
+				float Damage = info.Damage < MinDamage ? MinDamage : info.Damage;
+
+                float maxAmount = 12;
+				int currentAmount = 0;
+                while (currentAmount <= maxAmount)
+				{
+					Vector2 velocity = new Vector2(Main.rand.NextFloat(2f, 25f), Main.rand.NextFloat(2f, 25f));
+                    Vector2 Bounds = new Vector2(Main.rand.NextFloat(2f, 25f), Main.rand.NextFloat(2f, 25f));
+                    float intensity = Main.rand.NextFloat(2f, 25f);
+
+					Vector2 vector12 = Vector2.UnitX * 0f;
+					vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
+					vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
+					Vector2 ShootVelocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
+
+					Projectile.NewProjectile(Player.GetSource_OnHurt(info.DamageSource), Player.Center, ShootVelocity, ModContent.ProjectileType<CactusNeedle>(), (int)Damage, 4.5f, Player.whoAmI);
+
+					currentAmount++;
+				}
+            }
+
+            //when you get hit, krampus chimney charge resets
+            if (KrampusChimney)
+            {
+                KrampusChimneyCharge = 0;
+            }
+		}
+
+		public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
+		{
+			RaveyardGuardsHostile = false;
+		}
+
+		public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
+        {
+            bool ShouldPlayerDie = true;
+
+            //embryo revive ability
+            if (Player.statLife <= 0)
+			{
+                if (OrroboroEmbyro && !Player.HasBuff(ModContent.BuffType<EmbryoCooldown>()))
+                {
+                    SoundEngine.PlaySound(SoundID.Item103, Player.Center);
+                    Player.AddBuff(ModContent.BuffType<EmbryoRevival>(), 300);
+                    Player.AddBuff(ModContent.BuffType<EmbryoCooldown>(), 36000);
+                    Player.immuneTime += 60;
+                    Player.statLife = 1;
+                    ShouldPlayerDie = false;
+                }
+
+                if (KrampusResolution && KrampusResolutionTimer <= 0)
+                {
+                    KrampusResolutionTimer = 300;
+                    Player.immuneTime += 300;
+                    Player.statLife = 1;
+                    ShouldPlayerDie = false;
+                }
+            }
+
+            return ShouldPlayerDie;
+        }
+
+        public override void HideDrawLayers(PlayerDrawSet drawInfo)
+        {
+            //hide the player's head while wearing the full horseman armor set
+            if (HorsemanSet)
+            {
+                PlayerDrawLayers.Head.Hide();
+            }
+
+            //do not draw anything if the player is being eaten by a goo slug
+			if (EatenByGooSlug)
+			{
+				drawInfo.drawPlayer.frozen = true;
+
+				foreach (var layer in PlayerDrawLayerLoader.Layers)
+				{
+					layer.Hide();
+				}
+			}
+        }
+
+        public override void PreUpdate()
+        {
+            //cooldowns and delays
+            if (SpiderSpeedTimer > 0)
+            {
+                SpiderSpeedTimer--;
+            }
+            if (SlendermanPageDelay > 0)
+            {
+                SlendermanPageDelay--;
+            }
+            if (RootHealCooldown > 0)
+            {
+                RootHealCooldown--;
+            }
+            if (GooSlugEatCooldown > 0)
+            {
+                GooSlugEatCooldown--;
+            }
+            if (CandyBagCooldown > 0)
+            {
+                CandyBagCooldown--;
+            }
+            if (SpearfishChargeCooldown > 0)
+            {
+                SpearfishChargeCooldown--;
+            }
+            if (KrampusResolutionTimer > 0)
+            {
+				KrampusResolutionTimer--;
+
+                if (KrampusResolutionTimer == 1)
+                {
+					Player.KillMe(PlayerDeathReason.ByCustomReason(Language.GetText("Mods.Spooky.DeathReasons.KrampusResolution").ToNetworkText(Player.name)), 10, 0, false);    
+                }
+            }
+			if (Player.dead)
+			{
+				KrampusResolutionTimer = 0;
+			}
+
+            //set skeleton bouncer hositility to false if no raveyard is happening
+            if (!Flags.RaveyardHappening)
+            {
+                RaveyardGuardsHostile = false;
+            }
+
+			//set candy bag hit to false if you dont have the candy bag
+			if (!CandyBag)
+			{
+				CandyBagJustHit = false;
+			}
+
+            //reset skull amulet charge if the amulet isnt equipped
+            if (!SkullAmulet)
+            {
+                SkullFrenzyCharge = 0;
+            }
+
+            //reset hits if you dont have the nes cartridge equipped
+            if (!RedGodzillaCartridge)
+            {
+                RedGodzillaCartridgeHits = 0;
+            }
+
+            //reset shape box buffs if you dont have it equipped
+            if (!KrampusShapeBox || !Player.HasBuff(ModContent.BuffType<KrampusShapeBuff>()))
+            {
+                KrampusShapeBuffStacks = 0;
+            }
+
+            //make player immune to the sandstorm debuff since it still applies it when you're in spooky mod biomes and theres a desert with a sandstorm happening nearby
+            //because spooky mod biomes take higher priority that vanilla ones, this should not cause any issues
+            if (Player.InModBiome(ModContent.GetInstance<SpookyBiome>()) || Player.InModBiome(ModContent.GetInstance<CemeteryBiome>()))
+            {
+                Player.buffImmune[BuffID.WindPushed] = true;
+            }
+
+            if (Player.velocity == Vector2.Zero && BustlingGlowshroom)
+            {
+                BustlingHealTimer++;
+
+                //dont heal the player until after they are standing still for long enough
+                if (BustlingHealTimer >= 60)
+                {
+                    Player.AddBuff(ModContent.BuffType<BustlingGlowshroomHeal>(), 2);
+                }
+            }
+            else
+            {
+                //reset the time if you move at all
+                BustlingHealTimer = 0;
+            }
+
+            //spawn flies while wearing the fly amulet
+            if (FlyAmulet)
+            {
+                //add the fly buff if the player has any flies around them
+                if (Player.ownedProjectileCounts[ModContent.ProjectileType<SwarmFly>()] > 0)
+                {
+                    Player.AddBuff(ModContent.BuffType<FlyBuff>(), 2);
+                }
+
+                //spawn flies
+                if (Player.ownedProjectileCounts[ModContent.ProjectileType<SwarmFly>()] < 10)
+                {
+                    FlySpawnTimer++;
+
+                    if (FlySpawnTimer == 300)
+                    {
+                        Vector2 randomVelocity = Vector2.UnitY.RotatedByRandom(1.5f) * new Vector2(5f, 3f);
+
+                        Projectile.NewProjectile(null, Player.Center.X, Player.Center.Y, randomVelocity.X, 
+                        randomVelocity.Y, ModContent.ProjectileType<SwarmFly>(), 0, 0f, Main.myPlayer);
+
+                        FlySpawnTimer = 0;
+                    }
+                }
+            }
+
+            //grant the player the skull frenzy when they absorb enough souls
+            if (SkullFrenzyCharge >= 10)
+            {
+                Player.AddBuff(ModContent.BuffType<SkullFrenzyBuff>(), 600);
+
+                SoundEngine.PlaySound(SoundID.DD2_DarkMageSummonSkeleton with { Volume = SoundID.DD2_DarkMageSummonSkeleton.Volume * 3.5f }, Player.Center);
+
+                for (int numDust = 0; numDust < 45; numDust++)
+                {
+                    int newDust = Dust.NewDust(Player.position, Player.width, Player.height, DustID.KryptonMoss, 0f, 0f, 100, default, 1.5f);
+                    Main.dust[newDust].velocity.X *= Main.rand.Next(-12, 12);
+                    Main.dust[newDust].velocity.Y *= Main.rand.Next(-12, 12);
+                    Main.dust[newDust].noGravity = true;
+                }
+
+                SkullFrenzyCharge = 0;
+            }
+
+            //spawn cross sound bass projectile after pressing the hotkey
+            if (CrossSoundTimer > 0)
+            {
+                CrossSoundTimer--;
+
+                if (CrossSoundTimer % 12 == 2)
+                {
+                    //the damage for this projectile should always be the same regardless of difficulty
+                    int Damage = Main.masterMode ? 30 / 4 : Main.expertMode ? 30 / 3 : 30;
+
+                    Projectile.NewProjectile(null, Player.Center, Vector2.Zero, ModContent.ProjectileType<PandoraCrossSound>(), Damage, 0f, Main.myPlayer);
+                }
+            }
+
+            //spawn pandora cuff to attach to the chosen enemy
+            if (PandoraCuffs && Player.ownedProjectileCounts[ModContent.ProjectileType<PandoraCuffProj>()] < 1)
+            {
+                for (int i = 0; i <= Main.maxNPCs; i++)
+                {
+                    NPC NPC = Main.npc[i];
+
+                    if (NPC.active && !NPC.friendly && !NPC.immortal && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type] && Vector2.Distance(Player.Center, NPC.Center) <= 450f)
+                    {
+                        PandoraCuffTimer++;
+
+                        if (PandoraCuffTimer == 900)
+                        {
+                            //prioritize bosses over normal enemies
+                            if (NPC.boss)
+                            {
+                                Projectile.NewProjectile(null, Player.Center, Vector2.Zero, ModContent.ProjectileType<PandoraCuffProj>(), 0, 0f, Main.myPlayer, i);
+                                
+                                break;
+                            }
+                            else
+                            {
+                                Projectile.NewProjectile(null, Player.Center, Vector2.Zero, ModContent.ProjectileType<PandoraCuffProj>(), 0, 0f, Main.myPlayer, i);
+
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                PandoraCuffTimer = 0;
+            }
+
+            //spawn pandora rosary hands that circle the player
+            if (PandoraRosary && !Player.HasBuff(ModContent.BuffType<PandoraHandCooldown>()) && Player.ownedProjectileCounts[ModContent.ProjectileType<PandoraRosaryHand>()] < 5)
+            {
+                RosaryHandTimer++;
+
+                if (RosaryHandTimer >= 325)
+                {
+                    Projectile.NewProjectile(null, Player.Center.X, Player.Center.Y, 0, 0,
+                    ModContent.ProjectileType<PandoraRosaryHand>(), 0, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 360));
+
+                    RosaryHandTimer = 0;
+                }
+            }
+            else
+            {
+                RosaryHandTimer = 0;
+            }
+
+            //inflict enemies with the hunter mark debuff with the old hunter's scarf
+            if (HunterScarf)
+            {
+                for (int i = 0; i <= Main.maxNPCs; i++)
+                {
+                    NPC NPC = Main.npc[i];
+
+                    if (NPC.active && !NPC.friendly && !NPC.immortal && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type] && Vector2.Distance(Player.Center, NPC.Center) <= 350f)
+                    {
+                        NPC.AddBuff(ModContent.BuffType<HunterScarfMark>(), 10);
+                    }
+                }
+            }
+
+            //spawn nature's mockery on the ground with the lethal omen accessory
+            if (GeminiEntertainmentGame && Player.ownedProjectileCounts[ModContent.ProjectileType<NaturesMockery>()] < 1)
+            {
+                Vector2 center = new Vector2(Player.Center.X, Player.Center.Y + Player.height / 4);
+                center.X += Main.rand.Next(-125, 126);
+                int numtries = 0;
+                int x = (int)(center.X / 16);
+                int y = (int)(center.Y / 16);
+                while (y < Main.maxTilesY - 10 && Main.tile[x, y] != null && !WorldGen.SolidTile2(x, y) &&
+                Main.tile[x - 1, y] != null && !WorldGen.SolidTile2(x - 1, y) && Main.tile[x + 1, y] != null && !WorldGen.SolidTile2(x + 1, y))
+                {
+                    y++;
+                    center.Y = y * 16;
+                }
+                while ((WorldGen.SolidOrSlopedTile(x, y) || WorldGen.SolidTile2(x, y)) && numtries < 10)
+                {
+                    numtries++;
+                    y--;
+                    center.Y = y * 16;
+                }
+
+                int NewProj = Projectile.NewProjectile(null, center.X, center.Y, 0, -0.3f, ModContent.ProjectileType<NaturesMockery>(), 0, 0, Main.myPlayer, 0, 0, 4);
+                Main.projectile[NewProj].frame = AnalogHorrorTape ? 4 : Main.rand.Next(0, 4);
+            }
+
+			//spawn spores with the vita carnis flavor enhancer
+            if (CarnisFlavorEnhancer)
+            {
+                CarnisSporeSpawnTimer++;
+
+                if (PlayerSpeedToMPH(Player) >= 10)
+                {
+                    CarnisSporeSpawnTimer++;
+
+                    if (CarnisSporeSpawnTimer >= 30)
+                    {
+                        Projectile.NewProjectile(null, Player.Center.X, Player.Center.Y, 0, 0, ModContent.ProjectileType<FoodEnhancerSpore>(), 0, 0f, Main.myPlayer);
+                        CarnisSporeSpawnTimer = 0;
+                    }
+                }
+                else
+                {
+                    CarnisSporeSpawnTimer = 0;
+                }
+            }
+
+			//shoot skulls with big bones expert item
+            if (FlowerPotShoe && !Player.dead)
+            {
+                //do not shoot skulls under 20mph (basically if you are not moving fast enough)
+                if (PlayerSpeedToMPH(Player) >= 20)
+                {
+                    BoneWispTimer++;
+
+                    if (BoneWispTimer >= 180 / (PlayerSpeedToMPH(Player) / 10))
+                    {
+                        SoundEngine.PlaySound(SoundID.Item8, Player.Center);
+
+                        Vector2 Speed = new Vector2(12f, 0f).RotatedByRandom(2 * Math.PI);
+                        Vector2 newVelocity = Player.velocity.Y == 0 ? new Vector2(Speed.X, Main.rand.Next(-10, -3)) : Speed.RotatedBy(2 * Math.PI / 2 * (Main.rand.NextDouble() - 0.5));
+
+                        //scale the damage based on the player's current speed
+                        int damage = 80 + ((int)PlayerSpeedToMPH(Player) / 3);
+
+                        int newProj = Projectile.NewProjectile(null, Player.Center.X, Player.Center.Y, newVelocity.X, newVelocity.Y,
+                        ModContent.ProjectileType<FlowerPotShoeFlower>(), damage, 0f, Player.whoAmI);
+                        Main.projectile[newProj].frame = Main.rand.Next(0, 4);
+
+                        BoneWispTimer = 0;
+                    }
+                }
+                else
+                {
+                    BoneWispTimer = 0;
+                }
+            }
+            else
+            {
+                BoneWispTimer = 0;
+            }
+
+			//handle stoned kidney charge for the UI
+			if (StonedKidney)
+			{
+                bool PlayerHoldingWeapon = ItemGlobal.ActiveItem(Player).damage > 0 && ItemGlobal.ActiveItem(Player).pick <= 0 && ItemGlobal.ActiveItem(Player).hammer <= 0 && 
+			    ItemGlobal.ActiveItem(Player).axe <= 0 && ItemGlobal.ActiveItem(Player).mountType <= 0;
+
+				if ((!Player.controlUseItem || !PlayerHoldingWeapon) && StonedKidneyCharge <= 7.5f)
+				{
+					StonedKidneyCharge += 0.05f;
+				}
+			}
+			else
+			{
+				StonedKidneyCharge = 0;
+			}
+
+			if (DaffodilHairpin)
+            {
+                if (Player.ownedProjectileCounts[ModContent.ProjectileType<DaffodilHairpinPetal>()] < 6)
+                {
+                    DaffodilHairpinTimer++;
+                    if (DaffodilHairpinTimer % 17 == 0)
+                    {
+                        int PetalType = ModContent.ProjectileType<DaffodilHairpinPetal>();
+
+						SoundEngine.PlaySound(SoundID.Grass with { Volume = 0.2f }, Player.Center);
+                        Projectile.NewProjectile(null, Player.Center, Vector2.Zero, PetalType, 0, 3f, Player.whoAmI, ai0: Player.ownedProjectileCounts[PetalType]);
+                    }
+                }
+            }
+            else
+            {
+                DaffodilHairpinTimer = 0;
+            }
+
+            //handle krampus chimney charge for the UI
+			if (KrampusChimney)
+			{
+				if (KrampusChimneyCharge < 10.5f)
+				{
+					KrampusChimneyCharge += 0.0075f;
+				}
+
+                if (KrampusChimneyProjTimer > 0)
+                {
+                    KrampusChimneyProjTimer--;
+
+                    if (KrampusChimneyProjTimer % 10 == 0)
+                    {
+                        SoundEngine.PlaySound(SoundID.Item73, Player.Center);
+
+                        Vector2 velocity = new Vector2(0, -25).RotatedByRandom(MathHelper.ToRadians(35));
+
+                        Vector2 Position = Player.Top + new Vector2(Player.direction == 1 ? -10 : 10, 0);
+
+						Projectile.NewProjectile(null, Position, velocity, ModContent.ProjectileType<ChimneyCoal>(), 32, 0, Player.whoAmI);
+
+                        for (int j = 0; j < 10; j++)
+                        {
+                            Vector2 dustVelocity = new Vector2(0, -25).RotatedByRandom(MathHelper.ToRadians(35));
+
+                            Dust dust = Dust.NewDustPerfect(Position, DustID.Torch, dustVelocity, default, default, 1f);
+                            dust.velocity *= Main.rand.NextFloat(0.1f, 0.001f);
+                        }
+                    }
+
+                    if (KrampusChimneyCharge > 0)
+                    {
+                        KrampusChimneyCharge -= 0.1f;
+                    }
+                }
+			}
+			else
+			{
+				KrampusChimneyCharge = 0;
+			}
+
+            //yuletide flaming timer and projectiles
+			if (YuletideSet && YuletideFireTimer > 0)
+			{
+				YuletideFireTimer--;
+
+				if (YuletideFireTimer % 10 == 0)
+				{
+					SoundEngine.PlaySound(SoundID.Item42, Player.Center);
+
+					Vector2 velocity = new Vector2(0, -3).RotatedByRandom(MathHelper.ToRadians(65));
+
+					Projectile.NewProjectile(null, Player.Top, velocity, Main.rand.Next(400, 403), 35, 0, Player.whoAmI);
+				}
+
+                if (YuletideFireTimer == 2)
+                {
+                    Player.AddBuff(ModContent.BuffType<YuletideArmorCooldown>(), 1200);
+                }
+
+				if (Main.rand.NextBool(10))
+				{
+					Color[] colors = new Color[] { Color.Gray, Color.DarkGray };
+
+					int DustEffect = Dust.NewDust(Player.position, Player.width, 3, ModContent.DustType<SmokeEffect>(), 0f, 0f, 100, Main.rand.Next(colors) * 0.5f, Main.rand.NextFloat(0.2f, 0.4f));
+					Main.dust[DustEffect].velocity.X = 0;
+					Main.dust[DustEffect].velocity.Y = -2;
+					Main.dust[DustEffect].alpha = 100;
+				}
+			}
+
+            if (KrampusShapeBox && KrampusShapeBuffStacks < 5 && Player.ownedProjectileCounts[ModContent.ProjectileType<ShapeBoxProj>()] <= 0)
+            {
+                if (Main.rand.NextBool(225))
+                {
+                    float PositionX = Player.Center.X + Main.rand.Next(-250, 251);
+                    float PositionY = Player.Center.Y - 450;
+
+                    int FrameToUse = 0;
+                    if (KrampusShapeBuffStacks == 1)
+                    {
+                        FrameToUse = 1;
+                    }
+                    if (KrampusShapeBuffStacks == 2)
+                    {
+                        FrameToUse = 2;
+                    }
+                    if (KrampusShapeBuffStacks == 3)
+                    {
+                        FrameToUse = 3;
+                    }
+                    if (KrampusShapeBuffStacks == 4) 
+                    {
+                        FrameToUse = 4;
+                    }
+
+                    Projectile.NewProjectile(null, new Vector2(PositionX, PositionY), Vector2.Zero, ModContent.ProjectileType<ShapeBoxProj>(), 0, 0, Player.whoAmI, ai1: FrameToUse);
+                }
+            }
+
+            //sentient cap random dialogue
+            if (SentientCap && Main.rand.NextBool(1000))
+            {
+                switch (Main.rand.Next(3))
+                {
+                    case 0:
+                    {
+                        SoundEngine.PlaySound(CapSound1, Player.Center);
+                        break;
+                    }
+                    case 1:
+                    {
+                        SoundEngine.PlaySound(CapSound2, Player.Center);
+                        break;
+                    }
+                    case 2:
+                    {
+                        SoundEngine.PlaySound(CapSound3, Player.Center);
+                        break;
+                    }
+                }
+
+                CombatText.NewText(Player.getRect(), Color.DarkOrchid, Language.GetTextValue("Mods.Spooky.Dialogue.SentientCap.Dialogue" + Main.rand.Next(1, 7).ToString()), true);
+            }
+        }
+
+		public override void PostUpdate()
+		{
+			if (SkullFrenzyCharge > 0)
+			{
+				Player.GetDamage(DamageClass.Generic) += (0.02f * SkullFrenzyCharge);
+			}
+
+            if (StonedKidneyCharge >= 7.5f)
+            {
+                Player.GetDamage(DamageClass.Generic) += 0.15f;
+            }
+		}
+
+		public override void SetControls()
+		{
+			if (DisablePlayerControls)
+			{
+                Main.playerInventory = false;
+				Player.controlLeft = false;
+				Player.controlRight = false;
+				Player.controlUp = false;
+				Player.controlDown = false;
+				Player.controlJump = false;
+				Player.controlHook = false;
+				Player.controlUseItem = false;
+				Player.controlUseTile = false;
+				Player.controlMap = false;
+				Player.controlMount = false;
+				Player.immuneNoBlink = true;
+                Player.immuneTime = 30;
+
+				if (AlsoDisableEscapeKey)
+				{
+					Player.controlInv = false;
+				}
+			}
+		}
+
+		public override void PostUpdateMiscEffects()
+		{
+			if (PotionSicknessCranberryTimer > 0)
+			{
+				PotionSicknessCranberryTimer--;
+			}
+			if (PotionSicknessCranberryTimer == 1)
+			{
+				int Duration = Player.pStone ? (int)(1800 * 0.75) : 1800;
+				Player.AddBuff(BuffID.PotionSickness, Duration);
+			}
+
+			if (PotionSicknessLatteTimer > 0)
+			{
+				PotionSicknessLatteTimer--;
+			}
+			if (PotionSicknessLatteTimer == 1)
+			{
+				int Duration = Player.pStone ? (int)(3600 * 0.75) : 3600;
+				Player.AddBuff(BuffID.PotionSickness, Duration);
+			}
+
+            if (Player.ownedProjectileCounts[ModContent.ProjectileType<SpearfishLanceSlashProj>()] > 0 || Player.ownedProjectileCounts[ModContent.ProjectileType<SpearfishLanceMetalSlashProj>()] > 0)
+            {
+                Player.noFallDmg = true;
+                Player.maxFallSpeed = 80f;
+            }
+		}
+
+		public override void PreUpdateMovement()
+		{
+			// If the player can use our dash and has double tapped in a direction, then apply the dash
+			if (CanUseDash())
+			{
+				Vector2 newVelocity = Player.velocity;
+
+				switch (dashDir)
+				{
+                    case dashUp when Player.velocity.Y > -dashVelocityY:
+					case dashDown when Player.velocity.Y < dashVelocityY:
+					{
+						float dashDirection = dashDir == dashDown ? 1 : -1;
+						newVelocity.Y = dashDirection * dashVelocityY;
+						break;
+					}
+					case dashLeft when Player.velocity.X > -dashVelocityX:
+					case dashRight when Player.velocity.X < dashVelocityX:
+					{
+						float dashDirection = dashDir == dashRight ? 1 : -1;
+						newVelocity.X = dashDirection * dashVelocityX;
+						break;
+					}
+					default:
+					{
+						return;
+					}
+				}
+
+				SoundEngine.PlaySound(SoundID.DD2_MonkStaffSwing, Player.position);
+
+				dashDelay = dashCooldown;
+				dashTimer = dashDuration;
+
+				Player.velocity = newVelocity;
+
+                Player.AddBuff(ModContent.BuffType<StitchedCloakCooldown>(), 300);
+			}
+
+			if (dashDelay > 0)
+			{
+				dashDelay--;
+			}
+
+			if (dashTimer > 0)
+			{
+				dashTimer--;
+
+                Player.immune = true;
+                Player.immuneTime = 2;
+                Player.gravity = 0;
+
+                if (dashTimer == 1)
+			    {
+                    if (dashDir == dashDown || dashDir == dashUp)
+                    {
+                        Player.velocity.Y *= 0.25f;
+                    }
+                    if (dashDir == dashLeft || dashDir == dashRight)
+                    {
+                        Player.velocity.X *= 0.25f;
+                    }
+                }
+                else
+                {
+                    if (dashDir == dashDown || dashDir == dashUp)
+                    {
+                        Player.velocity.X *= 0.0001f;
+                    }
+                    if (dashDir == dashLeft || dashDir == dashRight)
+                    {
+                        Player.velocity.Y *= 0.0001f;
+                    }
+                }
+
+				int dust = Dust.NewDust(Player.position, Player.width, Player.height, DustID.Web, 0, 0, default, default, Main.rand.NextFloat(0.75f, 1.5f));
+				Main.dust[dust].velocity *= 0;
+			}
+		}
+
+		//check if you can dash
+		private bool CanUseDash()
+		{
+			return StitchedCloak && Player.dashType == 0 && !Player.setSolar && dashDir != -1 && dashDelay == 0 && !Player.mount.Active && !Player.HasBuff(ModContent.BuffType<StitchedCloakCooldown>());
+		}
+
+		public override void PostUpdateRunSpeeds()
+        {
+            if (SpiderSpeedTimer > 0)
+            {
+                Player.maxRunSpeed += 5f;
+                Player.runAcceleration += 0.075f;
+            }
+
+			if (StitchedCloak)
+			{
+				Player.runAcceleration += 0.025f;
+			}
+
+			if (FlowerPotShoe)
+			{
+				Player.maxRunSpeed += 7f;
+				Player.runAcceleration += 0.075f;
+			}
+
+            if (Player.HasBuff(ModContent.BuffType<GooseberryBoostBuff>()))
+            {
+                Player.maxRunSpeed += 3f;
+                Player.runAcceleration += 0.015f;
+            }
+		}
+
+		public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
+        {
+			//spider stealth alpha
+            if (Player.HasBuff(ModContent.BuffType<SpiderArmorStealth>()))
+            {
+                if (SpiderStealthAlpha < 0.8f)
+                {
+                    SpiderStealthAlpha += 0.02f;
+                }
+            }
+            else
+            {
+                if (SpiderStealthAlpha > 0f)
+                {
+                    SpiderStealthAlpha -= 0.02f;
+                }
+            }
+
+			if (SpiderStealthAlpha > 0f)
+			{
+				r *= 1f - (SpiderStealthAlpha * 0.75f);
+				g *= 1f - (SpiderStealthAlpha * 0.5f);
+				b *= 1f - (SpiderStealthAlpha * 0.75f);
+				a *= 1f - (SpiderStealthAlpha * 0.5f);
+			}
+
+			//yuletide fire colors
+			if (YuletideSet && YuletideFireTimer > 0)
+			{
+				if (YuletideFireAlpha < 0.8f)
+				{
+					YuletideFireAlpha += 0.02f;
+				}
+			}
+			else
+			{
+				if (YuletideFireAlpha > 0f)
+				{
+					YuletideFireAlpha -= 0.02f;
+				}
+			}
+
+			if (YuletideFireAlpha > 0f)
+			{
+				r *= 1f - (YuletideFireAlpha * 0.15f);
+				g *= 1f - (YuletideFireAlpha * 0.75f);
+				b *= 1f - (YuletideFireAlpha * 1f);
+			}
+		}
+
+		public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
+		{
+			if (drawInfo.shadow != 0f || EatenByGooSlug)
+			{
+				return;
+			}
+
+			if (!drawInfo.drawPlayer.frozen && !drawInfo.drawPlayer.dead && !drawInfo.drawPlayer.wet)
+			{
+                HazmatArmorBackTex ??= ModContent.Request<Texture2D>("Spooky/Content/Items/Minibiomes/Armor/HazmatBackpack");
+
+                SpriteEffects spriteEffects = drawInfo.drawPlayer.direction == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+
+                if (ItemGlobal.ActiveItem(drawInfo.drawPlayer).type == ModContent.ItemType<SentientLeafBlower>() && drawInfo.drawPlayer.ownedProjectileCounts[ModContent.ProjectileType<SentientLeafBlowerProj>()] > 0)
+                {
+                    SentientLeafBlowerBackTex ??= ModContent.Request<Texture2D>("Spooky/Content/Items/SpookyHell/Sentient/SentientLeafBlowerBack");
+                    
+                    int xOffset = 6;
+
+                    DrawData PlayerBack = new DrawData(SentientLeafBlowerBackTex.Value,
+					new Vector2((int)(drawInfo.drawPlayer.MountedCenter.X - Main.screenPosition.X - (xOffset * drawInfo.drawPlayer.direction)) - 4f * drawInfo.drawPlayer.direction, (int)(drawInfo.drawPlayer.MountedCenter.Y - Main.screenPosition.Y + 2f * drawInfo.drawPlayer.gravDir - 8f * drawInfo.drawPlayer.gravDir + drawInfo.drawPlayer.gfxOffY)),
+					new Rectangle(0, 0, SentientLeafBlowerBackTex.Width(), SentientLeafBlowerBackTex.Height()),
+                    drawInfo.colorArmorBody,
+                    drawInfo.drawPlayer.bodyRotation,
+                    new Vector2(SentientLeafBlowerBackTex.Width() / 2, SentientLeafBlowerBackTex.Height() / 2),
+                    1f, 
+                    spriteEffects, 
+                    0);
+
+                    PlayerBack.shader = 0;
+                    drawInfo.DrawDataCache.Add(PlayerBack);
+                }
+
+                if (ItemGlobal.ActiveItem(drawInfo.drawPlayer).type == ModContent.ItemType<MiteVacuum>() && drawInfo.drawPlayer.ownedProjectileCounts[ModContent.ProjectileType<MiteVacuumProj>()] > 0)
+                {
+                    MiteVacuumBackTex ??= ModContent.Request<Texture2D>("Spooky/Content/Items/SpiderCave/MiteVacuumBack");
+
+                    int xOffset = 10;
+
+                    DrawData PlayerBack = new DrawData(MiteVacuumBackTex.Value,
+					new Vector2((int)(drawInfo.drawPlayer.MountedCenter.X - Main.screenPosition.X - (xOffset * drawInfo.drawPlayer.direction)) - 4f * drawInfo.drawPlayer.direction, (int)(drawInfo.drawPlayer.MountedCenter.Y - Main.screenPosition.Y + 2f * drawInfo.drawPlayer.gravDir - 8f * drawInfo.drawPlayer.gravDir + drawInfo.drawPlayer.gfxOffY)),
+					new Rectangle(0, 0, MiteVacuumBackTex.Width(), MiteVacuumBackTex.Height()),
+                    drawInfo.colorArmorBody,
+                    drawInfo.drawPlayer.bodyRotation,
+                    new Vector2(MiteVacuumBackTex.Width() / 2, MiteVacuumBackTex.Height() / 2),
+                    1f, 
+                    spriteEffects, 
+                    0);
+
+                    PlayerBack.shader = 0;
+                    drawInfo.DrawDataCache.Add(PlayerBack);
+                }
+
+                if (DrawHazmatBack)
+                {
+                    HazmatArmorBackTex ??= ModContent.Request<Texture2D>("Spooky/Content/Items/Minibiomes/Armor/HazmatBackpack");
+                
+                    int xOffset = 5;
+
+                    DrawData PlayerBack = new DrawData(HazmatArmorBackTex.Value,
+                    new Vector2((int)(drawInfo.drawPlayer.MountedCenter.X - Main.screenPosition.X - (xOffset * drawInfo.drawPlayer.direction)) - 4f * drawInfo.drawPlayer.direction, (int)(drawInfo.drawPlayer.MountedCenter.Y - Main.screenPosition.Y + 2f * drawInfo.drawPlayer.gravDir - 8f * drawInfo.drawPlayer.gravDir + drawInfo.drawPlayer.gfxOffY)),
+                    new Rectangle(0, 0, HazmatArmorBackTex.Width(), HazmatArmorBackTex.Height()),
+                    drawInfo.colorArmorBody,
+                    drawInfo.drawPlayer.bodyRotation,
+                    new Vector2(HazmatArmorBackTex.Width() / 2, HazmatArmorBackTex.Height() / 2),
+                    1f, 
+                    spriteEffects, 
+                    0);
+
+                    PlayerBack.shader = 0;
+                    drawInfo.DrawDataCache.Add(PlayerBack);
+                }
+			}
+		}
+
+		public override void CatchFish(FishingAttempt attempt, ref int itemDrop, ref int npcSpawn, ref AdvancedPopupRequest sonar, ref Vector2 sonarPosition)
+        {
+            if (!attempt.inLava && !attempt.inHoney)
+            {
+                //spook fishron
+				if (Player.ZoneBeach && (Main.pumpkinMoon || Main.snowMoon) && attempt.playerFishingConditions.BaitItemType == ModContent.ItemType<SinisterSnailItem>())
+				{
+					npcSpawn = ModContent.NPCType<SpookFishron>();
+					return;
+				}
+
+                //spooky forest
+                if (Player.InModBiome<SpookyBiome>() || Player.InModBiome<SpookyBiomeUg>())
+                {
+                    //quest fishes
+                    if (attempt.questFish == ModContent.ItemType<GourdFish>() && attempt.uncommon)
+					{
+                        itemDrop = ModContent.ItemType<GourdFish>();
+                    }
+                    if (attempt.questFish == ModContent.ItemType<ZomboidFish>() && attempt.uncommon)
+					{
+                        itemDrop = ModContent.ItemType<ZomboidFish>();
+                    }
+					if (attempt.questFish == ModContent.ItemType<DumboOctopoid>() && attempt.uncommon && Player.InModBiome<SpookyBiomeUg>())
+					{
+						itemDrop = ModContent.ItemType<DumboOctopoid>();
+					}
+
+					//crate
+					if (attempt.uncommon && attempt.crate)
+					{
+						itemDrop = Main.hardMode ? ModContent.ItemType<SpookyCrate2>() : ModContent.ItemType<SpookyCrate>();
+                    }
+                }
+
+                //cemetery
+                if (Player.InModBiome<CemeteryBiome>())
+                {
+                    //quest fishes
+                    if (attempt.questFish == ModContent.ItemType<SpookySpiritFish>() && attempt.uncommon)
+					{
+                        itemDrop = ModContent.ItemType<SpookySpiritFish>();
+                    }
+
+					//crate
+					if (attempt.uncommon && attempt.crate && Flags.downedSpookySpirit)
+					{
+						itemDrop = Main.hardMode ? ModContent.ItemType<CatacombCrate2>() : ModContent.ItemType<CatacombCrate>();
+					}
+				}
+
+                //catacomb
+                if (Player.InModBiome<CatacombBiome>() || Player.InModBiome<CatacombBiome2>())
+                {
+                    //quest fishes
+                    if (attempt.questFish == ModContent.ItemType<HibiscusFish>() && attempt.uncommon)
+					{
+                        itemDrop = ModContent.ItemType<HibiscusFish>();
+                    }
+
+                    //crate
+                    if (attempt.uncommon && attempt.crate)
+                    {
+                        itemDrop = Main.hardMode ? ModContent.ItemType<CatacombCrate2>() : ModContent.ItemType<CatacombCrate>();
+                    }
+                }
+
+                //spider cave
+                if (Player.InModBiome<SpiderCaveBiome>())
+                {
+                    //quest fishes
+                    if (attempt.questFish == ModContent.ItemType<SphiderFish>() && attempt.uncommon)
+					{
+                        itemDrop = ModContent.ItemType<SphiderFish>();
+                    }
+
+					//crate
+					if (attempt.uncommon && attempt.crate)
+					{
+						itemDrop = Main.hardMode ? ModContent.ItemType<GrottoCrate2>() : ModContent.ItemType<GrottoCrate>();
+                    }
+                }
+
+                //tar pits
+				if (Player.InModBiome<TarPitsBiome>())
+				{
+					//quest fishes
+					if (attempt.questFish == ModContent.ItemType<Tarpon>() && attempt.uncommon)
+					{
+						itemDrop = ModContent.ItemType<Tarpon>();
+					}
+
+					if (Main.rand.NextBool(3) && attempt.common)
+					{
+						itemDrop = ModContent.ItemType<TarGar>();
+					}
+				}
+
+                //fetid farms
+				if (Player.InModBiome<VegetableBiome>())
+				{
+					if (Main.rand.NextBool(7) && attempt.common)
+					{
+						itemDrop = ModContent.ItemType<CarrotFish>();
+					}
+				}
+			}
+
+            //alternate blood moon enemy catches
+            if (Player.InModBiome<SpookyHellBiome>())
+            {
+                //random blocks and junk normally fished out of the blood lake
+                int[] BloodLakeItems = { ModContent.ItemType<EyeBlockItem>(), ModContent.ItemType<LivingFleshItem>(),
+                ModContent.ItemType<SpookyMushItem>(), ModContent.ItemType<ValleyStoneItem>(), ModContent.ItemType<EyeSeed>() };
+
+                itemDrop = Main.rand.Next(BloodLakeItems);
+
+                //do not allow any other npcs to be caught in the eye valley besides the enemies below
+                //this is specifically to prevent any regular blood moon fishing enemies from being caught in the blood lake if a blood moon is happening
+                npcSpawn = NPCID.None;
+
+                //quest fishes
+                if (attempt.questFish == ModContent.ItemType<BoogerFish>() && attempt.uncommon)
+				{
+                    itemDrop = ModContent.ItemType<BoogerFish>();
+
+                    return;
+                }
+                if (attempt.questFish == ModContent.ItemType<OrroEel>() && attempt.uncommon)
+				{
+                    itemDrop = ModContent.ItemType<OrroEel>();
+
+                    return;
+                }
+
+				//crate
+				if (attempt.uncommon && attempt.crate)
+				{
+					itemDrop = Main.hardMode ? ModContent.ItemType<SpookyHellCrate2>() : ModContent.ItemType<SpookyHellCrate>();
+				}
+
+                //the sludge
+                if (attempt.legendary)
+                {
+                    itemDrop = ModContent.ItemType<TheSludge>();
+                }
+
+				//do not allow blood lake enemy catches if any of the enemies already exist in the world
+				bool BloodFishingEnemiesExist = NPC.AnyNPCs(ModContent.NPCType<ValleyFish>()) || NPC.AnyNPCs(ModContent.NPCType<ValleyMerman>()) || 
+                NPC.AnyNPCs(ModContent.NPCType<ValleySquid>()) || NPC.AnyNPCs(ModContent.NPCType<ValleyNautilus>()) || 
+                NPC.AnyNPCs(ModContent.NPCType<ValleyEelHead>()) || NPC.AnyNPCs(ModContent.NPCType<ValleyShark>());
+
+                if (!BloodFishingEnemiesExist && ItemGlobal.ActiveItem(Player).type == ModContent.ItemType<SentientChumCaster>())
+                {
+                    //claret cephalopod
+                    if (Flags.downedOrroboro && Main.rand.NextBool(25))
+                    {
+                        npcSpawn = ModContent.NPCType<ValleyNautilus>();
+
+                        return;
+                    }
+
+                    //aortic eel and hemostasis beast
+                    if (Main.hardMode && Main.rand.NextBool(20))
+                    {
+                        npcSpawn = Main.rand.NextBool() ? ModContent.NPCType<ValleyEelHead>() : ModContent.NPCType<ValleyShark>();
+
+                        return;
+                    }
+
+                    //clot squid
+                    if (Main.rand.NextBool(18))
+                    {
+                        npcSpawn = ModContent.NPCType<ValleySquid>();
+
+                        return;
+                    }
+
+                    //peeper fish and flesh merfolk
+                    if (Main.rand.NextBool(15))
+                    {
+                        npcSpawn = Main.rand.NextBool() ? ModContent.NPCType<ValleyFish>() : ModContent.NPCType<ValleyMerman>();
+
+                        return;
+                    }
+                }
+            }
+        }
+
+        //converts the players speed to miles per hour, uses vanillas own calculations for the stopwatch
+        public static float PlayerSpeedToMPH(Player Player)
+        {
+            Vector2 SpeedVector = Player.velocity + Player.instantMovementAccumulatedThisFrame;
+
+            if (Player.mount.Active && Player.mount.IsConsideredASlimeMount && Player.velocity != Vector2.Zero && !Player.SlimeDontHyperJump)
+            {
+                SpeedVector += Player.velocity;
+            }
+
+            Player.speedSlice[0] = SpeedVector.Length();
+
+            int num15 = (int)(1f + SpeedVector.Length() * 6f);
+            if (num15 > Player.speedSlice.Length)
+            {
+                num15 = Player.speedSlice.Length;
+            }
+
+            float num16 = 0f;
+            for (int num17 = num15 - 1; num17 > 0; num17--)
+            {
+                Player.speedSlice[num17] = Player.speedSlice[num17 - 1];
+            }
+
+            Player.speedSlice[0] = SpeedVector.Length();
+            for (int m = 0; m < Player.speedSlice.Length; m++)
+            {
+                if (m < num15)
+                {
+                    num16 += Player.speedSlice[m];
+                }
+                else
+                {
+                    Player.speedSlice[m] = num16 / (float)num15;
+                }
+            }
+
+            num16 /= num15;
+            int num18 = 42240;
+            int num19 = 216000;
+            float num20 = num16 * (float)num19 / (float)num18;
+
+            return num20;
+        }
+	}
+}

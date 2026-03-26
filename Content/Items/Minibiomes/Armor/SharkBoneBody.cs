@@ -1,0 +1,34 @@
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+using Spooky.Content.Items.Minibiomes.Ocean;
+
+namespace Spooky.Content.Items.Minibiomes.Armor
+{
+	[AutoloadEquip(EquipType.Body)]
+	public class SharkBoneBody : ModItem
+	{
+		public override void SetDefaults() 
+		{
+			Item.defense = 5;
+			Item.width = 38;
+			Item.height = 24;
+			Item.rare = ItemRarityID.Blue;
+		}
+
+        public override void UpdateEquip(Player player) 
+		{
+			player.endurance += 0.05f;
+			player.fishingSkill += 5;
+		}
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+            .AddIngredient(ModContent.ItemType<FishboneChunk>(), 28)
+            .AddTile(TileID.Anvils)
+            .Register();
+        }
+	}
+}

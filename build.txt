@@ -1,0 +1,8 @@
+displayName = [c/F68E34:Spooky] [c/55CB3A:Mod] 
+author = The Spooky Mod Team
+version = 1.4
+dllReferences = StructureHelper
+hideCode = true
+hideResources = true
+includeSource = false
+includePDB = true

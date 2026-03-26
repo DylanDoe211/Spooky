@@ -1,0 +1,1156 @@
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
+using Terraria.Localization;
+using Terraria.Audio;
+using ReLogic.Content;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
+
+using Spooky.Core;
+using Spooky.Content.Biomes;
+using Spooky.Content.Items.BossBags;
+using Spooky.Content.Items.Costume;
+using Spooky.Content.NPCs.Boss.OldHunter.Projectiles;
+using Spooky.Content.NPCs.Friendly;
+using Spooky.Content.Tiles.Relic;
+using Spooky.Content.Tiles.Trophy;
+
+namespace Spooky.Content.NPCs.Boss.OldHunter
+{
+    [AutoloadBossHead]
+	public class OldHunterBoss : ModNPC
+	{
+        int CurrentFrameX = 0;
+        int AmmoType = 0;
+        int AmmoForPlatformJumpAttack = 0;
+
+        bool Phase2 = false;
+        bool ForcePlatformCollision = false;
+        bool ActuallyDead = false;
+
+        public enum AnimationState
+		{
+			Idle, Walking, Jumping, HoldAmmo, Shoot, ShotProjectile, JumpShoot
+		}
+
+        private AnimationState CurrentAnimation
+        {
+			get => (AnimationState)NPC.ai[3];
+			set => NPC.ai[3] = (float)value;
+		}
+
+        private static Asset<Texture2D> NPCTexture;
+        private static Asset<Texture2D> HeadTexture;
+        private static Asset<Texture2D> ArmShootFrontTexture;
+        private static Asset<Texture2D> ArmShotProjFrontTexture;
+        private static Asset<Texture2D> ArmShootBackTexture;
+        private static Asset<Texture2D> AmmoHoldTexture;
+
+        public static readonly SoundStyle UseSound = new("Spooky/Content/Sounds/SlingshotDraw", SoundType.Sound);
+        public static readonly SoundStyle ShootSound = new("Spooky/Content/Sounds/SlingshotShoot", SoundType.Sound);
+
+		public override void SetStaticDefaults()
+		{
+			Main.npcFrameCount[NPC.type] = 9;
+
+            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                Position = new Vector2(0f, 0f),
+                PortraitPositionXOverride = 0f,
+                PortraitPositionYOverride = 22f
+			};
+		}
+
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            //ints
+            writer.Write(CurrentFrameX);
+            writer.Write(AmmoType);
+            writer.Write(AmmoForPlatformJumpAttack);
+
+            //bools
+            writer.Write(Phase2);
+            writer.Write(ForcePlatformCollision);
+            writer.Write(ActuallyDead);
+
+            //floats
+            writer.Write(NPC.localAI[0]);
+            writer.Write(NPC.localAI[1]);
+            writer.Write(NPC.localAI[2]);
+            writer.Write(NPC.localAI[3]);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            //ints
+            CurrentFrameX = reader.ReadInt32();
+            AmmoType = reader.ReadInt32();
+            AmmoForPlatformJumpAttack = reader.ReadInt32();
+
+            //bools
+            Phase2 = reader.ReadBoolean();
+            ForcePlatformCollision = reader.ReadBoolean();
+            ActuallyDead = reader.ReadBoolean();
+
+            //floats
+            NPC.localAI[0] = reader.ReadSingle();
+            NPC.localAI[1] = reader.ReadSingle();
+            NPC.localAI[2] = reader.ReadSingle();
+            NPC.localAI[3] = reader.ReadSingle();
+        }
+
+		public override void SetDefaults()
+		{
+            NPC.lifeMax = 25500;
+            NPC.damage = 45;
+			NPC.defense = 10;
+			NPC.width = 50;
+			NPC.height = 56;
+            NPC.npcSlots = 8f;
+			NPC.knockBackResist = 0f;
+            NPC.value = Item.buyPrice(0, 6, 0, 0);
+            NPC.lavaImmune = true;
+            NPC.noGravity = true;
+            NPC.noTileCollide = false;
+            NPC.netAlways = true;
+            NPC.boss = true;
+			NPC.HitSound = SoundID.NPCHit2;
+			NPC.aiStyle = -1;
+            Music = MusicID.Boss5;
+			SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.SpiderCaveBiome>().Type };
+		}
+
+        public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
+		{
+			NPC.lifeMax = (int)(NPC.lifeMax * 0.75f * balance * bossAdjustment);
+		}
+
+		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
+        {
+			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
+            {
+				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.OldHunter"),
+                new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.SpiderCaveBiome>().ModBiomeBestiaryInfoElement)
+			});
+		}
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            NPCTexture ??= ModContent.Request<Texture2D>(Texture);
+            HeadTexture ??= ModContent.Request<Texture2D>(Texture + "Head");
+            ArmShootFrontTexture ??= ModContent.Request<Texture2D>(Texture + "SlingArmFront");
+            ArmShotProjFrontTexture ??= ModContent.Request<Texture2D>(Texture + "SlingArmFrontShot");
+            ArmShootBackTexture ??= ModContent.Request<Texture2D>(Texture + "SlingArmBack");
+            AmmoHoldTexture ??= ModContent.Request<Texture2D>(Texture + "AmmoHold");
+
+            var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+
+            //rotation stuff
+            Player player = Main.player[NPC.target];
+            Vector2 vector = new Vector2(NPC.Center.X, NPC.Center.Y);
+            float RotateX = player.Center.X - vector.X;
+            float RotateY = player.Center.Y - vector.Y;
+			float ArmRotation = (float)Math.Atan2((double)RotateY, (double)RotateX) + (NPC.spriteDirection == 1 ? MathHelper.Pi : MathHelper.TwoPi);
+
+			if (CurrentFrameX == 1 && CurrentAnimation == AnimationState.Shoot)
+            {
+                spriteBatch.Draw(ArmShootBackTexture.Value, NPC.Center - screenPos + new Vector2(0, NPC.gfxOffY + 4), 
+				NPC.frame, NPC.GetAlpha(drawColor), ArmRotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+            }
+
+            spriteBatch.Draw(NPCTexture.Value, NPC.Center - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+            if (NPC.ai[0] != -3)
+            {
+                spriteBatch.Draw(HeadTexture.Value, NPC.Center - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+            }
+
+            if (CurrentFrameX == 1 && (CurrentAnimation == AnimationState.Shoot || CurrentAnimation == AnimationState.ShotProjectile))
+            {
+                spriteBatch.Draw(CurrentAnimation == AnimationState.ShotProjectile ? ArmShotProjFrontTexture.Value : ArmShootFrontTexture.Value, 
+                NPC.Center - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, drawColor, ArmRotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+            }
+
+            if (CurrentFrameX == 0 && CurrentAnimation == AnimationState.HoldAmmo)
+            {
+                Rectangle AmmoFrame = new Rectangle(0, 28 * AmmoType, 28, 28);
+
+                Vector2 drawOrigin = new Vector2(AmmoHoldTexture.Width() * 0.5f, (AmmoHoldTexture.Height() / 8) * 0.5f);
+
+                spriteBatch.Draw(AmmoHoldTexture.Value, NPC.Center - screenPos + new Vector2(25 * -NPC.spriteDirection, NPC.gfxOffY - 4), 
+				AmmoFrame, NPC.GetAlpha(drawColor), NPC.rotation, drawOrigin, NPC.scale, effects, 0);
+                spriteBatch.Draw(AmmoHoldTexture.Value, NPC.Center - screenPos + new Vector2(25 * -NPC.spriteDirection, NPC.gfxOffY - 4), 
+				AmmoFrame, NPC.GetAlpha(Color.White * 0.75f), NPC.rotation, drawOrigin, NPC.scale, effects, 0);
+            }
+
+            return false;
+        }
+        
+        public override void FindFrame(int frameHeight)
+        {
+            if (Main.netMode != NetmodeID.Server)
+            {
+                NPC.frame.Width = TextureAssets.Npc[NPC.type].Width() / 2;
+            }
+
+            NPC.frame.X = (int)(NPC.frame.Width * CurrentFrameX);
+
+            if (CurrentAnimation == AnimationState.Idle)
+			{
+                NPC.frame.Y = 0;
+            }
+            else if (CurrentAnimation == AnimationState.Walking)
+			{
+                NPC.frameCounter++;
+                if (NPC.frameCounter > 6 - (NPC.velocity.X > 0 ? NPC.velocity.X : -NPC.velocity.X))
+                {
+                    NPC.frame.Y = NPC.frame.Y + frameHeight;
+                    NPC.frameCounter = 0;
+                }
+
+                if (NPC.frame.Y >= frameHeight * 7)
+                {
+                    NPC.frame.Y = 1 * frameHeight;
+                }
+            }
+            else if (CurrentAnimation == AnimationState.Jumping)
+			{
+                NPC.frame.Y = 8 * frameHeight;
+            }
+            else if (CurrentAnimation == AnimationState.HoldAmmo)
+			{
+                NPC.frame.Y = 7 * frameHeight;
+            }
+            else if (CurrentAnimation == AnimationState.Shoot || CurrentAnimation == AnimationState.ShotProjectile)
+			{
+                NPC.frameCounter++;
+                if (NPC.frameCounter > 8)
+                {
+                    NPC.frame.Y = NPC.frame.Y + frameHeight;
+                    NPC.frameCounter = 0;
+                }
+
+                if (NPC.frame.Y >= frameHeight * 3)
+                {
+                    NPC.frame.Y = 2 * frameHeight;
+                }
+            }
+            else if (CurrentAnimation == AnimationState.JumpShoot)
+            {
+                NPC.frameCounter++;
+                if (NPC.frameCounter > 8)
+                {
+                    NPC.frame.Y = NPC.frame.Y + frameHeight;
+                    NPC.frameCounter = 0;
+                }
+
+                if (NPC.frame.Y < frameHeight * 4)
+                {
+                    NPC.frame.Y = 3 * frameHeight;
+                }
+
+                if (NPC.frame.Y >= frameHeight * 6)
+                {
+                    NPC.frame.Y = 5 * frameHeight;
+                }
+            }
+        }
+
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+		{
+			return false;
+		}
+
+        public override bool CheckDead()
+        {
+            if (!ActuallyDead)
+            {
+                //death animation
+                NPC.localAI[0] = 0;
+                NPC.localAI[1] = 0;
+                NPC.localAI[2] = 0;
+                NPC.localAI[3] = 0;
+                NPC.ai[0] = -3;
+                NPC.immortal = true;
+                NPC.dontTakeDamage = true;
+                NPC.life = 1;
+
+                NPC.netUpdate = true;
+
+                return false;
+            }
+            
+            return true;
+        }
+
+        public override void AI()
+        {
+            NPC.TargetClosest(true);
+            Player player = Main.player[NPC.target];
+
+            Vector2 ArenaOriginPosition = Flags.OldHunterPosition;
+			Vector2 PlatformOffset1 = new Vector2(-260, -185);
+            Vector2 PlatformOffset2 = new Vector2(-25, -185);
+            Vector2 PlatformOffset3 = new Vector2(275, -185);
+
+            //despawn and turn back into friendly npc if the player dies or leaves the biome
+            if (player.dead || !player.active || !player.InModBiome(ModContent.GetInstance<SpiderCaveBiome>()))
+            {
+                int OldHunter = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y + (NPC.height / 2), ModContent.NPCType<NPCs.Friendly.OldHunter>());
+                if (Main.netMode == NetmodeID.Server)
+                {
+                    NetMessage.SendData(MessageID.SyncNPC, number: OldHunter);
+                }
+
+                NPC.active = false;
+
+                return;
+            }
+
+            //enter phase 2 when below half hp
+            if (NPC.life <= (NPC.lifeMax / 2) && !Phase2)
+            {
+                Phase2 = true;
+
+                NPC.localAI[0] = 0;
+                NPC.localAI[1] = 0;
+                NPC.localAI[2] = 0;
+                NPC.localAI[3] = 0;
+                NPC.ai[0] = -2;
+
+                NPC.netUpdate = true;
+            }
+
+            bool ShootingGrenades = NPC.ai[0] == 4;
+
+			//old hunter should have gravity but manually because of his jumping behavior
+            bool PlatformCollide = NPC.Center.Y >= player.Center.Y + 15 && !ShootingGrenades;
+            if (!NPCGlobalHelper.IsCollidingWithFloor(NPC, ForcePlatformCollision ? true : PlatformCollide))
+            {
+                NPC.velocity.Y += 0.3f;
+                if (NPC.velocity.Y > 4f)
+                {
+                    NPC.velocity.Y += 0.3f;
+                }
+            }
+            //y-velocity should immediately be slowed when on the ground to prevent old hunter from clipping into it due to fast falling speeds
+            else
+            {
+                NPC.velocity.Y *= 0.2f;
+
+                NPC.noTileCollide = false;
+            }
+
+            if (ShootingGrenades)
+            {
+                ForcePlatformCollision = false;
+
+                if (NPC.Center.Y < ArenaOriginPosition.Y - 170)
+                {
+                    NPC.noTileCollide = true;
+                }
+                else
+                {
+                    NPC.noTileCollide = false;
+                }
+            }
+            else
+            {
+                if (NPC.Center.Y > ArenaOriginPosition.Y - 100)
+                {
+                    ForcePlatformCollision = false;
+                    NPC.noTileCollide = false;
+                }
+                else
+                {
+                    if (ForcePlatformCollision)
+                    {
+                        NPC.noTileCollide = false;
+                    }
+                    else
+                    {
+                        if (!PlatformCollide)
+                        {
+                            NPC.noTileCollide = true;
+                        }
+                        else
+                        {
+                            NPC.noTileCollide = false;
+                        }
+                    }
+                }
+            }
+
+            if (NPC.alpha == 255)
+            {
+                NPC.alpha = 0;
+            }
+
+            switch ((int)NPC.ai[0])
+            {
+                case -3:
+                {
+                    NPC.localAI[0]++;
+
+                    if (NPC.localAI[0] == 1)
+                    {
+                        SoundEngine.PlaySound(SoundID.Item112 with { Pitch = 1f, Volume = 3f }, NPC.Center);
+
+                        CurrentFrameX = 0;
+                        CurrentAnimation = AnimationState.Idle;
+
+                        NPC.velocity.X = 0;
+
+                        Vector2 Speed = new Vector2((NPC.Center.X >= ArenaOriginPosition.X ? -6 : 6), -2);
+                        NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Top, Speed, ModContent.ProjectileType<OldHunterHead>(), 0, 0f, ai2: NPC.whoAmI);
+                    }
+
+                    if (NPC.localAI[0] >= 180)
+                    {
+                        if (NPC.localAI[1] <= 0)
+                        {
+                            CurrentAnimation = AnimationState.Walking;
+
+                            NPC.spriteDirection = NPC.direction = NPC.velocity.X >= 0 ? -1 : 1;
+
+                            Vector2 Position = NPC.Center;
+
+                            foreach (var Proj in Main.ActiveProjectiles)
+                            {
+                                if (Proj.type == ModContent.ProjectileType<OldHunterHead>() && NPC.Hitbox.Intersects(new Rectangle((int)Proj.Center.X, (int)Proj.Center.Y, 1, 1)))
+                                {
+                                    NPC.localAI[1] = 1;
+                                    Proj.ai[1] = 1;
+                                    break;
+                                }
+                                if (Proj.type == ModContent.ProjectileType<OldHunterHead>()) 
+                                {
+                                    Position = Proj.Center; 
+                                    break;
+                                }
+                            }
+
+                            WalkTowardsTarget(Position, 2f, 0.15f, 50);
+                        }
+
+                        if (NPC.localAI[1] == 1)
+                        {
+                            CurrentAnimation = AnimationState.Idle;
+
+                            NPC.velocity.X = 0;
+                        }
+
+                        if (NPC.localAI[1] >= 2)
+                        {
+                            ActuallyDead = true;
+                            NPC.immortal = false;
+                            NPC.dontTakeDamage = false;
+                            NPC.netUpdate = true;
+                            player.ApplyDamageToNPC(NPC, NPC.lifeMax * 2, 0, 0, false);
+
+                            int OldHunter = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y + (NPC.height / 2), ModContent.NPCType<NPCs.Friendly.OldHunter>());
+                            if (Main.netMode == NetmodeID.Server)
+                            {
+                                NetMessage.SendData(MessageID.SyncNPC, number: OldHunter);
+                            }
+                        }
+                    }
+
+                    break;
+                }
+
+                //phase 2 transition
+                case -2:
+                {
+                    NPC.spriteDirection = -NPC.direction;
+
+                    NPC.velocity.X *= 0.75f;
+                    NPC.rotation = 0;
+
+                    CurrentFrameX = 0;
+                    CurrentAnimation = AnimationState.Idle;
+
+                    NPC.localAI[0]++;
+                    if (NPC.localAI[0] == 1)
+                    {
+                        NPC.immortal = true;
+                        NPC.dontTakeDamage = true;
+                    }
+
+                    if (NPC.localAI[0] == 120)
+                    {
+                        CustomPopupText.SpawnText(NPC.Top, Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterBoss.Phase2-1"), Color.Chocolate, new Vector2(NPC.direction * 2, -2f), 130);
+                    }
+
+                    if (NPC.localAI[0] == 240)
+                    {
+                        CustomPopupText.SpawnText(NPC.Top, Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterBoss.Phase2-2"), Color.Chocolate, new Vector2(NPC.direction * 2, -2f), 130);
+                    }
+
+                    if (NPC.localAI[0] >= 360)
+                    {
+                        NPC.immortal = false;
+                        NPC.dontTakeDamage = false;
+
+                        AmmoType = 0;
+                        AmmoForPlatformJumpAttack = 5;
+
+                        NPC.localAI[0] = 0;
+                        NPC.localAI[1] = 0;
+                        NPC.localAI[2] = 0;
+                        NPC.localAI[3] = 0;
+                        NPC.ai[0] = 0;
+
+                        NPC.netUpdate = true;
+                    }
+
+                    break;
+                }
+
+                //spawn intro
+                case -1:
+                {
+                    NPC.spriteDirection = -NPC.direction;
+
+                    NPC.localAI[0]++;
+
+                    if (NPC.localAI[0] == 1)
+                    {
+                        NPC.immortal = true;
+                        NPC.dontTakeDamage = true;
+                    }
+
+                    if (!Flags.downedOldHunter)
+                    {
+                        if (NPC.localAI[0] == 50)
+                        {
+                            CustomPopupText.SpawnText(NPC.Top, Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterBoss.Intro1"), Color.Chocolate, new Vector2(NPC.direction * 2, -2f), 120);
+                        }
+
+                        if (NPC.localAI[0] == 200)
+                        {
+                            CustomPopupText.SpawnText(NPC.Top, Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterBoss.Intro2"), Color.Chocolate, new Vector2(NPC.direction * 2, -2f), 250);
+                        }
+
+                        if (NPC.localAI[0] == 260)
+                        {
+                            CustomPopupText.SpawnText(player.Top, Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterBoss.IntroPlayer2"), Color.White, new Vector2(player.direction * 2, -2f), 100);
+                        }
+
+                        if (NPC.localAI[0] == 320)
+                        {
+                            CustomPopupText.SpawnText(NPC.Top, Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterBoss.Intro3"), Color.Chocolate, new Vector2(NPC.direction * 2, -2f), 100);
+                        }
+
+                        if (NPC.localAI[0] >= 450)
+                        {
+                            NPC.immortal = false;
+                            NPC.dontTakeDamage = false;
+
+                            NPC.localAI[0] = 0;
+                            NPC.ai[0]++;
+
+                            NPC.netUpdate = true;
+                        }
+                    }
+                    else
+                    {
+                        if (NPC.localAI[0] == 60)
+                        {
+                            CustomPopupText.SpawnText(NPC.Top, Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterBoss.PostDefeatIntro1"), Color.Chocolate, new Vector2(NPC.direction * 2, -2f), 130);
+                        }
+
+                        if (NPC.localAI[0] == 180)
+                        {
+                            CustomPopupText.SpawnText(NPC.Top, Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterBoss.PostDefeatIntro2"), Color.Chocolate, new Vector2(NPC.direction * 2, -2f), 130);
+                        }
+
+                        if (NPC.localAI[0] >= 320)
+                        {
+                            NPC.immortal = false;
+                            NPC.dontTakeDamage = false;
+
+                            NPC.localAI[0] = 0;
+                            NPC.ai[0]++;
+
+                            NPC.netUpdate = true;
+                        }
+                    }
+
+                    break;
+                }
+
+                //walk at the player
+                case 0:
+                {
+                    NPC.localAI[0]++;
+
+                    CurrentAnimation = AnimationState.Walking;
+
+                    NPC.spriteDirection = NPC.direction = NPC.velocity.X >= 0 ? -1 : 1;
+
+                    WalkTowardsTarget(player.Center, 2f, 0.15f, 50);
+
+                    if (NPC.localAI[0] >= 180)
+                    {
+                        NPC.localAI[0] = 0;
+                        NPC.ai[0]++;
+
+                        NPC.netUpdate = true;
+                    }
+
+                    break;
+                }
+
+                //jump to a platform in the arena and shoot a projectile
+                case 1:
+                {
+                    //jump towards the desired location
+                    if (NPC.localAI[1] == 0)
+                    {
+                        SoundEngine.PlaySound(SoundID.DD2_JavelinThrowersAttack with { Pitch = -0.5f }, NPC.Center);
+
+                        CurrentAnimation = AnimationState.Jumping;
+                        
+                        NPC.spriteDirection = NPC.direction = NPC.velocity.X >= 0 ? -1 : 1;
+
+                        Vector2 offset = Vector2.Zero;
+
+                        //randomize the platform to jump to depending on where the player is
+                        if (player.Center.X >= ArenaOriginPosition.X)
+                        {
+                            switch (Main.rand.Next(2))
+                            {
+                                case 0:
+                                {
+                                    offset = PlatformOffset1;
+                                    break;
+                                }
+                                case 1:
+                                {
+                                    offset = PlatformOffset2;
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            switch (Main.rand.Next(2))
+                            {
+                                case 0:
+                                {
+                                    offset = PlatformOffset2;
+                                    break;
+                                }
+                                case 1:
+                                {
+                                    offset = PlatformOffset3;
+                                    break;
+                                }
+                            }
+                        }
+
+                        Vector2 GoTo = ArenaOriginPosition + offset;
+
+                        NPC.velocity = ArcVelocityHelper.GetArcVelocity(NPC, GoTo, 0.3f, 320, 350, maxXvel: 14);
+
+                        NPC.localAI[1]++;
+
+                        NPC.netUpdate = true;
+                    }
+                    //land and then start shooting behavior
+                    if (NPC.localAI[1] == 1)
+                    {
+                        NPC.spriteDirection = NPC.direction = NPC.velocity.X >= 0 ? -1 : 1;
+
+                        ForcePlatformCollision = true;
+
+                        NPC.localAI[2]++;
+                        if (NPC.localAI[2] >= 5 && NPCGlobalHelper.IsCollidingWithFloor(NPC, true))
+                        {
+                            NPC.spriteDirection = -NPC.direction;
+
+                            AmmoType = AmmoForPlatformJumpAttack;
+
+                            NPC.velocity = Vector2.Zero;
+                            NPC.localAI[1]++;
+
+                            NPC.netUpdate = true;
+                        }
+                    }
+                    //shooting projectile with animations and stuff
+                    if (NPC.localAI[1] > 1)
+                    {
+                        NPC.spriteDirection = -NPC.direction;
+
+                        NPC.localAI[0]++;
+
+                        //hold ammo for a second before shooting
+                        int TimeBeforeShoot = Phase2 ? 48 : 58;
+                        if (NPC.localAI[0] < TimeBeforeShoot)
+                        {
+                            CurrentAnimation = AnimationState.HoldAmmo;
+                        }
+
+                        //how many times to loop the shooting attack
+                        int Repeats = 2;
+
+                        //gourd and spike ball attack repeats 6 times
+                        if (AmmoForPlatformJumpAttack == 5 || AmmoForPlatformJumpAttack == 6)
+                        {
+                            Repeats = 6;
+                        }
+
+                        if (NPC.localAI[3] <= Repeats)
+                        {
+                            int TimeForSound = Phase2 ? 50 : 60;
+                            int TimeForShooting = (AmmoForPlatformJumpAttack == 5 || AmmoForPlatformJumpAttack == 6) ? 80 : (Phase2 ? 110 : 140);
+
+                            //begin shooting animation and sound
+                            if (NPC.localAI[0] == TimeForSound)
+                            {
+                                SoundEngine.PlaySound(UseSound, NPC.Center);
+
+                                NPC.frame.Y = 0;
+                                CurrentFrameX = 1;
+                                CurrentAnimation = AnimationState.Shoot;
+                            }
+
+                            //shoot projectile
+                            if (NPC.localAI[0] == TimeForShooting)
+                            {
+                                SoundEngine.PlaySound(ShootSound, NPC.Center);
+
+                                CurrentFrameX = 1;
+                                CurrentAnimation = AnimationState.ShotProjectile;
+
+                                int AmmoToShoot = 0;
+                                float ProjSpeed = 0f;
+
+                                switch (AmmoType)
+                                {
+                                    case 0:
+                                    {
+                                        AmmoToShoot = ModContent.ProjectileType<SlingshotIceBall>();
+                                        ProjSpeed = 16f;
+                                        break;
+                                    }
+                                    case 1:
+                                    {
+                                        AmmoToShoot = ModContent.ProjectileType<SlingshotBigRock>();
+                                        ProjSpeed = 8f;
+                                        break;
+                                    }
+                                    case 5:
+                                    {
+                                        AmmoToShoot = ModContent.ProjectileType<SlingshotRotBall>();
+                                        ProjSpeed = 8f;
+                                        break;
+                                    }
+                                    case 6:
+                                    {
+                                        AmmoToShoot = ModContent.ProjectileType<SlingshotSpikeBall>();
+                                        ProjSpeed = 12f;
+                                        break;
+                                    }
+                                }
+
+                                Vector2 ShootSpeed = player.Center - NPC.Center;
+                                ShootSpeed.Normalize();
+                                ShootSpeed *= ProjSpeed;
+
+                                Vector2 Offset = Vector2.Normalize(new Vector2(ShootSpeed.X, ShootSpeed.Y)) * 40f;
+                                Vector2 position = NPC.Center;
+
+                                if (Collision.CanHit(position, 0, 0, position + Offset, 0, 0))
+                                {
+                                    position += Offset;
+                                }
+
+                                if (AmmoToShoot != ModContent.ProjectileType<SlingshotBigRock>())
+                                {
+                                    NPCGlobalHelper.ShootHostileProjectile(NPC, position, ShootSpeed, AmmoToShoot, NPC.damage, 4.5f);
+                                }
+                                else
+                                {
+                                    for (int numProjs = 0; numProjs <= 2; numProjs++)
+                                    {
+                                        Vector2 Velocity = ShootSpeed.RotatedByRandom(MathHelper.ToRadians(50));
+                                        NPCGlobalHelper.ShootHostileProjectile(NPC, position, Velocity, AmmoToShoot, NPC.damage, 4.5f);
+                                    }
+                                }
+
+                                NPC.localAI[0] = TimeForSound - 1;
+                                NPC.localAI[3]++;
+
+                                NPC.netUpdate = true;
+                            }
+                        }
+                        else
+                        {
+                            if (NPC.localAI[0] >= 30)
+                            {
+                                CurrentFrameX = 0;
+                                CurrentAnimation = AnimationState.Idle;
+
+                                ForcePlatformCollision = false;
+
+                                //phase 1 values
+                                if (AmmoForPlatformJumpAttack == 0)
+                                {
+                                    AmmoForPlatformJumpAttack = 1;
+                                }
+                                else if (AmmoForPlatformJumpAttack == 1)
+                                {
+                                    AmmoForPlatformJumpAttack = 0;
+                                }
+
+                                //phase 2 values
+                                if (AmmoForPlatformJumpAttack == 5)
+                                {
+                                    AmmoForPlatformJumpAttack = 6;
+                                }
+                                else if (AmmoForPlatformJumpAttack == 6)
+                                {
+                                    AmmoForPlatformJumpAttack = 5;
+                                }
+
+                                NPC.localAI[0] = 0;
+                                NPC.localAI[1] = 0;
+                                NPC.localAI[2] = 0;
+                                NPC.localAI[3] = 0;
+                                NPC.ai[0]++;
+                                
+                                NPC.netUpdate = true;
+                            }
+                        }
+                    }
+
+                    break;
+                }
+
+                case 2:
+                {
+                    goto case 0;
+                }
+
+                //jump up, then fire at the player directly
+                case 3:
+                {
+                    NPC.spriteDirection = -NPC.direction;
+
+                    //hold up ammo before jumping
+                    if (NPC.localAI[1] == 0)
+                    {
+                        NPC.velocity.X = 0;
+
+                        NPC.localAI[2]++;
+                        if (NPC.localAI[2] <= 1)
+                        {
+                            AmmoType = Phase2 ? 7 : 2; //bouncy ammo
+                        }
+                        if (NPC.localAI[2] > 1 && NPC.localAI[2] < 60)
+                        {
+                            CurrentAnimation = AnimationState.HoldAmmo;
+                        }
+                        if (NPC.localAI[2] >= 60)
+                        {
+                            NPC.localAI[1]++;
+
+                            NPC.netUpdate = true;
+                        }
+                    }
+                    //actual jumping
+                    if (NPC.localAI[1] == 1)
+                    {
+                        SoundEngine.PlaySound(SoundID.DD2_JavelinThrowersAttack with { Pitch = -0.5f }, NPC.Center);
+
+                        CurrentFrameX = 1;
+                        CurrentAnimation = AnimationState.JumpShoot;
+
+                        int MinHeight = 325;
+                        int MaxHeight = 350;
+                        if (NPC.Center.Y <= ArenaOriginPosition.Y - 170)
+                        {
+                            MinHeight = 125;
+                            MaxHeight = 150;
+                        }
+
+                        NPC.velocity = ArcVelocityHelper.GetArcVelocity(NPC, new Vector2(player.Center.X, ArenaOriginPosition.Y), 0.3f, MinHeight, MaxHeight, maxXvel: 14);
+
+                        NPC.localAI[1]++;
+
+                        NPC.netUpdate = true;
+                    }
+                    //shooting projectile with animations and stuff
+                    if (NPC.localAI[1] > 1)
+                    {
+                        NPC.localAI[0]++;
+
+                        if (NPC.localAI[0] == 1)
+                        {
+                            SoundEngine.PlaySound(UseSound, NPC.Center);
+                        }
+
+                        if (NPC.localAI[0] < 45)
+                        {
+                            Vector2 vector = new Vector2(NPC.Center.X, NPC.Center.Y);
+                            float RotateX = player.Center.X - vector.X;
+                            float RotateY = player.Center.Y - vector.Y;
+                            NPC.rotation = (float)Math.Atan2((double)RotateY, (double)RotateX) + (NPC.spriteDirection == 1 ? MathHelper.Pi : MathHelper.TwoPi);
+                        }
+
+                        if (NPC.localAI[0] > 30 && NPC.localAI[0] < 45)
+                        {
+                            NPC.velocity *= 0.98f;
+                        }
+
+                        if (NPC.localAI[0] == 45)
+                        {
+                            SoundEngine.PlaySound(ShootSound, NPC.Center);
+
+                            CurrentFrameX = 0;
+                            CurrentAnimation = AnimationState.Jumping;
+                            
+                            NPC.rotation = 0;
+
+                            int AmmoToShoot = Phase2 ? ModContent.ProjectileType<SlingshotBomb>() : ModContent.ProjectileType<SlingshotBouncyBall>();
+
+                            Vector2 ShootSpeed = player.Center - NPC.Center;
+                            ShootSpeed.Normalize();
+                            ShootSpeed *= 12f;
+
+                            Vector2 Offset = Vector2.Normalize(new Vector2(ShootSpeed.X, ShootSpeed.Y)) * 40f;
+                            Vector2 position = NPC.Center;
+
+                            if (Collision.CanHit(position, 0, 0, position + Offset, 0, 0))
+                            {
+                                position += Offset;
+                            }
+
+                            NPCGlobalHelper.ShootHostileProjectile(NPC, position, ShootSpeed, AmmoToShoot, NPC.damage, 4.5f);
+                        }
+
+                        if (NPC.localAI[0] > 45)
+                        {
+                            if (NPCGlobalHelper.IsCollidingWithFloor(NPC, true))
+                            {
+                                CurrentAnimation = AnimationState.Walking;
+                                NPC.rotation = 0;
+
+                                //the bomb in phase 2 needs time to explode, so walk towards the player for a bit
+                                if (Phase2)
+                                {
+                                    WalkTowardsTarget(player.Center, 2f, 0.15f, 50);
+                                }
+
+                                int EndTime = Phase2 ? 130 : 45;
+                                if (NPC.localAI[0] > EndTime)
+                                {
+                                    NPC.localAI[0] = 0;
+                                    NPC.localAI[1] = 0;
+                                    NPC.localAI[2] = 0;
+                                    NPC.ai[0]++;
+                                    
+                                    NPC.netUpdate = true;
+                                }
+                            }
+                        }
+                    }
+
+                    break;
+                }
+
+                //fire grenades because its funny
+                case 4:
+                {
+                    //walk at the target for a bit
+                    if (NPC.localAI[1] == 0)
+                    {
+                        AmmoType = 3; //grenade
+
+                        CurrentAnimation = AnimationState.Walking;
+
+                        NPC.spriteDirection = NPC.direction = NPC.velocity.X >= 0 ? -1 : 1;
+                        
+                        WalkTowardsTarget(player.Center, 2f, 0.15f, 50);
+
+                        NPC.localAI[2]++;
+                        if (NPC.localAI[2] >= 45)
+                        {
+                            NPC.localAI[1]++;
+
+                            NPC.netUpdate = true;
+                        }
+                    }
+                    //shooting projectile with animations and stuff
+                    if (NPC.localAI[1] > 0)
+                    {
+                        NPC.spriteDirection = -NPC.direction;
+
+                        NPC.velocity.X = 0;
+
+                        NPC.localAI[0]++;
+
+                        //hold ammo for a second before shooting
+                        int TimeBeforeShoot = Phase2 ? 38 : 58;
+                        if (NPC.localAI[0] < TimeBeforeShoot)
+                        {
+                            CurrentAnimation = AnimationState.HoldAmmo;
+                        }
+
+                        //repet 2 times shooting a grenade (or grenade bundle in phase 2)
+                        int Repeats = Phase2 ? 4 : 3;
+                        if (NPC.localAI[3] <= Repeats)
+                        {
+                            int TimeForSound = Phase2 ? 40 : 60;
+                            int TimeForShooting = Phase2 ? 80 : 110;
+
+                            //begin shooting animation and sound
+                            if (NPC.localAI[0] == TimeForSound)
+                            {
+                                SoundEngine.PlaySound(UseSound, NPC.Center);
+
+                                NPC.frame.Y = 0;
+                                CurrentFrameX = 1;
+                                CurrentAnimation = AnimationState.Shoot;
+                            }
+
+                            //shoot projectile
+                            if (NPC.localAI[0] == TimeForShooting)
+                            {
+                                SoundEngine.PlaySound(ShootSound, NPC.Center);
+
+                                CurrentFrameX = 1;
+                                CurrentAnimation = AnimationState.ShotProjectile;
+
+                                Vector2 ShootSpeed = player.Center - NPC.Center;
+                                ShootSpeed.Normalize();
+                                ShootSpeed *= 10f;
+
+                                Vector2 Offset = Vector2.Normalize(new Vector2(ShootSpeed.X, ShootSpeed.Y)) * 40f;
+                                Vector2 position = NPC.Center;
+
+                                if (Collision.CanHit(position, 0, 0, position + Offset, 0, 0))
+                                {
+                                    position += Offset;
+                                }
+
+                                //in phase 2, fire a grenade cluster on the final shot
+                                int Type = NPC.localAI[3] == 4 ? ModContent.ProjectileType<SlingshotGrenadeCluster>() : ModContent.ProjectileType<SlingshotGrenade>();
+
+                                NPCGlobalHelper.ShootHostileProjectile(NPC, position, Vector2.Zero, Type, NPC.damage, 4.5f);
+
+                                NPC.localAI[0] = TimeForSound - 1;
+                                NPC.localAI[3]++;
+
+                                NPC.netUpdate = true;
+                            }
+                        }
+                        else
+                        {
+                            if (NPC.localAI[0] >= 30)
+                            {
+                                CurrentFrameX = 0;
+                                CurrentAnimation = AnimationState.Idle;
+
+                                NPC.localAI[0] = 0;
+                                NPC.localAI[1] = 0;
+                                NPC.localAI[2] = 0;
+                                NPC.localAI[3] = 0;
+                                NPC.ai[0] = 0;
+                                
+                                NPC.netUpdate = true;
+                            }
+                        }
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        public void WalkTowardsTarget(Vector2 Center, float MaxSpeed, float Acceleration, int Distance)
+        {
+            //prevents the pet from getting stuck on sloped tiles
+            Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
+
+            Vector2 center2 = NPC.Center;
+            Vector2 vector48 = Center - center2;
+            float CenterDistance = vector48.Length();
+
+            if (NPC.collideX)
+            {
+                NPC.velocity.X = -NPC.velocity.X;
+            }
+
+            if (center2.X < Center.X)
+            {
+                NPC.velocity.X += Acceleration;
+                if (NPC.velocity.X > MaxSpeed)
+                {
+                    NPC.velocity.X = MaxSpeed;
+                }
+            }
+            else
+            {
+                NPC.velocity.X -= Acceleration;
+                if (NPC.velocity.X < -MaxSpeed)
+                {
+                    NPC.velocity.X = -MaxSpeed;
+                }
+            }
+        }
+
+        //Loot and stuff
+        public override void ModifyNPCLoot(NPCLoot npcLoot) 
+        {
+            LeadingConditionRule notExpertRule = new(new Conditions.NotExpert());
+
+			//treasure bag
+            npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<BossBagOldHunter>()));
+
+            //master relic and pet
+            npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<OldHunterRelicItem>()));
+
+            //drop boss mask
+            notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<OldHunterHat>(), 7));
+
+            //trophy always drops directly from the boss
+			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<OldHunterTrophyItem>(), 10));
+        }
+
+        public override void OnKill()
+        {
+            if (!Flags.downedOldHunter)
+			{
+				Flags.GuaranteedRaveyard = true;
+
+				if (Main.netMode == NetmodeID.Server)
+				{
+					NetMessage.SendData(MessageID.WorldData);
+				}
+			}
+
+            NPC.SetEventFlagCleared(ref Flags.downedOldHunter, -1);
+
+            if (!MenuSaveSystem.hasDefeatedOldHunter)
+			{
+				MenuSaveSystem.hasDefeatedOldHunter = true;
+			}
+        }
+
+        public override void BossLoot(ref string name, ref int potionType)
+		{
+			potionType = ModContent.ItemType<CranberryJelly>();
+		}
+    }
+}

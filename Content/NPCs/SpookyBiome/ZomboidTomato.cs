@@ -1,0 +1,131 @@
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.GameContent.ItemDropRules;
+using Terraria.GameContent.Bestiary;
+using Microsoft.Xna.Framework;
+using System.Collections.Generic;
+
+using Spooky.Core;
+using Spooky.Content.Items.Food;
+using Spooky.Content.NPCs.SpookyBiome.Projectiles;
+using Spooky.Content.Tiles.Blooms;
+
+namespace Spooky.Content.NPCs.SpookyBiome
+{
+    public class ZomboidTomato : ModNPC  
+    {
+        public override void SetStaticDefaults()
+        {
+			Main.npcFrameCount[NPC.type] = 7;
+        }
+        
+        public override void SetDefaults()
+		{
+            NPC.lifeMax = 80;
+            NPC.damage = 22;
+            NPC.defense = 10;
+            NPC.width = 36;
+			NPC.height = 48;
+            NPC.npcSlots = 1f;
+			NPC.knockBackResist = 0.5f;
+            NPC.value = Item.buyPrice(0, 0, 0, 50);
+            NPC.HitSound = SoundID.NPCHit1;
+			NPC.DeathSound = SoundID.NPCDeath2;
+            NPC.aiStyle = 3;
+			AIType = NPCID.GiantWalkingAntlion;
+            SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.SpookyBiome>().Type };
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
+        {
+			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
+            {
+				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.ZomboidTomato"),
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.BloodMoon,
+				new BestiaryBackgroundOverlay("Spooky/Content/Biomes/SpookyBiomeBloodMoon_Background", Color.White)
+			});
+		}
+
+        public override void FindFrame(int frameHeight)
+        {   
+            //running animation
+            NPC.frameCounter++;
+            if (NPC.frameCounter > 3)
+            {
+                NPC.frame.Y = NPC.frame.Y + frameHeight;
+                NPC.frameCounter = 0;
+            }
+            if (NPC.frame.Y >= frameHeight * 6)
+            {
+                NPC.frame.Y = 0 * frameHeight;
+            }
+
+            //jumping frame
+            if (NPC.velocity.Y > 0 || NPC.velocity.Y < 0)
+            {
+                NPC.frame.Y = 6 * frameHeight;
+            }
+        }
+        
+        public override void AI()
+		{
+			NPC.spriteDirection = NPC.direction;
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot) 
+        {
+            npcLoot.Add(ItemDropRule.Common(ItemID.SharkToothNecklace, 150));
+            npcLoot.Add(ItemDropRule.Common(ItemID.MoneyTrough, 200));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FrankenMarshmallow>(), 100));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<TomatoSeed>(), 120));
+        }
+
+        public override void HitEffect(NPC.HitInfo hit) 
+        {
+            if (NPC.life <= 0) 
+            {
+                NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X, NPC.Center.Y - 10), new Vector2(0, Main.rand.Next(-15, -9)), 
+                ModContent.ProjectileType<ZomboidTomatoHead>(), NPC.damage, 4.5f, ai0: 0);
+
+                for (int numGores = 2; numGores <= 6; numGores++)
+                {
+                    if (Main.netMode != NetmodeID.Server) 
+                    {
+                        Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/ZomboidThornGore" + numGores).Type);
+                    }
+                }
+            }
+        }
+    }
+
+    public class ZomboidTomatoMold : ZomboidTomato  
+    {
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
+        {
+			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
+            {
+				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.ZomboidTomatoMold"),
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.BloodMoon,
+				new BestiaryBackgroundOverlay("Spooky/Content/Biomes/SpookyBiomeBloodMoon_Background", Color.White)
+			});
+		}
+
+        public override void HitEffect(NPC.HitInfo hit) 
+        {
+            if (NPC.life <= 0) 
+            {
+                NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X, NPC.Center.Y - 10), new Vector2(0, Main.rand.Next(-15, -9)), 
+                ModContent.ProjectileType<ZomboidTomatoHead>(), NPC.damage, 4.5f, ai0: 1);
+
+                for (int numGores = 2; numGores <= 6; numGores++)
+                {
+                    if (Main.netMode != NetmodeID.Server) 
+                    {
+                        Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/ZomboidThornGore" + numGores).Type);
+                    }
+                }
+            }
+        }
+    }
+}
