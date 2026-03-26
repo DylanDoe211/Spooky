@@ -12,8 +12,6 @@ namespace Spooky
 {
     internal class SpookyMenu : ModMenu
     {
-        //test
-
         private bool HasClicked;
 
         private float LogoSquishIntensity;
