@@ -8,6 +8,9 @@ However, you are NOT allowed to use any sprites from the mod as that is the prop
 If you decide to compile the mod from this github in game yourself thats totally fine, but please keep in mind that you will be spoiling all of the new content for yourself, there will be things that are unfinished, and that some planned features might not even exist yet.
 
 Thank you to all of the people who helped make this project possible!
+
 Developers: DylanDoe21, Hugekraken, Tortilla, Waasephi, Seasalt, Dandy, Sulfur, Astrobit, Kekcroc, Bananalizard, Rockwizard5, Luxcapacitor, Jim2OUK
+
 Contributors: Grae, Graydee, Lion8cake, HondaCivicMoment, RocketLauncher, Guck, Ennway, Tomat, Vortex of Rainbows, Ebonfly
+
 Also credit to zapsplat.com, a free sound library where most of the custom sound effects used in this mod come from
