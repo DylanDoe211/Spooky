@@ -2938,6 +2938,11 @@ TatantulaFlyTome: {
 		'''
 }
 
+TrackingCrossbow: {
+	DisplayName: Hi-Tech Crossbow
+	Tooltip: Fires out homing bolts that stick to enemies
+}
+
 VenomHarpoon: {
 	DisplayName: Venomous Spiderpoon
 	Tooltip:

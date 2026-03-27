@@ -274,7 +274,7 @@ namespace Spooky.Content.NPCs.EggEvent
 				//shoot sound blast
 				if (NPC.ai[1] == 400)
 				{
-					SoundEngine.PlaySound(ScreechSound, NPC.Center);
+					SoundEngine.PlaySound(ScreechSound with { Volume = 0.5f }, NPC.Center);
 
 					Screenshake.ShakeScreenWithIntensity(NPC.Center, 5f, 400f);
 

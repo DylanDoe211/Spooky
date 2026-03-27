@@ -116,6 +116,8 @@ Enemy/Boss:
 -Tomato zomboids now drop their head as a damaging projectile instead of tomato piles
 -Putty slimes and putty pumpkins are now animated like terraria's slimes
 -Lowered zomboid warlock spawnrates on the surface at night (Its underground spawnrate is still the same)
+-Lowered the volume on ear worms screeching sound
+-Changed the sound effects for biojetter scream, crux bat scream, and tongue biter scream to be less loud and annoying
 
 World Generation:
 -Rotten depths now accounts for having both calamity and thorium on at the same time, if both are on the rotten depths will generate next to the sulphur sea, with its tunnel connecting to the sulphur sea caves

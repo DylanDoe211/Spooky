@@ -20,7 +20,6 @@ using Spooky.Content.Biomes;
 using Spooky.Content.Items.BossBags;
 using Spooky.Content.Items.Costume;
 using Spooky.Content.NPCs.Boss.OldHunter.Projectiles;
-using Spooky.Content.NPCs.Friendly;
 using Spooky.Content.Tiles.Relic;
 using Spooky.Content.Tiles.Trophy;
 
@@ -49,7 +48,7 @@ namespace Spooky.Content.NPCs.Boss.OldHunter
 		}
 
         private static Asset<Texture2D> NPCTexture;
-        private static Asset<Texture2D> HeadTexture;
+        private static Asset<Texture2D> NPCHeadTexture;
         private static Asset<Texture2D> ArmShootFrontTexture;
         private static Asset<Texture2D> ArmShotProjFrontTexture;
         private static Asset<Texture2D> ArmShootBackTexture;
@@ -146,7 +145,7 @@ namespace Spooky.Content.NPCs.Boss.OldHunter
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             NPCTexture ??= ModContent.Request<Texture2D>(Texture);
-            HeadTexture ??= ModContent.Request<Texture2D>(Texture + "Head");
+			NPCHeadTexture ??= ModContent.Request<Texture2D>(Texture + "Head");
             ArmShootFrontTexture ??= ModContent.Request<Texture2D>(Texture + "SlingArmFront");
             ArmShotProjFrontTexture ??= ModContent.Request<Texture2D>(Texture + "SlingArmFrontShot");
             ArmShootBackTexture ??= ModContent.Request<Texture2D>(Texture + "SlingArmBack");
@@ -170,7 +169,7 @@ namespace Spooky.Content.NPCs.Boss.OldHunter
             spriteBatch.Draw(NPCTexture.Value, NPC.Center - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
             if (NPC.ai[0] != -3)
             {
-                spriteBatch.Draw(HeadTexture.Value, NPC.Center - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+                spriteBatch.Draw(NPCHeadTexture.Value, NPC.Center - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
             }
 
             if (CurrentFrameX == 1 && (CurrentAnimation == AnimationState.Shoot || CurrentAnimation == AnimationState.ShotProjectile))
