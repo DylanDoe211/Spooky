@@ -1,4 +1,4 @@
-# Spooky
+# Spooky Mod
 The spooky mod for terraria, a halloween themed content mod with lots of goofy content.
 
 This github is public, and anyone is free to look through it to use it as a tool to develop their own projects.
