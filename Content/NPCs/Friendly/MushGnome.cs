@@ -25,10 +25,7 @@ namespace Spooky.Content.NPCs.Friendly
         {
             Main.npcFrameCount[NPC.type] = 5;
 
-            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
-            {
-				Velocity = 1f
-			};
+            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
         }
         
         public override void SetDefaults()
@@ -45,17 +42,7 @@ namespace Spooky.Content.NPCs.Friendly
             NPC.HitSound = SoundID.DD2_GoblinScream with { Pitch = 1f, Volume = 0.4f };
             NPC.DeathSound = SoundID.NPCDeath1;
             NPC.aiStyle = -1;
-            SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.SpiderCaveBiome>().Type };
         }
-
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
-        {
-            bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
-            {
-				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.MushGnome1"),
-				new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.SpiderCaveBiome>().ModBiomeBestiaryInfoElement)
-			});
-		}
 
         public override void FindFrame(int frameHeight)
         {   
@@ -261,42 +248,15 @@ namespace Spooky.Content.NPCs.Friendly
     public class MushGnome2 : MushGnome1  
     {
         Vector2 SavePosition;
-
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
-        {
-            bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
-            {
-				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.MushGnome2"),
-				new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.SpiderCaveBiome>().ModBiomeBestiaryInfoElement)
-			});
-		}
     }
 
     public class MushGnome3 : MushGnome1  
     {
         Vector2 SavePosition;
-
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
-        {
-            bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
-            {
-				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.MushGnome3"),
-				new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.SpiderCaveBiome>().ModBiomeBestiaryInfoElement)
-			});
-		}
     }
 
     public class MushGnome4 : MushGnome1  
     {
         Vector2 SavePosition;
-
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
-        {
-            bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
-            {
-				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.MushGnome4"),
-				new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.SpiderCaveBiome>().ModBiomeBestiaryInfoElement)
-			});
-		}
     }
 }

@@ -32,7 +32,6 @@ namespace Spooky.Content.NPCs.Quest
 		public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 3;
-			NPCID.Sets.ShouldBeCountedAsBoss[Type] = true;
 			NPCID.Sets.CantTakeLunchMoney[Type] = true;
 
 			NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()

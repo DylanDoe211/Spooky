@@ -108,17 +108,15 @@ namespace Spooky.Content.NPCs.Boss.OldHunter.Projectiles
 
         public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			SoundEngine.PlaySound(SoundID.Item56, Projectile.Center);
-
 			if (Projectile.velocity.X != oldVelocity.X)
 			{
 				Projectile.position.X = Projectile.position.X + Projectile.velocity.X;
-				Projectile.velocity.X = -oldVelocity.X * 0.5f;
+				Projectile.velocity.X = -oldVelocity.X;
 			}
 			if (Projectile.velocity.Y != oldVelocity.Y)
 			{
 				Projectile.position.Y = Projectile.position.Y + Projectile.velocity.Y;
-				Projectile.velocity.Y = -oldVelocity.Y * 0.5f;
+				Projectile.velocity.Y = -oldVelocity.Y;
 			}
 
 			return false;
@@ -128,27 +126,7 @@ namespace Spooky.Content.NPCs.Boss.OldHunter.Projectiles
         {
             Projectile.rotation += Projectile.velocity.X * 0.1f;
 
-            Projectile.ai[0] += 1f;
-            if (Projectile.ai[0] > 5f)
-            {
-                Projectile.ai[0] = 5f;
-                if (Projectile.velocity.Y == 0f && Projectile.velocity.X != 0f)
-                {
-                    Projectile.velocity.X *= 0.97f;
-                    if ((double)Projectile.velocity.X > -0.01 && (double)Projectile.velocity.X < 0.01)
-                    {
-                        Projectile.velocity.X = 0f;
-                        Projectile.netUpdate = true;
-                    }
-                }
-
-                Projectile.velocity.Y += 0.5f;
-            }
-			
-			if (Projectile.velocity.Y > 16f)
-			{
-				Projectile.velocity.Y = 16f;
-			}
+            Projectile.velocity.Y = Projectile.velocity.Y + 0.22f;
 
 			if (Projectile.timeLeft <= 90)
             {

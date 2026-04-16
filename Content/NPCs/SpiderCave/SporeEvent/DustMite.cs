@@ -27,7 +27,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SporeEvent
 
 		public override void SetDefaults()
 		{
-            NPC.lifeMax = 320;
+            NPC.lifeMax = 300;
             NPC.damage = 55;
             NPC.defense = 10;
 			NPC.width = 46;
@@ -94,11 +94,6 @@ namespace Spooky.Content.NPCs.SpiderCave.SporeEvent
             NPC.spriteDirection = NPC.direction;
 
             NPC.rotation = NPC.velocity.Y * 0.01f;
-
-            if (NPC.wet)
-            {
-                NPC.velocity.Y = -3;
-            }
                 
             NPC.ai[0]++;
             if (NPC.ai[0] >= 2)
@@ -113,7 +108,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SporeEvent
                 float speed = MathHelper.Clamp(velocity.Length() / 36, 10, 18);
 
                 //actual jumping
-                if (NPC.velocity.X == 0)
+                if (NPC.velocity.X == 0 || NPC.wet)
                 {
                     if (NPCGlobalHelper.IsCollidingWithFloor(NPC))
                     {

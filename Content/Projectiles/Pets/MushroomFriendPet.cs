@@ -208,7 +208,7 @@ namespace Spooky.Content.Projectiles.Pets
                 {
                     Vector2 position = new Vector2(Projectile.Center.X + Main.rand.Next(-30, 31), Projectile.Center.Y + Main.rand.Next(-30, 31));
                     Dust dust = Dust.NewDustPerfect(position, ModContent.DustType<SmokeEffect>(), -Projectile.velocity / 3);
-                    dust.color = player.shirtColor;
+                    dust.color = player.shirtColor * 0.5f;
                     dust.scale = Main.rand.NextFloat(0.2f, 0.3f);
                 }
 

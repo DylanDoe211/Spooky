@@ -3,16 +3,20 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.GameContent.UI;
 using Terraria.Localization;
 using Terraria.Audio;
+using ReLogic.Content;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using System.Collections.Generic;
-using Spooky.Core;
 
+using Spooky.Core;
 using Spooky.Content.Buffs.Debuff;
 using Spooky.Content.Items.Cemetery;
 using Spooky.Content.Projectiles.Cemetery;
+using Spooky.Content.UserInterfaces;
 
 namespace Spooky.Content.NPCs.Friendly
 {
@@ -23,7 +27,19 @@ namespace Spooky.Content.NPCs.Friendly
 
         bool IsShooting = false;
 
+        Vector2 modifier = new(-200, -75);
+
+        Player PlayerTalkingTo = null;
+
+        private static Asset<Texture2D> UITexture;
+
+        public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/TalkSounds/PartySkeletonTalk", SoundType.Sound) { Volume = 3f, PitchVariance = 0.75f };
         public static readonly SoundStyle ShootSound = new("Spooky/Content/Sounds/PartyNailgun", SoundType.Sound);
+
+        public override void Load()
+		{
+			UITexture = ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/DialogueUIBouncerSkeleton");
+		}
 
         public override void SetStaticDefaults()
         {
@@ -80,11 +96,6 @@ namespace Spooky.Content.NPCs.Friendly
             TownNPCStayingHomeless = true;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.RaveyardBiome>().Type };
         }
-
-        public override bool CanChat() 
-        {
-			return true;
-		}
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
         {
@@ -145,16 +156,6 @@ namespace Spooky.Content.NPCs.Friendly
             }
         }
 
-        public override void SetChatButtons(ref string button, ref string button2)
-		{
-			button = "";
-		}
-
-        public override string GetChat()
-		{
-			return Language.GetTextValue("Mods.Spooky.Dialogue.SkeletonBouncer.Dialogue" + Main.rand.Next(1, 6));
-		}
-
 		public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
 		{
 			player.GetModPlayer<SpookyPlayer>().RaveyardGuardsHostile = true;
@@ -166,6 +167,11 @@ namespace Spooky.Content.NPCs.Friendly
 			{
 				Main.player[projectile.owner].GetModPlayer<SpookyPlayer>().RaveyardGuardsHostile = true;
 			}
+		}
+
+        public override bool CanChat() 
+        {
+			return false;
 		}
 
 		public override void AI()
@@ -257,6 +263,33 @@ namespace Spooky.Content.NPCs.Friendly
                 IsShooting = false;
 
                 NPC.aiStyle = 7;
+
+                Player player = Main.LocalPlayer;
+			
+                if (NPC.Hitbox.Intersects(new Rectangle((int)Main.MouseWorld.X - 1, (int)Main.MouseWorld.Y - 1, 1, 1)) &&
+                NPC.Distance(player.Center) <= 150f && !Main.mapFullscreen)
+                {
+                    if (Main.mouseRight && Main.mouseRightRelease && PlayerTalkingTo == null)
+                    {
+                        Main.BestiaryTracker.Chats.SetWasChatWithDirectly(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[Type]);
+
+                        PlayerTalkingTo = player;
+
+                        if (!Main.dedServ)
+                        {
+                            DialogueChain chain = new();
+                            chain.Add(new(UITexture.Value, NPC,
+                            Language.GetTextValue("Mods.Spooky.Dialogue.SkeletonBouncer.Dialogue" + Main.rand.Next(1, 6)),
+                            Language.GetTextValue("..."),
+                            TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
+                            .Add(new(UITexture.Value, NPC, null, null, TalkSound, 2f, 0f, modifier, true));
+                            chain.OnPlayerResponseTrigger += PlayerResponse;
+                            chain.OnEndTrigger += EndDialogue;
+                            DialogueUI.Visible = true;
+                            DialogueUI.Add(chain);
+                        }
+                    }
+                }
             }
 
             if (!Flags.RaveyardHappening)
@@ -281,5 +314,19 @@ namespace Spooky.Content.NPCs.Friendly
         {
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<PartyNailgun>()));
         }
+
+        public void PlayerResponse(Dialogue dialogue, string Text, int ID)
+		{
+			Dialogue newDialogue = new(ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/DialogueUIPlayer").Value, Main.LocalPlayer,
+			Text, null, SoundID.Item1, 2f, 0f, default, NotPlayer: false);
+			DialogueUI.Visible = true;
+			DialogueUI.Add(newDialogue);
+		}
+
+		public void EndDialogue(Dialogue dialogue, int ID)
+		{
+            PlayerTalkingTo = null;
+			DialogueUI.Visible = false;
+		}
     }
 }

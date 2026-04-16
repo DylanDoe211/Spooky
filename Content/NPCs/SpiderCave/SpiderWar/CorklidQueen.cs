@@ -53,7 +53,6 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 		public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 7;
-			NPCID.Sets.ShouldBeCountedAsBoss[NPC.type] = true;
 
 			NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
@@ -110,8 +109,8 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 
 		public override void SetDefaults()
 		{
-            NPC.lifeMax = 13000;
-            NPC.damage = 50;
+            NPC.lifeMax = 12000;
+            NPC.damage = 70;
 			NPC.defense = 15;
 			NPC.width = 124;
 			NPC.height = 118;
@@ -122,7 +121,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 			NPC.HitSound = SoundID.NPCHit29 with { Pitch = -1.5f };
 			NPC.DeathSound = SoundID.NPCDeath31 with { Pitch = -1f };
             NPC.aiStyle = -1;
-			SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.SpiderCaveBiome>().Type };
+			SpawnModBiomes = new int[2] { ModContent.GetInstance<Biomes.SpiderWarBiome>().Type, ModContent.GetInstance<Biomes.SpiderCaveBiome>().Type };
 		}
 
 		public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
@@ -154,6 +153,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
             {
 				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.CorklidQueen"),
+				new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.SpiderWarBiome>().ModBiomeBestiaryInfoElement),
 				new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.SpiderCaveBiome>().ModBiomeBestiaryInfoElement)
 			});
 		}
@@ -427,7 +427,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 					//dig in ground and teleport to player if line of sight is lost for too long
 					else
 					{
-						TeleportToPlayer(player, true);
+						TeleportToPlayer(player, 8, true);
 						
 						if (JustTeleported)
 						{
@@ -447,19 +447,16 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 				{
 					if (NPC.localAI[0] <= 0)
 					{
-						if (NPCGlobalHelper.IsCollidingWithFloor(NPC))
+						TeleportToPlayer(player, 1, true);
+							
+						if (JustTeleported)
 						{
-							TeleportToPlayer(player, true);
-								
-							if (JustTeleported)
-							{
-								SaveDirection = NPC.direction;
+							SaveDirection = NPC.direction;
 
-								NPC.localAI[0] = 1;
-								JustTeleported = false;
+							NPC.localAI[0] = 1;
+							JustTeleported = false;
 
-								NPC.netUpdate = true;
-							}
+							NPC.netUpdate = true;
 						}
 					}
 					else
@@ -508,7 +505,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 							bool HasLineOfSight = Collision.CanHitLine(player.position, player.width, player.height, NPC.position, NPC.width, NPC.height);
 							if (!HasLineOfSight)
 							{
-								TeleportToPlayer(player, false);
+								TeleportToPlayer(player, 1, false);
 							}
 						}
 
@@ -528,19 +525,16 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 				{
 					if (NPC.localAI[0] <= 0)
 					{
-						if (NPCGlobalHelper.IsCollidingWithFloor(NPC))
+						TeleportToPlayer(player, 1, true);
+							
+						if (JustTeleported)
 						{
-							TeleportToPlayer(player, true);
-								
-							if (JustTeleported)
-							{
-								SaveDirection = NPC.direction;
+							SaveDirection = NPC.direction;
 
-								NPC.localAI[0] = 1;
-								JustTeleported = false;
+							NPC.localAI[0] = 1;
+							JustTeleported = false;
 
-								NPC.netUpdate = true;
-							}
+							NPC.netUpdate = true;
 						}
 					}
 					else
@@ -579,7 +573,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 							bool HasLineOfSight = Collision.CanHitLine(player.position, player.width, player.height, NPC.position, NPC.width, NPC.height);
 							if (!HasLineOfSight)
 							{
-								TeleportToPlayer(player, false);
+								TeleportToPlayer(player, 1, false);
 							}
 						}
 
@@ -596,19 +590,26 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 			}
 		}
 
-		public void TeleportToPlayer(Player player, bool UseAnimation)
+		public void TeleportToPlayer(Player player, int TelefragDistance, bool UseAnimation)
 		{
-			if (!NPCGlobalHelper.IsCollidingWithFloor(NPC))
+			if (!NPCGlobalHelper.IsCollidingWithFloor(NPC) && NPC.velocity.Y != 0)
 			{
+				NPC.noGravity = true;
+
 				NPC.velocity.X *= 0.95f;
+				NPC.velocity.Y += 5;
 
-				CurrentFrameX = 1;
-
-				CurrentAnimation = AnimationState.Walking;
+				if (UseAnimation)
+				{
+					CurrentFrameX = 1;
+					CurrentAnimation = AnimationState.StayStill;
+				}
 			}
 			else
 			{
-				NPC.velocity.X = 0;
+				NPC.noGravity = false;
+
+				NPC.velocity = Vector2.Zero;
 
 				if (UseAnimation)
 				{
@@ -625,50 +626,47 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 						CurrentAnimation = AnimationState.GoInGround;
 					}
 				}
+				
+				if (destinationX == 0 && destinationY == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+				{
+					Point point = player.Center.ToTileCoordinates();
+					Vector2 chosenTile = Vector2.Zero;
+					if (NPCGlobalHelper.TeleportToSpot(NPC, player, ref chosenTile, point.X, point.Y, 55, TelefragDistance))
+					{
+						destinationX = (ushort)chosenTile.X;
+						destinationY = (ushort)chosenTile.Y;
+						NPC.netUpdate = true;
+					}
+				}
 
 				TeleportTimer++;
-				if (TeleportTimer >= 30)
+				if (TeleportTimer >= 30 && destinationX != 0 && destinationY != 0)
 				{
-					if (TeleportTimer >= 30 && destinationX == 0 && destinationY == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+					TeleportDelay++;
+					if (TeleportDelay <= 10)
 					{
-						Point point = player.Center.ToTileCoordinates();
-						Vector2 chosenTile = Vector2.Zero;
-						if (NPCGlobalHelper.TeleportToSpot(NPC, player, ref chosenTile, point.X, point.Y, 55, 15))
-						{
-							destinationX = (ushort)chosenTile.X;
-							destinationY = (ushort)chosenTile.Y;
-							NPC.netUpdate = true;
-						}
+						Dust dust = Dust.NewDustDirect(new Vector2((destinationX * 16f) - 30, (destinationY * 16f) - 20), NPC.width, NPC.height, DustID.Mud, Main.rand.NextFloat(-4f, 4f), Main.rand.NextFloat(-12f, -8f), 50, Color.White, 2.5f);
+						dust.color = Color.White;
+						dust.noGravity = true;
 					}
-
-					if (destinationX != 0 && destinationY != 0)
+					else
 					{
-						TeleportDelay++;
-						if (TeleportDelay <= 10)
-						{
-							Dust dust = Dust.NewDustDirect(new Vector2((destinationX * 16f) - 30, (destinationY * 16f) - 20), NPC.width, NPC.height, DustID.Mud, Main.rand.NextFloat(-4f, 4f), Main.rand.NextFloat(-12f, -8f), 50, Color.White, 2.5f);
-							dust.color = Color.White;
-							dust.noGravity = true;
-						}
-						else
-						{
-							NPC.position.X = destinationX * 16f - (float)(NPC.width / 2) + 8f;
-							NPC.position.Y = destinationY * 16f - (float)NPC.height;
-							NPC.velocity.X = 0f;
-							NPC.velocity.Y = 0f;
-							NPC.netOffset *= 0f;
-							destinationX = 0;
-							destinationY = 0;
-							TeleportTimer = 0;
-							TeleportFrameTimer = 0;
-							TeleportDelay = 0;
+						NPC.position.X = destinationX * 16f - (float)(NPC.width / 2) + 8f;
+						NPC.position.Y = destinationY * 16f - (float)NPC.height;
+						NPC.velocity.X = 0f;
+						NPC.velocity.Y = 0f;
+						NPC.netOffset *= 0f;
+						destinationX = 0;
+						destinationY = 0;
+						TeleportTimer = 0;
+						TeleportFrameTimer = 0;
+						TeleportDelay = 0;
 
-							SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact with { Volume = 0.5f }, NPC.Center);
-							Screenshake.ShakeScreenWithIntensity(NPC.Center, 3f, 300f);
+						SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact with { Volume = 0.5f }, NPC.Center);
+						Screenshake.ShakeScreenWithIntensity(NPC.Center, 3f, 300f);
 
-							JustTeleported = true;
-							NPC.netUpdate = true;
-						}
+						JustTeleported = true;
+						NPC.netUpdate = true;
 					}
 				}
 			}

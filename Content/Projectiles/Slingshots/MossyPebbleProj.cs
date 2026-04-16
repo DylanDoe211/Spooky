@@ -5,6 +5,7 @@ using Terraria.Audio;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 using Spooky.Core;
 
@@ -81,7 +82,7 @@ namespace Spooky.Content.Projectiles.Slingshots
 
         public override void AI()
         {
-			Projectile.rotation += 0.2f * (float)Projectile.direction;
+			Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.02f * (float)Projectile.direction;
 
             Projectile.ai[0]++;
             if (Projectile.ai[0] >= 30)

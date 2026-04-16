@@ -24,7 +24,7 @@ namespace Spooky.Content.Items.SpiderCave.Armor
 
 		public override void UpdateEquip(Player player) 
 		{
-			player.GetDamage(DamageClass.Generic) += 0.1f;
+			player.GetDamage(DamageClass.Generic) += 0.15f;
         }
 	}
 }

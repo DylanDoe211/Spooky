@@ -181,12 +181,15 @@ namespace Spooky.Content.Projectiles.SpiderCave
 					//shoot a bunch of spore clouds
 					for (int numProjs = 0; numProjs < 2; numProjs++)
 					{
-						Vector2 newVelocity = ShootSpeed.RotatedByRandom(MathHelper.ToRadians(35));
+						Vector2 SporeShootSpeed = Main.MouseWorld - player.Center;
+						SporeShootSpeed.Normalize();
+						SporeShootSpeed *= Main.rand.Next(7, 11);
+
+						Vector2 newVelocity = SporeShootSpeed.RotatedByRandom(MathHelper.ToRadians(35));
 
 						int newProj = Projectile.NewProjectile(Projectile.GetSource_Death(), player.Center, newVelocity, 
                         ModContent.ProjectileType<SporeCloud>(), Projectile.damage / 2, 0, ai0: 2);
 						Main.projectile[newProj].DamageType = DamageClass.Melee;
-                        Main.projectile[newProj].alpha = 125;
 					}
 
 					//shoot mite
@@ -195,7 +198,6 @@ namespace Spooky.Content.Projectiles.SpiderCave
 					Main.projectile[newMite].ai[0] = 7; //frame
 					Main.projectile[newMite].ai[2] = 2; //behavior
 					Main.projectile[newMite].ai[1] = 60; //bouncing behavior doesnt home until after 1 second (60 ticks) so this will start it instantly
-					Main.projectile[newMite].timeLeft = 180;
 					Main.projectile[newMite].penetrate = 1;
 				}
 

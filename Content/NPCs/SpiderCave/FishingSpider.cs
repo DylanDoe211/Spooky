@@ -115,7 +115,7 @@ namespace Spooky.Content.NPCs.SpiderCave
 				NPC.noTileCollide = false;
 
 				bool HasLineOfSight = Collision.CanHitLine(player.position, player.width, player.height, NPC.position, NPC.width, NPC.height);
-				if ((HasLineOfSight && player.Distance(NPC.Center) <= 350f) || NPC.life < NPC.lifeMax)
+				if ((HasLineOfSight && player.Distance(NPC.Center) <= 200f) || NPC.life < NPC.lifeMax)
 				{
 					NPC.localAI[0]++;
 				}

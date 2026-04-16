@@ -705,8 +705,13 @@ BigDunkSlingshotJuice.DisplayName: Zomboid Juice
 ArachnidSlingshotBaby.DisplayName: Baby Spider
 BigBoneSlingshotProj.DisplayName: Potted Plant Slingshot
 ProSlingshotProj.DisplayName: Pro Slingshot
-EvilMiteBlood.DisplayName: Blood
-OldHunterHead.DisplayName: Old Hunter Head
-SlingshotBigRock.DisplayName: Big Rock
+EvilMiteBlood.DisplayName: Blood Glob
+OldHunterHead.DisplayName: Old Hunter's Head
+SlingshotBigRock.DisplayName: Sticky Rock
 TrackingCrossbowProj.DisplayName: Hi-Tech Crossbow
 TrackingCrossbowBolt.DisplayName: Tracking Bolt
+SporeShroom.DisplayName: Spore Shroom
+SporeShroomCloud.DisplayName: Spore
+PossessedCrownProj.DisplayName: Possessed Crown
+BloodBallTooth.DisplayName: Blood Ball Tooth
+PossessedDagger.DisplayName: Possessed Dagger

@@ -34,11 +34,8 @@ using Spooky.Content.Projectiles.Sentient;
 using Spooky.Content.Projectiles.SpiderCave;
 using Spooky.Content.Projectiles.SpookyBiome;
 using Spooky.Content.Projectiles.SpookyHell;
-using Spooky.Content.Tiles.Catacomb.Furniture;
-using Spooky.Content.Tiles.SpookyBiome.Furniture;
 using Spooky.Content.Tiles.SpookyHell;
 using Spooky.Content.Tiles.SpookyHell.Tree;
-using Spooky.Content.Tiles.SpookyHell.Furniture;
 
 namespace Spooky.Core
 {
@@ -61,7 +58,6 @@ namespace Spooky.Core
         public bool HazmatSet = false;
         public bool MortarSet = false;
         public bool SporeShroomSet = false;
-        public bool SporeShroomHitEffect = false;
         public bool TarCactusSet = false;
         public bool HazmatMinionCrit = false;
         public bool DrawHazmatBack = false;
@@ -283,7 +279,6 @@ namespace Spooky.Core
             HazmatSet = false;
             MortarSet = false;
             SporeShroomSet = false;
-            SporeShroomHitEffect = false;
             TarCactusSet = false;
             HazmatMinionCrit = false;
             DrawHazmatBack = false;
@@ -413,6 +408,28 @@ namespace Spooky.Core
 				    dashDir = -1;
                 }
 			}
+
+			//prevent player from building in boss arenas, needs to be done in reset effects so the creative shock applies properly
+			if (!SpookyWorld.IsInSubworld())
+			{
+				Rectangle DaffodilRect = new Rectangle((int)(Flags.DaffodilPosition.X - 750), (int)(Flags.DaffodilPosition.Y - 275), 1490, 600);
+				Rectangle BigBoneRect = new Rectangle((int)(Flags.FlowerPotPosition.X - 835), (int)(Flags.FlowerPotPosition.Y - 500), 1650, 1050);
+				Rectangle OldHunterRect = new Rectangle((int)(Flags.OldHunterPosition.X - 600), (int)(Flags.OldHunterPosition.Y - 400), 1200, 415);
+
+				foreach (Player player in Main.ActivePlayers)
+				{
+					if (!player.dead && !player.ghost)
+					{
+						if ((Flags.DaffodilPosition != Vector2.Zero && player.Hitbox.Intersects(DaffodilRect)) ||
+						(Flags.FlowerPotPosition != Vector2.Zero && player.Hitbox.Intersects(BigBoneRect)) ||
+						(Flags.OldHunterPosition != Vector2.Zero && player.Hitbox.Intersects(OldHunterRect)))
+						{
+							player.AddBuff(BuffID.NoBuilding, 2);
+							player.noBuilding = true;
+						}
+					}
+				}
+			}
 		}
 
 		public override void ArmorSetBonusActivated()
@@ -437,6 +454,14 @@ namespace Spooky.Core
 				Player.AddBuff(ModContent.BuffType<SpiderArmorStealth>(), 600);
 				Player.AddBuff(ModContent.BuffType<SpiderStealthCooldown>(), 7200);
 			}
+
+            if (SporeShroomSet && Player.ownedProjectileCounts[ModContent.ProjectileType<SporeShroom>()] < 3)
+            {
+                SoundEngine.PlaySound(SoundID.Item112 with { Pitch = 0.5f }, Player.Center);
+
+                int Mushroom = Projectile.NewProjectile(null, Player.Bottom, new Vector2(0, -10), ModContent.ProjectileType<SporeShroom>(), 65, 0f, Player.whoAmI, ai0: Main.rand.Next(0, 6));
+				Main.projectile[Mushroom].scale = 0f;
+            }
 
 			//yuletide combustion
 			if (YuletideSet && YuletideFireTimer <= 0 && !Player.HasBuff(ModContent.BuffType<YuletideArmorCooldown>()))
@@ -505,10 +530,13 @@ namespace Spooky.Core
                 //spawn lingering bricks with the krampus lego bricks
 				if (KrampusBricks && !Player.HasBuff(ModContent.BuffType<KrampusBricksCooldown>()))
 				{
-                    for (int numProjectiles = -2; numProjectiles <= 2; numProjectiles++)
+                    for (int repeats = 0; repeats <= 1; repeats++)
                     {
-                        Projectile.NewProjectile(null, Player.Center, new Vector2(numProjectiles * 2, Main.rand.NextFloat(-7f, -4f)),
-                        ModContent.ProjectileType<KrampusBricksProj>(), 25, 0f, Player.whoAmI, ai1: Main.rand.Next(0, 4));
+                        for (int numProjectiles = -3; numProjectiles <= 3; numProjectiles++)
+                        {
+                            Projectile.NewProjectile(null, Player.Center, new Vector2(numProjectiles * 2, Main.rand.NextFloat(-15f, -7f)),
+                            ModContent.ProjectileType<KrampusBricksProj>(), 25, 0f, Player.whoAmI, ai1: Main.rand.Next(0, 4));
+                        }
                     }
 
 					Player.AddBuff(ModContent.BuffType<KrampusBricksCooldown>(), 900);
@@ -670,6 +698,19 @@ namespace Spooky.Core
                     int RealDamage = damageDone < 50 ? 50 : damageDone;
 
                     Projectile.NewProjectile(target.GetSource_OnHurt(Player), Player.Center, Velocity, ModContent.ProjectileType<MortarArmorRocket>(), RealDamage, 0, Player.whoAmI);
+                }
+
+                //spawn blades when hitting enemies with whips for each possessed crown you have
+                if (Player.ownedProjectileCounts[ModContent.ProjectileType<PossessedCrownProj>()] > 0 && hit.DamageType == DamageClass.SummonMeleeSpeed)
+                {
+                    int MaxBlades = Player.ownedProjectileCounts[ModContent.ProjectileType<PossessedCrownProj>()];
+                    for (int numBlades = 0; numBlades < MaxBlades; numBlades++)
+                    {
+                        Vector2 SpawnPosition = target.Center + new Vector2(0, Main.rand.Next(260, 301)).RotatedByRandom(360);
+
+                        Projectile.NewProjectile(target.GetSource_OnHit(target), SpawnPosition, Vector2.Zero, 
+                        ModContent.ProjectileType<PossessedDagger>(), damageDone, hit.Knockback, Player.whoAmI, 0, target.whoAmI);
+                    }
                 }
             }
         }

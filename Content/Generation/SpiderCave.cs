@@ -43,6 +43,8 @@ namespace Spooky.Content.Generation
         {
             progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.SpiderCave").Value;
 
+            int Seed = WorldGen.genRand.Next();
+
             //biome position stuff
             initialStartPosX = GenVars.dungeonX;
             startPosX = GenVars.dungeonX;
@@ -163,40 +165,6 @@ namespace Spooky.Content.Generation
 				}
 			}
 
-            //place mushroom gnome village
-			int MushroomSizeX = Main.maxTilesX / 70;
-			int MushroomSizeY = Main.maxTilesY / 37;
-
-            int GnomeDivideY = Main.maxTilesY >= 2400 ? 25 : 18;
-            int GnomePositionY = startPosY + (Main.maxTilesY / GnomeDivideY);
-
-			SpookyWorldMethods.PlaceOval(startPosX, GnomePositionY, ModContent.TileType<DampMushroomGrass>(), 0, MushroomSizeX, MushroomSizeY, 2f, false, false);
-
-            //dig out noise caves in the gnome area
-			int Seed = WorldGen.genRand.Next();
-
-            for (int X = startPosX - MushroomSizeX; X <= startPosX + MushroomSizeX; X++)
-            {
-                for (int Y = GnomePositionY - MushroomSizeY; Y <= GnomePositionY + MushroomSizeY; Y++)
-                {
-                    if (Main.tile[X, Y].TileType == ModContent.TileType<DampMushroomGrass>())
-                    {
-                        //generate perlin noise caves
-                        float horizontalOffsetNoise = SpookyWorldMethods.PerlinNoise2D(X / 1500f, Y / 325f, 5, Seed + 1) * 0.5f;
-                        float cavePerlinValue = SpookyWorldMethods.PerlinNoise2D(X / 1500f, Y / 325f, 5, Seed) + 0.5f + horizontalOffsetNoise;
-                        float cavePerlinValue2 = SpookyWorldMethods.PerlinNoise2D(X / 1500f, Y / 325f, 5, Seed - 1) + 0.5f;
-                        float caveNoiseMap = (cavePerlinValue + cavePerlinValue2) * 0.5f;
-                        float caveCreationThreshold = horizontalOffsetNoise * 3.5f + 0.235f;
-
-                        //kill or place tiles depending on the noise map
-                        if (caveNoiseMap * caveNoiseMap > caveCreationThreshold)
-                        {
-                            WorldGen.KillTile(X, Y);
-                        }
-                    }
-                }
-            }
-
 			//place clumps of stone
 			for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
             {
@@ -265,7 +233,7 @@ namespace Spooky.Content.Generation
 
                         if (tile.TileType == ModContent.TileType<DampGrass>() && !tileAbove.HasTile)
                         {
-                            if (WorldGen.genRand.NextBool(135) && CheckForFlatSurface(X, Y, 6, 1))
+                            if (WorldGen.genRand.NextBool(120) && CheckForFlatSurface(X, Y, 6, 1))
                             {
                                 int SizeX = WorldGen.genRand.Next(35, 41);
                                 int SizeY = WorldGen.genRand.Next(35, 41);
@@ -593,33 +561,23 @@ namespace Spooky.Content.Generation
             }
             
             //place old hunter arena
-            Vector2 ArenaOrigin = new Vector2(startPosX - 50, (GnomePositionY + (MushroomSizeY / 2)) - 25);
+			int HunterHouseOffsetY = Main.maxTilesY / 37;
+
+            int HunterHouseDivideY = Main.maxTilesY >= 2400 ? 25 : 18;
+            int HunterHousePositionY = startPosY + (Main.maxTilesY / HunterHouseDivideY);
+
+            Vector2 ArenaOrigin = new Vector2(startPosX - 50, (HunterHousePositionY + (HunterHouseOffsetY / 2)) - 25);
             StructureHelper.API.Generator.GenerateStructure("Content/Structures/SpiderCave/OldHunterArena.shstruct", ArenaOrigin.ToPoint16(), Mod);
-            Flags.OldHunterPosition = new Vector2(startPosX * 16, (GnomePositionY + (MushroomSizeY / 2) + 13) * 16);
+            Flags.OldHunterPosition = new Vector2(startPosX * 16, (HunterHousePositionY + (HunterHouseOffsetY / 2) + 13) * 16);
 
             //place soil blocks so the old hunters house isnt floating
             for (int X = (int)startPosX - 45; X <= (int)startPosX + 45; X++)
             {
-				for (int Y = (GnomePositionY + (MushroomSizeY / 2)) + 18; Y <= origin.Y + verticalRadius + 3; Y++)
+				for (int Y = (HunterHousePositionY + (HunterHouseOffsetY / 2)) + 18; Y <= origin.Y + verticalRadius + 3; Y++)
                 {
 					if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
 					{
                         WorldGen.PlaceTile(X, Y, ModContent.TileType<DampSoil>());
-                    }
-                }
-            }
-
-            //place gnome houses
-            for (int X = startPosX - MushroomSizeX; X <= startPosX + MushroomSizeX; X++)
-            {
-                for (int Y = GnomePositionY - MushroomSizeY; Y <= GnomePositionY + MushroomSizeY; Y++)
-                {
-                    if (WorldGen.genRand.NextBool(7) && Main.tile[X, Y].TileType == ModContent.TileType<DampMushroomGrass>())
-                    {
-                        ushort[] MushroomHouses = new ushort[] { (ushort)ModContent.TileType<GnomeHouse1>(), (ushort)ModContent.TileType<GnomeHouse2>(),
-                        (ushort)ModContent.TileType<GnomeHouse3>(), (ushort)ModContent.TileType<GnomeHouse4>() };
-
-                        WorldGen.PlaceObject(X, Y - 1, WorldGen.genRand.Next(MushroomHouses));
                     }
                 }
             }

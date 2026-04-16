@@ -42,6 +42,11 @@ namespace Spooky.Content.Tiles.Catacomb.Furniture
             HitSound = SoundID.Tink;
         }
 
+		public override void NumDust(int i, int j, bool fail, ref int num) 
+		{
+			num = 1;
+		}
+
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) 
 		{
 			float divide = 220f;

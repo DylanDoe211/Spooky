@@ -17,10 +17,15 @@ namespace Spooky.Content.NPCs.SpiderCave.Projectiles
         private static Asset<Texture2D> ProjTexture;
         private static Asset<Texture2D> TrailTexture;
 
+        public override void SetStaticDefaults()
+        {
+            Main.projFrames[Projectile.type] = 4;
+        }
+
         public override void SetDefaults()
         {
             Projectile.width = 34;
-            Projectile.height = 90;
+            Projectile.height = 92;
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.ignoreWater = false;
@@ -55,6 +60,17 @@ namespace Spooky.Content.NPCs.SpiderCave.Projectiles
         public override void AI()
         {
             Player player = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
+
+            Projectile.frameCounter++;
+            if (Projectile.frameCounter >= 4)
+            {
+                Projectile.frameCounter = 0;
+                Projectile.frame++;
+                if (Projectile.frame >= 4)
+                {
+                    Projectile.frame = 0;
+                }
+            }
 
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             Projectile.rotation += 0f * (float)Projectile.direction;

@@ -27,7 +27,6 @@ namespace Spooky.Content.Projectiles.SpiderCave
         {
             if (!IsStickingToTarget)
             {
-                Projectile.timeLeft = 60;
                 Projectile.ai[1] = target.whoAmI;
                 Projectile.velocity = (target.Center - Projectile.Center) * 0.75f;
                 IsStickingToTarget = true;
@@ -45,7 +44,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
                 int npcTarget = (int)Projectile.ai[1];
                 if (npcTarget < 0 || npcTarget >= 200) 
                 {
-                    Projectile.Kill();
+                    IsStickingToTarget = false;
                 }
                 else if (Main.npc[npcTarget].active && !Main.npc[npcTarget].dontTakeDamage) 
                 {
@@ -54,7 +53,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
                 }
                 else 
                 {
-                    Projectile.Kill();
+                    IsStickingToTarget = false;
                 }
 			}
 			else 

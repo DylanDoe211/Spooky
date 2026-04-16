@@ -98,7 +98,7 @@ namespace Spooky.Content.NPCs.SpiderCave.Projectiles
             Player player = Main.player[Player.FindClosest(Projectile.Center, Projectile.width, Projectile.height)];
 
             Projectile.frameCounter++;
-            if (Projectile.frameCounter >= 6)
+            if (Projectile.frameCounter >= 5)
             {
                 Projectile.frameCounter = 0;
                 Projectile.frame++;

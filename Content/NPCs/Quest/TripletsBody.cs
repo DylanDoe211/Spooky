@@ -11,9 +11,9 @@ using System.Collections.Generic;
 
 using Spooky.Core;
 using Spooky.Content.Dusts;
-using Spooky.Content.NPCs.SpookyHell.Projectiles;
+using Spooky.Content.NPCs.Quest.Projectiles;
 
-namespace Spooky.Content.NPCs.SpookyHell
+namespace Spooky.Content.NPCs.Quest
 {
     public class TripletsBody : ModNPC
     {

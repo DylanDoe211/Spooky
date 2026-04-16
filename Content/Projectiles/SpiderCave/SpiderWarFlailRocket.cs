@@ -16,14 +16,13 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+            Main.projFrames[Projectile.type] = 4;
         }
 
         public override void SetDefaults()
         {
-            Projectile.width = 14;
-            Projectile.height = 28;
+            Projectile.width = 18;
+            Projectile.height = 44;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
@@ -40,24 +39,26 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
             Vector2 drawPos = Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY);
 
-            Color color = new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0).MultiplyRGBA(Color.Orange);
-
             Rectangle rectangle = new(0, (ProjTexture.Height() / Main.projFrames[Projectile.type]) * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
 
-            for (int oldPos = 0; oldPos < Projectile.oldPos.Length; oldPos++)
-            {
-                float scale = Projectile.scale * (Projectile.oldPos.Length - oldPos) / Projectile.oldPos.Length * 1f;
-                Vector2 drawPosOld = Projectile.oldPos[oldPos] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                Main.EntitySpriteDraw(ProjTexture.Value, drawPosOld, rectangle, color * 0.75f, Projectile.rotation, drawOrigin, scale, SpriteEffects.None, 0);
-            }
-
-            Main.EntitySpriteDraw(ProjTexture.Value, drawPos, rectangle, Color.White, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+            Main.EntitySpriteDraw(ProjTexture.Value, drawPos, rectangle, lightColor, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
 
             return false;
         }
 
         public override void AI()       
         {
+            Projectile.frameCounter++;
+            if (Projectile.frameCounter >= 4)
+            {
+                Projectile.frame++;
+                Projectile.frameCounter = 0;
+                if (Projectile.frame >= 4)
+                {
+                    Projectile.frame = 0;
+                }
+            }
+
 			Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             Projectile.rotation += 0f * (float)Projectile.direction;
 

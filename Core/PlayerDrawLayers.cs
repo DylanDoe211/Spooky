@@ -70,8 +70,9 @@ namespace Spooky.Core
 						float rotation = drawPlayer.headRotation;
 
 						Vector2 GravityOffset = drawPlayer.gravDir == 1 ? HelmetDrawer.Offset : -HelmetDrawer.Offset - (HelmetDrawer.Offset.Y == 0 ? Vector2.Zero : new Vector2(0f, 4f));
+                        float GravityDirection = drawPlayer.gravDir == 1 ? drawPlayer.direction : -drawPlayer.direction;
 
-						DrawData drawData = new DrawData(Tex, drawPos - new Vector2(GravityOffset.X * drawPlayer.direction, GravityOffset.Y) + origin, frame, drawInfo.colorArmorHead, rotation, origin, 1f, drawInfo.playerEffect, 0)
+						DrawData drawData = new DrawData(Tex, drawPos - new Vector2(GravityOffset.X * GravityDirection, GravityOffset.Y) + origin, frame, drawInfo.colorArmorHead, rotation, origin, 1f, drawInfo.playerEffect, 0)
 						{
 							shader = drawInfo.cHead
 						};

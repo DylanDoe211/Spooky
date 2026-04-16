@@ -59,6 +59,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Christmas
         {
             Player player = Main.player[Projectile.owner];
 
+            //the minion should only ever fall through platforms if the player (or npc if its targeting one) is below it, otherwise do not
             fallThrough = CurrentTarget == null ? (Projectile.position.Y < player.Center.Y - (Projectile.height) && !isAttacking) : (Projectile.position.Y < CurrentTarget.Center.Y - (Projectile.height));
 
             return true;
@@ -151,15 +152,15 @@ namespace Spooky.Content.Projectiles.Minibiomes.Christmas
 
             Projectile.rotation = 0;
 
-            Vector2 vector48 = target.Center - Projectile.Center;
-            float targetDistance = vector48.Length();
+            Vector2 DistToPlayer = target.Center - Projectile.Center;
+            float targetDistance = DistToPlayer.Length();
 
+            //copied from IdleAI below, except it follows the npc its targeting instead of the player
             if (Projectile.velocity.Y == 0 && (HoleBelow() || (targetDistance > 50f && Projectile.position.X == Projectile.oldPosition.X)))
             {
                 Projectile.velocity.Y = -9f;
             }
 
-            //jump if the target is too high
             if (Projectile.velocity.Y == 0 && target.Center.Y < Projectile.Center.Y - 50)
             {
                 Projectile.velocity.Y = Main.rand.Next(-12, -6);
@@ -225,30 +226,32 @@ namespace Spooky.Content.Projectiles.Minibiomes.Christmas
             {
                 Projectile.rotation = 0;
 
-                int num = 1;
+                int numberOfThisMinion = 1;
                 for (int k = 0; k < Projectile.whoAmI; k++)
                 {
                     if (Main.projectile[k].active && Main.projectile[k].owner == Projectile.owner && Main.projectile[k].type == Projectile.type)
                     {
-                        num++;
+                        numberOfThisMinion++;
                     }
                 }
 
-                Vector2 vector48 = player.Center - Projectile.Center;
-                float playerDistance = vector48.Length();
+                Vector2 DistToPlayer = player.Center - Projectile.Center;
+                float playerDistance = DistToPlayer.Length();
 
+                //if theres a hole or tile in the way jump to the player
                 if (Projectile.velocity.Y == 0 && ((HoleBelow() && playerDistance > 100f) || (playerDistance > 100f && Projectile.position.X == Projectile.oldPosition.X)))
                 {
                     Projectile.velocity.Y = -6f;
                 }
 
+                //constantly fall down
                 Projectile.velocity.Y += 0.35f;
-
                 if (Projectile.velocity.Y > 15f)
                 {
                     Projectile.velocity.Y = 15f;
                 }
 
+                //fly to the player 
                 if (playerDistance > 500f)
                 {
                     playerFlying = true;
@@ -320,6 +323,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Christmas
                     }
                 }
 
+                //set direction
                 if (Projectile.velocity.X > 0.8f)
                 {
                     Projectile.spriteDirection = -1;
@@ -331,19 +335,21 @@ namespace Spooky.Content.Projectiles.Minibiomes.Christmas
             }
             else if (playerFlying)
             {
-                float num16 = 0.5f;
+                float FlySpeed = 0.5f;
                 Projectile.tileCollide = false;
-                Vector2 vector3 = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
-                float horiPos = player.position.X + (float)(player.width / 2) - vector3.X;
-                float vertiPos = player.position.Y + (float)(player.height / 2) - vector3.Y;
+                float horiPos = player.Center.X - Projectile.Center.X;
+                float vertiPos = player.Center.Y - Projectile.Center.Y;
+
+                //offset values when flying
                 vertiPos += (float)Main.rand.Next(-10, 21);
                 horiPos += (float)Main.rand.Next(-10, 21);
                 horiPos += (float)(60 * -(float)player.direction);
                 vertiPos -= 60f;
+
                 float playerDistance = (float)Math.Sqrt((double)(horiPos * horiPos + vertiPos * vertiPos));
                 float num21 = 18f;
-                float num27 = (float)Math.Sqrt((double)(horiPos * horiPos + vertiPos * vertiPos));
 
+                //teleport to the player if its way too far away
                 if (playerDistance > 1200f)
                 {
                     Projectile.position.X = player.Center.X - (float)(Projectile.width / 2);
@@ -353,7 +359,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Christmas
 
                 if (playerDistance < 100f)
                 {
-                    num16 = 0.5f;
+                    FlySpeed = 0.5f;
                     if (player.velocity.Y == 0f)
                     {
                         playerStill++;
@@ -376,17 +382,17 @@ namespace Spooky.Content.Projectiles.Minibiomes.Christmas
                     {
                         Projectile.velocity *= 0.90f;
                     }
-                    num16 = 0.02f;
+                    FlySpeed = 0.02f;
                 }
                 else
                 {
                     if (playerDistance < 100f)
                     {
-                        num16 = 0.35f;
+                        FlySpeed = 0.35f;
                     }
                     if (playerDistance > 300f)
                     {
-                        num16 = 1f;
+                        FlySpeed = 1f;
                     }
                     
                     playerDistance = num21 / playerDistance;
@@ -396,37 +402,37 @@ namespace Spooky.Content.Projectiles.Minibiomes.Christmas
 
                 if (Projectile.velocity.X <= horiPos)
                 {
-                    Projectile.velocity.X = Projectile.velocity.X + num16;
-                    if (num16 > 0.05f && Projectile.velocity.X < 0f)
+                    Projectile.velocity.X = Projectile.velocity.X + FlySpeed;
+                    if (FlySpeed > 0.05f && Projectile.velocity.X < 0f)
                     {
-                        Projectile.velocity.X = Projectile.velocity.X + num16;
+                        Projectile.velocity.X = Projectile.velocity.X + FlySpeed;
                     }
                 }
 
                 if (Projectile.velocity.X > horiPos)
                 {
-                    Projectile.velocity.X = Projectile.velocity.X - num16;
-                    if (num16 > 0.05f && Projectile.velocity.X > 0f)
+                    Projectile.velocity.X = Projectile.velocity.X - FlySpeed;
+                    if (FlySpeed > 0.05f && Projectile.velocity.X > 0f)
                     {
-                        Projectile.velocity.X = Projectile.velocity.X - num16;
+                        Projectile.velocity.X = Projectile.velocity.X - FlySpeed;
                     }
                 }
 
                 if (Projectile.velocity.Y <= vertiPos)
                 {
-                    Projectile.velocity.Y = Projectile.velocity.Y + num16;
-                    if (num16 > 0.05f && Projectile.velocity.Y < 0f)
+                    Projectile.velocity.Y = Projectile.velocity.Y + FlySpeed;
+                    if (FlySpeed > 0.05f && Projectile.velocity.Y < 0f)
                     {
-                        Projectile.velocity.Y = Projectile.velocity.Y + num16 * 2f;
+                        Projectile.velocity.Y = Projectile.velocity.Y + FlySpeed * 2f;
                     }
                 }
 
                 if (Projectile.velocity.Y > vertiPos)
                 {
-                    Projectile.velocity.Y = Projectile.velocity.Y - num16;
-                    if (num16 > 0.05f && Projectile.velocity.Y > 0f)
+                    Projectile.velocity.Y = Projectile.velocity.Y - FlySpeed;
+                    if (FlySpeed > 0.05f && Projectile.velocity.Y > 0f)
                     {
-                        Projectile.velocity.Y = Projectile.velocity.Y - num16 * 2f;
+                        Projectile.velocity.Y = Projectile.velocity.Y - FlySpeed * 2f;
                     }
                 }
 
@@ -472,6 +478,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Christmas
 			}
         }
 
+        //check if theres a hole or obstacle infront of it that should be jumped over
         private bool HoleBelow()
         {
             int tileWidth = 4;
@@ -491,6 +498,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Christmas
                     }
                 }
             }
+
             return true;
         }
     }

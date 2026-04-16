@@ -32,7 +32,7 @@ namespace Spooky.Content.UserInterfaces
         public static Vector2 modifier = new(-200, -75);
         public static readonly Vector2 UITopLeft = new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
 
-        public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/LittleEye/Talk", SoundType.Sound) { PitchVariance = 0.75f };
+        public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/TalkSounds/OldHunterTalk", SoundType.Sound) { Volume = 3f, PitchVariance = 0.5f };
 
         private static Asset<Texture2D> BarTexture;
 		private static Asset<Texture2D> BarHoverTexture;
@@ -71,34 +71,31 @@ namespace Spooky.Content.UserInterfaces
 
             Vector2 UIBoxScale = Vector2.One * Main.UIScale;
 
-            string Choice1 = Language.GetTextValue("Mods.Spooky.UI.OldHunterDialogueChoice.TalkChoice");
-			string Choice2 = Language.GetTextValue("Mods.Spooky.UI.OldHunterDialogueChoice.RareItemChoice");
-			string Choice3 = Language.GetTextValue("Mods.Spooky.UI.OldHunterDialogueChoice.RematchChoice");
+			string Choice1 = Language.GetTextValue("Mods.Spooky.UI.OldHunterDialogueChoice.RareItemChoice");
+			string Choice2 = Language.GetTextValue("Mods.Spooky.UI.OldHunterDialogueChoice.RematchChoice");
 
             BarTexture ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/OldHunterDialogueChoiceUIBar");
 			BarHoverTexture ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/OldHunterDialogueChoiceUIBarHover");
             UITexture ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/DialogueUIOldHunter");
 
-            Vector2 UITopLeft1 = UITopLeft + new Vector2(0, -200);
-            Vector2 UITopLeft2 = UITopLeft + new Vector2(0, -150 + (BarTexture.Height() / 2 * UIBoxScale.Y));
-            Vector2 UITopLeft3 = UITopLeft + new Vector2(0, -100 + (BarTexture.Height() / 2 * UIBoxScale.Y) * 2);
+            Vector2 UITopLeft1 = UITopLeft + new Vector2(0, -150 + (BarTexture.Height() / 2 * UIBoxScale.Y));
+            Vector2 UITopLeft2 = UITopLeft + new Vector2(0, -100 + (BarTexture.Height() / 2 * UIBoxScale.Y) * 2);
 
-			Vector2 RematchBarPosition = Flags.downedOldHunter ? UITopLeft3 : UITopLeft2;
+			Vector2 RematchBarPosition = Flags.downedOldHunter ? UITopLeft2 : UITopLeft1;
 
 			//top 2 UI bars shouldnt be accessible until after you beat the old hunter
 			if (Flags.downedOldHunter)
 			{
+				//spriteBatch.Draw(BarTexture.Value, UITopLeft1, null, Color.White, 0f, BarTexture.Size() / 2, UIBoxScale, SpriteEffects.None, 0f);
 				spriteBatch.Draw(BarTexture.Value, UITopLeft1, null, Color.White, 0f, BarTexture.Size() / 2, UIBoxScale, SpriteEffects.None, 0f);
-				spriteBatch.Draw(BarTexture.Value, UITopLeft2, null, Color.White, 0f, BarTexture.Size() / 2, UIBoxScale, SpriteEffects.None, 0f);
 			}
             spriteBatch.Draw(BarTexture.Value, RematchBarPosition, null, Color.White, 0f, BarTexture.Size() / 2, UIBoxScale, SpriteEffects.None, 0f);
 
             Color textColor1 = Color.White;
             Color textColor2 = Color.White;
-            Color textColor3 = Color.White;
 
-            //regular talk dialogue
-            if (IsMouseOverUI(UITopLeft1, BarTexture.Value, UIBoxScale) && Flags.downedOldHunter)
+			//dialogue and rewards for rare enemy items
+			if (IsMouseOverUI(UITopLeft1, BarTexture.Value, UIBoxScale) && Flags.downedOldHunter)
             {
 				spriteBatch.Draw(BarHoverTexture.Value, UITopLeft1, null, Color.White, 0f, BarHoverTexture.Size() / 2, UIBoxScale, SpriteEffects.None, 0f);
 
@@ -107,36 +104,16 @@ namespace Spooky.Content.UserInterfaces
 
                 if (Main.mouseLeft && Main.mouseLeftRelease)
                 {
+					int DialogueChoice = Main.rand.Next(1, 4);
+
 					DialogueChain chain = new();
 					chain.Add(new(UITexture.Value, Main.npc[OldHunter],
-					Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.OldHunterTalk1-1"),
-					Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerOldHunterTalk1-1"),
+					Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Quest" + DialogueChoice + "-1"),
+					Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerQuest" + DialogueChoice + "-1"),
 					TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
-					.Add(new(UITexture.Value, Main.npc[OldHunter], null, null, TalkSound, 2f, 0f, modifier, true));
-					chain.OnPlayerResponseTrigger += PlayerResponse;
-					chain.OnEndTrigger += EndDialogue;
-					DialogueUI.Visible = true;
-					DialogueUI.Add(chain);
-
-                    OldHunter = -1;
-                    UIOpen = false;
-                }
-            }
-
-			//dialogue and rewards for rare enemy items
-			if (IsMouseOverUI(UITopLeft2, BarTexture.Value, UIBoxScale) && Flags.downedOldHunter)
-            {
-				spriteBatch.Draw(BarHoverTexture.Value, UITopLeft2, null, Color.White, 0f, BarHoverTexture.Size() / 2, UIBoxScale, SpriteEffects.None, 0f);
-
-                textColor2 = Color.Gold;
-                player.mouseInterface = true;
-
-                if (Main.mouseLeft && Main.mouseLeftRelease)
-                {
-					DialogueChain chain = new();
-					chain.Add(new(UITexture.Value, Main.npc[OldHunter],
-					Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.OldHunterNoItem"),
-					Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerOldHunterNoItem"),
+					.Add(new(UITexture.Value, Main.npc[OldHunter],
+					Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Quest" + DialogueChoice + "-2"),
+					Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerQuest" + DialogueChoice + "-2"),
 					TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
 					.Add(new(UITexture.Value, Main.npc[OldHunter], null, null, TalkSound, 2f, 0f, modifier, true));
 					chain.OnPlayerResponseTrigger += PlayerResponse;
@@ -154,7 +131,7 @@ namespace Spooky.Content.UserInterfaces
             {
 				spriteBatch.Draw(BarHoverTexture.Value, RematchBarPosition, null, Color.White, 0f, BarHoverTexture.Size() / 2, UIBoxScale, SpriteEffects.None, 0f);
 
-                textColor3 = Color.Gold;
+                textColor2 = Color.Gold;
                 player.mouseInterface = true;
 
                 if (Main.mouseLeft && Main.mouseLeftRelease)
@@ -177,10 +154,9 @@ namespace Spooky.Content.UserInterfaces
 
 			if (Flags.downedOldHunter)
 			{
-				DrawTextDescription(spriteBatch, UITopLeft1 + new Vector2(-50f, -10f), Choice1, textColor1);
-				DrawTextDescription(spriteBatch, UITopLeft2 + new Vector2(-50f, -10f), Choice2, textColor2);
+				DrawTextDescription(spriteBatch, UITopLeft1 + new Vector2(-52f, -10f), Choice1, textColor1);
 			}
-			DrawTextDescription(spriteBatch, RematchBarPosition + new Vector2(-50f, -10f), Choice3, textColor3);
+			DrawTextDescription(spriteBatch, RematchBarPosition + new Vector2(-52f, -10f), Choice2, textColor2);
         }
 
         public static bool InRangeOfNPC()

@@ -99,7 +99,7 @@ namespace Spooky.Content.Backgrounds.Cemetery
                             new Color(18, 148, 0)
                         };
 
-                        Texture2D BeamTexture = ModContent.Request<Texture2D>("Spooky/Content/Backgrounds/Cemetery/RaveyardSkyBeam").Value;
+                        Texture2D BeamTexture = ModContent.Request<Texture2D>("Spooky/Content/Backgrounds/Cemetery/RaveyardSkyBeamTall").Value;
 
                         spriteBatch.Draw(BeamTexture, PillarPosition + new Vector2(0, 600), null, Color.Lerp(BeamColors[index], BeamColors[(index + 1) % 3], fade) * 0.75f * scale * opacity, 
                         i % 2 == 0 ? MathF.Sin(-Rotation) : MathF.Sin(Rotation), new Vector2(0, BeamTexture.Height), new Vector2(realDepth / 70f, realDepth / 45f), SpriteEffects.None, 0f);
@@ -162,7 +162,7 @@ namespace Spooky.Content.Backgrounds.Cemetery
                             new Color(148, 80, 0)
                         };
 
-                        float Rotation = Main.GlobalTimeWrappedHourly * 0.1f;
+                        float Rotation = Main.GlobalTimeWrappedHourly * 0.2f;
 
                         Texture2D BeamTextureTop = ModContent.Request<Texture2D>("Spooky/Content/Backgrounds/Cemetery/RaveyardSkyBeamTall").Value;
 
@@ -170,13 +170,13 @@ namespace Spooky.Content.Backgrounds.Cemetery
                         spriteBatch.Draw(BeamTextureTop, position + new Vector2(0, 2000), null, 
                         i % 2 == 0 ? (Color.Lerp(BeamColors2[index], BeamColors2[(index + 1) % 3], fade) * 0.55f * opacity) * backgroundPillar[i].Opacity : 
                         (Color.Lerp(BeamColors[index], BeamColors[(index + 1) % 3], fade) * 0.5f * opacity) * backgroundPillar[i].Opacity,
-                        i % 2 == 0 ? MathF.Sin(Rotation) : MathF.Sin(-Rotation), new Vector2(BeamTextureTop.Width / 2, BeamTextureTop.Height), (Depth.X * 0.5f + 0.5f) * 1.35f , SpriteEffects.None, 0f);
+                        i % 2 == 0 ? MathF.Sin(Rotation) : MathF.Sin(-Rotation), new Vector2(BeamTextureTop.Width / 2, BeamTextureTop.Height), (Depth.X * 0.5f + 0.5f) * 1.22f , SpriteEffects.None, 0f);
                     }
                 }
             }
 
             //draw the sky itself
-            if (maxDepth >= 3.40282347E+38f && minDepth < 3.40282347E+38f)
+            if (maxDepth >= 3E+38f && minDepth < 3E+38f && !Main.gameMenu)
             {
                 Color[] SkyColors = new Color[]
                 {
@@ -187,7 +187,7 @@ namespace Spooky.Content.Backgrounds.Cemetery
 
                 Texture2D SkyTexture = ModContent.Request<Texture2D>("Spooky/Content/Backgrounds/Cemetery/RaveyardSky").Value;
 
-                spriteBatch.Draw(SkyTexture, new Rectangle(0, Math.Max(0, (int)((Main.worldSurface * 16.0 - (double)Main.screenPosition.Y - 2000) * 0.1f)), Main.screenWidth, Main.screenHeight),
+                spriteBatch.Draw(SkyTexture, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight),
                 Color.Lerp(SkyColors[index], SkyColors[(index + 1) % 3], fade) * Math.Min(1f, (Main.screenPosition.Y - 800f) / 1000f * opacity));
             }
 

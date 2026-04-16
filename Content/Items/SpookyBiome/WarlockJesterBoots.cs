@@ -16,8 +16,8 @@ namespace Spooky.Content.Items.SpookyBiome
 			Item.width = 38;
 			Item.height = 40;
 			Item.accessory = true;
-			Item.rare = ItemRarityID.Orange;
-			Item.value = Item.buyPrice(gold: 1);
+			Item.rare = ItemRarityID.LightRed;
+			Item.value = Item.buyPrice(gold: 10);
 		}
 
 		public override void UpdateAccessory(Player player, bool hideVisual)
@@ -29,7 +29,7 @@ namespace Spooky.Content.Items.SpookyBiome
 			player.GetJumpState<WarlockJesterBootJump2>().Enable();
 			player.GetJumpState<WarlockJesterBootJump3>().Enable();
 
-			if (!hideVisual && !player.sleeping.isSleeping && player.velocity.Y == 0 && player.velocity.X != 0)
+			if (!player.sleeping.isSleeping && player.velocity.Y == 0 && player.velocity.X != 0)
 			{
 				for (int k = 0; k < 1; k++)
 				{

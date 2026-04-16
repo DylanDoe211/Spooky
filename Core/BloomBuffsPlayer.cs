@@ -1,9 +1,10 @@
 using Terraria;
-using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.DataStructures;
+using Terraria.GameInput;
+using Terraria.Audio;
 using Microsoft.Xna.Framework;
 using System;
 using System.Linq;
@@ -414,6 +415,39 @@ namespace Spooky.Core
 			}
         }
 
+		public override void ProcessTriggers(TriggersSet triggersSet)
+        {
+            //do not allow hotkeys to do anything if you are dead
+            if (Player.dead)
+            {
+                return;
+            }
+
+			if (Spooky.AccessoryHotkey.JustPressed && Main.myPlayer == Player.whoAmI)
+            {
+				if (UltimateTomato)
+				{
+					//reduce duration by 20 seconds
+					if (BloomBuffSlots[0] == "UltimateTomato")
+					{
+						Duration1 -= 60 * 20;
+					}
+					else if (BloomBuffSlots[1] == "UltimateTomato")
+					{
+						Duration2 -= 60 * 20;
+					}
+					else if (BloomBuffSlots[2] == "UltimateTomato")
+					{
+						Duration3 -= 60 * 20;
+					}
+					else if (BloomBuffSlots[3] == "UltimateTomato")
+					{
+						Duration4 -= 60 * 20;
+					}
+				}
+			}
+		}
+
 		public override void OnHurt(Player.HurtInfo info)
 		{
 			//fire off venom spines when hit with the sea urchin
@@ -563,7 +597,7 @@ namespace Spooky.Core
 					int Damage = ItemGlobal.ActiveItem(Player).damage >= 30 ? ItemGlobal.ActiveItem(Player).damage : 30;
 
 					Projectile.NewProjectile(null, new Vector2(Player.Center.X + Main.rand.Next(-30, 30), Player.Center.Y + Main.rand.Next(-50, -30)), 
-                    Vector2.Zero, ModContent.ProjectileType<GhastlyPumpkin>(), Damage, 0, Player.whoAmI);
+                    Vector2.Zero, ModContent.ProjectileType<GhastlyPumpkin>(), Damage * 2, 0, Player.whoAmI);
 
 					FallSoulPumpkinTimer = 0;
                 }
@@ -1071,19 +1105,19 @@ namespace Spooky.Core
 			}
 
 			//fungus debuffs
-			if (FungusBluePinkgill && Main.rand.NextBool(25) && !target.HasBuff(ModContent.BuffType<BluegillSparkleDebuff>()))
+			if (FungusBluePinkgill && Main.rand.NextBool(15) && !target.HasBuff(ModContent.BuffType<BluegillSparkleDebuff>()))
 			{
 				target.AddBuff(ModContent.BuffType<BluegillSparkleDebuff>(), 600);
 			}
-			if (FungusDevilTooth && Main.rand.NextBool(30) && !target.HasBuff(ModContent.BuffType<DevilToothDebuff>()))
+			if (FungusDevilTooth && Main.rand.NextBool(15) && !target.HasBuff(ModContent.BuffType<DevilToothDebuff>()))
 			{
 				target.AddBuff(ModContent.BuffType<DevilToothDebuff>(), 600);
 			}
 			if (FungusInkCap)
 			{
-				if (Main.rand.NextBool(25) && !target.HasBuff(ModContent.BuffType<InkyCapDebuff>()))
+				if (Main.rand.NextBool(15) && !target.HasBuff(ModContent.BuffType<InkyCapDebuff>()))
 				{
-					target.AddBuff(ModContent.BuffType<InkyCapDebuff>(), 120);
+					target.AddBuff(ModContent.BuffType<InkyCapDebuff>(), 180);
 				}
 
 				if (Main.rand.NextBool(3) && target.HasBuff(ModContent.BuffType<InkyCapDebuff>()))

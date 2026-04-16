@@ -375,10 +375,10 @@ namespace Spooky.Core
 			{
 				modifiers.FinalDamage *= 1.25f;
 			}
-			//samsons cuff makes enemies take 18% more damage
+			//samsons cuff makes enemies take 25% more damage
 			if (npc.HasBuff(ModContent.BuffType<SamsonCuffDebuff>()))
 			{
-				modifiers.FinalDamage *= 1.18f;
+				modifiers.FinalDamage *= 1.25f;
 			}
 		}
 

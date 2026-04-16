@@ -18,7 +18,7 @@ namespace Spooky.Content.Tiles.SpiderCave.Ambient
 			Main.tileCut[Type] = true;
 			Main.tileSolid[Type] = false;
 			Main.tileBlockLight[Type] = false;
-			Main.tileLighted[Type] = false;
+			Main.tileLighted[Type] = true;
 			TileID.Sets.IsVine[Type] = true;
             TileID.Sets.VineThreads[Type] = true;
 			TileID.Sets.MultiTileSway[Type] = true;
@@ -27,6 +27,15 @@ namespace Spooky.Content.Tiles.SpiderCave.Ambient
 			HitSound = SoundID.Grass;
 			MineResist = 0.1f;
 		}
+
+		public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
+		{
+			float divide = 700f;
+
+			r = 204f / divide;
+			g = 223f / divide;
+			b = 216f / divide;
+        }
 
 		public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 		{

@@ -34,12 +34,12 @@ namespace Spooky.Content.Projectiles.Slingshots
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.timeLeft = 240;
-			Projectile.penetrate = -1;
+			Projectile.penetrate = 3;
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
-            if (runOnce)
+            if (runOnce || IsStickingToTarget)
 			{
 				return false;
 			}

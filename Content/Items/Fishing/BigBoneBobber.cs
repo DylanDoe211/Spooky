@@ -17,7 +17,7 @@ namespace Spooky.Content.Items.Fishing
 
 		public override void UpdateAccessory(Player player, bool hideVisual)
 		{
-			player.fishingSkill += 10;
+			player.fishingSkill += 20;
 			player.overrideFishingBobber = ModContent.ProjectileType<BigBoneBobberProj>();
 		}
     }

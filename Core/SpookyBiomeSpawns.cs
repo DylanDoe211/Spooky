@@ -83,6 +83,10 @@ namespace Spooky.Core
             {
 				spawnRate /= 2;
 			}
+			else if (player.InModBiome(ModContent.GetInstance<VegetableBiome>()))
+            {
+				spawnRate *= 2;
+			}
 			else if (player.InModBiome(ModContent.GetInstance<SpookyHellBiome>()))
             {
 				//lower spawn rates if little eye is nearby
@@ -124,7 +128,7 @@ namespace Spooky.Core
 			}
 
 			//disable spawns during a hallucination encounter
-            if (player.HasBuff(ModContent.BuffType<HallucinationDebuff1>()) )
+            if (player.HasBuff(ModContent.BuffType<HallucinationDebuff1>()))
 			{
 				spawnRate = 0;
 				maxSpawns = 0;
@@ -170,12 +174,12 @@ namespace Spooky.Core
 						{
 							pool.Add(ModContent.NPCType<PuttyPumpkin>(), 2);
 							pool.Add(ModContent.NPCType<ScarecrowShotgunner>(), 1);
+						}
 
-							//do not spawn putty amalgams if it already exists
-							if (!NPC.AnyNPCs(ModContent.NPCType<PuttyAmalgam>()))
-							{
-								pool.Add(ModContent.NPCType<PuttyAmalgam>(), 0.35f);
-							}
+						//do not spawn putty amalgams if it already exists
+						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<PuttyAmalgam>()))
+						{
+							pool.Add(ModContent.NPCType<PuttyAmalgam>(), 0.35f);
 						}
 					}
 				}
@@ -339,7 +343,7 @@ namespace Spooky.Core
 						}
 
 						//do not spawn harold if he already exists
-						if (Main.hardMode && !NPC.AnyNPCs(ModContent.NPCType<Harold>()))
+						if (Flags.downedOldHunter && Main.hardMode && !NPC.AnyNPCs(ModContent.NPCType<Harold>()))
 						{
 							pool.Add(ModContent.NPCType<Harold>(), 0.5f);
 						}
@@ -593,9 +597,9 @@ namespace Spooky.Core
 						pool.Add(ModContent.NPCType<RustMite>(), 2);
 
 						//do not spawn an evil mite if one already exists
-						if (Main.hardMode && !NPC.AnyNPCs(ModContent.NPCType<EvilMite>()))
+						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<EvilMite>()))
 						{
-							pool.Add(ModContent.NPCType<EvilMite>(), 0.25f);
+							pool.Add(ModContent.NPCType<EvilMite>(), 0.2f);
 						}
 					}
 				}
@@ -828,7 +832,7 @@ namespace Spooky.Core
 						}
 
 						//do not spawn triplets if they already exist
-						if (Main.hardMode && !NPC.AnyNPCs(ModContent.NPCType<TripletsBody>()))
+						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<TripletsBody>()))
 						{
 							pool.Add(ModContent.NPCType<TripletsBody>(), 0.35f);
 						}
@@ -898,6 +902,14 @@ namespace Spooky.Core
 						{
 							pool.Add(ModContent.NPCType<GhostPepper>(), 1);
 						}
+
+						/*
+						//do not spawn an alligator if one already exists
+						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<PotatoGator>()))
+						{
+							pool.Add(ModContent.NPCType<PotatoGator>(), 0.2f);
+						}
+						*/
 					}
 				}
 			}

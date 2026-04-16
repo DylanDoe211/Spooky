@@ -9,7 +9,7 @@ using System;
 
 using Spooky.Content.Dusts;
 
-namespace Spooky.Content.NPCs.SpookyHell.Projectiles
+namespace Spooky.Content.NPCs.Quest.Projectiles
 {
     public class TripletsLaser : ModProjectile
     {

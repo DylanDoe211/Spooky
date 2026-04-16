@@ -17,6 +17,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
         {
 			Projectile.width = 24;
             Projectile.height = 24;
+            Projectile.DamageType = DamageClass.Magic;
             Projectile.localNPCHitCooldown = 60;
             Projectile.usesLocalNPCImmunity = true;
 			Projectile.friendly = true;                              			  		
@@ -56,7 +57,6 @@ namespace Spooky.Content.Projectiles.SpiderCave
                     int newProj = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, 
                     ModContent.ProjectileType<SporeCloud>(), Projectile.damage, Projectile.knockBack, Projectile.owner, ai0: 2);
                     Main.projectile[newProj].DamageType = DamageClass.Magic;
-                    Main.projectile[newProj].alpha = 125;
                 }
 
                 int npcTarget = (int)Projectile.ai[1];

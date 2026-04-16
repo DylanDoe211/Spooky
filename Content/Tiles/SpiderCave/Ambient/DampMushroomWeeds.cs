@@ -17,6 +17,7 @@ namespace Spooky.Content.Tiles.SpiderCave.Ambient
             Main.tileFrameImportant[Type] = true;
             Main.tileCut[Type] = true;
             Main.tileSolid[Type] = false;
+            Main.tileLighted[Type] = true;
             TileID.Sets.SwaysInWindBasic[Type] = true;
             TileID.Sets.IgnoredByGrowingSaplings[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
@@ -26,6 +27,15 @@ namespace Spooky.Content.Tiles.SpiderCave.Ambient
             AddMapEntry(new Color(160, 185, 176));
             DustType = DustID.Smoke;
             HitSound = SoundID.Grass;
+        }
+
+        public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
+		{
+			float divide = 700f;
+
+			r = 204f / divide;
+			g = 223f / divide;
+			b = 216f / divide;
         }
 
         public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY)
@@ -55,7 +65,7 @@ namespace Spooky.Content.Tiles.SpiderCave.Ambient
                 
                 if (Main.rand.NextBool(20))
 				{
-                    yield return new Item(ModContent.ItemType<DampGrassSeeds>());
+                    yield return new Item(ModContent.ItemType<DampMushroomGrassSeeds>());
 				}
             }
         }

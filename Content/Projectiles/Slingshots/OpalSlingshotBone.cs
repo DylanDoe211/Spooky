@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 using Microsoft.Xna.Framework;
+using System;
 
 using Spooky.Core;
 
@@ -34,7 +35,7 @@ namespace Spooky.Content.Projectiles.Slingshots
         {
 			Projectile.frame = (int)Projectile.ai[1];
 
-			Projectile.rotation += 0.2f * (float)Projectile.direction;
+			Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.03f * (float)Projectile.direction;
 
 			Projectile.ai[0]++;
 			if (Projectile.ai[0] >= 30)

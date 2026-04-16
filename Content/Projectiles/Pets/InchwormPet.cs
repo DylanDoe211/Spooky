@@ -152,7 +152,7 @@ namespace Spooky.Content.Projectiles.Pets
                     }
                     if (Projectile.frame >= 4)
                     {
-                        Projectile.frame = 0;
+                        Projectile.frame = 1;
                     }
                 }
 

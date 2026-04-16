@@ -41,7 +41,7 @@ namespace Spooky.Content.NPCs.Boss.OldHunter.Projectiles
 
 			TrailTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Projectiles/TrailSquare");
 
-			Vector2 drawOrigin = new(TrailTexture.Width() * 0.5f, TrailTexture.Height() * 0.5f);
+			Vector2 drawOrigin = new Vector2(TrailTexture.Width() * 0.5f, TrailTexture.Height() * 0.5f);
 			Vector2 previousPosition = Projectile.Center;
 
 			for (int k = 0; k < trailLength.Length; k++)
@@ -97,6 +97,11 @@ namespace Spooky.Content.NPCs.Boss.OldHunter.Projectiles
 			Projectile.rotation += 0.5f * (float)Projectile.direction;
 
 			Projectile.velocity.Y = Projectile.velocity.Y + 0.22f;
+
+			if (Projectile.timeLeft <= 60)
+			{
+				Projectile.alpha += 5;
+			}
 
 			if (runOnce)
 			{

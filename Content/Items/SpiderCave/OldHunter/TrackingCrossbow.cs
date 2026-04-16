@@ -9,7 +9,7 @@ using Spooky.Content.Items.SpiderCave.Misc;
 using Spooky.Content.Projectiles.SpiderCave;
 using Spooky.Content.Tiles.SpiderCave;
  
-namespace Spooky.Content.Items.SpiderCave
+namespace Spooky.Content.Items.SpiderCave.OldHunter
 {
 	public class TrackingCrossbow : ModItem
 	{

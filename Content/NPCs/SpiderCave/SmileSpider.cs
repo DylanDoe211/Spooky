@@ -113,15 +113,20 @@ namespace Spooky.Content.NPCs.SpiderCave
 			{
 				for (int i = 0; i < legs.Count; i++)
 				{
-					legs[i].LegUpdate(NPC.Center, NPC.rotation, 80, NPC.velocity);
+					legs[i].LegUpdate(NPC.Center, NPC.rotation, 50, NPC.velocity);
 				}
 			}
 		}
 
 		public override void AI()
 		{
-			NPC.TargetClosest(true);
-            Player player = Main.player[NPC.target];
+			Player player = Main.player[NPC.target];
+
+			bool HasLineOfSight = Collision.CanHitLine(player.position, player.width, player.height, NPC.position, NPC.width, NPC.height);
+            if (HasLineOfSight)
+            {
+				NPC.TargetClosest(true);
+			}
 
 			NPC.rotation = NPC.velocity.ToRotation();
 

@@ -65,8 +65,8 @@ namespace Spooky.Content.NPCs.SpookyBiome
 
         public override void AI()
 		{
-			NPC.spriteDirection = NPC.direction;
-            NPC.rotation = NPC.velocity.X * 0.035f;
+			NPC.spriteDirection = NPC.velocity.X < 0 ? -1 : 1;
+            NPC.rotation = NPC.velocity.X * 0.045f;
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot) 

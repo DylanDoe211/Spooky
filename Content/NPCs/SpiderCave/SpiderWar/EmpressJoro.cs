@@ -41,7 +41,6 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 		public override void SetStaticDefaults()
         {
 			Main.npcFrameCount[NPC.type] = 9;
-			NPCID.Sets.ShouldBeCountedAsBoss[NPC.type] = true;
 
 			NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
@@ -78,7 +77,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 		public override void SetDefaults()
 		{
             NPC.lifeMax = 15000;
-            NPC.damage = 50;
+            NPC.damage = 70;
 			NPC.defense = 30;
 			NPC.width = 230;
 			NPC.height = 110;
@@ -89,7 +88,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 			NPC.HitSound = SoundID.NPCHit29 with { Pitch = -0.5f };
 			NPC.DeathSound = SoundID.NPCDeath36 with { Pitch = -1.5f };
 			NPC.aiStyle = -1;
-            SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.SpiderCaveBiome>().Type };
+            SpawnModBiomes = new int[2] { ModContent.GetInstance<Biomes.SpiderWarBiome>().Type, ModContent.GetInstance<Biomes.SpiderCaveBiome>().Type };
 		}
 
 		public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
@@ -121,6 +120,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
             {
 				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.EmpressJoro"),
+				new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.SpiderWarBiome>().ModBiomeBestiaryInfoElement),
 				new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.SpiderCaveBiome>().ModBiomeBestiaryInfoElement)
 			});
 		}

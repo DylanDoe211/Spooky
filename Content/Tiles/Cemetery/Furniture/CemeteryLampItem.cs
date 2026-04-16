@@ -1,5 +1,8 @@
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+
+using Spooky.Content.Tiles.Catacomb;
 
 namespace Spooky.Content.Tiles.Cemetery.Furniture
 {
@@ -11,5 +14,13 @@ namespace Spooky.Content.Tiles.Cemetery.Furniture
             Item.width = 16;
 			Item.height = 16;
 		}
+
+		public override void AddRecipes()
+        {
+            CreateRecipe()
+            .AddIngredient(ModContent.ItemType<CatacombBrick1Item>(), 15)
+            .AddTile(TileID.WorkBenches)
+            .Register();
+        }
 	}
 }

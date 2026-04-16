@@ -145,13 +145,17 @@ namespace Spooky.Content.Projectiles.Slingshots
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 			Projectile.rotation += 0f * (float)Projectile.direction;
 
-            Projectile.velocity.Y = Projectile.velocity.Y + 0.75f;
+            Projectile.ai[1]++;
+            if (Projectile.ai[1] >= 25)
+            {
+                Projectile.velocity.Y = Projectile.velocity.Y + 0.75f;
+            }
 
             int foundTarget = HomeOnTarget();
             if (foundTarget != -1)
             {
                 NPC target = Main.npc[foundTarget];
-                Vector2 desiredVelocity = Projectile.DirectionTo(target.Center) * 8;
+                Vector2 desiredVelocity = Projectile.DirectionTo(target.Center) * 12;
                 Projectile.velocity.X = Vector2.Lerp(Projectile.velocity, desiredVelocity, 1f / 20).X;
             }
 

@@ -25,7 +25,7 @@ namespace Spooky.Content.NPCs.Friendly
 
 		Player PlayerTalkingTo = null;
 
-		public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/Krampus/Talk", SoundType.Sound) { Volume = 0.35f, PitchVariance = 0.75f };
+		public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/TalkSounds/KrampusTalk", SoundType.Sound) { Volume = 0.35f, PitchVariance = 0.75f };
 
 		private static Asset<Texture2D> HappyTexture;
 		private static Asset<Texture2D> AngryTexture;

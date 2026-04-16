@@ -84,7 +84,7 @@ namespace Spooky.Content.Tiles.SpiderCave.Furniture
 
                 Vector2 TilePos = new Vector2(X * 16, Y * 16);
 
-				if (GnomeNPC.active && EventNPCs.Contains(GnomeNPC.type) && GnomeNPC.Distance(TilePos) <= 200f)
+				if (GnomeNPC.active && EventNPCs.Contains(GnomeNPC.type) && GnomeNPC.Distance(TilePos) <= 50f)
 				{
 					NpcCount++;
 				}

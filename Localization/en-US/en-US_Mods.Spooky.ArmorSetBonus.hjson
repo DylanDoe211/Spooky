@@ -48,8 +48,9 @@ FlowerArmor:
 	'''
 SporeShroomArmor:
 	'''
-	You will spawn damaging spores whenever you get hit
-	Sometimes fire out lingering spores when using weapons
+	Double tap Down to grow a spore shroom that damages enemies around it
+	Spore shrooms can be bounced off of to restore flight time a bit
+	You can only have up to 3 spore shrooms active at once
 	'''
 HazmatArmor:
 	'''

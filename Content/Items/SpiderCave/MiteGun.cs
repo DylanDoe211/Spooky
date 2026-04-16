@@ -15,7 +15,7 @@ namespace Spooky.Content.Items.SpiderCave
 	{
 		public override void SetDefaults()
 		{
-			Item.damage = 52;
+			Item.damage = 55;
 			Item.DamageType = DamageClass.Ranged;
 			Item.noMelee = true;
 			Item.autoReuse = true;
@@ -63,7 +63,7 @@ namespace Spooky.Content.Items.SpiderCave
                 Main.projectile[newMite].DamageType = DamageClass.Ranged;
                 Main.projectile[newMite].ai[0] = Main.rand.NextBool() ? Main.rand.Next(0, 3) : 7;
                 Main.projectile[newMite].ai[2] = 1;
-				Main.projectile[newMite].penetrate = 4;
+				Main.projectile[newMite].penetrate = 5;
 
 				return false;
 			}

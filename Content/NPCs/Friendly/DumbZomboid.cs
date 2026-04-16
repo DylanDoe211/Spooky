@@ -22,7 +22,7 @@ namespace Spooky.Content.NPCs.Friendly
 
         private static Asset<Texture2D> UITexture;
 
-        public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/LittleEye/Talk", SoundType.Sound) { Volume = 2f, PitchVariance = 0.75f };
+        public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/TalkSounds/KrampusTalk", SoundType.Sound) { Volume = 0.35f, PitchVariance = 0.75f };
 
         public override void Load()
 		{

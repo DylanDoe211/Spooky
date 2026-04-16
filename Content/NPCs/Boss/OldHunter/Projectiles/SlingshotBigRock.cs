@@ -18,11 +18,11 @@ namespace Spooky.Content.NPCs.Boss.OldHunter.Projectiles
 
         public override void SetDefaults()
         {
-			Projectile.width = 16;
-            Projectile.height = 26;
+			Projectile.width = 22;
+            Projectile.height = 22;
 			Projectile.friendly = false;
             Projectile.hostile = true;
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
             Projectile.penetrate = 1;
             Projectile.timeLeft = 1200;
@@ -30,8 +30,8 @@ namespace Spooky.Content.NPCs.Boss.OldHunter.Projectiles
 
         public override Color? GetAlpha(Color lightColor)
 		{
-			return Color.White;
-		}
+            return Color.White * (1f - (Projectile.alpha / 255f));
+        }
 
         public override bool PreDraw(ref Color lightColor)
 		{
@@ -42,14 +42,14 @@ namespace Spooky.Content.NPCs.Boss.OldHunter.Projectiles
 
 			TrailTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Projectiles/TrailSquare");
 
-			Vector2 drawOrigin = new(TrailTexture.Width() * 0.5f, TrailTexture.Height() * 0.5f);
+			Vector2 drawOrigin = new Vector2(TrailTexture.Width() * 0.5f, TrailTexture.Height() * 0.5f);
 			Vector2 previousPosition = Projectile.Center;
 
 			for (int k = 0; k < trailLength.Length; k++)
 			{
 				float scale = Projectile.scale * (trailLength.Length - k) / (float)trailLength.Length;
 
-				Color color = Color.Lerp(Color.Lime, Color.DarkGray, scale);
+				Color color = Color.Lerp(Color.DarkGray, Color.Blue, scale);
 
 				if (trailLength[k] == Vector2.Zero)
 				{
@@ -75,17 +75,21 @@ namespace Spooky.Content.NPCs.Boss.OldHunter.Projectiles
 			return true;
 		}
 
-		public override bool OnTileCollide(Vector2 oldVelocity)
-		{
-            Projectile.velocity = Vector2.Zero;
-
-            return false;
-        }
-
         public override void AI()
         {
-			Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-			Projectile.rotation += 0f * (float)Projectile.direction;
+			Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.03f * (float)Projectile.direction;
+
+			Projectile.ai[0]++;
+            if (Projectile.ai[0] >= 30)
+            {
+                Projectile.velocity.X = Projectile.velocity.X * 0.98f;
+                Projectile.velocity.Y = Projectile.velocity.Y + 0.35f;
+            }
+
+			if (IsColliding())
+			{
+				Projectile.velocity = Vector2.Zero;
+			}
 
             if (runOnce)
 			{
@@ -104,6 +108,51 @@ namespace Spooky.Content.NPCs.Boss.OldHunter.Projectiles
 				trailLength[i] = current;
 				current = previousPosition;
 			}
+        }
+
+		public bool IsColliding()
+        {
+            int minTilePosX = (int)(Projectile.position.X / 16) - 1;
+            int maxTilePosX = (int)((Projectile.position.X + Projectile.width) / 16) + 2;
+            int minTilePosY = (int)(Projectile.position.Y / 16) - 1;
+            int maxTilePosY = (int)((Projectile.position.Y + Projectile.height) / 16) + 2;
+            if (minTilePosX < 0)
+            {
+                minTilePosX = 0;
+            }
+            if (maxTilePosX > Main.maxTilesX)
+            {
+                maxTilePosX = Main.maxTilesX;
+            }
+            if (minTilePosY < 0)
+            {
+                minTilePosY = 0;
+            }
+            if (maxTilePosY > Main.maxTilesY)
+            {
+                maxTilePosY = Main.maxTilesY;
+            }
+
+            for (int i = minTilePosX; i < maxTilePosX; ++i)
+            {
+                for (int j = minTilePosY; j < maxTilePosY; ++j)
+                {
+                    if (Main.tile[i, j] != null && WorldGen.SolidTile(i, j))
+                    {
+                        Vector2 vector2;
+                        vector2.X = (float)(i * 16);
+                        vector2.Y = (float)(j * 16);
+
+                        if (Projectile.position.X + Projectile.width > vector2.X && Projectile.position.X < vector2.X + 16.0 && 
+                        (Projectile.position.Y + Projectile.height > (double)vector2.Y && Projectile.position.Y < vector2.Y + 16.0))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

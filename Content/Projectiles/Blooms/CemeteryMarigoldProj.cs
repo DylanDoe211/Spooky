@@ -48,7 +48,7 @@ namespace Spooky.Content.Projectiles.Blooms
 			{
 				if (trailLength[k] == Vector2.Zero)
 				{
-					return false;
+					break;
 				}
 
 				float scale = Projectile.scale * (trailLength.Length - k) / (float)trailLength.Length;
@@ -100,7 +100,7 @@ namespace Spooky.Content.Projectiles.Blooms
 
 			if (Projectile.scale < 1f)
 			{
-				Projectile.scale += 0.12f;
+				Projectile.scale += 0.08f;
 			}
 
 			if (Projectile.timeLeft <= 60)

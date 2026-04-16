@@ -11,9 +11,9 @@ using System;
 using System.Collections.Generic;
 
 using Spooky.Core;
-using Spooky.Content.NPCs.SpookyBiome.Projectiles;
+using Spooky.Content.NPCs.Quest.Projectiles;
 
-namespace Spooky.Content.NPCs.SpookyBiome
+namespace Spooky.Content.NPCs.Quest
 {
 	public class PuttyAmalgam : ModNPC
 	{

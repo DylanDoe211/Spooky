@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace Spooky.Content.NPCs.Cemetery
+namespace Spooky.Content.NPCs.Quest
 {
     public class HaroldHandLeft : ModNPC  
     {

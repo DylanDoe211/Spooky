@@ -9,9 +9,9 @@ using System;
 
 using Spooky.Core;
 using Spooky.Content.Dusts;
-using Spooky.Content.NPCs.SpiderCave.Projectiles;
+using Spooky.Content.NPCs.Quest.Projectiles;
 
-namespace Spooky.Content.NPCs.SpiderCave.SporeEvent
+namespace Spooky.Content.NPCs.Quest
 {
     public class EvilMiteDeath : ModNPC
     {

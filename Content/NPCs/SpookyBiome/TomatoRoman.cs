@@ -44,7 +44,7 @@ namespace Spooky.Content.NPCs.SpookyBiome
 			SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.SpookyBiome>().Type };
 		}
 
-		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
+		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
 			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
             {
@@ -135,6 +135,13 @@ namespace Spooky.Content.NPCs.SpookyBiome
         {
             if (NPC.life <= 0) 
             {
+                for (int numGores = 1; numGores <= 3; numGores++)
+                {
+                    if (Main.netMode != NetmodeID.Server) 
+                    {
+                        Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/TomatoRomanGore" + numGores).Type);
+                    }
+                }
             }
         }
     }

@@ -58,8 +58,8 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 
         public override void SetDefaults()
         {
-            NPC.lifeMax = 25000;
-            NPC.damage = 50;
+            NPC.lifeMax = 15000;
+            NPC.damage = 65;
 			NPC.defense = 40;
             NPC.width = 60;
             NPC.height = 38;

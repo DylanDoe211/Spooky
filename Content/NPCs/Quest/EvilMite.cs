@@ -11,12 +11,9 @@ using System.IO;
 using System.Collections.Generic;
 
 using Spooky.Core;
-using Spooky.Content.Items.SpiderCave;
-using Spooky.Content.Items.SpiderCave.Armor;
-using Spooky.Content.NPCs.SpiderCave.Projectiles;
-using Spooky.Content.Tiles.Trophy;
+using Spooky.Content.NPCs.Quest.Projectiles;
 
-namespace Spooky.Content.NPCs.SpiderCave.SporeEvent
+namespace Spooky.Content.NPCs.Quest
 {
 	public class EvilMite : ModNPC
 	{

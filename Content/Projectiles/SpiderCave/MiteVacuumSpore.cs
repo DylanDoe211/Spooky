@@ -27,22 +27,56 @@ namespace Spooky.Content.Projectiles.SpiderCave
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 120;
-            Projectile.alpha = 125;
+            Projectile.alpha = 195;
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            ProjTexture ??= ModContent.Request<Texture2D>(Texture);
+
+            Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
+			Vector2 vector = new Vector2(Projectile.Center.X, Projectile.Center.Y) - Main.screenPosition + new Vector2(0, Projectile.gfxOffY);
+			Rectangle rectangle = new(0, ProjTexture.Height() / Main.projFrames[Projectile.type] * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
+
+            Main.EntitySpriteDraw(ProjTexture.Value, vector, rectangle, Projectile.GetAlpha(lightColor) * Projectile.ai[1], Projectile.rotation, drawOrigin, Projectile.scale * Projectile.ai[2], SpriteEffects.None, 0);
+
+            return true;
         }
 
         public override void AI()
 		{
             Projectile.frame = (int)Projectile.ai[0];
 
-            Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.06f * (float)Projectile.direction;
+            Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.005f * (float)Projectile.direction;
 
             Projectile.velocity *= 0.95f;
 
             if (Projectile.timeLeft < 60)
             {
+                Projectile.ai[2] -= 0.1f;
+
+                if (Projectile.ai[1] > 0f)
+                {
+                    Projectile.ai[1] -= 0.05f;
+                }
+
                 if (Projectile.alpha < 255)
                 {
-                    Projectile.alpha += 2;
+                    Projectile.alpha += 5;
+                }
+            }
+            else
+            {
+                Projectile.ai[2] = 2f;
+
+                if (Projectile.ai[1] <= 0.25f)
+                {
+                    Projectile.ai[1] += 0.01f;
+                }
+
+                if (Projectile.alpha > 125)
+                {
+                    Projectile.alpha -= 5;
                 }
             }
         }

@@ -14,7 +14,7 @@ namespace Spooky.Content.Projectiles.Catacomb
 {
     public class RustedBulletProj : ModProjectile
     {
-        public override string Texture => "Spooky/Content/Items/Catacomb/RustedBullet";
+        public override string Texture => "Spooky/Content/Projectiles/Blank";
 
         bool runOnce = true;
 		Vector2[] trailLength = new Vector2[8];
@@ -31,6 +31,7 @@ namespace Spooky.Content.Projectiles.Catacomb
             Projectile.timeLeft = 1800;
             Projectile.extraUpdates = 2;
 			Projectile.penetrate = 1;
+			Projectile.alpha = 255;
         }
 
         public override bool PreDraw(ref Color lightColor)

@@ -11,8 +11,6 @@ namespace Spooky.Content.Projectiles.Blooms
 {
     public class BloodToothBall : ModProjectile
     {
-        int foundTarget = -1;
-        
         public override void SetDefaults()
         {
             Projectile.width = 38;
@@ -22,7 +20,7 @@ namespace Spooky.Content.Projectiles.Blooms
             Projectile.ignoreWater = true;
             Projectile.tileCollide = true;
 			Projectile.penetrate = 1;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 300;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -49,25 +47,19 @@ namespace Spooky.Content.Projectiles.Blooms
 			return Projectile.velocity.Y >= 0;
 		}
 
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            //explode into teeth
-        }
-
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
 
             Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.01f * (float)Projectile.direction;
 
-            foundTarget = FindTarget();
-
+            int foundTarget = FindTarget();
             if (foundTarget != -1)
             {
                 NPC target = Main.npc[foundTarget];
 
-                Projectile.velocity.X += target.Center.X < Projectile.Center.X ? -0.12f : 0.12f;
-                Projectile.velocity.X = MathHelper.Clamp(Projectile.velocity.X, -5, 5);
+                Vector2 desiredVelocity = Projectile.DirectionTo(target.Center) * 12;
+                Projectile.velocity.X = Vector2.Lerp(Projectile.velocity, desiredVelocity, 1f / 20).X;
             }
 
             Projectile.ai[0]++;
@@ -101,6 +93,21 @@ namespace Spooky.Content.Projectiles.Blooms
 		public override void OnKill(int timeLeft)
 		{
             SoundEngine.PlaySound(SoundID.NPCDeath1 with { Volume = 0.5f }, Projectile.Center);
+
+            for (int numTeeth = 0; numTeeth < 10; numTeeth++)
+            {
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    Vector2 ProjectilePosition = Projectile.Center - new Vector2(0, 20);
+                    Vector2 ShootSpeed = Projectile.Center - ProjectilePosition;
+                    ShootSpeed.Normalize();
+                    ShootSpeed *= -Main.rand.NextFloat(4f, 9f);
+
+                    Vector2 newVelocity = ShootSpeed.RotatedByRandom(MathHelper.ToRadians(45));
+
+                    Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, newVelocity, ModContent.ProjectileType<BloodBallTooth>(), Projectile.damage / 2, 0, Projectile.owner);
+                }
+            }
 
             float maxAmount = 10;
             int currentAmount = 0;

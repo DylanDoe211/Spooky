@@ -22,7 +22,8 @@ namespace Spooky.Content.NPCs.SpiderCave
 			NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
 			{
 				CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/PelicanSpiderBrownBestiary",
-				Position = new Vector2(0f, 30f),
+				Position = new Vector2(6f, 20f),
+				PortraitPositionXOverride = 0f,
 				PortraitPositionYOverride = 30f
 			};
 		}
@@ -347,8 +348,9 @@ namespace Spooky.Content.NPCs.SpiderCave
 
 			NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
 			{
-				CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/PelicanSpiderBrownBestiary",
-				Position = new Vector2(0f, 30f),
+				CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/PelicanSpiderRedBestiary",
+				Position = new Vector2(6f, 20f),
+				PortraitPositionXOverride = 0f,
 				PortraitPositionYOverride = 30f
 			};
 		}

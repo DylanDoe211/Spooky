@@ -719,3 +719,8 @@ SentientOpticStaffBuff: {
 	DisplayName: Retina Chomper
 	Description: The retina chompers protect you
 }
+
+PossessedCrownBuff: {
+	DisplayName: Possessed Crown
+	Description: The crowns grant your whips more power
+}

@@ -7,28 +7,27 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace Spooky.Content.NPCs.SpookyBiome.Projectiles
+namespace Spooky.Content.NPCs.Quest.Projectiles
 {
-    public class PuttyBlob : ModProjectile
+    public class EvilMiteBlood : ModProjectile
     {
         private static Asset<Texture2D> ProjTexture;
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 3;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
         }
 
         public override void SetDefaults()
         {
-            Projectile.width = 20;
-            Projectile.height = 20;
+            Projectile.width = 16;
+            Projectile.height = 22;
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.ignoreWater = false;
-            Projectile.tileCollide = true;
-            Projectile.timeLeft = 1800;
+            Projectile.tileCollide = false;
+            Projectile.timeLeft = 180;
 			Projectile.penetrate = -1;
         }
 
@@ -36,33 +35,35 @@ namespace Spooky.Content.NPCs.SpookyBiome.Projectiles
         {
             ProjTexture ??= ModContent.Request<Texture2D>(Texture);
 
+            Color color = Projectile.GetAlpha(Color.DarkRed * 0.5f);
+
             Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
+
+            float fade = (float)Math.Cos((double)(Main.GlobalTimeWrappedHourly % 2.5f / 2.5f * 6f)) / 2f + 0.5f;
 
             for (int oldPos = 0; oldPos < Projectile.oldPos.Length; oldPos++)
             {
-                float scale = Projectile.scale * (Projectile.oldPos.Length - oldPos) / Projectile.oldPos.Length;
+                var effects = Projectile.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+                float scale = Projectile.scale * (Projectile.oldPos.Length - oldPos) / Projectile.oldPos.Length * 1f;
                 Vector2 drawPos = Projectile.oldPos[oldPos] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                Color color = Projectile.GetAlpha(Color.Gray) * ((float)(Projectile.oldPos.Length - oldPos) / (float)Projectile.oldPos.Length);
                 Rectangle rectangle = new(0, (ProjTexture.Height() / Main.projFrames[Projectile.type]) * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
-                Main.EntitySpriteDraw(ProjTexture.Value, drawPos, rectangle, color, Projectile.rotation, drawOrigin, scale, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(ProjTexture.Value, drawPos, rectangle, color, Projectile.rotation, drawOrigin, scale + (fade / 2), effects, 0);
             }
 
-            return true;
-        }
-
-        public override void OnHitPlayer(Player target, Player.HurtInfo info)
-        {
-            target.AddBuff(BuffID.Slow, 300);
+            return false;
         }
 
         public override void AI()       
         {
-            Projectile.frame = (int)Projectile.ai[0];
-
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             Projectile.rotation += 0f * (float)Projectile.direction;
 
-            Projectile.velocity.Y = Projectile.velocity.Y + 0.25f;
+            Projectile.velocity.Y = Projectile.velocity.Y + 0.05f;
+
+            if (Projectile.timeLeft <= 60)
+            {
+                Projectile.alpha += 5;
+            }
         }
 
 		public override void OnKill(int timeLeft)

@@ -31,7 +31,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SporeEvent
         
         public override void SetDefaults()
 		{
-            NPC.lifeMax = 400;
+            NPC.lifeMax = 320;
             NPC.damage = 70;
             NPC.defense = 25;
             NPC.width = 54;
@@ -59,6 +59,11 @@ namespace Spooky.Content.NPCs.SpiderCave.SporeEvent
             GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
 
             var effects = NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+
+            if (SaveDirection != 0)
+            {
+                effects = SaveDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            }
 
             Main.EntitySpriteDraw(GlowTexture.Value, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 4), 
             NPC.frame, Color.White, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
@@ -167,6 +172,8 @@ namespace Spooky.Content.NPCs.SpiderCave.SporeEvent
                 if (NPC.localAI[2] >= 170)
                 {
                     SoundEngine.PlaySound(SoundID.Dig with { Pitch = 0.5f }, NPC.Center);
+
+                    SaveDirection = 0;
 
                     NPC.noGravity = false;
                     NPC.noTileCollide = false;

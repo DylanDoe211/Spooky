@@ -186,9 +186,6 @@ BloatGhostSmall.DisplayName: Bloat Ghost
 Crow.DisplayName: Crow
 FeralRat1.DisplayName: Feral Rat
 FeralRat2.DisplayName: Feral Rat
-Harold.DisplayName: Haunting Harold
-HaroldHandRight.DisplayName: ""
-HaroldHandLeft.DisplayName: ""
 HungryGhost.DisplayName: Hungry Ghost
 MistGhost.DisplayName: Mist Ghost
 MistGhostFaces.DisplayName: Mist Ghost
@@ -326,10 +323,6 @@ Tortumor.DisplayName: Tortumor
 TortumorFleshy.DisplayName: Tortumor
 TortumorGiant.DisplayName: Giant Tortumor
 TortumorGiantFleshy.DisplayName: Giant Tortumor
-TripletsBody.DisplayName: The Triplets
-TripletsEyeGreen.DisplayName: Cornealius
-TripletsEyeRed.DisplayName: Macule
-TripletsEyePurple.DisplayName: Vitreous Bobby
 Mocling.DisplayName: Mocling
 MoclingSwarm.DisplayName: ""
 ValleyFish.DisplayName: Peeper Fish
@@ -421,8 +414,6 @@ BerryMite3.DisplayName: Berry Mite
 DeerMite.DisplayName: Deer Mite
 DustMite1.DisplayName: Dust Mite
 DustMite2.DisplayName: Dust Mite
-EvilMite.DisplayName: Full Tick
-EvilMiteDeath.DisplayName: ""
 EyelashMiteBlueBody1.DisplayName: Eyelash Mite
 EyelashMiteBlueBody2.DisplayName: Eyelash Mite
 EyelashMiteBlueHead.DisplayName: Eyelash Mite
@@ -456,7 +447,7 @@ NoseCultistLeaderIdle.DisplayName: ""
 NoseCultistLeader.DisplayName: Noseferatu
 SnotMonster.DisplayName: Snot Monster
 SnotSlime.DisplayName: Snot Slime
-//quest minibosses
+//quest enemies
 BanditBook.DisplayName: Tome of Spirits
 BanditBruiser.DisplayName: Rarg
 BanditWizard.DisplayName: Greeny
@@ -468,6 +459,16 @@ FrankenGoblinHandFront.DisplayName: Frank's Hand
 FrankenGoblinHandBack.DisplayName: Frank's Hand
 FrankenGoblinEye.DisplayName: Monster Eye
 StitchSpider.DisplayName: Stitches
+PotatoGator.DisplayName: Potato Gator
+EvilMite.DisplayName: Full Tick
+EvilMiteDeath.DisplayName: Full Tick
+Harold.DisplayName: Haunting Harold
+HaroldHandRight.DisplayName: ""
+HaroldHandLeft.DisplayName: ""
+TripletsBody.DisplayName: The Triplets
+TripletsEyeGreen.DisplayName: Cornealius
+TripletsEyeRed.DisplayName: Macule
+TripletsEyePurple.DisplayName: Vitreous Bobby
 //tar pits
 Hydroraptor.DisplayName: Hydroraptor
 Tarblimp.DisplayName: Tarblimp

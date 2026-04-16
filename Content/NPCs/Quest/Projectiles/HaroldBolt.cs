@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace Spooky.Content.NPCs.Cemetery.Projectiles
+namespace Spooky.Content.NPCs.Quest.Projectiles
 {
     public class HaroldBolt : ModProjectile
     {
@@ -50,8 +50,7 @@ namespace Spooky.Content.NPCs.Cemetery.Projectiles
 				float scale = Projectile.scale * (trailLength.Length - k) / (float)trailLength.Length;
 				scale *= 1f;
 
-				Color color = Color.White;
-                color *= (Projectile.timeLeft) / 90f;
+				Color color = Projectile.GetAlpha(Color.White);
 
 				if (trailLength[k] == Vector2.Zero)
 				{
@@ -99,6 +98,11 @@ namespace Spooky.Content.NPCs.Cemetery.Projectiles
                     Projectile.frame = 0;
                 }
             }
+
+			if (Projectile.timeLeft < 60)
+			{
+				Projectile.alpha += 5;
+			}
 
 			Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 

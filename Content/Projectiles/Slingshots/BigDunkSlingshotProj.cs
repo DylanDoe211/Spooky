@@ -51,7 +51,7 @@ namespace Spooky.Content.Projectiles.Slingshots
 
 						for (int numProjs = 0; numProjs <= 2; numProjs++)
 						{
-							Vector2 newVelocity = ShootSpeed.RotatedByRandom(MathHelper.ToRadians(35));
+							Vector2 newVelocity = ShootSpeed.RotatedByRandom(MathHelper.ToRadians(22));
 							Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, newVelocity, ModContent.ProjectileType<BigDunkSlingshotJuice>(), 
 							Projectile.damage / 2, Projectile.knockBack, Projectile.owner, ai0: Main.rand.Next(0, 2));
 						}

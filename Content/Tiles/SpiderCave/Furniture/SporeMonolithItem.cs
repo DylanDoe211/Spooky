@@ -32,7 +32,7 @@ namespace Spooky.Content.Tiles.SpiderCave.Furniture
         public override void AddRecipes()
         {
             CreateRecipe()
-            .AddIngredient(ModContent.ItemType<MiteMandibles>(), 50)
+            .AddIngredient(ModContent.ItemType<MiteMandibles>(), 15)
             .AddTile(TileID.WorkBenches)
             .Register();
         }

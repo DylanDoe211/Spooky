@@ -110,11 +110,9 @@ namespace Spooky.Content.Projectiles.SpiderCave
             //different behaviors
             switch ((int)Projectile.ai[0])
             {
-                //travel with gravity
                 case 0:
                 {
-                    Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-                    Projectile.rotation += 0f * (float)Projectile.direction;
+                    Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.015f * (float)Projectile.direction;
 
                     break;
                 }
@@ -123,6 +121,17 @@ namespace Spooky.Content.Projectiles.SpiderCave
                 {
                     Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.06f * (float)Projectile.direction;
                     Projectile.velocity *= 0.975f;
+
+                    //spawn spores
+                    Projectile.ai[1]++;
+                    if (Projectile.ai[1] % 30 == 0 && Projectile.alpha <= 0)
+                    {
+                        Vector2 ShootSpeed = new Vector2(0, -2).RotatedByRandom(360);
+
+                        int newProj = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, ShootSpeed, 
+                        ModContent.ProjectileType<SporeCloud>(), Projectile.damage / 2, Projectile.knockBack, Projectile.owner, ai0: 2);
+                        Main.projectile[newProj].DamageType = DamageClass.Magic;
+                    }
 
                     break;
                 }
@@ -134,20 +143,26 @@ namespace Spooky.Content.Projectiles.SpiderCave
                     Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 			        Projectile.rotation += 0f * (float)Projectile.direction;
 
+                    Projectile.ai[1]++;
+
                     int foundTarget = FindTarget();
-                    if (foundTarget != -1)
+                    if (foundTarget != -1 && Projectile.ai[1] >= 20 && Projectile.localAI[0] == 0)
                     {
                         NPC target = Main.npc[foundTarget];
-                        Vector2 desiredVelocity = Projectile.DirectionTo(target.Center) * 25;
-                        Projectile.velocity = Vector2.Lerp(Projectile.velocity, desiredVelocity, 1f / 20);
-                        Projectile.tileCollide = false;
+                        
+                        Vector2 ChargeDirection = target.Center - Projectile.Center;
+                        ChargeDirection.Normalize();
+                        ChargeDirection *= 20;
+                        Projectile.velocity = ChargeDirection;
+
+                        Projectile.localAI[0]++;
                     }
 
                     if (IsColliding())
                     {
-                        Projectile.ai[1] = 1;
+                        Projectile.ai[2] = 1;
                     }
-                    if (Projectile.ai[1] > 0)
+                    if (Projectile.ai[2] > 0)
                     {
                         Projectile.velocity *= 0.95f;
 
@@ -189,7 +204,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
         private int FindTarget()
         {
-            const float homingMaximumRangeInPixels = 350;
+            const float homingMaximumRangeInPixels = 200;
 
             int selectedTarget = -1;
             for (int i = 0; i < Main.maxNPCs; i++)
@@ -255,20 +270,22 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
         public override void OnKill(int timeLeft)
 		{
-            if (Projectile.ai[0] == 3)
+            if (Projectile.ai[0] == 2 || Projectile.ai[0] == 3)
             {
-                SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
+                SoundEngine.PlaySound(SoundID.NPCDeath3, Projectile.Center);
+                SoundEngine.PlaySound(SoundID.Item56 with { Pitch = 0.7f }, Projectile.Center);
 
-                for (int i = 0; i < 7; i++)
+                int MaxSpores = Projectile.ai[0] == 2 ? 3 : 8;
+
+                for (int i = 0; i < MaxSpores; i++)
                 {
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Vector2 velocity = new Vector2(0, Main.rand.Next(5, 10)).RotatedByRandom(MathHelper.ToRadians(360));
+                        Vector2 velocity = new Vector2(0, (Projectile.ai[0] == 2 ? 3 : Main.rand.Next(5, 10))).RotatedByRandom(MathHelper.ToRadians(360));
 
                         int newProj = Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, velocity, 
-                        ModContent.ProjectileType<SporeCloud>(), Projectile.damage / 3, Projectile.knockBack, ai0: 1);
+                        ModContent.ProjectileType<SporeCloud>(), Projectile.damage / 2, Projectile.knockBack, ai0: Projectile.ai[0] == 2 ? 0 : 1);
                         Main.projectile[newProj].DamageType = DamageClass.Magic;
-                        Main.projectile[newProj].alpha = 125;
                     }
                 }
             }

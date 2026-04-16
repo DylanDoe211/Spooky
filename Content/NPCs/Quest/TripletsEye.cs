@@ -13,9 +13,9 @@ using System.Collections.Generic;
 using Spooky.Core;
 using Spooky.Content.Dusts;
 using Spooky.Content.Items.Food;
-using Spooky.Content.NPCs.SpookyHell.Projectiles;
+using Spooky.Content.NPCs.Quest.Projectiles;
 
-namespace Spooky.Content.NPCs.SpookyHell
+namespace Spooky.Content.NPCs.Quest
 {
     public class TripletsEyeGreen : ModNPC
     {
@@ -83,11 +83,11 @@ namespace Spooky.Content.NPCs.SpookyHell
 
                 if (Purple)
                 {
-				    ChainTexture = ModContent.Request<Texture2D>("Spooky/Content/NPCs/SpookyHell/TripletsChainPurple").Value;
+				    ChainTexture = ModContent.Request<Texture2D>("Spooky/Content/NPCs/Quest/TripletsChainPurple").Value;
                 }
                 else
                 {
-                    ChainTexture = ModContent.Request<Texture2D>("Spooky/Content/NPCs/SpookyHell/TripletsChainRed").Value;
+                    ChainTexture = ModContent.Request<Texture2D>("Spooky/Content/NPCs/Quest/TripletsChainRed").Value;
                 }
 
 				bool flip = false;

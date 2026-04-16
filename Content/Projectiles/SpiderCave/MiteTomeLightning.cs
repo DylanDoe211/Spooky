@@ -74,7 +74,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
                 Vector2 ProjectilePosition = Projectile.Center + new Vector2(1, 0).RotatedByRandom(360);
                 Vector2 Velocity = Projectile.Center - ProjectilePosition;
                 Velocity.Normalize();
-                Velocity *= 2f;
+                Velocity *= 6f;
 
                 int newMite = Projectile.NewProjectile(Projectile.GetSource_Death(), target.Center, Velocity, ModContent.ProjectileType<MiteProjectile>(), Projectile.damage / 2, 0, Projectile.owner);
                 Main.projectile[newMite].DamageType = DamageClass.Magic;

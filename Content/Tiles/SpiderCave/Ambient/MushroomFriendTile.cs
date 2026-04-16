@@ -21,6 +21,7 @@ namespace Spooky.Content.Tiles.SpiderCave.Ambient
 			Main.tileSolid[Type] = false;
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
+			Main.tileSpelunker[Type] = true;
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);
             TileObjectData.newTile.Width = 3;
 			TileObjectData.newTile.Height = 3;

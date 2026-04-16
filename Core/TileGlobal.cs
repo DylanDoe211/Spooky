@@ -9,7 +9,6 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Spooky.Content.Achievements;
-using Spooky.Content.Dusts;
 using Spooky.Content.Gores.Misc;
 using Spooky.Content.Items.Minibiomes.Desert;
 using Spooky.Content.NPCs.Minibiomes.Desert.Projectiles;
@@ -203,6 +202,23 @@ namespace Spooky.Core
 					float b = 111f / divide;
 
 					Lighting.AddLight(new Vector2(i, j) * 16, new Vector3(r, g, b));
+				}
+
+				//ice rod blocks should be destroyed immediately in boss arenas
+				if (tile.TileType == TileID.MagicalIceBlock)
+				{
+					Rectangle TilePos = new Rectangle(i * 16, j * 16, 1, 1);
+
+					Rectangle DaffodilRect = new Rectangle((int)(Flags.DaffodilPosition.X - 750), (int)(Flags.DaffodilPosition.Y - 275), 1490, 600);
+					Rectangle BigBoneRect = new Rectangle((int)(Flags.FlowerPotPosition.X - 835), (int)(Flags.FlowerPotPosition.Y - 500), 1650, 1050);
+					Rectangle OldHunterRect = new Rectangle((int)(Flags.OldHunterPosition.X - 600), (int)(Flags.OldHunterPosition.Y - 400), 1200, 415);
+
+					if ((Flags.DaffodilPosition != Vector2.Zero && TilePos.Intersects(DaffodilRect)) ||
+					(Flags.FlowerPotPosition != Vector2.Zero && TilePos.Intersects(BigBoneRect)) ||
+					(Flags.OldHunterPosition != Vector2.Zero && TilePos.Intersects(OldHunterRect)))
+					{
+						WorldGen.KillTile(i, j);
+					}
 				}
 			}
 		}

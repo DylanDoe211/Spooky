@@ -11,9 +11,9 @@ using System.IO;
 using System.Collections.Generic;
 
 using Spooky.Core;
-using Spooky.Content.NPCs.Cemetery.Projectiles;
+using Spooky.Content.NPCs.Quest.Projectiles;
 
-namespace Spooky.Content.NPCs.Cemetery
+namespace Spooky.Content.NPCs.Quest
 {
     public class Harold : ModNPC
     {

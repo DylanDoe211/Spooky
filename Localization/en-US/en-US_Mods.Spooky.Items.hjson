@@ -364,7 +364,12 @@ SummerSunflower: {
 
 UltimateTomato: {
 	DisplayName: Ultimato
-	Tooltip: 5 minute duration
+	Tooltip:
+		'''
+		Press the Accessory Hotkey to throw around a ton of tomatos and ketchup
+		Every use of this will subtract 20 seconds off of this blooms duration
+		5 minute duration
+		'''
 }
 
 VegetableCauliflower: {
@@ -899,7 +904,7 @@ PandoraAmalgam: {
 		Spawns blobs of ectoplasm when you restore mana that deal more damage the more you restore
 		Press the Accessory hotkey to release sound that damages you and enemies
 		You will spawn hands every few seconds that will home in on you and heal you when hit
-		Occasionally fire out a cuff at a nearby enemy, enemies attatched to it will take 18% more damage
+		Occasionally fire out a cuff at a nearby enemy, enemies attatched to it will take 25% more damage
 		'''
 }
 
@@ -930,7 +935,7 @@ PandoraCuffs: {
 	Tooltip:
 		'''
 		Every 15 seconds, a chain will attach itself to a nearby enemy for 5 seconds
-		Enemies attached to the chain will take 20% more damage
+		Enemies attached to the chain will take 25% more damage
 		The chain will also prioritize bosses over normal enemies
 		'Suffering builds character'
 		'''
@@ -1425,7 +1430,7 @@ SpookyHellCrate2: {
 
 BigBoneBobber: {
 	DisplayName: Big Bone Bobber
-	Tooltip: ""
+	Tooltip: Increases fishing power by 20
 }
 
 BoogerFish: {
@@ -1450,7 +1455,7 @@ OrroEel: {
 
 PumpkinBobber: {
 	DisplayName: Pumpkin Bobber
-	Tooltip: ""
+	Tooltip: Increases fishing power by 10
 }
 
 GourdFish: {
@@ -2441,6 +2446,41 @@ StitchedCloak: {
 		'''
 }
 
+OldHunterCloth: {
+	DisplayName: Haunted Cloth
+	Tooltip: The Old Hunter may be interested in this
+}
+
+OldHunterEyes: {
+	DisplayName: Pair of Eyes
+	Tooltip: The Old Hunter may be interested in this
+}
+
+OldHunterMushroom: {
+	DisplayName: Chud Cap
+	Tooltip: The Old Hunter may be interested in this
+}
+
+OldHunterOrnament: {
+	DisplayName: Pulsing Ornament
+	Tooltip: The Old Hunter may be interested in this
+}
+
+OldHunterPotatos: {
+	DisplayName: Mashed Gator
+	Tooltip: The Old Hunter may be interested in this
+}
+
+OldHunterPutty: {
+	DisplayName: Putty Core
+	Tooltip: The Old Hunter may be interested in this
+}
+
+OldHunterSac: {
+	DisplayName: Tick Sac
+	Tooltip: The Old Hunter may be interested in this
+}
+
 SummonItem1: {
 	DisplayName: Red Velvet Cake
 	Tooltip:
@@ -2692,17 +2732,17 @@ SpiderLegs: {
 }
 
 SporeShroomBody: {
-	DisplayName: Chestplate-Shaped Mushroom
-	Tooltip: 10% increased damage
+	DisplayName: Sporeshroom Bodyplate
+	Tooltip: 15% increased damage
 }
 
 SporeShroomHead: {
-	DisplayName: Helmet-Shaped Mushroom
+	DisplayName: Sporeshroom Mask
 	Tooltip: 10% increased critical strike chance
 }
 
 SporeShroomLegs: {
-	DisplayName: Legging-Shaped Mushroom
+	DisplayName: Sporeshroom Pants
 	Tooltip: 12% increased movement speed
 }
 
@@ -2728,12 +2768,12 @@ InchwormOrangeItem: {
 
 MiteMandibles: {
 	DisplayName: Mite Mandibles
-	Tooltip: "'Don't stick your fingers in them!'"
+	Tooltip: ""
 }
 
 SpiderChitin: {
 	DisplayName: Spider Chitin
-	Tooltip: The hard exo-skeleton of a spider-like creature
+	Tooltip: ""
 }
 
 SpiderKey: {
@@ -2741,13 +2781,25 @@ SpiderKey: {
 	Tooltip: Unlocks a spider chest in the dungeon
 }
 
-MiteClaws: {
-	DisplayName: Shred Claw
+PossessedCrown: {
+	DisplayName: Possessed Crown
 	Tooltip:
 		'''
-		Creates a claw swipe nearby you that shreds enemies
-		Has a chance to bleed enemies
+		Summons possessed crowns above you, each costing one minion slot
+		The crowns cause your whips to spawn ghostly swords when hitting enemies
+		The more crowns you have, the more swords get spawned
+		The damage of the swords scales based on the whip you are using
 		'''
+}
+
+TrackingCrossbow: {
+	DisplayName: Hi-Tech Crossbow
+	Tooltip: Fires out homing bolts that stick to enemies
+}
+
+MiteClaws: {
+	DisplayName: Shred Claw
+	Tooltip: Shreds enemies at a close range
 }
 
 MiteGun: {
@@ -2757,7 +2809,7 @@ MiteGun: {
 
 MiteShovel: {
 	DisplayName: Mighty Shovel
-	Tooltip: Spawn a stationary mite den that spawns mites to attack enemies
+	Tooltip: Summons a mite den sentry that spawns mites to attack enemies
 }
 
 MiteSword: {
@@ -2878,7 +2930,7 @@ SpiderWarFlail: {
 	Tooltip:
 		'''
 		Rapidly shoots missiles while being swung
-		When dropped, creates a devestating ground slam that sends debris everywhere
+		Creates a devestating shockwave that sends debris everywhere when dropped
 		'''
 }
 
@@ -2936,11 +2988,6 @@ TatantulaFlyTome: {
 		Conjures flies that follow your cursor while continously using the grimoire
 		Releasing while having 10 flies around your cursor causes them to home in on enemies
 		'''
-}
-
-TrackingCrossbow: {
-	DisplayName: Hi-Tech Crossbow
-	Tooltip: Fires out homing bolts that stick to enemies
 }
 
 VenomHarpoon: {
@@ -3151,12 +3198,30 @@ LeafBlower: {
 		'''
 }
 
+MoldBalloon: {
+	DisplayName: Mold in a Balloon
+	Tooltip:
+		'''
+		Allows the holder to double jump
+		Increases jump height and negates fall damage
+		'''
+}
+
+MoldBalloonHorseshoe: {
+	DisplayName: Mold Horseshoe Balloon
+	Tooltip:
+		'''
+		Allows the holder to double jump
+		Increases jump height
+		'''
+}
+
 MoldJar: {
 	DisplayName: Mold in a Jar
 	Tooltip:
 		'''
 		Allows the holder to double jump
-		'It smells awful!'
+		'Do not open this'
 		'''
 }
 
@@ -5887,6 +5952,11 @@ RootWoodWallItem: {
 
 WebBlockItem: {
 	DisplayName: Spider Web Block
+	Tooltip: ""
+}
+
+WebBlockWallItem: {
+	DisplayName: Spider Web Wall
 	Tooltip: ""
 }
 

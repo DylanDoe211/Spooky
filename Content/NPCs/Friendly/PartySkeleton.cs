@@ -4,12 +4,15 @@ using Terraria.ModLoader;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.UI;
 using Terraria.Localization;
+using Terraria.Audio;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using System.Collections.Generic;
+
 using Spooky.Core;
+using Spooky.Content.UserInterfaces;
 
 namespace Spooky.Content.NPCs.Friendly
 {
@@ -25,10 +28,22 @@ namespace Spooky.Content.NPCs.Friendly
         bool hasPants = false;
         bool hasSunGlasses = false;
 
+        Vector2 modifier = new(-200, -75);
+
+        Player PlayerTalkingTo = null;
+
         private static Asset<Texture2D> ShirtTexture;
         private static Asset<Texture2D> ShirtLogoTexture;
         private static Asset<Texture2D> PantsTexture;
         private static Asset<Texture2D> SunglassesTexture;
+        private static Asset<Texture2D> UITexture;
+
+        public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/TalkSounds/PartySkeletonTalk", SoundType.Sound) { Volume = 3f, PitchVariance = 0.75f };
+
+		public override void Load()
+		{
+			UITexture = ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/DialogueUIPartySkeleton");
+		}
 
         public override void SetStaticDefaults()
         {
@@ -226,21 +241,6 @@ namespace Spooky.Content.NPCs.Friendly
             }
         }
 
-        public override bool CanChat() 
-        {
-			return true;
-		}
-
-        public override void SetChatButtons(ref string button, ref string button2)
-		{
-			button = "";
-		}
-
-        public override string GetChat()
-		{
-			return Language.GetTextValue("Mods.Spooky.Dialogue.PartySkeleton.Dialogue" + dialogueStyle.ToString());
-		}
-
         public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
         {
             if (NPC.AnyNPCs(ModContent.NPCType<SkeletonBouncer>()))
@@ -257,12 +257,85 @@ namespace Spooky.Content.NPCs.Friendly
             }
         }
 
+        public override bool CanChat() 
+        {
+			return false;
+		}
+
         public override void AI()
         {
             NPC.spriteDirection = NPC.direction;
 
-            NPC.localAI[0]++;
+            if (PlayerTalkingTo != null)
+            {
+                NPC.TargetClosest(true);
 
+                NPC.velocity.X = 0;
+            }
+
+            Player player = Main.LocalPlayer;
+			
+			if (NPC.Hitbox.Intersects(new Rectangle((int)Main.MouseWorld.X - 1, (int)Main.MouseWorld.Y - 1, 1, 1)) &&
+			NPC.Distance(player.Center) <= 150f && !Main.mapFullscreen)
+			{
+				if (Main.mouseRight && Main.mouseRightRelease && PlayerTalkingTo == null)
+				{
+					Main.BestiaryTracker.Chats.SetWasChatWithDirectly(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[Type]);
+
+					PlayerTalkingTo = player;
+
+					if (!Main.dedServ)
+					{
+                        Color color = Color.White;
+
+                        if (NPC.type == ModContent.NPCType<PartySkeleton1>())
+                        {
+                            color = Color.Orange;
+                        }
+                        if (NPC.type == ModContent.NPCType<PartySkeleton2>())
+                        {
+                            color = Color.ForestGreen;
+                        }
+                        if (NPC.type == ModContent.NPCType<PartySkeleton3>())
+                        {
+                            color = Color.Crimson;
+                        }
+                        if (NPC.type == ModContent.NPCType<PartySkeleton4>())
+                        {
+                            color = Color.MediumPurple;
+                        }
+                        if (NPC.type == ModContent.NPCType<PartySkeleton5>())
+                        {
+                            color = Color.Cyan;
+                        }
+                        if (NPC.type == ModContent.NPCType<PartySkeleton6>())
+                        {
+                            color = Color.HotPink;
+                        }
+                        if (NPC.type == ModContent.NPCType<PartySkeleton7>())
+                        {
+                            color = Color.YellowGreen;
+                        }
+                        if (NPC.type == ModContent.NPCType<PartySkeleton8>())
+                        {
+                            color = Color.Navy;
+                        }
+
+                        DialogueChain chain = new();
+                        chain.Add(new(UITexture.Value, NPC,
+                        Language.GetTextValue("Mods.Spooky.Dialogue.PartySkeleton.Dialogue" + dialogueStyle.ToString()),
+                        Language.GetTextValue("..."),
+                        TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
+                        .Add(new(UITexture.Value, NPC, null, null, TalkSound, 2f, 0f, modifier, true));
+                        chain.OnPlayerResponseTrigger += PlayerResponse;
+                        chain.OnEndTrigger += EndDialogue;
+                        DialogueUI.Visible = true;
+                        DialogueUI.Add(chain);
+                    }
+                }
+            }
+
+            NPC.localAI[0]++;
             if (NPC.localAI[0] == 1)
             {
                 //select the dialogue this npc should use
@@ -345,6 +418,20 @@ namespace Spooky.Content.NPCs.Friendly
                 }
             }
         }
+
+        public void PlayerResponse(Dialogue dialogue, string Text, int ID)
+		{
+			Dialogue newDialogue = new(ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/DialogueUIPlayer").Value, Main.LocalPlayer,
+			Text, null, SoundID.Item1, 2f, 0f, default, NotPlayer: false);
+			DialogueUI.Visible = true;
+			DialogueUI.Add(newDialogue);
+		}
+
+		public void EndDialogue(Dialogue dialogue, int ID)
+		{
+            PlayerTalkingTo = null;
+			DialogueUI.Visible = false;
+		}
     }
 
     public class PartySkeleton2 : PartySkeleton1  

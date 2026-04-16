@@ -14,7 +14,7 @@ namespace Spooky.Content.Items.SpookyBiome
 			Item.height = 40;
 			Item.accessory = true;
 			Item.rare = ItemRarityID.Blue;
-			Item.value = Item.buyPrice(gold: 1);
+			Item.value = Item.buyPrice(gold: 5);
 		}
 
 		public override void UpdateAccessory(Player player, bool hideVisual)
@@ -22,7 +22,7 @@ namespace Spooky.Content.Items.SpookyBiome
 			player.accRunSpeed = 5.25f;
 			player.maxRunSpeed = 5.25f;
 
-			if (!hideVisual && !player.sleeping.isSleeping && player.velocity.Y == 0 && player.velocity.X != 0)
+			if (!player.sleeping.isSleeping && player.velocity.Y == 0 && player.velocity.X != 0)
 			{
 				for (int k = 0; k < 1; k++)
 				{

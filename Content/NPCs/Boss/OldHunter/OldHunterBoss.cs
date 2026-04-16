@@ -703,7 +703,7 @@ namespace Spooky.Content.NPCs.Boss.OldHunter
                         int Repeats = 2;
 
                         //gourd and spike ball attack repeats 6 times
-                        if (AmmoForPlatformJumpAttack == 5 || AmmoForPlatformJumpAttack == 6)
+                        if (AmmoForPlatformJumpAttack == 6)
                         {
                             Repeats = 6;
                         }
@@ -745,7 +745,7 @@ namespace Spooky.Content.NPCs.Boss.OldHunter
                                     case 1:
                                     {
                                         AmmoToShoot = ModContent.ProjectileType<SlingshotBigRock>();
-                                        ProjSpeed = 8f;
+                                        ProjSpeed = 14f;
                                         break;
                                     }
                                     case 5:
@@ -774,17 +774,17 @@ namespace Spooky.Content.NPCs.Boss.OldHunter
                                     position += Offset;
                                 }
 
-                                if (AmmoToShoot != ModContent.ProjectileType<SlingshotBigRock>())
-                                {
-                                    NPCGlobalHelper.ShootHostileProjectile(NPC, position, ShootSpeed, AmmoToShoot, NPC.damage, 4.5f);
-                                }
-                                else
+                                if (AmmoToShoot == ModContent.ProjectileType<SlingshotBigRock>() || AmmoToShoot == ModContent.ProjectileType<SlingshotRotBall>())
                                 {
                                     for (int numProjs = 0; numProjs <= 2; numProjs++)
                                     {
                                         Vector2 Velocity = ShootSpeed.RotatedByRandom(MathHelper.ToRadians(50));
                                         NPCGlobalHelper.ShootHostileProjectile(NPC, position, Velocity, AmmoToShoot, NPC.damage, 4.5f);
                                     }
+                                }
+                                else
+                                {
+                                    NPCGlobalHelper.ShootHostileProjectile(NPC, position, ShootSpeed, AmmoToShoot, NPC.damage, 4.5f);
                                 }
 
                                 NPC.localAI[0] = TimeForSound - 1;

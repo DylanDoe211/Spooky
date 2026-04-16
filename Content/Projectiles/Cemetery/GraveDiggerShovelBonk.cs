@@ -16,8 +16,8 @@ namespace Spooky.Content.Projectiles.Cemetery
 
         public override void SetDefaults()
         {
-            Projectile.width = 42;
-            Projectile.height = 42;
+            Projectile.width = 82;
+            Projectile.height = 48;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.friendly = true;
             Projectile.hostile = false;

@@ -30,7 +30,7 @@ namespace Spooky.Content.Items.SpiderCave
 			Item.value = Item.buyPrice(gold: 2);
 			Item.UseSound = SoundID.Item97;
 			Item.shoot = ModContent.ProjectileType<CannonEggSmall>();
-			Item.shootSpeed = 8f;
+			Item.shootSpeed = 13f;
 		}
 
 		public override Vector2? HoldoutOffset()

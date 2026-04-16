@@ -29,9 +29,8 @@ LittleEyeDialogueChoice: {
 }
 
 OldHunterDialogueChoice: {
-	TalkChoice: Talk
-	RareItemChoice: Rare Items
-	RematchChoice: Rematch
+	RareItemChoice: Bounty Quests
+	RematchChoice: Duel Rematch
 }
 
 RottenDepthsTerminal: {

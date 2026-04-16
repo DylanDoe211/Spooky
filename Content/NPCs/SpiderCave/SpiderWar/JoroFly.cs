@@ -44,7 +44,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
         public override void SetDefaults()
         {
             NPC.lifeMax = 450;
-            NPC.damage = 45;
+            NPC.damage = 55;
             NPC.defense = 15;
             NPC.width = 42;
 			NPC.height = 48;
@@ -55,7 +55,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
             NPC.HitSound = SoundID.NPCHit29 with { Pitch = -0.2f };
             NPC.DeathSound = SoundID.NPCDeath36 with { Volume = 0.5f, Pitch = -0.5f };
             NPC.aiStyle = -1;
-            SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.SpiderCaveBiome>().Type };
+            SpawnModBiomes = new int[2] { ModContent.GetInstance<Biomes.SpiderWarBiome>().Type, ModContent.GetInstance<Biomes.SpiderCaveBiome>().Type };
         }
 
         public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
@@ -68,7 +68,8 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
             bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
             {
 				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.JoroFly"),
-                new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.SpiderCaveBiome>().ModBiomeBestiaryInfoElement)
+                new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.SpiderWarBiome>().ModBiomeBestiaryInfoElement),
+				new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.SpiderCaveBiome>().ModBiomeBestiaryInfoElement)
 			});
 		}
 

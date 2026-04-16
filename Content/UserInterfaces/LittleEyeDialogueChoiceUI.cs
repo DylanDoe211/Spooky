@@ -32,7 +32,7 @@ namespace Spooky.Content.UserInterfaces
         public static Vector2 modifier = new(-200, -75);
         public static readonly Vector2 UITopLeft = new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
 
-        public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/LittleEye/Talk", SoundType.Sound) { Volume = 2f, PitchVariance = 0.75f };
+        public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/TalkSounds/LittleEyeTalk", SoundType.Sound) { Volume = 2f, PitchVariance = 0.75f };
 
         private static Asset<Texture2D> BarTexture;
 		private static Asset<Texture2D> BarHoverTexture;

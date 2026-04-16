@@ -30,7 +30,6 @@ namespace Spooky.Content.NPCs.Quest
 		public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 10;
-			NPCID.Sets.ShouldBeCountedAsBoss[Type] = true;
 			NPCID.Sets.CantTakeLunchMoney[Type] = true;
 
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;

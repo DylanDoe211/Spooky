@@ -20,6 +20,9 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 {
 	public class JoroBaby : ModNPC
 	{
+		int WingFrame = 0;
+		int WingFrameCounter = 0;
+
 		float FlashOpacity = 0f;
 		float Timer1 = 0f;
 		float Timer2 = 0f;
@@ -29,6 +32,9 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 		private static Asset<Texture2D> GlowTexture;
 		private static Asset<Texture2D> AuraTexture;
         private static Asset<Texture2D> FlashTexture;
+		private static Asset<Texture2D> WingsTexture;
+		private static Asset<Texture2D> WingsGlowTexture;
+        private static Asset<Texture2D> WingsFlashTexture;
 
 		public override void SetStaticDefaults()
 		{
@@ -47,8 +53,8 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
             NPC.lifeMax = 3500;
             NPC.damage = 50;
 			NPC.defense = 10;
-			NPC.width = 74;
-			NPC.height = 50;
+			NPC.width = 78;
+			NPC.height = 54;
             NPC.npcSlots = 1f;
             NPC.knockBackResist = 0f;
 			NPC.noGravity = true;
@@ -56,7 +62,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 			NPC.HitSound = SoundID.NPCHit29 with { Pitch = -0.4f };
 			NPC.DeathSound = SoundID.NPCDeath36 with { Pitch = -1f };
             NPC.aiStyle = 22;
-			SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.SpiderCaveBiome>().Type };
+			SpawnModBiomes = new int[2] { ModContent.GetInstance<Biomes.SpiderWarBiome>().Type, ModContent.GetInstance<Biomes.SpiderCaveBiome>().Type };
 		}
 
 		public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
@@ -76,6 +82,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
             {
 				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.JoroBaby"),
+				new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.SpiderWarBiome>().ModBiomeBestiaryInfoElement),
 				new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.SpiderCaveBiome>().ModBiomeBestiaryInfoElement)
 			});
 		}
@@ -83,7 +90,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 		public override void FindFrame(int frameHeight)
         {
 			NPC.frameCounter++;
-			if (NPC.frameCounter > 2)
+			if (NPC.frameCounter > 5)
 			{
 				NPC.frame.Y = NPC.frame.Y + frameHeight;
 				NPC.frameCounter = 0;
@@ -96,15 +103,14 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
-			if (NPC.IsABestiaryIconDummy)
-			{
-                return true;
-            }
-
 			NPCTexture ??= ModContent.Request<Texture2D>(Texture);
 			GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
 			AuraTexture ??= ModContent.Request<Texture2D>(Texture + "Aura");
 			FlashTexture ??= ModContent.Request<Texture2D>(Texture + "Flash");
+
+			WingsTexture ??= ModContent.Request<Texture2D>(Texture + "Wings");
+			WingsGlowTexture ??= ModContent.Request<Texture2D>(Texture + "WingsGlow");
+			WingsFlashTexture ??= ModContent.Request<Texture2D>(Texture + "WingsFlash");
 
 			var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
@@ -128,14 +134,26 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
                 }
 			}
 
+			Rectangle CurrentWingFrame = NPC.IsABestiaryIconDummy ? NPC.frame : new Rectangle(0, NPC.height * WingFrame, NPC.width, NPC.height); 
+
 			//npc texture
 			Main.EntitySpriteDraw(NPCTexture.Value, vector, NPC.frame, NPC.GetNPCColorTintedByBuffs(NPC.GetAlpha(drawColor)), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
-			//Main.EntitySpriteDraw(GlowTexture.Value, vector, NPC.frame, NPC.GetAlpha(Color.White * 0.5f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+			if (!NPC.IsABestiaryIconDummy)
+			{
+				Main.EntitySpriteDraw(GlowTexture.Value, vector, NPC.frame, NPC.GetAlpha(Color.White * 0.5f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+			}
+
+			Main.EntitySpriteDraw(WingsTexture.Value, vector, CurrentWingFrame, NPC.GetNPCColorTintedByBuffs(NPC.GetAlpha(drawColor)), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+			if (!NPC.IsABestiaryIconDummy)
+			{
+				Main.EntitySpriteDraw(WingsGlowTexture.Value, vector, CurrentWingFrame, NPC.GetAlpha(Color.White * 0.5f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+			}
 
 			//flashing texture when exploding
 			if (FlashOpacity > 0f)
             {
                 Main.EntitySpriteDraw(FlashTexture.Value, vector, NPC.frame, Color.White * FlashOpacity, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+				Main.EntitySpriteDraw(WingsFlashTexture.Value, vector, CurrentWingFrame, Color.White * FlashOpacity, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
             }
 
 			return false;
@@ -149,6 +167,19 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
             NPC.spriteDirection = NPC.direction;
 
 			NPC.rotation = NPC.velocity.X * 0.015f;
+
+			WingFrameCounter++;
+			if (WingFrameCounter % 3 == 0)
+			{
+				if (WingFrame >= 5)
+				{
+					WingFrame = 0;
+				}
+				else
+				{
+					WingFrame++;
+				}
+			}
 
 			if (FlashOpacity > 0f)
             {

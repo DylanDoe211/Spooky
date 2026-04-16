@@ -209,7 +209,7 @@ namespace Spooky.Content.Projectiles.Slingshots
                 if (foundTarget != -1)
 				{
 					NPC target = Main.npc[foundTarget];
-					Vector2 desiredVelocity = Projectile.DirectionTo(target.Center) * 5;
+					Vector2 desiredVelocity = Projectile.DirectionTo(target.Center) * 6;
 					Projectile.velocity = Vector2.Lerp(Projectile.velocity, desiredVelocity, 1f / 20);
 				}
 

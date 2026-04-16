@@ -29,13 +29,11 @@ namespace Spooky.Core
         public bool storedHalloween;
         public bool storedHalloweenForToday;
 
-        public bool KrampusDailyQuest = true;
-
         public static bool DaySwitched;
         public static bool LastTime;
 
 		//check to make sure the player isnt in a subworld so that all of the npcs meant to be saved and spawned in specific world locations are not spawned in subworlds
-		public bool IsInSubworld()
+		public static bool IsInSubworld()
         {
             if (Spooky.Instance.subworldLibrary == null)
             {

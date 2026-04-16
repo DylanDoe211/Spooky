@@ -10,10 +10,14 @@ namespace Spooky.Content.Projectiles.SpiderCave
 {
     public class MiteProjectile : ModProjectile
     {
-        public bool IsStickingToTarget = false;
+        bool IsStickingToTarget = false;
+
+        bool runOnce = true;
+		Vector2[] trailLength = new Vector2[8];
 
         private static Asset<Texture2D> ProjTexture;
         private static Asset<Texture2D> AuraTexture;
+        private static Asset<Texture2D> TrailTexture;
 
         public override void SetStaticDefaults()
         {
@@ -34,61 +38,96 @@ namespace Spooky.Content.Projectiles.SpiderCave
         {
             ProjTexture ??= ModContent.Request<Texture2D>(Texture);
             AuraTexture ??= ModContent.Request<Texture2D>(Texture + "Aura");
+            TrailTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Projectiles/TrailSquare");
 
             Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
 			Vector2 vector = new Vector2(Projectile.Center.X, Projectile.Center.Y) - Main.screenPosition + new Vector2(0, Projectile.gfxOffY);
 			Rectangle rectangle = new(0, ProjTexture.Height() / Main.projFrames[Projectile.type] * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
 
+            Color RealColor = Color.White;
+
+            switch ((int)Projectile.ai[0])
+            {
+                case 0:
+                {
+                    RealColor = Color.SaddleBrown;
+                    break;
+                }
+                case 1:
+                {
+                    RealColor = Color.White;
+                    break;
+                }
+                case 2:
+                {
+                    RealColor = Color.Gold;
+                    break;
+                }
+                case 3:
+                {
+                    RealColor = Color.Indigo;
+                    break;
+                }
+                case 4:
+                {
+                    RealColor = Color.Blue;
+                    break;
+                }
+                case 5:
+                {
+                    RealColor = Color.Green;
+                    break;
+                }
+                case 6:
+                {
+                    RealColor = Color.Turquoise;
+                    break;
+                }
+                case 7:
+                {
+                    RealColor = Color.Red;
+                    break;
+                }
+            }
+
+            Color color = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(RealColor);
+
+            if (!IsStickingToTarget)
+            {
+                //draw afterimage trail
+                Vector2 drawOriginTrail = new(TrailTexture.Width() * 0.5f, TrailTexture.Height() * 0.5f);
+                Vector2 previousPosition = Projectile.Center;
+
+                for (int k = 0; k < trailLength.Length; k++)
+                {
+                    float scale = Projectile.scale * (trailLength.Length - k) / (float)trailLength.Length;
+                    scale *= 1f;
+
+                    if (trailLength[k] == Vector2.Zero)
+                    {
+                        return true;
+                    }
+
+                    Vector2 drawPos = trailLength[k] - Main.screenPosition;
+                    Vector2 currentPos = trailLength[k];
+                    Vector2 betweenPositions = previousPosition - currentPos;
+
+                    float max = betweenPositions.Length();
+
+                    for (int i = 0; i < max; i++)
+                    {
+                        drawPos = previousPosition + -betweenPositions * (i / max) - Main.screenPosition;
+
+                        Main.spriteBatch.Draw(TrailTexture.Value, drawPos, null, color * 0.5f, Projectile.rotation, drawOriginTrail, scale, SpriteEffects.None, 0f);
+                    }
+
+                    previousPosition = currentPos;
+                }
+            }
+
+            //draw aura
             for (int i = 0; i < 360; i += 90)
             {
-                Color RealColor = Color.White;
-
-                switch ((int)Projectile.ai[0])
-                {
-                    case 0:
-                    {
-                        RealColor = Color.SaddleBrown;
-                        break;
-                    }
-                    case 1:
-                    {
-                        RealColor = Color.White;
-                        break;
-                    }
-                    case 2:
-                    {
-                        RealColor = Color.Gold;
-                        break;
-                    }
-                    case 3:
-                    {
-                        RealColor = Color.Indigo;
-                        break;
-                    }
-                    case 4:
-                    {
-                        RealColor = Color.Blue;
-                        break;
-                    }
-                    case 5:
-                    {
-                        RealColor = Color.Green;
-                        break;
-                    }
-                    case 6:
-                    {
-                        RealColor = Color.Turquoise;
-                        break;
-                    }
-                    case 7:
-                    {
-                        RealColor = Color.Red;
-                        break;
-                    }
-                }
-
-                Color color = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(RealColor);
-
                 Vector2 circular = new Vector2(Main.rand.NextFloat(2f, 2f), Main.rand.NextFloat(2f, 2f)).RotatedBy(MathHelper.ToRadians(i));
 
                 Main.EntitySpriteDraw(AuraTexture.Value, vector + circular, rectangle, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
@@ -148,6 +187,29 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 			Projectile.rotation += 0f * (float)Projectile.direction;
+
+            if (Projectile.timeLeft < 60)
+            {
+                Projectile.alpha += 5;
+            }
+
+            if (runOnce)
+			{
+				for (int i = 0; i < trailLength.Length; i++)
+				{
+					trailLength[i] = Vector2.Zero;
+				}
+
+				runOnce = false;
+			}
+
+			Vector2 current = Projectile.Center;
+			for (int i = 0; i < trailLength.Length; i++)
+			{
+				Vector2 previousPosition = trailLength[i];
+				trailLength[i] = current;
+				current = previousPosition;
+			}
         
             //different behaviors
             switch ((int)Projectile.ai[2])
@@ -220,6 +282,11 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
                     Projectile.velocity.Y = Projectile.velocity.Y + 0.2f;
 
+                    if (Projectile.localAI[0] > 0)
+                    {
+                        Projectile.velocity.Y = Projectile.velocity.Y + 0.25f;
+                    }
+
                     Projectile.ai[1]++;
                     if (Projectile.ai[1] > 60)
                     {
@@ -251,12 +318,12 @@ namespace Spooky.Content.Projectiles.SpiderCave
                 if (Projectile.velocity.X != oldVelocity.X)
                 {
                     Projectile.position.X = Projectile.position.X + Projectile.velocity.X;
-                    Projectile.velocity.X = -oldVelocity.X * 0.8f;
+                    Projectile.velocity.X = -oldVelocity.X;
                 }
                 if (Projectile.velocity.Y != oldVelocity.Y)
                 {
                     Projectile.position.Y = Projectile.position.Y + Projectile.velocity.Y;
-                    Projectile.velocity.Y = -oldVelocity.Y * 0.8f;
+                    Projectile.velocity.Y = -oldVelocity.Y;
                 }
             }
 
@@ -265,7 +332,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
         private int HomeOnTarget()
         {
-            const float homingMaximumRangeInPixels = 250;
+            const float homingMaximumRangeInPixels = 500;
 
             int selectedTarget = -1;
             for (int i = 0; i < Main.maxNPCs; i++)

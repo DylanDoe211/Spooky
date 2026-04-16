@@ -51,6 +51,11 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 			return false;
         }
 
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+		{
+			return false;
+		}
+
 		public override bool PreAI()
         {
             NPC Parent = Main.npc[(int)NPC.ai[3]];
@@ -83,13 +88,6 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 			}
 
 			return false;
-        }
-
-        public override void HitEffect(NPC.HitInfo hit)
-        {
-            if (NPC.life <= 0) 
-            {
-            }
         }
 
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
