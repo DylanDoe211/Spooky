@@ -27,7 +27,7 @@ namespace Spooky.Content.UserInterfaces
         public static int LittleEye = -1;
         public static bool UIOpen = false;
         public static bool IsHoveringOverAnyButton = false;
-
+		
 		public static Mod Mod = Spooky.mod;
 
 		public static Vector2 modifier = new(-200, -75);

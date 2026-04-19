@@ -48,7 +48,9 @@ namespace Spooky.Content.NPCs.Boss.OldHunter.Projectiles
 			{
 				float scale = Projectile.scale * (trailLength.Length - k) / (float)trailLength.Length;
 
-				Color color = Color.Lerp(Color.Lime, Color.Gold, scale);
+				Color TrailColorFade = Color.Lerp(Color.Lime, Color.Gold, scale);
+
+				Color color = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(TrailColorFade);
 
 				if (trailLength[k] == Vector2.Zero)
 				{

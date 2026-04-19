@@ -125,7 +125,6 @@ namespace Spooky.Core
             }
         }
 
-        //TODO: probably will change this because golem dropping the key is a bit lame
         public class OrangeCatacombKeyCondition : IItemDropRuleCondition
         {
             public bool CanDrop(DropAttemptInfo info) 
@@ -135,6 +134,34 @@ namespace Spooky.Core
                     NPC npc = info.npc;
 
                     if (!Flags.CatacombKey3 && npc.type == NPCID.Golem)
+                    {
+                        return true;
+                    }
+                }
+                
+                return false;
+            }
+
+            public bool CanShowItemDropInUI() 
+            {
+                return false;
+            }
+
+            public string GetConditionDescription() 
+            {
+                return null;
+            }
+        }
+
+        public class SpiderBountyCondition : IItemDropRuleCondition
+        {
+            public bool CanDrop(DropAttemptInfo info) 
+            {
+                if (!info.IsInSimulation) 
+                {
+                    NPC npc = info.npc;
+
+                    if (!Flags.downedSpiderWar && npc.type == NPCID.Golem)
                     {
                         return true;
                     }

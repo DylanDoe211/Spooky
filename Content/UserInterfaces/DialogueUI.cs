@@ -421,8 +421,11 @@ namespace Spooky.Content.UserInterfaces
 					if (displayingText.Length != 0)
 					{
 						char trigger = displayingText[^1];
+
+						int SoundFrequency = ModContent.GetInstance<SpookyConfig>().DialogueSpeed == DialogueSpeedEnum.Fast ? 6 : 3;
+
 						if (!Main.dedServ && ModContent.GetInstance<SpookyConfig>().DialogueSpeed != DialogueSpeedEnum.Instant &&
-						dialogueSoundTimer % 3 == 0 && sound != null && (trigger is not '.' and not ',' and not '!' and not '?'))
+						dialogueSoundTimer % SoundFrequency == 0 && sound != null && (trigger is not '.' and not ',' and not '!' and not '?'))
 						{
 							SoundEngine.PlaySound((SoundStyle)sound, entity.Center);
 						}

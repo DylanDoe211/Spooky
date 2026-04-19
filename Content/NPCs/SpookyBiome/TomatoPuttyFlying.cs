@@ -79,11 +79,11 @@ namespace Spooky.Content.NPCs.SpookyBiome
 
 			Vector2 scaleStretch = new Vector2(1f - stretch, 1f + stretch);
 			
-			if (NPC.velocity.Y <= 0)
+			if (NPC.velocity.Y > 0)
 			{
 				scaleStretch = new Vector2(1f + stretch, 1f - stretch);
 			}
-			if (NPC.velocity.Y > 0)
+			if (NPC.velocity.Y <= 0)
 			{
 				scaleStretch = new Vector2(1f - stretch, 1f + stretch);
 			}

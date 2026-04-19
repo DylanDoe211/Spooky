@@ -105,7 +105,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
                     if (trailLength[k] == Vector2.Zero)
                     {
-                        return true;
+                        break;
                     }
 
                     Vector2 drawPos = trailLength[k] - Main.screenPosition;

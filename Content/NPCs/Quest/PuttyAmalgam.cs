@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 
 using Spooky.Core;
+using Spooky.Content.Items.Quest;
 using Spooky.Content.NPCs.Quest.Projectiles;
 
 namespace Spooky.Content.NPCs.Quest
@@ -257,6 +258,11 @@ namespace Spooky.Content.NPCs.Quest
 				}
 			}
 		}
+
+		public override void ModifyNPCLoot(NPCLoot npcLoot) 
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<OldHunterPutty>()));
+        }
 
 		public override void HitEffect(NPC.HitInfo hit) 
         {

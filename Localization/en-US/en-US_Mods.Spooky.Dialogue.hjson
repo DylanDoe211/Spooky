@@ -621,7 +621,7 @@ OldHunterDialogue: {
 	PlayerQuestComplete1-1: I got the tick that was full.
 	QuestComplete1-2: Uhh, ok? I reckon I could find a use for this stuff I guess.
 	PlayerQuestComplete1-2: What do you mean? You asked me to find this thing.
-	QuestComplete1-3: Nohow chap, yer speaking humbu- oh wait, yer talking about when I got shitface drunk?
+	QuestComplete1-3: Nohow chap, yer speakin' humbu- oh wait, yer talking about when I got shitface drunk?
 	PlayerQuestComplete1-3: Please just give me a reward.
 	//harold quest
 	Quest2-1: I know this might be all-standin, but think ya can get me some cloth? My thatchs starting to look mean, and I ain't in no shape to paddle off and get it myself.
@@ -632,13 +632,13 @@ OldHunterDialogue: {
 	QuestComplete2-1: Hmm, don't mean to row up yer good deed, but there's something off with this rag... where did ya get it?
 	PlayerQuestComplete2-1: I got it from a ghost.
 	QuestComplete2-2: WHAT!? I tell ya to get a normal rag and ya bamboozle me by bringing back a spectre into my home!? Why I oughta-
-	PlayerQuestComplete2-2: Dude. You are undead. I got your soul from a box of ghosts, under a graveyard full of ghosts, which I got into by fighting a giant ghost. Please just take the cloth.
+	PlayerQuestComplete2-2: You are undead. I got your soul from a box of ghosts, under a graveyard full of ghosts. Please just take the cloth.
 	QuestComplete2-3: ...Alrighty.
 	PlayerQuestComplete2-3: ...
 	//chudshroom quest
 	Quest3-1: I've heard tall tales of a shroom up in the spooky forest. Plenty of yapping 'bout how it never got along with the rest of em critters. Ya make anything of it?
 	PlayerQuest3-1: Sounds kinda like a chud. Should be easy.
-	Quest3-2: Yer speaking nothin' but boulderdash.
+	Quest3-2: Yer speakin' nothin' but boulderdash.
 	PlayerQuest3-2: Ok whatever.
 	//chudshroom quest done
 	QuestComplete3-1: What's all this?
@@ -659,4 +659,74 @@ OldHunterDialogue: {
 	PlayerQuestComplete4-2: What? This is a pair of eyes I killed, what else do you want?
 	QuestComplete4-3: That's the issue right there. I asked for all the pieces and ya brought back twins instead of triplets. I'll still toss in some coins but ya ain't getting no big treasure for a bunch of humbug.
 	PlayerQuestComplete4-3: Fine, whatever.
+	//putty quest
+	Quest5-1: The old rats would keep tellin' this story 'bout a monstrous slimy beast. They said the thing was gigantic! Apparently it kept eating some of their cattle! Gather anythin' from it?
+	PlayerQuest5-1: Honestly sounds pretty plausible.
+	Quest5-2: I reckoned. The tales as tall as they were always had some truth to them. Cattle did keep disappearing, especially up above in the autumn forest. If ya can kill that thing, bring back somethin' from it and I'll make it worth your while.
+	PlayerQuest5-2: Alright, sure thing.
+	//putty quest done
+	QuestComplete5-1: Howdy chap! Ya didn't flunk out right? Ya give that slimy beast what it had coming?
+	PlayerQuestComplete5-1: Yep, here's the left over putty.
+	QuestComplete5-2: Oh, putty? Uhh, I think ya got the wrong monster chap.
+	PlayerQuestComplete5-2: What?
+	QuestComplete5-3: I was thinking ya'd bring back like, a crown of some kind. Did I not talk about the crown on the monster? Ah whatever, here's something for the trouble anyhow.
+	PlayerQuestComplete5-3: You are so old.
+	//potato gator quest
+	Quest6-1: Ya know I've been kinda craving for some tater. Not fun to be hungry when yer dead but hey, maybe seeing taters might make me feel a bit better.
+	PlayerQuest6-1: Some... Tater?
+	Quest6-2: Oh come on chap, ya know! Taters! Like, whatchamacallit. Potatoes! That's at least what them sophisticated folk would call 'em.
+	PlayerQuest6-2: Oh yeah sure, I can get you a potato.
+	//potato gator quest done
+	QuestComplete6-1: There ya are! Thanks chap. I might not be able to eat anymore but ya made me one happy old feller.
+	PlayerQuestComplete6-1: No problem, I got it from some kind of potato alligator.
+	QuestComplete6-2: Ya mean a gater tater?
+	PlayerQuestComplete6-2: No, a potato gator. Like a gator that's a potato.
+	QuestComplete6-3: So a tater gater then.
+	PlayerQuestComplete6-3: I'm just gonna leave now.
+	//christmas tree quest
+	Quest7-1: Heh, I remember when I was just knee-high to a lamb my mom got me a teddy bear for christmas. Long way from back then, but I can say my memories are sweet. I'm thinking of celebratin' again for old times sake.
+	PlayerQuest7-1: Uhh, might be difficult given it hasn't been christmas in years.
+	Quest7-2: What in tarnation?! Ye can't just tell me ya haven't seen that old lubber saint nick in years! Let's make it worth your while. Bring me a Christmas tree. Ya better bring me the whole thing! Lock, Stock, and Barrel!
+	PlayerQuest7-2: Alright, I can probably find a way.
+	//christmas tree quest done
+	QuestComplete7-1: Heya chap! Now I know that what I told you wasn't moonshine or anythin' given what you told me. Still, do yer reckon ye've got that tree I asked ya for?
+	PlayerQuestComplete7-1: The tree ran away.
+	QuestComplete7-2: Why do ya keep spoutin' gammon? What actually happened?
+	PlayerQuestComplete7-2: The tree RAN away. I only managed to get this.
+	QuestComplete7-3: Lemme see there. Hm, didn't expect ya to find a ribbon. Guess I can at least get some use out of this, so I'll give ya somethin' at least. Ya gotta stop speakin' humbug all the time chap.
+	PlayerQuestComplete7-3: Yeah whatever man.
+	//tar pig quest
+	Quest8-1: Hm, ya ever hearn of head-cheese chap? I've been thinking of makin' some, just like I used to make back with the old rats.
+	PlayerQuest8-1: What the hell is head-cheese?
+	Quest8-2: Yer mind must be all Higgledy-Piggledy from just the name! It's a simple meal we used to make back when this was our home. I've got some axle grease, so all's I need is a hog. If I remember right, should be easy enough to find some in those big desert caves.
+	PlayerQuest8-2: Ok, doesn't sound too bad. I'll get that for you.
+	//tar pig quest done
+	QuestComplete8-1: Howdy chap. Did ya get that hog I mentioned earlier? Gotta be the one from the desert or else the dish will be ruined.
+	PlayerQuestComplete8-1: Uhh, well yes, kind of?
+	QuestComplete8-2: Are you just dilly-dallying or is this some no-good deviltry yer up to?
+	PlayerQuestComplete8-2: The hog you wanted me to find went extinct. I only found its bones.
+	QuestComplete8-3: Damn it, no this won't do chap. Yer fine, just wish ya could have had a taste of the dish. I'm telling ya there's nothin' as delicious as cut up hog ears and feet boiled and pressed into a cheese jelly.
+	PlayerQuestComplete8-3: I think this is the objectively best outcome for me.
+	//spider war
+	SpiderWar1: ...
+	PlayerSpiderWar1: Hey uh, I found this poster. Thought you might know what its for.
+	SpiderWar2: Grumble grumble...
+	PlayerSpiderWar2: Alright pops what's got you angry this time?
+	SpiderWar3: What's got me mad as a hare is that the devils still kicking! I thought that by now he'd be six feet underground but I saw that monster again while scouting the house! Hasn't even aged a day!
+	PlayerSpiderWar3: I mean I could just kill it. That's kinda what I've been doing for you this whole time anyways.
+	SpiderWar4: Really? wait, yes you could... Alright chap ya've got a deal. This feller is another one of 'em good for nothin spiders. 'Bout as tall as you and me, has a bit of a beard, and looks even older than I am. Ya should be able to dry gulch him but, just so ya know ye might be starting the candlelight caboodle all over again.
+	PlayerSpiderWar4: Yeah whatever you say I'll get it done.
+	//spider war complete
+	PostSpiderWar1: Goodness chap! I thought you'd be six feet under but looks like you capped the climax! I knew ya could-
+	PlayerPostSpiderWar1: What the hell did you make me do?
+	PostSpiderWar2: Well chap I-
+	PlayerPostSpiderWar2: Tell it to me properly. What the hell did I just do?
+	PostSpiderWar3: Fine, I'll explain. Back when me and the rest of us hunters were alive, we all used to live here. That was until that monster and his army leveled us all to the ground. I couldn't stand a chance against you now, and I definitely didn't stand a chance against them. I can't remember how I went out, but, I know the rest of the hunters went down with me.
+	PlayerPostSpiderWar3: Oh damn...
+	PostSpiderWar4: I'm sorry chap I-It just didn't sit right with me to see him again. I shouldn't have dragged you into all of this without making it clear what would happen.
+	PlayerPostSpiderWar4: Yeah no kidding- wait are you speaking normally?
+	PostSpiderWar5: What do ya mean chap?
+	PlayerPostSpiderWar5: Huh?
+	PostSpiderWar6: Yer speakin' humbug again aren't yah? Still, glad ye ain't down the gutter.
+	PlayerPostSpiderWar6: I guess bro.
 }

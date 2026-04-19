@@ -90,6 +90,16 @@ namespace Spooky.Core
 		public static bool BountyIntro = false;
 		public static bool PokedLittleEye = false;
 
+		//old hunter quests
+		public static bool OldHunterQuest1 = false; 
+        public static bool OldHunterQuest2 = false;
+        public static bool OldHunterQuest3 = false;
+        public static bool OldHunterQuest4 = false;
+		public static bool OldHunterQuest5 = false; 
+        public static bool OldHunterQuest6 = false;
+        public static bool OldHunterQuest7 = false;
+		public static bool OldHunterQuest8 = false;
+
 		//misc stuff
 		public static bool SpookyBackgroundAlt = false;
 		public static bool CemeteryBackgroundAlt = false;
@@ -171,6 +181,16 @@ namespace Spooky.Core
 			BountyInProgress4 = false;
 			BountyIntro = false;
 			PokedLittleEye = false;
+
+			//old hunter quests
+			OldHunterQuest1 = false;
+			OldHunterQuest2 = false;
+			OldHunterQuest3 = false;
+			OldHunterQuest4 = false;
+			OldHunterQuest5 = false;
+			OldHunterQuest6 = false;
+			OldHunterQuest7 = false;
+			OldHunterQuest8 = false;
 
 			//misc stuff
 			SpookyBackgroundAlt = false;
@@ -261,6 +281,16 @@ namespace Spooky.Core
 			tag[nameof(BountyInProgress4)] = BountyInProgress4;
 			tag[nameof(BountyIntro)] = BountyIntro;
 			tag[nameof(PokedLittleEye)] = PokedLittleEye;
+
+			//old hunter quests
+			tag[nameof(OldHunterQuest1)] = OldHunterQuest1;
+			tag[nameof(OldHunterQuest2)] = OldHunterQuest2;
+			tag[nameof(OldHunterQuest3)] = OldHunterQuest3;
+			tag[nameof(OldHunterQuest4)] = OldHunterQuest4;
+			tag[nameof(OldHunterQuest5)] = OldHunterQuest5;
+			tag[nameof(OldHunterQuest6)] = OldHunterQuest6;
+			tag[nameof(OldHunterQuest7)] = OldHunterQuest7;
+			tag[nameof(OldHunterQuest8)] = OldHunterQuest8;
 
 			//misc stuff
 			tag[nameof(SpookyBackgroundAlt)] = SpookyBackgroundAlt;
@@ -358,6 +388,16 @@ namespace Spooky.Core
 			BountyIntro = tag.GetBool(nameof(BountyIntro));
 			PokedLittleEye = tag.GetBool(nameof(PokedLittleEye));
 
+			//old hunter quests
+			OldHunterQuest1 = tag.GetBool(nameof(OldHunterQuest1));
+			OldHunterQuest2 = tag.GetBool(nameof(OldHunterQuest2));
+			OldHunterQuest3 = tag.GetBool(nameof(OldHunterQuest3));
+			OldHunterQuest4 = tag.GetBool(nameof(OldHunterQuest4));
+			OldHunterQuest5 = tag.GetBool(nameof(OldHunterQuest5));
+			OldHunterQuest6 = tag.GetBool(nameof(OldHunterQuest6));
+			OldHunterQuest7 = tag.GetBool(nameof(OldHunterQuest7));
+			OldHunterQuest8 = tag.GetBool(nameof(OldHunterQuest8));
+
 			//misc stuff
 			SpookyBackgroundAlt = tag.GetBool(nameof(SpookyBackgroundAlt));
 			CemeteryBackgroundAlt = tag.GetBool(nameof(CemeteryBackgroundAlt));
@@ -404,6 +444,9 @@ namespace Spooky.Core
 			writer.WriteFlags(LittleEyeBounty1, LittleEyeBounty2, LittleEyeBounty3, LittleEyeBounty4);
 			writer.WriteFlags(BountyInProgress1, BountyInProgress2, BountyInProgress3, BountyInProgress4, BountyIntro, PokedLittleEye);
 
+			//old hunter quests
+			writer.WriteFlags(OldHunterQuest1, OldHunterQuest2, OldHunterQuest3, OldHunterQuest4, OldHunterQuest5, OldHunterQuest6, OldHunterQuest7, OldHunterQuest8);
+
 			//misc stuff
 			writer.WriteFlags(SpookyBackgroundAlt, CemeteryBackgroundAlt, CatacombKey1, CatacombKey2, CatacombKey3, RaveyardHappening, GuaranteedRaveyard, SporeEventHappening);
 			writer.WriteFlags(OldHunterRevived, encounteredMan);
@@ -446,6 +489,9 @@ namespace Spooky.Core
 			//little eye quest stuff
 			reader.ReadFlags(out LittleEyeBounty1, out LittleEyeBounty2, out LittleEyeBounty3, out LittleEyeBounty4);
 			reader.ReadFlags(out BountyInProgress1, out BountyInProgress2, out BountyInProgress3, out BountyInProgress4, out BountyIntro, out PokedLittleEye);
+
+			//old hunter quests
+			reader.ReadFlags(out OldHunterQuest1, out OldHunterQuest2, out OldHunterQuest3, out OldHunterQuest4, out OldHunterQuest5, out OldHunterQuest6, out OldHunterQuest7, out OldHunterQuest8);
 
 			//misc stuff
 			reader.ReadFlags(out SpookyBackgroundAlt, out CemeteryBackgroundAlt, out CatacombKey1, out CatacombKey2, out CatacombKey3, out RaveyardHappening, out GuaranteedRaveyard, out SporeEventHappening);

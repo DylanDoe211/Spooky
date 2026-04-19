@@ -11,6 +11,8 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
+using Spooky.Content.Items.Quest;
+
 namespace Spooky.Content.NPCs.Quest
 {
 	public class PotatoGator : ModNPC
@@ -282,6 +284,11 @@ namespace Spooky.Content.NPCs.Quest
 				NPC.ai[0] = 1f;
 			}
 		}
+
+		public override void ModifyNPCLoot(NPCLoot npcLoot) 
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<OldHunterPotatoes>()));
+        }
 
         public override void HitEffect(NPC.HitInfo hit)
         {

@@ -453,6 +453,9 @@ namespace Spooky.Core
             globalLoot.Add(ItemDropRule.ByCondition(new DropConditions.RedCatacombKeyCondition(), ModContent.ItemType<CatacombKey2>(), 1));
             globalLoot.Add(ItemDropRule.ByCondition(new DropConditions.OrangeCatacombKeyCondition(), ModContent.ItemType<CatacombKey3>(), 1));
 
+			//archduke spider bounty
+			globalLoot.Add(ItemDropRule.ByCondition(new DropConditions.SpiderBountyCondition(), ModContent.ItemType<ArchdukeBounty>(), 1));
+
 			//eye valley enemies should not drop living flame blocks
             globalLoot.RemoveWhere(rule => rule is ItemDropWithConditionRule drop && drop.itemId == ItemID.LivingFireBlock);
 			//re-add living fire blocks dropping with a custom condition that excludes the valley of eyes

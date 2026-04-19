@@ -2,6 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.Audio;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
@@ -11,6 +12,7 @@ using System.IO;
 using System.Collections.Generic;
 
 using Spooky.Core;
+using Spooky.Content.Items.Quest;
 using Spooky.Content.NPCs.Quest.Projectiles;
 
 namespace Spooky.Content.NPCs.Quest
@@ -247,6 +249,11 @@ namespace Spooky.Content.NPCs.Quest
                     NPC.netUpdate = true;
                 }
             }
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot) 
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<OldHunterCloth>()));
         }
 
         public override void HitEffect(NPC.HitInfo hit)

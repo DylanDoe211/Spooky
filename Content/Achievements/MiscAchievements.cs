@@ -130,4 +130,15 @@ namespace Spooky.Content.Achievements
             DumbZomboidCondition = AddCondition();
         }
     }
+
+    public class MiscAchievementOldHunterQuest : ModAchievement
+    {
+        public CustomFlagCondition OldHunterQuestCondition { get; private set; }
+
+        public override void SetStaticDefaults()
+        {
+            Achievement.SetCategory(AchievementCategory.Explorer);
+            OldHunterQuestCondition = AddCondition();
+        }
+    }
 }

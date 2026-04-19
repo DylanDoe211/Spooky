@@ -263,6 +263,54 @@ namespace Spooky
                     NetMessage.SendData(MessageID.WorldData);
                     break;
                 }
+                case SpookyMessageType.OldHunterQuest1Complete:
+                {
+                    Flags.OldHunterQuest1 = true;
+                    NetMessage.SendData(MessageID.WorldData);
+                    break;
+                }
+                case SpookyMessageType.OldHunterQuest2Complete:
+                {
+                    Flags.OldHunterQuest2 = true;
+                    NetMessage.SendData(MessageID.WorldData);
+                    break;
+                }
+                case SpookyMessageType.OldHunterQuest3Complete:
+                {
+                    Flags.OldHunterQuest3 = true;
+                    NetMessage.SendData(MessageID.WorldData);
+                    break;
+                }
+                case SpookyMessageType.OldHunterQuest4Complete:
+                {
+                    Flags.OldHunterQuest4 = true;
+                    NetMessage.SendData(MessageID.WorldData);
+                    break;
+                }
+                case SpookyMessageType.OldHunterQuest5Complete:
+                {
+                    Flags.OldHunterQuest5 = true;
+                    NetMessage.SendData(MessageID.WorldData);
+                    break;
+                }
+                case SpookyMessageType.OldHunterQuest6Complete:
+                {
+                    Flags.OldHunterQuest6 = true;
+                    NetMessage.SendData(MessageID.WorldData);
+                    break;
+                }
+                case SpookyMessageType.OldHunterQuest7Complete:
+                {
+                    Flags.OldHunterQuest7 = true;
+                    NetMessage.SendData(MessageID.WorldData);
+                    break;
+                }
+                case SpookyMessageType.OldHunterQuest8Complete:
+                {
+                    Flags.OldHunterQuest8 = true;
+                    NetMessage.SendData(MessageID.WorldData);
+                    break;
+                }
 				//should never occur I think?
 				default:
                 {
@@ -302,6 +350,14 @@ namespace Spooky
         KrampusDailyQuestReset,
         DrawKrampusMapIconReset,
         SpawnMushGnome,
-        SpawnGhostAmbush
+        SpawnGhostAmbush,
+        OldHunterQuest1Complete,
+        OldHunterQuest2Complete,
+        OldHunterQuest3Complete,
+        OldHunterQuest4Complete,
+        OldHunterQuest5Complete,
+        OldHunterQuest6Complete,
+        OldHunterQuest7Complete,
+        OldHunterQuest8Complete
 	}
 }

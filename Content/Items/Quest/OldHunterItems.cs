@@ -24,7 +24,7 @@ namespace Spooky.Content.Items.Quest
 		} 
     }
 
-    public class OldHunterPotatos : ModItem
+    public class OldHunterPotatoes : ModItem
 	{
         public override void SetDefaults()
 		{
@@ -64,7 +64,7 @@ namespace Spooky.Content.Items.Quest
 		}
     }
 
-	public class OldHunterOrnament : ModItem
+	public class OldHunterTinsel : ModItem
 	{
         public override void SetDefaults()
 		{

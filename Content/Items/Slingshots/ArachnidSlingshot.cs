@@ -33,8 +33,8 @@ namespace Spooky.Content.Items.Slingshots
 			Item.channel = true;
 			Item.width = 22;
             Item.height = 32;
-			Item.useTime = 32;
-			Item.useAnimation = 32;
+			Item.useTime = 40;
+			Item.useAnimation = 40;
 			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.knockBack = 4;
 			Item.rare = ItemRarityID.Lime;

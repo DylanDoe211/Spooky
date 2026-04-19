@@ -132,3 +132,8 @@ MiscAchievementDumbZomboid: {
 	FriendlyName: How Did You Get Here?
 	Description: Encounter the lost zomboid wandering around your world.
 }
+
+MiscAchievementOldHunterQuest: {
+	FriendlyName: Let Daylight Into Vermin
+	Description: Complete every one of the old hunter's bounties.
+}

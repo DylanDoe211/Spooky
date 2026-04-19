@@ -2365,12 +2365,22 @@ YellowSpore: {
 	Tooltip: Summons a small mushroom hopper to provide light
 }
 
+ArchdukeBounty: {
+	DisplayName: Spider Bounty
+	Tooltip:
+		'''
+		It reads: Wanted! Archduke spider
+		Bring back dead or very, very dead
+		The Old Hunter may be interested in this
+		'''
+}
+
 BountyItem1: {
 	DisplayName: Goblin's Tongue
 	Tooltip:
 		'''
 		An abnormally long human-like tongue
-		Bounty Quest Item
+		Little Eye may be interested in this
 		'''
 }
 
@@ -2379,7 +2389,7 @@ BountyItem2: {
 	Tooltip:
 		'''
 		Should probably never be opened ever again
-		Bounty Quest Item
+		Little Eye may be interested in this
 		'''
 }
 
@@ -2388,7 +2398,7 @@ BountyItem3: {
 	Tooltip:
 		'''
 		Little Eye's extremely expensive fabric
-		Bounty Quest Item
+		Little Eye may be interested in this
 		'''
 }
 
@@ -2397,7 +2407,7 @@ BountyItem4: {
 	Tooltip:
 		'''
 		It's Bigger Eye's... head?
-		Bounty Quest Item
+		Little Eye may be interested in this
 		'''
 }
 
@@ -2448,37 +2458,65 @@ StitchedCloak: {
 
 OldHunterCloth: {
 	DisplayName: Haunted Cloth
-	Tooltip: The Old Hunter may be interested in this
+	Tooltip:
+		'''
+		It is oddly clean, it feels off...
+		The Old Hunter may be interested in this
+		'''
 }
 
 OldHunterEyes: {
 	DisplayName: Pair of Eyes
-	Tooltip: The Old Hunter may be interested in this
+	Tooltip:
+		'''
+		Two of the three triplets except they're dead
+		The Old Hunter may be interested in this
+		'''
 }
 
 OldHunterMushroom: {
 	DisplayName: Chud Cap
-	Tooltip: The Old Hunter may be interested in this
+	Tooltip:
+		'''
+		A strange spore left behind by an angry mushroom
+		The Old Hunter may be interested in this
+		'''
 }
 
-OldHunterOrnament: {
-	DisplayName: Pulsing Ornament
-	Tooltip: The Old Hunter may be interested in this
+OldHunterTinsel: {
+	DisplayName: Pulsing Tinsel
+	Tooltip:
+		'''
+		Just holding it makes you feel jolly!
+		The Old Hunter may be interested in this
+		'''
 }
 
-OldHunterPotatos: {
-	DisplayName: Mashed Gator
-	Tooltip: The Old Hunter may be interested in this
+OldHunterPotatoes: {
+	DisplayName: Mashed Potato Gator
+	Tooltip:
+		'''
+		Goes great with some gravy on top!
+		The Old Hunter may be interested in this
+		'''
 }
 
 OldHunterPutty: {
 	DisplayName: Putty Core
-	Tooltip: The Old Hunter may be interested in this
+	Tooltip:
+		'''
+		A chunk of the fused together putty
+		The Old Hunter may be interested in this
+		'''
 }
 
 OldHunterSac: {
 	DisplayName: Tick Sac
-	Tooltip: The Old Hunter may be interested in this
+	Tooltip:
+		'''
+		It is still leaking blood... gross
+		The Old Hunter may be interested in this
+		'''
 }
 
 SummonItem1: {
@@ -2578,7 +2616,7 @@ BaseSlingshot: {
 
 BigBoneSlingshot: {
 	DisplayName: Potted Plant Slingshot
-	Tooltip: ""
+	Tooltip: Projectiles shot by this will leave behind lingering flowers on hit
 }
 
 BigDunkSlingshot: {
@@ -3203,16 +3241,16 @@ MoldBalloon: {
 	Tooltip:
 		'''
 		Allows the holder to double jump
-		Increases jump height and negates fall damage
+		Increases jump height
 		'''
 }
 
 MoldBalloonHorseshoe: {
-	DisplayName: Mold Horseshoe Balloon
+	DisplayName: Purple Horseshoe Balloon
 	Tooltip:
 		'''
 		Allows the holder to double jump
-		Increases jump height
+		Increases jump height and negates fall damage
 		'''
 }
 
@@ -6992,6 +7030,15 @@ BloomGrower: {
 	Tooltip:
 		'''
 		Grows all nearby blooms immediately
+		Testing Item
+		'''
+}
+
+OldHunterQuestReset: {
+	DisplayName: Old Hunter Quest Reset
+	Tooltip:
+		'''
+		Resets all of the old hunters bounty quests
 		Testing Item
 		'''
 }

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 
 using Spooky.Core;
 using Spooky.Content.Dusts;
+using Spooky.Content.Items.Quest;
 using Spooky.Content.NPCs.Quest.Projectiles;
 
 namespace Spooky.Content.NPCs.Quest
@@ -166,6 +167,11 @@ namespace Spooky.Content.NPCs.Quest
                 NPC.velocity.Y += MoveSpeedY * 0.01f;
                 NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y, -MaxSpeed, MaxSpeed);
             }
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot) 
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<OldHunterEyes>()));
         }
 
         public override void HitEffect(NPC.HitInfo hit)

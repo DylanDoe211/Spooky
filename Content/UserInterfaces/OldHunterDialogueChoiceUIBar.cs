@@ -1,24 +1,19 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Localization;
 using Terraria.GameContent;
 using Terraria.UI.Chat;
-using Terraria.Localization;
 using Terraria.Audio;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 using Spooky.Core;
 using Spooky.Content.Achievements;
-using Spooky.Content.Items.BossSummon;
-using Spooky.Content.Items.Costume;
-using Spooky.Content.Items.Food;
-using Spooky.Content.Items.Pets;
 using Spooky.Content.Items.Quest;
-using Spooky.Content.Items.SpookyHell;
-using Spooky.Content.Items.SpookyHell.Sentient;
-using Spooky.Content.Tiles.Painting;
+using Spooky.Content.Items.SpiderCave.Misc;
 
 namespace Spooky.Content.UserInterfaces
 {
@@ -104,22 +99,228 @@ namespace Spooky.Content.UserInterfaces
 
                 if (Main.mouseLeft && Main.mouseLeftRelease)
                 {
-					int DialogueChoice = Main.rand.Next(1, 4);
+					//pre spider war
+					if (player.HasItem(ModContent.ItemType<ArchdukeBounty>()) && !Flags.downedSpiderWar)
+					{
+						DialogueChain chain = new();
+						chain.Add(new(UITexture.Value, Main.npc[OldHunter],
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.SpiderWar1"),
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerSpiderWar1"),
+						TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
+						.Add(new(UITexture.Value, Main.npc[OldHunter],
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.SpiderWar2"),
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerSpiderWar2"),
+						TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
+						.Add(new(UITexture.Value, Main.npc[OldHunter],
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.SpiderWar3"),
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerSpiderWar3"),
+						TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
+						.Add(new(UITexture.Value, Main.npc[OldHunter],
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.SpiderWar4"),
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerSpiderWar4"),
+						TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
+						.Add(new(UITexture.Value, Main.npc[OldHunter], null, null, TalkSound, 2f, 0f, modifier, true));
+						chain.OnPlayerResponseTrigger += PlayerResponse;
+						chain.OnEndTrigger += EndDialogue;
+						DialogueUI.Visible = true;
+						DialogueUI.Add(chain);
+					}
+					//post spider war
+					else if (Flags.downedSpiderWar)
+					{
+						DialogueChain chain = new();
+						chain.Add(new(UITexture.Value, Main.npc[OldHunter],
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PostSpiderWar1"),
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerPostSpiderWar1"),
+						TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
+						.Add(new(UITexture.Value, Main.npc[OldHunter],
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PostSpiderWar2"),
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerPostSpiderWar2"),
+						TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
+						.Add(new(UITexture.Value, Main.npc[OldHunter],
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PostSpiderWar3"),
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerPostSpiderWar3"),
+						TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
+						.Add(new(UITexture.Value, Main.npc[OldHunter],
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PostSpiderWar4"),
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerPostSpiderWar4"),
+						TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
+						.Add(new(UITexture.Value, Main.npc[OldHunter],
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PostSpiderWar5"),
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerPostSpiderWar5"),
+						TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
+						.Add(new(UITexture.Value, Main.npc[OldHunter],
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PostSpiderWar6"),
+						Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerPostSpiderWar6"),
+						TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
+						.Add(new(UITexture.Value, Main.npc[OldHunter], null, null, TalkSound, 2f, 0f, modifier, true));
+						chain.OnPlayerResponseTrigger += PlayerResponse;
+						chain.OnEndTrigger += EndDialogue;
+						DialogueUI.Visible = true;
+						DialogueUI.Add(chain);
+					}
+					//normal dialogue
+					else
+					{
+						/*
+						dialogue order:
+						1 = Tick
+						2 = Harold Ghost
+						3 = Chud Mushroom
+						4 = Triplets
+						5 = Putty Amalgam
+						6 = Potato Gator
+						7 = Christmas Tree
+						8 = Tar Pig
+						*/
 
-					DialogueChain chain = new();
-					chain.Add(new(UITexture.Value, Main.npc[OldHunter],
-					Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Quest" + DialogueChoice + "-1"),
-					Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerQuest" + DialogueChoice + "-1"),
-					TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
-					.Add(new(UITexture.Value, Main.npc[OldHunter],
-					Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Quest" + DialogueChoice + "-2"),
-					Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerQuest" + DialogueChoice + "-2"),
-					TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
-					.Add(new(UITexture.Value, Main.npc[OldHunter], null, null, TalkSound, 2f, 0f, modifier, true));
-					chain.OnPlayerResponseTrigger += PlayerResponse;
-					chain.OnEndTrigger += EndDialogue;
-					DialogueUI.Visible = true;
-					DialogueUI.Add(chain);
+						List<int> DialogueChoices = new List<int>()
+						{
+							1, 2, 3, 4, 5, 6, 7, 8
+						};
+						List<int> DialogueRewardChoices = new List<int>()
+						{
+							1, 2, 3, 4, 5, 6, 7, 8
+						};
+
+						//remove each specific dialogue choice if the corresponding quest is done already
+						if (Flags.OldHunterQuest1)
+						{
+							DialogueChoices.RemoveAll(x => x == 1);
+							DialogueRewardChoices.RemoveAll(x => x == 1);
+						}
+						if (Flags.OldHunterQuest2)
+						{
+							DialogueChoices.RemoveAll(x => x == 2);
+							DialogueRewardChoices.RemoveAll(x => x == 2);
+						}
+						if (Flags.OldHunterQuest3)
+						{
+							DialogueChoices.RemoveAll(x => x == 3);
+							DialogueRewardChoices.RemoveAll(x => x == 3);
+						}
+						if (Flags.OldHunterQuest4)
+						{
+							DialogueChoices.RemoveAll(x => x == 4);
+							DialogueRewardChoices.RemoveAll(x => x == 4);
+						}
+						if (Flags.OldHunterQuest5)
+						{
+							DialogueChoices.RemoveAll(x => x == 5);
+							DialogueRewardChoices.RemoveAll(x => x == 5);
+						}
+						if (Flags.OldHunterQuest6)
+						{
+							DialogueChoices.RemoveAll(x => x == 6);
+							DialogueRewardChoices.RemoveAll(x => x == 6);
+						}
+						if (Flags.OldHunterQuest7)
+						{
+							DialogueChoices.RemoveAll(x => x == 7);
+							DialogueRewardChoices.RemoveAll(x => x == 7);
+						}
+						if (Flags.OldHunterQuest8)
+						{
+							DialogueChoices.RemoveAll(x => x == 8);
+							DialogueRewardChoices.RemoveAll(x => x == 8);
+						}
+
+						//complete quests if you have the item for said quest
+						int CurrentCompletedQuest = 0;
+
+						if (player.HasItem(ModContent.ItemType<OldHunterSac>()))
+						{
+							CurrentCompletedQuest = 1;
+						}
+						else if (player.HasItem(ModContent.ItemType<OldHunterCloth>()))
+						{
+							CurrentCompletedQuest = 2;
+						}
+						else if (player.HasItem(ModContent.ItemType<OldHunterMushroom>()))
+						{
+							CurrentCompletedQuest = 3;
+						}
+						else if (player.HasItem(ModContent.ItemType<OldHunterEyes>()))
+						{
+							CurrentCompletedQuest = 4;
+						}
+						else if (player.HasItem(ModContent.ItemType<OldHunterPutty>()))
+						{
+							CurrentCompletedQuest = 5;
+						}
+						else if (player.HasItem(ModContent.ItemType<OldHunterPotatoes>()))
+						{
+							CurrentCompletedQuest = 6;
+						}
+						else if (player.HasItem(ModContent.ItemType<OldHunterTinsel>()))
+						{
+							CurrentCompletedQuest = 7;
+						}
+						/*
+						else if (player.HasItem(ModContent.ItemType<OldHunterTinsel>()))
+						{
+							CurrentCompletedQuest = 8;
+						}
+						*/
+
+						//if no quest is completed then display quest dialogue
+						if (CurrentCompletedQuest <= 0)
+						{
+							if (DialogueChoices.Count > 0)
+							{
+								int Choice = Main.rand.Next(DialogueChoices);
+
+								DialogueChain chain = new();
+								chain.Add(new(UITexture.Value, Main.npc[OldHunter],
+								Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Quest" + Choice + "-1"),
+								Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerQuest" + Choice + "-1"),
+								TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
+								.Add(new(UITexture.Value, Main.npc[OldHunter],
+								Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Quest" + Choice + "-2"),
+								Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerQuest" + Choice + "-2"),
+								TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
+								.Add(new(UITexture.Value, Main.npc[OldHunter], null, null, TalkSound, 2f, 0f, modifier, true));
+								chain.OnPlayerResponseTrigger += PlayerResponse;
+								chain.OnEndTrigger += EndDialogue;
+								DialogueUI.Visible = true;
+								DialogueUI.Add(chain);
+							}
+						}
+						//display quest completed dialogue
+						else
+						{
+							if (DialogueRewardChoices.Contains(CurrentCompletedQuest))
+							{
+								DialogueChain chain = new();
+								chain.Add(new(UITexture.Value, Main.npc[OldHunter],
+								Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.QuestComplete" + CurrentCompletedQuest + "-1"),
+								Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerQuestComplete" + CurrentCompletedQuest + "-1"),
+								TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
+								.Add(new(UITexture.Value, Main.npc[OldHunter],
+								Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.QuestComplete" + CurrentCompletedQuest + "-2"),
+								Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerQuestComplete" + CurrentCompletedQuest + "-2"),
+								TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
+								.Add(new(UITexture.Value, Main.npc[OldHunter],
+								Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.QuestComplete" + CurrentCompletedQuest + "-3"),
+								Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerQuestComplete" + CurrentCompletedQuest + "-3"),
+								TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
+								.Add(new(UITexture.Value, Main.npc[OldHunter], null, null, TalkSound, 2f, 0f, modifier, true));
+								chain.OnPlayerResponseTrigger += PlayerResponse;
+								chain.OnEndTrigger += EndDialogueBountyComplete;
+								DialogueUI.Visible = true;
+								DialogueUI.Add(chain);
+							}
+							else
+							{
+								DialogueChain chain = new();
+								chain.Add(new(UITexture.Value, Main.npc[OldHunter], null, null, TalkSound, 2f, 0f, modifier, true));
+								chain.OnPlayerResponseTrigger += PlayerResponse;
+								chain.OnEndTrigger += EndDialogueBountyComplete;
+								DialogueUI.Visible = true;
+								DialogueUI.Add(chain);
+							}
+						}
+					}
 
                     OldHunter = -1;
                     UIOpen = false;
@@ -217,7 +418,13 @@ namespace Spooky.Content.UserInterfaces
 			DialogueUI.Visible = false;
 		}
 
-		/*
+		public static  void EndDialogueBountyComplete(Dialogue dialogue, int ID)
+		{
+			GiveRewardAndSetComplete();
+
+			DialogueUI.Visible = false;
+		}
+
         public static void SpawnItem(int Type, int Amount)
         {
             int newItem = Item.NewItem(Main.LocalPlayer.GetSource_DropAsItem(), Main.LocalPlayer.Hitbox, Type, Amount);
@@ -228,162 +435,120 @@ namespace Spooky.Content.UserInterfaces
 		{
 			Player player = Main.LocalPlayer;
 
-			if (player.ConsumeItem(ModContent.ItemType<BountyItem1>()))
+			if (player.ConsumeItem(ModContent.ItemType<OldHunterSac>()))
 			{
-				bool IsLastQuest = !Flags.OldHunterBounty1 && Flags.OldHunterBounty2 && Flags.OldHunterBounty3 && Flags.OldHunterBounty4;
-
-				if (IsLastQuest)
-				{
-					SpawnItem(ModContent.ItemType<SentientChumCaster>(), 1);
-				}
-
-				SpawnItem(ModContent.ItemType<SewingThread>(), 1);
-
-				SpawnItem(ModContent.ItemType<IconPainting1Item>(), 1);
-
-				if (Main.rand.NextBool(20))
-				{
-					SpawnItem(ModContent.ItemType<BrownieOrange>(), 1);
-				}
-
 				if (Main.netMode != NetmodeID.SinglePlayer)
 				{
 					ModPacket packet = Mod.GetPacket();
-					packet.Write((byte)SpookyMessageType.Bounty1Complete);
+					packet.Write((byte)SpookyMessageType.OldHunterQuest1Complete);
 					packet.Send();
 				}
 				else
 				{
-					Flags.OldHunterBounty1 = true;
-					Flags.BountyInProgress1 = false;
+					Flags.OldHunterQuest1 = true;
 				}
 			}
-			else if (player.ConsumeItem(ModContent.ItemType<BountyItem2>()))
+			else if (player.ConsumeItem(ModContent.ItemType<OldHunterCloth>()))
 			{
-				bool IsLastQuest = !Flags.OldHunterBounty2 && Flags.OldHunterBounty1 && Flags.OldHunterBounty3 && Flags.OldHunterBounty4;
-
-				if (IsLastQuest)
-				{
-					SpawnItem(ModContent.ItemType<SentientChumCaster>(), 1);
-				}
-
-				SpawnItem(ModContent.ItemType<GhostBook>(), 1);
-
-				SpawnItem(ModContent.ItemType<IconPainting2Item>(), 1);
-
-				if (Main.rand.NextBool(20))
-				{
-					SpawnItem(ModContent.ItemType<BrownieGhost>(), 1);
-				}
-
 				if (Main.netMode != NetmodeID.SinglePlayer)
 				{
 					ModPacket packet = Mod.GetPacket();
-					packet.Write((byte)SpookyMessageType.Bounty2Complete);
+					packet.Write((byte)SpookyMessageType.OldHunterQuest2Complete);
 					packet.Send();
 				}
 				else
 				{
-					Flags.OldHunterBounty2 = true;
-					Flags.BountyInProgress2 = false;
+					Flags.OldHunterQuest2 = true;
 				}
 			}
-			else if (player.ConsumeItem(ModContent.ItemType<BountyItem3>()))
+			else if (player.ConsumeItem(ModContent.ItemType<OldHunterMushroom>()))
 			{
-				bool IsLastQuest = !Flags.OldHunterBounty3 && Flags.OldHunterBounty1 && Flags.OldHunterBounty2 && Flags.OldHunterBounty4;
-
-				if (IsLastQuest)
-				{
-					SpawnItem(ModContent.ItemType<SentientChumCaster>(), 1);
-				}
-
-				SpawnItem(ModContent.ItemType<StitchedCloak>(), 1);
-
-				SpawnItem(ModContent.ItemType<IconPainting3Item>(), 1);
-
-				if (Main.rand.NextBool(20))
-				{
-					SpawnItem(ModContent.ItemType<BrownieBone>(), 1);
-				}
-
 				if (Main.netMode != NetmodeID.SinglePlayer)
 				{
 					ModPacket packet = Mod.GetPacket();
-					packet.Write((byte)SpookyMessageType.Bounty3Complete);
+					packet.Write((byte)SpookyMessageType.OldHunterQuest3Complete);
 					packet.Send();
 				}
 				else
 				{
-					Flags.OldHunterBounty3 = true;
-					Flags.BountyInProgress3 = false;
+					Flags.OldHunterQuest3 = true;
 				}
 			}
-			else if (player.ConsumeItem(ModContent.ItemType<BountyItem4>()))
+			else if (player.ConsumeItem(ModContent.ItemType<OldHunterEyes>()))
 			{
-				bool IsLastQuest = !Flags.OldHunterBounty4 && Flags.OldHunterBounty1 && Flags.OldHunterBounty2 && Flags.OldHunterBounty3;
-
-				if (IsLastQuest)
-				{
-					SpawnItem(ModContent.ItemType<SentientChumCaster>(), 1);
-				}
-
-				SpawnItem(ModContent.ItemType<MagicEyeOrb>(), 1);
-
-				SpawnItem(ModContent.ItemType<OldHunterHat>(), 1);
-				SpawnItem(ModContent.ItemType<IconPainting4Item>(), 1);
-
-				if (Main.rand.NextBool(20))
-				{
-					SpawnItem(ModContent.ItemType<BrownieOrganic>(), 1);
-				}
-
 				if (Main.netMode != NetmodeID.SinglePlayer)
 				{
 					ModPacket packet = Mod.GetPacket();
-					packet.Write((byte)SpookyMessageType.Bounty4Complete);
+					packet.Write((byte)SpookyMessageType.OldHunterQuest4Complete);
 					packet.Send();
 				}
 				else
 				{
-					Flags.OldHunterBounty4 = true;
-					Flags.BountyInProgress4 = false;
+					Flags.OldHunterQuest4 = true;
 				}
 			}
-
-			//"Qol" feature where little eye can give you items in vanilla that are obnoxiously rare and have sentient upgrades
-			if (Main.rand.NextBool(5))
+			else if (player.ConsumeItem(ModContent.ItemType<OldHunterPutty>()))
 			{
-				int[] RareItemsForSentientStuff = new int[] { ItemID.Katana, ItemID.ChainKnife, ItemID.BlackLens };
-
-				SpawnItem(Main.rand.Next(RareItemsForSentientStuff), 1);
+				if (Main.netMode != NetmodeID.SinglePlayer)
+				{
+					ModPacket packet = Mod.GetPacket();
+					packet.Write((byte)SpookyMessageType.OldHunterQuest5Complete);
+					packet.Send();
+				}
+				else
+				{
+					Flags.OldHunterQuest5 = true;
+				}
+			}	
+			else if (player.ConsumeItem(ModContent.ItemType<OldHunterPotatoes>()))
+			{
+				if (Main.netMode != NetmodeID.SinglePlayer)
+				{
+					ModPacket packet = Mod.GetPacket();
+					packet.Write((byte)SpookyMessageType.OldHunterQuest6Complete);
+					packet.Send();
+				}
+				else
+				{
+					Flags.OldHunterQuest6 = true;
+				}
 			}
-
-			if (Main.rand.NextBool())
+			else if (player.ConsumeItem(ModContent.ItemType<OldHunterTinsel>()))
 			{
-				SpawnItem(ModContent.ItemType<SnotMedication>(), 1);
+				if (Main.netMode != NetmodeID.SinglePlayer)
+				{
+					ModPacket packet = Mod.GetPacket();
+					packet.Write((byte)SpookyMessageType.OldHunterQuest7Complete);
+					packet.Send();
+				}
+				else
+				{
+					Flags.OldHunterQuest7 = true;
+				}
 			}
-
-			SpawnItem(ItemID.GoodieBag, Main.rand.Next(1, 5));
-
-			if (Main.rand.NextBool())
+			/*
+			else if (player.ConsumeItem(ModContent.ItemType<PigItemNameHere>()))
 			{
-				int[] Foods = new int[] { ModContent.ItemType<BlackLicorice>(), ModContent.ItemType<EyeChocolate>(), ModContent.ItemType<GoofyPretzel>() };
+				if (Main.netMode != NetmodeID.SinglePlayer)
+					{
+						ModPacket packet = Mod.GetPacket();
+						packet.Write((byte)SpookyMessageType.OldHunterQuest8Complete);
+						packet.Send();
+					}
+					else
+					{
+						Flags.OldHunterQuest8 = true;
+					}
+				}
+			*/
 
-				SpawnItem(Main.rand.Next(Foods), Main.rand.Next(1, 3));
-			}
-
-			if (Main.rand.NextBool(3))
+			if (Flags.OldHunterQuest1 && Flags.OldHunterQuest2 && Flags.OldHunterQuest3 && Flags.OldHunterQuest4 &&
+			Flags.OldHunterQuest5 && Flags.OldHunterQuest6 && Flags.OldHunterQuest7) //&& Flags.OldHunterQuest8)
 			{
-				SpawnItem(ItemID.ObsidianLockbox, 1);
-			}
-
-			if (Main.rand.NextBool(3))
-			{
-				SpawnItem(ItemID.BloodMoonStarter, 1);
+				ModContent.GetInstance<MiscAchievementOldHunterQuest>().OldHunterQuestCondition.Complete();
 			}
 
 			SpawnItem(ItemID.GoldCoin, 10);
 		}
-		*/
     }
 }
