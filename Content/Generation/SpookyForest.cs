@@ -692,15 +692,6 @@ namespace Spooky.Content.Generation
 				}
 			}
 
-			//place wooden beams in the mineshaft
-			for (int X = PositionX - Main.maxTilesX / 12; X <= PositionX + Main.maxTilesX / 12; X++)
-			{
-				for (int Y = 100; Y < (int)Main.worldSurface + 10; Y++)
-				{
-					PlaceMineshaftBeam(X, Y);
-				}
-			}
-
 			//place furniture in underground old wood cabins
 			for (int X = PositionX - Main.maxTilesX / 12; X <= PositionX + Main.maxTilesX / 12; X++)
 			{
@@ -983,7 +974,7 @@ namespace Spooky.Content.Generation
 							Main.tile[x, y].TileType = (ushort)ModContent.TileType<SpookyWood>();
 						}
 
-						if (Main.tile[x, y].WallType > 0 && Main.tile[x, y].WallType != ModContent.WallType<SpookyStoneWall>())
+						if (Main.tile[x, y].WallType > 0)
 						{
 							Main.tile[x, y].WallType = WorldGen.genRand.NextBool(5) ? (ushort)ModContent.WallType<SpookyStoneWall>() : (ushort)ModContent.WallType<SpookyWoodWall>();
 						}
@@ -1000,65 +991,6 @@ namespace Spooky.Content.Generation
 					if ((int)Vector2.Distance(new Vector2(x, y), new Vector2(i, j)) <= DigOutRadius)
 					{
 						WorldGen.KillTile(x, y);
-					}
-				}
-			}
-		}
-
-		public void PlaceMineshaftBeam(int PositionX, int PositionY)
-		{
-			bool CanPlaceBeam = false;
-
-			if (Main.tile[PositionX, PositionY].TileType == ModContent.TileType<SpookyWood>() && Main.tile[PositionX, PositionY + 1].WallType == ModContent.WallType<SpookyWoodWall>() && !Main.tile[PositionX, PositionY + 1].HasTile)
-			{
-				for (int j = PositionY; j <= PositionY + 30; j++)
-				{
-					for (int i = PositionX - 3; i <= PositionX + 3; i++)
-					{
-						//if a wooden beam is too close, dont place another beam
-						if (Main.tile[i, j].TileType == TileID.WoodenBeam)
-						{
-							return;
-						}
-
-						//if a tile is floating in the air and doesnt have a tile above it, dont place a beam under it
-						if (j == PositionY && !Main.tile[PositionX, j - 1].HasTile)
-						{
-							return;
-						}
-
-						//dont place the beam if there isnt enough room (less than 3 tiles downward)
-						if (j < PositionY + 3 && Main.tile[PositionX, j + 1].HasTile)
-						{
-							return;
-						}
-
-						//dont place the beam if theres too much room
-						if (j >= PositionY + 20 && !Main.tile[PositionX, j + 1].HasTile)
-						{
-							return;
-						}
-					}
-
-					if (CanPlaceBeam)
-					{
-						break;
-					}
-				}
-
-				if (CanPlaceBeam)
-				{
-					for (int j = PositionY + 1; j <= PositionY + 20; j++)
-					{
-						if (Main.tile[PositionX, j].HasTile)
-						{
-							return;
-						}
-
-						WorldGen.PlaceTile(PositionX, j, TileID.WoodenBeam);
-						Tile tile = Main.tile[PositionX, j + 1];
-						tile.Slope = 0;
-						tile.IsHalfBlock = false;
 					}
 				}
 			}

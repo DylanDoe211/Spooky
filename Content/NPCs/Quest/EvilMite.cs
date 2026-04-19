@@ -123,7 +123,7 @@ namespace Spooky.Content.NPCs.Quest
 			int CollideHeight = 20;
 			Vector2 NPCCollisionPos = new Vector2(NPC.Center.X - 40, NPC.position.Y + (float)NPC.height - 20);
 
-			if (Math.Abs(NPC.Center.X - player.Center.X) < 50f || NPC.ai[0] == 1 || NPC.ai[0] == 2)
+			if (Math.Abs(NPC.Center.X - player.Center.X) < 50f)
 			{
 				SlowDown = true;
 			}

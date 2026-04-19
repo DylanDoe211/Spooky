@@ -852,6 +852,12 @@ namespace Spooky.Core
 					{
 						pool.Add(ModContent.NPCType<Tarblimp>(), 5);
 						pool.Add(ModContent.NPCType<Tarrar>(), 5);
+
+						//do not spawn a tar pig if one already exists
+						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<TarPig>()))
+						{
+							pool.Add(ModContent.NPCType<TarPig>(), 0.5f);
+						}
 					}
 					else
 					{
@@ -903,13 +909,11 @@ namespace Spooky.Core
 							pool.Add(ModContent.NPCType<GhostPepper>(), 1);
 						}
 
-						/*
 						//do not spawn an alligator if one already exists
 						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<PotatoGator>()))
 						{
 							pool.Add(ModContent.NPCType<PotatoGator>(), 0.2f);
 						}
-						*/
 					}
 				}
 			}
@@ -950,9 +954,9 @@ namespace Spooky.Core
 					pool.Add(ModContent.NPCType<TeddyBearSnow>(), 0.5f);
 					pool.Add(ModContent.NPCType<ToyRobot>(), 2);
 					pool.Add(ModContent.NPCType<ToyRobotTank>(), 0.5f);
-					pool.Add(ModContent.NPCType<PresentTrapBlue>(), 0.25f);
-					pool.Add(ModContent.NPCType<PresentTrapGreen>(), 0.25f);
-					pool.Add(ModContent.NPCType<PresentTrapRed>(), 0.25f);
+					pool.Add(ModContent.NPCType<PresentTrapBlue>(), 0.35f);
+					pool.Add(ModContent.NPCType<PresentTrapGreen>(), 0.35f);
+					pool.Add(ModContent.NPCType<PresentTrapRed>(), 0.35f);
 
 					if (Flags.KrampusQuest1)
 					{
@@ -969,6 +973,12 @@ namespace Spooky.Core
 					if (Flags.KrampusQuest4)
 					{
 						pool.Add(ModContent.NPCType<ChefRobot>(), 0.5f);
+					}
+
+					//do not spawn an alligator if one already exists
+					if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<ChristmasTreeMimic>()))
+					{
+						pool.Add(ModContent.NPCType<ChristmasTreeMimic>(), 0.15f);
 					}
 				}
 			}

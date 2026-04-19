@@ -710,9 +710,7 @@ namespace Spooky.Content.Generation
 
             while (!foundValidPosition && attempts++ < 100000)
 			{
-                Tile tileBelow = Main.tile[EntrancePosX, EntrancePosY + 1];
-
-                if (!tileBelow.HasTile)
+                if (!WorldGen.SolidTile(EntrancePosX, EntrancePosY + 1))
                 {
                     foundValidPosition = true;
                 }

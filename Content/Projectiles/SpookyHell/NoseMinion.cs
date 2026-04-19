@@ -147,23 +147,23 @@ namespace Spooky.Content.Projectiles.SpookyHell
 
 			Projectile.localAI[0]++;
 
-			if (Projectile.localAI[0] < 60)
+			if (Projectile.localAI[0] < 30)
 			{
 				IdleAIButForNPCs(target);
 			}
 
-			if (Projectile.localAI[0] == 60)
+			if (Projectile.localAI[0] == 30)
 			{
 				SaveProjPosition = Projectile.Center;
 			}
 
-			if (Projectile.localAI[0] > 60 && Projectile.localAI[0] < 90)
+			if (Projectile.localAI[0] > 30 && Projectile.localAI[0] < 50)
 			{
 				Projectile.Center = new Vector2(SaveProjPosition.X, SaveProjPosition.Y);
                 Projectile.Center += Main.rand.NextVector2Square(-3, 3);
 			}
 
-			if (Projectile.localAI[0] == 90)
+			if (Projectile.localAI[0] == 50)
 			{
 				SoundEngine.PlaySound(SneezeSound, Projectile.Center);
 
@@ -174,18 +174,18 @@ namespace Spooky.Content.Projectiles.SpookyHell
 
 				Vector2 ShootSpeed = target.Center - Projectile.Center;
                 ShootSpeed.Normalize();
-                ShootSpeed *= 20f;
+                ShootSpeed *= 22f;
                         
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, 
                 ShootSpeed.X, ShootSpeed.Y, ModContent.ProjectileType<NoseMinionBooger>(), Projectile.damage, 2f, Projectile.owner);
 			}
 
-			if (Projectile.localAI[0] >= 90)
+			if (Projectile.localAI[0] >= 50)
 			{
 				Projectile.velocity *= 0.95f;
 			}
 
-			if (Projectile.localAI[0] >= 110)
+			if (Projectile.localAI[0] >= 60)
 			{
 				Projectile.localAI[0] = 0;
 			}

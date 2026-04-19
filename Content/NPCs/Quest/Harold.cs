@@ -167,7 +167,7 @@ namespace Spooky.Content.NPCs.Quest
                 NPC.netUpdate = true;
             }
 
-            if (player.Distance(NPC.Center) <= 600f)
+            if (player.Distance(NPC.Center) <= 600f || NPC.ai[0] > 360)
             {
                 NPC.dontTakeDamage = false;
 
