@@ -12,6 +12,7 @@ using System.IO;
 using System.Collections.Generic;
 
 using Spooky.Core;
+using Spooky.Content.Items.SpiderCave;
 using Spooky.Content.Items.SpiderCave.Misc;
 
 namespace Spooky.Content.NPCs.SpiderCave
@@ -121,14 +122,13 @@ namespace Spooky.Content.NPCs.SpiderCave
 		public override void AI()
 		{
 			Player player = Main.player[NPC.target];
+			
+			Vector2 RotateTowards = player.Center - NPC.Center;
 
-			bool HasLineOfSight = Collision.CanHitLine(player.position, player.width, player.height, NPC.position, NPC.width, NPC.height);
-            if (HasLineOfSight)
-            {
-				NPC.TargetClosest(true);
-			}
+			float RotateDirection = NPC.velocity.ToRotation();
+			float RotateSpeed = 0.055f;
 
-			NPC.rotation = NPC.velocity.ToRotation();
+			NPC.rotation = NPC.rotation.AngleTowards(RotateDirection, RotateSpeed);
 
 			UpdateSpiderLegs();
 		}
@@ -136,6 +136,7 @@ namespace Spooky.Content.NPCs.SpiderCave
 		public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SpiderChitin>(), 3, 1, 3));
+			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<GlaggleOrb>(), 8));
         }
 
 		public override void HitEffect(NPC.HitInfo hit) 

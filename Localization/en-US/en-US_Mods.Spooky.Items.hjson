@@ -2835,6 +2835,15 @@ TrackingCrossbow: {
 	Tooltip: Fires out homing bolts that stick to enemies
 }
 
+GlaggleOrb: {
+	DisplayName: Glaggle Orb
+	Tooltip:
+		'''
+		Conjures magic glaggle orbs
+		The glaggle orbs will explode and fling smaller glaggles around
+		'''
+}
+
 MiteClaws: {
 	DisplayName: Shred Claw
 	Tooltip: Shreds enemies at a close range

@@ -137,3 +137,8 @@ MiscAchievementOldHunterQuest: {
 	FriendlyName: Let Daylight Into Vermin
 	Description: Complete every one of the old hunter's bounties.
 }
+
+MiscAchievementDahlia: {
+	FriendlyName: On Fleek!
+	Description: Encounter and kill diva dahlia in the lower catacombs.
+}

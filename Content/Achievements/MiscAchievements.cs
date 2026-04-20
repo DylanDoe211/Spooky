@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 
 using Spooky.Core;
+using Spooky.Content.NPCs.Catacomb.Layer2;
 using Spooky.Content.NPCs.Minibiomes.Ocean;
 
 namespace Spooky.Content.Achievements
@@ -139,6 +140,15 @@ namespace Spooky.Content.Achievements
         {
             Achievement.SetCategory(AchievementCategory.Explorer);
             OldHunterQuestCondition = AddCondition();
+        }
+    }
+
+    public class MiscAchievementDahlia : ModAchievement
+    {
+        public override void SetStaticDefaults()
+        {
+			Achievement.SetCategory(AchievementCategory.Slayer);
+            AddNPCKilledCondition(ModContent.NPCType<Dahlia>());
         }
     }
 }
