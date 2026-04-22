@@ -143,6 +143,17 @@ namespace Spooky.Content.Achievements
         }
     }
 
+    public class MiscAchievementKrampusQuest : ModAchievement
+    {
+        public CustomFlagCondition KrampusQuestCondition { get; private set; }
+
+        public override void SetStaticDefaults()
+        {
+            Achievement.SetCategory(AchievementCategory.Explorer);
+            KrampusQuestCondition = AddCondition();
+        }
+    }
+
     public class MiscAchievementDahlia : ModAchievement
     {
         public override void SetStaticDefaults()

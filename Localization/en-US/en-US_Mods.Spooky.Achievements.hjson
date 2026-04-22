@@ -135,7 +135,12 @@ MiscAchievementDumbZomboid: {
 
 MiscAchievementOldHunterQuest: {
 	FriendlyName: Let Daylight Into Vermin
-	Description: Complete every one of the old hunter's bounties.
+	Description: Complete all of the old hunter's bounty hunts for rare, strange creatures.
+}
+
+MiscAchievementKrampusQuest: {
+	FriendlyName: G.O.A.T.
+	Description: Help krampus find a way to save christmas in his own special way.
 }
 
 MiscAchievementDahlia: {

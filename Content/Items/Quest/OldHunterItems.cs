@@ -73,4 +73,14 @@ namespace Spooky.Content.Items.Quest
 			Item.rare = ItemRarityID.Quest;
 		}
     }
+
+	public class OldHunterPigBone : ModItem
+	{
+        public override void SetDefaults()
+		{
+			Item.width = 32;
+            Item.height = 26;
+			Item.rare = ItemRarityID.Quest;
+		}
+    }
 }

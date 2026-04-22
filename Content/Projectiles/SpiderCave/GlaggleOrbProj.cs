@@ -103,7 +103,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
 			if (Projectile.timeLeft <= 180)
 			{
-				if (OrbiterDistance > 0.2f)
+				if (OrbiterDistance > 0.3f)
 				{
 					OrbiterDistance -= 0.005f;
 				}

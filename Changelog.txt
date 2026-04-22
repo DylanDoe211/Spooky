@@ -81,6 +81,7 @@ Weapons/Accessories:
 -Nerfed bottomless snow bag damage from 15 -> 10
 -Buffed licker base damage from 48 -> 55
 -Buffed spooky scroll damage from 20 -> 38
+-Buffed sabertooth scythe use speed
 -Buffed damage done by skull smasher's right-click when you throw the hammer
 -Skull smasher's left-click short range throw now goes through enemies instead of immediately returning to you when it hits one enemy
 -Living caduceus minion now deals way more damage when they suicide-bomb enemies after targeting that enemy for too long

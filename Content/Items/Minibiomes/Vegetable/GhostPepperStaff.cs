@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
+using System;
 
 using Spooky.Content.Buffs.Minion;
 using Spooky.Content.Projectiles.Minibiomes.Vegetable;
@@ -53,8 +54,10 @@ namespace Spooky.Content.Items.Minibiomes.Vegetable
 							Main.dust[DustGore].position.Y += Main.rand.Next(-50, 51) * 0.05f - 1.5f;
 						}
 
-						var projectile = Projectile.NewProjectileDirect(source, proj.Center, proj.velocity, TypeToSpawn, (int)(proj.damage * 1.025f), proj.knockBack, player.whoAmI);
-						projectile.originalDamage = (int)(proj.damage * 1.025f);
+						float damageIncrease = proj.damage * 1.5f;
+						int roundedDamage = (int)Math.Round(damageIncrease, 0);
+
+						var projectile = Projectile.NewProjectileDirect(source, proj.Center, proj.velocity, TypeToSpawn, roundedDamage, proj.knockBack, player.whoAmI);
 
 						proj.Kill();
 

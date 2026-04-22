@@ -190,7 +190,7 @@ CrabSpider1: These watchful spiders have the ability to crawl around really quic
 CrabSpider2: Good at hunting, they will quickly run backwards while facing their prey as to not loose track. Then, once far enough, they will quickly lunge at their target.
 DaddyLongLegs: Their long legs allow them to walk across the rough terrain in the grotto. Lacking any other attack besides biting, they are not as intimidating as they might seem.
 Harvestmen: Despite their scary looking legs, these spiders are shy and curious, wandering about the grotto. Don't take advantage of their passive behavior though, as they will retaliate if harmed!
-FishingSpider: Adapted to live in both water and land, their bodies look like a fish from a distance, after which they will jump out and attack whatever thought they were a harmless fish.
+FishingSpider: Able to live in water and land, their bodies look like a fish when they tuck their legs in. After prey gets close, they will jump out of the water and attack whatever thought they were a harmless fish.
 Inchworm1: Little worms that crawl around in the damp spider infested cave. They are not so good at avoiding the spiders that eat them.
 Inchworm2: Cute and reclusive little worms that live in the damp caverns. They apparently taste good to spiders, which eat them often.
 Inchworm3: These inchworms have miraculously adapted to have a more hostile appearance, making spiders less likely to target them.
@@ -314,6 +314,10 @@ PeacockMite: They take in spores through their face, and turn it into a sticky w
 RustMite: Wandering slowly through the spore fog, they feed on whatever is left behind by other mites on the ground and turn the leftovers into spike-like objects.
 //old hunter enemies
 PuttyAmalgam: In rare circumstances, putty slimes can merge together and increase their power by traveling together as one. Their ability to jump has been enhanced, as well as being able to melt their body and reform elsewhere.
-Harold: An unknown being that wears a giant ghost costume sheet. He flies around the cemetery at night and can summon small ghosts to assist him.
-Triplets: A group of three eyes attached to veins, they travel attached to each other and can sync up their special laser attack.
+Harold: A strange being of unknown origin, who flies around the cemetery at night and can summon small ghosts to assist him. Some say they have observed people being absorbed into his body upon touching his sheet, but this is only a rumor with no concrete evidence.
+Triplets: A group of three eyes attached to veins, they travel attached to each other and, over time, have learned to how to work together despite having disconnected consciousnesses. They can channel their psychic power together into powerful lasers.
 EvilMite: It is rare that mites are able to gather a ton of blood, but when they do they become bloated to unnatural sizes. Their bodies being filled with blood makes them squishy and explosive.
+PotatoGator: This potato creature can use its root-like legs to move through the ground, and can launch itself out at unsuspecting creatures it wants to eat. Its mouth is filled with nothing but potato mush, so it usually tries to swallow its prey whole, no matter how large.
+ChristmasTreeMimic: When krampus had to step up to take care of christmas responsibilities, he got a tree to feel more festive. Due to his demonic nature, the evil power seeped into the tree. It stays still most of the time until someone or something annoys it, after which it will rampage everywhere.
+TarPig: This species of hog used to be plentiful in the desert caverns due to its favorite food, cactuses, being plentiful. Now that they are extinct, these giant tar slimes use their skeletal remains as a shield to protect themselves so they can float and relax in pools of tar peacefully.
+Chudshroom: TODO

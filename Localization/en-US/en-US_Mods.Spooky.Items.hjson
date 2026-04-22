@@ -2492,6 +2492,15 @@ OldHunterTinsel: {
 		'''
 }
 
+OldHunterPigBone: {
+	DisplayName: Opalised Pig Bone
+	Tooltip:
+		'''
+		The bone from an extinct species of swine
+		The Old Hunter may be interested in this
+		'''
+}
+
 OldHunterPotatoes: {
 	DisplayName: Mashed Potato Gator
 	Tooltip:
@@ -3829,6 +3838,11 @@ SentientPaladinsHammer: {
 		Upon reaching the targeted enemy, it will strike it 3 times before returning to you
 		'They won't stop yapping'
 		'''
+}
+
+SentientPygmyStaff: {
+	DisplayName: Goblinoid Staff
+	Tooltip: Summons various goblinoids with different abilities
 }
 
 SentientRavenStaff: {

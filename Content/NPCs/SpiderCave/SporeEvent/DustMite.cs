@@ -27,7 +27,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SporeEvent
 
 		public override void SetDefaults()
 		{
-            NPC.lifeMax = 300;
+            NPC.lifeMax = 350;
             NPC.damage = 55;
             NPC.defense = 10;
 			NPC.width = 46;
@@ -167,7 +167,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SporeEvent
 
         public override void SetDefaults()
 		{
-            NPC.lifeMax = 320;
+            NPC.lifeMax = 350;
             NPC.damage = 55;
             NPC.defense = 10;
 			NPC.width = 46;

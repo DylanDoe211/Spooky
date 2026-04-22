@@ -62,7 +62,7 @@ namespace Spooky.Content.Projectiles.Catacomb
 
             if (Projectile.ai[0] % 10 == 0)
             {
-                SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, player.Center);
+                SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode with { Volume = 0.25f }, player.Center);
 
                 Projectile.NewProjectile(Projectile.GetSource_FromAI(), player.Center + new Vector2(Main.rand.Next(-150, 151), Main.rand.Next(-150, 151)), 
                 Vector2.Zero, ModContent.ProjectileType<FlameIdolAura>(), Projectile.damage / 2, 0f, Projectile.owner);

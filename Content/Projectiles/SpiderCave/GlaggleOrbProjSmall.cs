@@ -42,6 +42,11 @@ namespace Spooky.Content.Projectiles.SpiderCave
 		{
             Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.02f * (float)Projectile.direction;
 
+            if (Projectile.timeLeft <= 60)
+            {
+                Projectile.alpha += 5;
+            }
+
             int foundTarget = FindTarget();
             if (foundTarget != -1)
             {

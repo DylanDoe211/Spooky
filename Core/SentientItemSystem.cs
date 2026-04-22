@@ -56,6 +56,7 @@ namespace Spooky.Core
 			AddTransformation(ItemID.ImpStaff, ModContent.ItemType<SentientImpStaff>());
 			AddTransformation(ItemID.HoundiusShootius, ModContent.ItemType<SentientShootius>());
 			AddTransformation(ItemID.OpticStaff, ModContent.ItemType<SentientOpticStaff>());
+			AddTransformation(ItemID.PygmyStaff, ModContent.ItemType<SentientPygmyStaff>());
 			AddTransformation(ItemID.RavenStaff, ModContent.ItemType<SentientRavenStaff>());
 			AddTransformation(ItemID.DeadlySphereStaff, ModContent.ItemType<SentientSphereStaff>());
 

@@ -256,12 +256,10 @@ namespace Spooky.Content.UserInterfaces
 						{
 							CurrentCompletedQuest = 7;
 						}
-						/*
-						else if (player.HasItem(ModContent.ItemType<OldHunterTinsel>()))
+						else if (player.HasItem(ModContent.ItemType<OldHunterPigBone>()))
 						{
 							CurrentCompletedQuest = 8;
 						}
-						*/
 
 						//if no quest is completed then display quest dialogue
 						if (CurrentCompletedQuest <= 0)
@@ -526,24 +524,22 @@ namespace Spooky.Content.UserInterfaces
 					Flags.OldHunterQuest7 = true;
 				}
 			}
-			/*
-			else if (player.ConsumeItem(ModContent.ItemType<PigItemNameHere>()))
+			else if (player.ConsumeItem(ModContent.ItemType<OldHunterPigBone>()))
 			{
 				if (Main.netMode != NetmodeID.SinglePlayer)
-					{
-						ModPacket packet = Mod.GetPacket();
-						packet.Write((byte)SpookyMessageType.OldHunterQuest8Complete);
-						packet.Send();
-					}
-					else
-					{
-						Flags.OldHunterQuest8 = true;
-					}
+				{
+					ModPacket packet = Mod.GetPacket();
+					packet.Write((byte)SpookyMessageType.OldHunterQuest8Complete);
+					packet.Send();
 				}
-			*/
+				else
+				{
+					Flags.OldHunterQuest8 = true;
+				}
+			}
 
 			if (Flags.OldHunterQuest1 && Flags.OldHunterQuest2 && Flags.OldHunterQuest3 && Flags.OldHunterQuest4 &&
-			Flags.OldHunterQuest5 && Flags.OldHunterQuest6 && Flags.OldHunterQuest7) //&& Flags.OldHunterQuest8)
+			Flags.OldHunterQuest5 && Flags.OldHunterQuest6 && Flags.OldHunterQuest7 && Flags.OldHunterQuest8)
 			{
 				ModContent.GetInstance<MiscAchievementOldHunterQuest>().OldHunterQuestCondition.Complete();
 			}

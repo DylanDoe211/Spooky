@@ -26,6 +26,9 @@ namespace Spooky.Content.NPCs.Quest
 
 			NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
+				Position = new Vector2(15f, -20f),
+				PortraitPositionXOverride = 0f,
+				PortraitPositionYOverride = 0f,
 				Velocity = -1
             };
 

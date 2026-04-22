@@ -830,7 +830,7 @@ namespace Spooky.Content.Generation
                 if (StructureFile == "LittleEyeHouse")
                 {
                     NPC.NewNPC(null, (startX - 8) * 16, (startY + 6) * 16, ModContent.NPCType<LittleEyeSleeping>());
-                    Flags.LittleEyePosition = new Vector2((startX - 8) * 16, (startY + 6) * 16);
+                    Flags.LittleEyePosition = new Vector2((startX - 8) * 16, (startY + 8) * 16);
                 }
 
                 if (StructureFile == "OrroboroNest")

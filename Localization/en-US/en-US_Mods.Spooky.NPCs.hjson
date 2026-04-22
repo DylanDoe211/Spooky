@@ -269,7 +269,6 @@ MonsterEye1.DisplayName: Monster Eye
 MonsterEye2.DisplayName: Monster Eye
 MonsterEye4.DisplayName: Monster Eye
 MonsterEye3.DisplayName: Monster Eye
-PuttyAmalgam.DisplayName: Putty Amalgam
 PuttyPumpkin.DisplayName: Pumpkin Putty
 PuttyPumpkinling.DisplayName: Pumpkin Puttling
 PuttySlime1.DisplayName: Putty Slime
@@ -469,6 +468,7 @@ TripletsBody.DisplayName: The Triplets
 TripletsEyeGreen.DisplayName: Cornealius
 TripletsEyeRed.DisplayName: Macule
 TripletsEyePurple.DisplayName: Vitreous Bobby
+PuttyAmalgam.DisplayName: Putty Amalgam
 ChristmasTreeMimic.DisplayName: Christmas Tree Mimic
 TarPig.DisplayName: Opalised Hog
 //tar pits

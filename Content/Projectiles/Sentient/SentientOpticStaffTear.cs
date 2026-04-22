@@ -27,7 +27,6 @@ namespace Spooky.Content.Projectiles.Sentient
             Projectile.tileCollide = true;
             Projectile.timeLeft = 300;
             Projectile.penetrate = 1;
-            Projectile.alpha = 255;
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -52,11 +51,6 @@ namespace Spooky.Content.Projectiles.Sentient
         {
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 			Projectile.rotation += 0f * (float)Projectile.direction;
-
-            if (Projectile.alpha > 0)
-            {
-                Projectile.alpha -= 15;
-            }
         }
 
         public override void OnKill(int timeLeft)

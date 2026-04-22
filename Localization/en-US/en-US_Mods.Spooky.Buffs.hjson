@@ -724,3 +724,8 @@ PossessedCrownBuff: {
 	DisplayName: Possessed Crown
 	Description: The crowns grant your whips more power
 }
+
+GoblinoidBuff: {
+	DisplayName: Goblinoids
+	Description: The insane goblinoids will assist you in combat
+}

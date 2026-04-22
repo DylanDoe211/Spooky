@@ -268,6 +268,16 @@ namespace Spooky.Content.NPCs.Quest
         {
             if (NPC.life <= 0) 
             {
+				Color[] ColorList = new Color[]
+				{
+					Color.LimeGreen, Color.MediumPurple, Color.Chocolate
+				};
+
+                for (int numDusts = 0; numDusts < 45; numDusts++)
+                {
+                    int DustGore = Dust.NewDust(NPC.Center, 1, 1, DustID.TintableDust, 0f, 0f, 100, Main.rand.Next(ColorList), 1f);
+                    Main.dust[DustGore].velocity *= 1.2f;
+                }
             }
 		}
     }

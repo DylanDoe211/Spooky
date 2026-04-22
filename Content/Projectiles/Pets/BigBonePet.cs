@@ -56,7 +56,7 @@ namespace Spooky.Content.Projectiles.Pets
 				}
 
 				Vector2 drawOrigin = new Vector2(0, ChainTexture1.Height() / 2);
-				Vector2 myCenter = Projectile.Center - new Vector2(0 * (flip ? -1 : 1), 5).RotatedBy(Projectile.rotation);
+				Vector2 myCenter = Projectile.Center - new Vector2(0 * (flip ? -1 : 1), 0).RotatedBy(Projectile.rotation);
 				Vector2 p0 = player.Center;
 				Vector2 p1 = player.Center;
 				Vector2 p2 = myCenter - new Vector2(45 * (flip ? -1 : 1), -75).RotatedBy(Projectile.rotation);

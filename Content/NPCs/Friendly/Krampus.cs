@@ -642,6 +642,8 @@ namespace Spooky.Content.NPCs.Friendly
 			{
 				Flags.KrampusQuestlineDone = true;
 			}
+
+			ModContent.GetInstance<MiscAchievementKrampusQuest>().KrampusQuestCondition.Complete();
 		}
 
 		private void SetDailyQuestComplete(Dialogue dialogue, int ID)

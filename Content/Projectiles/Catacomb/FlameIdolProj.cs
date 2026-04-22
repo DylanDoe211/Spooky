@@ -99,7 +99,7 @@ namespace Spooky.Content.Projectiles.Catacomb
                 {
                     player.statMana -= ItemGlobal.ActiveItem(player).mana;
 
-                    SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot, player.MountedCenter);
+                    SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot with { Volume = 0.25f }, player.MountedCenter);
 
                     Projectile.NewProjectile(Projectile.GetSource_FromAI(), player.MountedCenter, Vector2.Zero, ModContent.ProjectileType<FlameIdolRing>(), Projectile.damage, 0f, Projectile.owner);
 

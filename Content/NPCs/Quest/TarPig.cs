@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
 using Spooky.Core;
+using Spooky.Content.Items.Quest;
 using Spooky.Content.NPCs.Minibiomes.Desert.Projectiles;
 
 namespace Spooky.Content.NPCs.Quest
@@ -26,9 +27,10 @@ namespace Spooky.Content.NPCs.Quest
 
 			NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
 			{
-				//Position = new Vector2(0f, 46f),
-				//PortraitPositionYOverride = 46f,
-				//Frame = 5
+				Position = new Vector2(12f, 35f),
+				PortraitPositionXOverride = 0f,
+				PortraitPositionYOverride = 46f,
+				Frame = 5
 			};
 		}
 
@@ -318,7 +320,7 @@ namespace Spooky.Content.NPCs.Quest
 
 		public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
-            //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<TarSurpriseEgg>()));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<OldHunterPigBone>()));
 		}
 
 		public override void HitEffect(NPC.HitInfo hit) 
