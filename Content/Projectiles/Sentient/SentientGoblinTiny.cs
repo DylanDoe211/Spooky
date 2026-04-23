@@ -89,7 +89,7 @@ namespace Spooky.Content.Projectiles.Sentient
             for (int i = 0; i < Main.maxNPCs; i++)
             {
 				NPC Target = Projectile.OwnerMinionAttackTargetNPC;
-				if (Target != null && Target.CanBeChasedBy(this) && !NPCID.Sets.CountsAsCritter[Target.type])
+				if (Target != null && Target.CanBeChasedBy(this) && !NPCID.Sets.CountsAsCritter[Target.type] && Vector2.Distance(player.Center, Target.Center) <= 750f)
                 {
 					AttackingAI(Target);
                     CurrentTarget = Target;
@@ -102,7 +102,7 @@ namespace Spooky.Content.Projectiles.Sentient
                 }
 
 				NPC NPC = Main.npc[i];
-                if (NPC.active && NPC.CanBeChasedBy(this) && !NPC.friendly && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type])
+                if (NPC.active && NPC.CanBeChasedBy(this) && !NPC.friendly && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type] && Vector2.Distance(player.Center, NPC.Center) <= 750f)
                 {
 					AttackingAI(NPC);
                     CurrentTarget = NPC;
@@ -179,6 +179,8 @@ namespace Spooky.Content.Projectiles.Sentient
 
             if (Projectile.ai[1] == 0)
             {
+                Projectile.tileCollide = false;
+
                 Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.02f * (float)Projectile.direction;
 
                 Vector2 desiredVelocity = Projectile.DirectionTo(target.Center) * 35f;
@@ -186,6 +188,8 @@ namespace Spooky.Content.Projectiles.Sentient
             }
             else
             {
+                Projectile.tileCollide = true;
+
                 Projectile.rotation = 0;
                 
                 Projectile.velocity.Y += 0.35f;
