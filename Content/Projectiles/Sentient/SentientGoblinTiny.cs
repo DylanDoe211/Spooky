@@ -77,7 +77,8 @@ namespace Spooky.Content.Projectiles.Sentient
 				NPC Target = Projectile.OwnerMinionAttackTargetNPC;
 				if (Target != null && Target.CanBeChasedBy(this) && !NPCID.Sets.CountsAsCritter[Target.type])
                 {
-					//AttackingAI(Target);
+					AttackingAI(Target);
+                    CurrentTarget = Target;
 
 					break;
 				}
@@ -89,7 +90,8 @@ namespace Spooky.Content.Projectiles.Sentient
 				NPC NPC = Main.npc[i];
                 if (NPC.active && NPC.CanBeChasedBy(this) && !NPC.friendly && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type])
                 {
-					//AttackingAI(NPC);
+					AttackingAI(NPC);
+                    CurrentTarget = NPC;
 
 					break;
 				}
@@ -157,8 +159,46 @@ namespace Spooky.Content.Projectiles.Sentient
             }
 		}
 
+        public void AttackingAI(NPC target)
+		{
+            isAttacking = true;
+
+            if (Projectile.ai[1] == 0)
+            {
+                Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.02f * (float)Projectile.direction;
+
+                Vector2 desiredVelocity = Projectile.DirectionTo(target.Center) * 35f;
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, desiredVelocity, 1f / 20);
+
+                if (Projectile.Hitbox.Intersects(target.Hitbox))
+                {
+                    Projectile.velocity = -Projectile.velocity / 2;
+                    Projectile.ai[1]++;
+                }
+            }
+            else
+            {
+                Projectile.rotation = 0;
+                
+                Projectile.velocity.Y += 0.35f;
+                if (Projectile.velocity.Y > 2f)
+                {
+                    Projectile.velocity.Y += 0.35f;
+                }
+
+                if (Collision.SolidTilesVersatile((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.X) / 16, (int)Projectile.Bottom.Y / 16, (int)Projectile.Bottom.Y / 16 + 3))
+                {
+                    Projectile.ai[0] = 0;
+                    Projectile.ai[1] = 0;
+                }
+            }
+        }
+
         public void IdleAI(Player player)
         {
+            Projectile.ai[0] = 0;
+            Projectile.ai[1] = 0;
+
             if (!playerFlying)
             {
                 //set frames when idle

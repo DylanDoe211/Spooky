@@ -54,10 +54,8 @@ namespace Spooky.Content.Items.Minibiomes.Vegetable
 							Main.dust[DustGore].position.Y += Main.rand.Next(-50, 51) * 0.05f - 1.5f;
 						}
 
-						float damageIncrease = proj.damage * 1.5f;
-						int roundedDamage = (int)Math.Round(damageIncrease, 0);
-
-						var projectile = Projectile.NewProjectileDirect(source, proj.Center, proj.velocity, TypeToSpawn, roundedDamage, proj.knockBack, player.whoAmI);
+						var projectile = Projectile.NewProjectileDirect(source, proj.Center, proj.velocity, TypeToSpawn, (int)(proj.damage * 1.02f), proj.knockBack, player.whoAmI);
+						projectile.originalDamage = (int)(proj.damage * 1.02f);
 
 						proj.Kill();
 

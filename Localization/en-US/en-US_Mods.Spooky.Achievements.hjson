@@ -53,11 +53,6 @@ EventAchievementPandoraBox: {
 	Description: Open pandora's box and defeat all of the mischevious spirits trapped inside.
 }
 
-MinibossAchievementBigDunk: {
-	FriendlyName: Tummy Troubles
-	Description: Feed the sea mine to Big Dunk, sending him to re-extinction.
-}
-
 MiscAchievementTurkeyTamed: {
 	FriendlyName: First Thanksgiving
 	Description: Tame a wild turkey using rotten seeds from the spooky forest. It is very friendly!
@@ -86,6 +81,11 @@ MiscAchievementNoseCultist: {
 MiscAchievementBigDunkEat: {
 	FriendlyName: Breakfast With The Dead
 	Description: Say hello to the undead fish in the depths, and see how he responds!
+}
+
+MiscAchievementBigDunk: {
+	FriendlyName: Tummy Troubles
+	Description: Feed the sea mine to Big Dunk, sending him to re-extinction.
 }
 
 MiscAchievementLittleEyeQuest: {

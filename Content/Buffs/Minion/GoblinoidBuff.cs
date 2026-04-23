@@ -17,8 +17,8 @@ namespace Spooky.Content.Buffs.Minion
 		{
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<SentientGoblinFlyMouth>()] > 0 ||
 			player.ownedProjectileCounts[ModContent.ProjectileType<SentientGoblinSpit>()] > 0 || 
-			player.ownedProjectileCounts[ModContent.ProjectileType<SentientGoblinTiny>()] > 0) //||
-			//player.ownedProjectileCounts[ModContent.ProjectileType<SentientGoblinTiny>()] > 0) 
+			player.ownedProjectileCounts[ModContent.ProjectileType<SentientGoblinTiny>()] > 0 ||
+			player.ownedProjectileCounts[ModContent.ProjectileType<SentientGoblinFlyEye>()] > 0)
 			{
 				player.buffTime[buffIndex] = 18000;
 			}

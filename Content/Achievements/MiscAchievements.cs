@@ -77,6 +77,15 @@ namespace Spooky.Content.Achievements
         }
     }
 
+    public class MiscAchievementBigDunk : ModAchievement
+    {
+        public override void SetStaticDefaults()
+        {
+            Achievement.SetCategory(AchievementCategory.Slayer);
+            AddNPCKilledCondition(ModContent.NPCType<Dunkleosteus>());
+        }
+    }
+
     public class MiscAchievementLittleEyeQuest : ModAchievement
     {
         public CustomFlagCondition LittleEyeQuestCondition { get; private set; }
@@ -138,7 +147,7 @@ namespace Spooky.Content.Achievements
 
         public override void SetStaticDefaults()
         {
-            Achievement.SetCategory(AchievementCategory.Explorer);
+            Achievement.SetCategory(AchievementCategory.Challenger);
             OldHunterQuestCondition = AddCondition();
         }
     }
@@ -149,7 +158,7 @@ namespace Spooky.Content.Achievements
 
         public override void SetStaticDefaults()
         {
-            Achievement.SetCategory(AchievementCategory.Explorer);
+            Achievement.SetCategory(AchievementCategory.Challenger);
             KrampusQuestCondition = AddCondition();
         }
     }

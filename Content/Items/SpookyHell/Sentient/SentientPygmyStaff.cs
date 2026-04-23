@@ -16,7 +16,7 @@ namespace Spooky.Content.Items.SpookyHell.Sentient
 
         public override void SetDefaults()
         {
-            Item.damage = 80;
+            Item.damage = 70;
             Item.mana = 30;
 			Item.DamageType = DamageClass.Summon;
             Item.autoReuse = true;
@@ -43,8 +43,8 @@ namespace Spooky.Content.Items.SpookyHell.Sentient
             {
                 case 0:
                 {
-                    //type = ModContent.ProjectileType<SentientGoblinTiny>(); //ModContent.ProjectileType<SentientGoblinFlyMouth>();
-                    //numUses++;
+                    type = ModContent.ProjectileType<SentientGoblinFlyMouth>();
+                    numUses++;
                     break;
                 }
                 case 1:
@@ -62,7 +62,7 @@ namespace Spooky.Content.Items.SpookyHell.Sentient
                 }
                 case 3:
                 {
-                    //type = ModContent.ProjectileType<SentientGoblinFlyEye>();
+                    type = ModContent.ProjectileType<SentientGoblinFlyEye>();
                     numUses = 0;
                     break;
                 }

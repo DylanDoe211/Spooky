@@ -3842,7 +3842,11 @@ SentientPaladinsHammer: {
 
 SentientPygmyStaff: {
 	DisplayName: Goblinoid Staff
-	Tooltip: Summons various goblinoids with different abilities
+	Tooltip:
+		'''
+		Summons various goblinoids with different abilities
+		'Goblinoids are deranged, but very loyal'
+		'''
 }
 
 SentientRavenStaff: {
