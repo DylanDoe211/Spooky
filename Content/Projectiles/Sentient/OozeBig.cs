@@ -80,29 +80,28 @@ namespace Spooky.Content.Projectiles.Sentient
 
             Screenshake.ShakeScreenWithIntensity(Projectile.Center, 3f, 500f);
 
-            for (int numProjectiles = 0; numProjectiles < 30; numProjectiles++)
+            float maxAmount = 50;
+            int currentAmount = 0;
+            while (currentAmount <= maxAmount)
             {
-                Vector2 ProjectilePosition = Projectile.Center + new Vector2(0, 15).RotatedByRandom(360);
+                Vector2 velocity = new Vector2(Main.rand.NextFloat(8f, 15f), Main.rand.NextFloat(8f, 15f));
+                Vector2 Bounds = new Vector2(Main.rand.NextFloat(8f, 15f), Main.rand.NextFloat(8f, 15f));
+                float intensity = Main.rand.NextFloat(8f, 15f);
 
-                Vector2 ShootSpeed = Projectile.Center - ProjectilePosition;
-                ShootSpeed.Normalize();
-                ShootSpeed *= -20f;
+                Vector2 vector12 = Vector2.UnitX * 0f;
+                vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
+                vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
 
-                Projectile.NewProjectile(Projectile.GetSource_Death(), ProjectilePosition, ShootSpeed, ModContent.ProjectileType<OozeSmall>(), Projectile.damage / 2, 0, Projectile.owner);
+                Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity,
+                ModContent.ProjectileType<OozeSmall>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+
+                int num104 = Dust.NewDust(Projectile.Center, 1, 1, DustID.KryptonMoss, 0f, 0f, 100, default, 3f);
+                Main.dust[num104].noGravity = true;
+                Main.dust[num104].position = Projectile.Center + vector12;
+                Main.dust[num104].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
+
+                currentAmount++;
             }
-
-            for (int numDusts = 0; numDusts < 25; numDusts++)
-			{                                                                                  
-				int newDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.KryptonMoss, 0f, -2f, 0, default, 1.5f);
-				Main.dust[newDust].position.X += Main.rand.Next(-50, 51) * 0.05f - 1.5f;
-				Main.dust[newDust].position.Y += Main.rand.Next(-50, 51) * 0.05f - 1.5f;
-                Main.dust[newDust].noGravity = true;
-                
-				if (Main.dust[newDust].position != Projectile.Center)
-                {
-				    Main.dust[newDust].velocity = Projectile.DirectionTo(Main.dust[newDust].position) * 2f;
-                }
-			}
 		}
     }
 }

@@ -1,6 +1,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Audio;
 using Microsoft.Xna.Framework;
 using System;
 using System.Linq;
@@ -29,6 +30,8 @@ namespace Spooky.Content.Projectiles.Sentient
             Projectile.width = 28;
 			Projectile.height = 50;
             Projectile.DamageType = DamageClass.Summon;
+            Projectile.localNPCHitCooldown = 40;
+            Projectile.usesLocalNPCImmunity = true;
 			Projectile.minion = true;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
@@ -36,7 +39,7 @@ namespace Spooky.Content.Projectiles.Sentient
             Projectile.netImportant = true;
             Projectile.timeLeft = 2;
             Projectile.penetrate = -1;
-			Projectile.minionSlots = 1;
+			Projectile.minionSlots = 0.25f;
             Projectile.aiStyle = -1;
         }
 
@@ -72,6 +75,9 @@ namespace Spooky.Content.Projectiles.Sentient
             {
 				Projectile.timeLeft = 2;
 			}
+
+            //prevents this from getting stuck on sloped tiles
+            Collision.StepUp(ref Projectile.position, ref Projectile.velocity, Projectile.width, Projectile.height, ref Projectile.stepSpeed, ref Projectile.gfxOffY);
 
             //target an enemy
             for (int i = 0; i < Main.maxNPCs; i++)
@@ -137,6 +143,8 @@ namespace Spooky.Content.Projectiles.Sentient
 
         public void AttackingAI(NPC target)
 		{
+            isAttacking = true;
+
             Projectile.tileCollide = true;
 
             Projectile.rotation = 0;
@@ -151,7 +159,6 @@ namespace Spooky.Content.Projectiles.Sentient
             }
 
             Projectile.velocity.Y += 0.35f;
-
             if (Projectile.velocity.Y > 15f)
             {
                 Projectile.velocity.Y = 15f;
@@ -165,10 +172,6 @@ namespace Spooky.Content.Projectiles.Sentient
                 Projectile.velocity.X = 0;
 
                 Projectile.frameCounter++;
-                if (Projectile.frame < 6)
-                {
-                    Projectile.frame = 5;
-                }
                 if (Projectile.frameCounter > 5)
                 {
                     Projectile.frame++;
@@ -182,12 +185,14 @@ namespace Spooky.Content.Projectiles.Sentient
                 Projectile.ai[0]++;
                 if (Projectile.ai[0] % 30 == 0)
                 {
+                    SoundEngine.PlaySound(SoundID.NPCDeath9 with { Pitch = -1f }, Projectile.Center);
+
                     Vector2 ShootSpeed = target.Center - Projectile.Center;
                     ShootSpeed.Normalize();
-                    ShootSpeed *= 20f;
+                    ShootSpeed *= 25f;
 
                     int SpitProj = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center.X, Projectile.Center.Y - 10, 
-                    ShootSpeed.X, ShootSpeed.Y, ModContent.ProjectileType<SentientOpticStaffTear1>(), Projectile.damage / 2, 2f, Projectile.owner);
+                    ShootSpeed.X, ShootSpeed.Y, ModContent.ProjectileType<SentientOpticStaffTear1>(), Projectile.damage, 2f, Projectile.owner);
                     Main.projectile[SpitProj].tileCollide = false;
                 }
             }
@@ -276,7 +281,7 @@ namespace Spooky.Content.Projectiles.Sentient
                     Projectile.velocity.Y = 0f;
                 }
 
-                if (playerDistance > 160f)
+                if (playerDistance > 120f)
                 {
                     if (player.position.X - Projectile.position.X > 0f)
                     {
@@ -296,17 +301,17 @@ namespace Spooky.Content.Projectiles.Sentient
                     }
                 }
 
-                if (playerDistance < 150f)
+                if (playerDistance < 110f)
                 {
                     if (Projectile.velocity.X != 0f)
                     {
                         if (Projectile.velocity.X > 0.8f)
                         {
-                            Projectile.velocity.X -= 0.1f;
+                            Projectile.velocity.X -= 0.25f;
                         }
                         else if (Projectile.velocity.X < -0.8f)
                         {
-                            Projectile.velocity.X += 0.1f;
+                            Projectile.velocity.X += 0.25f;
                         }
                         else if (Projectile.velocity.X < 0.8f && Projectile.velocity.X > -0.8f)
                         {

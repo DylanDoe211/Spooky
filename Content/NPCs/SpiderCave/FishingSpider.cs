@@ -12,7 +12,7 @@ using System.IO;
 using System.Collections.Generic;
 
 using Spooky.Core;
-using Spooky.Content.Items.SpiderCave.Misc;
+using Spooky.Content.Items.Fishing;
 
 namespace Spooky.Content.NPCs.SpiderCave
 {
@@ -134,6 +134,11 @@ namespace Spooky.Content.NPCs.SpiderCave
 				NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
 			}
 		}
+
+		public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FishingSpiderRod>(), 8));
+        }
 
 		public override void HitEffect(NPC.HitInfo hit) 
         {

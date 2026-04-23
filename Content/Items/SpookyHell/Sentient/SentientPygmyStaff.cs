@@ -12,11 +12,9 @@ namespace Spooky.Content.Items.SpookyHell.Sentient
 {
     public class SentientPygmyStaff : ModItem, ICauldronOutput
     {
-        int numUses = 0;
-
         public override void SetDefaults()
         {
-            Item.damage = 70;
+            Item.damage = 42;
             Item.mana = 30;
 			Item.DamageType = DamageClass.Summon;
             Item.autoReuse = true;
@@ -32,45 +30,20 @@ namespace Spooky.Content.Items.SpookyHell.Sentient
             Item.UseSound = SoundID.Item79;
             Item.buffType = ModContent.BuffType<GoblinoidBuff>();
 			Item.shoot = ModContent.ProjectileType<SentientGoblinFlyMouth>();
-            Item.shootSpeed = 0f;
+            Item.shootSpeed = 4f;
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-            Vector2 offset = Vector2.Zero;
-
-            switch (numUses)
-            {
-                case 0:
-                {
-                    type = ModContent.ProjectileType<SentientGoblinFlyMouth>();
-                    numUses++;
-                    break;
-                }
-                case 1:
-                {
-                    type = ModContent.ProjectileType<SentientGoblinSpit>();
-                    offset = new Vector2(0, -15);
-                    numUses++;
-                    break;
-                }
-                case 2:
-                {
-                    type = ModContent.ProjectileType<SentientGoblinTiny>();
-                    numUses++;
-                    break;
-                }
-                case 3:
-                {
-                    type = ModContent.ProjectileType<SentientGoblinFlyEye>();
-                    numUses = 0;
-                    break;
-                }
-            }
-
             player.AddBuff(Item.buffType, 2);
 
-            var projectile = Projectile.NewProjectileDirect(source, position + offset, velocity, type, damage, knockback, player.whoAmI);
+            var projectile = Projectile.NewProjectileDirect(source, position, velocity, ModContent.ProjectileType<SentientGoblinFlyMouth>(), damage, knockback, player.whoAmI);
+            projectile.originalDamage = Item.damage;
+            projectile = Projectile.NewProjectileDirect(source, position - new Vector2(0, 15), velocity, ModContent.ProjectileType<SentientGoblinSpit>(), damage, knockback, player.whoAmI);
+            projectile.originalDamage = Item.damage;
+            projectile = Projectile.NewProjectileDirect(source, position, velocity, ModContent.ProjectileType<SentientGoblinTiny>(), damage, knockback, player.whoAmI);
+            projectile.originalDamage = Item.damage;
+            projectile = Projectile.NewProjectileDirect(source, position, velocity, ModContent.ProjectileType<SentientGoblinFlyEye>(), damage, knockback, player.whoAmI);
             projectile.originalDamage = Item.damage;
 
 			return false;

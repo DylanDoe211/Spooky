@@ -24,8 +24,8 @@ namespace Spooky.Content.Items.Minibiomes.Desert
 			Item.channel = true;
             Item.width = 40;
             Item.height = 40;
-            Item.useTime = 25;
-			Item.useAnimation = 25;
+            Item.useTime = 20;
+			Item.useAnimation = 20;
 			Item.useStyle = ItemUseStyleID.Swing;
 			Item.knockBack = 6;
             Item.rare = ItemRarityID.Blue;

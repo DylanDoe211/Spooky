@@ -5,6 +5,7 @@ using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using System.Collections.Generic;
 
+using Spooky.Content.Items.SpiderCave;
 using Spooky.Content.Items.SpiderCave.Misc;
 
 namespace Spooky.Content.NPCs.SpiderCave
@@ -92,6 +93,12 @@ namespace Spooky.Content.NPCs.SpiderCave
 				new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.SpiderCaveBiome>().ModBiomeBestiaryInfoElement)
 			});
 		}
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SpiderChitin>(), 3, 1, 3));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<AntSpiderBoomerang>(), 8));
+        }
 
         public override void HitEffect(NPC.HitInfo hit) 
         {

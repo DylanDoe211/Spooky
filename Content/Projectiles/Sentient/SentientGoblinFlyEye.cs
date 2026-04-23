@@ -34,13 +34,15 @@ namespace Spooky.Content.Projectiles.Sentient
 			Projectile.width = 60;
             Projectile.height = 34;
             Projectile.DamageType = DamageClass.Summon;
+            Projectile.localNPCHitCooldown = 40;
+            Projectile.usesLocalNPCImmunity = true;
 			Projectile.minion = true;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.netImportant = true;
             Projectile.timeLeft = 2;
-            Projectile.minionSlots = 1;
+            Projectile.minionSlots = 0.25f;
             Projectile.penetrate = -1;
         }
 
@@ -159,7 +161,7 @@ namespace Spooky.Content.Projectiles.Sentient
 
             //shoot down tears
             Projectile.ai[0]++;
-            if (Projectile.ai[0] % 15 == 0)
+            if (Projectile.ai[0] % 10 == 0)
             {
                 //SoundEngine.PlaySound(EyePopSound, Projectile.Center);
 

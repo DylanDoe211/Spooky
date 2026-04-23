@@ -18,6 +18,8 @@ namespace Spooky.Content.Projectiles.Sentient
         bool Charging = false;
         bool isAttacking = false;
 
+        Vector2 GoToOffset;
+
         private static Asset<Texture2D> GlowTexture;
         private static Asset<Texture2D> ProjTexture;
 
@@ -33,14 +35,21 @@ namespace Spooky.Content.Projectiles.Sentient
 			Projectile.width = 42;
             Projectile.height = 36;
             Projectile.DamageType = DamageClass.Summon;
+            Projectile.localNPCHitCooldown = 40;
+            Projectile.usesLocalNPCImmunity = true;
 			Projectile.minion = true;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.netImportant = true;
             Projectile.timeLeft = 2;
-            Projectile.minionSlots = 1;
+            Projectile.minionSlots = 0.25f;
             Projectile.penetrate = -1;
+        }
+
+        public override bool? CanDamage()
+        {
+            return Charging;
         }
 
         public override void AI()
@@ -151,13 +160,17 @@ namespace Spooky.Content.Projectiles.Sentient
 
             Projectile.ai[1]++;
 
-            //go to the side of the target to prepare for dashing
-            if (Projectile.ai[1] < 30)
+            if (Projectile.ai[1] == 1)
             {
-                Vector2 GoTo = target.Center;
-                GoTo.X += (Projectile.Center.X < target.Center.X) ? -135 : 135;
+                GoToOffset = target.Center + new Vector2(150, 0).RotatedByRandom(360);
+            }
 
-                float vel = MathHelper.Clamp(Projectile.Distance(GoTo) / 12, 12, 25);
+            //go to the side of the target to prepare for dashing
+            if (Projectile.ai[1] > 1 && Projectile.ai[1] < 30)
+            {
+                Vector2 GoTo = GoToOffset;
+
+                float vel = MathHelper.Clamp(Projectile.Distance(GoTo) / 12, 15, 35);
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(GoTo) * vel, 0.08f);
             }
 
@@ -169,21 +182,19 @@ namespace Spooky.Content.Projectiles.Sentient
                 saveDirection = Projectile.spriteDirection;
 
                 //set frame to charging immediately 
-                Projectile.frame = 5;
+                Projectile.frame = 3;
                 
                 Vector2 ChargeSpeed = target.Center - Projectile.Center;
                 ChargeSpeed.Normalize();
 
-                ChargeSpeed.X *= 25;
-                ChargeSpeed.Y *= 12;
-                Projectile.velocity.X = ChargeSpeed.X;
-                Projectile.velocity.Y = ChargeSpeed.Y;
+                ChargeSpeed *= 25;
+                Projectile.velocity = ChargeSpeed;
             }
 
             //slow down at the end of the charge
             if (Projectile.ai[1] >= 40)
             {
-                Projectile.velocity *= 0.7f;
+                Projectile.velocity *= 0.75f;
             }
 
             //loop ai

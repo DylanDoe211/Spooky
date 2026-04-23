@@ -1458,6 +1458,11 @@ PumpkinBobber: {
 	Tooltip: Increases fishing power by 10
 }
 
+FishingSpiderRod: {
+	DisplayName: Fishing Spider Rod
+	Tooltip: Requires bait to catch fish
+}
+
 GourdFish: {
 	DisplayName: Moldy Gourd Fish
 	Tooltip: "'Caught in Spooky Forest'"
@@ -2844,6 +2849,15 @@ TrackingCrossbow: {
 	Tooltip: Fires out homing bolts that stick to enemies
 }
 
+AntSpiderBoomerang: {
+	DisplayName: Ant Spider Head
+	Tooltip:
+		'''
+		Throw a returning ant spider head with sharp mandibles
+		Slashes enemies it hits multiple times
+		'''
+}
+
 GlaggleOrb: {
 	DisplayName: Glaggle Orb
 	Tooltip:
@@ -3844,8 +3858,9 @@ SentientPygmyStaff: {
 	DisplayName: Goblinoid Staff
 	Tooltip:
 		'''
-		Summons various goblinoids with different abilities
-		'Goblinoids are deranged, but very loyal'
+		Summons a group of 4 goblinoids, each with different abilities
+		Each group only counts as one minion
+		'DO NOT feed them after midnight!'
 		'''
 }
 

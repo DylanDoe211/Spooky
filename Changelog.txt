@@ -29,8 +29,8 @@ Old Hunter Overhaul:
 -Old hunter is now revived by finding his corpse in his house deep in the spider grotto, and bringing back his soul which has been locked away in the lower catacombs in a certain ghostly chest
 -Old hunter no longer moves into houses like regular town npcs, you will now need to visit him in his ruined house at the bottom of the spider grotto
 -In hardmode, you can find various rare powerful enemies that spawn in the different spooky mod biomes, which each drop a special item you can give to the old hunter for unique rewards
--These special materials do not work like little eyes quests, you can just find the enemies as soon as you get into hardmode, kill them, and give the special items to the old hunter whenever you like (Maybe scrap this before release)
--Old hunter will also give you hints on where you can find these enemies when you talk to him
+-These enemies do not work like little eye enemies as you do not need a spawn item, you can just find the enemies, kill them, and give the special items to the old hunter whenever you like
+-Old hunter will also give you hints on where you can find all of these enemies when you talk to him, if you have not completed that corresponding quest
 
 Slingshots Overhaul:
 -Slingshots are now a unique subclass of slow but high damage ranged weapons that come with a ton of unique 
@@ -163,7 +163,7 @@ Miscellaneous Changes:
 -Big bone and daffodils arenas now inflict creative shock while you are in them to prevent placing blocks as it can mess with their attacks
 
 
-~Bugs And Other Fixes~
+~Fixes~
 
 Bug, Issue, and Oversight Fixes:
 -Spooky mod sofas/benches and clocks not having smart cursor outline highlights
@@ -175,9 +175,9 @@ Bug, Issue, and Oversight Fixes:
 -Freaky fertilizer being consumed on use if you were too far away from big bones flower pot
 -Biothrusters hovering not working if you were wearing a different pair of wings in your vanity, and its hover moving you upward super slowly instead of moving you in a straight line with no vertical change
 -Poker pineapple bloom increasing critical strike damage by a horribly incorrect value of 135% instead of 35%
--Flesh bolsters not dropping living arteries after orro-boro have been defeated
+-Flesh bolsters not dropping living arteries after orro & boro have been defeated
 -Little eye randomly disappearing for some players
--Terrazinosaurus arm teleporting the player out of the world
+-Terrazinosaurus arm grappling hook teleporting the player out of the world
 -Poison crossbow using 2 ammo per use
 -Tiny ghost critters bestiary background being way too dark
 -Cemetery screen color tint being applied while in the catacombs

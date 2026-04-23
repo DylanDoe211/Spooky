@@ -32,6 +32,8 @@ namespace Spooky.Content.Projectiles.Sentient
             Projectile.width = 28;
 			Projectile.height = 22;
             Projectile.DamageType = DamageClass.Summon;
+            Projectile.localNPCHitCooldown = 40;
+            Projectile.usesLocalNPCImmunity = true;
 			Projectile.minion = true;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
@@ -39,9 +41,21 @@ namespace Spooky.Content.Projectiles.Sentient
             Projectile.netImportant = true;
             Projectile.timeLeft = 2;
             Projectile.penetrate = -1;
-			Projectile.minionSlots = 1;
+			Projectile.minionSlots = 0.25f;
             Projectile.aiStyle = -1;
         }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) 
+        {
+            Projectile.velocity.X = -Projectile.velocity.X / 4;
+            Projectile.velocity.Y = -10;
+            Projectile.ai[1]++;
+        }
+
+        public override bool? CanDamage()
+		{
+			return Projectile.ai[1] <= 0;
+		}
 
         public override bool OnTileCollide(Vector2 oldVelocity)
 		{
@@ -169,12 +183,6 @@ namespace Spooky.Content.Projectiles.Sentient
 
                 Vector2 desiredVelocity = Projectile.DirectionTo(target.Center) * 35f;
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, desiredVelocity, 1f / 20);
-
-                if (Projectile.Hitbox.Intersects(target.Hitbox))
-                {
-                    Projectile.velocity = -Projectile.velocity / 2;
-                    Projectile.ai[1]++;
-                }
             }
             else
             {
@@ -186,10 +194,16 @@ namespace Spooky.Content.Projectiles.Sentient
                     Projectile.velocity.Y += 0.35f;
                 }
 
-                if (Collision.SolidTilesVersatile((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.X) / 16, (int)Projectile.Bottom.Y / 16, (int)Projectile.Bottom.Y / 16 + 3))
+                Projectile.ai[0]++;
+                if (Projectile.velocity.Y > 0 && Collision.SolidTilesVersatile((int)(Projectile.Center.X / 16f), (int)(Projectile.Center.X) / 16, (int)Projectile.Bottom.Y / 16, (int)Projectile.Bottom.Y / 16 + 3))
                 {
-                    Projectile.ai[0] = 0;
-                    Projectile.ai[1] = 0;
+                    Projectile.velocity.X = 0;
+
+                    if (Projectile.ai[0] >= 20)
+                    {
+                        Projectile.ai[0] = 0;
+                        Projectile.ai[1] = 0;
+                    }
                 }
             }
         }
