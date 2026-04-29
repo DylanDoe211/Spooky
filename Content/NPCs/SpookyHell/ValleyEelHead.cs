@@ -253,7 +253,7 @@ namespace Spooky.Content.NPCs.SpookyHell
                         //charge at the player
                         if (NPC.localAI[0] == 50)
                         {
-                            SoundEngine.PlaySound(SoundID.Zombie7 with { Pitch = -0.5f }, NPC.Center);
+                            SoundEngine.PlaySound(SoundID.Zombie5 with { Volume = 1.5f }, NPC.Center);
 
                             Vector2 ChargeDirection = player.Center - NPC.Center;
                             ChargeDirection.Normalize();
@@ -335,7 +335,7 @@ namespace Spooky.Content.NPCs.SpookyHell
                     //charge at the player
                     if (NPC.localAI[0] == 60)
                     {
-                        SoundEngine.PlaySound(SoundID.Zombie7 with { Pitch = -0.5f }, NPC.Center);
+                        SoundEngine.PlaySound(SoundID.Zombie5 with { Pitch = -0.5f, Volume = 2f }, NPC.Center);
 
                         Vector2 ChargeDirection = player.Center - NPC.Center;
                         ChargeDirection.Normalize(); 
@@ -381,7 +381,7 @@ namespace Spooky.Content.NPCs.SpookyHell
                     //charge again after circling
                     if (NPC.localAI[0] == 300)
                     {
-                        SoundEngine.PlaySound(SoundID.Zombie7 with { Pitch = -0.5f }, NPC.Center);
+                        SoundEngine.PlaySound(SoundID.Zombie5 with { Pitch = -0.75f, Volume = 2f }, NPC.Center);
 
                         Vector2 ChargeDirection = SavePlayerPosition - NPC.Center;
                         ChargeDirection.Normalize(); 

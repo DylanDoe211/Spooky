@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.Audio;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -86,6 +87,21 @@ namespace Spooky.Content.NPCs.Quest
 
             var effects = NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
+			if (NPC.localAI[0] >= 360)
+			{
+				//draw aura
+				for (int i = 0; i < 360; i += 60)
+				{
+					Color color = new Color(125 - NPC.alpha, 125 - NPC.alpha, 125 - NPC.alpha, 0).MultiplyRGBA(Color.Gold);
+
+					Vector2 circular = new Vector2(Main.rand.NextFloat(3.5f, 7f), 0).RotatedBy(MathHelper.ToRadians(i));
+
+					Vector2 offset = new Vector2(-2 * NPC.direction, 7);
+
+					Main.EntitySpriteDraw(GlowTexture.Value, NPC.Center + offset + circular - screenPos, NPC.frame, color * 0.75f, NPC.rotation, NPC.frame.Size() / 2, NPC.scale * 1.05f, effects, 0);
+				}
+			}
+
             Main.EntitySpriteDraw(GlowTexture.Value, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 4), 
             NPC.frame, Color.White, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
         }
@@ -117,13 +133,13 @@ namespace Spooky.Content.NPCs.Quest
             NPC.TargetClosest(true);
             Player player = Main.player[NPC.target];
 
-            NPC.spriteDirection = NPC.direction = NPC.velocity.X <= 0 ? -1 : 1;
-
 			switch ((int)NPC.ai[0])
 			{
 				//standing still
 				case 0:
 				{
+					NPC.spriteDirection = NPC.direction = NPC.velocity.X <= 0 ? -1 : 1;
+
 					NPC.noGravity = false;
 					NPC.noTileCollide = false;
 
@@ -149,7 +165,34 @@ namespace Spooky.Content.NPCs.Quest
 					bool IncreaseFallSpeed = false;
 					bool HasLineOfSight = Collision.CanHitLine(player.position, player.width, player.height, NPC.position, NPC.width, NPC.height);
 
-					MoveBackAndFourth(player.Center, 5f, 0.65f, 150);
+					NPC.localAI[0]++;
+					if (NPC.localAI[0] <= 360)
+					{
+						NPC.spriteDirection = NPC.direction = NPC.velocity.X <= 0 ? -1 : 1;
+
+						MoveBackAndFourth(player.Center, 5f, 0.15f, 200);
+					}
+					else
+					{
+						NPC.velocity.X = 0;
+
+						NPC.spriteDirection = NPC.direction;
+
+						if (NPC.localAI[0] >= 420 && NPC.localAI[0] % 30 == 0)
+						{
+							SoundEngine.PlaySound(SoundID.Item4 with { Pitch = -1f }, NPC.Center);
+
+							Vector2 newVelocity = new Vector2(0, -10).RotatedByRandom(MathHelper.ToRadians(45));
+
+							NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center + new Vector2(25 * NPC.direction, -58), newVelocity, ModContent.ProjectileType<ChristmasTreeStar>(), NPC.damage, 4.5f);
+						}
+
+						if (NPC.localAI[0] >= 629)
+						{
+							NPC.localAI[0] = 0;
+							NPC.netUpdate = true;
+						}
+					}
 
 					if (NPC.position.X < player.position.X && NPC.position.X + (float)NPC.width > player.position.X + (float)player.width &&
 					NPC.position.Y + (float)NPC.height < player.position.Y + (float)player.height - 16f)
@@ -158,7 +201,7 @@ namespace Spooky.Content.NPCs.Quest
 					}
 					if (IncreaseFallSpeed)
 					{
-						NPC.velocity.Y += 0.5f;
+						NPC.velocity.Y += 0.75f;
 					}
 					else if (Collision.SolidCollision(NPCCollisionPos, CollideWidth, CollideHeight) && !HasLineOfSight && NPC.Bottom.Y < player.Top.Y)
 					{
@@ -206,12 +249,6 @@ namespace Spooky.Content.NPCs.Quest
 
 					break;
 				}
-
-				//shoot stars out of the star on top
-				case 2:
-				{	
-					break;
-				}
 			}
 		}
 
@@ -226,7 +263,7 @@ namespace Spooky.Content.NPCs.Quest
 
             if (CenterDistance > Distance)
             {
-                if (Center.X - NPC.position.X > 0f)
+                if (Center.X - NPC.Center.X > 0f)
                 {
                     NPC.velocity.X += Acceleration;
                     if (NPC.velocity.X > MaxSpeed)

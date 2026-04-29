@@ -14,7 +14,7 @@ namespace Spooky.Content.Items.Minibiomes.Vegetable
     {
         public override void SetDefaults()
         {
-            Item.damage = 30;
+            Item.damage = 45;
 			Item.mana = 20;
             Item.DamageType = DamageClass.Summon;
 			Item.noMelee = true;
@@ -26,14 +26,14 @@ namespace Spooky.Content.Items.Minibiomes.Vegetable
             Item.useStyle = ItemUseStyleID.Swing;
 			Item.knockBack = 3;
             Item.rare = ItemRarityID.LightRed;
-            Item.value = Item.buyPrice(gold: 5);
+            Item.value = Item.buyPrice(gold: 15);
             Item.UseSound = SoundID.NPCDeath52 with { Volume = 0.5f, Pitch = 1f };
             Item.buffType = ModContent.BuffType<GhostPepperMinionBuff>();
 			Item.shoot = ModContent.ProjectileType<GhostPepperMinionTier1>();
             Item.shootSpeed = 7f;
         }
 
-		public void FindAndUpgradeMinion(EntitySource_ItemUse_WithAmmo source, Player player, int TypeToCheckFor, int TypeToSpawn)
+		public void FindAndUpgradeMinion(EntitySource_ItemUse_WithAmmo source, Player player, int TypeToCheckFor, int TypeToSpawn, int Damage)
 		{
 			if (!CanSpawnMinion(player))
 			{
@@ -54,8 +54,8 @@ namespace Spooky.Content.Items.Minibiomes.Vegetable
 							Main.dust[DustGore].position.Y += Main.rand.Next(-50, 51) * 0.05f - 1.5f;
 						}
 
-						var projectile = Projectile.NewProjectileDirect(source, proj.Center, proj.velocity, TypeToSpawn, (int)(proj.damage * 1.02f), proj.knockBack, player.whoAmI);
-						projectile.originalDamage = (int)(proj.damage * 1.02f);
+						var projectile = Projectile.NewProjectileDirect(source, proj.Center, proj.velocity, TypeToSpawn, Damage, proj.knockBack, player.whoAmI);
+						projectile.originalDamage = Damage;
 
 						proj.Kill();
 
@@ -65,6 +65,7 @@ namespace Spooky.Content.Items.Minibiomes.Vegetable
 			}
 		}
 
+		//check for one available minion slot to make sure theres enough slots for the next upgrade to be summoned
 		public bool CanSpawnMinion(Player player)
 		{
 			float foundSlotsCount = 0;
@@ -96,20 +97,20 @@ namespace Spooky.Content.Items.Minibiomes.Vegetable
 				var projectile  = Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI);
 				projectile.originalDamage = Item.damage;
 			}
-			//upgrade to tier 2, check for one minion slot only since the existing ghost pepper will be taking up slots equal to one less than its upgrade
+			//upgrade to tier 2
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<GhostPepperMinionTier1>()] > 0)
 			{
-				FindAndUpgradeMinion(source, player, ModContent.ProjectileType<GhostPepperMinionTier1>(), ModContent.ProjectileType<GhostPepperMinionTier2>());
+				FindAndUpgradeMinion(source, player, ModContent.ProjectileType<GhostPepperMinionTier1>(), ModContent.ProjectileType<GhostPepperMinionTier2>(), (int)(Item.damage * 1.1f));
 			}
 			//upgrade to tier 3
 			else if (player.ownedProjectileCounts[ModContent.ProjectileType<GhostPepperMinionTier2>()] > 0)
 			{
-				FindAndUpgradeMinion(source, player, ModContent.ProjectileType<GhostPepperMinionTier2>(), ModContent.ProjectileType<GhostPepperMinionTier3>());
+				FindAndUpgradeMinion(source, player, ModContent.ProjectileType<GhostPepperMinionTier2>(), ModContent.ProjectileType<GhostPepperMinionTier3>(), (int)(Item.damage * 1.3f));
 			}
 			//upgrade to tier 4
 			else if (player.ownedProjectileCounts[ModContent.ProjectileType<GhostPepperMinionTier3>()] > 0)
 			{
-				FindAndUpgradeMinion(source, player, ModContent.ProjectileType<GhostPepperMinionTier3>(), ModContent.ProjectileType<GhostPepperMinionTier4>());
+				FindAndUpgradeMinion(source, player, ModContent.ProjectileType<GhostPepperMinionTier3>(), ModContent.ProjectileType<GhostPepperMinionTier4>(), (int)(Item.damage * 1.5f));
 			}
 
 			return false;

@@ -44,7 +44,7 @@ namespace Spooky.Content.NPCs.SpiderCave
 			NPC.width = 30;
 			NPC.height = 30;
             NPC.npcSlots = 1f;
-			NPC.knockBackResist = 0f;
+			NPC.knockBackResist = 0.75f;
 			NPC.value = Item.buyPrice(0, 0, 1, 0);
 			NPC.noGravity = true;
 			NPC.noTileCollide = false;

@@ -757,7 +757,7 @@ namespace Spooky.Content.NPCs.Boss.OldHunter
                                     case 6:
                                     {
                                         AmmoToShoot = ModContent.ProjectileType<SlingshotSpikeBall>();
-                                        ProjSpeed = 12f;
+                                        ProjSpeed = Main.rand.NextFloat(10f, 16f);
                                         break;
                                     }
                                 }

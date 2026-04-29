@@ -44,7 +44,7 @@ namespace Spooky.Content.NPCs.Quest
             NPC.height = 40;
             NPC.npcSlots = 2f;
             NPC.knockBackResist = 0.1f;
-            NPC.value = Item.buyPrice(0, 0, 5, 0);
+            NPC.value = Item.buyPrice(0, 0, 10, 0);
             NPC.immortal = true;
             NPC.dontTakeDamage = true;
             NPC.noGravity = true;

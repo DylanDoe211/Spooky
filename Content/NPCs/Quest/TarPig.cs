@@ -43,7 +43,7 @@ namespace Spooky.Content.NPCs.Quest
 			NPC.height = 96;
             NPC.npcSlots = 1f;
 			NPC.knockBackResist = 0f;
-            NPC.value = Item.buyPrice(0, 0, 0, 50);
+            NPC.value = Item.buyPrice(0, 0, 10, 0);
             NPC.noGravity = true;
             NPC.noTileCollide = false;
 			NPC.HitSound = SoundID.Item95 with { Volume = 0.8f, Pitch = 1f };

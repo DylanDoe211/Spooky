@@ -24,7 +24,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Vegetable
 			Projectile.width = 20;
             Projectile.height = 56;
             Projectile.DamageType = DamageClass.Summon;
-            Projectile.localNPCHitCooldown = 45;
+            Projectile.localNPCHitCooldown = 20;
             Projectile.usesLocalNPCImmunity = true;
 			Projectile.minion = true;
             Projectile.friendly = true;
@@ -237,7 +237,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Vegetable
 			Projectile.width = 28;
             Projectile.height = 62;
             Projectile.DamageType = DamageClass.Summon;
-            Projectile.localNPCHitCooldown = 45;
+            Projectile.localNPCHitCooldown = 20;
             Projectile.usesLocalNPCImmunity = true;
 			Projectile.minion = true;
             Projectile.friendly = true;
@@ -257,7 +257,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Vegetable
 			Projectile.width = 38;
             Projectile.height = 92;
             Projectile.DamageType = DamageClass.Summon;
-            Projectile.localNPCHitCooldown = 45;
+            Projectile.localNPCHitCooldown = 20;
             Projectile.usesLocalNPCImmunity = true;
 			Projectile.minion = true;
             Projectile.friendly = true;
@@ -277,7 +277,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Vegetable
 			Projectile.width = 62;
             Projectile.height = 120;
             Projectile.DamageType = DamageClass.Summon;
-            Projectile.localNPCHitCooldown = 45;
+            Projectile.localNPCHitCooldown = 20;
             Projectile.usesLocalNPCImmunity = true;
 			Projectile.minion = true;
             Projectile.friendly = true;

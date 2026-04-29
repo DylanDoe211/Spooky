@@ -108,6 +108,7 @@ namespace Spooky.Core
         public bool KrampusResolution = false;
         public bool KrampusShapeBox = false;
         public bool HallucigeniaSpine = false;
+        public bool PeacockSpiderMask = false;
 
 		//expert accessories
 		public bool FlyAmulet = false;
@@ -327,6 +328,7 @@ namespace Spooky.Core
             KrampusResolution = false;
             KrampusShapeBox = false;
             HallucigeniaSpine = false;
+            PeacockSpiderMask = false;
 
 			//expert accessories
 			FlyAmulet = false;
@@ -881,6 +883,18 @@ namespace Spooky.Core
 					currentAmount++;
 				}
             }
+
+            //inflict peacock mask debuff on nearby enemies
+			if (PeacockSpiderMask)
+			{
+				foreach (NPC npc in Main.ActiveNPCs)
+				{
+                    if (npc.Distance(Player.Center) <= 600)
+                    {
+                        npc.AddBuff(ModContent.BuffType<PeacockSpiderMaskDebuff>(), 300);
+                    }
+				}
+			}
 
             //when you get hit, krampus chimney charge resets
             if (KrampusChimney)

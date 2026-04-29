@@ -94,7 +94,7 @@ namespace Spooky.Content.Items.Cemetery
                     }
                 }
 
-                SoundEngine.PlaySound(SoundID.Item103, position);
+                SoundEngine.PlaySound(SoundID.Item103 with { Volume = 0.5f }, position);
 
                 Vector2 direction = mouse - position;
                 direction.Normalize();

@@ -287,12 +287,18 @@ namespace Spooky.Core
                     {
                         pool.Add(ModContent.NPCType<Bungus>(), 3);
                         pool.Add(ModContent.NPCType<Chungus>(), 3);
+
+						//do not spawn chudshrooms if one already exists
+						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<Chudshroom>()))
+						{
+							pool.Add(ModContent.NPCType<Chudshroom>(), 0.35f);
+						}
                     }
 
 					//hardmode enemies
 					if (Main.hardMode)
 					{
-						pool.Add(ModContent.NPCType<CandleMonster>(), 2);
+						pool.Add(ModContent.NPCType<CandleMonster>(), 3);
 						pool.Add(ModContent.NPCType<SinisterSnail>(), 2);
 					}
                 }
@@ -343,7 +349,7 @@ namespace Spooky.Core
 						}
 
 						//do not spawn harold if he already exists
-						if (Flags.downedOldHunter && Main.hardMode && !NPC.AnyNPCs(ModContent.NPCType<Harold>()))
+						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<Harold>()))
 						{
 							pool.Add(ModContent.NPCType<Harold>(), 0.5f);
 						}

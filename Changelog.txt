@@ -121,6 +121,7 @@ Enemy/Boss:
 -Lowered the volume on ear worms screeching sound
 -Aortic eel now has a better growling sound
 -Changed the sound effects for biojetter scream, crux bat scream, and tongue biter scream to be less loud and annoying
+-Hardmode spider grotto enemies now drop spider chitin
 
 World Generation:
 -Rotten depths now accounts for having both calamity and thorium on at the same time, if both are on the rotten depths will generate next to the sulphur sea, with its tunnel connecting to the sulphur sea caves
@@ -181,6 +182,7 @@ Bug, Issue, and Oversight Fixes:
 -Poison crossbow using 2 ammo per use
 -Tiny ghost critters bestiary background being way too dark
 -Cemetery screen color tint being applied while in the catacombs
+-Ghost pepper scepter doing damage way too much, and fixed damage scaling not working properly
 
 Multiplayer Fixes:
 -Mysterious tombstone ghost ambushes not working correctly

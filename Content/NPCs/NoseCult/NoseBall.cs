@@ -82,7 +82,7 @@ namespace Spooky.Content.NPCs.NoseCult
         {
             if (NPC.life <= 0) 
             {
-                for (int numHeart = 0; numHeart < 8; numHeart++)
+                for (int numHeart = 0; numHeart < 3; numHeart++)
 				{
 					int newItem = Item.NewItem(NPC.GetSource_DropAsItem(), NPC.Hitbox, ItemID.Heart);
                     if (Main.netMode == NetmodeID.Server)
@@ -117,7 +117,7 @@ namespace Spooky.Content.NPCs.NoseCult
         {
             if (NPC.life <= 0) 
             {
-                for (int numHeart = 0; numHeart < 8; numHeart++)
+                for (int numHeart = 0; numHeart < 3; numHeart++)
 				{
 					int newItem = Item.NewItem(NPC.GetSource_DropAsItem(), NPC.Hitbox, ItemID.Heart);
                     if (Main.netMode == NetmodeID.Server)

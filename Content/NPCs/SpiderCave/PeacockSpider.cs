@@ -8,6 +8,7 @@ using System.IO;
 using System.Collections.Generic;
 
 using Spooky.Core;
+using Spooky.Content.Items.SpiderCave;
 using Spooky.Content.Items.SpiderCave.Misc;
 
 namespace Spooky.Content.NPCs.SpiderCave
@@ -261,7 +262,7 @@ namespace Spooky.Content.NPCs.SpiderCave
 
             if (CenterDistance > Distance)
             {
-                if (Center.X - NPC.position.X > 0f)
+                if (Center.X - NPC.Center.X > 0f)
                 {
                     NPC.velocity.X += Acceleration;
                     if (NPC.velocity.X > MaxSpeed)
@@ -329,6 +330,7 @@ namespace Spooky.Content.NPCs.SpiderCave
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<PeacockSpiderMask>(), 8));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SpiderChitin>(), 3, 1, 3));
         }
 
@@ -358,6 +360,11 @@ namespace Spooky.Content.NPCs.SpiderCave
 			});
 		}
 
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SpiderChitin>(), 3, 1, 3));
+        }
+
         public override void HitEffect(NPC.HitInfo hit) 
         {
             if (NPC.life <= 0) 
@@ -383,6 +390,11 @@ namespace Spooky.Content.NPCs.SpiderCave
                 new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.SpiderCaveBiome>().ModBiomeBestiaryInfoElement)
 			});
 		}
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SpiderChitin>(), 3, 1, 3));
+        }
 
         public override void HitEffect(NPC.HitInfo hit) 
         {

@@ -380,6 +380,11 @@ namespace Spooky.Core
 			{
 				modifiers.FinalDamage *= 1.25f;
 			}
+			//peacock spider intimidate makes enemies take 15% more damage
+			if (npc.HasBuff(ModContent.BuffType<PeacockSpiderMaskDebuff>()))
+			{
+				modifiers.FinalDamage *= 1.15f;
+			}
 		}
 
 		public override void OnKill(NPC npc)

@@ -729,3 +729,13 @@ GoblinoidBuff: {
 	DisplayName: Goblinoids
 	Description: The insane goblinoids will assist you in combat
 }
+
+WolfSpiderMinionBuff: {
+	DisplayName: Wolf Spider
+	Description: The wolf spider and its children will protect you
+}
+
+PeacockSpiderMaskDebuff: {
+	DisplayName: Peacock Spider Mask Debuff
+	Description: ""
+}

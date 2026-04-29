@@ -6,6 +6,7 @@ using Terraria.GameContent.ItemDropRules;
 using System.Collections.Generic;
 
 using Spooky.Content.Items.Pets;
+using Spooky.Content.Items.SpiderCave.Misc;
 
 namespace Spooky.Content.NPCs.SpiderCave
 {
@@ -75,6 +76,7 @@ namespace Spooky.Content.NPCs.SpiderCave
 
         public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SpiderChitin>(), 3, 1, 3));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<TrapdoorSpiderSaddle>(), 15));
         }
 
@@ -151,6 +153,7 @@ namespace Spooky.Content.NPCs.SpiderCave
 
         public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SpiderChitin>(), 3, 1, 3));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<TrapdoorSpiderSaddle>(), 8));
         }
 

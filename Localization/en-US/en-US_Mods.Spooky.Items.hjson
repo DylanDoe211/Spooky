@@ -2942,6 +2942,15 @@ OrbWeaverStaff: {
 	Tooltip: Summons an orb weaver spider sentry to shoot spikes around it
 }
 
+PeacockSpiderMask: {
+	DisplayName: Peacock Oni Mask
+	Tooltip:
+		'''
+		When you get hit, all nearby enemies will be intimidated
+		Intimidated enemies take more damage
+		'''
+}
+
 PheromoneWhip: {
 	DisplayName: Pheromone Stinger
 	Tooltip:
@@ -2955,6 +2964,11 @@ PheromoneWhip: {
 SphiderFlail: {
 	DisplayName: Swingable Sphider
 	Tooltip: Spits out web blobs while being swung
+}
+
+SpiderAntHead: {
+	DisplayName: Spider Ant Head
+	Tooltip: Its fangs can set enemies ablaze
 }
 
 SpiderCrossbow: {
@@ -3067,6 +3081,11 @@ VenomHarpoon: {
 		Fires out a venomous harpoon that can latch onto enemies and pull them towards you
 		If an enemy is caught and dragged back to you, the spiderpoon will shoot out venom spit
 		'''
+}
+
+WolfSpiderStaff: {
+	DisplayName: Wolf Spider Staff
+	Tooltip: Summons wolf spiders to fight with you
 }
 
 GourdBody: {

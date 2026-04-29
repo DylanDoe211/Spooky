@@ -11,6 +11,7 @@ using System.IO;
 using System.Collections.Generic;
 
 using Spooky.Content.Items.SpiderCave;
+using Spooky.Content.Items.SpiderCave.Misc;
 
 namespace Spooky.Content.NPCs.SpiderCave
 {
@@ -284,6 +285,11 @@ namespace Spooky.Content.NPCs.SpiderCave
             }
         }
 
+        public override void ModifyNPCLoot(NPCLoot npcLoot) 
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SpiderChitin>(), 3, 1, 3));
+        }
+
         public override void HitEffect(NPC.HitInfo hit) 
         {
             if (NPC.life <= 0) 
@@ -351,6 +357,7 @@ namespace Spooky.Content.NPCs.SpiderCave
 
         public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SpiderChitin>(), 3, 1, 3));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<TarantulaHawkBow>(), 8));
         }
 
@@ -421,6 +428,7 @@ namespace Spooky.Content.NPCs.SpiderCave
 
         public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SpiderChitin>(), 3, 1, 3));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<TatantulaFlyTome>(), 8));
         }
 
@@ -435,7 +443,7 @@ namespace Spooky.Content.NPCs.SpiderCave
                     switch (EnemyBeingCarried)
                     {
                         case 0:
-                        {   
+                        {
                             DroppedEnemy = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y + 50, ModContent.NPCType<JumpingSpider1>());
                             break;
                         }

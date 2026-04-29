@@ -180,7 +180,7 @@ namespace Spooky.Content.NPCs.EggEvent
                     //play sound, spawn aura
                     if (NPC.localAI[0] == 60)
                     {
-                        SoundEngine.PlaySound(SoundID.Zombie8 with { Pitch = 1f, Volume = 1f }, NPC.Center);
+                        SoundEngine.PlaySound(SoundID.Zombie8 with { Pitch = 0.75f, Volume = 0.65f }, NPC.Center);
 
                         NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center, Vector2.Zero, ModContent.ProjectileType<CruxAura>(), 0, 0f, ai0: NPC.whoAmI);
                     }
