@@ -20,6 +20,14 @@ namespace Spooky.Content.NPCs.SpookyBiome
         public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 2;
+
+			NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/TomatoPuttyBestiary",
+                Position = new Vector2(0f, -15f),
+                PortraitPositionXOverride = 0f,
+                PortraitPositionYOverride = -15f
+            };
 		}
 
 		public override void SetDefaults()
@@ -46,7 +54,7 @@ namespace Spooky.Content.NPCs.SpookyBiome
         {
 			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
             {
-				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.TomatoPutty1"),
+				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.TomatoPutty"),
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.BloodMoon,
 				new BestiaryBackgroundOverlay("Spooky/Content/Biomes/SpookyBiomeBloodMoon_Background", Color.White)
 			});
@@ -79,40 +87,76 @@ namespace Spooky.Content.NPCs.SpookyBiome
 
 	public class TomatoPutty2 : TomatoPutty1
 	{
-		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
+		public override void SetStaticDefaults()
         {
-			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
+			Main.npcFrameCount[NPC.type] = 2;
+            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
+        }
+
+		public override void HitEffect(NPC.HitInfo hit) 
+        {
+            if (NPC.life <= 0) 
             {
-				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.TomatoPutty2"),
-                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.BloodMoon,
-				new BestiaryBackgroundOverlay("Spooky/Content/Biomes/SpookyBiomeBloodMoon_Background", Color.White)
-			});
+				NPC BestiaryParent = new();
+                BestiaryParent.SetDefaults(ModContent.NPCType<TomatoPutty1>());
+                Main.BestiaryTracker.Kills.RegisterKill(BestiaryParent);
+
+                for (int numDusts = 0; numDusts < 20; numDusts++)
+                {
+                    int DustGore = Dust.NewDust(NPC.Center, 1, 1, DustID.TintableDust, 0f, 0f, 100, Color.Red, 1.25f);
+                    Main.dust[DustGore].velocity *= 1.2f;
+                }
+            }
 		}
 	}
 
 	public class TomatoPutty3 : TomatoPutty1
 	{
-		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
+		public override void SetStaticDefaults()
         {
-			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
+			Main.npcFrameCount[NPC.type] = 2;
+            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
+        }
+
+		public override void HitEffect(NPC.HitInfo hit) 
+        {
+            if (NPC.life <= 0) 
             {
-				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.TomatoPutty3"),
-                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.BloodMoon,
-				new BestiaryBackgroundOverlay("Spooky/Content/Biomes/SpookyBiomeBloodMoon_Background", Color.White)
-			});
+				NPC BestiaryParent = new();
+                BestiaryParent.SetDefaults(ModContent.NPCType<TomatoPutty1>());
+                Main.BestiaryTracker.Kills.RegisterKill(BestiaryParent);
+
+                for (int numDusts = 0; numDusts < 20; numDusts++)
+                {
+                    int DustGore = Dust.NewDust(NPC.Center, 1, 1, DustID.TintableDust, 0f, 0f, 100, Color.Red, 1.25f);
+                    Main.dust[DustGore].velocity *= 1.2f;
+                }
+            }
 		}
 	}
 
     public class TomatoPutty4 : TomatoPutty1
 	{
-		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
+		public override void SetStaticDefaults()
         {
-			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
+			Main.npcFrameCount[NPC.type] = 2;
+            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
+        }
+
+		public override void HitEffect(NPC.HitInfo hit) 
+        {
+            if (NPC.life <= 0) 
             {
-				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.TomatoPutty4"),
-                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.BloodMoon,
-				new BestiaryBackgroundOverlay("Spooky/Content/Biomes/SpookyBiomeBloodMoon_Background", Color.White)
-			});
+				NPC BestiaryParent = new();
+                BestiaryParent.SetDefaults(ModContent.NPCType<TomatoPutty1>());
+                Main.BestiaryTracker.Kills.RegisterKill(BestiaryParent);
+
+                for (int numDusts = 0; numDusts < 20; numDusts++)
+                {
+                    int DustGore = Dust.NewDust(NPC.Center, 1, 1, DustID.TintableDust, 0f, 0f, 100, Color.Red, 1.25f);
+                    Main.dust[DustGore].velocity *= 1.2f;
+                }
+            }
 		}
 	}
 }

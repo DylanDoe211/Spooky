@@ -54,6 +54,9 @@ namespace Spooky.Content.Items.Fishing.Crate
 
             itemLoot.Add(ItemDropRule.OneFromOptions(1, spookyChestDrops));
 
+			//unique bobber
+			itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<PumpkinBobber>(), 5));
+
 			//drop vanilla ores
 			IItemDropRule[] oreTypes = new IItemDropRule[] 
 			{

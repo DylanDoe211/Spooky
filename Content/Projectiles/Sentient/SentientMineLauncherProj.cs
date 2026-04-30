@@ -108,7 +108,7 @@ namespace Spooky.Content.Projectiles.Sentient
                         Vector2 newVelocity = ShootSpeed.RotatedByRandom(MathHelper.ToRadians(30));
 
                         Vector2 muzzleOffset = Vector2.Normalize(new Vector2(ShootSpeed.X, ShootSpeed.Y)) * 40f;
-                        if (!Collision.CanHit(ShootSpeed, 0, 0, ShootSpeed + muzzleOffset, 0, 0))
+                        if (!Collision.CanHit(player.Center, 0, 0, player.Center + muzzleOffset, 0, 0))
                         {
                             muzzleOffset = Vector2.Zero;
                         }

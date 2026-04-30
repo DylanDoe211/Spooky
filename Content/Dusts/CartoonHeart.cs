@@ -17,7 +17,7 @@ namespace Spooky.Content.Dusts
 
         public override Color? GetAlpha(Dust dust, Color lightColor)
         {
-			return Color.White * dust.scale;
+            return Color.White * (1f - (dust.alpha / 255f));
         }
 
         public override bool Update(Dust dust)
@@ -26,10 +26,13 @@ namespace Spooky.Content.Dusts
 			dust.velocity.Y -= 0.01f;
             dust.position.X += (float)Math.Sin(dust.velocity.X);
 			dust.position.Y += dust.velocity.Y;
-			dust.scale *= 0.975f;
+			dust.scale *= 0.985f;
 
-            if (dust.scale <= 0.1f)
+            dust.alpha += 3;
+            if (dust.alpha > 255)
+            {
                 dust.active = false;
+            }
 
             return false;
         }

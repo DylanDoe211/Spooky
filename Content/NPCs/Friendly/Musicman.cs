@@ -23,6 +23,13 @@ namespace Spooky.Content.NPCs.Friendly
             NPCID.Sets.ActsLikeTownNPC[Type] = true;
             NPCID.Sets.ShimmerTownTransform[Type] = false;
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
+
+            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
+			{
+                Position = new Vector2(0f, 10f),
+                PortraitPositionXOverride = 0f,
+                PortraitPositionYOverride = 10f
+            };
         }
 
         public override void SetDefaults()

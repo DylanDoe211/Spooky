@@ -149,8 +149,15 @@ TinyGhost2: Small nefarious apparitions that wander around and harass homeowners
 TinyGhostBoof: A more fancy and well mannered ghost who also smokes its little pipe.
 TinyGhostRare: It's a tiny ghost, but these ones are orange. They can be befriended if you can manage to find and catch one!
 TinyMushroom: Who knew that the mushrooms in the spooky forest could move? Well now you do!
+TomatoPutty: These significantly more aggressive putties gain their ketchup properties from the strange power during a blood moon. They are generally not edible though.
+TomatoPuttyFlying: The salsa putty is not actually made of salsa, it is just a very big ketchup putty that tumbled around on some grass. It uses small leaves to fly, albeit poorly.
+TomatoPuttyFlyingSmall: Its common for putties to split up into much smaller pieces. Unlike slime, putty is a lot firmer and can survive in pieces easier.
+TomatoRoman: The blood moons magic accelerates their growth and causes them to be really rowdy. They surprise those who step near them by jumping out of the ground, but they don't really think that far ahead...
+TomatoWorm: Granny's Tomato Soup™ used to be a popular soup brand around 50 years ago. Sadly the company went banktrupt after numerous incidents involving the owners tendency for witchcraft and mischief.
 Witch: As it turns out, the stories of evil witches are true. The death of the flesh wall has unleashed powerful spooky magic, allowing these wretched witches to live at night once again, throwing their toxic flasks at everyone.
 ZomboidArmored: The few times zomboids do something that seems smart, it usually comes back to bite them. This one was smart enough to make armor, but not smart enough to use a material that doesn't attract lightning.
+ZomboidBrute: Though referred to as brutes, they are actually more intelligent than it may seem. Their strength just comes from a very healthy workout routine. It is not recommended to try and ask them what it is.
+ZomboidBruteTomato: Like regular zomboids, the zomboid brutes also hide their heads inside a giant tomato. It seems to be a common phenomenon among zomboids, but it is unknown why they do this only during blood moons.
 ZomboidClarinet: Zomboids are known to frequently get themselves into very stupid situations. This ones entire body is stuck inside of a giant instrument.
 ZomboidFungus: Zomboids that have become overgrown with a strange fungus. Despite being blind, they can still sniff out their target's location.
 ZomboidPumpkin: Rooted to the ground, these zomboids are incapable of movement and are constantly angry because of it. They can control their roots to attack nearby foes from below.
@@ -209,6 +216,8 @@ OrbWeaverGiant: These scary mutated orb weavers roam in the grotto very rarely. 
 PeacockSpider1: Slightly more hostile jumping spiders, these ones seem to be able to run really fast along with their ability to leap.
 PeacockSpider2: The strange and bright patterns on their back are meant to ward off predators, or other spiders from invading their territory.
 PeacockSpider3: Peacock spiders have adapted to have many unique and bright colored patterns on their abdomen. It is said they use it to attract and impress others of its kind.
+PelicanSpider1: They can float on the water as their bodies are thin and streamlined. They can also run on land surprisingly quick and have small wings they can use to hover.
+PelicanSpider2: Their long mandibles resemble a beak, earning them the name pelican spider. It uses these mandibles to hold its prey at a distance to avoid being poisoned or attacked in return.
 SmileSpider: The smile-like pattern on their back is said to be an adaptation to trick prey, and scare away any predators that may eat them.
 SpiderAnt1: In order to avoid ant spiders, these ants have evolved to look like spiders so they do not get hunted.
 SpiderAnt2: The ant spiders disguise backfired, after these ants adapted their appearance to look like spiders.
@@ -218,7 +227,7 @@ TarantulaHawk3: These tarantula hawks have adapted to take on the appearance of 
 TinySpider: These baby spiders can be found wandering around the grotto. They are also very hard to spot in the dark, and despite their size will not hesitate to attack threats.
 TrapdoorSpider1: These juvenile spiders have very thin legs they can easily dig into the ground with, allowing them to disguise themselves and jump out at unsuspecting prey.
 TrapdoorSpider2: These fully grown trapdoor spiders are even more deadly. The extra legs they have grown in maturity allow them to burrow and chase prey even more efficiently.
-WhipSpider: These creatures are actually more related to crustaceans than spiders. They have a long whip-like tongue coated in pheromones that increase the aggression of other spiders.
+WhipSpider: These creatures are actually more related to crustaceans than spiders. They have a long and flexible tail with a stinger, which contains a special pheromone that causes aggression in other spiders.
 WolfSpider: One of the only species of spiders to carry their young on their back. Despite the babies smaller size, the mother will allow them to hunt so they can learn to live on their own.
 WolfSpiderBaby: They can camouflage by waiting on their mother's back, and will attack if they themselves or their mother is in danger.
 //nose cultists
@@ -320,4 +329,4 @@ EvilMite: It is rare that mites are able to gather a ton of blood, but when they
 PotatoGator: This potato creature can use its root-like legs to move through the ground, and can launch itself out at unsuspecting creatures it wants to eat. Its mouth is filled with nothing but potato mush, so it usually tries to swallow its prey whole, no matter how large.
 ChristmasTreeMimic: When krampus had to step up to take care of christmas responsibilities, he got a tree to feel more festive. Due to his demonic nature, the evil power seeped into the tree. It stays still most of the time until someone or something annoys it, after which it will rampage everywhere.
 TarPig: This species of hog used to be plentiful in the desert caverns due to its favorite food, cactuses, being plentiful. Now that they are extinct, these giant tar slimes use their skeletal remains as a shield to protect themselves so they can float and relax in pools of tar peacefully.
-Chudshroom: These notoriously grumpy and solitary species do not like anyone going near them and will chase them away, sometimes forgetting why they are even mad to begin with while doing so. Their mushroom caps are a very rare and valueble item, so they used to be hunted frequently for it.
+Chudshroom: These notoriously grumpy species do not like anyone going near them and will become agitated when anything invades its space. Their mushroom caps were a very rare and valueble item that led to them being over-hunted, perhaps why they have a very solitary and defensive nature.

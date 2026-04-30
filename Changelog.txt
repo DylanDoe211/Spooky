@@ -102,7 +102,7 @@ Weapons/Accessories:
 Ranged Weapon Ammo Change:
 -All spooky mod ranged bows and guns now have proper ammo conversion like vanilla ranged items do
 -Spooky mod bows and guns that previously converted all ammo into a unique projectile now only do so with their basic ammos (Basic bullets for guns, wooden arrows for bows), and non-basic ammos will just shoot their own projectile
--Changed the tooltips for all of the changed items to reflect that they now only convert regular basic ammos
+-Changed the tooltips for all of the changed items to reflect that they now only convert basic ammos
 -This change applies to the following items: Flower Shot, Bone Bender, Seer, Living Seer, Fly Shot, Old Hunters Crossbow, Old Hunters Rifle, Spider-Wing Longbow, Firestorm Monsoon, Crusty Gunfish, Celery Blaster, HAK-2r, Poison Crossbow
 
 Enemy/Boss:

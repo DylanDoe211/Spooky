@@ -4,6 +4,8 @@ using Terraria.ModLoader;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Audio;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using System.Collections.Generic;
 
@@ -16,14 +18,27 @@ namespace Spooky.Content.NPCs.SpiderCave
     public class WhipSpider : ModNPC  
     {
         int SaveDirection;
+        bool SpawnedStinger = false;
 
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 7;
+
+            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/WhipSpiderBestiary",
+				Position = new Vector2(12f, 5f),
+                PortraitPositionXOverride = 0f,
+                PortraitPositionYOverride = 0f
+            };
         }
 
         public override void SendExtraAI(BinaryWriter writer)
         {
+            //bools
+            writer.Write(SpawnedStinger);
+
+            //floats
             writer.Write(NPC.localAI[0]);
             writer.Write(NPC.localAI[1]);
             writer.Write(NPC.localAI[2]);
@@ -31,6 +46,10 @@ namespace Spooky.Content.NPCs.SpiderCave
 
         public override void ReceiveExtraAI(BinaryReader reader)
         {
+            //bools
+            SpawnedStinger = reader.ReadBoolean();
+
+            //floats
             NPC.localAI[0] = reader.ReadSingle();
             NPC.localAI[1] = reader.ReadSingle();
             NPC.localAI[2] = reader.ReadSingle();
@@ -48,6 +67,8 @@ namespace Spooky.Content.NPCs.SpiderCave
             NPC.value = Item.buyPrice(0, 0, 5, 0);
             NPC.HitSound = SoundID.NPCHit45;
 			NPC.DeathSound = SoundID.NPCDeath34;
+            NPC.aiStyle = 26;
+			AIType = NPCID.Unicorn;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.SpiderCaveBiome>().Type };
         }
 
@@ -100,44 +121,15 @@ namespace Spooky.Content.NPCs.SpiderCave
 
 			NPC.spriteDirection = NPC.direction;
 
-            NPC.localAI[0]++;
-
-            if (NPC.localAI[0] >= 600 && player.Distance(NPC.Center) <= 450f)
+            if (!SpawnedStinger)
             {
-                NPC.localAI[1] = 1;
-            }
-
-            if (NPC.localAI[1] == 0)
-            {
-                NPC.aiStyle = 26;
-			    AIType = NPCID.Unicorn;
-            }
-            else
-            {
-                NPC.aiStyle = 0;
-
-                NPC.localAI[2]++;
-
-                if (NPC.localAI[2] == 100 || NPC.localAI[2] == 120 || NPC.localAI[2] == 140)
+                int Stinger = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<WhipSpiderStinger>(), ai2: NPC.whoAmI);
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    SoundEngine.PlaySound(SoundID.Item17, NPC.Center);
-
-                    int Tongue = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X + (NPC.direction == -1 ? -40 : 40), (int)NPC.Center.Y, ModContent.NPCType<WhipSpiderTongue>(), ai3: NPC.whoAmI);
-                    
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
-                    {
-                        NetMessage.SendData(MessageID.SyncNPC, number: Tongue);
-                    }
+                    NetMessage.SendData(MessageID.SyncNPC, number: Stinger);
                 }
 
-                if (NPC.localAI[2] >= 180)
-                {
-                    NPC.localAI[0] = 0;
-                    NPC.localAI[1] = 0;
-                    NPC.localAI[2] = 0;
-
-                    NPC.netUpdate = true;
-                }
+                SpawnedStinger = true;
             }
         }
 

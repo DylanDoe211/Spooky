@@ -310,11 +310,29 @@ namespace Spooky.Content.NPCs.Quest
         {
             if (NPC.life <= 0) 
             {
+				for (int numGores = 1; numGores <= 5; numGores++)
+                {
+					if (Main.netMode != NetmodeID.Server) 
+					{
+						Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/ChristmasTreeMimicGore" + numGores).Type);
+					}
+				}
+
 				for (int numGores = 1; numGores <= 6; numGores++)
                 {
 					if (Main.netMode != NetmodeID.Server) 
 					{
-						//Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/ChristmasTreeMimicGore" + numGores).Type);
+						Gore.NewGore(NPC.GetSource_Death(), NPC.position + new Vector2(Main.rand.Next(0, NPC.width), Main.rand.Next(0, NPC.height - 10)), 
+						NPC.velocity, ModContent.Find<ModGore>("Spooky/ChristmasTreeMimicTinselGore").Type);
+					}
+				}
+
+				for (int numGores = 1; numGores <= 25; numGores++)
+                {
+					if (Main.netMode != NetmodeID.Server) 
+					{
+						Gore.NewGore(NPC.GetSource_Death(), NPC.position + new Vector2(Main.rand.Next(0, NPC.width), Main.rand.Next(0, NPC.height - 10)), 
+						NPC.velocity, ModContent.Find<ModGore>("Spooky/ChristmasTreeMimicLeafGore" + Main.rand.Next(1, 3)).Type);
 					}
 				}
             }

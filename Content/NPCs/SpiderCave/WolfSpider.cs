@@ -33,7 +33,7 @@ namespace Spooky.Content.NPCs.SpiderCave
 
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
-                Position = new Vector2(23f, 0f),
+                Position = new Vector2(23f, 12f),
                 PortraitPositionXOverride = 0f,
                 PortraitPositionYOverride = 0f
             };

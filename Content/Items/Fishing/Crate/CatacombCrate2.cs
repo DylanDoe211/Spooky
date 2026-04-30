@@ -51,6 +51,9 @@ namespace Spooky.Content.Items.Fishing.Crate
             itemLoot.Add(ItemDropRule.OneFromOptions(1, catacombChestDrops));
 
 			itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<EMFReaderBroke>(), 2));
+			
+			//unique bobber
+			itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<BigBoneBobber>(), 5));
 
 			//drop vanilla bars
 			IItemDropRule[] oreBars = new IItemDropRule[] 

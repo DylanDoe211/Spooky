@@ -8,8 +8,8 @@ namespace Spooky.Content.Items.Fishing
 	{
 		public override void SetDefaults()
 		{
-			Item.width = 18;
-			Item.height = 32;
+			Item.width = 14;
+			Item.height = 30;
 			Item.accessory = true;
 			Item.rare = ItemRarityID.Blue;
 			Item.value = Item.buyPrice(gold: 1);
@@ -24,12 +24,14 @@ namespace Spooky.Content.Items.Fishing
 
 	public class PumpkinBobberProj : ModProjectile
     {
-		public override string Texture => "Spooky/Content/Items/Fishing/PumpkinBobber";
-
         public override void SetDefaults()
         {
-            Projectile.CloneDefaults(ProjectileID.BobberWooden);
-            DrawOriginOffsetY = -8;
-        }
+			Projectile.aiStyle = ProjAIStyleID.Bobber;
+			AIType = ProjectileID.FishingBobber;
+			Projectile.bobber = true;
+			Projectile.width = 18;
+			Projectile.height = 18;
+			DrawOriginOffsetY = -6;
+		}
     }
 }

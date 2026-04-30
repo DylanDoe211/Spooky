@@ -427,8 +427,15 @@ namespace Spooky.Content.NPCs.SpiderCave
         public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SpiderChitin>(), 3, 1, 3));
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<OrbWeaverBoomerang>(), 8));
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<OrbWeaverGiantStaff>(), 8));
+
+            //weapon drops
+            int[] Weapons = new int[] 
+			{ 
+				ModContent.ItemType<OrbWeaverBoomerang>(), 
+				ModContent.ItemType<OrbWeaverGiantStaff>(),
+			};
+
+			npcLoot.Add(ItemDropRule.OneFromOptions(8, Weapons));
         }
 
         public override void HitEffect(NPC.HitInfo hit) 
