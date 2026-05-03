@@ -39,7 +39,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean
 			Tile Below = Framing.GetTileSafely(i, j + 1);
             Tile Above = Framing.GetTileSafely(i, j - 1);
 
-            // Place sunken kelp
+            //place kelp
             if (WorldGen.genRand.NextBool(3) && !Above.HasTile && Above.LiquidAmount > 0 && !Tile.LeftSlope && !Tile.RightSlope && !Tile.IsHalfBlock)
             {
                 WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<OceanKelp>(), true);

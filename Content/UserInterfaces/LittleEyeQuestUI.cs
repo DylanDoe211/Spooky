@@ -33,7 +33,7 @@ namespace Spooky.Content.UserInterfaces
 		public static Vector2 modifier = new(-200, -75);
         public static readonly Vector2 UITopLeft = new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
 
-		public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/TalkSounds/LittleEyeTalk", SoundType.Sound) { Volume = 2f, PitchVariance = 0.75f };
+		public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/TalkSounds/LittleEyeTalk", SoundType.Sound) { Volume = 3f, PitchVariance = 0.75f };
 
         //actual icon textures
         private static Asset<Texture2D> BountyIcon1Done;
@@ -173,6 +173,11 @@ namespace Spooky.Content.UserInterfaces
 
 			if (player.controlInv)
 			{
+				if (player.talkNPC > -1)
+				{
+					player.SetTalkNPC(-1);
+					Main.npcChatText = string.Empty;
+				}
 				LittleEye = -1;
 				UIOpen = false;
 			}
@@ -449,7 +454,7 @@ namespace Spooky.Content.UserInterfaces
 							DialogueUI.Add(chain);
 						}
 
-                        UIOpen = false;
+						UIOpen = false;
                     }
                 }
             }
@@ -545,7 +550,7 @@ namespace Spooky.Content.UserInterfaces
 							DialogueUI.Add(chain);
 						}
 
-                        UIOpen = false;
+						UIOpen = false;
                     }
                 }
             }
@@ -657,7 +662,7 @@ namespace Spooky.Content.UserInterfaces
 							DialogueUI.Add(chain);
 						}
 
-                        UIOpen = false;
+						UIOpen = false;
                     }
                 }
             }

@@ -32,12 +32,6 @@ namespace Spooky.Core
 		//list of rotten depths biome positions for big dunk to travel between
 		public static List<Vector2> ZombieBiomePositions = new List<Vector2>();
 
-		//blooms planted for achievement, there are currently 11 blooms
-		public static List<bool> BloomsPlanted = new List<bool>()
-		{
-			false, false, false, false, false, false, false, false, false, false, false, false
-		};
-
 		//bosses
 		public static bool downedRotGourd = false;
         public static bool downedSpookySpirit = false;
@@ -91,6 +85,7 @@ namespace Spooky.Core
 		public static bool PokedLittleEye = false;
 
 		//old hunter quests
+		public static bool OldHunterDefeatDialogue = false;
 		public static bool OldHunterQuest1 = false; 
         public static bool OldHunterQuest2 = false;
         public static bool OldHunterQuest3 = false;
@@ -183,6 +178,7 @@ namespace Spooky.Core
 			PokedLittleEye = false;
 
 			//old hunter quests
+			OldHunterDefeatDialogue = false;
 			OldHunterQuest1 = false;
 			OldHunterQuest2 = false;
 			OldHunterQuest3 = false;
@@ -226,9 +222,6 @@ namespace Spooky.Core
 
 			//list of zombie biome positions
 			tag[nameof(ZombieBiomePositions)] = ZombieBiomePositions;
-
-			//blooms planted for achievement
-			tag[nameof(BloomsPlanted)] = BloomsPlanted;
 
 			//bosses
 			tag[nameof(downedRotGourd)] = downedRotGourd;
@@ -283,6 +276,7 @@ namespace Spooky.Core
 			tag[nameof(PokedLittleEye)] = PokedLittleEye;
 
 			//old hunter quests
+			tag[nameof(OldHunterDefeatDialogue)] = OldHunterDefeatDialogue;
 			tag[nameof(OldHunterQuest1)] = OldHunterQuest1;
 			tag[nameof(OldHunterQuest2)] = OldHunterQuest2;
 			tag[nameof(OldHunterQuest3)] = OldHunterQuest3;
@@ -328,12 +322,6 @@ namespace Spooky.Core
 			if (tag.ContainsKey(nameof(ZombieBiomePositions)))
 			{
 				ZombieBiomePositions = tag.Get<List<Vector2>>(nameof(ZombieBiomePositions));
-			}
-
-			//list of blooms planted for achievement
-			if (tag.ContainsKey(nameof(BloomsPlanted)))
-			{
-				BloomsPlanted = tag.Get<List<bool>>(nameof(BloomsPlanted));
 			}
 
 			//bosses
@@ -389,6 +377,7 @@ namespace Spooky.Core
 			PokedLittleEye = tag.GetBool(nameof(PokedLittleEye));
 
 			//old hunter quests
+			OldHunterDefeatDialogue = tag.GetBool(nameof(OldHunterDefeatDialogue));
 			OldHunterQuest1 = tag.GetBool(nameof(OldHunterQuest1));
 			OldHunterQuest2 = tag.GetBool(nameof(OldHunterQuest2));
 			OldHunterQuest3 = tag.GetBool(nameof(OldHunterQuest3));
@@ -445,6 +434,7 @@ namespace Spooky.Core
 			writer.WriteFlags(BountyInProgress1, BountyInProgress2, BountyInProgress3, BountyInProgress4, BountyIntro, PokedLittleEye);
 
 			//old hunter quests
+			writer.WriteFlags(OldHunterDefeatDialogue);
 			writer.WriteFlags(OldHunterQuest1, OldHunterQuest2, OldHunterQuest3, OldHunterQuest4, OldHunterQuest5, OldHunterQuest6, OldHunterQuest7, OldHunterQuest8);
 
 			//misc stuff
@@ -491,6 +481,7 @@ namespace Spooky.Core
 			reader.ReadFlags(out BountyInProgress1, out BountyInProgress2, out BountyInProgress3, out BountyInProgress4, out BountyIntro, out PokedLittleEye);
 
 			//old hunter quests
+			reader.ReadFlags(out OldHunterDefeatDialogue);
 			reader.ReadFlags(out OldHunterQuest1, out OldHunterQuest2, out OldHunterQuest3, out OldHunterQuest4, out OldHunterQuest5, out OldHunterQuest6, out OldHunterQuest7, out OldHunterQuest8);
 
 			//misc stuff

@@ -28,6 +28,7 @@ namespace Spooky.Content.Items.Debug
 
 		public override bool? UseItem(Player player)
 		{
+            Flags.OldHunterDefeatDialogue = false;
 			Flags.OldHunterQuest1 = false;
             Flags.OldHunterQuest2 = false;
             Flags.OldHunterQuest3 = false;

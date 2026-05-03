@@ -28,6 +28,7 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 			NPCID.Sets.TrailCacheLength[NPC.type] = 7;
 			NPCID.Sets.TrailingMode[NPC.type] = 0;
 			NPCID.Sets.CantTakeLunchMoney[Type] = true;
+			NPCID.Sets.ShouldBeCountedAsBoss[Type] = true;
 
 			NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
 			{
@@ -86,22 +87,25 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 			}
 
 			//draw aura
-			for (int i = 0; i < 360; i += 30)
+			if (!NPC.IsABestiaryIconDummy)
 			{
-				Color color1 = Color.OrangeRed;
-				Color color2 = Color.Orange;
-
-				if (SpawnedDuringFrostMoon)
+				for (int i = 0; i < 360; i += 30)
 				{
-					color1 = Color.Cyan;
-				 	color2 = Color.LightBlue;
+					Color color1 = Color.OrangeRed;
+					Color color2 = Color.Orange;
+
+					if (SpawnedDuringFrostMoon)
+					{
+						color1 = Color.Cyan;
+						color2 = Color.LightBlue;
+					}
+
+					Color color = new Color(125 - NPC.alpha, 125 - NPC.alpha, 125 - NPC.alpha, 0).MultiplyRGBA(Color.Lerp(color1, color2, i / 30));
+
+					Vector2 circular = new Vector2(Main.rand.NextFloat(3.5f, 5f), 0).RotatedBy(MathHelper.ToRadians(i));
+
+					Main.EntitySpriteDraw(AuraTexture.Value, NPC.Center + circular - screenPos, NPC.frame, color * 0.75f, NPC.rotation, NPC.frame.Size() / 2, NPC.scale * 1.05f, effects, 0);
 				}
-
-				Color color = new Color(125 - NPC.alpha, 125 - NPC.alpha, 125 - NPC.alpha, 0).MultiplyRGBA(Color.Lerp(color1, color2, i / 30));
-
-				Vector2 circular = new Vector2(Main.rand.NextFloat(3.5f, 5f), 0).RotatedBy(MathHelper.ToRadians(i));
-
-				Main.EntitySpriteDraw(AuraTexture.Value, NPC.Center + circular - screenPos, NPC.frame, color * 0.75f, NPC.rotation, NPC.frame.Size() / 2, NPC.scale * 1.05f, effects, 0);
 			}
 
 			Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - screenPos, NPC.frame, NPC.GetNPCColorTintedByBuffs(NPC.GetAlpha(Color.White)), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);

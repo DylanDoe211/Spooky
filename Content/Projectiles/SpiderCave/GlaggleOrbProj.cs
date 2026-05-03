@@ -29,7 +29,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
             Projectile.timeLeft = 420;
         }
 
-		//shout-out ebon for this orbiter draw code: https://github.com/flye-name/ebonian-mod/blob/1e460b0b4b889f2554e9d3441242edd5257a9eb6/Content/NPCs/Overworld/Asteroid/AsteroidHerder.cs
+		//shout-out Flye for this orbiter draw code: https://github.com/flye-name/ebonian-mod/blob/1e460b0b4b889f2554e9d3441242edd5257a9eb6/Content/NPCs/Overworld/Asteroid/AsteroidHerder.cs
 		public float CircleDividedEqually(float i, float max)
 		{
 			return 2f * MathF.PI / max * i;

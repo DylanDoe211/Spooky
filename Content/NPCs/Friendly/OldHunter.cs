@@ -1,7 +1,15 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.UI;
+using Terraria.Localization;
+using Terraria.Audio;
+using ReLogic.Content;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System.IO;
+using System.Collections.Generic;
 
 using Spooky.Core;
 using Spooky.Content.UserInterfaces;
@@ -11,6 +19,21 @@ namespace Spooky.Content.NPCs.Friendly
     [AutoloadHead]
     public class OldHunter : ModNPC  
     {
+        Vector2 modifier = new(-200, -75);
+
+        Player PlayerTalkingTo = null;
+
+        public static Mod Mod = Spooky.mod;
+
+        private static Asset<Texture2D> UITexture;
+
+        public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/TalkSounds/OldHunterTalk", SoundType.Sound) { Volume = 3f, PitchVariance = 0.5f };
+
+        public override void Load()
+		{
+			UITexture = ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/DialogueUIOldHunter");
+		}
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 7;
@@ -86,10 +109,13 @@ namespace Spooky.Content.NPCs.Friendly
 			return true;
 		}
 
-		public override string GetChat()
+        public override string GetChat()
 		{
-			OldHunterDialogueChoiceUI.OldHunter = NPC.whoAmI;
-			OldHunterDialogueChoiceUI.UIOpen = true;
+            if (Flags.OldHunterDefeatDialogue && !DialogueUI.Visible)
+            {
+                OldHunterDialogueChoiceUI.OldHunter = NPC.whoAmI;
+                OldHunterDialogueChoiceUI.UIOpen = true;
+            }
             return string.Empty;
 		}
 
@@ -116,6 +142,72 @@ namespace Spooky.Content.NPCs.Friendly
                     NPC.netUpdate = true;
                 }
             }
+
+            Player player = Main.LocalPlayer;
+			
+			if (NPC.Hitbox.Intersects(new Rectangle((int)Main.MouseWorld.X - 1, (int)Main.MouseWorld.Y - 1, 1, 1)) &&
+			NPC.Distance(player.Center) <= 150f && !Main.mapFullscreen && !Flags.OldHunterDefeatDialogue)
+			{
+				if (Main.mouseRight && Main.mouseRightRelease && PlayerTalkingTo == null)
+				{
+					PlayerTalkingTo = player;
+
+					if (!Main.dedServ)
+					{
+                        DialogueChain chain = new();
+                        chain.Add(new(UITexture.Value, NPC,
+                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Defeat1"),
+                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerDefeat1"),
+                        TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
+                        .Add(new(UITexture.Value, NPC,
+                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Defeat2"),
+                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerDefeat2"),
+                        TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
+                        .Add(new(UITexture.Value, NPC,
+                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Defeat3"),
+                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerDefeat3"),
+                        TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
+                        .Add(new(UITexture.Value, NPC,
+                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Defeat4"),
+                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerDefeat4"),
+                        TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
+                        .Add(new(UITexture.Value, NPC,
+                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Defeat5"),
+                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerDefeat5"),
+                        TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
+                        .Add(new(UITexture.Value, NPC, null, null, TalkSound, 2f, 0f, modifier, true));
+                        chain.OnPlayerResponseTrigger += PlayerResponse;
+                        chain.OnEndTrigger += EndDialogue;
+                        DialogueUI.Visible = true;
+                        DialogueUI.Add(chain);
+                    }
+                }
+            }
         }
+
+        public void PlayerResponse(Dialogue dialogue, string Text, int ID)
+		{
+			Dialogue newDialogue = new(ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/DialogueUIPlayer").Value, Main.LocalPlayer,
+			Text, null, SoundID.Item1, 2f, 0f, default, NotPlayer: false);
+			DialogueUI.Visible = true;
+			DialogueUI.Add(newDialogue);
+		}
+
+        public void EndDialogue(Dialogue dialogue, int ID)
+		{
+            if (Main.netMode != NetmodeID.SinglePlayer)
+            {
+                ModPacket packet = Mod.GetPacket();
+                packet.Write((byte)SpookyMessageType.OldHunterDefeatDialogue);
+                packet.Send();
+            }
+            else
+            {
+                Flags.OldHunterDefeatDialogue = true;
+            }
+
+			PlayerTalkingTo = null;
+			DialogueUI.Visible = false;
+		}
     }
 }

@@ -16,7 +16,7 @@ namespace Spooky.Content.Dusts
 
         public override Color? GetAlpha(Dust dust, Color lightColor)
         {
-            return dust.color;
+            return dust.color * (1f - (dust.alpha / 255f));
         }
 
         public override bool Update(Dust dust)

@@ -379,10 +379,10 @@ LittleEyeDialogue: {
 	BountyIntroPlayerResponse2: I meant like, anything normal.
 	BountyIntro3: Now that you mention it, perhaps you and your weapons could be of use. I'd reward you of course, given my requests would be so obtuse.
 	BountyIntroPlayerResponse3: I did not mention requests at all.
-	BountyIntro4: Here, guest, I've made a list for you! My creations that have ran far from view! They hide from me, oh me oh my. I need you to slime them.
-	BountyIntroPlayerResponse4: Sorry, what?
-	BountyIntro5: I'll tell you more once you pick! Surprises are more fun after all! but... I will need you to kill all of them.
-	BountyIntroPlayerResponse5: Dude...
+	BountyIntro4: Here, guest, I've made a list for you! My creations that have ran far from view! They hide from me, oh me oh my.
+	BountyIntroPlayerResponse4: Why's that?
+	BountyIntro5: I'll tell you more once you pick! Surprises are more fun after all! but... I will need you find all of them.
+	BountyIntroPlayerResponse5: Alright, fine.
 	BountyIntro6: Teehee!
 	BountyIntroPlayerResponse6: ...
 	//frank the goblin quest
@@ -578,7 +578,7 @@ LittleEyeDialogue: {
 	LittleEyeTalk5-4: Yes! This is called a monopoly. I am the only alchemist down here!
 	PlayerLittleEyeTalk5-4: Whatever man.
 	//normal dialogue 6
-	LittleEyeTalk6-1: Hey have you seen any fleshy storage-like creature around?
+	LittleEyeTalk6-1: Hey have you seen any fleshy storage-like creatures around?
 	PlayerLittleEyeTalk6-1: No and I don't want to.
 	LittleEyeTalk6-2: Are you sure? Kinda looks like your weird containers made of wood.
 	PlayerLittleEyeTalk6-2: Oh those, yeah I've seen one. Why?
@@ -611,6 +611,17 @@ OldHunterBoss: {
 OldHunterDialogue: {
 	//corpse dialogue
 	OldHunterCorpse: It's an old dead skeleton. Perhaps he can revived if his soul is returned to his body.
+	//defeated dialogue
+	Defeat1: Alright, ye've got me over head and ears, least I'm dying with my boots on.
+	PlayerDefeat1: I'm not trying to kill you.
+	Defeat2: What?
+	PlayerDefeat2: Yeah.
+	Defeat3: Oh. I'm sorry chap, didn't mean to be a hard case barkin' at a knot. Woke up confused, but that don’t mean I should've caused all this hellabaloo.
+	PlayerDefeat3: Its fine? Sorry you are hard to understand.
+	Defeat4: Heh, never thought I'd be an old pod. I've still got the mind to do the clean thing and hash this out with ya.
+	PlayerDefeat4: Yeah alright, got most of that I think. Sure.
+	Defeat5: Let me cut a new figure; I'm an old hunter, master at the sling. You put up a good fit there, and I've got plenty'o riches if yer willing to get some jobs for me.
+	PlayerDefeat5: Sure, why not I guess.
 	//tick quest
 	Quest1-1: One time, me and the buddies were jawing at the husking bee, and chap I tell ya the juice was somethin else. Got knocked into a cocked hat, full as a tick, and started a milling so bad we hid among the willows for a whole month.
 	PlayerQuest1-1: Full tick... I think I know just where and when I can find a large tick.
@@ -713,20 +724,20 @@ OldHunterDialogue: {
 	SpiderWar2: Grumble grumble...
 	PlayerSpiderWar2: Alright pops what's got you angry this time?
 	SpiderWar3: What's got me mad as a hare is that the devils still kicking! I thought that by now he'd be six feet underground but I saw that monster again while scouting the house! Hasn't even aged a day!
-	PlayerSpiderWar3: I mean I could just kill it. That's kinda what I've been doing for you this whole time anyways.
-	SpiderWar4: Really? wait, yes you could... Alright chap ya've got a deal. This feller is another one of 'em good for nothin spiders. 'Bout as tall as you and me, has a bit of a beard, and looks even older than I am. Ya should be able to dry gulch him but, just so ya know ye might be starting the candlelight caboodle all over again.
+	PlayerSpiderWar3: I mean I could just kill it. That's kinda what I've been doing for you this whole time.
+	SpiderWar4: Really? Wait, yes you could... Alright chap ya've got a deal. This feller is another one of 'em good for nothin spiders. 'Bout as tall as you and me, has a bit of a beard, and looks even older than I am. Ya should be able to dry gulch him but, just so ya know ye might be starting the candlelight caboodle all over again.
 	PlayerSpiderWar4: Yeah whatever you say I'll get it done.
 	//spider war complete
 	PostSpiderWar1: Goodness chap! I thought you'd be six feet under but looks like you capped the climax! I knew ya could-
 	PlayerPostSpiderWar1: What the hell did you make me do?
 	PostSpiderWar2: Well chap I-
-	PlayerPostSpiderWar2: Tell it to me properly. What the hell did I just do?
-	PostSpiderWar3: Fine, I'll explain. Back when me and the rest of us hunters were alive, we all used to live here. That was until that monster and his army leveled us all to the ground. I couldn't stand a chance against you now, and I definitely didn't stand a chance against them. I can't remember how I went out, but, I know the rest of the hunters went down with me.
+	PlayerPostSpiderWar2: Tell it to me properly. What just happened?
+	PostSpiderWar3: Fine, I'll explain. Back when me and the rest of us hunters were alive, we all used to live here. That was until that monster and his army leveled us all to the ground. I couldn't stand a chance against you when we fought, and I definitely didn't stand a chance against them. I can't remember how I went out, but, I know the rest of the hunters went down with me.
 	PlayerPostSpiderWar3: Oh damn...
 	PostSpiderWar4: I'm sorry chap I-It just didn't sit right with me to see him again. I shouldn't have dragged you into all of this without making it clear what would happen.
 	PlayerPostSpiderWar4: Yeah no kidding- wait are you speaking normally?
 	PostSpiderWar5: What do ya mean chap?
 	PlayerPostSpiderWar5: Huh?
-	PostSpiderWar6: Yer speakin' humbug again aren't yah? Still, glad ye ain't down the gutter.
+	PostSpiderWar6: Yer speakin' humbug again aren't yah? Still, glad ya ain't down the gutter.
 	PlayerPostSpiderWar6: I guess bro.
 }

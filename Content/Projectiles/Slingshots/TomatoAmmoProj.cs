@@ -53,15 +53,11 @@ namespace Spooky.Content.Projectiles.Slingshots
             //spawn blood splatter
 			for (int i = 0; i < 5; i++)
 			{
-				Vector2 Position = Projectile.Center + new Vector2(0, 15).RotatedByRandom(360);
-
-                Vector2 ShootSpeed = Projectile.Center - Position;
-                ShootSpeed.Normalize();
-                ShootSpeed *= -Main.rand.NextFloat(5f, 9f);
+				Vector2 Velocity = new Vector2(0, -Main.rand.NextFloat(5f, 9f)).RotatedByRandom(360);
 
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    Projectile.NewProjectile(Projectile.GetSource_Death(), Position, ShootSpeed, ModContent.ProjectileType<RedSplatter>(), 0, 0);
+                    Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Velocity, ModContent.ProjectileType<RedSplatter>(), 0, 0);
                 }
 			}
 

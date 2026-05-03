@@ -48,7 +48,7 @@ namespace Spooky.Content.Generation
 
 		Vector2 PandoraRoomPosition;
 
-        public static List<ushort> Paintings = new()
+        public static List<ushort> PaintingsLayer1 = new()
         {
             (ushort)ModContent.TileType<AlienPainting>(),
             (ushort)ModContent.TileType<BaxterWitchPainting>(),
@@ -64,6 +64,11 @@ namespace Spooky.Content.Generation
             (ushort)ModContent.TileType<SurprisedSkullPainting>(),
             (ushort)ModContent.TileType<TheKillerPainting>(),
             (ushort)ModContent.TileType<ZomboidThinkPainting>()
+        };
+
+        public static List<ushort> PaintingsLayer2 = new()
+        {
+            (ushort)ModContent.TileType<SkeletonGardeningPainting>()
         };
 
 		private void PlaceCatacomb(GenerationProgress progress, GameConfiguration configuration)
@@ -159,9 +164,9 @@ namespace Spooky.Content.Generation
                         {
                             StructureHelper.API.Generator.GenerateStructure("Content/Structures/CatacombLayer1/PaintingRoom" + WorldGen.genRand.Next(1, 3) + ".shstruct", origin.ToPoint16(), Mod);
 
-                            List<ushort> ActualPainting = new List<ushort>(Paintings);
+                            List<ushort> ActualPainting = new List<ushort>(PaintingsLayer1);
 
-                            //place paintings in the room
+                            //place PaintingsLayer1 in the room
                             for (int paintingX = (int)origin.X + 4; paintingX <= (int)origin.X + 32; paintingX++)
                             {
                                 for (int paintingY = (int)origin.Y + 4; paintingY <= (int)origin.Y + 32; paintingY++)
@@ -170,7 +175,7 @@ namespace Spooky.Content.Generation
                                     {
                                         if (ActualPainting.Count == 0)
                                         {
-                                            ActualPainting = new List<ushort>(Paintings);
+                                            ActualPainting = new List<ushort>(PaintingsLayer1);
                                         }
 
                                         int PaintingToPlace = WorldGen.genRand.Next(ActualPainting.Count);
@@ -622,12 +627,12 @@ namespace Spooky.Content.Generation
             {
                 for (int Y = (int)Main.worldSurface - 10; Y <= BigBoneArenaY - 30; Y++)
 				{
-                    //randomly place paintings in the catacombs
+                    //randomly place PaintingsLayer1 in the catacombs
                     if (WorldGen.genRand.NextBool(550) && !Main.tile[X, Y].HasTile)
 					{
-                        if (CanPlacePainting(X, Y, Paintings, true))
+                        if (CanPlacePainting(X, Y, PaintingsLayer1, true))
                         {
-						    WorldGen.PlaceObject(X, Y, WorldGen.genRand.Next(Paintings));
+						    WorldGen.PlaceObject(X, Y, WorldGen.genRand.Next(PaintingsLayer1));
                         }
 					}
 
@@ -769,7 +774,7 @@ namespace Spooky.Content.Generation
                             //place platforms at the top of the hole, on the floor in the room
                             if (tunnelY == Y + 15)
                             {
-                                WorldGen.PlaceTile(tunnelX, tunnelY, ModContent.TileType<OldWoodPlatform>());
+                                WorldGen.PlaceTile(tunnelX, tunnelY, ModContent.TileType<CatacombBrickPlatform1>());
 
                                 //in the middle of the tunnel, place a chain that goes down
                                 if (tunnelX == X - 1)
@@ -1617,7 +1622,7 @@ namespace Spooky.Content.Generation
 		}
 
         //if a painting can place
-        public bool CanPlacePainting(int PositionX, int PositionY, List<ushort> PaintingsToCheckFor, bool DoCheckForNearbyPaintings)
+        public bool CanPlacePainting(int PositionX, int PositionY, List<ushort> PaintingsLayer1ToCheckFor, bool DoCheckForNearbyPaintingsLayer1)
 		{
 			//first check for enough walls
 			for (int i = PositionX - 3; i <= PositionX + 3; i++)
@@ -1631,13 +1636,13 @@ namespace Spooky.Content.Generation
 				}
 			}
 
-            if (DoCheckForNearbyPaintings)
+            if (DoCheckForNearbyPaintingsLayer1)
             {
                 for (int i = PositionX - 6; i <= PositionX + 6; i++)
                 {
                     for (int j = PositionY - 6; j <= PositionY + 6; j++)
                     {	
-                        if (PaintingsToCheckFor.Contains(Main.tile[i, j].TileType))
+                        if (PaintingsLayer1ToCheckFor.Contains(Main.tile[i, j].TileType))
                         {
                             return false;
                         }

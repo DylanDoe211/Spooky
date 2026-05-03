@@ -31,8 +31,8 @@ namespace Spooky.Content.NPCs.SpiderCave
             NPC.knockBackResist = 0f;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.HitSound = SoundID.NPCHit9;
-            NPC.DeathSound = SoundID.NPCDeath22;
+            NPC.HitSound = SoundID.NPCHit32;
+            NPC.DeathSound = SoundID.NPCDeath1;
             NPC.aiStyle = -1;
         }
 
@@ -116,6 +116,11 @@ namespace Spooky.Content.NPCs.SpiderCave
             return false;
         }
 
+		public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
+        {
+            target.AddBuff(BuffID.Venom, 300);
+        }
+
         public override void AI()
 		{
             NPC Parent = Main.npc[(int)NPC.ai[2]];
@@ -134,13 +139,24 @@ namespace Spooky.Content.NPCs.SpiderCave
 
             if (NPC.Distance(GoTo) >= 10)
             {
-                float vel = MathHelper.Clamp(NPC.Distance(GoTo) / 12, 14, 22);
+                float vel = MathHelper.Clamp(NPC.Distance(GoTo) / 12, 15, 25);
                 NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(GoTo) * vel, 0.08f);
             }
             else
             {
                 NPC.velocity *= 0.95f;
             }
+
+			if (NPC.Distance(player.Center) <= 160f)
+			{
+				if (NPC.Distance(GoTo) <= 15)
+				{
+					Vector2 ChargeDirection = player.Center - NPC.Center;
+					ChargeDirection.Normalize();
+					ChargeDirection *= 25;
+					NPC.velocity = ChargeDirection;
+				}
+			}
 		}
 	}
 }

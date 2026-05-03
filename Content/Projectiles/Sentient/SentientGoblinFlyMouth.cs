@@ -70,7 +70,7 @@ namespace Spooky.Content.Projectiles.Sentient
             for (int i = 0; i < Main.maxNPCs; i++)
             {
                 NPC Target = Projectile.OwnerMinionAttackTargetNPC;
-                if (Target != null && Target.CanBeChasedBy(this) && !NPCID.Sets.CountsAsCritter[Target.type] && Vector2.Distance(player.Center, Target.Center) <= 750f)
+                if (Target != null && Target.CanBeChasedBy(this) && !NPCID.Sets.CountsAsCritter[Target.type] && Vector2.Distance(player.Center, Target.Center) <= 700f)
                 {
                     AttackingAI(Target);
 
@@ -82,7 +82,7 @@ namespace Spooky.Content.Projectiles.Sentient
                 }
 
                 NPC NPC = Main.npc[i];
-                if (NPC.active && NPC.CanBeChasedBy(this) && !NPC.friendly && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type] && Vector2.Distance(player.Center, NPC.Center) <= 750f)
+                if (NPC.active && NPC.CanBeChasedBy(this) && !NPC.friendly && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type] && Vector2.Distance(player.Center, NPC.Center) <= 700f)
                 {
                     AttackingAI(NPC);
 

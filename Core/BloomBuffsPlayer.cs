@@ -96,6 +96,7 @@ namespace Spooky.Core
 		public int FossilBlackPepperTimer = 0;
 		public int FossilBlackPepperStacks = 0;
 		public int CemeteryMarigoldTimer = 0;
+		public int TomatoAbilityDelay = 0;
 
 		//accessories
 		public bool Wormy = false;
@@ -425,8 +426,17 @@ namespace Spooky.Core
 
 			if (Spooky.AccessoryHotkey.JustPressed && Main.myPlayer == Player.whoAmI)
             {
-				if (UltimateTomato)
+				if (UltimateTomato && TomatoAbilityDelay <= 0)
 				{
+					for (int numProjectiles = -6; numProjectiles <= 6; numProjectiles++)
+					{
+						int[] Types = new int[] { ModContent.ProjectileType<TomatoRed>(), ModContent.ProjectileType<TomatoOrange>(), ModContent.ProjectileType<TomatoYellow>() };
+
+						Projectile.NewProjectile(null, Player.Center, new Vector2(numProjectiles, Main.rand.NextFloat(-15f, -7f)), Main.rand.Next(Types), 25, 0f, Player.whoAmI);
+					}
+
+					TomatoAbilityDelay = 60;
+
 					//reduce duration by 20 seconds
 					if (BloomBuffSlots[0] == "UltimateTomato")
 					{
@@ -923,6 +933,11 @@ namespace Spooky.Core
 			else
 			{
 				CemeteryMarigoldTimer = 0;
+			}
+
+			if (TomatoAbilityDelay > 0)
+			{
+				TomatoAbilityDelay--;
 			}
 		}
 

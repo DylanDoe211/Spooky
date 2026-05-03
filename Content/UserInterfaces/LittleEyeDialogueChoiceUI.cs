@@ -32,7 +32,7 @@ namespace Spooky.Content.UserInterfaces
         public static Vector2 modifier = new(-200, -75);
         public static readonly Vector2 UITopLeft = new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
 
-        public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/TalkSounds/LittleEyeTalk", SoundType.Sound) { Volume = 2f, PitchVariance = 0.75f };
+        public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/TalkSounds/LittleEyeTalk", SoundType.Sound) { Volume = 3f, PitchVariance = 0.75f };
 
         private static Asset<Texture2D> BarTexture;
 		private static Asset<Texture2D> BarHoverTexture;
@@ -60,6 +60,11 @@ namespace Spooky.Content.UserInterfaces
 
 			if (player.controlInv)
 			{
+				if (player.talkNPC > -1)
+				{
+					player.SetTalkNPC(-1);
+					Main.npcChatText = string.Empty;
+				}
 				LittleEye = -1;
 				UIOpen = false;
 			}
@@ -176,7 +181,6 @@ namespace Spooky.Content.UserInterfaces
 						}
 					}
 
-                    LittleEye = -1;
                     UIOpen = false;
                 }
             }
@@ -375,6 +379,7 @@ namespace Spooky.Content.UserInterfaces
 					}
                     else
                     {
+						//little eye bounty intro
 						if (!Flags.BountyIntro)
 						{
 							DialogueChain chain = new();
@@ -402,19 +407,18 @@ namespace Spooky.Content.UserInterfaces
 							Language.GetTextValue("Mods.Spooky.Dialogue.LittleEyeDialogue.BountyIntro6"),
 							Language.GetTextValue("Mods.Spooky.Dialogue.LittleEyeDialogue.BountyIntroPlayerResponse6"),
 							TalkSound, 2f, 0f, modifier, NPCID: Main.npc[LittleEye].type))
-							.Add(new(UITexture.Value, Main.npc[LittleEye], null, null, TalkSound, 2f, 0f, modifier, true));
+							.Add(new(UITexture.Value, Main.npc[LittleEye], null, null, TalkSound, 2f, 0f, modifier, true, StopTalkingToNPC: false));
 							chain.OnPlayerResponseTrigger += PlayerResponse;
 							chain.OnEndTrigger += EndDialogueBountyIntro;
 							DialogueUI.Visible = true;
 							DialogueUI.Add(chain);
 						}
-						
+
 						LittleEyeQuestUI.LittleEye = LittleEye;
 						LittleEyeQuestUI.Delay = 0;
 						LittleEyeQuestUI.UIOpen = true;
                     }
 
-                    LittleEye = -1;
                     UIOpen = false;
                 }
             }
@@ -452,7 +456,6 @@ namespace Spooky.Content.UserInterfaces
                     DialogueUI.Visible = true;
                     DialogueUI.Add(chain);
 
-                    LittleEye = -1;
                     UIOpen = false;
                 }
             }

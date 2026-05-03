@@ -68,7 +68,6 @@ namespace Spooky.Core
 			NPCTamed = tag.GetBool(nameof(NPCTamed));
 		}
 
-		/*
 		public override void Load()
 		{
 			On_Main.DrawMiscMapIcons += DrawTamedMapIcons;
@@ -87,7 +86,7 @@ namespace Spooky.Core
 
 		private static void DrawTamedMapIcon(Main self, SpriteBatch spriteBatch, Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale, float drawScale, ref string mouseTextString)
 		{
-			if (Main.gameMenu)
+			if (Main.gameMenu || Main.netMode == NetmodeID.Server)
 			{
 				return;
 			}
@@ -124,7 +123,7 @@ namespace Spooky.Core
 						}
 					}
 				}
-				if (npc.GetGlobalNPC<NPCGlobal>().NPCTamed)
+				if (npc.type == ModContent.NPCType<Turkey>() && npc.GetGlobalNPC<NPCGlobal>().NPCTamed)
 				{
 					float alphaMult = 1f;
 					Vector2 vec = npc.Center / 16f - mapTopLeft;
@@ -144,23 +143,18 @@ namespace Spooky.Core
 					{
 						Texture2D texture = ModContent.Request<Texture2D>("Spooky/Content/NPCs/Tameable/TurkeyMapIcon").Value;
 
-						if (npc.type == ModContent.NPCType<Turkey>())
-						{
-							texture = ModContent.Request<Texture2D>("Spooky/Content/NPCs/Tameable/TurkeyMapIcon").Value;
-						}
-						else if (npc.type == ModContent.NPCType<LittleDunk>())
-						{
-							texture = ModContent.Request<Texture2D>("Spooky/Content/NPCs/Tameable/LittleDunkMapIcon").Value;
-						}
-
 						Rectangle rectangle = texture.Frame();
 
 						spriteBatch.Draw(texture, vec, rectangle, Color.White * alphaMult, 0f, rectangle.Size() / 2f, drawScale, 0, 0f);
+						Rectangle rectangle2 = Utils.CenteredRectangle(vec, rectangle.Size() * drawScale);
+						if (rectangle2.Contains(Main.MouseScreen.ToPoint()))
+						{
+							mouseTextString = Language.GetTextValue("Mods.Spooky.NPCs.Turkey.DisplayName");
+						}
 					}
 				}
 			}
 		}
-		*/
 
 		public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {

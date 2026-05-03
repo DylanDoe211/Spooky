@@ -41,6 +41,12 @@ namespace Spooky.Content.Tiles.Blooms
 			HitSound = SoundID.Grass;
 		}
 
+		public override void PlaceInWorld(int i, int j, Item item)
+		{
+			BloomsPlantedSystem.VegetableSeed = true;
+			NetMessage.SendData(MessageID.WorldData);
+		}
+
 		public static void DrawPlant(int i, int j, Texture2D tex, Rectangle? source, Vector2? offset = null, Vector2? origin = null)
 		{
 			Vector2 drawPos = new Vector2(i, j).ToWorldCoordinates() - Main.screenPosition + (offset ?? new Vector2(0, -2));

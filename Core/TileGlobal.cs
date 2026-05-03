@@ -37,7 +37,7 @@ namespace Spooky.Core
             (ushort)ModContent.TileType<SummerBloomPlant>(),
             (ushort)ModContent.TileType<VegetableBloomPlant>(),
             (ushort)ModContent.TileType<WinterBloomPlant>(),
-			(ushort)ModContent.TileType<TomatoBloomPlant>(),
+			(ushort)ModContent.TileType<TomatoBloomPlant>()
 		};
 
 		public static Vector2 TileOffset => Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
@@ -64,76 +64,6 @@ namespace Spooky.Core
 
 			//orig MUST be returned by default in order for vanillas own shimmer locking conditions to apply
 			return orig(type);
-		}
-
-		public override void PlaceInWorld(int i, int j, int type, Item item)
-		{
-			if (Blooms.Contains((ushort)type))
-			{
-				if (type == Blooms[0])
-				{
-					Flags.BloomsPlanted[0] = true;
-				}
-				if (type == Blooms[1])
-				{
-					Flags.BloomsPlanted[1] = true;
-				}
-				if (type == Blooms[2])
-				{
-					Flags.BloomsPlanted[2] = true;
-				}
-				if (type == Blooms[3])
-				{
-					Flags.BloomsPlanted[3] = true;
-				}
-				if (type == Blooms[4])
-				{
-					Flags.BloomsPlanted[4] = true;
-				}
-				if (type == Blooms[5])
-				{
-					Flags.BloomsPlanted[5] = true;
-				}
-				if (type == Blooms[6])
-				{
-					Flags.BloomsPlanted[6] = true;
-				}
-				if (type == Blooms[7])
-				{
-					Flags.BloomsPlanted[7] = true;
-				}
-				if (type == Blooms[8])
-				{
-					Flags.BloomsPlanted[8] = true;
-				}
-				if (type == Blooms[9])
-				{
-					Flags.BloomsPlanted[9] = true;
-				}
-				if (type == Blooms[10])
-				{
-					Flags.BloomsPlanted[10] = true;
-				}
-				if (type == Blooms[11])
-				{
-					Flags.BloomsPlanted[11] = true;
-				}
-
-				bool CanGetAchievement = true;
-				foreach (bool var in Flags.BloomsPlanted)
-				{
-					if (var == false)
-					{
-						CanGetAchievement = false;
-						break;
-					}
-				}
-
-				if (CanGetAchievement)
-				{
-					ModContent.GetInstance<MiscAchievementBloomSeeds>().BloomSeedsCondition.Complete();
-				}
-			}
 		}
 
 		public override void KillTile(int i, int j, int type, ref bool fail, ref bool effectOnly, ref bool noItem)

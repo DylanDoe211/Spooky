@@ -343,34 +343,33 @@ namespace Spooky.Content.NPCs.Tameable
 				SoundTimer = 0;
 			}
 
-			float time = Main.GameUpdateCount % 60 / 60f;
-
 			//taming functionality
 			if (!NPC.GetGlobalNPC<NPCGlobal>().NPCTamed)
 			{
 				foreach (var item in Main.ActiveItems)
 				{
-					if (item.type == ModContent.ItemType<RottenSeed>() && item.stack > 0 && item.Distance(NPC.Center) <= 50)
+					if (item.type == ModContent.ItemType<RottenSeed>() && item.stack > 0 && item.Distance(NPC.Center) <= 25)
 					{
-						Vector2 desiredVelocity = item.DirectionTo(NPC.Center) * 7;
+						Vector2 desiredVelocity = item.DirectionTo(NPC.Center) * 8;
 						item.velocity = Vector2.Lerp(item.velocity, desiredVelocity, 1f / 20);
 
 						if (item.Hitbox.Intersects(NPC.Hitbox) && numSeedsEaten < 5)
 						{
-							if (time % 10 == 0)
+							SoundEngine.PlaySound(SoundID.Item2, NPC.Center);
+
+							for (int numDusts = 0; numDusts < 20; numDusts++)
 							{
-								SoundEngine.PlaySound(SoundID.Item2, NPC.Center);
-
-								for (int numDusts = 0; numDusts < 20; numDusts++)
-								{
-									Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.FoodPiece, NPC.velocity.X * 0.5f, NPC.velocity.Y * 0.5f, default, new Color(211, 109, 58), 0.75f);
-								}
-
-								item.stack--;
-
-								numSeedsEaten++;
-								NPC.netUpdate = true;
+								Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.FoodPiece, NPC.velocity.X * 0.5f, NPC.velocity.Y * 0.5f, default, new Color(211, 109, 58), 0.75f);
 							}
+
+							item.stack--;
+							if (item.stack == 0)
+							{
+								item.TurnToAir();
+							}
+
+							numSeedsEaten++;
+							NPC.netUpdate = true;
 						}
 					}
 				}

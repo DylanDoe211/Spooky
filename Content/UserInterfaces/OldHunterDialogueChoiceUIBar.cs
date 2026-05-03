@@ -55,6 +55,11 @@ namespace Spooky.Content.UserInterfaces
 
 			if (player.controlInv)
 			{
+				if (player.talkNPC > -1)
+				{
+					player.SetTalkNPC(-1);
+					Main.npcChatText = string.Empty;
+				}
 				OldHunter = -1;
 				UIOpen = false;
 			}
@@ -320,8 +325,7 @@ namespace Spooky.Content.UserInterfaces
 						}
 					}
 
-                    OldHunter = -1;
-                    UIOpen = false;
+					UIOpen = false;
                 }
             }
 
@@ -346,8 +350,12 @@ namespace Spooky.Content.UserInterfaces
                         Flags.SpawnOldHunter = true;
                     }
 
-                    OldHunter = -1;
-                    UIOpen = false;
+                    if (player.talkNPC > -1)
+					{
+						player.SetTalkNPC(-1);
+						Main.npcChatText = string.Empty;
+					}
+					UIOpen = false;
                 }
             }
 

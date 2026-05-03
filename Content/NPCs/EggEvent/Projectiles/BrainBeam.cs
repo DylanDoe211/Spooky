@@ -16,14 +16,14 @@ namespace Spooky.Content.NPCs.EggEvent.Projectiles
 
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 18;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
         }
 
         public override void SetDefaults()
         {
-			Projectile.width = 10;
-            Projectile.height = 28;
+			Projectile.width = 12;
+            Projectile.height = 12;
 			Projectile.friendly = false;
 			Projectile.hostile = true;                               			  		
             Projectile.tileCollide = false;
@@ -31,24 +31,27 @@ namespace Spooky.Content.NPCs.EggEvent.Projectiles
             Projectile.penetrate = 1;
 			Projectile.timeLeft = 300;
 		}
+
+        public override Color? GetAlpha(Color lightColor)
+		{
+            return Color.White * (1f - (Projectile.alpha / 255f));
+        }
         
         public override bool PreDraw(ref Color lightColor)
         {
             ProjTexture ??= ModContent.Request<Texture2D>(Texture);
 
-            Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
-            Vector2 vector = new Vector2(Projectile.Center.X, Projectile.Center.Y) - Main.screenPosition + new Vector2(0, Projectile.gfxOffY);
-			Rectangle rectangle = new(0, ProjTexture.Height() / Main.projFrames[Projectile.type] * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
+            Vector2 vector = new Vector2(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
 
-            for (int oldPos = 0; oldPos < Projectile.oldPos.Length; oldPos++)
+            for (int i = 0; i < Projectile.oldPos.Length; i++)
             {
-				float scale = Projectile.scale * (Projectile.oldPos.Length - oldPos) / Projectile.oldPos.Length * 1f;
-                Vector2 drawPos = Projectile.oldPos[oldPos] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                Color color = Projectile.GetAlpha(Color.MediumPurple) * ((Projectile.oldPos.Length - oldPos) / (float)Projectile.oldPos.Length);
-                Main.EntitySpriteDraw(ProjTexture.Value, drawPos, rectangle, color, Projectile.rotation, drawOrigin, scale, SpriteEffects.None, 0);
+                Vector2 position = Projectile.oldPos[i] - Main.screenPosition + vector + new Vector2(0f, Projectile.gfxOffY);
+                Color color = Color.MediumPurple * ((float)(Projectile.oldPos.Length - i) / (float)Projectile.oldPos.Length);
+                Rectangle value = new Rectangle(0, ProjTexture.Height() / Main.projFrames[Projectile.type] * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
+                Main.spriteBatch.Draw(ProjTexture.Value, position, value, color, Projectile.rotation, vector, Projectile.scale, SpriteEffects.None, 0f);
             }
 
-            return false;
+            return true;
         }
 
 		public override void OnHitPlayer(Player target, Player.HurtInfo info)

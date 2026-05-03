@@ -22,7 +22,7 @@ namespace Spooky.Content.NPCs.Friendly
 
         private static Asset<Texture2D> UITexture;
 
-        public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/TalkSounds/KrampusTalk", SoundType.Sound) { Volume = 0.35f, PitchVariance = 0.75f };
+        public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/TalkSounds/DumbZomboidTalk", SoundType.Sound) { Volume = 0.75f, PitchVariance = 0.75f };
 
         public override void Load()
 		{
@@ -86,31 +86,23 @@ namespace Spooky.Content.NPCs.Friendly
 			return true;
 		}
 
-        public override void SetChatButtons(ref string button, ref string button2)
-		{
-			button = "";
-		}
-
         public override string GetChat()
 		{
             ModContent.GetInstance<MiscAchievementDumbZomboid>().DumbZomboidCondition.Complete();
 
-            if (!Main.dedServ)
-            {
-                int DialogueChoice = Main.rand.Next(1, 3);
-                int PlayerDialogueChoice = Main.rand.Next(1, 3);
+            int DialogueChoice = Main.rand.Next(1, 3);
+            int PlayerDialogueChoice = Main.rand.Next(1, 3);
 
-                DialogueChain chain = new();
-                chain.Add(new(UITexture.Value, NPC,
-                Language.GetTextValue("Mods.Spooky.Dialogue.DumbZomboidDialogue.Dialogue" + DialogueChoice),
-                Language.GetTextValue("Mods.Spooky.Dialogue.DumbZomboidDialogue.DialoguePlayer" + PlayerDialogueChoice),
-                TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
-                .Add(new(UITexture.Value, NPC, null, null, TalkSound, 2f, 0f, modifier, true));
-                chain.OnPlayerResponseTrigger += PlayerResponse;
-                chain.OnEndTrigger += EndDialogue;
-                DialogueUI.Visible = true;
-                DialogueUI.Add(chain);
-            }
+            DialogueChain chain = new();
+            chain.Add(new(UITexture.Value, NPC,
+            Language.GetTextValue("Mods.Spooky.Dialogue.DumbZomboidDialogue.Dialogue" + DialogueChoice),
+            Language.GetTextValue("Mods.Spooky.Dialogue.DumbZomboidDialogue.DialoguePlayer" + PlayerDialogueChoice),
+            TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
+            .Add(new(UITexture.Value, NPC, null, null, TalkSound, 2f, 0f, modifier, true));
+            chain.OnPlayerResponseTrigger += PlayerResponse;
+            chain.OnEndTrigger += EndDialogue;
+            DialogueUI.Visible = true;
+            DialogueUI.Add(chain);
 
 			return string.Empty;
 		}

@@ -41,6 +41,9 @@ namespace Spooky.Content.NPCs.EggEvent.Projectiles
 
 			for (int k = 0; k < trailLength.Length; k++)
 			{
+				float scale = Projectile.scale * ((trailLength.Length - k) / (float)trailLength.Length) * 0.5f;
+				scale *= 1f;
+
 				Color color = Color.Gold.MultiplyRGBA(lightColor);
                 color *= (Projectile.timeLeft) / 90f;
 
@@ -59,7 +62,7 @@ namespace Spooky.Content.NPCs.EggEvent.Projectiles
 				{
 					drawPos = previousPosition + -betweenPositions * (i / max) - Main.screenPosition;
 
-					Main.spriteBatch.Draw(ProjTexture.Value, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale * 0.5f, SpriteEffects.None, 0f);
+					Main.spriteBatch.Draw(ProjTexture.Value, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale * scale, SpriteEffects.None, 0f);
 				}
 
 				previousPosition = currentPos;

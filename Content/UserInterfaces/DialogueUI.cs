@@ -24,7 +24,7 @@ namespace Spooky.Content.UserInterfaces
     {
         public static List<IDialogue> Dialogue;
 
-		public static bool Visible = true;
+		public static bool Visible = false;
 		public static bool DisplayPlayerResponse = false;
 		public static bool DisplayingPlayerResponse = false;
 
@@ -317,6 +317,7 @@ namespace Spooky.Content.UserInterfaces
 		public bool textFinished;
 		public bool IsLastDialogue;
 		public bool NotPlayer;
+		public bool StopTalkingToNPC;
 		public bool ClickedOnResponse = false;
 
 		public string text;
@@ -335,7 +336,7 @@ namespace Spooky.Content.UserInterfaces
 		public int NPCType;
 
 		public Dialogue(Texture2D texToUse, Entity entity, string text, string playerText, SoundStyle sound, float preFadeTime, float fadeTime, 
-		Vector2 modifier = default, bool IsLastDialogue = false, bool NotPlayer = true, float Expression = -1, int NPCID = -1)
+		Vector2 modifier = default, bool IsLastDialogue = false, bool NotPlayer = true, float Expression = -1, int NPCID = -1, bool StopTalkingToNPC = true)
 		{
 			this.entity = entity;
 			this.playerText ??= playerText;
@@ -344,6 +345,7 @@ namespace Spooky.Content.UserInterfaces
 
 			this.IsLastDialogue = IsLastDialogue;
 			this.NotPlayer = NotPlayer;
+			this.StopTalkingToNPC = StopTalkingToNPC;
 
 			this.preFadeTime = preFadeTime;
 			this.fadeTime = fadeTime;
@@ -482,6 +484,12 @@ namespace Spooky.Content.UserInterfaces
 			{
 				if (IsLastDialogue)
 				{
+					if (Main.LocalPlayer.talkNPC > -1 && StopTalkingToNPC)
+					{
+						Main.LocalPlayer.SetTalkNPC(-1);
+						Main.npcChatText = string.Empty;
+					}
+
 					TriggerEnd(0);
 					chain?.TriggerEnd(0);
 				}

@@ -65,8 +65,8 @@ namespace Spooky.Content.NPCs.SpiderCave
             NPC.npcSlots = 1f;
 			NPC.knockBackResist = 0.15f;
             NPC.value = Item.buyPrice(0, 0, 5, 0);
-            NPC.HitSound = SoundID.NPCHit45;
-			NPC.DeathSound = SoundID.NPCDeath34;
+            NPC.HitSound = SoundID.NPCHit32;
+			NPC.DeathSound = SoundID.NPCDeath17 with { Pitch = 0.5f };
             NPC.aiStyle = 26;
 			AIType = NPCID.Unicorn;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.SpiderCaveBiome>().Type };

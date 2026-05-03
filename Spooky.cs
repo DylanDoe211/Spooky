@@ -311,6 +311,12 @@ namespace Spooky
                     NetMessage.SendData(MessageID.WorldData);
                     break;
                 }
+                case SpookyMessageType.OldHunterDefeatDialogue:
+                {
+                    Flags.OldHunterDefeatDialogue = true;
+                    NetMessage.SendData(MessageID.WorldData);
+                    break;
+                }
 				//should never occur I think?
 				default:
                 {
@@ -358,6 +364,7 @@ namespace Spooky
         OldHunterQuest5Complete,
         OldHunterQuest6Complete,
         OldHunterQuest7Complete,
-        OldHunterQuest8Complete
+        OldHunterQuest8Complete,
+        OldHunterDefeatDialogue
 	}
 }

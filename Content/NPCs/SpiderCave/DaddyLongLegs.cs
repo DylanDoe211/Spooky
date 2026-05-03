@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
 using Spooky.Content.Items.SpiderCave.Misc;
@@ -14,6 +15,13 @@ namespace Spooky.Content.NPCs.SpiderCave
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 7;
+
+            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                Position = new Vector2(5f, 20f),
+                PortraitPositionXOverride = 0f,
+                PortraitPositionYOverride = 0f
+            };
         }
         
         public override void SetDefaults()

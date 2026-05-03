@@ -141,8 +141,11 @@ namespace Spooky.Content.NPCs.Friendly
 
 		public override string GetChat()
 		{
-			LittleEyeDialogueChoiceUI.LittleEye = NPC.whoAmI;
-			LittleEyeDialogueChoiceUI.UIOpen = true;
+			if (!DialogueUI.Visible)
+            {
+				LittleEyeDialogueChoiceUI.LittleEye = NPC.whoAmI;
+				LittleEyeDialogueChoiceUI.UIOpen = true;
+			}
             return string.Empty;
 		}
 
