@@ -53,6 +53,10 @@ namespace Spooky.Content.Projectiles.SpookyBiome
                 if (Main.myPlayer == Projectile.owner)
                 {
                     Vector2 muzzleOffset = Vector2.Normalize(new Vector2(Projectile.velocity.X, Projectile.velocity.Y)) * 45f;
+                    if (!Collision.CanHit(player.Center, 0, 0, player.Center + muzzleOffset, 0, 0))
+                    {
+                        muzzleOffset = Vector2.Zero;
+                    }
 
                     Projectile.NewProjectile(Projectile.GetSource_FromAI(), playerRelativePoint + Projectile.velocity * 0.8f + muzzleOffset,
                     Projectile.velocity * 3f, ModContent.ProjectileType<OldWoodStaffBolt>(), Projectile.damage, Projectile.knockBack, Projectile.owner);

@@ -27,9 +27,9 @@ namespace Spooky.Content.Projectiles.SpiderCave
 			SpriteEffects effects = ((!(Projectile.ai[0] >= 0f)) ? SpriteEffects.FlipVertically : SpriteEffects.None);
 			float CurrentAI = Projectile.localAI[0] / Projectile.ai[1];
 			float Intensity = Utils.Remap(CurrentAI, 0f, 0.6f, 0f, 1f) * Utils.Remap(CurrentAI, 0.6f, 1f, 1f, 0f);
-			Color SlashColor1 = Color.Lerp(Color.Red, Color.Gold, Intensity);
-			Color SlashColor2 = Color.Lerp(Color.Red, Color.Orange, Intensity);
-            Color SlashColor3 = Color.Lerp(Color.Red, Color.OrangeRed, Intensity);
+			Color SlashColor1 = Color.Lerp(Color.Red, Color.Orange, Intensity);
+			Color SlashColor2 = Color.Lerp(Color.Red, Color.OrangeRed, Intensity);
+            Color SlashColor3 = Color.Lerp(Color.Red, Color.Red, Intensity);
             Color SlashColor4 = Color.Lerp(Color.Red, Color.Red, Intensity);
 
             //these are the slash textures themselves

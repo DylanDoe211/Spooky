@@ -919,13 +919,24 @@ namespace Spooky.Content.NPCs.Boss.SpookySpirit
         {
             if (NPC.life <= 0) 
             {
-                for (int numDusts = 0; numDusts < 30; numDusts++)
+                float maxAmount = 20;
+                int currentAmount = 0;
+                while (currentAmount <= maxAmount)
                 {
-                    int dustGore = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<GlowyDust>(), 0f, -2f, 0, default, 0.35f);
-                    Main.dust[dustGore].color = Color.BlueViolet;
-                    Main.dust[dustGore].velocity.X *= Main.rand.NextFloat(-5f, 5f);
-                    Main.dust[dustGore].velocity.Y *= Main.rand.NextFloat(-3f, 3f);
-                    Main.dust[dustGore].noGravity = true;
+                    Vector2 velocity = new Vector2(Main.rand.NextFloat(4f, 7f), Main.rand.NextFloat(4f, 7f));
+                    Vector2 Bounds = new Vector2(Main.rand.NextFloat(4f, 7f), Main.rand.NextFloat(4f, 7f));
+                    float intensity = Main.rand.NextFloat(4f, 7f);
+
+                    Vector2 vector12 = Vector2.UnitX * 0f;
+                    vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
+                    vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
+
+                    int newDust = Dust.NewDust(NPC.Center, 1, 1, ModContent.DustType<GlowyDust>(), 0f, 0f, 0, Color.BlueViolet, 0.35f);
+                    Main.dust[newDust].noGravity = true;
+                    Main.dust[newDust].position = NPC.Center + vector12;
+                    Main.dust[newDust].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
+
+                    currentAmount++;
                 }
             }
         }

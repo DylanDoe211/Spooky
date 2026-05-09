@@ -45,7 +45,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 			NPCTexture ??= ModContent.Request<Texture2D>(Texture);
             NPCLightTexture ??= ModContent.Request<Texture2D>(Texture + "Light");
             NPCLightGlowTexture ??= ModContent.Request<Texture2D>(Texture + "LightGlow");
-			SpotlightTexture ??= ModContent.Request<Texture2D>("Spooky/ShaderAssets/LightCone");
+			SpotlightTexture ??= ModContent.Request<Texture2D>("Spooky/Effects/LightCone");
 
 			var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 

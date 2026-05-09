@@ -14,8 +14,8 @@ namespace Spooky.Content.Items.SpookyHell.Misc
 
         public override void SetDefaults()
         {
-            Item.width = 28;
-            Item.height = 26;
+            Item.width = 34;
+            Item.height = 32;
             Item.rare = ItemRarityID.Blue;
             Item.value = Item.buyPrice(silver: 2);
             Item.maxStack = 9999;

@@ -360,7 +360,7 @@ namespace Spooky.Content.NPCs.Quest
 								}
 
 								NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(center.X - 3, center.Y), Vector2.Zero, 
-								ModContent.ProjectileType<GoblinEyeDebrisGrounded>(), NPC.damage, 3.5f, ai1: NPC.whoAmI, Frame: Main.rand.Next(0, 4));
+								ModContent.ProjectileType<GoblinEyeDebrisGrounded>(), NPC.damage, 3.5f, ai1: NPC.whoAmI, ai2: Main.rand.Next(0, 4));
 							}
 						}
 

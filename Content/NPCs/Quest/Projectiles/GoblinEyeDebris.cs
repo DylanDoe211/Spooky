@@ -79,8 +79,9 @@ namespace Spooky.Content.NPCs.Quest.Projectiles
 
             Projectile.velocity.Y = Projectile.velocity.Y + 0.35f;
 
-            Projectile.ai[0]++;
+            Projectile.frame = (int)Projectile.ai[1];
 
+            Projectile.ai[0]++;
             if (Projectile.ai[0] < 20)
             {
                 Projectile.tileCollide = false;

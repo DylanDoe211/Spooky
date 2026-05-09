@@ -684,9 +684,11 @@ namespace Spooky.Core
 				}
 
 				//spawn friendly ghosts on hit with spirit amulet
-				if (SpiritAmulet && Main.rand.NextBool(5) && Player.ownedProjectileCounts[ModContent.ProjectileType<AmuletGhost>()] < 5)
+				if (SpiritAmulet && Main.rand.NextBool(10) && Player.ownedProjectileCounts[ModContent.ProjectileType<AmuletGhost>()] < 5)
 				{
-                    Projectile.NewProjectile(target.GetSource_OnHurt(Player), Player.Center, Vector2.Zero, ModContent.ProjectileType<AmuletGhost>(), damageDone / 2, 0, ai2: Main.rand.Next(0, 6));
+					int RealDamage = damageDone < 20 ? 20 : damageDone;
+
+					Projectile.NewProjectile(target.GetSource_OnHurt(Player), Player.Center, Vector2.Zero, ModContent.ProjectileType<AmuletGhost>(), RealDamage, 0, ai2: Main.rand.Next(0, 6));
 				}
 
                 //spawn rockets on hit with mortar armor
@@ -719,7 +721,7 @@ namespace Spooky.Core
 
 		public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
 		{
-            //broccoli armor spawns broccolis on enemies when hit by summons
+			//broccoli armor spawns broccolis on enemies when hit by summons
 			if (BroccoliSet && !proj.npcProj && !proj.trap && (proj.minion || ProjectileID.Sets.MinionShot[proj.type]) && proj.type != ModContent.ProjectileType<GrowingBroccoli>() && Main.rand.NextBool(5))
 			{
 				Vector2 projPos = target.Center + new Vector2(1, 0).RotatedByRandom(360);
@@ -831,6 +833,7 @@ namespace Spooky.Core
 				}
 			}
 
+			//spawn hallucigenia spines
             if (HallucigeniaSpine)
             {
                 int[] Types = { ModContent.ProjectileType<HallucigeniaSpineProj1>(), ModContent.ProjectileType<HallucigeniaSpineProj2>() };
@@ -860,6 +863,7 @@ namespace Spooky.Core
 				}
             }
 
+			//tar cactus armor spawns cactus spines around you
             if (TarCactusSet)
             {
 				int MinDamage = 20;
@@ -912,25 +916,28 @@ namespace Spooky.Core
         {
             bool ShouldPlayerDie = true;
 
-            //embryo revive ability
             if (Player.statLife <= 0)
 			{
+                //embryo revive ability
                 if (OrroboroEmbyro && !Player.HasBuff(ModContent.BuffType<EmbryoCooldown>()))
                 {
                     SoundEngine.PlaySound(SoundID.Item103, Player.Center);
                     Player.AddBuff(ModContent.BuffType<EmbryoRevival>(), 300);
-                    Player.AddBuff(ModContent.BuffType<EmbryoCooldown>(), 36000);
+                    Player.AddBuff(ModContent.BuffType<EmbryoCooldown>(), 18000);
                     Player.immuneTime += 60;
                     Player.statLife = 1;
                     ShouldPlayerDie = false;
                 }
-
-                if (KrampusResolution && KrampusResolutionTimer <= 0)
+                //only activate new years resolution ability if the embryo isnt active or cant revive you
+                else
                 {
-                    KrampusResolutionTimer = 300;
-                    Player.immuneTime += 300;
-                    Player.statLife = 1;
-                    ShouldPlayerDie = false;
+                    if (KrampusResolution && KrampusResolutionTimer <= 0)
+                    {
+                        KrampusResolutionTimer = 300;
+                        Player.immuneTime += 300;
+                        Player.statLife = 1;
+                        ShouldPlayerDie = false;
+                    }
                 }
             }
 
@@ -1415,7 +1422,7 @@ namespace Spooky.Core
                     }
                 }
 
-                CombatText.NewText(Player.getRect(), Color.DarkOrchid, Language.GetTextValue("Mods.Spooky.Dialogue.SentientCap.Dialogue" + Main.rand.Next(1, 7).ToString()), true);
+                CustomPopupText.SpawnText(Player.Top, Language.GetTextValue("Mods.Spooky.Dialogue.SentientCap.Dialogue" + Main.rand.Next(1, 7).ToString()), Color.DarkOrchid, Player.velocity, 60);
             }
         }
 

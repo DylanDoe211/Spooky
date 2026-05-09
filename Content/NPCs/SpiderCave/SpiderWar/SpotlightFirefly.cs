@@ -64,7 +64,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 		{
 			NPCTexture ??= ModContent.Request<Texture2D>(Texture);
             GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
-			SpotlightTexture ??= ModContent.Request<Texture2D>("Spooky/ShaderAssets/LightCone");
+			SpotlightTexture ??= ModContent.Request<Texture2D>("Spooky/Effects/LightCone");
 
             Vector2 frameOrigin = new Vector2(SpotlightTexture.Width() / 2f, 0f);
             Vector2 drawPos = NPC.Center - Main.screenPosition + frameOrigin + new Vector2(-SpotlightTexture.Width() / 2, NPC.gfxOffY + 4);

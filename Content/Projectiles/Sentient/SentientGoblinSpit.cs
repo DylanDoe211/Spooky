@@ -183,7 +183,7 @@ namespace Spooky.Content.Projectiles.Sentient
                 }
 
                 Projectile.ai[0]++;
-                if (Projectile.ai[0] % 30 == 0)
+                if (Projectile.ai[0] % 20 == 0)
                 {
                     SoundEngine.PlaySound(SoundID.NPCDeath9 with { Pitch = -1f }, Projectile.Center);
 

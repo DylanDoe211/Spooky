@@ -39,6 +39,7 @@ namespace Spooky.Content.Items.Debug
             Flags.BountyInProgress4 = false;
             Flags.BountyIntro = false;
             Flags.PokedLittleEye = false;
+            Flags.AlreadyPokedLittleEye = false;
 
 			return true;
 		}

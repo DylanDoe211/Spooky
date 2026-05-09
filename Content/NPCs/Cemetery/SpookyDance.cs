@@ -60,6 +60,7 @@ namespace Spooky.Content.NPCs.Cemetery
                     int GhostDust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.GemDiamond, 0f, 0f, 100, default, 2f);
                     Main.dust[GhostDust].velocity *= 1.2f;
                     Main.dust[GhostDust].noGravity = true;
+                    Main.dust[GhostDust].noLight = true;
 
                     if (Main.rand.NextBool(2))
                     {

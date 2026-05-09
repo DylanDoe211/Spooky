@@ -95,6 +95,7 @@ Weapons/Accessories:
 -Spider-wing longbow now increases its shoot frequency quicker, and made its maximum shoot frequency higher
 -Increased old hunter's rifle shoot speed
 -Increased spider egg cannon shoot speed
+-Undying embryo revival cooldown reduced from 10 minutes -> 5 minutes
 -Stik brix accessory now throws out way more brix projectiles, and shoots them way further from you
 -Lowered the volume for the EMF reader beeping sounds, ear companion screeching sound, and moocher staff flame explosion sounds
 -Blackberry glacier now guarantees any blooms you eat will last double their normal duration instead of it only being a chance
@@ -157,7 +158,6 @@ Miscellaneous Changes:
 -Big dunk now drops 3 to 4 unidentifiable organs instead of 1 to 2
 -Improved egg incursion biomass explosion visuals a little bit
 -Resprited organic mush walls to look like organic mush blocks
--Catacomb keys are now stackable to 9999
 -Candy corn and vampire gummy now give well fed like other foods
 -Spi-ops armor now has a recipe group for silver/tungsten bars, instead of having 2 different crafting recipes for every piece of the armor
 -All friendly npcs in spooky mod that exist in specific locations (Like krampus and little eye) no longer take up any npc slots (Essentially this just means they no longer unintentionally impact spawnrates)
@@ -166,6 +166,11 @@ Miscellaneous Changes:
 -Improved the raveyard sky beam visual effect to look better and prevent beams from being way too high in the air
 -Big bone and daffodils arenas now inflict creative shock while you are in them to prevent placing blocks as it can mess with their attacks
 -Spooky mod minibosses no longer count as actual bosses in the bestiary
+-Big bone bobber and pumpkin bobber are now functional items and are obtainable in their corresponding spooky mod fishing crates
+-Little eye quests no longer give you goodie bags
+-Little eye quest items that you give to him now stack to 9999
+-Catacomb keys are now stackable to 9999
+-Resprited a bunch of stuff (Sorry I forgot to keep track of what specifically)
 
 
 ~Fixes~
@@ -188,6 +193,8 @@ Bug, Issue, and Oversight Fixes:
 -Cemetery screen color tint being applied while in the catacombs
 -Ghost pepper scepter doing damage way too much, and fixed damage scaling not working properly
 -Spook fishron and spooky sharkron bestiary entries unintentionally having their orange aura
+-New years resolution not accounting for the undying embryos revival (Now, the new years resolution player kill countdown will not happen if the undying embryo is able to revive you first)
+-Spooky mod special glowy bloom-light dust particles looking off due to an issue with how they were drawn
 
 Multiplayer Fixes:
 -Mysterious tombstone ghost ambushes not working correctly

@@ -26,9 +26,9 @@ namespace Spooky.Content.Biomes
 
 			SporeMist = ModContent.Request<Effect>("Spooky/Effects/MoldMist");
 
-			SwirlyNoise = ModContent.Request<Texture2D>("Spooky/ShaderAssets/swirlyNoise");
-			SwirlyNoiseInv = ModContent.Request<Texture2D>("Spooky/ShaderAssets/swirlyNoiseInverted");
-			StarNoise = ModContent.Request<Texture2D>("Spooky/ShaderAssets/starNoise");
+			SwirlyNoise = ModContent.Request<Texture2D>("Spooky/Effects/swirlyNoise");
+			SwirlyNoiseInv = ModContent.Request<Texture2D>("Spooky/Effects/swirlyNoiseInverted");
+			StarNoise = ModContent.Request<Texture2D>("Spooky/Effects/starNoise");
 		}
 
 		float FogAlpha = 0f;

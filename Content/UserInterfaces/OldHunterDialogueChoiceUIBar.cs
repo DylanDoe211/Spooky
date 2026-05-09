@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using Spooky.Core;
 using Spooky.Content.Achievements;
 using Spooky.Content.Items.Quest;
+using Spooky.Content.Items.Slingshots;
+using Spooky.Content.Items.SpiderCave;
 using Spooky.Content.Items.SpiderCave.Misc;
 
 namespace Spooky.Content.UserInterfaces
@@ -131,7 +133,7 @@ namespace Spooky.Content.UserInterfaces
 						DialogueUI.Add(chain);
 					}
 					//post spider war
-					else if (Flags.downedSpiderWar)
+					else if (Flags.downedSpiderWar && !Flags.OldHunterQuestEnd)
 					{
 						DialogueChain chain = new();
 						chain.Add(new(UITexture.Value, Main.npc[OldHunter],
@@ -160,7 +162,7 @@ namespace Spooky.Content.UserInterfaces
 						TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
 						.Add(new(UITexture.Value, Main.npc[OldHunter], null, null, TalkSound, 2f, 0f, modifier, true));
 						chain.OnPlayerResponseTrigger += PlayerResponse;
-						chain.OnEndTrigger += EndDialogue;
+						chain.OnEndTrigger += EndDialoguePostWar;
 						DialogueUI.Visible = true;
 						DialogueUI.Add(chain);
 					}
@@ -424,9 +426,25 @@ namespace Spooky.Content.UserInterfaces
 			DialogueUI.Visible = false;
 		}
 
-		public static  void EndDialogueBountyComplete(Dialogue dialogue, int ID)
+		public static void EndDialogueBountyComplete(Dialogue dialogue, int ID)
 		{
 			GiveRewardAndSetComplete();
+
+			DialogueUI.Visible = false;
+		}
+
+		public static void EndDialoguePostWar(Dialogue dialogue, int ID)
+		{
+			if (Main.netMode != NetmodeID.SinglePlayer)
+			{
+				ModPacket packet = Mod.GetPacket();
+				packet.Write((byte)SpookyMessageType.OldHunterQuestEnd);
+				packet.Send();
+			}
+			else
+			{
+				Flags.OldHunterQuestEnd = true;
+			}
 
 			DialogueUI.Visible = false;
 		}
@@ -552,7 +570,26 @@ namespace Spooky.Content.UserInterfaces
 				ModContent.GetInstance<MiscAchievementOldHunterQuest>().OldHunterQuestCondition.Complete();
 			}
 
-			SpawnItem(ItemID.GoldCoin, 10);
+			//actual unique weapons
+			int[] MainItem = new int[] { ModContent.ItemType<ProSlingshot>(), ModContent.ItemType<MagicBeanBag>(), ModContent.ItemType<MetalFistBox>(), 
+			ModContent.ItemType<PossessedCrown>(), ModContent.ItemType<TrackingCrossbow>(), ModContent.ItemType<WrestlingBelt>() };
+			SpawnItem(Main.rand.Next(MainItem), 1);
+
+			//give souls of night or light
+			int[] Souls = new int[] { ItemID.SoulofNight, ItemID.SoulofLight };
+			SpawnItem(Main.rand.Next(Souls), Main.rand.Next(8, 16));
+
+			//give random tier 2 or 3 hardmode bars 
+			int[] Bars = new int[] { ItemID.MythrilBar, ItemID.OrichalcumBar, ItemID.AdamantiteBar, ItemID.TitaniumBar };
+			SpawnItem(Main.rand.Next(Bars), Main.rand.Next(12, 26));
+
+			//give potions
+			int[] Potions = new int[] { ItemID.BattlePotion, ItemID.CalmingPotion, ItemID.EndurancePotion, ItemID.LuckPotionGreater, ItemID.IronskinPotion,
+			ItemID.LifeforcePotion, ItemID.MagicPowerPotion, ItemID.RegenerationPotion, ItemID.SummoningPotion, ItemID.WrathPotion };
+			SpawnItem(Main.rand.Next(Potions), Main.rand.Next(2, 6));
+
+			//coins
+			SpawnItem(ItemID.GoldCoin, Main.rand.Next(5, 11));
 		}
     }
 }

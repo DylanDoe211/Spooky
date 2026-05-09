@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Spooky.Content.Buffs.Minion;
 using Spooky.Content.Projectiles.SpiderCave;
  
-namespace Spooky.Content.Items.SpiderCave.OldHunter
+namespace Spooky.Content.Items.SpiderCave
 {
     public class PossessedCrown : ModItem
     {

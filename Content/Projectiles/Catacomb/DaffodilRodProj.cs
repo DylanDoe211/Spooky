@@ -57,9 +57,13 @@ namespace Spooky.Content.Projectiles.Catacomb
                     {
                         Projectile.ai[1] = 1;
 
-                        Vector2 offset = Vector2.Normalize(new Vector2(Projectile.velocity.X, Projectile.velocity.Y)) * 45f;
+                        Vector2 muzzleOffset = Vector2.Normalize(new Vector2(Projectile.velocity.X, Projectile.velocity.Y)) * 45f;
+                        if (!Collision.CanHit(player.Center, 0, 0, player.Center + muzzleOffset, 0, 0))
+                        {
+                            muzzleOffset = Vector2.Zero;
+                        }
 
-                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), playerRelativePoint + Projectile.velocity * 0.8f + offset,
+                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), playerRelativePoint + Projectile.velocity * 0.8f + muzzleOffset,
                         Projectile.velocity * 1.5f, ModContent.ProjectileType<DaffodilRodFlower>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                     }
                 }

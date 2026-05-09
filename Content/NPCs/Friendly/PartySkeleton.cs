@@ -259,81 +259,30 @@ namespace Spooky.Content.NPCs.Friendly
 
         public override bool CanChat() 
         {
-			return false;
+			return true;
 		}
+
+        public override string GetChat()
+		{
+            DialogueChain chain = new();
+            chain.Add(new(UITexture.Value, NPC,
+            Language.GetTextValue("Mods.Spooky.Dialogue.PartySkeleton.Dialogue" + dialogueStyle.ToString()),
+            Language.GetTextValue("..."),
+            TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
+            .Add(new(UITexture.Value, NPC, null, null, TalkSound, 2f, 0f, modifier, true));
+            chain.OnPlayerResponseTrigger += PlayerResponse;
+            chain.OnEndTrigger += EndDialogue;
+            DialogueUI.Visible = true;
+            DialogueUI.Add(chain);
+
+            return string.Empty;
+        }
 
         public override void AI()
         {
             NPC.spriteDirection = NPC.direction;
 
-            if (PlayerTalkingTo != null)
-            {
-                NPC.TargetClosest(true);
-
-                NPC.velocity.X = 0;
-            }
-
             Player player = Main.LocalPlayer;
-			
-			if (NPC.Hitbox.Intersects(new Rectangle((int)Main.MouseWorld.X - 1, (int)Main.MouseWorld.Y - 1, 1, 1)) &&
-			NPC.Distance(player.Center) <= 150f && !Main.mapFullscreen)
-			{
-				if (Main.mouseRight && Main.mouseRightRelease && PlayerTalkingTo == null)
-				{
-					Main.BestiaryTracker.Chats.SetWasChatWithDirectly(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[Type]);
-
-					PlayerTalkingTo = player;
-
-					if (!Main.dedServ)
-					{
-                        Color color = Color.White;
-
-                        if (NPC.type == ModContent.NPCType<PartySkeleton1>())
-                        {
-                            color = Color.Orange;
-                        }
-                        if (NPC.type == ModContent.NPCType<PartySkeleton2>())
-                        {
-                            color = Color.ForestGreen;
-                        }
-                        if (NPC.type == ModContent.NPCType<PartySkeleton3>())
-                        {
-                            color = Color.Crimson;
-                        }
-                        if (NPC.type == ModContent.NPCType<PartySkeleton4>())
-                        {
-                            color = Color.MediumPurple;
-                        }
-                        if (NPC.type == ModContent.NPCType<PartySkeleton5>())
-                        {
-                            color = Color.Cyan;
-                        }
-                        if (NPC.type == ModContent.NPCType<PartySkeleton6>())
-                        {
-                            color = Color.HotPink;
-                        }
-                        if (NPC.type == ModContent.NPCType<PartySkeleton7>())
-                        {
-                            color = Color.YellowGreen;
-                        }
-                        if (NPC.type == ModContent.NPCType<PartySkeleton8>())
-                        {
-                            color = Color.Navy;
-                        }
-
-                        DialogueChain chain = new();
-                        chain.Add(new(UITexture.Value, NPC,
-                        Language.GetTextValue("Mods.Spooky.Dialogue.PartySkeleton.Dialogue" + dialogueStyle.ToString()),
-                        Language.GetTextValue("..."),
-                        TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
-                        .Add(new(UITexture.Value, NPC, null, null, TalkSound, 2f, 0f, modifier, true));
-                        chain.OnPlayerResponseTrigger += PlayerResponse;
-                        chain.OnEndTrigger += EndDialogue;
-                        DialogueUI.Visible = true;
-                        DialogueUI.Add(chain);
-                    }
-                }
-            }
 
             NPC.localAI[0]++;
             if (NPC.localAI[0] == 1)

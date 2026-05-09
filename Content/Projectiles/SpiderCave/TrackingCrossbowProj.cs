@@ -141,12 +141,11 @@ namespace Spooky.Content.Projectiles.SpiderCave
                             TypeToShoot = ModContent.ProjectileType<TrackingCrossbowBolt>();
                         }
 
-                        Vector2 ShootSpeed = Main.MouseWorld - new Vector2(Projectile.Center.X, Projectile.Center.Y - playerCenterOffset);
+                        Vector2 ShootSpeed = Main.MouseWorld - Projectile.Center;
                         ShootSpeed.Normalize();
                         ShootSpeed *= ItemGlobal.ActiveItem(player).shootSpeed;
 
-                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center.X, Projectile.Center.Y - playerCenterOffset, ShootSpeed.X, ShootSpeed.Y, 
-                        TypeToShoot, Projectile.damage, Projectile.knockBack, Projectile.owner);
+                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, ShootSpeed, TypeToShoot, Projectile.damage, Projectile.knockBack, Projectile.owner);
                     }
                 }
 

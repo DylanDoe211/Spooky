@@ -70,7 +70,7 @@ namespace Spooky.Content.NPCs.Friendly
                     float radians = (i + (fade / 2)) * MathHelper.TwoPi;
 
                     Main.EntitySpriteDraw(AuraTexture.Value, NPC.Center - screenPos + new Vector2(12, NPC.gfxOffY + 12).RotatedBy(radians) * time, 
-                    NPC.frame, NPC.GetAlpha(Color.Cyan * 0.2f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale + scaleTime * 1.2f, SpriteEffects.None, 0);
+                    NPC.frame, NPC.GetAlpha(Color.Cyan * 0.2f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale + scaleTime * 0.85f, SpriteEffects.None, 0);
                 }
             }
             
@@ -130,6 +130,7 @@ namespace Spooky.Content.NPCs.Friendly
                             Dust dust = Main.dust[Dust.NewDust(DustPos, 0, 0, DustID.UltraBrightTorch, 0, 0, 100, Color.White, 1f)];
                             dust.velocity = -((DustPos - NPC.Center) * Main.rand.NextFloat(0.01f, 0.12f));
                             dust.noGravity = true;
+                            dust.noLight = true;
                             dust.scale = 2f;
                         }
                     }

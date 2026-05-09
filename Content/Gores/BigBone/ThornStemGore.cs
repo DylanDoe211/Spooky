@@ -5,7 +5,7 @@ using Terraria.DataStructures;
 
 namespace Spooky.Content.Gores.BigBone
 {
-	public class EyeFlowerStemGore1 : ModGore
+	public class ThornStemGore1 : ModGore
 	{
 		public override void OnSpawn(Gore gore, IEntitySource source)
 		{
@@ -14,7 +14,7 @@ namespace Spooky.Content.Gores.BigBone
 		}
 	}
 
-	public class EyeFlowerStemGore2 : EyeFlowerStemGore1
+	public class ThornStemGore2 : ThornStemGore1
 	{
 	}
 }

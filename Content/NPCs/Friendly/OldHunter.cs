@@ -57,7 +57,7 @@ namespace Spooky.Content.NPCs.Friendly
 			NPC.dontTakeDamage = true;
 			NPC.dontCountMe = true;
 			TownNPCStayingHomeless = true;
-			NPC.knockBackResist = 0.75f;
+			NPC.knockBackResist = 0f;
             NPC.HitSound = SoundID.NPCHit2;
 			NPC.DeathSound = SoundID.NPCDeath2;
             NPC.aiStyle = 7;
@@ -111,6 +111,35 @@ namespace Spooky.Content.NPCs.Friendly
 
         public override string GetChat()
 		{
+            if (!Flags.OldHunterDefeatDialogue)
+            {
+                DialogueChain chain = new();
+                chain.Add(new(UITexture.Value, NPC,
+                Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Defeat1"),
+                Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerDefeat1"),
+                TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
+                .Add(new(UITexture.Value, NPC,
+                Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Defeat2"),
+                Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerDefeat2"),
+                TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
+                .Add(new(UITexture.Value, NPC,
+                Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Defeat3"),
+                Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerDefeat3"),
+                TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
+                .Add(new(UITexture.Value, NPC,
+                Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Defeat4"),
+                Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerDefeat4"),
+                TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
+                .Add(new(UITexture.Value, NPC,
+                Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Defeat5"),
+                Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerDefeat5"),
+                TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
+                .Add(new(UITexture.Value, NPC, null, null, TalkSound, 2f, 0f, modifier, true));
+                chain.OnPlayerResponseTrigger += PlayerResponse;
+                chain.OnEndTrigger += EndDialogue;
+                DialogueUI.Visible = true;
+                DialogueUI.Add(chain);
+            }
             if (Flags.OldHunterDefeatDialogue && !DialogueUI.Visible)
             {
                 OldHunterDialogueChoiceUI.OldHunter = NPC.whoAmI;
@@ -140,47 +169,6 @@ namespace Spooky.Content.NPCs.Friendly
                     NPC.velocity.X = -NPC.velocity.X;
                     NPC.direction = -NPC.direction;
                     NPC.netUpdate = true;
-                }
-            }
-
-            Player player = Main.LocalPlayer;
-			
-			if (NPC.Hitbox.Intersects(new Rectangle((int)Main.MouseWorld.X - 1, (int)Main.MouseWorld.Y - 1, 1, 1)) &&
-			NPC.Distance(player.Center) <= 150f && !Main.mapFullscreen && !Flags.OldHunterDefeatDialogue)
-			{
-				if (Main.mouseRight && Main.mouseRightRelease && PlayerTalkingTo == null)
-				{
-					PlayerTalkingTo = player;
-
-					if (!Main.dedServ)
-					{
-                        DialogueChain chain = new();
-                        chain.Add(new(UITexture.Value, NPC,
-                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Defeat1"),
-                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerDefeat1"),
-                        TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
-                        .Add(new(UITexture.Value, NPC,
-                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Defeat2"),
-                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerDefeat2"),
-                        TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
-                        .Add(new(UITexture.Value, NPC,
-                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Defeat3"),
-                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerDefeat3"),
-                        TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
-                        .Add(new(UITexture.Value, NPC,
-                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Defeat4"),
-                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerDefeat4"),
-                        TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
-                        .Add(new(UITexture.Value, NPC,
-                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.Defeat5"),
-                        Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerDefeat5"),
-                        TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
-                        .Add(new(UITexture.Value, NPC, null, null, TalkSound, 2f, 0f, modifier, true));
-                        chain.OnPlayerResponseTrigger += PlayerResponse;
-                        chain.OnEndTrigger += EndDialogue;
-                        DialogueUI.Visible = true;
-                        DialogueUI.Add(chain);
-                    }
                 }
             }
         }

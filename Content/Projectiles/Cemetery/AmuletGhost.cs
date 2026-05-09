@@ -72,7 +72,7 @@ namespace Spooky.Content.Projectiles.Cemetery
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-			Projectile.alpha += 85; //85 is 1/3rd of 255 and this projectile can hit enemies 3 times before dying
+			Projectile.alpha += 40;
 		}
 
         public override void AI()

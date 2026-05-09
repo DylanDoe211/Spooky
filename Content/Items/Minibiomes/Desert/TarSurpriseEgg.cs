@@ -2,6 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using Spooky.Content.Items.Slingshots;
 using Spooky.Content.Items.Minibiomes.Armor;
 
 namespace Spooky.Content.Items.Minibiomes.Desert
@@ -31,7 +32,7 @@ namespace Spooky.Content.Items.Minibiomes.Desert
         public override void ExtractinatorUse(int extractinatorBlockType, ref int resultType, ref int resultStack)
 		{
             int[] Items = { ModContent.ItemType<GoldrushPickaxe>(), ModContent.ItemType<TarBomb>(), 
-            ModContent.ItemType<TarGun>(), ModContent.ItemType<TarFeatherTome>(),
+            ModContent.ItemType<TarGun>(), ModContent.ItemType<TarFeatherTome>(), ModContent.ItemType<TarFlinger>(),
             ModContent.ItemType<GoldrushHead>(), ModContent.ItemType<GoldrushBody>(), ModContent.ItemType<GoldrushLegs>() };
 
             resultType = Main.rand.Next(Items);

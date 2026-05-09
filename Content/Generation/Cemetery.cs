@@ -210,11 +210,11 @@ namespace Spooky.Content.Generation
             //get the two surface points at the left and right of the cemetery biome
 			while (!foundSurfaceLeft && attemptsLeft++ < 100000)
 			{
-				while ((!IsCemeteryTile(XStart, LeftY) || !NoFloatingIsland(XStart, LeftY)) && LeftY <= Main.maxTilesY)
+				while ((!IsCemeteryTile(XStart - 1, LeftY) || !NoFloatingIsland(XStart - 1, LeftY)) && LeftY <= Main.maxTilesY)
 				{
 					LeftY++;
 				}
-				if ((WorldGen.SolidTile(XStart, LeftY) || Main.tile[XStart, LeftY].WallType > 0) && NoFloatingIsland(XStart, LeftY))
+				if ((WorldGen.SolidTile(XStart - 1, LeftY) || Main.tile[XStart - 1, LeftY].WallType > 0) && NoFloatingIsland(XStart - 1, LeftY))
 				{
 					foundSurfaceLeft = true;
 				}
@@ -225,11 +225,11 @@ namespace Spooky.Content.Generation
 
 			while (!foundSurfaceRight && attemptsRight++ < 100000)
 			{
-				while ((!IsCemeteryTile(XEdge, RightY) || !NoFloatingIsland(XEdge, RightY)) && RightY <= Main.maxTilesY)
+				while ((!IsCemeteryTile(XEdge + 1, RightY) || !NoFloatingIsland(XEdge + 1, RightY)) && RightY <= Main.maxTilesY)
 				{
 					RightY++;
 				}
-				if ((WorldGen.SolidTile(XEdge, RightY) || Main.tile[XEdge, RightY].WallType > 0) && NoFloatingIsland(XEdge, RightY))
+				if ((WorldGen.SolidTile(XEdge + 1, RightY) || Main.tile[XEdge + 1, RightY].WallType > 0) && NoFloatingIsland(XEdge + 1, RightY))
 				{
 					foundSurfaceRight = true;
 				}
@@ -304,7 +304,7 @@ namespace Spooky.Content.Generation
             int XMiddle = Catacombs.PositionX;
             int XEdge = Catacombs.PositionX + (BiomeWidth / 2);
 
-            for (int X = XMiddle - (BiomeWidth / 2) - 100; X <= XMiddle + (BiomeWidth / 2) + 100; X++)
+            for (int X = XMiddle - (BiomeWidth / 2); X <= XMiddle + (BiomeWidth / 2); X++)
             {
                 for (int Y = PositionY - 75; Y <= Main.worldSurface; Y++)
                 {
@@ -331,6 +331,12 @@ namespace Spooky.Content.Generation
 
 							WorldGen.GrowTreeWithSettings(X, Y - 1, TreeSettings);
 						}
+
+                        //place shovels
+                        if (WorldGen.genRand.NextBool(15) && !tileAbove.HasTile && !tile.LeftSlope && !tile.RightSlope && !tile.IsHalfBlock)
+                        {
+                            WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<GraveShovelTile>());
+                        }
 
                         //grow cemetery weeds
                         if (WorldGen.genRand.NextBool() && !tileAbove.HasTile && !tile.LeftSlope && !tile.RightSlope && !tile.IsHalfBlock)
@@ -532,16 +538,16 @@ namespace Spooky.Content.Generation
 
 		public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
         {
-            int GenIndex1 = tasks.FindIndex(genpass => genpass.Name.Equals("Dirt Rock Wall Runner"));
-			if (GenIndex1 == -1)
+            int GenIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Dirt Rock Wall Runner"));
+			if (GenIndex == -1)
 			{
 				return;
 			}
 
-            tasks.Insert(GenIndex1 + 1, new PassLegacy("Cemetery", PlaceCemetery));
-			tasks.Insert(GenIndex1 + 2, new PassLegacy("Cemetery Flattening", CemeteryFlattening));
-            tasks.Insert(GenIndex1 + 3, new PassLegacy("Cemetery Ambience", CemeteryAmbience));
-			tasks.Insert(GenIndex1 + 4, new PassLegacy("Cemetery Structures", GenerateCemeteryStructures));
+            tasks.Insert(GenIndex + 1, new PassLegacy("Cemetery", PlaceCemetery));
+			tasks.Insert(GenIndex + 2, new PassLegacy("Cemetery Flattening", CemeteryFlattening));
+            tasks.Insert(GenIndex + 3, new PassLegacy("Cemetery Structures", GenerateCemeteryStructures));
+            tasks.Insert(GenIndex + 4, new PassLegacy("Cemetery Ambience", CemeteryAmbience));
         }
 
         public override void PostWorldGen()

@@ -41,7 +41,7 @@ namespace Spooky.Content.Projectiles.SpookyBiome
             for (int oldPos = 0; oldPos < Projectile.oldPos.Length; oldPos++)
             {
                 float scale = Projectile.scale * (Projectile.oldPos.Length - oldPos) / Projectile.oldPos.Length * 1f;
-                Vector2 drawPos = Projectile.oldPos[oldPos] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+                Vector2 drawPos = Projectile.oldPos[oldPos] - Main.screenPosition + (drawOrigin * scale) + new Vector2(0f, Projectile.gfxOffY);
                 Rectangle rectangle = new(0, (ProjTexture.Height() / Main.projFrames[Projectile.type]) * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
                 Main.EntitySpriteDraw(ProjTexture.Value, drawPos, rectangle, color * 0.75f, Projectile.rotation, drawOrigin, scale, SpriteEffects.None, 0);
             }

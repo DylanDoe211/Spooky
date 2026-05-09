@@ -340,7 +340,7 @@ namespace Spooky.Content.UserInterfaces
 						}
                     }
 					//if little eye is not poked and you have finished the orroboro fight
-					else if (Flags.downedOrroboro && !Flags.PokedLittleEye)
+					else if (Flags.downedOrroboro && !Flags.AlreadyPokedLittleEye)
 					{
 						DialogueChain chain = new();
 						chain.Add(new(UITexture.Value, Main.npc[LittleEye],
@@ -691,7 +691,10 @@ namespace Spooky.Content.UserInterfaces
 				SpawnItem(ModContent.ItemType<SnotMedication>(), 1);
 			}
 
-			SpawnItem(ItemID.GoodieBag, Main.rand.Next(1, 5));
+			if (Main.rand.NextBool(3))
+			{
+				SpawnItem(ModContent.ItemType<ThreeDimensionalGlasses>(), 1);
+			}
 
 			if (Main.rand.NextBool())
 			{

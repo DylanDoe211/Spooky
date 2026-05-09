@@ -83,6 +83,7 @@ namespace Spooky.Core
 		public static bool BountyInProgress4 = false;
 		public static bool BountyIntro = false;
 		public static bool PokedLittleEye = false;
+		public static bool AlreadyPokedLittleEye = false;
 
 		//old hunter quests
 		public static bool OldHunterDefeatDialogue = false;
@@ -94,6 +95,7 @@ namespace Spooky.Core
         public static bool OldHunterQuest6 = false;
         public static bool OldHunterQuest7 = false;
 		public static bool OldHunterQuest8 = false;
+		public static bool OldHunterQuestEnd = false;
 
 		//misc stuff
 		public static bool SpookyBackgroundAlt = false;
@@ -176,6 +178,7 @@ namespace Spooky.Core
 			BountyInProgress4 = false;
 			BountyIntro = false;
 			PokedLittleEye = false;
+			AlreadyPokedLittleEye = false;
 
 			//old hunter quests
 			OldHunterDefeatDialogue = false;
@@ -187,6 +190,7 @@ namespace Spooky.Core
 			OldHunterQuest6 = false;
 			OldHunterQuest7 = false;
 			OldHunterQuest8 = false;
+			OldHunterQuestEnd = false;
 
 			//misc stuff
 			SpookyBackgroundAlt = false;
@@ -274,6 +278,7 @@ namespace Spooky.Core
 			tag[nameof(BountyInProgress4)] = BountyInProgress4;
 			tag[nameof(BountyIntro)] = BountyIntro;
 			tag[nameof(PokedLittleEye)] = PokedLittleEye;
+			tag[nameof(AlreadyPokedLittleEye)] = AlreadyPokedLittleEye;
 
 			//old hunter quests
 			tag[nameof(OldHunterDefeatDialogue)] = OldHunterDefeatDialogue;
@@ -285,6 +290,7 @@ namespace Spooky.Core
 			tag[nameof(OldHunterQuest6)] = OldHunterQuest6;
 			tag[nameof(OldHunterQuest7)] = OldHunterQuest7;
 			tag[nameof(OldHunterQuest8)] = OldHunterQuest8;
+			tag[nameof(OldHunterQuestEnd)] = OldHunterQuestEnd;
 
 			//misc stuff
 			tag[nameof(SpookyBackgroundAlt)] = SpookyBackgroundAlt;
@@ -375,6 +381,7 @@ namespace Spooky.Core
 			BountyInProgress4 = tag.GetBool(nameof(BountyInProgress4));
 			BountyIntro = tag.GetBool(nameof(BountyIntro));
 			PokedLittleEye = tag.GetBool(nameof(PokedLittleEye));
+			AlreadyPokedLittleEye = tag.GetBool(nameof(AlreadyPokedLittleEye));
 
 			//old hunter quests
 			OldHunterDefeatDialogue = tag.GetBool(nameof(OldHunterDefeatDialogue));
@@ -386,6 +393,7 @@ namespace Spooky.Core
 			OldHunterQuest6 = tag.GetBool(nameof(OldHunterQuest6));
 			OldHunterQuest7 = tag.GetBool(nameof(OldHunterQuest7));
 			OldHunterQuest8 = tag.GetBool(nameof(OldHunterQuest8));
+			OldHunterQuestEnd = tag.GetBool(nameof(OldHunterQuestEnd));
 
 			//misc stuff
 			SpookyBackgroundAlt = tag.GetBool(nameof(SpookyBackgroundAlt));
@@ -431,10 +439,10 @@ namespace Spooky.Core
 
 			//little eye quest stuff
 			writer.WriteFlags(LittleEyeBounty1, LittleEyeBounty2, LittleEyeBounty3, LittleEyeBounty4);
-			writer.WriteFlags(BountyInProgress1, BountyInProgress2, BountyInProgress3, BountyInProgress4, BountyIntro, PokedLittleEye);
+			writer.WriteFlags(BountyInProgress1, BountyInProgress2, BountyInProgress3, BountyInProgress4, BountyIntro, PokedLittleEye, AlreadyPokedLittleEye);
 
 			//old hunter quests
-			writer.WriteFlags(OldHunterDefeatDialogue);
+			writer.WriteFlags(OldHunterDefeatDialogue, OldHunterQuestEnd);
 			writer.WriteFlags(OldHunterQuest1, OldHunterQuest2, OldHunterQuest3, OldHunterQuest4, OldHunterQuest5, OldHunterQuest6, OldHunterQuest7, OldHunterQuest8);
 
 			//misc stuff
@@ -478,10 +486,10 @@ namespace Spooky.Core
 
 			//little eye quest stuff
 			reader.ReadFlags(out LittleEyeBounty1, out LittleEyeBounty2, out LittleEyeBounty3, out LittleEyeBounty4);
-			reader.ReadFlags(out BountyInProgress1, out BountyInProgress2, out BountyInProgress3, out BountyInProgress4, out BountyIntro, out PokedLittleEye);
+			reader.ReadFlags(out BountyInProgress1, out BountyInProgress2, out BountyInProgress3, out BountyInProgress4, out BountyIntro, out PokedLittleEye, out AlreadyPokedLittleEye);
 
 			//old hunter quests
-			reader.ReadFlags(out OldHunterDefeatDialogue);
+			reader.ReadFlags(out OldHunterDefeatDialogue, out OldHunterQuestEnd);
 			reader.ReadFlags(out OldHunterQuest1, out OldHunterQuest2, out OldHunterQuest3, out OldHunterQuest4, out OldHunterQuest5, out OldHunterQuest6, out OldHunterQuest7, out OldHunterQuest8);
 
 			//misc stuff

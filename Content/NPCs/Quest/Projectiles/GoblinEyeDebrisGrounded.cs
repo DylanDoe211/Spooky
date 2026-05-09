@@ -74,6 +74,8 @@ namespace Spooky.Content.NPCs.Quest.Projectiles
                 Projectile.Kill();
             }
 
+            Projectile.frame = (int)Projectile.ai[2];
+
             if (Projectile.alpha > 0)
             {
                 Projectile.alpha -= 5;
@@ -97,8 +99,8 @@ namespace Spooky.Content.NPCs.Quest.Projectiles
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
 			    {
-                    int Eye = Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center.X, Projectile.Center.Y - 45, Main.rand.Next(-2, 3), Main.rand.Next(-18, -12), ModContent.ProjectileType<GoblinEyeDebris>(), Projectile.damage, 0, Main.myPlayer);
-                    Main.projectile[Eye].frame = Projectile.frame;
+                    Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center.X, Projectile.Center.Y - 45, Main.rand.Next(-2, 3), Main.rand.Next(-18, -12), 
+                    ModContent.ProjectileType<GoblinEyeDebris>(), Projectile.damage, 0, Main.myPlayer, ai1: Projectile.ai[2]);
                 }
 
                 Projectile.active = false;

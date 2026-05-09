@@ -46,7 +46,7 @@ namespace Spooky.Content.Items
 
                     if (npc.type == ModContent.NPCType<Turkey>())
                     {
-					    CombatText.NewText(npc.getRect(), Color.Lime, Language.GetTextValue("Mods.Spooky.NPCs.Turkey.State" + StateValue.ToString()), false);
+                        CustomPopupText.SpawnText(player.Top, Language.GetTextValue("Mods.Spooky.NPCs.Turkey.State" + StateValue.ToString()), Color.Lime, new Vector2(0, -2), 60);
                     }
 				}
             }

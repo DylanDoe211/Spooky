@@ -475,7 +475,7 @@ namespace Spooky.Core
     public static class NPCGlobalHelper
 	{
 		//utility provided by hallam that shoots a projectile with the correct damage to prevent the issue of terraria over-scaling the damage of hostile projectiles
-		public static void ShootHostileProjectile(this Terraria.NPC npc, Vector2 position, Vector2 velocity, int projType, int damage, float knockback, float ai0 = 0, float ai1 = 0, float ai2 = 0, int Frame = 0)
+		public static void ShootHostileProjectile(this Terraria.NPC npc, Vector2 position, Vector2 velocity, int projType, int damage, float knockback, float ai0 = 0, float ai1 = 0, float ai2 = 0)
 		{
 			damage /= 2;
 
@@ -487,7 +487,6 @@ namespace Spooky.Core
 			if (Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				int NewProj = Projectile.NewProjectile(npc.GetSource_FromAI(), position, velocity, projType, damage, knockback, Main.myPlayer, ai0, ai1, ai2);
-				Main.projectile[NewProj].frame = Frame;
 			}
 		}
 

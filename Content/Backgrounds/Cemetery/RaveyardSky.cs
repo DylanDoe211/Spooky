@@ -2,6 +2,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.Graphics.Effects;
 using Terraria.Utilities;
+using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -32,6 +33,10 @@ namespace Spooky.Content.Backgrounds.Cemetery
 
         private bool skyActive;
         private float opacity;
+
+        private static Asset<Texture2D> BeamTexture;
+        private static Asset<Texture2D> BeamTextureTall;
+        private static Asset<Texture2D> SkyTexture;
 
         public override void Update(GameTime gameTime)
         {
@@ -99,10 +104,10 @@ namespace Spooky.Content.Backgrounds.Cemetery
                             new Color(18, 148, 0)
                         };
 
-                        Texture2D BeamTexture = ModContent.Request<Texture2D>("Spooky/Content/Backgrounds/Cemetery/RaveyardSkyBeamTall").Value;
+                        BeamTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Backgrounds/Cemetery/RaveyardSkyBeamTall");
 
-                        spriteBatch.Draw(BeamTexture, PillarPosition + new Vector2(0, 600), null, Color.Lerp(BeamColors[index], BeamColors[(index + 1) % 3], fade) * 0.75f * scale * opacity, 
-                        i % 2 == 0 ? MathF.Sin(-Rotation) : MathF.Sin(Rotation), new Vector2(0, BeamTexture.Height), new Vector2(realDepth / 70f, realDepth / 45f), SpriteEffects.None, 0f);
+                        spriteBatch.Draw(BeamTexture.Value, PillarPosition + new Vector2(0, 600), null, Color.Lerp(BeamColors[index], BeamColors[(index + 1) % 3], fade) * 0.75f * scale * opacity, 
+                        i % 2 == 0 ? MathF.Sin(-Rotation) : MathF.Sin(Rotation), new Vector2(0, BeamTexture.Height()), new Vector2(realDepth / 70f, realDepth / 45f), SpriteEffects.None, 0f);
                     }
                 }
             }
@@ -164,13 +169,13 @@ namespace Spooky.Content.Backgrounds.Cemetery
 
                         float Rotation = Main.GlobalTimeWrappedHourly * 0.2f;
 
-                        Texture2D BeamTextureTop = ModContent.Request<Texture2D>("Spooky/Content/Backgrounds/Cemetery/RaveyardSkyBeamTall").Value;
+                        BeamTextureTall ??= ModContent.Request<Texture2D>("Spooky/Content/Backgrounds/Cemetery/RaveyardSkyBeamTall");
 
 						//draw the beam texture
-                        spriteBatch.Draw(BeamTextureTop, position + new Vector2(0, 2000), null, 
+                        spriteBatch.Draw(BeamTextureTall.Value, position + new Vector2(0, 2000), null, 
                         i % 2 == 0 ? (Color.Lerp(BeamColors2[index], BeamColors2[(index + 1) % 3], fade) * 0.55f * opacity) * backgroundPillar[i].Opacity : 
                         (Color.Lerp(BeamColors[index], BeamColors[(index + 1) % 3], fade) * 0.5f * opacity) * backgroundPillar[i].Opacity,
-                        i % 2 == 0 ? MathF.Sin(Rotation) : MathF.Sin(-Rotation), new Vector2(BeamTextureTop.Width / 2, BeamTextureTop.Height), (Depth.X * 0.5f + 0.5f) * 1.22f , SpriteEffects.None, 0f);
+                        i % 2 == 0 ? MathF.Sin(Rotation) : MathF.Sin(-Rotation), new Vector2(BeamTextureTall.Width() / 2, BeamTextureTall.Height()), (Depth.X * 0.5f + 0.5f) * 1.22f , SpriteEffects.None, 0f);
                     }
                 }
             }
@@ -185,9 +190,9 @@ namespace Spooky.Content.Backgrounds.Cemetery
                     new Color(158, 0, 145)
                 };
 
-                Texture2D SkyTexture = ModContent.Request<Texture2D>("Spooky/Content/Backgrounds/Cemetery/RaveyardSky").Value;
+                SkyTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Backgrounds/Cemetery/RaveyardSky");
 
-                spriteBatch.Draw(SkyTexture, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight),
+                spriteBatch.Draw(SkyTexture.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight),
                 Color.Lerp(SkyColors[index], SkyColors[(index + 1) % 3], fade) * Math.Min(1f, (Main.screenPosition.Y - 800f) / 1000f * opacity));
             }
 

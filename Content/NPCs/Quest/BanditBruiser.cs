@@ -145,7 +145,7 @@ namespace Spooky.Content.NPCs.Quest
 
 			if (ShieldAlpha > 0)
 			{
-                ShieldTexture ??= ModContent.Request<Texture2D>("Spooky/ShaderAssets/EggShieldNoise");
+                ShieldTexture ??= ModContent.Request<Texture2D>("Spooky/Effects/EggShieldNoise");
 
 				float fade = (float)Math.Cos((double)(Main.GlobalTimeWrappedHourly % 2.5f / 2.5f * 6f)) / 2f + 0.5f;
 

@@ -88,7 +88,7 @@ namespace Spooky.Content.Tiles.Cemetery.Furniture
 
 		public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
 		{
-            SpotlightTexture ??= ModContent.Request<Texture2D>("Spooky/ShaderAssets/LightConeUp");
+            SpotlightTexture ??= ModContent.Request<Texture2D>("Spooky/Effects/LightConeUp");
 
             Tile tile = Framing.GetTileSafely(i, j);
 

@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 
 using Spooky.Core;
+using Spooky.Content.Items.Slingshots.Ammo;
 using Spooky.Content.Tiles.Blooms;
 
 namespace Spooky.Content.NPCs.SpookyBiome
@@ -128,6 +129,7 @@ namespace Spooky.Content.NPCs.SpookyBiome
         
         public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
+			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<TomatoAmmo>(), 20, 25, 50));
 			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<TomatoSeed>(), 120));
         }
 

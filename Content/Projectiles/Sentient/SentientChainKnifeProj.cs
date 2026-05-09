@@ -145,7 +145,6 @@ namespace Spooky.Content.Projectiles.Sentient
 		public override void AI() 
         {
 			Player player = Main.player[Projectile.owner];
-			Vector2 ParentCenter = player.MountedCenter;
 
 			player.direction = Projectile.Center.X < player.Center.X ? -1 : 1;
 
@@ -164,13 +163,13 @@ namespace Spooky.Content.Projectiles.Sentient
 
 				Projectile.spriteDirection = player.direction;
 				
-				Vector2 vectorTowardsPlayer = Projectile.DirectionTo(ParentCenter).SafeNormalize(Vector2.Zero);
+				Vector2 vectorTowardsPlayer = Projectile.DirectionTo(player.MountedCenter).SafeNormalize(Vector2.Zero);
 				Projectile.rotation = vectorTowardsPlayer.ToRotation() + MathHelper.PiOver2;
 
 				Projectile.ai[0]++;
 				if (Projectile.ai[0] >= 12)
 				{
-					Vector2 RetractSpeed = Projectile.Center - ParentCenter;
+					Vector2 RetractSpeed = Projectile.Center - player.MountedCenter;
 					RetractSpeed.Normalize();
 					RetractSpeed *= 45;
 					Projectile.velocity = -RetractSpeed;

@@ -417,7 +417,7 @@ namespace Spooky.Core
 				Color NameBoxColor = new Color(113, 35, 206);
 				Color ProgressBoxColor = new Color(113, 35, 206);
 				Color ProgressBarColor1 = new Color(54, 35, 35);
-				Color ProgressBarColor2 = new Color(199, 7, 49);
+				Color ProgressBarColor2 = new Color(108, 248, 71);
 
 				int width = (int)(200f * Scale);
 				int height = (int)(46f * Scale);

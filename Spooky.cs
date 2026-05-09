@@ -217,6 +217,7 @@ namespace Spooky
                 case SpookyMessageType.PokedLittleEye:
                 {
                     Flags.PokedLittleEye = true;
+                    Flags.AlreadyPokedLittleEye = true;
                     NetMessage.SendData(MessageID.WorldData);
                     break;
                 }
@@ -317,6 +318,12 @@ namespace Spooky
                     NetMessage.SendData(MessageID.WorldData);
                     break;
                 }
+                case SpookyMessageType.OldHunterQuestEnd:
+                {
+                    Flags.OldHunterQuestEnd = true;
+                    NetMessage.SendData(MessageID.WorldData);
+                    break;
+                }
 				//should never occur I think?
 				default:
                 {
@@ -365,6 +372,7 @@ namespace Spooky
         OldHunterQuest6Complete,
         OldHunterQuest7Complete,
         OldHunterQuest8Complete,
-        OldHunterDefeatDialogue
+        OldHunterDefeatDialogue,
+        OldHunterQuestEnd
 	}
 }

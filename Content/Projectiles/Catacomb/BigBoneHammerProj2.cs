@@ -63,10 +63,9 @@ namespace Spooky.Content.Projectiles.Catacomb
 
             for (int numDusts = 0; numDusts < 30; numDusts++)
 			{
-                int dustGore = Dust.NewDust(target.position, target.width, target.height, ModContent.DustType<GlowyDust>(), 0f, -2f, 0, Color.Gold, 1.5f);
+                int dustGore = Dust.NewDust(target.position, target.width, target.height, ModContent.DustType<GlowyDust>(), 0f, 0f, 0, Color.Gold, 0.25f);
                 Main.dust[dustGore].velocity.X *= Main.rand.NextFloat(-5f, 5f);
-                Main.dust[dustGore].velocity.Y *= Main.rand.NextFloat(-3f, 3f);
-                Main.dust[dustGore].scale = 0.25f;
+                Main.dust[dustGore].velocity.Y *= Main.rand.NextFloat(-5f, 5f);
                 Main.dust[dustGore].noGravity = true;
             }
         }

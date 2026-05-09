@@ -413,6 +413,7 @@ namespace Spooky.Content.UserInterfaces
 						else
 						{
 							Flags.PokedLittleEye = true;
+							Flags.AlreadyPokedLittleEye = true;
 						}
 					}
 				}

@@ -36,6 +36,8 @@ namespace Spooky.Content.NPCs.Boss.OldHunter.Projectiles
 
         public override void AI()
         {
+			NPC Parent = Main.npc[(int)Projectile.ai[2]];
+
 			Projectile.timeLeft = 2;
 
             Projectile.rotation += Projectile.velocity.X * 0.1f;
@@ -67,9 +69,13 @@ namespace Spooky.Content.NPCs.Boss.OldHunter.Projectiles
 			else
 			{	
 				Projectile.localAI[0]++;
-				if (Projectile.localAI[0] >= 120)
+				if (Projectile.localAI[0] < 60)
 				{
-					NPC Parent = Main.npc[(int)Projectile.ai[2]];
+					Vector2 desiredVelocity = Projectile.DirectionTo(Parent.Center + new Vector2(0, -8)) * 1;
+                	Projectile.velocity = Vector2.Lerp(Projectile.velocity, desiredVelocity, 1f / 20);
+				}
+				else
+				{
 					Parent.localAI[1] = 2;
 					Projectile.Kill();
 				}

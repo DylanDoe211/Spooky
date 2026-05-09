@@ -426,13 +426,18 @@ namespace Spooky.Core
 
 			if (Spooky.AccessoryHotkey.JustPressed && Main.myPlayer == Player.whoAmI)
             {
-				if (UltimateTomato && TomatoAbilityDelay <= 0)
+				bool IsItemAWeapon = ItemGlobal.ActiveItem(Player).damage > 0 && ItemGlobal.ActiveItem(Player).pick <= 0 && 
+				ItemGlobal.ActiveItem(Player).hammer <= 0 && ItemGlobal.ActiveItem(Player).axe <= 0 && ItemGlobal.ActiveItem(Player).mountType <= 0;
+				if (UltimateTomato && TomatoAbilityDelay <= 0 && IsItemAWeapon)
 				{
+					//caps damage at 100 after it gets divided by 2 when the projectile is spawned
+					int Damage = ItemGlobal.ActiveItem(Player).damage > 200 ? 200 : ItemGlobal.ActiveItem(Player).damage;
+
 					for (int numProjectiles = -6; numProjectiles <= 6; numProjectiles++)
 					{
 						int[] Types = new int[] { ModContent.ProjectileType<TomatoRed>(), ModContent.ProjectileType<TomatoOrange>(), ModContent.ProjectileType<TomatoYellow>() };
 
-						Projectile.NewProjectile(null, Player.Center, new Vector2(numProjectiles, Main.rand.NextFloat(-15f, -7f)), Main.rand.Next(Types), 25, 0f, Player.whoAmI);
+						Projectile.NewProjectile(null, Player.Center, new Vector2(numProjectiles, Main.rand.NextFloat(-15f, -7f)), Main.rand.Next(Types), Damage / 2, 0f, Player.whoAmI);
 					}
 
 					TomatoAbilityDelay = 60;

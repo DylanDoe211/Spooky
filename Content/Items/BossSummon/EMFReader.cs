@@ -64,7 +64,7 @@ namespace Spooky.Content.Items.BossSummon
 			if (NPC.AnyNPCs(ModContent.NPCType<SpookySpirit>()) || PandoraBoxWorld.PandoraEventActive)
 			{
 				SoundEngine.PlaySound(BeepSound3, player.Center);
-				CombatText.NewText(player.getRect(), Color.Crimson, Language.GetTextValue("Mods.Spooky.EventsAndBosses.EMFReaderSpiritExists"));
+				CustomPopupText.SpawnText(player.Top, Language.GetTextValue("Mods.Spooky.EventsAndBosses.EMFReaderSpiritExists"), Color.Crimson, new Vector2(0, -2), 60);
 				return;
 			}
 
@@ -73,7 +73,7 @@ namespace Spooky.Content.Items.BossSummon
 				if (npc.type == ModContent.NPCType<PandoraBox>() && npc.Distance(player.Center) <= 200f)
 				{
 					SoundEngine.PlaySound(BeepSound3, player.Center);
-					CombatText.NewText(player.getRect(), Color.Cyan, Language.GetTextValue("Mods.Spooky.EventsAndBosses.EMFReaderPandoraBox"));
+					CustomPopupText.SpawnText(player.Top, Language.GetTextValue("Mods.Spooky.EventsAndBosses.EMFReaderPandoraBox"), Color.Cyan, new Vector2(0, -2), 60);
 
 					npc.ai[2] = 1;
 					npc.netUpdate = true;
@@ -86,7 +86,7 @@ namespace Spooky.Content.Items.BossSummon
 				if (i == (int)playerTileCenter.X + 8 && FoundValidAltar)
 				{
 					SoundEngine.PlaySound(BeepSound3, player.Center);
-					CombatText.NewText(player.getRect(), Color.MediumPurple, Language.GetTextValue("Mods.Spooky.EventsAndBosses.EMFReaderSpookySpirit"));
+					CustomPopupText.SpawnText(player.Top, Language.GetTextValue("Mods.Spooky.EventsAndBosses.EMFReaderSpookySpirit"), Color.MediumPurple, new Vector2(0, -2), 60);
 				}
 
 				for (int j = (int)playerTileCenter.Y - 5; j <= (int)playerTileCenter.Y + 5; j++)
@@ -138,7 +138,7 @@ namespace Spooky.Content.Items.BossSummon
 					if (i == (int)playerTileCenter.X + 8 && !FoundValidGrave)
 					{
 						SoundEngine.PlaySound(BeepSound1, player.Center);
-						CombatText.NewText(player.getRect(), Color.Lime, Language.GetTextValue("Mods.Spooky.EventsAndBosses.EMFReaderNoGhost"));
+						CustomPopupText.SpawnText(player.Top, Language.GetTextValue("Mods.Spooky.EventsAndBosses.EMFReaderNoGhost"), Color.Lime, new Vector2(0, -2), 60);
 					}
 
 					for (int j = (int)playerTileCenter.Y - 5; j <= (int)playerTileCenter.Y + 5; j++)
@@ -175,11 +175,11 @@ namespace Spooky.Content.Items.BossSummon
 
 								if (!Flags.RaveyardHappening)
 								{
-									CombatText.NewText(player.getRect(), Color.Orange, Language.GetTextValue("Mods.Spooky.EventsAndBosses.EMFReaderGhost"));
+									CustomPopupText.SpawnText(player.Top, Language.GetTextValue("Mods.Spooky.EventsAndBosses.EMFReaderGhost"), Color.Orange, new Vector2(0, -2), 60);
 								}
 								else
 								{
-									CombatText.NewText(player.getRect(), Main.DiscoColor, Language.GetTextValue("Mods.Spooky.EventsAndBosses.EMFReaderRaveyard"));
+									CustomPopupText.SpawnText(player.Top, Language.GetTextValue("Mods.Spooky.EventsAndBosses.EMFReaderRaveyard"), Main.DiscoColor, new Vector2(0, -2), 60);
 								}
 
 								int SpawnX = (left * 16) + 16;

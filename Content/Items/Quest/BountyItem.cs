@@ -10,6 +10,7 @@ namespace Spooky.Content.Items.Quest
 		{
 			Item.width = 30;
 			Item.height = 34;
+			Item.maxStack = 9999;
 			Item.rare = ItemRarityID.Quest;
 		}
 	}
@@ -20,6 +21,7 @@ namespace Spooky.Content.Items.Quest
 		{
 			Item.width = 32;
             Item.height = 42;
+			Item.maxStack = 9999;
 			Item.rare = ItemRarityID.Quest;
 		} 
     }
@@ -30,6 +32,7 @@ namespace Spooky.Content.Items.Quest
 		{
 			Item.width = 32;
 			Item.height = 24;
+			Item.maxStack = 9999;
 			Item.rare = ItemRarityID.Quest;
 		}
     }
@@ -40,6 +43,7 @@ namespace Spooky.Content.Items.Quest
 		{
 			Item.width = 28;
             Item.height = 38;
+			Item.maxStack = 9999;
 			Item.rare = ItemRarityID.Quest;
 		}
     }

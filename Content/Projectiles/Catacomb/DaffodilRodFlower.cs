@@ -9,7 +9,7 @@ namespace Spooky.Content.Projectiles.Catacomb
 {
 	public class DaffodilRodFlower : ModProjectile
 	{
-        private static Asset<Texture2D> ProjTexture;
+        private static Asset<Texture2D> TrailTexture;
 
         public override void SetStaticDefaults()
         {
@@ -31,9 +31,9 @@ namespace Spooky.Content.Projectiles.Catacomb
 
         public override bool PreDraw(ref Color lightColor)
         {
-            ProjTexture ??= ModContent.Request<Texture2D>(Texture);
+            TrailTexture ??= ModContent.Request<Texture2D>(Texture + "Trail");
 
-            Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
+            Vector2 drawOrigin = new(TrailTexture.Width() * 0.5f, Projectile.height * 0.5f);
 
             for (int oldPos = 0; oldPos < Projectile.oldPos.Length; oldPos++)
             {
@@ -41,8 +41,8 @@ namespace Spooky.Content.Projectiles.Catacomb
                 float scale = Projectile.scale * (Projectile.oldPos.Length - oldPos) / Projectile.oldPos.Length * 1f;
                 Vector2 drawPos = Projectile.oldPos[oldPos] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
                 Color color = Projectile.GetAlpha(Color.Gold) * ((Projectile.oldPos.Length - oldPos) / (float)Projectile.oldPos.Length) * 0.65f;
-                Rectangle rectangle = new(0, (ProjTexture.Height() / Main.projFrames[Projectile.type]) * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
-                Main.EntitySpriteDraw(ProjTexture.Value, drawPos, rectangle, color, Projectile.rotation, drawOrigin, scale * 1.3f, effects, 0);
+                Rectangle rectangle = new(0, (TrailTexture.Height() / Main.projFrames[Projectile.type]) * Projectile.frame, TrailTexture.Width(), TrailTexture.Height() / Main.projFrames[Projectile.type]);
+                Main.EntitySpriteDraw(TrailTexture.Value, drawPos, rectangle, color, Projectile.rotation, drawOrigin, scale, effects, 0);
             }
             
             return true;

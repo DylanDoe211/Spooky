@@ -35,8 +35,8 @@ namespace Spooky.Content.Items.Slingshots
 			Item.useAnimation = 60;
 			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.knockBack = 8;
-			Item.rare = ItemRarityID.LightPurple;
-			Item.value = Item.buyPrice(gold: 10);
+			Item.rare = ItemRarityID.LightRed;
+			Item.value = Item.buyPrice(gold: 20);
 			Item.UseSound = UseSound;
 			Item.shoot = ModContent.ProjectileType<ProSlingshotProj>();
 			Item.useAmmo = ModContent.ItemType<MossyPebble>();

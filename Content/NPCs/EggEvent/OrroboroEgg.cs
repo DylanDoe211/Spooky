@@ -135,7 +135,7 @@ namespace Spooky.Content.NPCs.EggEvent
                 Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
 
                 var center = NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 12);
-                DrawData drawData = new DrawData(ModContent.Request<Texture2D>("Spooky/ShaderAssets/EggShieldNoise").Value, center,
+                DrawData drawData = new DrawData(ModContent.Request<Texture2D>("Spooky/Effects/EggShieldNoise").Value, center,
                 new Rectangle(0, 0, 500, 420), shieldColor * ShieldAlpha, 0, new Vector2(250f, 250f), NPC.scale * (ShieldScale + (NPC.ai[3] > 0 ? fade2 * 0.25f : fade * 0.05f)), SpriteEffects.None, 0);
 
                 GameShaders.Misc["ForceField"].UseColor(new Vector3(1f + fade * 0.5f));

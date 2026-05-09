@@ -517,8 +517,8 @@ LittleEyeDialogue: {
 	PlayerQuestComplete5-2: It didn't even have any yolk. You sent me on a suicide mission!
 	QuestComplete5-3: Oh I would never, not without reason. You were bound to win, your power precedes you! And rewards you did get, after slaying the beast, so there's no need to complain my guinea p-
 	PlayerQuestComplete5-3: ...
-	QuestComplete5-4: AAAAUAAUUUGH!!!!
-	PlayerQuestComplete5-4: I told you I would do that if you called me that.
+	QuestComplete5-4: AAAAUAAUUUGH!
+	PlayerQuestComplete5-4: I told you I poke you if you called me that again.
 	QuestComplete5-5: OH MY GOD OH MY EYE! OW OW OW OW!
 	PlayerQuestComplete5-5: ...
 	QuestComplete5-6: OH MY GOD I CAN'T SEE! I CAN'T SEE IT BURNS SO BAD!
@@ -620,7 +620,7 @@ OldHunterDialogue: {
 	PlayerDefeat3: Its fine? Sorry you are hard to understand.
 	Defeat4: Heh, never thought I'd be an old pod. I've still got the mind to do the clean thing and hash this out with ya.
 	PlayerDefeat4: Yeah alright, got most of that I think. Sure.
-	Defeat5: Let me cut a new figure; I'm an old hunter, master at the sling. You put up a good fit there, and I've got plenty'o riches if yer willing to get some jobs for me.
+	Defeat5: Let me cut a new figure; I'm an old hunter, master at the sling. You put up a good fit there, and I've got plenty'o riches if yer willing to do some jobs for me.
 	PlayerDefeat5: Sure, why not I guess.
 	//tick quest
 	Quest1-1: One time, me and the buddies were jawing at the husking bee, and chap I tell ya the juice was somethin else. Got knocked into a cocked hat, full as a tick, and started a milling so bad we hid among the willows for a whole month.
@@ -630,19 +630,19 @@ OldHunterDialogue: {
 	//tick quest done
 	QuestComplete1-1: Pardon?
 	PlayerQuestComplete1-1: I got the tick that was full.
-	QuestComplete1-2: Uhh, ok? I reckon I could find a use for this stuff I guess.
+	QuestComplete1-2: Uhh, ok? I reckon I could find a use for this I guess.
 	PlayerQuestComplete1-2: What do you mean? You asked me to find this thing.
 	QuestComplete1-3: Nohow chap, yer speakin' humbu- oh wait, yer talking about when I got shitface drunk?
 	PlayerQuestComplete1-3: Please just give me a reward.
 	//harold quest
 	Quest2-1: I know this might be all-standin, but think ya can get me some cloth? My thatchs starting to look mean, and I ain't in no shape to paddle off and get it myself.
 	PlayerQuest2-1: Sure, any preferences?
-	Quest2-2: Well, now that you mention, ya think you could get it in white? Back in my day when ya wanted to rag proper, ye wore white. Get me that, and I reckon it'll pan out. Just don't go getting it from any strange places. I've dealt with enough haunts in that haunted graveyard.
+	Quest2-2: Well, now that you mention, ya think you could get it in white? Back in my day when ya wanted to rag proper, ye wore white. Get me that, and I reckon it'll pan out. Just don't go getting it from any strange places. I've dealt with enough haunts in that graveyard.
 	PlayerQuest2-2: Uhh... ok I guess?
 	//harold quest done
 	QuestComplete2-1: Hmm, don't mean to row up yer good deed, but there's something off with this rag... where did ya get it?
 	PlayerQuestComplete2-1: I got it from a ghost.
-	QuestComplete2-2: WHAT!? I tell ya to get a normal rag and ya bamboozle me by bringing back a spectre into my home!? Why I oughta-
+	QuestComplete2-2: WHAT! I tell ya to get a normal rag and ya bamboozle me by bringing back a spectre into my home! Why I oughta-
 	PlayerQuestComplete2-2: You are undead. I got your soul from a box of ghosts, under a graveyard full of ghosts. Please just take the cloth.
 	QuestComplete2-3: ...Alrighty.
 	PlayerQuestComplete2-3: ...
@@ -697,19 +697,19 @@ OldHunterDialogue: {
 	//christmas tree quest
 	Quest7-1: Heh, I remember when I was just knee-high to a lamb my mom got me a teddy bear for christmas. Long way from back then, but I can say my memories are sweet. I'm thinking of celebratin' again for old times sake.
 	PlayerQuest7-1: Uhh, might be difficult given it hasn't been christmas in years.
-	Quest7-2: What in tarnation?! Ye can't just tell me ya haven't seen that old lubber saint nick in years! Let's make it worth your while. Bring me a Christmas tree. Ya better bring me the whole thing! Lock, Stock, and Barrel!
+	Quest7-2: What in tarnation?! Ye can't just tell me ya haven't seen that old lubber saint nick in years! Let's make it worth your while. Bring me a Christmas tree. Ya better bring me the whole thing! Lock, stock, and barrel!
 	PlayerQuest7-2: Alright, I can probably find a way.
 	//christmas tree quest done
-	QuestComplete7-1: Heya chap! Now I know that what I told you wasn't moonshine or anythin' given what you told me. Still, do yer reckon ye've got that tree I asked ya for?
-	PlayerQuestComplete7-1: The tree ran away.
+	QuestComplete7-1: Heya chap! Now I know that what I told you wasn't moonshine or anythin' given what you told me. Still, do ya reckon ye've got that tree I asked for?
+	PlayerQuestComplete7-1: The tree attacked me.
 	QuestComplete7-2: Why do ya keep spoutin' gammon? What actually happened?
-	PlayerQuestComplete7-2: The tree RAN away. I only managed to get this.
+	PlayerQuestComplete7-2: The tree ATTACKED me. I only managed to get this.
 	QuestComplete7-3: Lemme see there. Hm, didn't expect ya to find a ribbon. Guess I can at least get some use out of this, so I'll give ya somethin' at least. Ya gotta stop speakin' humbug all the time chap.
 	PlayerQuestComplete7-3: Yeah whatever man.
 	//tar pig quest
 	Quest8-1: Hm, ya ever hearn of head-cheese chap? I've been thinking of makin' some, just like I used to make back with the old rats.
 	PlayerQuest8-1: What the hell is head-cheese?
-	Quest8-2: Yer mind must be all Higgledy-Piggledy from just the name! It's a simple meal we used to make back when this was our home. I've got some axle grease, so all's I need is a hog. If I remember right, should be easy enough to find some in those big desert caves.
+	Quest8-2: Yer mind must be all higgledy-piggledy from just the name! It's a simple meal we used to make back when this was our home. I've got some axle grease, so all's I need is a hog. If I remember right, should be easy enough to find some in those big desert caves.
 	PlayerQuest8-2: Ok, doesn't sound too bad. I'll get that for you.
 	//tar pig quest done
 	QuestComplete8-1: Howdy chap. Did ya get that hog I mentioned earlier? Gotta be the one from the desert or else the dish will be ruined.

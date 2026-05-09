@@ -68,7 +68,13 @@ namespace Spooky.Content.Generation
 
         public static List<ushort> PaintingsLayer2 = new()
         {
-            (ushort)ModContent.TileType<SkeletonGardeningPainting>()
+            (ushort)ModContent.TileType<SkeletonGardeningPainting>(),
+            (ushort)ModContent.TileType<FridaKahloPainting>(),
+            (ushort)ModContent.TileType<BeanstalkPainting>(),
+            (ushort)ModContent.TileType<MuertoSkeletoidPainting>(),
+            (ushort)ModContent.TileType<SunflowersPainting>(),
+            (ushort)ModContent.TileType<BlueHerbPainting>(),
+            (ushort)ModContent.TileType<DivaPainting>()
         };
 
 		private void PlaceCatacomb(GenerationProgress progress, GameConfiguration configuration)
@@ -153,7 +159,7 @@ namespace Spooky.Content.Generation
                     //origin offset for each room so it places at the center of the position its placed at
                     Vector2 origin = new Vector2(X - 18, Y - 18);
 
-                    int WoodenRoomChance = Main.maxTilesY >= 2400 ? 7 : (Main.maxTilesY >= 1800 ? 6 : 5);
+                    int WoodenRoomChance = Main.maxTilesY >= 2400 ? 9 : (Main.maxTilesY >= 1800 ? 8 : 6);
                     int TrapRoomChance = Main.maxTilesY >= 2400 ? 6 : (Main.maxTilesY >= 1800 ? 5 : 4);
                     int MineRoomChance = Main.maxTilesY >= 2400 ? 8 : (Main.maxTilesY >= 1800 ? 7 : 6);
 
@@ -500,7 +506,7 @@ namespace Spooky.Content.Generation
                     //puzzle rooms
                     else if (WorldGen.genRand.NextBool(PuzzleRoomChance))
                     {
-                        StructureHelper.API.Generator.GenerateStructure("Content/Structures/CatacombLayer2/PuzzleRoom" + WorldGen.genRand.Next(1, 3) + ".shstruct", origin.ToPoint16(), Mod);
+                        StructureHelper.API.Generator.GenerateStructure("Content/Structures/CatacombLayer2/PuzzleRoom" + WorldGen.genRand.Next(1, 4) + ".shstruct", origin.ToPoint16(), Mod);
                     }
                     //default room
                     else
@@ -627,12 +633,22 @@ namespace Spooky.Content.Generation
             {
                 for (int Y = (int)Main.worldSurface - 10; Y <= BigBoneArenaY - 30; Y++)
 				{
-                    //randomly place PaintingsLayer1 in the catacombs
+                    //randomly place paintings in the catacombs
                     if (WorldGen.genRand.NextBool(550) && !Main.tile[X, Y].HasTile)
 					{
-                        if (CanPlacePainting(X, Y, PaintingsLayer1, true))
+                        if (Main.tile[X, Y].WallType == ModContent.WallType<CatacombBrickWall1>())
                         {
-						    WorldGen.PlaceObject(X, Y, WorldGen.genRand.Next(PaintingsLayer1));
+                            if (CanPlacePainting(X, Y, PaintingsLayer1))
+                            {
+                                WorldGen.PlaceObject(X, Y, WorldGen.genRand.Next(PaintingsLayer1));
+                            }
+                        }
+                        if (Main.tile[X, Y].WallType == ModContent.WallType<CatacombBrickWall2>())
+                        {
+                            if (CanPlacePainting(X, Y, PaintingsLayer2))
+                            {
+                                WorldGen.PlaceObject(X, Y, WorldGen.genRand.Next(PaintingsLayer2));
+                            }
                         }
 					}
 
@@ -1622,7 +1638,7 @@ namespace Spooky.Content.Generation
 		}
 
         //if a painting can place
-        public bool CanPlacePainting(int PositionX, int PositionY, List<ushort> PaintingsLayer1ToCheckFor, bool DoCheckForNearbyPaintingsLayer1)
+        public bool CanPlacePainting(int PositionX, int PositionY, List<ushort> PaintingsToCheckFor)
 		{
 			//first check for enough walls
 			for (int i = PositionX - 3; i <= PositionX + 3; i++)
@@ -1636,16 +1652,13 @@ namespace Spooky.Content.Generation
 				}
 			}
 
-            if (DoCheckForNearbyPaintingsLayer1)
+            for (int i = PositionX - 6; i <= PositionX + 6; i++)
             {
-                for (int i = PositionX - 6; i <= PositionX + 6; i++)
+                for (int j = PositionY - 6; j <= PositionY + 6; j++)
                 {
-                    for (int j = PositionY - 6; j <= PositionY + 6; j++)
-                    {	
-                        if (PaintingsLayer1ToCheckFor.Contains(Main.tile[i, j].TileType))
-                        {
-                            return false;
-                        }
+                    if (PaintingsToCheckFor.Contains(Main.tile[i, j].TileType))
+                    {
+                        return false;
                     }
                 }
             }

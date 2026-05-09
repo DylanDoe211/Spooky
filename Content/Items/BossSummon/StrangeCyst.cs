@@ -21,7 +21,7 @@ namespace Spooky.Content.Items.BossSummon
 
 		public override void SetDefaults()
 		{
-			Item.width = 26;
+			Item.width = 28;
 			Item.height = 34;
 			Item.consumable = true;
 			Item.useTime = 45;

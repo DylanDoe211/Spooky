@@ -395,6 +395,7 @@ namespace Spooky.Content.NPCs.Boss.OldHunter
 
             switch ((int)NPC.ai[0])
             {
+                //death animation
                 case -3:
                 {
                     NPC.localAI[0]++;
