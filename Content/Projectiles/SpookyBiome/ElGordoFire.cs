@@ -81,7 +81,7 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) 
 		{
-            target.AddBuff(BuffID.OnFire, 600);
+            target.AddBuff(BuffID.OnFire3, 600);
         }
 
 		public override void AI()

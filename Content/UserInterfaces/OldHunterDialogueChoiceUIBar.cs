@@ -16,6 +16,7 @@ using Spooky.Content.Items.Quest;
 using Spooky.Content.Items.Slingshots;
 using Spooky.Content.Items.SpiderCave;
 using Spooky.Content.Items.SpiderCave.Misc;
+using Spooky.Content.Tiles.Painting;
 
 namespace Spooky.Content.UserInterfaces
 {
@@ -567,6 +568,8 @@ namespace Spooky.Content.UserInterfaces
 			if (Flags.OldHunterQuest1 && Flags.OldHunterQuest2 && Flags.OldHunterQuest3 && Flags.OldHunterQuest4 &&
 			Flags.OldHunterQuest5 && Flags.OldHunterQuest6 && Flags.OldHunterQuest7 && Flags.OldHunterQuest8)
 			{
+				SpawnItem(ModContent.ItemType<OldHunterPaintingItem>(), 1);
+
 				ModContent.GetInstance<MiscAchievementOldHunterQuest>().OldHunterQuestCondition.Complete();
 			}
 

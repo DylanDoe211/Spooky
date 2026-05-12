@@ -110,7 +110,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
 				if (GrappledNPC != null)
 				{
-					if (GrappledNPC.Distance(player.Center) >= 200f)
+					if (GrappledNPC.Distance(player.Center) >= 265f)
 					{
 						GrappledNPC.position = Projectile.Center - GrappledNPC.Size / 2;
 					}

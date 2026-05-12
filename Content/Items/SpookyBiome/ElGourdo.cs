@@ -12,7 +12,7 @@ namespace Spooky.Content.Items.SpookyBiome
     {
         public override void SetDefaults()
         {
-            Item.damage = 135;
+            Item.damage = 120;
             Item.DamageType = DamageClass.Melee;
             Item.noMelee = true;
             Item.useTurn = true;    
@@ -20,15 +20,15 @@ namespace Spooky.Content.Items.SpookyBiome
             Item.autoReuse = true;             
             Item.width = 56;
             Item.height = 46;
-            Item.useTime = 60;
-            Item.useAnimation = 60;
+            Item.useTime = 50;
+            Item.useAnimation = 50;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.knockBack = 6;
             Item.rare = ItemRarityID.Yellow;
             Item.value = Item.buyPrice(platinum: 1); 
             Item.UseSound = SoundID.Item1; 
             Item.shoot = ModContent.ProjectileType<ElGourdoProj>();
-            Item.shootSpeed = 20f;
+            Item.shootSpeed = 17f;
         }
         
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

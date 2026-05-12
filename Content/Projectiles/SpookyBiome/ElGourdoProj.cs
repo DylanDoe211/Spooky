@@ -86,6 +86,11 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 			return false;
 		}
 
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) 
+		{
+            target.AddBuff(BuffID.OnFire3, 600);
+        }
+
         public override void AI()
         {
             Projectile.rotation = Projectile.velocity.Y * (Projectile.direction == 1 ? -0.015f : 0.015f);
@@ -119,9 +124,9 @@ namespace Spooky.Content.Projectiles.SpookyBiome
             int currentAmount = 0;
             while (currentAmount <= maxAmount)
             {
-                Vector2 velocity = new Vector2(Main.rand.NextFloat(8f, 18f), Main.rand.NextFloat(8f, 18f));
-                Vector2 Bounds = new Vector2(Main.rand.NextFloat(8f, 18f), Main.rand.NextFloat(8f, 18f));
-                float intensity = Main.rand.NextFloat(8f, 18f);
+                Vector2 velocity = new Vector2(Main.rand.NextFloat(8f, 25f), Main.rand.NextFloat(8f, 25f));
+                Vector2 Bounds = new Vector2(Main.rand.NextFloat(8f, 25f), Main.rand.NextFloat(8f, 25f));
+                float intensity = Main.rand.NextFloat(8f, 25f);
 
                 Vector2 vector12 = Vector2.UnitX * 0f;
                 vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;

@@ -517,6 +517,25 @@ namespace Spooky.Content.Generation
                 }
             }
 
+            //spread grass again after house generation
+            for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
+            {
+				for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
+                {
+                    if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
+                    {
+                        Tile tile = Main.tile[X, Y];
+                        Tile tileAbove = Main.tile[X, Y - 1];
+                        Tile tileBelow = Main.tile[X, Y + 1];
+                        Tile tileLeft = Main.tile[X - 1, Y];
+                        Tile tileRight = Main.tile[X + 1, Y];
+
+                        //spread grass onto the dirt blocks throughout the biome
+                        WorldGen.SpreadGrass(X, Y, ModContent.TileType<DampSoil>(), ModContent.TileType<DampGrass>(), false);
+                    }
+                }
+            }
+
             //place lakes
             for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
 			{
