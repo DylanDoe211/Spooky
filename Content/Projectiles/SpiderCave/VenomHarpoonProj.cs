@@ -75,7 +75,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
                 {
                     Vector2 ShootSpeed = Main.MouseWorld - new Vector2(Projectile.Center.X, Projectile.Center.Y - playerCenterOffset);
                     ShootSpeed.Normalize();
-                    ShootSpeed *= 35;
+                    ShootSpeed *= 65;
 
                     Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center.X, Projectile.Center.Y - playerCenterOffset, ShootSpeed.X, ShootSpeed.Y,
                     ModContent.ProjectileType<VenomHarpoonSpike>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0, Projectile.whoAmI);

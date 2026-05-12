@@ -92,6 +92,8 @@ namespace Spooky.Content.Projectiles.Sentient
 
         public override void AI()
         {
+            Projectile.frame = (int)Projectile.ai[0];
+            
             if (Projectile.ai[0] == 0)
             {
                 Projectile.rotation += 0.5f * (float)Projectile.direction;
@@ -106,8 +108,6 @@ namespace Spooky.Content.Projectiles.Sentient
 
                 Projectile.rotation = 0;
             }
-
-            Projectile.frame = (int)Projectile.ai[0];
 
             if (Projectile.timeLeft <= 60)
             {

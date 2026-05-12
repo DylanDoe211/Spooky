@@ -16,7 +16,7 @@ namespace Spooky.Content.Projectiles.Catacomb
         public override void SetDefaults()
 		{
 			DrawOffsetX = 0;
-			DrawOriginOffsetY = -16;
+			DrawOriginOffsetY = -8;
 			DrawOriginOffsetX = -80;
 			Projectile.width = 2;
 			Projectile.height = 2;
@@ -49,7 +49,7 @@ namespace Spooky.Content.Projectiles.Catacomb
 			if (Projectile.ai[1] > 0)
             {
 		    	Main.EntitySpriteDraw(ProjTexture.Value, Projectile.Center - Main.screenPosition, 
-                new Rectangle(1200 - (int)Projectile.ai[1], Projectile.frame, (int)Projectile.ai[1] + 17, 34), Color.Red, 
+                new Rectangle(162 - (int)Projectile.ai[1], Projectile.frame, (int)Projectile.ai[1] + 17, 28), lightColor, 
                 Projectile.rotation, new Vector2(17, 17), 1f, SpriteEffects.None, 0);
             }
 
@@ -66,7 +66,6 @@ namespace Spooky.Content.Projectiles.Catacomb
 			target.AddBuff(ModContent.BuffType<ThornMark>(), 180);
         }
 
-		//The AI of the projectile
 		public override void AI()
 		{
 			Lighting.AddLight(Projectile.Center, 0.2f, 0f, 0f);

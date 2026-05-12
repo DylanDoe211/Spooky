@@ -59,7 +59,7 @@ namespace Spooky.Content.Projectiles.Cemetery
 
             Projectile.direction = Projectile.spriteDirection = direction.X > 0 ? 1 : -1;
 
-            Projectile.position = player.Center - Projectile.Size / 2 + new Vector2((Projectile.direction == -1 ? -15 : 15), 0);
+            Projectile.position = player.MountedCenter - Projectile.Size / 2 + new Vector2((Projectile.direction == -1 ? -15 : 15), 0);
 
 			if (player.channel)
             {

@@ -2,6 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
+using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -12,23 +13,22 @@ namespace Spooky.Content.Projectiles.SpookyHell
 {
     public class Brainy : ModProjectile
     {
-        float ScaleAmount = 0.05f;
-        int ScaleTimerLimit = 10;
+        float OrbiterDistance = 1.2f;
+		float OrbiterRotation = 0f;
+        float ExtraRotation = 0f;
 
-        public static readonly SoundStyle BrainySound1 = new("Spooky/Content/Sounds/Brainy1", SoundType.Sound);
-        public static readonly SoundStyle BrainySound2 = new("Spooky/Content/Sounds/Brainy2", SoundType.Sound);
-        public static readonly SoundStyle BrainyConvulseSound = new("Spooky/Content/Sounds/BrainyConvulse", SoundType.Sound);
+        private static Asset<Texture2D> ProjTexture;
+		private static Asset<Texture2D> OrbTexture;
 
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 7;
-            Main.projPet[Projectile.type] = true;
+            Main.projFrames[Projectile.type] = 4;
         }
         
         public override void SetDefaults()
         {
-            Projectile.width = 60;
-            Projectile.height = 46;
+            Projectile.width = 48;
+            Projectile.height = 52;
             Projectile.minion = true;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
@@ -40,49 +40,109 @@ namespace Spooky.Content.Projectiles.SpookyHell
             Projectile.aiStyle = -1;
         }
 
-        public override bool PreDraw(ref Color lightColor)
+        //shout-out Flye for this orbiter draw code: https://github.com/flye-name/ebonian-mod/blob/1e460b0b4b889f2554e9d3441242edd5257a9eb6/Content/NPCs/Overworld/Asteroid/AsteroidHerder.cs
+		public float CircleDividedEqually(float i, float max)
+		{
+			return 2f * MathF.PI / max * i;
+		}
+
+        public int GetPlayerMinionCount()
         {
-            Texture2D tex = ModContent.Request<Texture2D>(Texture).Value;
+            int MinionCount = 0;
 
-            Color color = new Color(125, 125, 125, 0).MultiplyRGBA(Color.DeepPink);
-
-            Vector2 drawOrigin = new(tex.Width * 0.5f, Projectile.height * 0.5f);
-
-            for (int numEffect = 0; numEffect < 3; numEffect++)
+            foreach (var Proj in Main.ActiveProjectiles)
             {
-                var effects = Projectile.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-                Color newColor = color;
-                newColor = Projectile.GetAlpha(newColor);
-                newColor *= 1f;
-                Vector2 vector = new Vector2(Projectile.Center.X, Projectile.Center.Y) + (numEffect / 3 * 6 + Projectile.rotation + 0f).ToRotationVector2() - Main.screenPosition + new Vector2(0, Projectile.gfxOffY + 2) - Projectile.velocity * numEffect;
-                Rectangle rectangle = new(0, tex.Height / Main.projFrames[Projectile.type] * Projectile.frame, tex.Width, tex.Height / Main.projFrames[Projectile.type]);
-                Main.EntitySpriteDraw(tex, vector, rectangle, newColor, Projectile.rotation, drawOrigin, Projectile.scale * 1.2f, effects, 0);
+                if (Proj.minion && Proj.owner == Projectile.owner && Proj.type != ModContent.ProjectileType<Brainy>()) 
+                {
+                    MinionCount++;
+                }
             }
 
-            return true;
+            return MinionCount;
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+		{
+			DrawBrainy(false, lightColor);
+
+			return false;
+        }
+
+        public void DrawBrainy(bool SpawnGore, Color lightColor)
+		{
+            float rotation = Main.GlobalTimeWrappedHourly + Projectile.whoAmI * 5 + MathHelper.ToRadians(ExtraRotation);
+
+            OrbiterRotation = Utils.AngleLerp(OrbiterRotation, -MathF.Sin(rotation * 0.05f) * 3, 0.2f);
+
+            if (!SpawnGore)
+			{
+                ProjTexture ??= ModContent.Request<Texture2D>(Texture);
+
+                DrawEyeOrbiters(false, rotation, lightColor, false);
+
+                Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
+                Vector2 vector = new Vector2(Projectile.Center.X, Projectile.Center.Y) - Main.screenPosition + new Vector2(0, Projectile.gfxOffY);
+                Rectangle rectangle = new(0, ProjTexture.Height() / Main.projFrames[Projectile.type] * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
+
+                var effects = Projectile.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+                
+                Main.EntitySpriteDraw(ProjTexture.Value, vector, rectangle, Projectile.GetAlpha(lightColor), Projectile.rotation, drawOrigin, Projectile.scale, effects, 0);
+
+                DrawEyeOrbiters(true, rotation, lightColor, false);
+            }
+            else
+            {
+                DrawEyeOrbiters(false, rotation, lightColor, true);
+            }
+        }
+
+        public void DrawEyeOrbiters(bool after, float rotOff, Color color, bool SpawnGore)
+        {
+            if (!SpawnGore)
+            {
+                OrbTexture ??= ModContent.Request<Texture2D>(Texture + "Eye");
+            }
+
+            int TotalEyes = GetPlayerMinionCount();
+            for (int i = after ? TotalEyes : 0; after ? i > 0 : i < TotalEyes; i += (after ? -1 : 1))
+            {
+                float angle = CircleDividedEqually(i, TotalEyes) + rotOff;
+                float progress = (MathF.Sin(rotOff * 0.1f) + 1) * 0.5f;
+                float distscale = MathHelper.Lerp(0.5f, 0.65f, progress) * 1.25f * OrbiterDistance;
+                Vector2 angleVec = angle.ToRotationVector2() * 50;
+                float perspectiveScale = MathHelper.Lerp(MathF.Sin(rotOff * 0.4f), 0.75f, 0f);
+                Vector2 offset = new Vector2(angleVec.X, angleVec.Y * 0.25f) * distscale;
+                float scale = MathHelper.Lerp(MathHelper.Lerp(0.5f + MathF.Abs(perspectiveScale * 0.25f), 1, MathHelper.Clamp(MathF.Sin(angle), 0, 1f)), 1, 0f);
+                bool shouldDraw = after ? scale > 0.78f : scale <= 0.78f;
+
+                if (shouldDraw && !SpawnGore)
+                {
+                    Main.EntitySpriteDraw(OrbTexture.Value, Projectile.Center + offset.RotatedBy(OrbiterRotation + MathF.Sin(rotOff * 0.05f) * 3) - Main.screenPosition, null,
+                    color, angle, OrbTexture.Size() / 2, scale, SpriteEffects.None, 0f);
+                }
+                if (SpawnGore)
+                {
+                    if (Main.netMode != NetmodeID.Server)
+                    {
+                        Gore.NewGore(Projectile.GetSource_FromAI(), Projectile.Center + offset.RotatedBy(OrbiterRotation + MathF.Sin(rotOff * 0.05f) * 3), 
+                        Vector2.Zero, ModContent.Find<ModGore>("Spooky/BrainEyeGore").Type, scale);
+                    }
+                }
+            }
         }
 
         public override void AI()
         {
-            if (Projectile.localAI[0] <= 3510)
+            Projectile.frameCounter++;
+            if (Projectile.frameCounter >= 5)
             {
-                Projectile.frameCounter++;
-                if (Projectile.frameCounter >= 6)
+                Projectile.frameCounter = 0;
+                Projectile.frame++;
+                if (Projectile.frame >= 4)
                 {
-                    Projectile.frameCounter = 0;
-                    Projectile.frame++;
-                    if (Projectile.frame >= 6)
-                    {
-                        Projectile.frame = 0;
-                    }
+                    Projectile.frame = 0;
                 }
             }
-            else
-            {
-                Projectile.frame = 6;
-            }
-
-            Projectile.spriteDirection = -Projectile.direction;
 
             Player player = Main.player[Projectile.owner];
 
@@ -96,144 +156,86 @@ namespace Spooky.Content.Projectiles.SpookyHell
 				Projectile.timeLeft = 2;
 			}
 
-            //actual minion exploding ai
-            Projectile.localAI[0]++;
+            Projectile.spriteDirection = player.direction;
 
-            if (Projectile.localAI[0] < 3510)
+            Projectile.ai[2]++;
+            Vector2 velocityOffset = -player.velocity * 7;
+            Vector2 destination = new Vector2(player.Center.X + velocityOffset.X, player.Center.Y + velocityOffset.Y - 85 + (float)Math.Sin(Projectile.ai[2] / 30) * 10);
+            
+            if (Projectile.Distance(destination) >= 15)
             {
-                if (Main.rand.NextBool(350))
-                {
-                    if (Main.rand.NextBool(2))
-                    {
-                        SoundEngine.PlaySound(BrainySound1, Projectile.Center);
-                    }
-                    else
-                    {
-                        SoundEngine.PlaySound(BrainySound2, Projectile.Center);
-                    }
-                }
-            }
-
-            if (Projectile.localAI[0] == 3510)
-            {
-                SoundEngine.PlaySound(BrainyConvulseSound, Projectile.Center);
-            }
-
-            if (Projectile.localAI[0] >= 3510 && Projectile.localAI[0] < 3600)
-            {
-                if (Projectile.localAI[0] == 3510 || Projectile.localAI[0] == 3540 || Projectile.localAI[0] == 3570)
-                {
-                    ScaleAmount += 0.05f;
-                    ScaleTimerLimit -= 3;
-                }
-
-                Projectile.localAI[1]++;
-                if (Projectile.localAI[1] < ScaleTimerLimit)
-                {
-                    Projectile.scale -= ScaleAmount;
-                }
-                if (Projectile.localAI[1] >= ScaleTimerLimit)
-                {
-                    Projectile.scale += ScaleAmount;
-                }
-
-                if (Projectile.localAI[1] > ScaleTimerLimit * 2)
-                {
-                    Projectile.localAI[1] = 0;
-                    Projectile.scale = 1f;
-                }
+                float vel = MathHelper.Clamp(Projectile.Distance(destination) / 12, 10, 15);
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(destination) * vel, 0.08f);
             }
             else
-            {   
-                Projectile.localAI[1] = 0;
-                Projectile.scale = 1f;
+            {
+                Projectile.velocity *= 0.9f;
             }
 
-            if (Projectile.localAI[0] >= 3600)
+            //actual minion exploding ai
+            Projectile.ai[0]++;
+            if (Projectile.ai[0] >= 3510 && Projectile.ai[0] < 3600)
             {
+                Projectile.localAI[0]++;
+				Projectile.localAI[1] += 0.12f;
+				ExtraRotation += MathHelper.Lerp(0, Projectile.localAI[1], MathHelper.Clamp(Projectile.localAI[0] / 60f, 0, 1));
+            }
+
+            if (Projectile.ai[0] >= 3600)
+            {
+                DrawBrainy(true, Color.White);
+
                 foreach (var Proj in Main.ActiveProjectiles)
 				{
                     if (Proj.minion && Proj.owner == Projectile.owner && Proj.type != ModContent.ProjectileType<Brainy>()) 
                     {
                         SoundEngine.PlaySound(SoundID.Item96, Proj.Center);
 
+                        LaunchLaser(Projectile.Center, Proj.Center);
+
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), Proj.Center, Vector2.Zero, 
                         ModContent.ProjectileType<BrainyExplosion>(), Projectile.damage + Proj.damage, 0f, Projectile.owner);
 
-                        for (int numDusts = 0; numDusts < 15; numDusts++)
+                        float maxAmount = 35;
+                        int currentAmount = 0;
+                        while (currentAmount <= maxAmount)
                         {
-                            int dust = Dust.NewDust(Proj.position, Proj.width, Proj.height, 182, 0f, 0f, 100, default, 2f);
-                            Main.dust[dust].velocity *= 35f;
-                            Main.dust[dust].noGravity = true;
+                            Vector2 velocity = new Vector2(Main.rand.NextFloat(8f, 18f), Main.rand.NextFloat(8f, 18f));
+                            Vector2 Bounds = new Vector2(Main.rand.NextFloat(8f, 18f), Main.rand.NextFloat(8f, 18f));
+                            float intensity = Main.rand.NextFloat(8f, 18f);
 
-                            if (Main.rand.NextBool(2))
-                            {
-                                Main.dust[dust].scale = 0.5f;
-                                Main.dust[dust].fadeIn = 1f + (float)Main.rand.Next(10) * 0.1f;
-                            }
+                            Vector2 vector12 = Vector2.UnitX * 0f;
+                            vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
+                            vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
+
+                            int newDust = Dust.NewDust(Projectile.Center, 1, 1, 182, 0f, 0f, 100, default, 2f);
+                            Main.dust[newDust].noGravity = true;
+                            Main.dust[newDust].position = Projectile.Center + vector12;
+                            Main.dust[newDust].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
+
+                            currentAmount++;
                         }
 
                         Proj.Kill();
                     }
                 }
 
-                ScaleAmount = 0.05f;
-                ScaleTimerLimit = 10;
+				Projectile.localAI[0] = 0;
+				Projectile.localAI[1] = 0;
+				ExtraRotation = 0;
 
-                Projectile.localAI[0] = 0;
-            }
-        
-            //movement stuff
-            if (!Collision.CanHitLine(Projectile.Center, 1, 1, player.Center, 1, 1))
-            {
-                Projectile.ai[0] = 1f;
-            }
-
-            float speed = 8f;
-            if (Projectile.ai[0] == 1f)
-            {
-                speed = 15f;
-            }
-
-            Vector2 center = Projectile.Center;
-            Vector2 direction = player.Center - center;
-            Projectile.ai[1] = 3600f;
-            Projectile.netUpdate = true;
-            
-            direction.Y -= 70f;
-            float distanceTo = direction.Length();
-            if (distanceTo > 200f && speed < 9f)
-            {
-                speed = 9f;
-            }
-            if (distanceTo < 100f && Projectile.ai[0] == 1f && !Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height))
-            {
-                Projectile.ai[0] = 0f;
-                Projectile.netUpdate = true;
-            }
-            if (distanceTo > 2000f)
-            {
-                Projectile.Center = player.Center;
-            }
-            if (distanceTo > 48f)
-            {
-                direction.Normalize();
-                direction *= speed;
-                float temp = 40 / 2f;
-                Projectile.velocity = (Projectile.velocity * temp + direction) / (temp + 1);
-            }
-            else
-            {
-                Projectile.velocity *= (float)Math.Pow(0.9, 40.0 / 40);
-            }
-
-            Projectile.rotation = Projectile.velocity.X * 0.05f;
-
-            if ((double)Math.Abs(Projectile.velocity.X) > 0.2)
-            {
-                Projectile.spriteDirection = -Projectile.direction;
-                return;
+				Projectile.ai[0] = 0;
             }
         }
+
+        private void LaunchLaser(Vector2 fromArea, Vector2 toArea)
+		{
+			Vector2 direction = fromArea - toArea;
+			direction.Normalize();
+			direction *= fromArea - toArea;
+
+			Projectile.NewProjectile(Projectile.GetSource_FromThis(), fromArea, Vector2.Zero,
+			ModContent.ProjectileType<BrainyBeam>(), 0, 0f, Projectile.owner, ai0: toArea.X - direction.X, ai1: toArea.Y - direction.Y);
+		}
     }
 }

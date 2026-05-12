@@ -16,33 +16,40 @@ namespace Spooky.Content.Items.Cemetery
 	{
 		public override void SetDefaults()
 		{
-			Item.damage = 100;
-            Item.mana = 30;
+			Item.damage = 80;
+			Item.mana = 5;
 			Item.DamageType = DamageClass.Magic;
-            Item.noMelee = true;
-            Item.channel = true;
-            Item.useTurn = true;
+			Item.noMelee = true;
+			Item.useTurn = false;
 			Item.autoReuse = true;
-            Item.width = 28;
-            Item.height = 30;
-            Item.useTime = 80;
-			Item.useAnimation = 80;
+			Item.channel = true;
+			Item.width = 40;
+            Item.height = 44;
+			Item.useTime = 10;
+			Item.useAnimation = 10;
 			Item.useStyle = ItemUseStyleID.Shoot;
-			Item.knockBack = 3;
+			Item.knockBack = 0;
 			Item.rare = ItemRarityID.Yellow;
 			Item.value = Item.buyPrice(platinum: 1);
-			Item.UseSound = SoundID.Item163;
-			Item.shoot = ModContent.ProjectileType<DiscoPartySkull>();
+			Item.UseSound = SoundID.Item117;
+			Item.shoot = ModContent.ProjectileType<DiscoSkullHoldout>();
 			Item.shootSpeed = 0f;
 		}
 
-		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+		public override Vector2? HoldoutOffset()
 		{
-            for (int numProjectiles = 0; numProjectiles < 8; numProjectiles++)
-            {
-			    Projectile.NewProjectile(source, position, new Vector2(Main.rand.Next(-15, 16), Main.rand.Next(-15, 16)), Item.shoot, damage, knockback, player.whoAmI, 0, numProjectiles);
-            }
-			
+			return new Vector2(-4, 0);
+		}
+
+		public override bool CanUseItem(Player player)
+		{
+			return player.ownedProjectileCounts[ModContent.ProjectileType<DiscoSkullHoldout>()] < 1;
+		}
+
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+		{
+			Projectile.NewProjectile(source, position.X, position.Y, 0, 0, ModContent.ProjectileType<DiscoSkullHoldout>(), damage, knockback, player.whoAmI);
+
 			return false;
 		}
 	}

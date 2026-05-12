@@ -62,7 +62,7 @@ namespace Spooky.Content.Projectiles.SpookyHell
             SoundEngine.PlaySound(SoundID.Item54, Projectile.Center);
 
             for (int numDusts = 0; numDusts < 10; numDusts++)
-			{                                                                                  
+			{
 				int newDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<CauldronBubble>(), 0f, -2f, 0, default, 1f);
                 Main.dust[newDust].color = Color.DeepPink;
 				Main.dust[newDust].position.X += Main.rand.Next(-50, 51) * 0.05f - 1.5f;

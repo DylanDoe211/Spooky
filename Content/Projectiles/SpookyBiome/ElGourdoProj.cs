@@ -2,7 +2,9 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
+using ReLogic.Content;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 
 using Spooky.Content.Dusts;
@@ -11,52 +13,74 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 {
     public class ElGourdoProj : ModProjectile
     {
-        int ScaleTimerLimit = 10;
-        float ScaleAmount = 0.05f;
-        float SaveRotation;
-        bool Shake = false;
+        public override string Texture => "Spooky/Content/Items/SpookyBiome/ElGourdo";
 
-        public override void SetStaticDefaults()
-        {
-            Main.projFrames[Projectile.type] = 5;
-        }
+        float addedStretch = 0f;
+		float stretchRecoil = 0f;
+
+        private static Asset<Texture2D> ProjTexture;
 
         public override void SetDefaults()
         {
-            Projectile.width = 42;
-            Projectile.height = 85;
+            Projectile.width = 46;
+            Projectile.height = 26;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.friendly = true;
             Projectile.tileCollide = true;
-            Projectile.timeLeft = 2000;
+            Projectile.timeLeft = 600;
             Projectile.penetrate = 1;
             Projectile.aiStyle = -1;
         }
 
-        public override void PostDraw(Color lightColor)
-        {
-            if (Projectile.ai[0] == 180 || Projectile.ai[0] == 210 || Projectile.ai[0] == 240 || Projectile.ai[0] == 270)
-            {
-                Projectile.frame++;
-            }
-        }
+        public override bool PreDraw(ref Color lightColor)
+		{
+			ProjTexture ??= ModContent.Request<Texture2D>(Texture);
 
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            Projectile.Kill();
-        }
+			float stretch = 0f;
+
+			stretch = Math.Abs(stretch) - addedStretch;
+
+			//limit how much it can stretch
+			if (stretch > 0.2f)
+			{
+				stretch = 0.2f;
+			}
+
+			//limit how much it can squish
+			if (stretch < -0.2f)
+			{
+				stretch = -0.2f;
+			}
+
+			Vector2 scaleStretch = new Vector2(1f - stretch, 1f + stretch);
+
+            int height = ProjTexture.Height() / Main.projFrames[Projectile.type];
+            int frameHeight = height * Projectile.frame;
+            Rectangle rectangle = new Rectangle(0, frameHeight, ProjTexture.Width(), height);
+
+            var effects = Projectile.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+
+            Main.EntitySpriteDraw(ProjTexture.Value, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), rectangle, 
+            Projectile.GetAlpha(lightColor), Projectile.rotation, new Vector2(ProjTexture.Width() / 2f, height / 2f), scaleStretch, effects, 0);
+
+			return false;
+		}
 
         public override bool OnTileCollide(Vector2 oldVelocity)
 		{
+            SoundEngine.PlaySound(SoundID.Item56 with { Volume = 2.5f, Pitch = -1f, PitchVariance = 0.5f }, Projectile.Center);
+
+            stretchRecoil = -0.85f;
+
             if (Projectile.velocity.X != oldVelocity.X)
             {
                 Projectile.position.X = Projectile.position.X + Projectile.velocity.X;
-                Projectile.velocity.X = -oldVelocity.X * 0.8f;
+                Projectile.velocity.X = -oldVelocity.X * 0.98f;
             }
             if (Projectile.velocity.Y != oldVelocity.Y)
             {
                 Projectile.position.Y = Projectile.position.Y + Projectile.velocity.Y;
-                Projectile.velocity.Y = -oldVelocity.Y * 0.8f;
+                Projectile.velocity.Y = -oldVelocity.Y * 0.98f;
             }
 
 			return false;
@@ -64,121 +88,54 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 
         public override void AI()
         {
-            Projectile.ai[0]++;
+            Projectile.rotation = Projectile.velocity.Y * (Projectile.direction == 1 ? -0.015f : 0.015f);
 
-            //set projectile rotation randomly for variance
-            if (Projectile.ai[0] == 1)
-            {   
-                Projectile.rotation = Main.rand.Next(0, 360);
-            }
+            Projectile.spriteDirection = Projectile.direction;
 
-            //dont allow projectile to collide with tiles if you are close to the ground
-            if (Projectile.ai[0] < 5)
-            {
-                Projectile.tileCollide = false;
-            }
-            else
-            {
-                Projectile.tileCollide = true;
-            }
+            Projectile.velocity.Y = Projectile.velocity.Y + 0.5f;
 
-            //slow down before getting ready to explode
-            if (Projectile.ai[0] >= 75)
-            {
-                Projectile.velocity *= 0.98f;
-            }
+            //stretch stuff
+			if (stretchRecoil < 0)
+			{
+				stretchRecoil += 0.05f;
+			}
+			else
+			{
+				stretchRecoil = 0;
+			}
 
-            //rotate projectile based on the direction it is moving in
-            if (Projectile.ai[0] <= 180)
-            {
-                Projectile.rotation += 0.2f * Projectile.direction;
-            }
-
-            //save rotation before exploding
-            if (Projectile.ai[0] == 180)
-            {
-                SaveRotation = Projectile.rotation;
-            }
-
-            //scale up and down before it explodes
-            if (Projectile.ai[0] >= 180)
-            {
-                //shake the projectile back and fourth based on its last saved rotation before beginning to detonate
-                if (Shake)
-                {
-                    Projectile.rotation += 0.1f;
-                    if (Projectile.rotation > SaveRotation + 0.2f)
-                    {
-                        Shake = false;
-                    }
-                }
-                else
-                {
-                    Projectile.rotation -= 0.1f;
-                    if (Projectile.rotation < SaveRotation - 0.2f)
-                    {
-                        Shake = true;
-                    }
-                }
-
-                //make projectile scale up and down really quickly
-                Projectile.ai[1]++;
-                if (Projectile.ai[1] < ScaleTimerLimit)
-                {
-                    Projectile.scale -= ScaleAmount;
-                }
-                if (Projectile.ai[1] >= ScaleTimerLimit)
-                {
-                    Projectile.scale += ScaleAmount;
-                }
-
-                if (Projectile.ai[1] > ScaleTimerLimit * 2)
-                {
-                    Projectile.ai[1] = 0;
-                    Projectile.scale = 1.2f;
-                }
-            }
-
-            //increase the rate and size at which the projectile scales for the above
-            if (Projectile.ai[0] == 210 || Projectile.ai[0] == 240 || Projectile.ai[0] == 270)
-            {
-                ScaleAmount += 0.05f;
-                ScaleTimerLimit -= 3;
-            }
-
-            //explode
-            if (Projectile.ai[0] >= 300)
-            {
-                Projectile.Kill();
-            }
+			addedStretch = -stretchRecoil;
         }
 
         public override void OnKill(int timeLeft)
 		{
             SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
 
-            for (int numDust = 0; numDust < 50; numDust++)
-			{                                                                                  
-				int dustGore = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.InfernoFork, 0f, -2f, 0, default, 1.5f);
-                Main.dust[dustGore].velocity.X *= Main.rand.NextFloat(-8f, 8f);
-                Main.dust[dustGore].velocity.Y *= Main.rand.NextFloat(-8f, 8f);
-                Main.dust[dustGore].scale = Main.rand.NextFloat(2f, 3f);
-                Main.dust[dustGore].noGravity = true;
-			}
+            //explosion
+            Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<ElGourdoExplosion>(), Projectile.damage, 0f, Projectile.owner);
 
-            int[] Types = new int[] { ProjectileID.GreekFire1, ProjectileID.GreekFire2, ProjectileID.GreekFire3 };
-
-            for (int numProjectiles = 0; numProjectiles < 5; numProjectiles++)
+            //fire bolts
+            float maxAmount = 15;
+            int currentAmount = 0;
+            while (currentAmount <= maxAmount)
             {
-                Vector2 Speed = new Vector2(8f, 0f).RotatedByRandom(2 * Math.PI);
-                Vector2 realSpeed = Speed.RotatedBy(2 * Math.PI / 2 * (numProjectiles + Main.rand.NextDouble() - 0.5));
-                Vector2 Position = new Vector2(Projectile.Center.X + Main.rand.Next(-20, 20), Projectile.Center.Y + Main.rand.Next(-50, 50));
+                Vector2 velocity = new Vector2(Main.rand.NextFloat(8f, 18f), Main.rand.NextFloat(8f, 18f));
+                Vector2 Bounds = new Vector2(Main.rand.NextFloat(8f, 18f), Main.rand.NextFloat(8f, 18f));
+                float intensity = Main.rand.NextFloat(8f, 18f);
 
-                int GreekFire = Projectile.NewProjectile(Projectile.GetSource_Death(), Position, realSpeed, 
-                Main.rand.Next(Types), Projectile.damage / 2, 0f, Main.myPlayer, 0, 0);
-                Main.projectile[GreekFire].DamageType = DamageClass.Melee;
-                Main.projectile[GreekFire].friendly = true;
-                Main.projectile[GreekFire].hostile = false;
+                Vector2 vector12 = Vector2.UnitX * 0f;
+                vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
+                vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
+
+                Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity,
+                ModContent.ProjectileType<ElGordoFire>(), Projectile.damage / 2, Projectile.knockBack, Projectile.owner);
+
+                int newDust = Dust.NewDust(Projectile.Center, 1, 1, DustID.InfernoFork, 0f, 0f, 100, default, 3f);
+                Main.dust[newDust].noGravity = true;
+                Main.dust[newDust].position = Projectile.Center + vector12;
+                Main.dust[newDust].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
+
+                currentAmount++;
             }
 
             for (int numExplosion = 0; numExplosion < 15; numExplosion++)

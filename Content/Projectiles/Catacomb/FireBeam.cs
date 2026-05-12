@@ -28,7 +28,7 @@ namespace Spooky.Content.Projectiles.Catacomb
 			Projectile.tileCollide = true;
 			Projectile.timeLeft = 500;
             Projectile.penetrate = 1;
-            Projectile.extraUpdates = 15;
+            Projectile.extraUpdates = 3;
             Projectile.alpha = 255;
 		}
 
@@ -142,13 +142,22 @@ namespace Spooky.Content.Projectiles.Catacomb
 		{
             SoundEngine.PlaySound(SoundID.NPCDeath14, Projectile.Center);
 
-            for (int numDust = 0; numDust < 25; numDust++)
-			{                                                                                  
-				int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.InfernoFork, 0f, -2f, 0, default, 1.5f);
-                Main.dust[dust].velocity.X *= Main.rand.NextFloat(-12f, 12f);
-                Main.dust[dust].velocity.Y *= Main.rand.NextFloat(-12f, 12f);
-                Main.dust[dust].scale = Main.rand.NextFloat(1f, 2f);
-                Main.dust[dust].noGravity = true;
+			float maxAmount = 30;
+			int currentAmount = 0;
+			while (currentAmount <= maxAmount)
+			{
+				Vector2 velocity = new Vector2(Main.rand.NextFloat(1f, 25f), Main.rand.NextFloat(1f, 25f));
+				Vector2 Bounds = new Vector2(Main.rand.NextFloat(1f, 25f), Main.rand.NextFloat(1f, 25f));
+				float intensity = Main.rand.NextFloat(1f, 25f);
+
+				Vector2 vector12 = Vector2.UnitX * 0f;
+				vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
+				vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
+				int newDust = Dust.NewDust(Projectile.Center, 0, 0, DustID.InfernoFork, 0f, 0f, 100, default, 2f);
+				Main.dust[newDust].noGravity = true;
+				Main.dust[newDust].position = Projectile.Center + vector12;
+				Main.dust[newDust].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
+				currentAmount++;
 			}
 		}
 	}

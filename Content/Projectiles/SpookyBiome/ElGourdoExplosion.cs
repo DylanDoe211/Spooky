@@ -7,17 +7,17 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace Spooky.Content.Projectiles.SpookyHell
+namespace Spooky.Content.Projectiles.SpookyBiome
 {
-    public class BrainyExplosion : ModProjectile
+    public class ElGourdoExplosion : ModProjectile
     {
         private static Asset<Texture2D> ProjTexture;
 
         public override void SetDefaults()
         {
-            Projectile.width = 300;
-            Projectile.height = 300;
-            Projectile.DamageType = DamageClass.Summon;
+            Projectile.width = 96;
+            Projectile.height = 96;
+            Projectile.DamageType = DamageClass.Melee;
             Projectile.friendly = true;
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
@@ -35,11 +35,15 @@ namespace Spooky.Content.Projectiles.SpookyHell
 
             for (int i = 0; i < 360; i += 90)
             {
-                Color color1 = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(Color.HotPink);
+                Color color1 = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(Color.OrangeRed);
+                Color color2 = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(Color.Orange);
+                Color color3 = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(Color.Gold);
                 
                 Vector2 circular = new Vector2(Main.rand.NextFloat(1f, 12f), Main.rand.NextFloat(1f, 12f)).RotatedBy(MathHelper.ToRadians(i));
 
                 Main.EntitySpriteDraw(ProjTexture.Value, vector + circular, rectangle, color1, Projectile.rotation, drawOrigin, Projectile.ai[0] / 37, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(ProjTexture.Value, vector + circular, rectangle, color2, Projectile.rotation, drawOrigin, (Projectile.ai[0] / 37) * 0.66f, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(ProjTexture.Value, vector + circular, rectangle, color3, Projectile.rotation, drawOrigin, (Projectile.ai[0] / 37) * 0.33f, SpriteEffects.None, 0);
             }
 
             return false;
@@ -49,6 +53,11 @@ namespace Spooky.Content.Projectiles.SpookyHell
         {
             return false;
         }
+
+        public override bool? CanDamage()
+		{
+			return false;
+		}
     
         public override void AI()
         {

@@ -74,7 +74,8 @@ namespace Spooky.Content.Generation
             (ushort)ModContent.TileType<MuertoSkeletoidPainting>(),
             (ushort)ModContent.TileType<SunflowersPainting>(),
             (ushort)ModContent.TileType<BlueHerbPainting>(),
-            (ushort)ModContent.TileType<DivaPainting>()
+            (ushort)ModContent.TileType<DivaPainting>(),
+            (ushort)ModContent.TileType<PikminPainting>()
         };
 
 		private void PlaceCatacomb(GenerationProgress progress, GameConfiguration configuration)

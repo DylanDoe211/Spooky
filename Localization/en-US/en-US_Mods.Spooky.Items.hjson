@@ -754,10 +754,9 @@ BigBoneBow: {
 	DisplayName: Flower Shot
 	Tooltip:
 		'''
-		Left click to fire the bow normally
-		Right click to shoot a stationary thorn flower that inflicts thorn mark on enemies
-		Enemies with the thorn mark debuff will take more damage from this weapon
 		Converts wooden arrows into piercing roses than can slightly home in on enemies
+		Right click to shoot a stationary thorn flower that inflicts thorn mark on enemies
+		Enemies with the thorn mark debuff will take more damage from the piercing roses
 		10% chance to save ammo
 		'''
 }
@@ -1213,7 +1212,7 @@ CemeterySolution: {
 
 DiscoSkull: {
 	DisplayName: Disco Skull
-	Tooltip: Fires out homing rainbow party skulls
+	Tooltip: Channel disco light beams that damage all nearby enemies
 }
 
 GraveDiggerShovel: {
@@ -3280,12 +3279,7 @@ EggCarton: {
 
 ElGourdo: {
 	DisplayName: El Gourdo
-	Tooltip:
-		'''
-		Throws a slow moving gourd bomb that will stop midair after a bit
-		After a few seconds, the bomb will explode, unleashing lingering greek fire
-		The bomb will automatically detonate when it hits an enemy
-		'''
+	Tooltip: Throw bouncing gourd bombs that explode and launch fire everywhere
 }
 
 GourdBook: {
@@ -4022,6 +4016,17 @@ BoogerStaff: {
 	Tooltip: Summons fast flying noses that sneeze on enemies
 }
 
+BrainJar: {
+	DisplayName: Brainy in a Jar
+	Tooltip:
+		'''
+		Summons brainy the brain to hover around you
+		Every minute brainy will explode all of your minions, dealing a ton of damage
+		Each explosions damage will scale further based on each individual minion's damage
+		Brainy does not take up any minion slots
+		'''
+}
+
 EyeFlail: {
 	DisplayName: Chained Eyes
 	Tooltip: Wield two long range eye flails
@@ -4064,17 +4069,6 @@ MouthFlamethrower: {
 Scycler: {
 	DisplayName: Scycler
 	Tooltip: Throws discs that follow your cursor before returning to you
-}
-
-BrainJar: {
-	DisplayName: Brainy in a Jar
-	Tooltip:
-		'''
-		Summons brainy the brain to hover around you
-		Every minute, he will convulsate, causing all of your existing minions to explode
-		Each explosions damage will scale further based on each individual minion's damage
-		Brainy does not take up any minion slots
-		'''
 }
 
 FleshAxe: {
@@ -5816,6 +5810,11 @@ BlueHerbPaintingItem: {
 DivaPaintingItem: {
 	DisplayName: The Diva
 	Tooltip: "'Astrobit'"
+}
+
+PikminPaintingItem: {
+	DisplayName: I'm Spooky?
+	Tooltip: "'Waasephi'"
 }
 
 CemeteryPylonItem: {

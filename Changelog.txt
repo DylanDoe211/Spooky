@@ -1,60 +1,62 @@
 ~New Stuff~
 
 Spider Grotto Overhaul:
+-Spider grotto biome generation has been improved, the caves are now way more open, structure generation is better, added some new lakes to the biome, and much more
 -Added many new enemies in both prehardmode and hardmode in the spider grotto
--Spider grotto caves are now way more open, giving you more room to explore and allowing for better structure placement
--Spider grotto caves are also now really flat, as the caves generation before did not work well with how some of the spider grotto enemies behaved 
 -Added clusters of newly added mycelium grass, which give off faint white light and grow new red mushroom trees (Because spooky mod didnt have enough mushrooms already)
 -Added many block resprites, new blocks, new ambient tiles/objects, and other stuff to enhance the spider grotto's aesthetic more
--Added new old birch trees which drop ambient leaves, and have their own new wood block and furniture set
+-Added new birch trees which drop ambient leaves that fall to the ground, and have their own new wood block and furniture set
 
 Spider Grotto Spore Event:
--New natural weather event where fog and spores take over the grotto, which occurs in hardmode
+-The sporestorm is a new natural weather event where fog and spores take over the grotto, which occurs randomly in hardmode
 -During this event, a new set of mite enemies will begin spawning alongside the normal enemies
 -The fog intensity increases over time, and when intense enough the spiders will stop spawning and only mites can be found
 -Towards the end of the event, the fog intensity will decrease until the event actually ends
--Mite enemies drop a new bloom seed and a new unique material which can be used to craft lots of fun new items
+-Mite enemies drop a unique new bloom seed and a new material which can be used to craft lots of fun new items
 -You can also find pieces of a new armor set growing on the ground while this event is happening, and a funny new pet
 
 Spider War Event:
 -New wave-based event in the spider grotto you can do after defeating golem
--There is a total of 5 unique minibosses in the event
+-There is a total of 5 unique minibosses in the event, each with various different attacks
 -Has a total of 10 waves, and the final wave will consist of an onslaught of minibosses until you get 20 kills
--Each miniboss has a trophy and some unique weapon drops, with the drop rate being dependant on the wave (Before final wave, 10% drop chance, and during final wave you get guaranteed drops)
--The event will automatically count as complete just by making it to wave 10, so you do not have to continue past that unless you want more loot
+-Each miniboss has a trophy and some unique weapon drops, with the drop rate being dependant on the wave (10% drop chance for items before the final wave, and during final wave you get guaranteed drops)
+-The event will automatically count as complete just by making it to wave 10, so you do not have to continue past that unless you want to farm for all the loot
 
 Old Hunter Overhaul:
 -The old hunter was a lackluster town npc and has been changed to be more unique, as well as being moved to hardmode where the mod has less content
 -Old hunter is no longer locked behind a scavenger hunt, and because of this the giant cobweb and all of the old hunter pieces have been removed from the mod
 -Old hunter is now revived by finding his corpse in his house deep in the spider grotto, and bringing back his soul which has been locked away in the lower catacombs in a certain ghostly chest
--Old hunter no longer moves into houses like regular town npcs, you will now need to visit him in his ruined house at the bottom of the spider grotto
+-Old hunter no longer moves into houses like regular town npcs, you will now need to visit him in his ruined house at the bottom of the spider grotto after you have revived him
 -In hardmode, you can find various rare powerful enemies that spawn in the different spooky mod biomes, which each drop a special item you can give to the old hunter for unique rewards
--These enemies do not work like little eye enemies as you do not need a spawn item, you can just find the enemies, kill them, and give the special items to the old hunter whenever you like
+-These enemies do not work like little eye enemies as you do not need a spawn item, you can just find the enemies, kill them, and give the special items to the old hunter
 -Old hunter will also give you hints on where you can find all of these enemies when you talk to him, if you have not completed that corresponding quest
 
 Slingshots Overhaul:
--Slingshots are now a unique subclass of slow but high damage ranged weapons that come with a ton of unique ammos
--Slingshots no longer have that weird mechanic of being able to charge them up and let go earlier at the cost of less damage, they now just have set use speeds like other items but with a unique use animation
+-Slingshots are now a unique subclass of slow but high damage ranged weapons
+-Slingshots no longer have a weird mechanic of being able to charge them up and let go earlier at the cost of less damage, they now just have set use speeds like other items but with a unique use animation
+-There is now a variety of different slingshot ammos across the mod, with each one having unique properties/gimmicks that can be beneficial in certain situations
+-Certain slingshots will also convert mossy pebbles (Which is the basic slingshot ammo) into their own unique projectile, similarly to how some vanilla ranged items convert their corresponding basic ammo into something new
+-Slingshots also now have a cartoon hit effect when their projectiles hit an enemy, with a bigger special one for critical hits (This is just a visual effect, we thought it would be funny to add)
 
 Dialogue Overhaul:
--The dialogue UI that was added and used for krampus in the last major update is now used across every friendly npc you can talk with in spooky mod
+-The dialogue UI that was added and used for krampus in the last major update is now used across almost every friendly npc you can talk with in spooky mod
 -Some of the dialogue in the mod has been re-written to be better and have interactions with your player responding to them just like with krampus
--As of now, little bone and the suspicious skeleton are the only ones left who dont use this system, as we have plans to rewrite their dialogue in a future update
+-As of now, little bone and the suspicious skeleton are the only ones left who dont use this system, as we have plans to rewrite their dialogue in the future when we have time
 
 New Catacombs Improvements:
 -The entire catacombs no longer consists of rooms that have the exact same layouts, the rooms themselves are still pre-built but the furniture, loot, and special rare rooms are all randomized now
--Even though the individual rooms are still pre-built, there is now more than double the number of room variants as there was before, meaning the catacombs should feel a lot more natural now with less repition in room variety
+-Even though the individual rooms are still pre-built, there is now more than double the number of room variants as there was before, so hopefully the catacombs feels a lot more natural with less repition of rooms
 -The pathways throughout the catacombs have also been made to be more random, which makes the catacombs feel like a proper maze for players to explore instead of just being able to run across the whole thing horizontally
 -Catacomb loot chests are also now scattered around the catacombs randomly instead of the catacombs only having 4 pre-made loot rooms in each layer
 -All of the items that the old hunter used to sell are now catacomb loot chest items, some of which are in the upper catacombs and some in the lower catacombs
 -Added new upper catacomb special rooms: Art gallery rooms filled with new unique paintings, and library rooms which utilize some old wood blocks, bookcases, and tables with candles
 -Added new lower catacomb special rooms: Library rooms like the first layer, living quarters with small old wood rooms with various pieces of old wood furniture, and improved puzzle rooms with switches that open walls
--Added new boulder trap and venom dart trap rooms into the upper catacombs because its funny
+-Added new boulder trap and venom dart trap rooms in the upper catacombs because its funny
+-Catacomb loot chests are now locked and you need to get keys for them, which can be dropped by enemies, found in barrels, or dropped by breaking wooden caskets
 -The wooden caskets you can find inside the catacombs now drop items similarly to pots, giving you some useful ammos, potions, and sometimes catacomb chest keys
--Catacomb loot chests are now locked and you need to get keys that can be dropped by enemies, found in barrels, or dropped by breaking wooden caskets
 
 Other New Stuff:
--Added a bunch of achievements, there are now achievements for things like bosses, events, getting items, discovering stuff in the world, ect (More may be added in the future as well)
+-Added a bunch of achievements, there are now achievements for things like defeating bosses, completing events, getting items, and discovering stuff in the world (More may be added in the future as well)
 -Added new double-jump bottle and hermes boots alternatives to the underground spooky forest cabin chests to give you early game mobility (The hermes boots alternative can be used to make spectre boots too)
 -Added new balloon and horseshoe balloon upgrades for the spooky forest double-jump bottle, and an upgrade for spooky forest hermes boots with krampus workshop moon shoes
 -Added many new enemies to the spooky forest (Including a bunch of new blood moon enemies)
@@ -62,15 +64,14 @@ Other New Stuff:
 -Added eye block walls, eye bricks, eye brick walls, sclera blocks, and added a safe version of organic mush walls you can craft and build houses with
 -Added new tar pits cactus block dropped by tar pit cactuses along with a new set of weapons and armor you can craft with them
 -Added a raveyard monolith that allows you to activate the raveyard visual effects, and a spore monolith for the visual effects in the new spore event
--Added the following old wood furniture that was missing from the set: Chandelier, candelabra, clock, dresser, lamp, lantern, and sink
--Added multiple new furniture sets: Upper catacombs, lower catacombs, old birch wood, and tar pit cactus
--Added spider grotto fishing crates, and a spooky forest hardmode crate
+-Added the old wood furniture tiles that were missing from the set which are the chandelier, candelabra, clock, dresser, lamp, lantern, and sink
+-Added multiple new furniture sets which are the upper catacombs, lower catacombs, old birch wood, and tar pit cactus sets
+-Added spider grotto fishing crates, and a hardmode version of the existing spooky forest crate
 -Added new spider grotto angler quest fish
 -Added tall kelp plants to the rotten depths
 -Added glowing flower cactus to the tar pits
 -Added glowing radioactive bulbs to the fetid farms
 -Added the sludge
-
 
 
 ~Changes To Existing Stuff~
@@ -83,6 +84,10 @@ Weapons/Accessories:
 -Nerfed bottomless snow bag damage from 15 -> 10
 -Buffed licker base damage from 48 -> 55
 -Buffed spooky scroll damage from 20 -> 38
+-Venomous spiderpoon damage buffed from 118 -> 125, its hook projectile now shoots and retracts faster, and when an enemy is successfully grappled towards you there is no longer a second delay before you can shoot again
+-El Gourdo damage buffed from 100 -> 135, and reworked it to now throw out gourd bombs that bounce everywhere like crazy, along with new improved explosion visual effects
+-Brainy in a jar damage buffed from 350 -> 380, it now has improved visual effects for brainy himself and his explosions, and brainy now shoots a laser beam at all of your minions when he explodes them
+-Disco skull damage reduced from 100 -> 80, it has been completely reworked as a channeled weapon that damages all nearby enemies with disco light beams
 -Buffed sabertooth scythe use speed
 -Buffed damage done by skull smasher's right-click when you throw the hammer
 -Skull smasher's left-click short range throw now goes through enemies instead of immediately returning to you when it hits one enemy
@@ -92,6 +97,7 @@ Weapons/Accessories:
 -Conscious cutter now spawns slashes on all nearby enemies when you hit something instead of on your cursor
 -Scycler projectiles now follow your cursor for a set time before returning instead of immediately returning when they touch your cursor, and nerfed its use speed
 -Fly shot is no longer a charge item, it now just has a set use time and fires out a spread of 5 projectiles
+-Crusty gunfish no longer shoots mud and now just shoots whatever bullet you are using as ammo
 -Spider-wing longbow now increases its shoot frequency quicker, and made its maximum shoot frequency higher
 -Increased old hunter's rifle shoot speed
 -Increased spider egg cannon shoot speed
@@ -106,7 +112,6 @@ Ranged Weapon Ammo Change:
 -Spooky mod bows and guns that previously converted all ammo into a unique projectile now only do so with their basic ammos (Basic bullets for guns, wooden arrows for bows), and non-basic ammos will just shoot their own projectile
 -Changed the tooltips for all of the changed items to reflect that they now only convert basic ammos
 -This change applies to the following items: Flower Shot, Bone Bender, Seer, Living Seer, Fly Shot, Old Hunters Crossbow, Old Hunters Rifle, Spider-Wing Longbow, Firestorm Monsoon, Crusty Gunfish, Celery Blaster, HAK-2r, Poison Crossbow
--Crusty gunfish no longer shoots mud and now just shoots whatever bullet you are using as ammo
 
 Enemy/Boss:
 -Increased orro-boro phase 1 health from 32000 -> 50000 (Which is technically 16000 -> 25000 in-game since it goes into phase 2 at half health)
@@ -131,10 +136,10 @@ World Generation:
 -Rotten depths now accounts for having both calamity and thorium on at the same time, if both are on the rotten depths will generate next to the sulphur sea, with its tunnel connecting to the sulphur sea caves
 -Rotten depths now automatically adjusts if you have either thorium or calamity on individually (If just calamity is on it will generate on the jungle side, or if just thorium is on it will generate on the dungeon side)
 -Rotten depths caves generation has been changed so that the biome feels more open and has way less empty/unused space
--Polished eye valley generation to prevent walls from being where they arent supposed to, generating behind structures, ect (This does not include the wall pillars as those are supposed to generate)
+-Polished eye valley generation to prevent walls from being where they arent supposed to, like generating behind structures (This does not include the wall pillars as those are supposed to generate)
 -Tar pits biome is now larger than before, but only one generates per world now and it is now limited to the lower half of the underground desert
--Spooky forest little eye house now generates way closer to the center of the spooky forest 
--Little eyes lab is now made out of the various new eye valley blocks to feel more fitting in the biome
+-Spooky forest little eye house now generates way closer to the center of the spooky forest, and it is now way more ruined 
+-Little eyes lab is now made out of the various new and existing eye valley blocks to feel more fitting in the biome
 -Spooky mod biome chests no longer generate in the dungeon, they are now in a special room in the lower catacombs right above big bone's arena
 -Bloom soil now generates in clumps in various spooky mod biomes, it still can be crafted but finding it in the world should hopefully make it way more intuitive for players to get into the blooms mechanic
 -Slightly reduced the amount of green grass that generates on the surface of the spooky forest
@@ -165,12 +170,12 @@ Miscellaneous Changes:
 -Naturally generated rusted plating can now only be broken with a cobalt pickaxe or better
 -Improved the raveyard sky beam visual effect to look better and prevent beams from being way too high in the air
 -Big bone and daffodils arenas now inflict creative shock while you are in them to prevent placing blocks as it can mess with their attacks
--Spooky mod minibosses no longer count as actual bosses in the bestiary
+-Various spooky mod mini-bosses no longer count as actual bosses in the bestiary
 -Big bone bobber and pumpkin bobber are now functional items and are obtainable in their corresponding spooky mod fishing crates
 -Little eye quests no longer give you goodie bags
 -Little eye quest items that you give to him now stack to 9999
 -Catacomb keys are now stackable to 9999
--Resprited a bunch of stuff (Sorry I forgot to keep track of what specifically)
+-Resprited a bunch of stuff (Sorry I forgot to keep track of every specific sprite that got redone)
 
 
 ~Fixes~
@@ -193,8 +198,8 @@ Bug, Issue, and Oversight Fixes:
 -Cemetery screen color tint being applied while in the catacombs
 -Ghost pepper scepter doing damage way too much, and fixed damage scaling not working properly
 -Spook fishron and spooky sharkron bestiary entries unintentionally having their orange aura
--New years resolution not accounting for the undying embryos revival (Now, the new years resolution player kill countdown will not happen if the undying embryo is able to revive you first)
--Spooky mod special glowy bloom-light dust particles looking off due to an issue with how they were drawn
+-New years resolution not accounting for the undying embryos revival (The new years resolution player kill countdown will not happen if the undying embryo is able to revive you first)
+-Spooky mod special glowy dust particles looking off due to an issue with how they were drawn (The dusts produced by the skull smashers right click, cemetery ghost enemies being killed, ect)
 
 Multiplayer Fixes:
 -Mysterious tombstone ghost ambushes not working correctly

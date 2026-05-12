@@ -135,7 +135,8 @@ namespace Spooky.Content.NPCs.Boss.BigBone.Projectiles
 					{
 						if (Main.netMode != NetmodeID.Server) 
 						{
-							Gore.NewGore(Projectile.GetSource_Death(), previousPosition + -betweenPositions, Vector2.Zero, Main.rand.NextBool() ? ModContent.Find<ModGore>("Spooky/ThornStemGore1").Type : ModContent.Find<ModGore>("Spooky/ThornStemGore2").Type);
+							Gore.NewGore(Projectile.GetSource_Death(), previousPosition + -betweenPositions, Vector2.Zero, 
+							Main.rand.NextBool() ? ModContent.Find<ModGore>("Spooky/ThornStemGore1").Type : ModContent.Find<ModGore>("Spooky/ThornStemGore2").Type);
 						}
 					}
 				}

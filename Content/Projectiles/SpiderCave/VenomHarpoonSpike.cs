@@ -97,8 +97,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 			Projectile.rotation = vectorTowardsPlayer.ToRotation() + MathHelper.PiOver2;
 
 			Projectile.ai[0]++;
-
-			if (Projectile.ai[0] >= 25)
+			if (Projectile.ai[0] >= 15)
 			{
 				int XAdd = Projectile.Center.Y > ParentProjectile.Center.Y ? (ParentProjectile.spriteDirection == 1 ? 10 : -10) : (ParentProjectile.spriteDirection == 1 ? -10 : 10);
 
@@ -106,7 +105,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
 				Vector2 RetractSpeed = Projectile.Center - ParentCenter2;
 				RetractSpeed.Normalize();
-				RetractSpeed *= 35;
+				RetractSpeed *= 65;
 				Projectile.velocity = -RetractSpeed;
 
 				if (GrappledNPC != null)
@@ -117,7 +116,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 					}
 				}
 
-				if (Projectile.Hitbox.Intersects(ParentProjectile.Hitbox))
+				if (Projectile.Distance(ParentCenter2) <= 150f)
 				{
 					ParentProjectile.ai[1] = 1;
 
@@ -125,7 +124,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 					{
 						SoundEngine.PlaySound(SoundID.NPCDeath9, player.Center);
 
-						GrappledNPC.velocity *= 0;
+						GrappledNPC.velocity = Vector2.Zero;
 
 						for (int numProjectiles = 0; numProjectiles < 5; numProjectiles++)
 						{
@@ -139,7 +138,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 							Projectile.NewProjectile(Projectile.GetSource_FromAI(), ParentCenter + muzzleOffset, ShootSpeed, ModContent.ProjectileType<VenomHarpoonSpit>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
 						}
 
-						ParentProjectile.timeLeft = 60;
+						ParentProjectile.timeLeft = 10;
 					}
 
 					Projectile.Kill();

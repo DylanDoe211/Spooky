@@ -13,8 +13,8 @@ namespace Spooky.Content.Projectiles.Catacomb
 	{
 		public override void SetDefaults()
 		{
-			Projectile.width = 30;
-            Projectile.height = 30;
+			Projectile.width = 46;
+            Projectile.height = 50;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.friendly = true; 
             Projectile.tileCollide = false;
@@ -29,17 +29,17 @@ namespace Spooky.Content.Projectiles.Catacomb
         }
 
 		public override void AI()
-        {   
-            Lighting.AddLight(Projectile.Center, 0.85f, 0f, 0f);
+        {
+            Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.05f * (float)Projectile.direction;
 
 			Projectile.ai[0]++;
-			if (Projectile.ai[0] >= 30)
+			if (Projectile.ai[0] >= 2)
 			{
-				Projectile.velocity *= 0.5f;
+				Projectile.velocity *= 0.98f;
 			}
 			if (Projectile.ai[0] >= 30)
 			{
-				Projectile.velocity *= 0;
+				Projectile.velocity = Vector2.Zero;
 
 				if (Projectile.ai[1] == 0)
 				{

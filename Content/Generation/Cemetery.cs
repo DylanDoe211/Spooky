@@ -304,7 +304,7 @@ namespace Spooky.Content.Generation
             int XMiddle = Catacombs.PositionX;
             int XEdge = Catacombs.PositionX + (BiomeWidth / 2);
 
-            for (int X = XMiddle - (BiomeWidth / 2); X <= XMiddle + (BiomeWidth / 2); X++)
+            for (int X = XMiddle - (BiomeWidth / 2) - 100; X <= XMiddle + (BiomeWidth / 2) + 100; X++)
             {
                 for (int Y = PositionY - 75; Y <= Main.worldSurface; Y++)
                 {
@@ -353,7 +353,7 @@ namespace Spooky.Content.Generation
                 }
             }
 
-            for (int X = XMiddle - (BiomeWidth / 2) - 100; X <= XMiddle + (BiomeWidth / 2) + 100; X += 30)
+            for (int X = XMiddle - (BiomeWidth / 2); X <= XMiddle + (BiomeWidth / 2); X += 30)
             {
                 for (int Y = PositionY - 75; Y <= Main.worldSurface; Y++)
                 {

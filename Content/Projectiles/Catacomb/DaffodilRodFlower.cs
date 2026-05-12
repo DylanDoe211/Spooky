@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Spooky.Content.Projectiles.Catacomb
 {
@@ -50,7 +51,7 @@ namespace Spooky.Content.Projectiles.Catacomb
 
 		public override void AI()
 		{
-            Projectile.rotation += 0.15f * (float)Projectile.direction;
+            Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.15f * (float)Projectile.direction;
 
             Projectile.velocity *= 0.99f;
 
