@@ -84,7 +84,9 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
             NPCTexture ??= ModContent.Request<Texture2D>(Texture);
             HeatGlowTexture ??= ModContent.Request<Texture2D>(Texture + "HeatGlow");
 
-            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - screenPos, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, SpriteEffects.None, 0);
+            NPC Parent = Main.npc[(int)NPC.ai[3]];
+
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - screenPos, NPC.frame, Parent.GetNPCColorTintedByBuffs(NPC.GetAlpha(drawColor)), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, SpriteEffects.None, 0);
 
             if (HeatMaskAlpha > 0)
             {

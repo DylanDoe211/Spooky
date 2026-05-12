@@ -124,9 +124,9 @@ namespace Spooky.Content.Projectiles.SpookyBiome
             int currentAmount = 0;
             while (currentAmount <= maxAmount)
             {
-                Vector2 velocity = new Vector2(Main.rand.NextFloat(8f, 25f), Main.rand.NextFloat(8f, 25f));
-                Vector2 Bounds = new Vector2(Main.rand.NextFloat(8f, 25f), Main.rand.NextFloat(8f, 25f));
-                float intensity = Main.rand.NextFloat(8f, 25f);
+                Vector2 velocity = new Vector2(Main.rand.NextFloat(8f, 22f), Main.rand.NextFloat(8f, 22f));
+                Vector2 Bounds = new Vector2(Main.rand.NextFloat(8f, 22f), Main.rand.NextFloat(8f, 22f));
+                float intensity = Main.rand.NextFloat(8f, 22f);
 
                 Vector2 vector12 = Vector2.UnitX * 0f;
                 vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;

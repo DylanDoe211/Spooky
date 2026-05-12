@@ -140,13 +140,13 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 			Main.EntitySpriteDraw(NPCTexture.Value, vector, NPC.frame, NPC.GetNPCColorTintedByBuffs(NPC.GetAlpha(drawColor)), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
 			if (!NPC.IsABestiaryIconDummy)
 			{
-				Main.EntitySpriteDraw(GlowTexture.Value, vector, NPC.frame, NPC.GetAlpha(Color.White * 0.5f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+				Main.EntitySpriteDraw(GlowTexture.Value, vector, NPC.frame, NPC.GetNPCColorTintedByBuffs(NPC.GetAlpha(Color.White * 0.5f)), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
 			}
 
 			Main.EntitySpriteDraw(WingsTexture.Value, vector, CurrentWingFrame, NPC.GetNPCColorTintedByBuffs(NPC.GetAlpha(drawColor)), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
 			if (!NPC.IsABestiaryIconDummy)
 			{
-				Main.EntitySpriteDraw(WingsGlowTexture.Value, vector, CurrentWingFrame, NPC.GetAlpha(Color.White * 0.5f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+				Main.EntitySpriteDraw(WingsGlowTexture.Value, vector, CurrentWingFrame, NPC.GetNPCColorTintedByBuffs(NPC.GetAlpha(Color.White * 0.5f)), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
 			}
 
 			//flashing texture when exploding
