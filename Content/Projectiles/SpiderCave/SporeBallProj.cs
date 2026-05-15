@@ -107,6 +107,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
                 int newProj = Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, ShootVelocity, 
 				ModContent.ProjectileType<SporeCloud>(), Projectile.damage, Projectile.knockBack, Projectile.owner, ai0: Main.rand.Next(0, 2));
 				Main.projectile[newProj].DamageType = DamageClass.Magic;
+				Main.projectile[newProj].localNPCHitCooldown = 60;
             }
         }
 

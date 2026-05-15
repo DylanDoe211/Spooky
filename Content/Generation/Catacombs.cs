@@ -598,6 +598,8 @@ namespace Spooky.Content.Generation
                         }
                         else
                         {
+                            StructureHelper.API.Generator.GenerateStructure("Content/Structures/CatacombLayer2/VerticalHall.shstruct", verticalHallOrigin.ToPoint16(), Mod);
+
                             if (!PlaceAdditionalHorizontalHall)
                             {
                                 PlaceAdditionalHorizontalHall = true;
@@ -760,12 +762,12 @@ namespace Spooky.Content.Generation
                 EntrancePosY++;
             }
 
-            //place the daffodil arena
+            //place daffodil arena
             Vector2 DaffodilArenaOrigin = new Vector2(XMiddle - 52, DaffodilArenaY - 21);
 
             StructureHelper.API.Generator.GenerateStructure("Content/Structures/CatacombLayer1/DaffodilArena.shstruct", DaffodilArenaOrigin.ToPoint16(), Mod);
 
-            //spawn daffodil itself in the arena
+            //spawn daffodil in the arena
             Flags.DaffodilPosition = new Vector2(XMiddle * 16, DaffodilArenaY * 16);
             int Daffodil = NPC.NewNPC(null, (int)Flags.DaffodilPosition.X, (int)Flags.DaffodilPosition.Y, ModContent.NPCType<DaffodilBody>());
             Main.npc[Daffodil].position.X -= 9;

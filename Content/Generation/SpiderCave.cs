@@ -443,7 +443,7 @@ namespace Spooky.Content.Generation
 				{
 					if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
 					{
-                        if (Main.tile[X, Y].HasTile && !Main.tile[X, Y - 1].HasTile && CheckForFlatSurface(X, Y, 22, 45))
+                        if (Main.tile[X, Y].HasTile && !Main.tile[X, Y - 1].HasTile && CheckForFlatSurface(X, Y, 27, 60))
                         {
                             //chance for ruins or house
                             if (WorldGen.genRand.NextBool())
@@ -1293,7 +1293,7 @@ namespace Spooky.Content.Generation
             {
 				Chest chest = Main.chest[chestIndex];
 
-				if (chest == null) 
+				if (chest == null)
                 {
 					continue;
 				}
@@ -1302,10 +1302,11 @@ namespace Spooky.Content.Generation
 				{
 					Tile chestTile = Main.tile[chest.x, chest.y];
 
-					int[] MainItems = new int[] { ItemID.BandofRegeneration, ItemID.AnkletoftheWind, ItemID.HermesBoots, ItemID.CloudinaBottle, ItemID.Aglet, ItemID.LuckyHorseshoe };
-
-					if (chestTile.TileFrameX == 5 * 36 && MainItems.Contains(chest.item[0].type))
+					if (chestTile.TileType == ModContent.TileType<BirchChest>())
 					{
+                        //main items
+                        int[] MainItems = new int[] { ItemID.BandofRegeneration, ItemID.AnkletoftheWind, ItemID.HermesBoots, ItemID.CloudinaBottle, ItemID.Aglet, ItemID.LuckyHorseshoe };
+
 						//potions
 						int[] Potions1 = new int[] { ItemID.BattlePotion, ItemID.CratePotion, ItemID.EndurancePotion };
 
@@ -1318,12 +1319,15 @@ namespace Spooky.Content.Generation
 						//bars
 						int[] Bars = new int[] { ItemID.GoldBar, ItemID.PlatinumBar };
 
+                        //main item
+						chest.item[0].SetDefaults(WorldGen.genRand.Next(MainItems));
+						chest.item[0].stack = 1;
 						//bars
 						chest.item[1].SetDefaults(WorldGen.genRand.Next(Bars));
 						chest.item[1].stack = WorldGen.genRand.Next(5, 16);
                         //torches
                         chest.item[2].SetDefaults(ModContent.ItemType<SpiderBiomeTorchItem>());
-						chest.item[2].stack = WorldGen.genRand.Next(3, 8);
+						chest.item[2].stack = WorldGen.genRand.Next(12, 26);
 						//potions
 						chest.item[3].SetDefaults(WorldGen.genRand.Next(Potions1));
 						chest.item[3].stack = WorldGen.genRand.Next(1, 3);
@@ -1333,12 +1337,9 @@ namespace Spooky.Content.Generation
 						//recovery potions
 						chest.item[5].SetDefaults(WorldGen.genRand.Next(RecoveryPotions));
 						chest.item[5].stack = WorldGen.genRand.Next(3, 7);
-						//goodie bags
-						chest.item[6].SetDefaults(ItemID.GoodieBag);
-						chest.item[6].stack = WorldGen.genRand.Next(1, 3);
 						//gold coins
-						chest.item[7].SetDefaults(ItemID.GoldCoin);
-						chest.item[7].stack = WorldGen.genRand.Next(1, 3);
+						chest.item[6].SetDefaults(ItemID.GoldCoin);
+						chest.item[6].stack = WorldGen.genRand.Next(1, 3);
 					}
 				}
             }

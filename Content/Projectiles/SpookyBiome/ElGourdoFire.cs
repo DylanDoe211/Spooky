@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace Spooky.Content.Projectiles.SpookyBiome
 {
-	public class ElGordoFire : ModProjectile
+	public class ElGourdoFire : ModProjectile
 	{
 		public override string Texture => "Spooky/Content/Projectiles/TrailCircle";
 
@@ -107,6 +107,10 @@ namespace Spooky.Content.Projectiles.SpookyBiome
             {
                 Projectile.alpha += 5;
             }
+			if (Projectile.alpha >= 125)
+			{
+				Projectile.Kill();
+			}
 		}
 	}
 }

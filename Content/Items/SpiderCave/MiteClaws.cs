@@ -14,7 +14,7 @@ namespace Spooky.Content.Items.SpiderCave
     {
         public override void SetDefaults()
         {
-            Item.damage = 20;
+            Item.damage = 25;
 			Item.DamageType = DamageClass.Melee;
 			Item.autoReuse = true;
             Item.noUseGraphic = true;

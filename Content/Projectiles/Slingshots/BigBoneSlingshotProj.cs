@@ -38,7 +38,7 @@ namespace Spooky.Content.Projectiles.Slingshots
 				{
 					SoundEngine.PlaySound(ShootSound, Projectile.Center);
 
-					int Type = GetProjectileToShoot(player); //ModContent.ProjectileType<SlingshotFlower>());
+					int Type = GetProjectileToShoot(player);
 
 					if (Projectile.owner == Main.myPlayer)
 					{
@@ -46,7 +46,8 @@ namespace Spooky.Content.Projectiles.Slingshots
 						ShootSpeed.Normalize();
 						ShootSpeed *= ItemGlobal.ActiveItem(player).shootSpeed;
 
-						Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, ShootSpeed, Type, Projectile.damage, Projectile.knockBack, Projectile.owner);
+						int Proj = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, ShootSpeed, Type, Projectile.damage, Projectile.knockBack, Projectile.owner);
+						Main.projectile[Proj].GetGlobalProjectile<ProjectileGlobal>().SlingshotProjSpawnFlower = true;
 					}
 				}
 

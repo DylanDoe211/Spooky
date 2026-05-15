@@ -25,7 +25,7 @@ namespace Spooky.Content.Items.Slingshots
 
         public override void SetDefaults()
         {
-            Item.damage = 160;
+            Item.damage = 185;
 			Item.crit = 10;
 			Item.DamageType = DamageClass.Ranged;
 			Item.noMelee = true;

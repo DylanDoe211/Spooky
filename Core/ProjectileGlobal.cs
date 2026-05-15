@@ -24,6 +24,7 @@ namespace Spooky.Core
 		public override bool InstancePerEntity => true;
 
 		public bool SpongeAbsorbAttempt = false;
+		public bool SlingshotProjSpawnFlower = false;
 
 		//ProjectileID set for slingshot ammo projectiles since they will spawn funny effects and play sounds on hit
 		public static bool[] IsSlingshotAmmoProj = ProjectileID.Sets.Factory.CreateBoolSet();
@@ -52,6 +53,13 @@ namespace Spooky.Core
 					Screenshake.ShakeScreenWithIntensity(projectile.Center, 1f, 350f);
 					Projectile.NewProjectile(projectile.GetSource_FromAI(), projectile.Center, Vector2.Zero, ModContent.ProjectileType<SlingshotHit>(), 0, 0f, player.whoAmI, Main.rand.Next(0, 3));
 				}
+			}
+
+			//big bone slingshot attaches a flower to enemies
+			if (SlingshotProjSpawnFlower && !target.GetGlobalNPC<NPCGlobal>().HasSlingshotFlowerAttached)
+			{
+				Projectile.NewProjectile(projectile.GetSource_FromAI(), target.Center, Vector2.Zero, ModContent.ProjectileType<SlingshotAttachFlower>(), 
+				projectile.damage / 3, 0f, player.whoAmI, target.whoAmI, Main.rand.Next(0, 6));
 			}
 
 			//creepy candle makes magic projectiles inflict on fire

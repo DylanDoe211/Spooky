@@ -1311,12 +1311,23 @@ namespace Spooky.Content.Generation
 						//potions
 						chest.item[4].SetDefaults(WorldGen.genRand.Next(Potions));
 						chest.item[4].stack = WorldGen.genRand.Next(2, 4);
-						//goodie bags
-						chest.item[5].SetDefaults(ItemID.GoodieBag);
-						chest.item[5].stack = WorldGen.genRand.Next(1, 3);
-						//coins
-						chest.item[6].SetDefaults(ItemID.GoldCoin);
-						chest.item[6].stack = WorldGen.genRand.Next(1, 3);
+						//chance to place goodie bags in extra slot
+						if (WorldGen.genRand.NextBool())
+						{
+							//goodie bags
+							chest.item[5].SetDefaults(ItemID.GoodieBag);
+							chest.item[5].stack = WorldGen.genRand.Next(1, 3);
+							//coins
+							chest.item[6].SetDefaults(ItemID.GoldCoin);
+							chest.item[6].stack = WorldGen.genRand.Next(1, 3);
+						}
+						//otherwise just place coins
+						else
+						{
+							//coins
+							chest.item[5].SetDefaults(ItemID.GoldCoin);
+							chest.item[5].stack = WorldGen.genRand.Next(1, 3);
+						}
 					}
 				}
             }

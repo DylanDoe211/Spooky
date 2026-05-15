@@ -2635,7 +2635,7 @@ BaseSlingshot: {
 
 BigBoneSlingshot: {
 	DisplayName: Potted Plant Slingshot
-	Tooltip: Projectiles shot by this will leave behind lingering flowers on hit
+	Tooltip: Projectiles shot by this will plant damaging flowers on enemies
 }
 
 BigDunkSlingshot: {
@@ -3221,12 +3221,12 @@ SpookyBiomeKey: {
 
 SpookyGlowshroom: {
 	DisplayName: Glowshroom
-	Tooltip: "'Filled with arcane energies'"
+	Tooltip: "'Emits a cool blue glow'"
 }
 
 SpookyGlowshroomYellow: {
 	DisplayName: Yellow Glowshroom
-	Tooltip: "'Filled with sparkling magic'"
+	Tooltip: "'Emits a warm golden glow'"
 }
 
 SpookySolution: {

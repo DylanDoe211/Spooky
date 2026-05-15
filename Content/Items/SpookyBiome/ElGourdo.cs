@@ -15,7 +15,6 @@ namespace Spooky.Content.Items.SpookyBiome
             Item.damage = 100;
             Item.DamageType = DamageClass.Melee;
             Item.noMelee = true;
-            Item.useTurn = true;
             Item.noUseGraphic = true;
             Item.autoReuse = true;
             Item.width = 56;

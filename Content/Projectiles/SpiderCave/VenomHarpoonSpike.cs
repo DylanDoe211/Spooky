@@ -13,15 +13,17 @@ namespace Spooky.Content.Projectiles.SpiderCave
 	public class VenomHarpoonSpike : ModProjectile
 	{
 		int ProjectileCenterOffsetY = 13;
+		bool HasHitBoss = false;
 
 		NPC GrappledNPC = null;
 
+		private static Asset<Texture2D> ProjTexture;
         private static Asset<Texture2D> ChainTexture;
 
         public override void SetDefaults() 
         {
-			Projectile.width = 24;
-			Projectile.height = 24;
+			Projectile.width = 40;
+			Projectile.height = 40;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.friendly = true;
             Projectile.tileCollide = false;
@@ -33,6 +35,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 		{
 			Projectile ParentProjectile = Main.projectile[(int)Projectile.ai[1]];
 
+			ProjTexture ??= ModContent.Request<Texture2D>(Texture);
             ChainTexture ??= ModContent.Request<Texture2D>("Spooky/Content/NPCs/SpiderCave/BallSpiderWeb");
 
 			int XAdd = Projectile.Center.Y > ParentProjectile.Center.Y ? (ParentProjectile.spriteDirection == 1 ? 10 : -10) : (ParentProjectile.spriteDirection == 1 ? -10 : 10);
@@ -59,14 +62,22 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
 			while (chainLengthRemainingToDraw > 0f)
 			{
-				Main.spriteBatch.Draw(ChainTexture.Value, chainDrawPosition - Main.screenPosition, chainSourceRectangle, lightColor, chainRotation, chainOrigin, 1f, SpriteEffects.None, 0f);
+				Color chainDrawColor = Lighting.GetColor((int)chainDrawPosition.X / 16, (int)(chainDrawPosition.Y / 16f));
+
+				Main.spriteBatch.Draw(ChainTexture.Value, chainDrawPosition - Main.screenPosition, chainSourceRectangle, chainDrawColor, chainRotation, chainOrigin, 1f, SpriteEffects.None, 0f);
 
 				chainDrawPosition += unitVectorToParent * chainSegmentLength;
 				chainCount++;
 				chainLengthRemainingToDraw -= chainSegmentLength;
 			}
 
-			return true;
+			Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
+			Vector2 vector = new Vector2(Projectile.Center.X, Projectile.Center.Y) - Main.screenPosition + new Vector2(0, Projectile.gfxOffY);
+			Rectangle rectangle = new(0, ProjTexture.Height() / Main.projFrames[Projectile.type] * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
+
+            Main.EntitySpriteDraw(ProjTexture.Value, vector, rectangle, Projectile.GetAlpha(lightColor), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+
+			return false;
 		}
 
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
@@ -78,6 +89,29 @@ namespace Spooky.Content.Projectiles.SpiderCave
 				GrappledNPC = target;
 
 				Projectile.ai[0] = 25;
+			}
+			if (Projectile.ai[0] >= 12 && !HasHitBoss && target.active && target.CanBeChasedBy(this) && target.IsTechnicallyBoss() && !target.friendly && !target.dontTakeDamage && !NPCID.Sets.CountsAsCritter[target.type])
+			{	
+				SoundEngine.PlaySound(SoundID.NPCDeath9, Projectile.Center);
+
+				Projectile ParentProjectile = Main.projectile[(int)Projectile.ai[1]];
+				Vector2 ParentCenter = new Vector2(ParentProjectile.Center.X, ParentProjectile.Center.Y - ProjectileCenterOffsetY);
+
+				for (int numProjectiles = 0; numProjectiles < 6; numProjectiles++)
+				{
+					Vector2 ShootSpeed = target.Center - ParentCenter;
+					ShootSpeed.Normalize();
+					ShootSpeed.X *= Main.rand.Next(15, 25);
+					ShootSpeed.Y *= Main.rand.Next(15, 25);
+
+					Vector2 muzzleOffset = Vector2.Normalize(new Vector2(ShootSpeed.X, ShootSpeed.Y)) * 40f;
+
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), ParentCenter + muzzleOffset, ShootSpeed, 
+					ModContent.ProjectileType<VenomHarpoonSpit>(), Projectile.damage / 2, Projectile.knockBack, Projectile.owner);
+				}
+		
+				Projectile.ai[0] = 25;
+				HasHitBoss = true;
 			}
 		}
 
@@ -105,15 +139,21 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
 				Vector2 RetractSpeed = Projectile.Center - ParentCenter2;
 				RetractSpeed.Normalize();
-				RetractSpeed *= 65;
-				Projectile.velocity = -RetractSpeed;
 
 				if (GrappledNPC != null)
 				{
-					if (GrappledNPC.Distance(player.Center) >= 265f)
+					if (GrappledNPC.Distance(player.Center) >= 230f)
 					{
 						GrappledNPC.position = Projectile.Center - GrappledNPC.Size / 2;
 					}
+
+					RetractSpeed *= 32;
+					Projectile.velocity = -RetractSpeed;
+				}
+				else
+				{
+					RetractSpeed *= 65;
+					Projectile.velocity = -RetractSpeed;
 				}
 
 				if (Projectile.Distance(ParentCenter2) <= 150f)
@@ -122,11 +162,11 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
 					if (GrappledNPC != null)
 					{
-						SoundEngine.PlaySound(SoundID.NPCDeath9, player.Center);
+						SoundEngine.PlaySound(SoundID.NPCDeath9, Projectile.Center);
 
 						GrappledNPC.velocity = Vector2.Zero;
 
-						for (int numProjectiles = 0; numProjectiles < 5; numProjectiles++)
+						for (int numProjectiles = 0; numProjectiles < 6; numProjectiles++)
 						{
 							Vector2 ShootSpeed = GrappledNPC.Center - ParentCenter;
 							ShootSpeed.Normalize();
@@ -135,7 +175,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
 							Vector2 muzzleOffset = Vector2.Normalize(new Vector2(ShootSpeed.X, ShootSpeed.Y)) * 40f;
 
-							Projectile.NewProjectile(Projectile.GetSource_FromAI(), ParentCenter + muzzleOffset, ShootSpeed, ModContent.ProjectileType<VenomHarpoonSpit>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+							Projectile.NewProjectile(Projectile.GetSource_FromAI(), ParentCenter + muzzleOffset, ShootSpeed, ModContent.ProjectileType<VenomHarpoonSpit>(), Projectile.damage / 2, Projectile.knockBack, Projectile.owner);
 						}
 
 						ParentProjectile.timeLeft = 10;

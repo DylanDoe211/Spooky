@@ -22,8 +22,8 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 
         public override void SetDefaults()
         {
-            Projectile.width = 46;
-            Projectile.height = 26;
+            Projectile.width = 50;
+            Projectile.height = 36;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.friendly = true;
             Projectile.tileCollide = true;
@@ -124,16 +124,16 @@ namespace Spooky.Content.Projectiles.SpookyBiome
             int currentAmount = 0;
             while (currentAmount <= maxAmount)
             {
-                Vector2 velocity = new Vector2(Main.rand.NextFloat(8f, 22f), Main.rand.NextFloat(8f, 22f));
-                Vector2 Bounds = new Vector2(Main.rand.NextFloat(8f, 22f), Main.rand.NextFloat(8f, 22f));
-                float intensity = Main.rand.NextFloat(8f, 22f);
+                Vector2 velocity = new Vector2(Main.rand.NextFloat(8f, 20f), Main.rand.NextFloat(8f, 20f));
+                Vector2 Bounds = new Vector2(Main.rand.NextFloat(8f, 20f), Main.rand.NextFloat(8f, 20f));
+                float intensity = Main.rand.NextFloat(8f, 20f);
 
                 Vector2 vector12 = Vector2.UnitX * 0f;
                 vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
                 vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
 
                 Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity,
-                ModContent.ProjectileType<ElGordoFire>(), Projectile.damage / 2, Projectile.knockBack, Projectile.owner);
+                ModContent.ProjectileType<ElGourdoFire>(), Projectile.damage / 2, Projectile.knockBack, Projectile.owner);
 
                 int newDust = Dust.NewDust(Projectile.Center, 1, 1, DustID.InfernoFork, 0f, 0f, 100, default, 3f);
                 Main.dust[newDust].noGravity = true;

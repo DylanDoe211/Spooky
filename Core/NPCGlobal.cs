@@ -45,6 +45,7 @@ namespace Spooky.Core
 
         public bool HasVeinChainAttached = false;
         public bool HasGooChompterAttached = false;
+		public bool HasSlingshotFlowerAttached = false;
 
 		public bool NPCTamed = false; //use for all instances of a tameable animal in spooky mod
 

@@ -131,6 +131,11 @@ namespace Spooky.Content.Projectiles.SpookyHell
             }
         }
 
+        public override bool? CanDamage()
+        {
+            return false;
+        }
+
         public override void AI()
         {
             Projectile.frameCounter++;

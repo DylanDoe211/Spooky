@@ -115,7 +115,7 @@ namespace Spooky.Content.NPCs.EggEvent
             }
             if (NPC.frame.Y >= frameHeight * 6)
             {
-                NPC.frame.Y = Main.rand.Next(0, 2) * frameHeight;
+                NPC.frame.Y = Main.rand.Next(0, 3) * frameHeight;
             }
         }
 
