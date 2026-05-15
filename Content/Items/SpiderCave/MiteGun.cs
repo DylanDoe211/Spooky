@@ -21,10 +21,10 @@ namespace Spooky.Content.Items.SpiderCave
 			Item.autoReuse = true;
 			Item.width = 56;
 			Item.height = 32;
-			Item.useTime = 16;
-			Item.useAnimation = 16;
+			Item.useTime = 12;
+			Item.useAnimation = 12;
 			Item.useStyle = ItemUseStyleID.Shoot;
-			Item.knockBack = 3;
+			Item.knockBack = 2;
 			Item.rare = ItemRarityID.LightRed;
             Item.value = Item.buyPrice(gold: 15);
 			Item.UseSound = SoundID.Item11;

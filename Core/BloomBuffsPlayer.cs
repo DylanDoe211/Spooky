@@ -1146,6 +1146,14 @@ namespace Spooky.Core
 					Projectile.NewProjectile(target.GetSource_OnHit(Player), target.Center, Velocity, ModContent.ProjectileType<InkSpore>(), hit.Damage, hit.Knockback, Player.whoAmI, Main.rand.Next(0, 3));
 				}
 			}
+			if (FungusRedCage && Main.rand.NextBool(3))
+			{
+				//big bone slingshot attaches a flower to enemies
+				if (!target.GetGlobalNPC<NPCGlobal>().HasRedCageAttached)
+				{
+					Projectile.NewProjectile(target.GetSource_OnHit(Player), target.Center, Vector2.Zero, ModContent.ProjectileType<CageFungusProj>(), 0, 0f, Player.whoAmI, target.whoAmI);
+				}
+			}
 		}
 
 		public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)

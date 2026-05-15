@@ -231,8 +231,7 @@ FungusRedCage: {
 	DisplayName: Red Cage Fungus
 	Tooltip:
 		'''
-		Hitting enemies may attach a chain to them that slows them down
-		Chains will remain attached as long as you are close enough, and only 4 can exist at once
+		Hitting enemies may grow a cage fungus that slows them down while its active
 		3 minute duration
 		'''
 }

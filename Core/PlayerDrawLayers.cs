@@ -140,7 +140,7 @@ namespace Spooky.Core
             Texture2D tex = ModContent.Request<Texture2D>("Spooky/Content/Items/SpiderCave/MortarWings_RealWings").Value;
             Texture2D glowTex = ModContent.Request<Texture2D>("Spooky/Content/Items/SpiderCave/MortarWings_RealWingsGlow").Value;
             Vector2 Position = drawInfo.Position;
-            Vector2 pos = new Vector2((int)(Position.X - Main.screenPosition.X + (drawPlayer.width / 2) - (11 * drawPlayer.direction)), (int)(Position.Y - Main.screenPosition.Y + (drawPlayer.height / 2) - 2f * drawPlayer.gravDir));
+            Vector2 pos = new Vector2((int)(Position.X - Main.screenPosition.X + (drawPlayer.width / 2) - (11 * drawPlayer.direction)), (int)(Position.Y - Main.screenPosition.Y + (drawPlayer.height / 2) - 2f - drawInfo.mountOffSet * drawPlayer.gravDir));
             Color lightColor = Lighting.GetColor((int)drawPlayer.Center.X / 16, (int)drawPlayer.Center.Y / 16, Color.White);
             Color color = lightColor * (1 - drawInfo.shadow);
             Color glowColor = Color.White * (1 - drawInfo.shadow);

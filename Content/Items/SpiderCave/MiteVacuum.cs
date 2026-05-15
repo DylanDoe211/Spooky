@@ -15,7 +15,7 @@ namespace Spooky.Content.Items.SpiderCave
 	{
 		public override void SetDefaults()
 		{
-			Item.damage = 35;
+			Item.damage = 45;
 			Item.DamageType = DamageClass.Ranged;
 			Item.noMelee = true;
 			Item.autoReuse = true;
@@ -23,8 +23,8 @@ namespace Spooky.Content.Items.SpiderCave
 			Item.channel = true;
 			Item.width = 34;
 			Item.height = 40;
-			Item.useTime = 6;
-			Item.useAnimation = 6;
+			Item.useTime = 5;
+			Item.useAnimation = 5;
 			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.knockBack = 1;
 			Item.rare = ItemRarityID.LightRed;
