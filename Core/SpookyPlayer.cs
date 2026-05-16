@@ -156,7 +156,6 @@ namespace Spooky.Core
         //misc bools
         public bool EatenByGooSlug = false;
         public bool RaveyardGuardsHostile = false;
-        public bool WhipSpiderAggression = false;
         public bool SpiderGrottoCompass = false;
         public bool EyeValleyCompass = false;
         public bool NoseCultistDisguise1 = false;
@@ -374,7 +373,6 @@ namespace Spooky.Core
             SludgePet = false;
 
             //misc bools
-            WhipSpiderAggression = false;
             EatenByGooSlug = false;
             SpiderGrottoCompass = false;
             EyeValleyCompass = false;

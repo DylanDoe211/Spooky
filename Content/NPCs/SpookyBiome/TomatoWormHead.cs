@@ -319,6 +319,11 @@ namespace Spooky.Content.NPCs.SpookyBiome
             }
         }
 
+        public override void ModifyNPCLoot(NPCLoot npcLoot) 
+        {
+            npcLoot.Add(ItemDropRule.Common(ItemID.BloodMoonStarter, 20));
+        }
+
         public override bool CheckDead()
         {
             if (Main.netMode != NetmodeID.Server) 

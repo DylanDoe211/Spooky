@@ -68,7 +68,8 @@ namespace Spooky.Content.NPCs.SpookyBiome
 		public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
             npcLoot.Add(ItemDropRule.Common(ItemID.Gel, 1, 1, 3));
-			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<TomatoAmmo>(), 20, 25, 50));
+            npcLoot.Add(ItemDropRule.Common(ItemID.BloodMoonStarter, 100));
+			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<TomatoAmmo>(), 5, 10, 25));
 			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<TomatoSeed>(), 120));
         }
 

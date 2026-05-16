@@ -71,7 +71,7 @@ namespace Spooky.Content.NPCs.SpiderCave
                     {
                         NPC.active = false;
                     }
-                    else if((NPC.Distance(player.Center) <= 300f || player.GetModPlayer<SpookyPlayer>().WhipSpiderAggression) && NPC.ai[1] >= 90)
+                    else if (NPC.Distance(player.Center) <= 300f && NPC.ai[1] >= 90)
                     {
                         SoundEngine.PlaySound(SoundID.Zombie74, NPC.Center);
 

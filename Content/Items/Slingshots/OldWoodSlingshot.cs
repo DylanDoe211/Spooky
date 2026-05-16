@@ -23,7 +23,7 @@ namespace Spooky.Content.Items.Slingshots
 
         public override void SetDefaults()
         {
-            Item.damage = 25;
+            Item.damage = 32;
 			Item.crit = 10;
 			Item.DamageType = DamageClass.Ranged;
 			Item.noMelee = true;
@@ -41,7 +41,7 @@ namespace Spooky.Content.Items.Slingshots
 			Item.UseSound = UseSound;
 			Item.shoot = ModContent.ProjectileType<OldWoodSlingshotProj>();
 			Item.useAmmo = ModContent.ItemType<MossyPebble>();
-			Item.shootSpeed = 10f;
+			Item.shootSpeed = 16f;
         }
 
 		public override bool CanConsumeAmmo(Item ammo, Player player)

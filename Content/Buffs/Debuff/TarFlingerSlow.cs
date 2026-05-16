@@ -21,17 +21,17 @@ namespace Spooky.Content.Buffs.Debuff
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            if (!npc.friendly)
+            if (!npc.friendly && !npc.boss && !npc.IsTechnicallyBoss())
             {
 				if (Main.rand.NextBool(10))
 				{
 					Dust.NewDust(npc.position, npc.width, npc.height, DustID.Asphalt, npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f, default, default, 1.5f);
 				}
 
-                if (!npc.boss && !npc.IsTechnicallyBoss())
+                npc.velocity.X *= 0.9f;
+                if (!npc.noGravity)
                 {
-                    npc.velocity.X *= 0.9f;
-                    npc.velocity.Y += !npc.noTileCollide ? 0.10f : 0.01f;
+                    npc.velocity.Y *= 0.9f;
                 }
 
                 if (!initializeStats && npc.buffTime[buffIndex] >= 5)

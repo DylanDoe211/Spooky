@@ -32,8 +32,8 @@ namespace Spooky.Content.Items.Slingshots
 			Item.channel = true;
 			Item.width = 24;
             Item.height = 34;
-			Item.useTime = 60;
-			Item.useAnimation = 60;
+			Item.useTime = 50;
+			Item.useAnimation = 50;
 			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.knockBack = 4;
 			Item.rare = ItemRarityID.LightRed;
@@ -41,7 +41,7 @@ namespace Spooky.Content.Items.Slingshots
 			Item.UseSound = UseSound;
 			Item.shoot = ModContent.ProjectileType<OpalSlingshotProj>();
 			Item.useAmmo = ModContent.ItemType<MossyPebble>();
-			Item.shootSpeed = 16f;
+			Item.shootSpeed = 20f;
         }
 
 		public override bool CanConsumeAmmo(Item ammo, Player player)

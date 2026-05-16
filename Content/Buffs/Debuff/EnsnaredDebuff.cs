@@ -16,12 +16,15 @@ namespace Spooky.Content.Buffs.Debuff
 
 		public override void Update(NPC npc, ref int buffIndex)
         {
-            if (!npc.boss && !npc.IsTechnicallyBoss())
+            if (!npc.friendly && !npc.boss && !npc.IsTechnicallyBoss())
             {
                 Dust.NewDust(npc.position, npc.width, npc.height, DustID.GreenMoss);
 				
-				npc.velocity.X *= 0.2f;
-				npc.velocity.Y += !npc.noTileCollide ? 0.10f : 0.01f;
+				npc.velocity.X *= 0.7f;
+                if (!npc.noGravity)
+                {
+                    npc.velocity.Y *= 0.7f;
+                }
 			}
 		}
     }

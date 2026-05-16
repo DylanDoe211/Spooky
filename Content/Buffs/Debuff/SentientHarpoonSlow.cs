@@ -16,10 +16,13 @@ namespace Spooky.Content.Buffs.Debuff
 
 		public override void Update(NPC npc, ref int buffIndex)
         {
-            if (!npc.boss && !npc.IsTechnicallyBoss())
+            if (!npc.friendly && !npc.boss && !npc.IsTechnicallyBoss())
             {
 				npc.velocity.X *= 0.95f;
-				npc.velocity.Y += !npc.noTileCollide ? 0.10f : 0.01f;
+                if (!npc.noGravity)
+                {
+                    npc.velocity.Y *= 0.95f;
+                }
 
 				if (Main.rand.NextBool(10))
 				{

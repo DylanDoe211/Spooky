@@ -39,7 +39,7 @@ namespace Spooky.Content.NPCs.SpiderCave
 
             NPC.spriteDirection = NPC.direction;
 
-			if (NPC.Distance(player.Center) <= 200f || NPC.life < NPC.lifeMax || player.GetModPlayer<SpookyPlayer>().WhipSpiderAggression)
+			if (NPC.Distance(player.Center) <= 200f || NPC.life < NPC.lifeMax)
             {
 				SoundEngine.PlaySound(SoundID.Zombie74, NPC.Center);
 
@@ -92,7 +92,7 @@ namespace Spooky.Content.NPCs.SpiderCave
 
             NPC.spriteDirection = NPC.direction;
 
-			if (NPC.Distance(player.Center) <= 200f || NPC.life < NPC.lifeMax || player.GetModPlayer<SpookyPlayer>().WhipSpiderAggression)
+			if (NPC.Distance(player.Center) <= 200f || NPC.life < NPC.lifeMax)
             {
 				SoundEngine.PlaySound(SoundID.Zombie74, NPC.Center);
 

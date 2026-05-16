@@ -50,7 +50,6 @@ namespace Spooky.Content.Generation
 
         public static List<ushort> PaintingsLayer1 = new()
         {
-            (ushort)ModContent.TileType<AlienPainting>(),
             (ushort)ModContent.TileType<BaxterWitchPainting>(),
             (ushort)ModContent.TileType<DavePainting>(),
             (ushort)ModContent.TileType<GrannyBatPainting>(),
@@ -59,7 +58,6 @@ namespace Spooky.Content.Generation
             (ushort)ModContent.TileType<GravestonePainting>(),
             (ushort)ModContent.TileType<HogPainting>(),
             (ushort)ModContent.TileType<HorsePainting>(),
-            (ushort)ModContent.TileType<ShoebillPainting>(),
             (ushort)ModContent.TileType<SmilingFriendsPainting>(),
             (ushort)ModContent.TileType<SurprisedSkullPainting>(),
             (ushort)ModContent.TileType<TheKillerPainting>(),
@@ -75,7 +73,10 @@ namespace Spooky.Content.Generation
             (ushort)ModContent.TileType<SunflowersPainting>(),
             (ushort)ModContent.TileType<BlueHerbPainting>(),
             (ushort)ModContent.TileType<DivaPainting>(),
-            (ushort)ModContent.TileType<PikminPainting>()
+            (ushort)ModContent.TileType<PikminPainting>(),
+            (ushort)ModContent.TileType<PumpkinPainting>(),
+            (ushort)ModContent.TileType<ShoebillPainting>(),
+            (ushort)ModContent.TileType<AlienPainting>()
         };
 
 		private void PlaceCatacomb(GenerationProgress progress, GameConfiguration configuration)
@@ -173,7 +174,7 @@ namespace Spooky.Content.Generation
 
                             List<ushort> ActualPainting = new List<ushort>(PaintingsLayer1);
 
-                            //place PaintingsLayer1 in the room
+                            //place paintings in the room
                             for (int paintingX = (int)origin.X + 4; paintingX <= (int)origin.X + 32; paintingX++)
                             {
                                 for (int paintingY = (int)origin.Y + 4; paintingY <= (int)origin.Y + 32; paintingY++)
@@ -415,89 +416,123 @@ namespace Spooky.Content.Generation
                     int PuzzleRoomChance = Main.maxTilesY >= 2400 ? 6 : (Main.maxTilesY >= 1800 ? 5 : 4);
                     int MineRoomChance = Main.maxTilesY >= 2400 ? 8 : (Main.maxTilesY >= 1800 ? 7 : 6);
 
-                    //library or living quarters room
+                    //library, painting, or living quarters room
                     if (WorldGen.genRand.NextBool(WoodenRoomChance))
                     {
+                        //first, have a 50% chance for a wooden living room or a painting room
                         if (WorldGen.genRand.NextBool())
                         {
-                            StructureHelper.API.Generator.GenerateStructure("Content/Structures/CatacombLayer2/LibraryRoom" + WorldGen.genRand.Next(1, 3) + ".shstruct", origin.ToPoint16(), Mod);
-
-                            //place furniture in the room
-                            for (int furnitureX = (int)origin.X; furnitureX <= (int)origin.X + 69; furnitureX++)
+                            //if a wooden living room is placed, 50% chance for either a library or living quarters room
+                            if (WorldGen.genRand.NextBool())
                             {
-                                for (int furnitureY = (int)origin.Y; furnitureY <= (int)origin.Y + 35; furnitureY++)
+                                StructureHelper.API.Generator.GenerateStructure("Content/Structures/CatacombLayer2/LibraryRoom" + WorldGen.genRand.Next(1, 3) + ".shstruct", origin.ToPoint16(), Mod);
+
+                                //place furniture in the room
+                                for (int furnitureX = (int)origin.X; furnitureX <= (int)origin.X + 69; furnitureX++)
                                 {
-                                    if (CanPlaceFurniture(furnitureX, furnitureY, 7, CheckWood: true))
+                                    for (int furnitureY = (int)origin.Y; furnitureY <= (int)origin.Y + 35; furnitureY++)
                                     {
-                                        switch (WorldGen.genRand.Next(2))
+                                        if (CanPlaceFurniture(furnitureX, furnitureY, 7, CheckWood: true))
                                         {
-                                            case 0:
+                                            switch (WorldGen.genRand.Next(2))
                                             {
-                                                WorldGen.PlaceObject(furnitureX, furnitureY - 1, ModContent.TileType<OldWoodBookcase>());
-                                                break;
+                                                case 0:
+                                                {
+                                                    WorldGen.PlaceObject(furnitureX, furnitureY - 1, ModContent.TileType<OldWoodBookcase>());
+                                                    break;
+                                                }
+                                                case 1:
+                                                {
+                                                    //table with candle and chairs
+                                                    if (WorldGen.genRand.NextBool(3))
+                                                    {
+                                                        WorldGen.PlaceObject(furnitureX - 2, furnitureY - 1, ModContent.TileType<OldWoodChair>(), direction: 1);
+                                                        WorldGen.PlaceObject(furnitureX, furnitureY - 1, ModContent.TileType<OldWoodTable>());
+                                                        WorldGen.PlaceObject(furnitureX, furnitureY - 3, ModContent.TileType<OldWoodCandle>());
+                                                        WorldGen.PlaceObject(furnitureX + 2, furnitureY - 1, ModContent.TileType<OldWoodChair>(), direction: -1);
+                                                    }
+                                                    //table with books
+                                                    else if (WorldGen.genRand.NextBool())
+                                                    {
+                                                        WorldGen.PlaceObject(furnitureX, furnitureY - 1, ModContent.TileType<OldWoodTable>());
+                                                        WorldGen.PlaceObject(furnitureX - 1, furnitureY - 3, TileID.Books, true, WorldGen.genRand.Next(0, 5));
+                                                        WorldGen.PlaceObject(furnitureX, furnitureY - 3, TileID.Books, true, WorldGen.genRand.Next(0, 5));
+                                                        WorldGen.PlaceObject(furnitureX + 1, furnitureY - 3, TileID.Books, true, WorldGen.genRand.Next(0, 5));
+                                                    }
+                                                    //workbench
+                                                    else
+                                                    {
+                                                        WorldGen.PlaceObject(furnitureX, furnitureY - 1, ModContent.TileType<OldWoodWorkBench>());
+                                                    }
+                                                    
+                                                    break;
+                                                }
                                             }
-                                            case 1:
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                StructureHelper.API.Generator.GenerateStructure("Content/Structures/CatacombLayer2/LivingQuarterRoom" + WorldGen.genRand.Next(1, 3) + ".shstruct", origin.ToPoint16(), Mod);
+
+                                //place furniture in the room
+                                for (int furnitureX = (int)origin.X; furnitureX <= (int)origin.X + 69; furnitureX++)
+                                {
+                                    for (int furnitureY = (int)origin.Y; furnitureY <= (int)origin.Y + 35; furnitureY++)
+                                    {
+                                        if (CanPlaceFurniture(furnitureX, furnitureY, 7, CheckWood: true))
+                                        {
+                                            switch (WorldGen.genRand.Next(3))
                                             {
-                                                //table with candle and chairs
-                                                if (WorldGen.genRand.NextBool(3))
+                                                case 0:
                                                 {
                                                     WorldGen.PlaceObject(furnitureX - 2, furnitureY - 1, ModContent.TileType<OldWoodChair>(), direction: 1);
                                                     WorldGen.PlaceObject(furnitureX, furnitureY - 1, ModContent.TileType<OldWoodTable>());
                                                     WorldGen.PlaceObject(furnitureX, furnitureY - 3, ModContent.TileType<OldWoodCandle>());
                                                     WorldGen.PlaceObject(furnitureX + 2, furnitureY - 1, ModContent.TileType<OldWoodChair>(), direction: -1);
+                                                    break;
                                                 }
-                                                //table with books
-                                                else if (WorldGen.genRand.NextBool())
+                                                case 1:
                                                 {
-                                                    WorldGen.PlaceObject(furnitureX, furnitureY - 1, ModContent.TileType<OldWoodTable>());
-                                                    WorldGen.PlaceObject(furnitureX - 1, furnitureY - 3, TileID.Books, true, WorldGen.genRand.Next(0, 5));
-                                                    WorldGen.PlaceObject(furnitureX, furnitureY - 3, TileID.Books, true, WorldGen.genRand.Next(0, 5));
-                                                    WorldGen.PlaceObject(furnitureX + 1, furnitureY - 3, TileID.Books, true, WorldGen.genRand.Next(0, 5));
+                                                    WorldGen.PlaceObject(furnitureX, furnitureY - 1, ModContent.TileType<OldWoodSofa>());
+                                                    break;
                                                 }
-                                                //workbench
-                                                else
+                                                case 2:
                                                 {
-                                                    WorldGen.PlaceObject(furnitureX, furnitureY - 1, ModContent.TileType<OldWoodWorkBench>());
+                                                    WorldGen.PlaceObject(furnitureX, furnitureY - 1, ModContent.TileType<OldWoodBed>(), direction: WorldGen.genRand.NextBool() ? -1 : 1);
+                                                    break;
                                                 }
-                                                
-                                                break;
                                             }
                                         }
                                     }
                                 }
                             }
                         }
+                        //painting gallery room
                         else
                         {
-                            StructureHelper.API.Generator.GenerateStructure("Content/Structures/CatacombLayer2/LivingQuarterRoom" + WorldGen.genRand.Next(1, 3) + ".shstruct", origin.ToPoint16(), Mod);
+                            StructureHelper.API.Generator.GenerateStructure("Content/Structures/CatacombLayer2/PaintingRoom.shstruct", origin.ToPoint16(), Mod);
 
-                            //place furniture in the room
-                            for (int furnitureX = (int)origin.X; furnitureX <= (int)origin.X + 69; furnitureX++)
+                            List<ushort> ActualPainting = new List<ushort>(PaintingsLayer2);
+
+                            //place paintings in the room
+                            for (int paintingX = (int)origin.X + 4; paintingX <= (int)origin.X + 65; paintingX++)
                             {
-                                for (int furnitureY = (int)origin.Y; furnitureY <= (int)origin.Y + 35; furnitureY++)
+                                for (int paintingY = (int)origin.Y + 4; paintingY <= (int)origin.Y + 31; paintingY++)
                                 {
-                                    if (CanPlaceFurniture(furnitureX, furnitureY, 7, CheckWood: true))
+                                    if (WorldGen.genRand.NextBool(18))
                                     {
-                                        switch (WorldGen.genRand.Next(3))
+                                        if (ActualPainting.Count == 0)
                                         {
-                                            case 0:
-                                            {
-                                                WorldGen.PlaceObject(furnitureX - 2, furnitureY - 1, ModContent.TileType<OldWoodChair>(), direction: 1);
-                                                WorldGen.PlaceObject(furnitureX, furnitureY - 1, ModContent.TileType<OldWoodTable>());
-                                                WorldGen.PlaceObject(furnitureX, furnitureY - 3, ModContent.TileType<OldWoodCandle>());
-                                                WorldGen.PlaceObject(furnitureX + 2, furnitureY - 1, ModContent.TileType<OldWoodChair>(), direction: -1);
-                                                break;
-                                            }
-                                            case 1:
-                                            {
-                                                WorldGen.PlaceObject(furnitureX, furnitureY - 1, ModContent.TileType<OldWoodSofa>());
-                                                break;
-                                            }
-                                            case 2:
-                                            {
-                                                WorldGen.PlaceObject(furnitureX, furnitureY - 1, ModContent.TileType<OldWoodBed>(), direction: WorldGen.genRand.NextBool() ? -1 : 1);
-                                                break;
-                                            }
+                                            ActualPainting = new List<ushort>(PaintingsLayer2);
+                                        }
+
+                                        int PaintingToPlace = WorldGen.genRand.Next(ActualPainting.Count);
+                                        bool Success = WorldGen.PlaceObject(paintingX, paintingY, ActualPainting[PaintingToPlace]);
+                                        if (Success)
+                                        {
+                                            ActualPainting.RemoveAt(PaintingToPlace);
                                         }
                                     }
                                 }

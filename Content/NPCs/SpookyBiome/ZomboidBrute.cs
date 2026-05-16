@@ -197,8 +197,6 @@ namespace Spooky.Content.NPCs.SpookyBiome
 
         public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
-            npcLoot.Add(ItemDropRule.Common(ItemID.SharkToothNecklace, 150));
-            npcLoot.Add(ItemDropRule.Common(ItemID.MoneyTrough, 200));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FrankenMarshmallow>(), 100));
         }
 
@@ -228,6 +226,14 @@ namespace Spooky.Content.NPCs.SpookyBiome
 				new BestiaryBackgroundOverlay("Spooky/Content/Biomes/SpookyBiomeBloodMoon_Background", Color.White)
 			});
 		}
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot) 
+        {
+            npcLoot.Add(ItemDropRule.Common(ItemID.SharkToothNecklace, 150));
+            npcLoot.Add(ItemDropRule.Common(ItemID.MoneyTrough, 200));
+            npcLoot.Add(ItemDropRule.Common(ItemID.BloodMoonStarter, 100));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FrankenMarshmallow>(), 100));
+        }
 
         public override void HitEffect(NPC.HitInfo hit)
         {

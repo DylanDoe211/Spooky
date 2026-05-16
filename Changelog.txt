@@ -54,12 +54,13 @@ New Catacombs Improvements:
 -Added new boulder trap and venom dart trap rooms in the upper catacombs because its funny
 -Catacomb loot chests are now locked and you need to get keys for them, which can be dropped by enemies, found in barrels, or dropped by breaking wooden caskets
 -The wooden caskets you can find inside the catacombs now drop items similarly to pots, giving you some useful ammos, potions, and sometimes catacomb chest keys
+-Added a bunch of new cool and funny paintings you can find in both layers of the catacombs
 
 Other New Stuff:
 -Added a bunch of achievements, there are now achievements for things like defeating bosses, completing events, getting items, and discovering stuff in the world (More may be added in the future as well)
 -Added new double-jump bottle and hermes boots alternatives to the underground spooky forest cabin chests to give you early game mobility (The hermes boots alternative can be used to make spectre boots too)
 -Added new balloon and horseshoe balloon upgrades for the spooky forest double-jump bottle, and an upgrade for spooky forest hermes boots with krampus workshop moon shoes
--Added many new enemies to the spooky forest (Including a bunch of new blood moon enemies)
+-Added many new enemies to the spooky forest, including a bunch of new blood moon exclusive enemies
 -Added 8 new sentient weapons
 -Added eye block walls, eye bricks, eye brick walls, sclera blocks, and added a safe version of organic mush walls you can craft and build houses with
 -Added new tar pits cactus block dropped by tar pit cactuses along with a new set of weapons and armor you can craft with them
@@ -69,7 +70,7 @@ Other New Stuff:
 -Added spider grotto fishing crates, and a hardmode version of the existing spooky forest crate
 -Added new spider grotto angler quest fish
 -Added tall kelp plants to the rotten depths
--Added glowing flower cactus to the tar pits
+-Added glowing flower cactuses to the tar pits
 -Added glowing radioactive bulbs to the fetid farms
 -Added the sludge
 
@@ -170,7 +171,6 @@ Miscellaneous Changes:
 -Naturally generated rusted plating can now only be broken with a cobalt pickaxe or better
 -Improved the raveyard sky beam visual effect to look better and prevent beams from being way too high in the air
 -Big bone and daffodils arenas now inflict creative shock while you are in them to prevent placing blocks as it can mess with their attacks
--Various spooky mod mini-bosses no longer count as actual bosses in the bestiary
 -Big bone bobber and pumpkin bobber are now functional items and are obtainable in their corresponding spooky mod fishing crates
 -Little eye quests no longer give you goodie bags
 -Little eye quest items that you give to him now stack to 9999
@@ -198,7 +198,7 @@ Bug, Issue, and Oversight Fixes:
 -Cemetery screen color tint being applied while in the catacombs
 -Ghost pepper scepter doing damage way too much, and fixed damage scaling not working properly
 -Spook fishron and spooky sharkron bestiary entries unintentionally having their orange aura
--New years resolution not accounting for the undying embryos revival (The new years resolution player kill countdown will not happen if the undying embryo is able to revive you first)
+-New years resolution not accounting for the undying embryos revival (The new years resolution kill countdown will no longer activate if the undying embryo can revive you)
 -Spooky mod special glowy dust particles looking off due to an issue with how they were drawn (The dusts produced by the skull smashers right click, cemetery ghost enemies being killed, ect)
 
 Multiplayer Fixes:

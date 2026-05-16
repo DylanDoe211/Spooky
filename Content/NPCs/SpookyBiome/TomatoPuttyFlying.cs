@@ -152,6 +152,7 @@ namespace Spooky.Content.NPCs.SpookyBiome
         public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
             npcLoot.Add(ItemDropRule.Common(ItemID.Gel, 1, 2, 5));
+            npcLoot.Add(ItemDropRule.Common(ItemID.BloodMoonStarter, 20));
         }
 
         public override void HitEffect(NPC.HitInfo hit)

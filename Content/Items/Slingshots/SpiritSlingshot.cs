@@ -42,7 +42,7 @@ namespace Spooky.Content.Items.Slingshots
 			Item.UseSound = UseSound;
 			Item.shoot = ModContent.ProjectileType<SpiritSlingshotProj>();
 			Item.useAmmo = ModContent.ItemType<MossyPebble>();
-			Item.shootSpeed = 15f;
+			Item.shootSpeed = 18f;
         }
 
 		public override bool CanConsumeAmmo(Item ammo, Player player)

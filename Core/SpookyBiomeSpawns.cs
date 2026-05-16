@@ -2,6 +2,8 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.Events;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -132,6 +134,25 @@ namespace Spooky.Core
 			{
 				spawnRate = 0;
 				maxSpawns = 0;
+			}
+
+			//disable spawns in boss arenas
+			if (!SpookyWorld.IsInSubworld())
+			{
+				Rectangle DaffodilRect = new Rectangle((int)(Flags.DaffodilPosition.X - 750), (int)(Flags.DaffodilPosition.Y - 275), 1490, 600);
+				Rectangle BigBoneRect = new Rectangle((int)(Flags.FlowerPotPosition.X - 835), (int)(Flags.FlowerPotPosition.Y - 500), 1650, 1050);
+				Rectangle OldHunterRect = new Rectangle((int)(Flags.OldHunterPosition.X - 600), (int)(Flags.OldHunterPosition.Y - 400), 1200, 415);
+
+				if (!player.dead && !player.ghost)
+				{
+					if ((Flags.DaffodilPosition != Vector2.Zero && player.Hitbox.Intersects(DaffodilRect)) ||
+					(Flags.FlowerPotPosition != Vector2.Zero && player.Hitbox.Intersects(BigBoneRect)) ||
+					(Flags.OldHunterPosition != Vector2.Zero && player.Hitbox.Intersects(OldHunterRect)))
+					{
+						spawnRate = 0;
+						maxSpawns = 0;
+					}
+				}
 			}
 		}
 

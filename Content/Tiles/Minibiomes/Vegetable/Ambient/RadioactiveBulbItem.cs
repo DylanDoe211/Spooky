@@ -18,6 +18,15 @@ namespace Spooky.Content.Tiles.Minibiomes.Vegetable.Ambient
             Item.width = 16;
 			Item.height = 16;
         }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+            .AddIngredient(ModContent.ItemType<JungleMossItem>())
+            .AddIngredient(ItemID.JungleSpores)
+            .AddTile(TileID.WorkBenches)
+            .Register();
+        }
     }
 
     public class RadioactiveBulbSmallItem : ModItem
@@ -34,6 +43,15 @@ namespace Spooky.Content.Tiles.Minibiomes.Vegetable.Ambient
             Item.DefaultToPlaceableTile(ModContent.TileType<RadioactiveBulbSmall>());
             Item.width = 16;
 			Item.height = 16;
+        }
+        
+        public override void AddRecipes()
+        {
+            CreateRecipe(2)
+            .AddIngredient(ModContent.ItemType<JungleMossItem>())
+            .AddIngredient(ItemID.JungleSpores)
+            .AddTile(TileID.WorkBenches)
+            .Register();
         }
     }
 }

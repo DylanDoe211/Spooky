@@ -12,6 +12,8 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Spooky.Core;
+using Spooky.Content.Items.SpiderCave;
+using Spooky.Content.Items.SpiderCave.Misc;
 using Spooky.Content.Tiles.Blooms;
 using Spooky.Content.Tiles.SpiderCave;
 using Spooky.Content.Tiles.SpiderCave.Ambient;
@@ -1305,7 +1307,8 @@ namespace Spooky.Content.Generation
 					if (chestTile.TileType == ModContent.TileType<BirchChest>())
 					{
                         //main items
-                        int[] MainItems = new int[] { ItemID.BandofRegeneration, ItemID.AnkletoftheWind, ItemID.HermesBoots, ItemID.CloudinaBottle, ItemID.Aglet, ItemID.LuckyHorseshoe };
+                        int[] MainItems = new int[] { ModContent.ItemType<AntSpiderBoomerang>(), ModContent.ItemType<GlaggleOrb>(), ModContent.ItemType<OrbWeaverShield>(),
+                        ModContent.ItemType<PeacockSpiderMask>(), ModContent.ItemType<SphiderFlail>(), ModContent.ItemType<SpiderAntHead>() };
 
 						//potions
 						int[] Potions1 = new int[] { ItemID.BattlePotion, ItemID.CratePotion, ItemID.EndurancePotion };
@@ -1323,8 +1326,9 @@ namespace Spooky.Content.Generation
 						chest.item[0].SetDefaults(WorldGen.genRand.Next(MainItems));
 						chest.item[0].stack = 1;
 						//bars
-						chest.item[1].SetDefaults(WorldGen.genRand.Next(Bars));
-						chest.item[1].stack = WorldGen.genRand.Next(5, 16);
+                        bool placeChitin = WorldGen.genRand.NextBool();
+						chest.item[1].SetDefaults(placeChitin ? ModContent.ItemType<SpiderChitin>() : WorldGen.genRand.Next(Bars));
+						chest.item[1].stack = placeChitin ? WorldGen.genRand.Next(10, 19) : WorldGen.genRand.Next(5, 16);
                         //torches
                         chest.item[2].SetDefaults(ModContent.ItemType<SpiderBiomeTorchItem>());
 						chest.item[2].stack = WorldGen.genRand.Next(12, 26);

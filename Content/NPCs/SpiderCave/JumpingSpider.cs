@@ -107,7 +107,7 @@ namespace Spooky.Content.NPCs.SpiderCave
                 NPC.aiStyle = 66;
 			    AIType = NPCID.Worm;
 
-                if (NPC.Distance(player.Center) <= 200f || player.GetModPlayer<SpookyPlayer>().WhipSpiderAggression)
+                if (NPC.Distance(player.Center) <= 200f)
                 {
                     //set ai to 75 so it jumps immediately
                     NPC.ai[0] = 75;

@@ -25,6 +25,7 @@ namespace Spooky.Core
 
 		public bool SpongeAbsorbAttempt = false;
 		public bool SlingshotProjSpawnFlower = false;
+		public bool HasSlingshotProjHit = false;
 
 		//ProjectileID set for slingshot ammo projectiles since they will spawn funny effects and play sounds on hit
 		public static bool[] IsSlingshotAmmoProj = ProjectileID.Sets.Factory.CreateBoolSet();
@@ -37,7 +38,7 @@ namespace Spooky.Core
 			Player player = Main.player[projectile.owner];
 
 			//slingshot cartoon hit effects
-			if (IsSlingshotAmmoProj[projectile.type])
+			if (IsSlingshotAmmoProj[projectile.type] && !HasSlingshotProjHit)
 			{
 				if (hit.Crit)
 				{
@@ -53,6 +54,18 @@ namespace Spooky.Core
 					Screenshake.ShakeScreenWithIntensity(projectile.Center, 1f, 350f);
 					Projectile.NewProjectile(projectile.GetSource_FromAI(), projectile.Center, Vector2.Zero, ModContent.ProjectileType<SlingshotHit>(), 0, 0f, player.whoAmI, Main.rand.Next(0, 3));
 				}
+
+				//do a small area of damage around slingshot projectile impact so slingshots arent useless against enemies right next to the one you hit
+				//also make sure that this area damage does not hit the same npc that was initially hit by the projectile
+				foreach (NPC nearbyNPC in Main.ActiveNPCs)
+				{
+					if (nearbyNPC.Distance(projectile.Center) <= 70f && nearbyNPC.whoAmI != target.whoAmI && nearbyNPC.CanBeChasedBy(this) && !nearbyNPC.friendly && !nearbyNPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[nearbyNPC.type])
+					{
+						player.ApplyDamageToNPC(nearbyNPC, projectile.damage / 2, 0, 0, false, null, true);
+					}
+				}
+
+				HasSlingshotProjHit = true;
 			}
 
 			//big bone slingshot attaches a flower to enemies

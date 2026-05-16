@@ -76,10 +76,6 @@ namespace Spooky.Content.Projectiles.Slingshots
 			return true;
 		}
 
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) 
-		{
-		}
-
         public override void AI()       
         {
 			Projectile.rotation += 0.2f * (float)Projectile.direction;

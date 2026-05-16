@@ -77,6 +77,7 @@ namespace Spooky.Content.NPCs.SpookyBiome
         {
             npcLoot.Add(ItemDropRule.Common(ItemID.SharkToothNecklace, 150));
             npcLoot.Add(ItemDropRule.Common(ItemID.MoneyTrough, 200));
+            npcLoot.Add(ItemDropRule.Common(ItemID.BloodMoonStarter, 100));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FrankenMarshmallow>(), 100));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<TomatoSeed>(), 120));
         }

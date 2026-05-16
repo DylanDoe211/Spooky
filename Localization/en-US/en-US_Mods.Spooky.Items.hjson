@@ -5816,6 +5816,11 @@ PikminPaintingItem: {
 	Tooltip: "'Waasephi'"
 }
 
+PumpkinPaintingItem: {
+	DisplayName: Dumb Ahh Pumpkin
+	Tooltip: "'Tortilla'"
+}
+
 CemeteryPylonItem: {
 	DisplayName: Swampy Cemetery Pylon
 	Tooltip:

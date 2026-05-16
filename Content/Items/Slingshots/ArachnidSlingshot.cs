@@ -33,8 +33,8 @@ namespace Spooky.Content.Items.Slingshots
 			Item.channel = true;
 			Item.width = 22;
             Item.height = 32;
-			Item.useTime = 40;
-			Item.useAnimation = 40;
+			Item.useTime = 50;
+			Item.useAnimation = 50;
 			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.knockBack = 4;
 			Item.rare = ItemRarityID.Lime;
@@ -42,7 +42,7 @@ namespace Spooky.Content.Items.Slingshots
 			Item.UseSound = UseSound;
 			Item.shoot = ModContent.ProjectileType<ArachnidSlingshotProj>();
 			Item.useAmmo = ModContent.ItemType<MossyPebble>();
-			Item.shootSpeed = 13f;
+			Item.shootSpeed = 22f;
         }
 
 		public override bool CanConsumeAmmo(Item ammo, Player player)
