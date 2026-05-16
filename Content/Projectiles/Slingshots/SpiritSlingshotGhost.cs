@@ -164,23 +164,19 @@ namespace Spooky.Content.Projectiles.Slingshots
 				Projectile.alpha += 5;
 			}
 
-			Projectile.ai[0]++;
-            if (Projectile.ai[0] > 20)
-            {
-                int foundTarget = FindTarget();
-                if (foundTarget != -1)
-                {
-                    NPC target = Main.npc[foundTarget];
-                    Vector2 desiredVelocity = Projectile.DirectionTo(target.Center) * 25;
-                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, desiredVelocity, 1f / 20);
-                    Projectile.tileCollide = false;
-                }
-                else
-                {
-                    Projectile.velocity *= 0.975f;
-                    Projectile.tileCollide = true;
-                }
-            }
+			int foundTarget = FindTarget();
+			if (foundTarget != -1)
+			{
+				NPC target = Main.npc[foundTarget];
+				Vector2 desiredVelocity = Projectile.DirectionTo(target.Center) * 25;
+				Projectile.velocity = Vector2.Lerp(Projectile.velocity, desiredVelocity, 1f / 20);
+				Projectile.tileCollide = false;
+			}
+			else
+			{
+				Projectile.velocity *= 0.975f;
+				Projectile.tileCollide = true;
+			}
 		}
 
 		private int FindTarget()

@@ -538,21 +538,6 @@ namespace Spooky.Content.Generation
                 }
             }
 
-            //place lakes
-            for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
-			{
-				for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
-				{
-					if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
-					{
-                        if (Main.tile[X, Y].HasTile && !Main.tile[X, Y - 1].HasTile && CheckForFlatSurface(X, Y, 22, 13))
-                        {
-                            PlaceLake(X, Y, 18, 18, 0.5f);
-                        }
-                    }
-                }
-            }
-
             //after the main biome is done, generate some clumps of web
             for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
             {
@@ -588,6 +573,9 @@ namespace Spooky.Content.Generation
             int HunterHousePositionY = startPosY + (Main.maxTilesY / HunterHouseDivideY);
 
             Vector2 ArenaOrigin = new Vector2(startPosX - 50, (HunterHousePositionY + (HunterHouseOffsetY / 2)) - 25);
+
+            SpookyWorldMethods.PlaceCircle((int)ArenaOrigin.X + 50, (int)ArenaOrigin.Y, -1, 0, 15, true, false);
+
             StructureHelper.API.Generator.GenerateStructure("Content/Structures/SpiderCave/OldHunterArena.shstruct", ArenaOrigin.ToPoint16(), Mod);
             Flags.OldHunterPosition = new Vector2(startPosX * 16, (HunterHousePositionY + (HunterHouseOffsetY / 2) + 13) * 16);
 
@@ -599,6 +587,21 @@ namespace Spooky.Content.Generation
 					if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
 					{
                         WorldGen.PlaceTile(X, Y, ModContent.TileType<DampSoil>());
+                    }
+                }
+            }
+
+            //place lakes
+            for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
+			{
+				for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
+				{
+					if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
+					{
+                        if (Main.tile[X, Y].HasTile && !Main.tile[X, Y - 1].HasTile && CheckForFlatSurface(X, Y, 22, 13))
+                        {
+                            PlaceLake(X, Y, 18, 18, 0.5f);
+                        }
                     }
                 }
             }

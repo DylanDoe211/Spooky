@@ -165,7 +165,7 @@ namespace Spooky.Content.Projectiles.SpookyHell
 
             Projectile.ai[2]++;
             Vector2 velocityOffset = -player.velocity * 7;
-            Vector2 destination = new Vector2(player.Center.X + velocityOffset.X, player.Center.Y + velocityOffset.Y - 85 + (float)Math.Sin(Projectile.ai[2] / 30) * 10);
+            Vector2 destination = new Vector2(player.Center.X + velocityOffset.X, player.Center.Y + velocityOffset.Y - 85 + (float)Math.Sin(Projectile.ai[2] / 30) * 30);
             
             if (Projectile.Distance(destination) >= 15)
             {
@@ -175,6 +175,11 @@ namespace Spooky.Content.Projectiles.SpookyHell
             else
             {
                 Projectile.velocity *= 0.9f;
+            }
+
+            if (Projectile.Distance(player.Center) > 1200f)
+            {
+                Projectile.Center = player.Center;
             }
 
             //actual minion exploding ai

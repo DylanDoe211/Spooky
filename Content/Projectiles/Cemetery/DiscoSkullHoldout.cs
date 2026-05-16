@@ -91,7 +91,7 @@ namespace Spooky.Content.Projectiles.Cemetery
 				}
 
 				//spotlight drawning
-				Main.EntitySpriteDraw(SpotlightTexture.Value, drawPos, null, Color.Lerp(BeamColors[index], BeamColors[(index + 1) % 3], fade), RealRotation, frameOrigin, ScaleIncrease[i], SpriteEffects.None, 0);
+				Main.EntitySpriteDraw(SpotlightTexture.Value, drawPos, null, Color.Lerp(BeamColors[index], BeamColors[(index + 1) % 3], fade), RealRotation * Projectile.spriteDirection, frameOrigin, ScaleIncrease[i], SpriteEffects.None, 0);
 			}
 
 			return false;

@@ -130,6 +130,8 @@ namespace Spooky.Content.Projectiles.SpiderCave
 			Vector2 vectorTowardsPlayer = Projectile.DirectionTo(ParentCenter).SafeNormalize(Vector2.Zero);
 			Projectile.rotation = vectorTowardsPlayer.ToRotation() + MathHelper.PiOver2;
 
+			Projectile.alpha = ParentProjectile.alpha;
+
 			Projectile.ai[0]++;
 			if (Projectile.ai[0] >= 15)
 			{

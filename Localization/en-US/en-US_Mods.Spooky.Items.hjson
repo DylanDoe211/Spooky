@@ -2660,8 +2660,8 @@ HighVelocitySlingshot: {
 	DisplayName: Crossbow Slingshot
 	Tooltip:
 		'''
-		A heavy slingshot that takes a while to pull back
-		Fires ammo at extremely high speeds
+		A heavy slingshot that takes a while to pull, but fires at extremely high speed
+		Projectiles shot by this pierce enemies
 		'''
 }
 
