@@ -42,7 +42,7 @@ namespace Spooky.Content.NPCs.Quest
         {
             Main.npcFrameCount[NPC.type] = 9;
 			NPCID.Sets.CantTakeLunchMoney[Type] = true;
-			NPCID.Sets.ShouldBeCountedAsBoss[Type] = true;
+			NPCGlobal.IsSpookyModMiniboss[Type] = true;
 
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;

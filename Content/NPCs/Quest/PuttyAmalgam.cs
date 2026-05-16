@@ -26,6 +26,7 @@ namespace Spooky.Content.NPCs.Quest
         public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 7;
+			NPCGlobal.IsSpookyModMiniboss[Type] = true;
 		}
 
 		public override void SetDefaults()

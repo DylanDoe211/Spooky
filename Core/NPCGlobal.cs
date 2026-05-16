@@ -50,6 +50,8 @@ namespace Spooky.Core
 
 		public bool NPCTamed = false; //use for all instances of a tameable animal in spooky mod
 
+		public static bool[] IsSpookyModMiniboss = NPCID.Sets.Factory.CreateBoolSet();
+
 		public override void SendExtraAI(NPC npc, BitWriter bitWriter, BinaryWriter binaryWriter)
 		{
 			binaryWriter.Write(NPCTamed);
@@ -708,7 +710,7 @@ namespace Spooky.Core
 					return true;
 			}
 
-			return npc.boss || NPCID.Sets.ShouldBeCountedAsBoss[type];
+			return npc.boss || NPCID.Sets.ShouldBeCountedAsBoss[type] || NPCGlobal.IsSpookyModMiniboss[type];
 		}
     }
 }

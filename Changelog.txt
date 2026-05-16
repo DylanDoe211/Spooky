@@ -49,12 +49,11 @@ New Catacombs Improvements:
 -The pathways throughout the catacombs have also been made to be more random, which makes the catacombs feel like a proper maze for players to explore instead of just being able to run across the whole thing horizontally
 -Catacomb loot chests are also now scattered around the catacombs randomly instead of the catacombs only having 4 pre-made loot rooms in each layer
 -All of the items that the old hunter used to sell are now catacomb loot chest items, some of which are in the upper catacombs and some in the lower catacombs
--Added new upper catacomb special rooms: Art gallery rooms filled with new unique paintings, and library rooms which utilize some old wood blocks, bookcases, and tables with candles
--Added new lower catacomb special rooms: Library rooms like the first layer, living quarters with small old wood rooms with various pieces of old wood furniture, and improved puzzle rooms with switches that open walls
+-Added some special old wood rooms to add extra variance in both layers, such as libraries, living quarters, and painting galleries can generate in place of regular rooms
 -Added new boulder trap and venom dart trap rooms in the upper catacombs because its funny
 -Catacomb loot chests are now locked and you need to get keys for them, which can be dropped by enemies, found in barrels, or dropped by breaking wooden caskets
 -The wooden caskets you can find inside the catacombs now drop items similarly to pots, giving you some useful ammos, potions, and sometimes catacomb chest keys
--Added a bunch of new cool and funny paintings you can find in both layers of the catacombs
+-Added a bunch of cool and funny paintings you can find in both layers of the catacombs
 
 Other New Stuff:
 -Added a bunch of achievements, there are now achievements for things like defeating bosses, completing events, getting items, and discovering stuff in the world (More may be added in the future as well)

@@ -11,6 +11,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
+using Spooky.Core;
 using Spooky.Content.Items.Quest;
 
 namespace Spooky.Content.NPCs.Quest
@@ -22,6 +23,7 @@ namespace Spooky.Content.NPCs.Quest
 		public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 5;
+			NPCGlobal.IsSpookyModMiniboss[Type] = true;
 
 			NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
