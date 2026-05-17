@@ -17,13 +17,14 @@ namespace Spooky.Content.Items.Slingshots
 
 		public override void SetStaticDefaults()
 		{
+			ItemID.Sets.IsRangedSpecialistWeapon[Type] = true;
 			ItemGlobal.IsSlingshot[Item.type] = true;
 		}
 
         public override void SetDefaults()
         {
-            Item.damage = 120;
-			Item.crit = 50;
+            Item.damage = 90;
+			Item.crit = 10;
 			Item.DamageType = DamageClass.Ranged;
 			Item.noMelee = true;
 			Item.autoReuse = true;

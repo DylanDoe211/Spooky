@@ -53,9 +53,9 @@ namespace Spooky.Content.Projectiles.Slingshots
 						}
 						else
 						{
-							for (int numProjs = 0; numProjs <= 1; numProjs++)
+							for (int numProjs = -1; numProjs <= 1; numProjs += 2)
 							{
-								Vector2 newVelocity = ShootSpeed.RotatedByRandom(MathHelper.ToRadians(25));
+								Vector2 newVelocity = ShootSpeed.RotatedBy(MathHelper.ToRadians(5 * numProjs));
 								Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, newVelocity, Type, Projectile.damage, Projectile.knockBack, Projectile.owner);
 							}
 						}

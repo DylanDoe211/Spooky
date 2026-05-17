@@ -67,6 +67,7 @@ namespace Spooky.Content.NPCs.Quest
 			NPC.noTileCollide = true;
 			NPC.HitSound = SoundID.NPCHit7;
 			NPC.DeathSound = SoundID.NPCDeath39 with { Pitch = -0.65f };
+			NPC.rarity = 1;
             NPC.aiStyle = -1;
 			SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.ChristmasDungeonBiome>().Type };
 		}

@@ -2605,7 +2605,7 @@ MossyPebble: {
 
 SeedAmmo: {
 	DisplayName: Pokey Seed Ball
-	Tooltip: Explodes into smaller seeds
+	Tooltip: Explodes into smaller seeds on impact
 }
 
 SkullAmmo: {
@@ -2661,7 +2661,7 @@ HighVelocitySlingshot: {
 	Tooltip:
 		'''
 		A heavy slingshot that takes a while to pull, but fires at extremely high speed
-		Projectiles shot by this pierce enemies
+		Projectiles shot by this will pierce through enemies 3 times
 		'''
 }
 
@@ -2686,7 +2686,7 @@ OpalSlingshot: {
 
 ProSlingshot: {
 	DisplayName: Pro Slingshot
-	Tooltip: ""
+	Tooltip: Projectiles shot by this will pierce through enemies twice
 }
 
 SpiderSlingshot: {

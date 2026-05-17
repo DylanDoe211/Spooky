@@ -98,8 +98,11 @@ namespace Spooky.Content.Projectiles.Slingshots
 
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
-			Projectile.velocity.X = -Projectile.velocity.X;
-			Projectile.velocity.Y = -Projectile.velocity.Y;
+			if (Projectile.ai[0] < 150)
+			{
+				Projectile.velocity = Vector2.Zero;
+				Projectile.ai[0] = 150;
+			}
 		}
 
         public override void AI()       
@@ -107,7 +110,7 @@ namespace Spooky.Content.Projectiles.Slingshots
 			Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.03f * (float)Projectile.direction;
 
             Projectile.ai[0]++;
-			if (Projectile.ai[0] >= 60)
+			if (Projectile.ai[0] >= 30)
 			{
 				Projectile.velocity *= 0.95f;
 			}

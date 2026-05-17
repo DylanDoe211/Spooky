@@ -240,6 +240,7 @@ namespace Spooky.Core
 				shop.Add<WaterFountainSpookFishronItem>(SpookFishronDowned);
 			}
 
+			//add spooky mod biome grass walls to dryad's shop
 			if (shop.NpcType == NPCID.Dryad)
 			{
 				shop.Add(new Item(ModContent.ItemType<SpookyGrassWallItem>())

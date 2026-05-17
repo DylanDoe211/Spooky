@@ -170,12 +170,10 @@ namespace Spooky.Content.Projectiles.Slingshots
 				NPC target = Main.npc[foundTarget];
 				Vector2 desiredVelocity = Projectile.DirectionTo(target.Center) * 25;
 				Projectile.velocity = Vector2.Lerp(Projectile.velocity, desiredVelocity, 1f / 20);
-				Projectile.tileCollide = false;
 			}
 			else
 			{
 				Projectile.velocity *= 0.975f;
-				Projectile.tileCollide = true;
 			}
 		}
 

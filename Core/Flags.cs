@@ -13,7 +13,6 @@ namespace Spooky.Core
         public static Vector2 DaffodilPosition = Vector2.Zero;
         public static Vector2 PandoraPosition = Vector2.Zero;
         public static Vector2 FlowerPotPosition = Vector2.Zero;
-        public static Vector2 SpiderWebPosition = Vector2.Zero;
         public static Vector2 EggPosition = Vector2.Zero;
 		public static Vector2 KrampusPosition = Vector2.Zero;
         public static Vector2 MocoIdolPosition1 = Vector2.Zero;
@@ -45,6 +44,7 @@ namespace Spooky.Core
         public static bool downedBigBone = false;
         public static bool downedSpookFishron = false;
 		public static bool downedDunkleosteus = false;
+		public static bool downedSporeEvent = false;
 
 		//events
         public static bool downedMocoIdol1 = false;
@@ -138,6 +138,7 @@ namespace Spooky.Core
             downedBigBone = false;
             downedSpookFishron = false;
 			downedDunkleosteus = false;
+			downedSporeEvent = false;
 
 			//events
 			downedPandoraBox = false;
@@ -208,7 +209,6 @@ namespace Spooky.Core
 			tag[nameof(DaffodilPosition)] = DaffodilPosition;
 			tag[nameof(PandoraPosition)] = PandoraPosition;
 			tag[nameof(FlowerPotPosition)] = FlowerPotPosition;
-			tag[nameof(SpiderWebPosition)] = SpiderWebPosition;
 			tag[nameof(EggPosition)] = EggPosition;
 			tag[nameof(KrampusPosition)] = KrampusPosition;
 			tag[nameof(MocoIdolPosition1)] = MocoIdolPosition1;
@@ -238,6 +238,7 @@ namespace Spooky.Core
 			tag[nameof(downedBigBone)] = downedBigBone;
 			tag[nameof(downedSpookFishron)] = downedSpookFishron;
 			tag[nameof(downedDunkleosteus)] = downedDunkleosteus;
+			tag[nameof(downedSporeEvent)] = downedSporeEvent;
 
 			//events
 			tag[nameof(downedPandoraBox)] = downedPandoraBox;
@@ -308,7 +309,6 @@ namespace Spooky.Core
 			DaffodilPosition = tag.Get<Vector2>(nameof(DaffodilPosition));
 			PandoraPosition = tag.Get<Vector2>(nameof(PandoraPosition));
 			FlowerPotPosition = tag.Get<Vector2>(nameof(FlowerPotPosition));
-			SpiderWebPosition = tag.Get<Vector2>(nameof(SpiderWebPosition));
 			EggPosition = tag.Get<Vector2>(nameof(EggPosition));
 			KrampusPosition = tag.Get<Vector2>(nameof(KrampusPosition));
 			MocoIdolPosition1 = tag.Get<Vector2>(nameof(MocoIdolPosition1));
@@ -341,6 +341,7 @@ namespace Spooky.Core
 			downedBigBone = tag.GetBool(nameof(downedBigBone));
 			downedSpookFishron = tag.GetBool(nameof(downedSpookFishron));
 		 	downedDunkleosteus = tag.GetBool(nameof(downedDunkleosteus));
+			downedSporeEvent = tag.GetBool(nameof(downedSporeEvent));
 
 			//events
 			downedPandoraBox = tag.GetBool(nameof(downedPandoraBox));
@@ -410,7 +411,6 @@ namespace Spooky.Core
             writer.WriteVector2(DaffodilPosition);
             writer.WriteVector2(PandoraPosition);
             writer.WriteVector2(FlowerPotPosition);
-            writer.WriteVector2(SpiderWebPosition);
             writer.WriteVector2(EggPosition);
 			writer.WriteVector2(KrampusPosition);
             writer.WriteVector2(MocoIdolPosition1);
@@ -427,8 +427,8 @@ namespace Spooky.Core
 			//downed bosses
 			writer.WriteFlags(downedRotGourd, downedSpookySpirit, downedMoco, downedDaffodil, downedOldHunter, downedOrroboro, downedBigBone, downedSpookFishron);
 
-			//downed events/misc
-			writer.WriteFlags(downedPandoraBox, downedEggEvent, downedSpiderWar, downedDunkleosteus);
+			//downed events
+			writer.WriteFlags(downedPandoraBox, downedEggEvent, downedSpiderWar, downedDunkleosteus, downedSporeEvent);
 
 			//downed moco temple stuff
 			writer.WriteFlags(downedMocoIdol1, downedMocoIdol2, downedMocoIdol3, downedMocoIdol4, downedMocoIdol5, downedMocoIdol6, MinibossBarrierOpen);
@@ -457,7 +457,6 @@ namespace Spooky.Core
             DaffodilPosition = reader.ReadVector2();
             PandoraPosition = reader.ReadVector2();
             FlowerPotPosition = reader.ReadVector2();
-            SpiderWebPosition = reader.ReadVector2();
             EggPosition = reader.ReadVector2();
 			KrampusPosition = reader.ReadVector2();
             MocoIdolPosition1 = reader.ReadVector2();
@@ -474,8 +473,8 @@ namespace Spooky.Core
 			//downed bosses
 			reader.ReadFlags(out downedRotGourd, out downedSpookySpirit, out downedMoco, out downedDaffodil, out downedOldHunter, out downedOrroboro, out downedBigBone, out downedSpookFishron);
 
-			//downed events/misc
-			reader.ReadFlags(out downedPandoraBox, out downedEggEvent, out downedSpiderWar, out downedDunkleosteus);
+			//downed events
+			reader.ReadFlags(out downedPandoraBox, out downedEggEvent, out downedSpiderWar, out downedDunkleosteus, out downedSporeEvent);
 
 			//downed moco temple stuff
 			reader.ReadFlags(out downedMocoIdol1, out downedMocoIdol2, out downedMocoIdol3, out downedMocoIdol4, out downedMocoIdol5, out downedMocoIdol6, out MinibossBarrierOpen);

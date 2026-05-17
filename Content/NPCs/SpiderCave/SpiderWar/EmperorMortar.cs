@@ -137,10 +137,10 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 			return false;
 		}
 
-        public override void AI()
+		public override void AI()
         {
             NPC.TargetClosest(true);
-            Player player = Main.player[NPC.target];
+			Player player = Main.player[NPC.target];
 
             NPC.spriteDirection = NPC.direction;
 

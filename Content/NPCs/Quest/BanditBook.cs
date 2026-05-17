@@ -74,6 +74,7 @@ namespace Spooky.Content.NPCs.Quest
 			NPC.dontTakeDamage = true;
 			NPC.noTileCollide = true;
 			NPC.noGravity = true;
+			NPC.rarity = 2;
 			NPC.aiStyle = -1;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.CemeteryBiome>().Type };
 		}

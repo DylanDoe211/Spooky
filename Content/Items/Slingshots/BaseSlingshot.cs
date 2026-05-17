@@ -17,6 +17,7 @@ namespace Spooky.Content.Items.Slingshots
 
 		public override void SetStaticDefaults()
 		{
+			ItemID.Sets.IsRangedSpecialistWeapon[Type] = true;
 			ItemGlobal.IsSlingshot[Item.type] = true;
 		}
 

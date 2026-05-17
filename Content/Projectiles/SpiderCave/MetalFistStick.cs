@@ -7,6 +7,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
+using Spooky.Core;
+using Spooky.Content.Dusts;
+
 namespace Spooky.Content.Projectiles.SpiderCave
 {
     public class MetalFistStick : ModProjectile
@@ -19,6 +22,8 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
         private static Asset<Texture2D> ProjTexture;
         private static Asset<Texture2D> FlashTexture;
+
+        public static readonly SoundStyle BeepSound = new("Spooky/Content/Sounds/CorklidBombCountdown", SoundType.Sound) { Volume = 0.25f };
 
         public override void SetDefaults()
         {
@@ -73,7 +78,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
             {
                 if (Projectile.timeLeft % 30 == 0)
                 {
-                    //SoundEngine.PlaySound(BeepSound, Projectile.Center);
+                    SoundEngine.PlaySound(BeepSound, Projectile.Center);
                     FlashOpacity = 1f;
                 }
             }
@@ -81,7 +86,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
             {
                 if (Projectile.timeLeft % 15 == 0)
                 {
-                    //SoundEngine.PlaySound(BeepSound, Projectile.Center);
+                    SoundEngine.PlaySound(BeepSound, Projectile.Center);
                     FlashOpacity = 1f;
                 }
             }
@@ -111,27 +116,11 @@ namespace Spooky.Content.Projectiles.SpiderCave
 		{
             Player player = Main.player[Projectile.owner];
 
-            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot with { Volume = 0.75f }, Projectile.Center);
-            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact with { Volume = 0.75f }, Projectile.Center);
-            SoundEngine.PlaySound(SoundID.Item74 with { Volume = 0.75f, Pitch = -0.5f }, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot with { Volume = 0.25f }, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact with { Volume = 0.25f }, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.Item74 with { Volume = 0.25f, Pitch = -0.5f }, Projectile.Center);
 
-            float maxAmount = 20;
-            int currentAmount = 0;
-            while (currentAmount <= maxAmount)
-            {
-                Vector2 velocity = new Vector2(Main.rand.NextFloat(6f, 15f), Main.rand.NextFloat(6f, 15f));
-                Vector2 Bounds = new Vector2(Main.rand.NextFloat(6f, 15f), Main.rand.NextFloat(6f, 15f));
-                float intensity = Main.rand.NextFloat(6f, 15f);
-
-                Vector2 vector12 = Vector2.UnitX * 0f;
-                vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
-                vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
-                int newDust = Dust.NewDust(Projectile.Center, 0, 0, DustID.Torch, 0f, 0f, 100, default, 3f);
-                Main.dust[newDust].noGravity = true;
-                Main.dust[newDust].position = Projectile.Center + vector12;
-                Main.dust[newDust].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
-                currentAmount++;
-            }
+            Screenshake.ShakeScreenWithIntensity(Projectile.Center, 10f, 500f);
 
             foreach (NPC npc in Main.ActiveNPCs)
             {
@@ -139,6 +128,34 @@ namespace Spooky.Content.Projectiles.SpiderCave
                 {
                     player.ApplyDamageToNPC(npc, Projectile.damage, Projectile.knockBack, 0, false, null, true);
                 }
+            }
+
+            float maxAmount = 50;
+            int currentAmount = 0;
+            while (currentAmount <= maxAmount)
+            {
+                Vector2 velocity = new Vector2(Main.rand.NextFloat(2f, 55f), Main.rand.NextFloat(2f, 55f));
+                Vector2 Bounds = new Vector2(Main.rand.NextFloat(2f, 55f), Main.rand.NextFloat(2f, 55f));
+                float intensity = Main.rand.NextFloat(2f, 55f);
+
+                Vector2 vector12 = Vector2.UnitX * 0f;
+                vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
+                vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
+
+                int Fire = Dust.NewDust(Projectile.Center, 0, 0, DustID.InfernoFork, 0f, 0f, 100, default, 3.5f);
+                Main.dust[Fire].noGravity = true;
+                Main.dust[Fire].position = Projectile.Center + vector12;
+                Main.dust[Fire].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
+
+                if (currentAmount % 2 == 0)
+                {
+                    int Smoke = Dust.NewDust(Projectile.Center, 0, 0, ModContent.DustType<SmokeEffect>(), 0f, 0f, 100, new Color(146, 75, 19) * 0.5f, Main.rand.NextFloat(2f, 5f));
+                    Main.dust[Smoke].noGravity = true;
+                    Main.dust[Smoke].position = Projectile.Center + vector12;
+                    Main.dust[Smoke].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity * 0.2f;
+                }
+
+                currentAmount++;
             }
         }
     }

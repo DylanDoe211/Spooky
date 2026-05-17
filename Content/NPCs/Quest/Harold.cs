@@ -69,12 +69,15 @@ namespace Spooky.Content.NPCs.Quest
             NPC.noTileCollide = true;
             NPC.HitSound = SoundID.NPCHit54 with { Pitch = -1f };
             NPC.DeathSound = SoundID.NPCDeath6;
+            NPC.rarity = 1;
             NPC.aiStyle = -1;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.CemeteryBiome>().Type };
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
+            bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[Type], quickUnlock: true);
+
             bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement>
             {
                 new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.Harold"),

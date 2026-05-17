@@ -47,7 +47,10 @@ namespace Spooky.Content.Projectiles.Slingshots
 						ShootSpeed *= ItemGlobal.ActiveItem(player).shootSpeed;
 
 						int Proj = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, ShootSpeed, Type, Projectile.damage, Projectile.knockBack, Projectile.owner);
-						Main.projectile[Proj].penetrate = 3;
+						if (Main.projectile[Proj].penetrate == 1)
+						{
+							Main.projectile[Proj].penetrate = 3;
+						}
 					}
 				}
 

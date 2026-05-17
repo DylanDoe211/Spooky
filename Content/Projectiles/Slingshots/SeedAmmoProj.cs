@@ -148,7 +148,7 @@ namespace Spooky.Content.Projectiles.Slingshots
                 vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
                 Vector2 ShootVelocity = (velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity).RotatedBy(RandomRotation);
 
-                Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, ShootVelocity, ModContent.ProjectileType<SeedAmmoSplit>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, ShootVelocity, ModContent.ProjectileType<SeedAmmoSplit>(), Projectile.damage / 4, Projectile.knockBack, Projectile.owner);
 
                 currentAmount++;
             }

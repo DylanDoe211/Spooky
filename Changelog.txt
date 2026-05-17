@@ -110,7 +110,7 @@ Weapons/Accessories:
 Ranged Weapon Ammo Change:
 -All spooky mod ranged bows and guns now have proper ammo conversion like vanilla ranged items do
 -Spooky mod bows and guns that previously converted all ammo into a unique projectile now only do so with their basic ammos (Basic bullets for guns, wooden arrows for bows), and non-basic ammos will just shoot their own projectile
--Changed the tooltips for all of the changed items to reflect that they now only convert basic ammos
+-Changed the tooltips for all of the affected items to reflect that they now only convert basic ammos
 -This change applies to the following items: Flower Shot, Bone Bender, Seer, Living Seer, Fly Shot, Old Hunters Crossbow, Old Hunters Rifle, Spider-Wing Longbow, Firestorm Monsoon, Crusty Gunfish, Celery Blaster, HAK-2r, Poison Crossbow
 
 Enemy/Boss:
@@ -131,6 +131,7 @@ Enemy/Boss:
 -Aortic eel now has a better growling sound
 -Lowered the volume on ear worms screeching sound
 -Changed the sound effects for biojetter scream, crux bat scream, and tongue biter scream to be less loud and annoying
+-Little eye quest minibosses now show up on the lifeform analyzer UI
 
 World Generation:
 -Rotten depths now accounts for having both calamity and thorium on at the same time, if both are on the rotten depths will generate next to the sulphur sea, with its tunnel connecting to the sulphur sea caves
@@ -146,7 +147,7 @@ World Generation:
 -Spooky forest surface now generates with way more trees
 -Spooky forest now spawns rotten gourds on the ground during world generation
 -Spooky forest glowshroom area now takes up the entire bottom of the underground spooky forest instead of being a circle
--Increased the growth rate of yellow glowshroom trees both during world generation and in-game
+-Increased the growth rate of yellow glowshroom trees during world generation and in game
 
 Miscellaneous Changes:
 -Terraria's fertilizer now works with spooky mod trees (Includes some spooky mod custom trees too)
@@ -171,9 +172,11 @@ Miscellaneous Changes:
 -Improved the raveyard sky beam visual effect to look better and prevent beams from being way too high in the air
 -Big bone and daffodils arenas now inflict creative shock while you are in them to prevent placing blocks as it can mess with their attacks
 -Big bone bobber and pumpkin bobber are now functional items and are obtainable in their corresponding spooky mod fishing crates
+-Skull amulet soul projectiles no longer destroy grass or other cuttable tiles
+-Removed jungle spores from the bloom soil crafting recipes
 -Little eye quests no longer give you goodie bags
 -Little eye quest items that you give to him now stack to 9999
--Catacomb keys are now stackable to 9999
+-Catacomb trapdoor keys are now stackable to 9999
 -Resprited a bunch of stuff (Sorry I forgot to keep track of every specific sprite that got redone)
 
 
@@ -196,7 +199,7 @@ Bug, Issue, and Oversight Fixes:
 -Tiny ghost critters bestiary background being way too dark
 -Cemetery screen color tint being applied while in the catacombs
 -Ghost pepper scepter doing damage way too much, and fixed damage scaling not working properly
--Spook fishron and spooky sharkron bestiary entries unintentionally having their orange aura
+-Spook fishron and spooky sharkron bestiary entries unintentionally drawing their orange auras
 -New years resolution not accounting for the undying embryos revival (The new years resolution kill countdown will no longer activate if the undying embryo can revive you)
 -Spooky mod special glowy dust particles looking off due to an issue with how they were drawn (The dusts produced by the skull smashers right click, cemetery ghost enemies being killed, ect)
 

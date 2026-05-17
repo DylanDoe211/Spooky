@@ -35,5 +35,13 @@ namespace Spooky.Content.Items.Slingshots.Ammo
 		{
 			return ItemGlobal.IsSlingshot[weapon.type] ? true : null;
 		}
+
+		public override void AddRecipes()
+        {
+            CreateRecipe(50)
+            .AddIngredient(ModContent.ItemType<MossyPebble>(), 50)
+			.AddIngredient(ItemID.PinkGel)
+            .Register();
+        }
 	}
 }

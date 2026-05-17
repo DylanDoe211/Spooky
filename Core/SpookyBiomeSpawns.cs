@@ -369,18 +369,18 @@ namespace Spooky.Core
 							pool.Add(ModContent.NPCType<ZomboidCasket>(), 2);
 						}
 
-						//do not spawn harold if he already exists
-						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<Harold>()))
-						{
-							pool.Add(ModContent.NPCType<Harold>(), 0.5f);
-						}
-
 						//bloodmoon enemies
 						if (Main.bloodMoon)
 						{	
 							pool.Add(ModContent.NPCType<FeralRat1>(), 2);
 							pool.Add(ModContent.NPCType<FeralRat2>(), 2);
 						}
+					}
+
+					//do not spawn harold if he already exists
+					if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<Harold>()))
+					{
+						pool.Add(ModContent.NPCType<Harold>(), 0.5f);
 					}
                 }
 			}
@@ -1013,7 +1013,7 @@ namespace Spooky.Core
 			//dumb zomboid can spawn anywhere super rarely
 			if (!NPC.AnyNPCs(ModContent.NPCType<DumbZomboid>()) && !spawnInfo.Player.InModBiome(ModContent.GetInstance<SpiderWarBiome>()) && !NoEventsHappening && !spawnInfo.Water)
 			{
-				pool.Add(ModContent.NPCType<DumbZomboid>(), 0.0001f);
+				pool.Add(ModContent.NPCType<DumbZomboid>(), 0.01f);
 			}
         }
     }

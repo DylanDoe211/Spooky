@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Spooky.Core;
 using Spooky.Content.Items.BossBags;
 using Spooky.Content.Items.BossSummon;
+using Spooky.Content.Tiles.Blooms;
 using Spooky.Content.Tiles.Cemetery;
 using Spooky.Content.Tiles.Cemetery.Ambient;
 using Spooky.Content.Tiles.Cemetery.Furniture;
@@ -147,11 +148,6 @@ namespace Spooky.Content.Generation
                         {
                             WorldGen.PlaceWall(X, Y, ModContent.WallType<CemeteryDirtWall>());
                         }
-
-                        if (tile.WallType == ModContent.WallType<CemeteryDirtWall>() && (!tileAbove.HasTile || !tileBelow.HasTile || !tileLeft.HasTile || !tileRight.HasTile))
-                        {
-                            tile.WallType = (ushort)ModContent.WallType<CemeteryGrassWall>();
-                        }
                     }
                 }
 
@@ -170,26 +166,11 @@ namespace Spooky.Content.Generation
                             }
 
                             //reaplce walls with cemetery grass walls
-                            if (tile.WallType > 0 && tile.WallType != ModContent.WallType<CemeteryGrassWall>())
+                            if (tile.WallType > 0 && tile.WallType != ModContent.WallType<CemeteryDirtWall>())
                             {
                                 tile.WallType = (ushort)ModContent.WallType<CemeteryDirtWall>();
                             }
                         }
-                    }
-                }
-            }
-
-            //place clumps of stone in the biome
-            for (int i = 0; i < (int)((double)(Main.maxTilesX * Main.maxTilesY * 27) * 1E-04); i++)
-            {
-                int X = WorldGen.genRand.Next(0, Main.maxTilesX);
-                int Y = WorldGen.genRand.Next(0, Main.maxTilesY - 2);
-
-                if (Main.tile[X, Y] != null && Main.tile[X, Y].HasTile)
-                {
-                    if (Main.tile[X, Y].TileType == ModContent.TileType<CemeteryDirt>())
-                    {
-                        WorldGen.TileRunner(X, Y, WorldGen.genRand.Next(10, 18), WorldGen.genRand.Next(10, 18), ModContent.TileType<CemeteryStone>(), false, 0f, 0f, false, true);
                     }
                 }
             }
@@ -298,6 +279,40 @@ namespace Spooky.Content.Generation
 			}
 		}
 
+        private void CemeteryBlockClusters(GenerationProgress progress, GameConfiguration configuration)
+        {
+            //place clumps of stone in the biome
+            for (int i = 0; i < (int)((double)(Main.maxTilesX * Main.maxTilesY * 27) * 1E-04); i++)
+            {
+                int X = WorldGen.genRand.Next(0, Main.maxTilesX);
+                int Y = WorldGen.genRand.Next(0, Main.maxTilesY - 2);
+
+                if (Main.tile[X, Y] != null && Main.tile[X, Y].HasTile)
+                {
+                    if (Main.tile[X, Y].TileType == ModContent.TileType<CemeteryDirt>())
+                    {
+                        WorldGen.TileRunner(X, Y, WorldGen.genRand.Next(10, 18), WorldGen.genRand.Next(10, 18), ModContent.TileType<CemeteryStone>(), false, 0f, 0f, false, true);
+                    }
+                }
+            }
+
+            //place clumps of bloom soil throughout the surface
+			for (int Rocks = 0; Rocks < (int)((double)(Main.maxTilesX * Main.maxTilesY * 27) * 8E-05); Rocks++)
+			{
+				int X = WorldGen.genRand.Next(0, Main.maxTilesX);
+				int Y = WorldGen.genRand.Next(0, Main.maxTilesY / 2);
+
+				if (Main.tile[X, Y] != null && Main.tile[X, Y].HasTile)
+				{
+					if (Main.tile[X, Y].TileType == ModContent.TileType<CemeteryDirt>())
+					{
+						WorldGen.TileRunner(X, Y, WorldGen.genRand.Next(5, 11), WorldGen.genRand.Next(5, 11),
+						ModContent.TileType<BloomSoil>(), false, 0f, 0f, false, true);
+					}
+				}
+			}
+        }
+
 		private void CemeteryAmbience(GenerationProgress progress, GameConfiguration configuration)
         {
             int XStart = Catacombs.PositionX - (BiomeWidth / 2);
@@ -357,33 +372,30 @@ namespace Spooky.Content.Generation
             {
                 for (int Y = PositionY - 75; Y <= Main.worldSurface; Y++)
                 {
-                    if (WorldGen.genRand.NextBool(3))
+                    if (WorldGen.genRand.NextBool())
                     {
                         for (int TombstoneX = X - 10; TombstoneX <= X + 10; TombstoneX++)
                         {
-                            for (int TombstoneY = Y - 6; TombstoneY <= Y + 6; TombstoneY++)
+                            Tile tile = Main.tile[TombstoneX, Y];
+                            if (IsCemeteryTile(TombstoneX, Y) && tile.HasTile && tile.WallType != WallID.WroughtIronFence && !WorldGen.SolidTile(TombstoneX, Y - 1))
                             {
-                                Tile tile = Main.tile[TombstoneX, TombstoneY];
-                                if ((tile.TileType == (ushort)ModContent.TileType<CemeteryGrass>() || tile.TileType == (ushort)ModContent.TileType<CemeteryStone>()) && !WorldGen.SolidTile(TombstoneX, TombstoneY - 1))
-                                {
-                                    WorldGen.PlaceWall(TombstoneX, TombstoneY - 2, WallID.WroughtIronFence);
-                                    WorldGen.PlaceWall(TombstoneX, TombstoneY - 1, WallID.WroughtIronFence);
-                                    WorldGen.PlaceWall(TombstoneX, TombstoneY, WallID.WroughtIronFence);
+                                WorldGen.PlaceWall(TombstoneX, Y - 2, WallID.WroughtIronFence);
+                                WorldGen.PlaceWall(TombstoneX, Y - 1, WallID.WroughtIronFence);
+                                WorldGen.PlaceWall(TombstoneX, Y, WallID.WroughtIronFence);
 
-                                    if (WorldGen.SolidTile(TombstoneX, TombstoneY) && WorldGen.genRand.NextBool())
+                                if (WorldGen.SolidTile(TombstoneX, Y) && WorldGen.genRand.NextBool())
+                                {
+                                    if (WorldGen.genRand.NextBool(12))
                                     {
-                                        if (WorldGen.genRand.NextBool(12))
-                                        {
-                                            WorldGen.PlaceObject(TombstoneX, TombstoneY - 1, ModContent.TileType<MysteriousTombstone>(), true, WorldGen.genRand.Next(0, 3));
-                                        }
-                                        else if (WorldGen.genRand.NextBool(6))
-                                        {
-                                            WorldGen.PlaceObject(TombstoneX, TombstoneY - 1, ModContent.TileType<TombstoneCracked>(), true, WorldGen.genRand.Next(0, 3));
-                                        }
-                                        else if (WorldGen.genRand.NextBool(3))
-                                        {
-                                            WorldGen.PlaceObject(TombstoneX, TombstoneY - 1, ModContent.TileType<Tombstone>(), true, WorldGen.genRand.Next(0, 3));
-                                        }
+                                        WorldGen.PlaceObject(TombstoneX, Y - 1, ModContent.TileType<MysteriousTombstone>(), true, WorldGen.genRand.Next(0, 3));
+                                    }
+                                    else if (WorldGen.genRand.NextBool(6))
+                                    {
+                                        WorldGen.PlaceObject(TombstoneX, Y - 1, ModContent.TileType<TombstoneCracked>(), true, WorldGen.genRand.Next(0, 3));
+                                    }
+                                    else if (WorldGen.genRand.NextBool(3))
+                                    {
+                                        WorldGen.PlaceObject(TombstoneX, Y - 1, ModContent.TileType<Tombstone>(), true, WorldGen.genRand.Next(0, 3));
                                     }
                                 }
                             }
@@ -533,7 +545,8 @@ namespace Spooky.Content.Generation
         {
             return Main.tile[X, Y].TileType == ModContent.TileType<CemeteryGrass>() || 
             Main.tile[X, Y].TileType == ModContent.TileType<CemeteryDirt>() ||
-            Main.tile[X, Y].TileType == ModContent.TileType<CemeteryStone>();
+            Main.tile[X, Y].TileType == ModContent.TileType<CemeteryStone>() || 
+            Main.tile[X, Y].TileType == ModContent.TileType<BloomSoil>();
         }
 
 		public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
@@ -546,8 +559,9 @@ namespace Spooky.Content.Generation
 
             tasks.Insert(GenIndex + 1, new PassLegacy("Cemetery", PlaceCemetery));
 			tasks.Insert(GenIndex + 2, new PassLegacy("Cemetery Flattening", CemeteryFlattening));
-            tasks.Insert(GenIndex + 3, new PassLegacy("Cemetery Structures", GenerateCemeteryStructures));
-            tasks.Insert(GenIndex + 4, new PassLegacy("Cemetery Ambience", CemeteryAmbience));
+            tasks.Insert(GenIndex + 3, new PassLegacy("Cemetery Clusters", CemeteryBlockClusters));
+            tasks.Insert(GenIndex + 4, new PassLegacy("Cemetery Structures", GenerateCemeteryStructures));
+            tasks.Insert(GenIndex + 5, new PassLegacy("Cemetery Ambience", CemeteryAmbience));
         }
 
         public override void PostWorldGen()

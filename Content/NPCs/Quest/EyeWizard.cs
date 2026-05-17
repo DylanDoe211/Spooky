@@ -71,6 +71,7 @@ namespace Spooky.Content.NPCs.Quest
 			NPC.noTileCollide = true;
 			NPC.HitSound = SoundID.NPCHit1;
 			NPC.DeathSound = SoundID.NPCDeath1;
+			NPC.rarity = 2;
 			NPC.aiStyle = -1;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.SpookyHellBiome>().Type };
 		}

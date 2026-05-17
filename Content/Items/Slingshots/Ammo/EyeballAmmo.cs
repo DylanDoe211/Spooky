@@ -3,8 +3,8 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 using Spooky.Core;
-using Spooky.Content.Items.Catacomb.Misc;
 using Spooky.Content.Projectiles.Slingshots;
+using Spooky.Content.Tiles.SpookyHell;
 
 namespace Spooky.Content.Items.Slingshots.Ammo
 {
@@ -36,13 +36,12 @@ namespace Spooky.Content.Items.Slingshots.Ammo
 			return ItemGlobal.IsSlingshot[weapon.type] ? true : null;
 		}
 
-		/*
 		public override void AddRecipes()
         {
-            CreateRecipe(15)
-            .AddIngredient(ModContent.ItemType<PlantChunk>())
+            CreateRecipe(50)
+            .AddIngredient(ModContent.ItemType<MossyPebble>(), 50)
+			.AddIngredient(ModContent.ItemType<EyeBlockItem>())
             .Register();
         }
-		*/
 	}
 }

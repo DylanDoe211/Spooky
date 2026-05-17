@@ -63,6 +63,7 @@ namespace Spooky.Content.NPCs.Quest
 			NPC.noTileCollide = true;
 			NPC.HitSound = SoundID.NPCHit20 with { Pitch = -1f };
 			NPC.DeathSound = SoundID.NPCDeath23 with { Pitch = -0.65f };
+			NPC.rarity = 1;
             NPC.aiStyle = -1;
 			SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.SporeEventBiome>().Type };
 		}

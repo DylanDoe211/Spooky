@@ -88,10 +88,10 @@ namespace Spooky.Content.Projectiles.SpiderCave
 			{	
 				GrappledNPC = target;
 
-				Projectile.ai[0] = 25;
+				Projectile.ai[0] = 15;
 			}
-			if (Projectile.ai[0] >= 12 && !HasHitBoss && target.active && target.CanBeChasedBy(this) && target.IsTechnicallyBoss() && !target.friendly && !target.dontTakeDamage && !NPCID.Sets.CountsAsCritter[target.type])
-			{	
+			if (Projectile.ai[0] >= 7 && !HasHitBoss && target.active && target.CanBeChasedBy(this) && target.IsTechnicallyBoss() && !target.friendly && !target.dontTakeDamage && !NPCID.Sets.CountsAsCritter[target.type])
+			{
 				SoundEngine.PlaySound(SoundID.NPCDeath9, Projectile.Center);
 
 				Projectile ParentProjectile = Main.projectile[(int)Projectile.ai[1]];
@@ -110,7 +110,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 					ModContent.ProjectileType<VenomHarpoonSpit>(), Projectile.damage / 2, Projectile.knockBack, Projectile.owner);
 				}
 		
-				Projectile.ai[0] = 25;
+				Projectile.ai[0] = 15;
 				HasHitBoss = true;
 			}
 		}

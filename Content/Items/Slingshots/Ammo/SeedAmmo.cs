@@ -38,7 +38,8 @@ namespace Spooky.Content.Items.Slingshots.Ammo
 
 		public override void AddRecipes()
         {
-            CreateRecipe(15)
+            CreateRecipe(50)
+			.AddIngredient(ModContent.ItemType<MossyPebble>(), 50)
             .AddIngredient(ModContent.ItemType<PlantChunk>())
             .Register();
         }

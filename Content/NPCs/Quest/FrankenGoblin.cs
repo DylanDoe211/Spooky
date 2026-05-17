@@ -87,6 +87,7 @@ namespace Spooky.Content.NPCs.Quest
 			NPC.knockBackResist = 0f;
             NPC.HitSound = SoundID.NPCHit52 with { Pitch = 1f, Volume = 2f };
 			NPC.DeathSound = SoundID.NPCDeath5 with { Pitch = 1f };
+			NPC.rarity = 2;
             NPC.aiStyle = 3;
 			AIType = NPCID.GoblinScout;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.SpookyBiome>().Type };

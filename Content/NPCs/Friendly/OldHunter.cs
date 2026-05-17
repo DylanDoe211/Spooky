@@ -38,6 +38,7 @@ namespace Spooky.Content.NPCs.Friendly
         {
             Main.npcFrameCount[NPC.type] = 7;
             NPCID.Sets.ActsLikeTownNPC[Type] = true;
+            NPCID.Sets.CannotSitOnFurniture[Type] = true;
             NPCID.Sets.ShimmerTownTransform[Type] = false;
             NPCID.Sets.NoTownNPCHappiness[Type] = true;
 

@@ -40,6 +40,7 @@ namespace Spooky.Content.Items.Debug
             Flags.downedSpiderWar = false;
             Flags.downedBigBone = false;
             Flags.downedSpookFishron = false;
+            Flags.downedSporeEvent = false;
 
 			return true;
 		}

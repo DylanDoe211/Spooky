@@ -62,6 +62,7 @@ namespace Spooky.Content.NPCs.Quest
 			NPC.behindTiles = true;
 			NPC.HitSound = SoundID.NPCHit11;
 			NPC.DeathSound = SoundID.NPCDeath5 with { Pitch = -0.65f };
+			NPC.rarity = 1;
             NPC.aiStyle = -1;
 			SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.VegetableBiome>().Type };
 		}

@@ -101,6 +101,7 @@ namespace Spooky.Content.NPCs.Quest
 			NPC.noTileCollide = true;
 			NPC.HitSound = SoundID.NPCHit32;
 			NPC.DeathSound = SoundID.Item14;
+			NPC.rarity = 2;
 			NPC.aiStyle = -1;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.SpiderCaveBiome>().Type };
 		}

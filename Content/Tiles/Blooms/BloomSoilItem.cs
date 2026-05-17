@@ -28,25 +28,21 @@ namespace Spooky.Content.Tiles.Blooms
             CreateRecipe(5)
             .AddIngredient(ItemID.DirtBlock, 5)
 			.AddIngredient(ItemID.MudBlock, 5)
-			.AddIngredient(ItemID.JungleSpores, 1)
 			.Register();
 
             CreateRecipe(5)
             .AddIngredient(ModContent.ItemType<CemeteryDirtItem>(), 5)
 			.AddIngredient(ItemID.MudBlock, 5)
-			.AddIngredient(ItemID.JungleSpores, 1)
 			.Register();
 
             CreateRecipe(5)
             .AddIngredient(ModContent.ItemType<DampSoilItem>(), 5)
 			.AddIngredient(ItemID.MudBlock, 5)
-			.AddIngredient(ItemID.JungleSpores, 1)
 			.Register();
 
             CreateRecipe(5)
             .AddIngredient(ModContent.ItemType<SpookyDirtItem>(), 5)
 			.AddIngredient(ItemID.MudBlock, 5)
-			.AddIngredient(ItemID.JungleSpores, 1)
 			.Register();
         }
     }

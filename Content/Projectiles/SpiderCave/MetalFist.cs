@@ -12,6 +12,8 @@ namespace Spooky.Content.Projectiles.SpiderCave
 {
     public class MetalFist : ModProjectile
     {
+        bool HasHitEnemy = false;
+
         private static Asset<Texture2D> ChainTexture;
 
         public override void SetStaticDefaults()
@@ -67,11 +69,16 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.Zero, ModContent.ProjectileType<MetalFistStick>(), Projectile.damage, Projectile.knockBack, Projectile.owner,
-            ai0: Projectile.rotation, ai1: target.whoAmI);
+            if (!HasHitEnemy)
+            {
+                Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.Zero, ModContent.ProjectileType<MetalFistStick>(), Projectile.damage, Projectile.knockBack, Projectile.owner,
+                ai0: Projectile.rotation, ai1: target.whoAmI);
 
-            Projectile.ai[0] = 20;
-            Projectile.alpha = 255;
+                Projectile.ai[0] = 20;
+                Projectile.alpha = 255;
+
+                HasHitEnemy = true;
+            }
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -106,7 +113,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
                 Projectile.velocity = ReturnSpeed;
 
-                if (Projectile.Hitbox.Intersects(player.Hitbox))
+                if (Projectile.Distance(player.Center) <= 50f)
                 {
                     Projectile.Kill();
                 }

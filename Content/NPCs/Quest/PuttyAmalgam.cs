@@ -43,12 +43,15 @@ namespace Spooky.Content.NPCs.Quest
             NPC.noTileCollide = false;
             NPC.HitSound = SoundID.Item177;
 			NPC.DeathSound = SoundID.NPCDeath1;
+			NPC.rarity = 1;
             NPC.aiStyle = -1;
 			SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.SpookyBiome>().Type };
 		}
 
 		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
         {
+			bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[Type], quickUnlock: true);
+
 			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
             {
 				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.PuttyAmalgam"),

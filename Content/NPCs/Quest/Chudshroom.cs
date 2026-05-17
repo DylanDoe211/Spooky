@@ -4,9 +4,7 @@ using Terraria.ModLoader;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Audio;
-using ReLogic.Content;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
 using Spooky.Core;
@@ -44,12 +42,15 @@ namespace Spooky.Content.NPCs.Quest
             NPC.noGravity = false;
 			NPC.HitSound = SoundID.NPCHit7;
 			NPC.DeathSound = SoundID.NPCDeath2 with { Pitch = 1.2f };
+            NPC.rarity = 1;
 			NPC.aiStyle = -1;
 			SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.SpookyBiomeUg>().Type };
 		}
 
 		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
         {
+            bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[Type], quickUnlock: true);
+
 			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
             {
 				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.Chudshroom"),

@@ -130,22 +130,6 @@ namespace Spooky.Content.Generation
 				}
 			}
 
-			//place clumps of bloom soil throughout the surface
-			for (int Rocks = 0; Rocks < (int)((double)(Main.maxTilesX * Main.maxTilesY * 27) * 8E-05); Rocks++)
-			{
-				int X = WorldGen.genRand.Next(0, Main.maxTilesX);
-				int Y = WorldGen.genRand.Next(0, Main.maxTilesY / 2);
-
-				if (Main.tile[X, Y] != null && Main.tile[X, Y].HasTile)
-				{
-					if (Main.tile[X, Y].TileType == ModContent.TileType<SpookyDirt>())
-					{
-						WorldGen.TileRunner(X, Y, WorldGen.genRand.Next(6, 13), WorldGen.genRand.Next(6, 13),
-						ModContent.TileType<BloomSoil>(), false, 0f, 0f, false, true);
-					}
-				}
-			}
-
 			for (double i = 0.25; i < 0.5; i += 0.00001)
 			{
 				progress.Set(i);
@@ -222,17 +206,18 @@ namespace Spooky.Content.Generation
 				progress.Set(i);
 			}
 
-			for (int X = PositionX - Main.maxTilesX / 12; X <= PositionX + Main.maxTilesX / 12; X++)
+			//place clumps of bloom soil throughout the biome
+			for (int Rocks = 0; Rocks < (int)((double)(Main.maxTilesX * Main.maxTilesY * 27) * 8E-05); Rocks++)
 			{
-				for (int Y = 100; Y < (int)Main.worldSurface + 10; Y++)
+				int X = WorldGen.genRand.Next(0, Main.maxTilesX);
+				int Y = WorldGen.genRand.Next(0, Main.maxTilesY / 2);
+
+				if (Main.tile[X, Y] != null && Main.tile[X, Y].HasTile)
 				{
-					if (Main.tile[X, Y].HasTile && Main.tile[X, Y].WallType == ModContent.WallType<SpookyStoneWall>())
+					if (Main.tile[X, Y].TileType == ModContent.TileType<SpookyDirt>() || Main.tile[X, Y].TileType == ModContent.TileType<SpookyDirt2>())
 					{
-						Main.tile[X, Y].TileType = (ushort)ModContent.TileType<SpookyStone>();
-						Main.tile[X - 1, Y].TileType = (ushort)ModContent.TileType<SpookyStone>();
-						Main.tile[X + 1, Y].TileType = (ushort)ModContent.TileType<SpookyStone>();
-						Main.tile[X, Y - 1].TileType = (ushort)ModContent.TileType<SpookyStone>();
-						Main.tile[X, Y + 1].TileType = (ushort)ModContent.TileType<SpookyStone>();
+						WorldGen.TileRunner(X, Y, WorldGen.genRand.Next(6, 13), WorldGen.genRand.Next(6, 13),
+						ModContent.TileType<BloomSoil>(), false, 0f, 0f, false, true);
 					}
 				}
 			}

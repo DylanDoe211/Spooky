@@ -365,6 +365,7 @@ namespace Spooky.Core
                 //end the spore event when the timer runs out
                 if (Flags.SporeEventTimeLeft == 2)
                 {
+                    Flags.downedSporeEvent = true;
                     Flags.SporeEventHappening = false;
                     Flags.SporeEventTimeLeft = 0;
 
@@ -398,10 +399,11 @@ namespace Spooky.Core
                         }
                     }
 
-                    if (!Flags.SporeEventHappening && Main.hardMode && Main.rand.NextBool(30))
+                    int SporeEventChance = !Flags.downedSporeEvent ? 2 : 20;
+                    if (!Flags.SporeEventHappening && Main.hardMode && Main.rand.NextBool(SporeEventChance))
                     {
                         Flags.SporeEventHappening = true;
-                        Flags.SporeEventTimeLeft = 54000; //15 real-life minutes=
+                        Flags.SporeEventTimeLeft = 54000; //15 real-life minutes
                         Flags.SporeFogIntensity = 0.5f;
 
                         if (Main.netMode == NetmodeID.Server)

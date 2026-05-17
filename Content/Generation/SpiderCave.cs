@@ -86,6 +86,8 @@ namespace Spooky.Content.Generation
             Point origin = new Point(startPosX, startPosY);
             Vector2 center = origin.ToVector2() * 16f + new Vector2(8f);
 
+            Flags.SpiderGrottoCenter = new Vector2(origin.X * 16, origin.Y * 16);
+
             float angle = MathHelper.Pi * 0.15f;
             float otherAngle = MathHelper.PiOver2 - angle;
 
@@ -789,8 +791,6 @@ namespace Spooky.Content.Generation
 					}
                 }
             }
-
-            Flags.SpiderWebPosition = new Vector2(origin.X * 16, origin.Y * 16);
         }
 
 		private void DeleteAnnoyingTraps(GenerationProgress progress, GameConfiguration configuration)

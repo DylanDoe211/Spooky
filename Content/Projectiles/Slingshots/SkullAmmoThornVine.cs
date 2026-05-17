@@ -70,7 +70,7 @@ namespace Spooky.Content.Projectiles.Slingshots
 			Projectile.height = 10;
 			Projectile.DamageType = DamageClass.Ranged;
             Projectile.friendly = true;
-			Projectile.hostile = true;
+			Projectile.hostile = false;
 			Projectile.tileCollide = false;
 			Projectile.hide = true;
 			Projectile.timeLeft = 60;
