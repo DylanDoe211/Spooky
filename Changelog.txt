@@ -18,4 +18,6 @@
 -Fixed blooms re-appearing after being broken in multiplayer, exiting then re-entering the world
 -Fixed rot gourd sometimes phasing through the ground after landing from his jump attacks above you on platforms
 -Fixed many instances where spooky mod achievements are set as complete not having proper checks to make sure they dont run on servers incorrectly
+-Fixed issue with many spooky mod holdout projectiles not syncing their rotation and animations to other players in multiplayer
+-Fixed root trees drawing too low and not looking as if they are attached to the block above them
 -Fixed tar flinger shimmering into rod of hands

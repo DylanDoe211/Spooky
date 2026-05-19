@@ -7,6 +7,7 @@ using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.IO;
 
 using Spooky.Core;
 
@@ -14,39 +15,55 @@ namespace Spooky.Content.Projectiles.SpookyHell
 {
     public class LivingFleshAxeProj : ModProjectile
     {
-		public float SwingRadians = MathHelper.Pi * 1.35f;
+		int SwingDirection;
 
-		public int Phase;
+		float SwingRadians = MathHelper.Pi * 1.35f;
+		float rotation;
 		
-		private bool initialized = false;
-
-		Vector2 direction = Vector2.Zero;
-
-		private bool flip = false;
-
-		public int Timer;
-
-		private float rotation;
-
+		bool initialized = false;
+		bool flip = false;
 		bool hasHitSomething = false;
 
-		public int SwingDirection
-		{
-			get
-			{
-				return Phase switch
-				{
-					0 => -1 * Math.Sign(direction.X),
-					1 => 1 * Math.Sign(direction.X),
-					_ => -1 * Math.Sign(direction.X),
-				};
-			}
-		}
+		Vector2 direction = Vector2.Zero;
 
 		private static Asset<Texture2D> ProjTexture;
 		private static Asset<Texture2D> SlashTexture;
 
 		public static readonly SoundStyle CrunchSound = new("Spooky/Content/Sounds/SentientKeybrandCrunch", SoundType.Sound);
+
+		public override void SendExtraAI(BinaryWriter writer)
+        {
+			//vector2 
+			writer.WriteVector2(direction);
+
+            //bools
+            writer.Write(initialized);
+			writer.Write(flip);
+
+			//int
+			writer.Write(SwingDirection);
+
+			//floats
+            writer.Write(SwingRadians);
+			writer.Write(rotation);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+			//vector2
+			direction = reader.ReadVector2();
+
+            //bools
+            initialized = reader.ReadBoolean();
+			flip = reader.ReadBoolean();
+
+			//int
+			SwingDirection = reader.ReadInt32();
+
+			//floats
+            SwingRadians = reader.ReadSingle();
+			rotation = reader.ReadSingle();
+        }
 
 		public override void SetDefaults()
 		{
@@ -71,7 +88,7 @@ namespace Spooky.Content.Projectiles.SpookyHell
 
 			//fade out stuff
 			int SwingTime = ItemGlobal.ActiveItem(player).useTime;
-			float progress = Timer / (float)SwingTime;
+			float progress = Projectile.localAI[0] / (float)SwingTime;
 			progress = EaseFunction.EaseQuadOut.Ease(progress);
 			float SlashAlpha = 1f - Math.Abs(progress);
 
@@ -169,36 +186,39 @@ namespace Spooky.Content.Projectiles.SpookyHell
 			player.itemTime = player.itemAnimation = 5;
 			player.heldProj = Projectile.whoAmI;
 
-			if (Projectile.owner != Main.myPlayer)
-				return;
-
 			if (!initialized)
 			{
-				initialized = true;
-				direction = player.DirectionTo(Main.MouseWorld);
-				direction.Normalize();
-				Projectile.rotation = direction.ToRotation();
+				if (Projectile.owner == Main.myPlayer)
+				{
+					Vector2 ProjDirection = Main.MouseWorld - new Vector2(player.MountedCenter.X, player.MountedCenter.Y);
+					ProjDirection.Normalize();
+					Projectile.ai[1] = ProjDirection.X;
+					Projectile.ai[2] = ProjDirection.Y;
+					Projectile.netUpdate = true;
+				}
 
-				if (Phase == 1) flip = !flip;
+				direction = new Vector2(Projectile.ai[1], Projectile.ai[2]);
+
 				if (direction.X < 0) flip = !flip;
+
+				SwingDirection = -1 * Math.Sign(direction.X);
+
+				initialized = true;
+				Projectile.netUpdate = true;
 			}
+
+			direction = new Vector2(Projectile.ai[1], Projectile.ai[2]);
 
 			Projectile.Center = player.MountedCenter + (direction.RotatedBy(-1.57f) * 20);
 
-			Timer++;
-
-			if (Timer > SwingTime)
+			Projectile.localAI[0]++;
+			if (Projectile.localAI[0] > SwingTime)
 			{
 				Projectile.Kill();
 			}
 
-			float progress = GetProgress();
-
-			//scales up the projectile a bit more based on its swing progress
-			//unnecessary for this projectile but ill keep it here incase this ever gets reused
-			//Projectile.scale = 1.2f - Math.Abs(0.5f - progress);
-
-			rotation = Projectile.rotation + MathHelper.Lerp(SwingRadians / 2 * SwingDirection, -SwingRadians / 2 * SwingDirection, progress);
+			Projectile.rotation = direction.ToRotation();
+			rotation = Projectile.rotation + MathHelper.Lerp(SwingRadians / 2 * SwingDirection, -SwingRadians / 2 * SwingDirection, GetProgress());
 
 			player.direction = Math.Sign(direction.X);
 
@@ -208,6 +228,8 @@ namespace Spooky.Content.Projectiles.SpookyHell
 			{
 				player.itemRotation -= 3.14f;
 			}
+
+			Projectile.netUpdate = true;
 
 			player.itemRotation = MathHelper.WrapAngle(player.itemRotation);
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation - 1.57f);
@@ -219,7 +241,7 @@ namespace Spooky.Content.Projectiles.SpookyHell
 
 			int SwingTime = ItemGlobal.ActiveItem(player).useTime;
 
-			float progress = Timer / (float)SwingTime;
+			float progress = Projectile.localAI[0] / (float)SwingTime;
 			progress = EaseFunction.EaseQuadOut.Ease(progress);
 
 			return Projectile.ai[0] == 1 ? -progress + 0.98f : progress;

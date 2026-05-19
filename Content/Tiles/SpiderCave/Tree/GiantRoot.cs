@@ -1,7 +1,8 @@
 ﻿using Terraria;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.Localization;
+using Terraria.ObjectData;
 using Terraria.DataStructures;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
@@ -274,7 +275,7 @@ namespace Spooky.Content.Tiles.SpiderCave.Tree
             int frameSize = 16;
             int frameSizeY = 16;
 
-            Vector2 WavyOffset = new Vector2((xOff * 2), 0);
+            Vector2 WavyOffset = new Vector2((xOff * 2), -2);
             Vector2 pos = TileGlobal.TileCustomPosition(i, j);
 
             if (tile.TileFrameX == 18)

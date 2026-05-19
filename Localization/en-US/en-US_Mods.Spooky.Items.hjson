@@ -212,7 +212,7 @@ FungusDevilTooth: {
 		'''
 		Hitting enemies may inflict them with fungal gingivitis
 		This debuff makes enemies spawn bloody teeth globs when killed
-		When toucehd, these globs will explode and fire off teeth
+		When touched, these globs will explode and fire off teeth
 		3 minute duration
 		'''
 }
@@ -365,9 +365,9 @@ UltimateTomato: {
 	DisplayName: Ultimato
 	Tooltip:
 		'''
-		Press the Accessory Hotkey while holding a weapon to throw around a ton of tomatos
-		The damage of these tomatos will scale based on the weapon you are holding
-		Every use of this ability will subtract 20 seconds off of this blooms duration
+		Press the Accessory Hotkey while holding a weapon to throw around a ton of tomatoes
+		The damage of these tomatoes will scale based on the weapon you are holding
+		Every use of this ability will subtract 20 seconds off of this bloom's duration
 		5 minute duration
 		'''
 }

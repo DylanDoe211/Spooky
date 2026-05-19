@@ -14,34 +14,16 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
 {
     public class SabertoothScytheProj : ModProjectile
     {
-		public float SwingRadians = MathHelper.Pi * 1.35f;
+		int SwingDirection;
 
-		public int Phase;
+		float SwingRadians = MathHelper.Pi * 1.35f;
+		float rotation;
 		
-		private bool initialized = false;
+		bool initialized = false;
+		bool flip = false;
+		bool LaunchedBlade = false;
 
 		Vector2 direction = Vector2.Zero;
-
-		private bool flip = false;
-
-		private bool LaunchedBlade = false;
-
-		public int Timer;
-
-		private float rotation;
-
-		public int SwingDirection
-		{
-			get
-			{
-				return Phase switch
-				{
-					0 => -1 * Math.Sign(direction.X),
-					1 => 1 * Math.Sign(direction.X),
-					_ => -1 * Math.Sign(direction.X),
-				};
-			}
-		}
 
 		private static Asset<Texture2D> ProjTexture;
 		private static Asset<Texture2D> BladeTexture;
@@ -68,7 +50,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
 
 			//fade out stuff
 			int SwingTime = ItemGlobal.ActiveItem(player).useTime;
-			float progress = Timer / (float)SwingTime;
+			float progress = Projectile.localAI[0] / (float)SwingTime;
 			progress = EaseFunction.EaseQuadOut.Ease(progress);
 			float SlashAlpha = 1f - Math.Abs(progress);
 
@@ -146,32 +128,38 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
 			player.itemTime = player.itemAnimation = 5;
 			player.heldProj = Projectile.whoAmI;
 
-			if (Projectile.owner != Main.myPlayer)
-			{
-				return;
-			}
-
 			if (!initialized)
 			{
-				initialized = true;
-				direction = player.DirectionTo(Main.MouseWorld);
-				direction.Normalize();
-				Projectile.rotation = direction.ToRotation();
+				if (Projectile.owner == Main.myPlayer)
+				{
+					Vector2 ProjDirection = Main.MouseWorld - new Vector2(player.MountedCenter.X, player.MountedCenter.Y);
+					ProjDirection.Normalize();
+					Projectile.ai[1] = ProjDirection.X;
+					Projectile.ai[2] = ProjDirection.Y;
+					Projectile.netUpdate = true;
+				}
 
-				if (Phase == 1) flip = !flip;
+				direction = new Vector2(Projectile.ai[1], Projectile.ai[2]);
+
 				if (direction.X < 0) flip = !flip;
+
+				SwingDirection = -1 * Math.Sign(direction.X);
+
+				initialized = true;
+				Projectile.netUpdate = true;
 			}
+
+			direction = new Vector2(Projectile.ai[1], Projectile.ai[2]);
 
 			Projectile.Center = player.MountedCenter + (direction.RotatedBy(-1.57f) * 20);
 
-			Timer++;
-
-			if (Timer > SwingTime)
+			Projectile.localAI[0]++;
+			if (Projectile.localAI[0] > SwingTime)
 			{
 				Projectile.Kill();
 			}
 
-			if (!LaunchedBlade && Projectile.ai[0] == 1 && Timer > (SwingTime / 3))
+			if (!LaunchedBlade && Projectile.ai[0] == 1 && Projectile.localAI[0] > (SwingTime / 3))
 			{
 				if (Projectile.owner == Main.myPlayer)
                 {
@@ -188,13 +176,8 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
 				LaunchedBlade = true;
 			}
 
-			float progress = GetProgress();
-
-			//scales up the projectile a bit more based on its swing progress
-			//unnecessary for this projectile but ill keep it here incase this ever gets reused
-			//Projectile.scale = 1.2f - Math.Abs(0.5f - progress);
-
-			rotation = Projectile.rotation + MathHelper.Lerp(SwingRadians / 2 * SwingDirection, -SwingRadians / 2 * SwingDirection, progress);
+			Projectile.rotation = direction.ToRotation();
+			rotation = Projectile.rotation + MathHelper.Lerp(SwingRadians / 2 * SwingDirection, -SwingRadians / 2 * SwingDirection, GetProgress());
 
 			player.direction = Math.Sign(direction.X);
 
@@ -204,6 +187,8 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
 			{
 				player.itemRotation -= 3.14f;
 			}
+
+			Projectile.netUpdate = true;
 
 			player.itemRotation = MathHelper.WrapAngle(player.itemRotation);
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation - 1.57f);
@@ -215,7 +200,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
 
 			int SwingTime = ItemGlobal.ActiveItem(player).useTime;
 
-			float progress = Timer / (float)SwingTime;
+			float progress = Projectile.localAI[0] / (float)SwingTime;
 			progress = EaseFunction.EaseQuadOut.Ease(progress);
 
 			return Projectile.ai[0] == 1 ? -progress + 0.98f : progress;

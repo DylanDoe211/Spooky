@@ -17,30 +17,15 @@ namespace Spooky.Content.Projectiles.Sentient
 {
     public class SentientKeybrandProj : ModProjectile
     {
+		int SwingDirection;
+
 		float SwingRadians = MathHelper.Pi * 1.35f;
+		float rotation;
 		
 		bool initialized = false;
-
-		Vector2 direction = Vector2.Zero;
-
 		bool flip = false;
 
-		float rotation;
-
-		int SwingDirection;
-		/*
-		{
-			get
-			{
-				return Projectile.ai[1] switch
-				{
-					0 => -1 * Math.Sign(direction.X),
-					1 => 1 * Math.Sign(direction.X),
-					_ => -1 * Math.Sign(direction.X),
-				};
-			}
-		}
-		*/
+		Vector2 direction = Vector2.Zero;
 
 		private static Asset<Texture2D> ProjTexture;
 		private static Asset<Texture2D> SlashTexture;
