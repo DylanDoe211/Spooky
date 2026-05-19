@@ -58,6 +58,7 @@ namespace Spooky.Content.Projectiles.Catacomb
                 ProjDirection.Normalize();
                 Projectile.ai[0] = ProjDirection.X;
 				Projectile.ai[1] = ProjDirection.Y;
+                Projectile.netUpdate = true;
             }
 
             Vector2 direction = new Vector2(Projectile.ai[0], Projectile.ai[1]);
