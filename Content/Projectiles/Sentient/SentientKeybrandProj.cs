@@ -18,8 +18,6 @@ namespace Spooky.Content.Projectiles.Sentient
     public class SentientKeybrandProj : ModProjectile
     {
 		public float SwingRadians = MathHelper.Pi * 1.35f;
-
-		public int Phase;
 		
 		private bool initialized = false;
 
@@ -27,11 +25,20 @@ namespace Spooky.Content.Projectiles.Sentient
 
 		private bool flip = false;
 
-		public int Timer;
-
 		private float rotation;
 
-		public int SwingDirection;
+		public int SwingDirection
+		{
+			get
+			{
+				return Projectile.ai[1] switch
+				{
+					0 => -1 * Math.Sign(direction.X),
+					1 => 1 * Math.Sign(direction.X),
+					_ => -1 * Math.Sign(direction.X),
+				};
+			}
+		}
 
 		private static Asset<Texture2D> ProjTexture;
 		private static Asset<Texture2D> SlashTexture;
@@ -47,11 +54,6 @@ namespace Spooky.Content.Projectiles.Sentient
             writer.Write(initialized);
 			writer.Write(flip);
 
-            //int
-			writer.Write(Phase);
-            writer.Write(Timer);
-			writer.Write(SwingDirection);
-
 			//floats
             writer.Write(SwingRadians);
 			writer.Write(rotation);
@@ -65,11 +67,6 @@ namespace Spooky.Content.Projectiles.Sentient
             //bools
             initialized = reader.ReadBoolean();
 			flip = reader.ReadBoolean();
-
-			//int
-            Phase = reader.ReadInt32();
-			Timer = reader.ReadInt32();
-			SwingDirection = reader.ReadInt32();
 
 			//floats
             SwingRadians = reader.ReadSingle();
@@ -99,7 +96,7 @@ namespace Spooky.Content.Projectiles.Sentient
 
 			//fade out stuff
 			int SwingTime = ItemGlobal.ActiveItem(player).useTime;
-			float progress = Timer / (float)SwingTime;
+			float progress = Projectile.ai[2] / (float)SwingTime;
 			progress = EaseFunction.EaseQuadOut.Ease(progress);
 			float SlashAlpha = 1f - Math.Abs(progress);
 
@@ -200,19 +197,18 @@ namespace Spooky.Content.Projectiles.Sentient
 			player.itemTime = player.itemAnimation = 5;
 			player.heldProj = Projectile.whoAmI;
 
-			if (Projectile.owner != Main.myPlayer)
-			{
-				return;
-			}
-
 			if (!initialized)
 			{
 				initialized = true;
-				direction = player.DirectionTo(Main.MouseWorld);
-				direction.Normalize();
-				Projectile.rotation = direction.ToRotation();
 
-				if (Phase == 1) flip = !flip;
+				if (Projectile.owner == Main.myPlayer)
+				{
+					direction = player.DirectionTo(Main.MouseWorld);
+					direction.Normalize();
+					Projectile.rotation = direction.ToRotation();
+				}
+
+				if (Projectile.ai[1] == 1) flip = !flip;
 				if (direction.X < 0) flip = !flip;
 
 				Projectile.netUpdate = true;
@@ -220,8 +216,8 @@ namespace Spooky.Content.Projectiles.Sentient
 
 			Projectile.Center = player.MountedCenter + (direction.RotatedBy(-1.57f) * 20);
 
-			Timer++;
-			if (Timer > SwingTime)
+			Projectile.ai[2]++;
+			if (Projectile.ai[2] > SwingTime)
 			{
 				Projectile.Kill();
 			}
@@ -232,21 +228,6 @@ namespace Spooky.Content.Projectiles.Sentient
 			//unnecessary for this projectile but ill keep it here incase this ever gets reused
 			//Projectile.scale = 1.2f - Math.Abs(0.5f - progress);
 
-			SwingDirection = -1 * Math.Sign(direction.X);
-			switch (Phase)
-			{
-				case 0:
-				{
-					SwingDirection = -1 * Math.Sign(direction.X);
-					break;
-				}
-				case 1:
-				{
-					SwingDirection = 1 * Math.Sign(direction.X);
-					break;
-				}
-			}
-
 			rotation = Projectile.rotation + MathHelper.Lerp(SwingRadians / 2 * SwingDirection, -SwingRadians / 2 * SwingDirection, progress);
 
 			player.direction = Math.Sign(direction.X);
@@ -256,9 +237,9 @@ namespace Spooky.Content.Projectiles.Sentient
 			if (player.direction != 1)
 			{
 				player.itemRotation -= 3.14f;
-
-				Projectile.netUpdate = true;
 			}
+
+			Projectile.netUpdate = true;
 
 			player.itemRotation = MathHelper.WrapAngle(player.itemRotation);
 			player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, rotation - 1.57f);
@@ -270,7 +251,7 @@ namespace Spooky.Content.Projectiles.Sentient
 
 			int SwingTime = ItemGlobal.ActiveItem(player).useTime;
 
-			float progress = Timer / (float)SwingTime;
+			float progress = Projectile.ai[2] / (float)SwingTime;
 			progress = EaseFunction.EaseQuadOut.Ease(progress);
 
 			return Projectile.ai[0] == 1 ? -progress + 0.98f : progress;
