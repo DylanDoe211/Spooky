@@ -31,18 +31,7 @@ namespace Spooky.Content.Projectiles.Sentient
 
 		private float rotation;
 
-		public int SwingDirection
-		{
-			get
-			{
-				return Phase switch
-				{
-					0 => -1 * Math.Sign(direction.X),
-					1 => 1 * Math.Sign(direction.X),
-					_ => -1 * Math.Sign(direction.X),
-				};
-			}
-		}
+		public int SwingDirection;
 
 		private static Asset<Texture2D> ProjTexture;
 		private static Asset<Texture2D> SlashTexture;
@@ -61,6 +50,7 @@ namespace Spooky.Content.Projectiles.Sentient
             //int
 			writer.Write(Phase);
             writer.Write(Timer);
+			writer.Write(SwingDirection);
 
 			//floats
             writer.Write(SwingRadians);
@@ -79,6 +69,7 @@ namespace Spooky.Content.Projectiles.Sentient
 			//int
             Phase = reader.ReadInt32();
 			Timer = reader.ReadInt32();
+			SwingDirection = reader.ReadInt32();
 
 			//floats
             SwingRadians = reader.ReadSingle();
@@ -240,6 +231,21 @@ namespace Spooky.Content.Projectiles.Sentient
 			//scales up the projectile a bit more based on its swing progress
 			//unnecessary for this projectile but ill keep it here incase this ever gets reused
 			//Projectile.scale = 1.2f - Math.Abs(0.5f - progress);
+
+			SwingDirection = -1 * Math.Sign(direction.X);
+			switch (Phase)
+			{
+				case 0:
+				{
+					SwingDirection = -1 * Math.Sign(direction.X);
+					break;
+				}
+				case 1:
+				{
+					SwingDirection = 1 * Math.Sign(direction.X);
+					break;
+				}
+			}
 
 			rotation = Projectile.rotation + MathHelper.Lerp(SwingRadians / 2 * SwingDirection, -SwingRadians / 2 * SwingDirection, progress);
 
