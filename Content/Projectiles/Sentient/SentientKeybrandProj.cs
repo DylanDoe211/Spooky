@@ -104,7 +104,7 @@ namespace Spooky.Content.Projectiles.Sentient
 
 			//fade out stuff
 			int SwingTime = ItemGlobal.ActiveItem(player).useTime;
-			float progress = Projectile.ai[2] / (float)SwingTime;
+			float progress = Projectile.localAI[0] / (float)SwingTime;
 			progress = EaseFunction.EaseQuadOut.Ease(progress);
 			float SlashAlpha = 1f - Math.Abs(progress);
 
@@ -209,11 +209,15 @@ namespace Spooky.Content.Projectiles.Sentient
 			{
 				if (Projectile.owner == Main.myPlayer)
 				{
-					direction = player.DirectionTo(Main.MouseWorld);
-					direction.Normalize();
-					Projectile.rotation = direction.ToRotation();
+					Vector2 ProjDirection = Main.MouseWorld - new Vector2(player.MountedCenter.X, player.MountedCenter.Y);
+					ProjDirection.Normalize();
+					Projectile.ai[1] = ProjDirection.X;
+					Projectile.ai[2] = ProjDirection.Y;
+					Projectile.rotation = ProjDirection.ToRotation();
 					Projectile.netUpdate = true;
 				}
+
+				direction = new Vector2(Projectile.ai[1], Projectile.ai[2]);
 
 				if (direction.X < 0) flip = !flip;
 
@@ -223,21 +227,17 @@ namespace Spooky.Content.Projectiles.Sentient
 				Projectile.netUpdate = true;
 			}
 
+			direction = new Vector2(Projectile.ai[1], Projectile.ai[2]);
+
 			Projectile.Center = player.MountedCenter + (direction.RotatedBy(-1.57f) * 20);
 
-			Projectile.ai[2]++;
-			if (Projectile.ai[2] > SwingTime)
+			Projectile.localAI[0]++;
+			if (Projectile.localAI[0] > SwingTime)
 			{
 				Projectile.Kill();
 			}
 
-			float progress = GetProgress();
-
-			//scales up the projectile a bit more based on its swing progress
-			//unnecessary for this projectile but ill keep it here incase this ever gets reused
-			//Projectile.scale = 1.2f - Math.Abs(0.5f - progress);
-
-			rotation = Projectile.rotation + MathHelper.Lerp(SwingRadians / 2 * SwingDirection, -SwingRadians / 2 * SwingDirection, progress);
+			rotation = Projectile.rotation + MathHelper.Lerp(SwingRadians / 2 * SwingDirection, -SwingRadians / 2 * SwingDirection, GetProgress());
 
 			player.direction = Math.Sign(direction.X);
 
@@ -260,7 +260,7 @@ namespace Spooky.Content.Projectiles.Sentient
 
 			int SwingTime = ItemGlobal.ActiveItem(player).useTime;
 
-			float progress = Projectile.ai[2] / (float)SwingTime;
+			float progress = Projectile.localAI[0] / (float)SwingTime;
 			progress = EaseFunction.EaseQuadOut.Ease(progress);
 
 			return Projectile.ai[0] == 1 ? -progress + 0.98f : progress;
