@@ -950,8 +950,6 @@ namespace Spooky.Content.NPCs.Boss.Orroboro
                 {
                     MenuSaveSystem.hasDefeatedOrroboro = true;
                 }
-
-                ModContent.GetInstance<BossAchievementOrroboro>().EitherOrroBoroDead.Complete();
             }
         }
 

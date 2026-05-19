@@ -274,6 +274,7 @@ namespace Spooky.Content.UserInterfaces
         }
     }
 
+	[Autoload(Side = ModSide.Client)]
 	public class DialogueUISystem : ModSystem
 	{
 		public override void Load()
@@ -297,6 +298,7 @@ namespace Spooky.Content.UserInterfaces
 		}
 	}
 
+	[Autoload(Side = ModSide.Client)]
 	public class Dialogue : IDialogue
 	{
 		public DialogueChain chain;
@@ -525,6 +527,7 @@ namespace Spooky.Content.UserInterfaces
 		public void TriggerPlayerResponse(string Text, int ID) => OnPlayerResponseTrigger?.Invoke(this, Text, ID);
 	}
 
+	[Autoload(Side = ModSide.Client)]
 	public class DialogueChain : IDialogue
 	{
 		public delegate void EndTrigger(Dialogue dialogue, int id);
@@ -563,6 +566,7 @@ namespace Spooky.Content.UserInterfaces
 		public void TriggerPlayerResponse(string Text, int ID) => OnPlayerResponseTrigger?.Invoke(Dialogue[0], Text, ID);
 	}
 
+	[Autoload(Side = ModSide.Client)]
 	public interface IDialogue
 	{
 		public void Update(GameTime gameTime);

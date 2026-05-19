@@ -103,17 +103,25 @@ namespace Spooky.Content.Tiles.Blooms
 
 			if (frameX == 216)
 			{
-				bool ShouldDropExtra = Main.LocalPlayer.GetModPlayer<BloomBuffsPlayer>().FallWaterGourd && Main.rand.NextBool(7);
-
+				bool ShouldDropExtra = Main.LocalPlayer.GetModPlayer<BloomBuffsPlayer>().FallWaterGourd && Main.rand.NextBool(4);
 				if (ShouldDropExtra)
 				{
-					Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<VegetableSeed>());
+					int Seed = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<VegetableSeed>());
+					if (Main.netMode == NetmodeID.MultiplayerClient && Seed > 0)
+					{
+						NetMessage.SendData(MessageID.SyncItem, -1, -1, null, Seed, 1f);
+					}
 				}
 
-				if (frameY == 0) Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<VegetablePepper>(), ShouldDropExtra ? 2 : 1);
-				if (frameY == 54) Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<VegetableEggplantPaint>(), ShouldDropExtra ? 2 : 1);
-				if (frameY == 108) Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<VegetableRomanesco>(), ShouldDropExtra ? 2 : 1);
-				if (frameY == 162) Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<VegetableCauliflower>(), ShouldDropExtra ? 2 : 1);
+				int Bloom = 0;
+				if (frameY == 0) Bloom = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<VegetablePepper>(), ShouldDropExtra ? 2 : 1);
+				if (frameY == 54) Bloom = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<VegetableEggplantPaint>(), ShouldDropExtra ? 2 : 1);
+				if (frameY == 108) Bloom = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<VegetableRomanesco>(), ShouldDropExtra ? 2 : 1);
+				if (frameY == 162) Bloom = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<VegetableCauliflower>(), ShouldDropExtra ? 2 : 1);
+				if (Main.netMode == NetmodeID.MultiplayerClient && Bloom > 0)
+				{
+					NetMessage.SendData(MessageID.SyncItem, -1, -1, null, Bloom, 1f);
+				}
 			}
 		}
 

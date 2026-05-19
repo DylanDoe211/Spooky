@@ -22,6 +22,7 @@ using Spooky.Content.NPCs.Boss.SpookySpirit;
 using Spooky.Content.NPCs.EggEvent;
 using Spooky.Content.NPCs.PandoraBox;
 using Spooky.Content.NPCs.SpiderCave.SpiderWar;
+using Spooky.Content.NPCs.SpiderCave.SporeEvent;
 using Spooky.Content.Tiles.MusicBox;
 using Spooky.Content.Tiles.Relic;
 using Spooky.Content.Tiles.Trophy;
@@ -169,6 +170,54 @@ namespace Spooky.Core
 					["spawnInfo"] = Language.GetOrRegister("Mods.Spooky.NPCs.Moco.BossChecklistIntegration.SpawnInfo"),
 					["despawnMessage"] = Language.GetOrRegister("Mods.Spooky.NPCs.Moco.BossChecklistIntegration.DespawnMessage"),
 					["customPortrait"] = MocoPortrait,
+				}
+			);
+
+
+			//Sporestorm
+			List<int> SporeEventEnemies = new List<int>()
+			{
+				ModContent.NPCType<BeetleMite1>(),
+				ModContent.NPCType<BeetleMite2>(), 
+				ModContent.NPCType<BerryMite1>(), 
+				ModContent.NPCType<BerryMite2>(),
+				ModContent.NPCType<BerryMite3>(),
+				ModContent.NPCType<DeerMite>(),
+				ModContent.NPCType<DustMite1>(),
+				ModContent.NPCType<DustMite2>(),
+				ModContent.NPCType<EyelashMiteBlueHead>(),
+				ModContent.NPCType<EyelashMitePurpleHead>(),
+				ModContent.NPCType<PeacockMite>(),
+				ModContent.NPCType<RustMite>(),
+			};
+
+			var SporeEventPortrait = (SpriteBatch spriteBatch, Rectangle rect, Color color) =>
+			{
+				Texture2D texture = ModContent.Request<Texture2D>("Spooky/Content/NPCs/NPCDisplayTextures/SporeEventBossChecklist").Value;
+				Vector2 centered = new Vector2(rect.X + (rect.Width / 2) - (texture.Width / 2), rect.Y + (rect.Height / 2) - (texture.Height / 2));
+				spriteBatch.Draw(texture, centered, color);
+			};
+
+			List<string> SporeEventIcon = new List<string>()
+			{
+				"Spooky/Content/Biomes/SporeEventBiomeIcon"
+			};
+
+			bossChecklistMod.Call(
+				"LogEvent", 
+				Mod,
+				"SporeEvent",
+				7.01f,
+				() => Flags.downedSporeEvent,
+				SporeEventEnemies,
+				new Dictionary<string, object>()
+				{
+					["spawnItems"] = ModContent.ItemType<SporeEventStarter>(),
+                    ["collectibles"] = ModContent.ItemType<SporeEventBox>(),
+                    ["displayName"] = Language.GetOrRegister("Mods.Spooky.BossChecklistIntegration.SporeEvent.EntryName"),
+					["spawnInfo"] = Language.GetOrRegister("Mods.Spooky.BossChecklistIntegration.SporeEvent.SpawnInfo"),
+					["overrideHeadTextures"] = SporeEventIcon,
+					["customPortrait"] = SporeEventPortrait,
 				}
 			);
 

@@ -52,14 +52,6 @@ namespace Spooky.Content.Items.Cemetery.Contraband
 			}
         }
 
-		public override void OnCreated(ItemCreationContext context)
-		{
-			if (context is RecipeItemCreationContext)
-			{
-				ModContent.GetInstance<MiscAchievementContrabandAcc>().ContrabandAccCondition.Complete();
-			}
-		}
-
 		public override void AddRecipes()
         {
             CreateRecipe()

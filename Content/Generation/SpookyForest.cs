@@ -1072,7 +1072,8 @@ namespace Spooky.Content.Generation
 				(ushort)ModContent.TileType<SpookyDirt>(),
 				(ushort)ModContent.TileType<SpookyDirt2>(),
 				(ushort)ModContent.TileType<SpookyWood>(),
-				(ushort)ModContent.TileType<MushroomMoss>()
+				(ushort)ModContent.TileType<MushroomMoss>(),
+				(ushort)ModContent.TileType<BloomSoil>()
 			};
 
 			int MaxPoints = 100;

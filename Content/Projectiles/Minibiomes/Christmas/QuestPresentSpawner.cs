@@ -139,8 +139,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Christmas
 					}
 
 					int NPCSpawn = NPC.NewNPC(Projectile.GetSource_Death(), (int)Projectile.Center.X, (int)Projectile.Center.Y, TypeToSpawn);
-
-					if (Main.netMode == NetmodeID.Server)
+					if (Main.netMode != NetmodeID.SinglePlayer)
 					{
 						NetMessage.SendData(MessageID.SyncNPC, number: NPCSpawn);
 					}

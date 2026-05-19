@@ -34,7 +34,10 @@ namespace Spooky.Content.Biomes
 
         public override void OnInBiome(Player player)
 		{
-			ModContent.GetInstance<EventAchievementRaveyard>().RaveyardCondition.Complete();
+            if (player.whoAmI == Main.myPlayer && Main.netMode != NetmodeID.Server)
+            {
+			    ModContent.GetInstance<EventAchievementRaveyard>().RaveyardCondition.Complete();
+            }
 		}
 
         public override bool IsBiomeActive(Player player)

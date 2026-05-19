@@ -109,6 +109,8 @@ namespace Spooky.Content.Projectiles.Slingshots
 		{	
 			SoundEngine.PlaySound(SoundID.NPCDeath1, Projectile.Center);
 
+			Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<SpiderSlingshotBaby>(), Projectile.damage / 3, 0, Projectile.owner);
+
 			for (int numDusts = 0; numDusts < 5; numDusts++)
 			{
 				int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Web, 0f, -2f, 0, default, 1.5f);

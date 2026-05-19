@@ -4,6 +4,8 @@ using Terraria.ModLoader;
 using Terraria.Localization;
 
 using Spooky.Content.Items.SpookyBiome;
+using Spooky.Content.Tiles.Minibiomes.Christmas;
+using Spooky.Content.Tiles.SpiderCave;
 using Spooky.Content.Tiles.SpookyBiome;
 
 namespace Spooky.Core
@@ -17,6 +19,8 @@ namespace Spooky.Core
             //old wood counts as a vanilla wood type
             RecipeGroup wood = RecipeGroup.recipeGroups[RecipeGroupID.Wood];
             wood.ValidItems.Add(ModContent.ItemType<SpookyWoodItem>());
+            wood.ValidItems.Add(ModContent.ItemType<ChristmasWoodItem>());
+            wood.ValidItems.Add(ModContent.ItemType<BirchWoodItem>());
 
             //custom recipe groups
 			RecipeGroup BaseGroup(object GroupName, object GroupName2, int[] Items)

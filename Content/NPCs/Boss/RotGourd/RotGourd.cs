@@ -91,7 +91,7 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
             NPC.damage = 22;
             NPC.defense = 12;
             NPC.width = 72;
-            NPC.height = 130;
+            NPC.height = 126;
 			NPC.npcSlots = 8f;
             NPC.knockBackResist = 0f;
 			NPC.value = Item.buyPrice(0, 2, 0, 0);
@@ -200,7 +200,7 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 
 			NPC.rotation = NPC.velocity.X * 0.02f;
 
-			bool CollidingWithGround = NPCGlobalHelper.IsCollidingWithFloor(NPC);
+			bool CollidingWithGround = NPCGlobalHelper.IsCollidingWithFloor(NPC, true);
 
 			//despawn if the player dies
             if (player.dead)
@@ -312,8 +312,6 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 					//charge down
 					if (NPC.localAI[0] == 20)
 					{
-						NPC.noGravity = true;
-
 						NPC.velocity.X = 0;
 						NPC.velocity.Y = 35;
 					}
@@ -330,9 +328,8 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 					//slam the ground
 					if (NPC.localAI[0] >= 20 && NPC.localAI[1] == 0 && (CollidingWithGround || NPC.velocity.Y == 0))
 					{
-						NPC.noGravity = false;
-
-						NPC.velocity.X = 0;
+						NPC.noGravity = true;
+						NPC.velocity = Vector2.Zero;
 
 						Screenshake.ShakeScreenWithIntensity(NPC.Center, 7f, 350f);
 
@@ -394,6 +391,8 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 						//actual jumping
 						if (NPC.localAI[0] == 60)
 						{
+							NPC.noGravity = false;
+
 							SoundEngine.PlaySound(SoundID.DD2_JavelinThrowersAttack, NPC.Center);
 
 							float speed = MathHelper.Clamp(velocity.Length() / 36, 8, 20);
@@ -425,7 +424,7 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 						{
 							NPC.noGravity = true;
 
-							NPC.velocity.X *= 0;
+							NPC.velocity.X = 0;
 							NPC.velocity.Y = 16;
 						}
 
@@ -441,9 +440,8 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 						//slam the ground
 						if (NPC.localAI[0] >= 125 && NPC.localAI[2] == 0 && (CollidingWithGround || NPC.velocity.Y == 0))
 						{
-							NPC.noGravity = false;
-
-							NPC.velocity.X = 0;
+							NPC.noGravity = true;
+							NPC.velocity = Vector2.Zero;
 
 							Screenshake.ShakeScreenWithIntensity(NPC.Center, 5f, 350f);
 
@@ -548,6 +546,7 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 					if (NPC.localAI[0] == 20)
 					{
 						NPC.noTileCollide = true;
+						NPC.noGravity = false;
 
 						SoundEngine.PlaySound(SoundID.DD2_JavelinThrowersAttack, NPC.Center);
 					}
@@ -593,7 +592,8 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 					//slam the ground
 					if (NPC.localAI[0] >= 75 && NPC.localAI[1] == 0 && (CollidingWithGround || NPC.velocity.Y == 0))
 					{
-						NPC.noGravity = false;
+						NPC.noGravity = true;
+						NPC.velocity = Vector2.Zero;
 
 						Screenshake.ShakeScreenWithIntensity(NPC.Center, 10f, 350f);
 
@@ -650,6 +650,8 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 					//actual jumping
 					if (NPC.localAI[0] == 80)
 					{
+						NPC.noGravity = false;
+
 						SoundEngine.PlaySound(SoundID.DD2_JavelinThrowersAttack, NPC.Center);
 
 						float speed = MathHelper.Clamp(velocity.Length() / 36, 6, 18);
@@ -741,6 +743,7 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 
 						if (NPC.localAI[0] == 60)
 						{
+							NPC.noGravity = false;
 							NPC.noTileCollide = true;
 
 							NPC.velocity.Y = -40;
@@ -765,7 +768,8 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 						//slam the ground
 						if (NPC.localAI[0] >= 90 && NPC.localAI[2] == 0 && (CollidingWithGround || NPC.velocity.Y == 0))
 						{
-							NPC.noGravity = false;
+							NPC.noGravity = true;
+							NPC.velocity = Vector2.Zero;
 
 							Screenshake.ShakeScreenWithIntensity(NPC.Center, 10f, 350f);
 
@@ -878,11 +882,10 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 						}
 
 						//slam the ground
-						if (NPC.localAI[0] >= 150 && NPC.localAI[2] == 0 && NPC.velocity.Y <= 0.1f)
+						if (NPC.localAI[0] >= 150 && NPC.localAI[2] == 0 && (CollidingWithGround || NPC.velocity.Y == 0))
 						{
-							NPC.noGravity = false;
-
-							NPC.velocity.X *= 0;
+							NPC.noGravity = true;
+							NPC.velocity = Vector2.Zero;
 
 							Screenshake.ShakeScreenWithIntensity(NPC.Center, 5f, 350f);
 
@@ -986,6 +989,8 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 						//actual jumping
 						if (NPC.localAI[0] == 30)
 						{
+							NPC.noGravity = false;
+
 							SoundEngine.PlaySound(SoundID.DD2_JavelinThrowersAttack, NPC.Center);
 
 							float speed = MathHelper.Clamp(velocity.Length() / 36, 8, 20);
@@ -1020,11 +1025,10 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 						}
 
 						//slam the ground
-						if (NPC.localAI[0] >= 85 && NPC.localAI[2] == 0 && NPC.velocity.Y <= 0.1f)
+						if (NPC.localAI[0] >= 85 && NPC.localAI[2] == 0 && (CollidingWithGround || NPC.velocity.Y == 0))
 						{
-							NPC.noGravity = false;
-
-							NPC.velocity.X *= 0;
+							NPC.noGravity = true;
+							NPC.velocity = Vector2.Zero;
 
 							Screenshake.ShakeScreenWithIntensity(NPC.Center, 5f, 350f);
 

@@ -64,12 +64,11 @@ namespace Spooky.Content.Achievements
 
 	public class BossAchievementOrroboro : ModAchievement
     {
-		public CustomFlagCondition EitherOrroBoroDead { get; private set; }
-
         public override void SetStaticDefaults()
         {
 			Achievement.SetCategory(AchievementCategory.Slayer);
-            EitherOrroBoroDead = AddCondition();
+            AddNPCKilledCondition(ModContent.NPCType<OrroHead>());
+            AddNPCKilledCondition(ModContent.NPCType<BoroHead>());
         }
     }
 

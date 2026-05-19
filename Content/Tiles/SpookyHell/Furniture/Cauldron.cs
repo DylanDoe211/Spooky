@@ -211,7 +211,10 @@ namespace Spooky.Content.Tiles.SpookyHell.Furniture
 						NetMessage.SendData(MessageID.SyncItem, -1, -1, null, newItem, 1f);
 					}
 
-					ModContent.GetInstance<MiscAchievementSentientItem>().SentientCondition.Complete();
+					if (Main.netMode != NetmodeID.Server)
+                    {
+						ModContent.GetInstance<MiscAchievementSentientItem>().SentientCondition.Complete();
+					}
 
 					Projectile.Kill();
 					return;

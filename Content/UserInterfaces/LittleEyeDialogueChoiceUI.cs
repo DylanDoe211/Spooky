@@ -541,7 +541,10 @@ namespace Spooky.Content.UserInterfaces
 
 		public static void EndDialoguePokedLittleEye(Dialogue dialogue, int ID)
 		{
-			ModContent.GetInstance<MiscAchievementLittleEyeQuest>().LittleEyeQuestCondition.Complete();
+			if (Main.netMode != NetmodeID.Server)
+            {
+				ModContent.GetInstance<MiscAchievementLittleEyeQuest>().LittleEyeQuestCondition.Complete();
+			}
 
 			DialogueUI.Visible = false;
 		}

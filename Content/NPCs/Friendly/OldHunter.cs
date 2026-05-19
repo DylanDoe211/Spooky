@@ -161,6 +161,11 @@ namespace Spooky.Content.NPCs.Friendly
         
         public override void AI()
 		{
+            if (Flags.OldHunterPosition == Vector2.Zero)
+            {
+                NPC.active = false;
+            }
+
 			NPC.spriteDirection = NPC.direction;
 
             if ((NPC.velocity.X < 0f && NPC.direction == -1) || (NPC.velocity.X > 0f && NPC.direction == 1))

@@ -324,6 +324,14 @@ namespace Spooky
                     NetMessage.SendData(MessageID.WorldData);
                     break;
                 }
+                case SpookyMessageType.StartSporeEvent:
+                {
+                    Flags.SporeEventHappening = true;
+                    Flags.SporeEventTimeLeft = 54000; //15 real-life minutes
+                    Flags.SporeFogIntensity = 0.5f;
+                    NetMessage.SendData(MessageID.WorldData);
+                    break;
+                }
 				//should never occur I think?
 				default:
                 {
@@ -373,6 +381,7 @@ namespace Spooky
         OldHunterQuest7Complete,
         OldHunterQuest8Complete,
         OldHunterDefeatDialogue,
-        OldHunterQuestEnd
+        OldHunterQuestEnd,
+        StartSporeEvent,
 	}
 }

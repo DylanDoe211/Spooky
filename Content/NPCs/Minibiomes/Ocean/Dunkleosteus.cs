@@ -69,6 +69,7 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 			NPCID.Sets.TrailingMode[NPC.type] = 3;
 			NPCID.Sets.CantTakeLunchMoney[Type] = true;
 			NPCID.Sets.ImmuneToRegularBuffs[Type] = true;
+			NPCGlobal.IsSpookyModMiniboss[Type] = true;
 
 			NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
 			{
@@ -519,7 +520,10 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 							TargetedPlayer = player;
 							NPC.ai[1] = 1;
 
-							ModContent.GetInstance<MiscAchievementBigDunkEat>().BigDunkEatCondition.Complete();
+							if (TargetedPlayer.whoAmI == Main.myPlayer && Main.netMode != NetmodeID.Server)
+               	 			{
+								ModContent.GetInstance<MiscAchievementBigDunkEat>().BigDunkEatCondition.Complete();
+							}
 
 							NPC.netUpdate = true;
 						}
@@ -894,7 +898,7 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 
 		public override SceneEffectPriority Priority => SceneEffectPriority.BossLow;
 
-		public override bool IsSceneEffectActive(Player player) => FindHostileDunkleosteus() && !Main.gameMenu;
+		public override bool IsSceneEffectActive(Player player) => FindHostileDunkleosteus() && player.InModBiome<ZombieOceanBiome>() && !Main.gameMenu;
 
 		private bool FindHostileDunkleosteus()
 		{

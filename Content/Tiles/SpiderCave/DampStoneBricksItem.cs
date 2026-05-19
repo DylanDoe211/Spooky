@@ -26,6 +26,11 @@ namespace Spooky.Content.Tiles.SpiderCave
             .AddIngredient(ModContent.ItemType<DampStoneBricksWallItem>(), 4)
             .AddTile(TileID.WorkBenches)
             .Register();
+
+            CreateRecipe()
+            .AddIngredient(ModContent.ItemType<DampStoneItem>(), 2)
+            .AddTile(TileID.Furnaces)
+            .Register();
         }
     }
 }

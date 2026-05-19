@@ -1,4 +1,5 @@
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
@@ -192,7 +193,10 @@ namespace Spooky.Content.Biomes
 		{
 			Lighting.GlobalBrightness = 1f; //same as when you have blindness in vanilla
 
-			ModContent.GetInstance<EventAchievementSpore>().SporeCondition.Complete();
+			if (player.whoAmI == Main.myPlayer && Main.netMode != NetmodeID.Server)
+			{
+				ModContent.GetInstance<EventAchievementSpore>().SporeCondition.Complete();
+			}
 		}
 
         public override bool IsBiomeActive(Player player)

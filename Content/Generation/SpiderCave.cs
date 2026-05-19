@@ -1310,8 +1310,8 @@ namespace Spooky.Content.Generation
 					if (chestTile.TileType == ModContent.TileType<BirchChest>())
 					{
                         //main items
-                        int[] MainItems = new int[] { ModContent.ItemType<AntSpiderBoomerang>(), ModContent.ItemType<GlaggleOrb>(), ModContent.ItemType<OrbWeaverShield>(),
-                        ModContent.ItemType<PeacockSpiderMask>(), ModContent.ItemType<SphiderFlail>(), ModContent.ItemType<SpiderAntHead>() };
+                        int[] MainItems = new int[] { ModContent.ItemType<AntSpiderBoomerang>(), ModContent.ItemType<GlaggleOrb>(), ModContent.ItemType<OrbWeaverStaff>(),
+                        ModContent.ItemType<OrbWeaverShield>(), ModContent.ItemType<PeacockSpiderMask>(), ModContent.ItemType<SphiderFlail>(), ModContent.ItemType<SpiderAntHead>() };
 
 						//potions
 						int[] Potions1 = new int[] { ItemID.BattlePotion, ItemID.CratePotion, ItemID.EndurancePotion };

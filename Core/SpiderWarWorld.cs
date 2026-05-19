@@ -178,7 +178,10 @@ namespace Spooky.Core
 					SpiderWarWave = 0;
 					SpiderWarActive = false;
 
-					ModContent.GetInstance<EventAchievementSpiderWarEnd>().SpiderWarEndCondition.Complete();
+					if (Main.netMode != NetmodeID.Server)
+                    {
+						ModContent.GetInstance<EventAchievementSpiderWarEnd>().SpiderWarEndCondition.Complete();
+					}
 
 					if (Main.netMode == NetmodeID.Server)
 					{
@@ -284,7 +287,10 @@ namespace Spooky.Core
 								Language.GetTextValue("Mods.Spooky.NPCs.CorklidQueen.DisplayName") + ", " + Language.GetTextValue("Mods.Spooky.NPCs.CamelColonel.DisplayName") + ", " +
 								Language.GetTextValue("Mods.Spooky.NPCs.EmpressJoro.DisplayName"), TextColor);
 
-								ModContent.GetInstance<EventAchievementSpiderWar>().SpiderWarCondition.Complete();
+								if (Main.netMode != NetmodeID.Server)
+                    			{
+									ModContent.GetInstance<EventAchievementSpiderWar>().SpiderWarCondition.Complete();
+								}
 								
 								break;
 							}

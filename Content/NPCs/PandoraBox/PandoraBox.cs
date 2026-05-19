@@ -555,7 +555,10 @@ namespace Spooky.Content.NPCs.PandoraBox
                             NetMessage.SendData(MessageID.WorldData);
                         }
 
-                        ModContent.GetInstance<EventAchievementPandoraBox>().PandoraBoxCondition.Complete();
+                        if (Main.netMode != NetmodeID.Server)
+                        {
+                            ModContent.GetInstance<EventAchievementPandoraBox>().PandoraBoxCondition.Complete();
+                        }
 
                         NPC.ai[1] = 0;
 

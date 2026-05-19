@@ -389,7 +389,10 @@ namespace Spooky.Content.NPCs.Tameable
 					NPC.GetGlobalNPC<NPCGlobal>().NPCTamed = true;
 					NPC.netUpdate = true;
 
-					ModContent.GetInstance<MiscAchievementTurkeyTamed>().TamedTurkeyCondition.Complete();
+					if (Main.netMode != NetmodeID.Server)
+            		{
+						ModContent.GetInstance<MiscAchievementTurkeyTamed>().TamedTurkeyCondition.Complete();
+					}
 				}
 			}
 			else

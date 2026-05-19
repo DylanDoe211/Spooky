@@ -353,7 +353,10 @@ namespace Spooky.Content.NPCs.EggEvent
                             NetMessage.SendData(MessageID.WorldData);
                         }
 
-                        ModContent.GetInstance<EventAchievementEggEvent>().EggEventCondition.Complete();
+                        if (Main.netMode != NetmodeID.Server)
+                        {
+                            ModContent.GetInstance<EventAchievementEggEvent>().EggEventCondition.Complete();
+                        }
 
                         NPC.ai[3] = 0;
 

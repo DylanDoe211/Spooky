@@ -12,3 +12,8 @@ SpiderWar: {
 	EntryName: Spider War
 	SpawnInfo: Assassinate the archduke spider in the spider grotto, who spawns after golem has been defeated.
 }
+
+SporeEvent: {
+	EntryName: Spore Storm
+	SpawnInfo: Occurs randomly in the spider grotto during hardmode, or can be started by using a [i:Spooky/SporeEventStarter] in the spider grotto.
+}

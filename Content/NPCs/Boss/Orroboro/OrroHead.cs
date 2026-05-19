@@ -838,7 +838,7 @@ namespace Spooky.Content.NPCs.Boss.Orroboro
             { 
                 ModContent.ItemType<EyeFlail>(), 
                 ModContent.ItemType<Scycler>(),
-                ModContent.ItemType<EyeRocketLauncher>(), 
+                ModContent.ItemType<EyeRocketLauncher>(),
             };
 
             notExpertRule.OnSuccess(ItemDropRule.OneFromOptions(1, MainItem));
@@ -898,8 +898,6 @@ namespace Spooky.Content.NPCs.Boss.Orroboro
                 {
                     MenuSaveSystem.hasDefeatedOrroboro = true;
                 }
-
-                ModContent.GetInstance<BossAchievementOrroboro>().EitherOrroBoroDead.Complete();
             }
         }
 

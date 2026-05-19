@@ -111,7 +111,10 @@ namespace Spooky.Content.Tiles.SpookyBiome.Gourds
                     NetMessage.SendTileSquare(-1, left, top, 12);
                 }
 
-                ModContent.GetInstance<MiscAchievementGourdCarve>().CarvedRottenGourdCondition.Complete();
+                if (Main.netMode != NetmodeID.Server)
+                {
+                    ModContent.GetInstance<MiscAchievementGourdCarve>().CarvedRottenGourdCondition.Complete();
+                }
             }
 
             return true;

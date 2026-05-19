@@ -227,7 +227,10 @@ namespace Spooky.Content.NPCs.NoseCult
             {
                 if (playerDisguised)
                 {
-                    ModContent.GetInstance<MiscAchievementNoseCultist>().NoseCultistCondition.Complete();
+                    if (Main.netMode != NetmodeID.Server)
+                    {
+                        ModContent.GetInstance<MiscAchievementNoseCultist>().NoseCultistCondition.Complete();
+                    }
                 }
                 else
                 {

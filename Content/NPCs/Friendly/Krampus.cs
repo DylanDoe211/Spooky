@@ -644,7 +644,10 @@ namespace Spooky.Content.NPCs.Friendly
 				Flags.KrampusQuestlineDone = true;
 			}
 
-			ModContent.GetInstance<MiscAchievementKrampusQuest>().KrampusQuestCondition.Complete();
+			if (Main.netMode != NetmodeID.Server)
+            {
+				ModContent.GetInstance<MiscAchievementKrampusQuest>().KrampusQuestCondition.Complete();
+			}
 		}
 
 		private void SetDailyQuestComplete(Dialogue dialogue, int ID)
@@ -678,7 +681,10 @@ namespace Spooky.Content.NPCs.Friendly
 		{
 			if (!Flags.KrampusQuest1)
 			{
-				ModContent.GetInstance<MiscAchievementKrampusHired>().KrampusHiredCondition.Complete();
+				if (Main.netMode != NetmodeID.Server)
+            	{
+					ModContent.GetInstance<MiscAchievementKrampusHired>().KrampusHiredCondition.Complete();
+				}
 			}
 
 			DialogueUI.Visible = false;

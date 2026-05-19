@@ -98,14 +98,21 @@ namespace Spooky.Content.Tiles.Blooms
 
 			if (frameX == 216)
 			{
-				bool ShouldDropExtra = Main.LocalPlayer.GetModPlayer<BloomBuffsPlayer>().FallWaterGourd && Main.rand.NextBool(7);
-
+				bool ShouldDropExtra = Main.LocalPlayer.GetModPlayer<BloomBuffsPlayer>().FallWaterGourd && Main.rand.NextBool(4);
 				if (ShouldDropExtra)
 				{
-					Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<TomatoSeed>());
+					int Seed = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<TomatoSeed>());
+					if (Main.netMode == NetmodeID.MultiplayerClient && Seed > 0)
+					{
+						NetMessage.SendData(MessageID.SyncItem, -1, -1, null, Seed, 1f);
+					}
 				}
 
-				Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<UltimateTomato>(), ShouldDropExtra ? 2 : 1);
+				int Bloom = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<UltimateTomato>(), ShouldDropExtra ? 2 : 1);
+				if (Main.netMode == NetmodeID.MultiplayerClient && Bloom > 0)
+				{
+					NetMessage.SendData(MessageID.SyncItem, -1, -1, null, Bloom, 1f);
+				}
 			}
 		}
 

@@ -24,7 +24,7 @@ namespace Spooky.Content.Tiles.SpiderCave.Ambient
 			TileID.Sets.MultiTileSway[Type] = true;
 			AddMapEntry(new Color(83, 70, 63));
 			DustType = DustID.Mud;
-			HitSound = SoundID.Dig;
+			HitSound = SoundID.Grass;
 			MineResist = 0.1f;
 		}
 

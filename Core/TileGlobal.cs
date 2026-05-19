@@ -70,7 +70,10 @@ namespace Spooky.Core
 		{
 			if (Blooms.Contains(Main.tile[i, j].TileType) && Main.tile[i, j].TileFrameX >= 216)
 			{
-				ModContent.GetInstance<MiscAchievementBloomHarvest>().BloomHarvestCondition.Complete();
+				if (Main.netMode != NetmodeID.Server)
+				{
+					ModContent.GetInstance<MiscAchievementBloomHarvest>().BloomHarvestCondition.Complete();
+				}
 			}
 
 			if (Main.tile[i, j].TileType == TileID.Stone && Main.rand.NextBool(40) && ItemGlobal.ActiveItem(Main.LocalPlayer).type == ModContent.ItemType<GoldrushPickaxe>())

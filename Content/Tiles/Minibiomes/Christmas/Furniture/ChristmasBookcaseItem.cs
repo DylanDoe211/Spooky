@@ -17,6 +17,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Christmas.Furniture
             CreateRecipe()
             .AddIngredient(ModContent.ItemType<ChristmasWoodItem>(), 20)
 			.AddIngredient(ItemID.Book, 10)
+			.AddTile(TileID.WorkBenches)
             .Register();
         }
 	}

@@ -12,11 +12,13 @@ using System.Collections.Generic;
 
 using Spooky.Core;
 using Spooky.Content.Achievements;
+using Spooky.Content.Items.BossSummon;
 using Spooky.Content.Items.Quest;
 using Spooky.Content.Items.Slingshots;
 using Spooky.Content.Items.SpiderCave;
 using Spooky.Content.Items.SpiderCave.Misc;
 using Spooky.Content.Tiles.Painting;
+using Spooky.Content.Tiles.SpiderCave.Furniture;
 
 namespace Spooky.Content.UserInterfaces
 {
@@ -568,15 +570,31 @@ namespace Spooky.Content.UserInterfaces
 			if (Flags.OldHunterQuest1 && Flags.OldHunterQuest2 && Flags.OldHunterQuest3 && Flags.OldHunterQuest4 &&
 			Flags.OldHunterQuest5 && Flags.OldHunterQuest6 && Flags.OldHunterQuest7 && Flags.OldHunterQuest8)
 			{
-				SpawnItem(ModContent.ItemType<OldHunterPaintingItem>(), 1);
+				if (Main.netMode != NetmodeID.Server)
+            	{
+					ModContent.GetInstance<MiscAchievementOldHunterQuest>().OldHunterQuestCondition.Complete();
+				}
 
-				ModContent.GetInstance<MiscAchievementOldHunterQuest>().OldHunterQuestCondition.Complete();
+				SpawnItem(ModContent.ItemType<OldHunterPaintingItem>(), 1);
 			}
 
-			//actual unique weapons
+			//unique weapons
 			int[] MainItem = new int[] { ModContent.ItemType<ProSlingshot>(), ModContent.ItemType<MagicBeanBag>(), ModContent.ItemType<MetalFistBox>(), 
 			ModContent.ItemType<PossessedCrown>(), ModContent.ItemType<TrackingCrossbow>(), ModContent.ItemType<WrestlingBelt>() };
 			SpawnItem(Main.rand.Next(MainItem), 1);
+
+			//gnome homes
+			if (Main.rand.NextBool(5))
+			{
+				int[] GnomeHomes = new int[] { ModContent.ItemType<GnomeHouse1Item>(), ModContent.ItemType<GnomeHouse2Item>(), ModContent.ItemType<GnomeHouse3Item>(), ModContent.ItemType<GnomeHouse4Item>() };
+				SpawnItem(Main.rand.Next(GnomeHomes), 1);
+			}
+
+			//gnome homes
+			if (Main.rand.NextBool())
+			{
+				SpawnItem(ModContent.ItemType<SporeEventStarter>(), 1);
+			}
 
 			//give souls of night or light
 			int[] Souls = new int[] { ItemID.SoulofNight, ItemID.SoulofLight };

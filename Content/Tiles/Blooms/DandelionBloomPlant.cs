@@ -102,16 +102,24 @@ namespace Spooky.Content.Tiles.Blooms
 
 			if (frameX == 216)
 			{
-				bool ShouldDropExtra = Main.LocalPlayer.GetModPlayer<BloomBuffsPlayer>().FallWaterGourd && Main.rand.NextBool(7);
-
+				bool ShouldDropExtra = Main.LocalPlayer.GetModPlayer<BloomBuffsPlayer>().FallWaterGourd && Main.rand.NextBool(4);
 				if (ShouldDropExtra)
 				{
-					Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<DandelionSeed>());
+					int Seed = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<DandelionSeed>());
+					if (Main.netMode == NetmodeID.MultiplayerClient && Seed > 0)
+					{
+						NetMessage.SendData(MessageID.SyncItem, -1, -1, null, Seed, 1f);
+					}
 				}
 
-				if (frameY == 0) Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<DandelionHerd>(), ShouldDropExtra ? 2 : 1);
-				if (frameY == 54) Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<DandelionMapleSeed>(), ShouldDropExtra ? 2 : 1);
-				if (frameY == 108) Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<DandelionTumbleweed>(), ShouldDropExtra ? 2 : 1);
+				int Bloom = 0;
+				if (frameY == 0) Bloom = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<DandelionHerd>(), ShouldDropExtra ? 2 : 1);
+				if (frameY == 54) Bloom = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<DandelionMapleSeed>(), ShouldDropExtra ? 2 : 1);
+				if (frameY == 108) Bloom = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<DandelionTumbleweed>(), ShouldDropExtra ? 2 : 1);
+				if (Main.netMode == NetmodeID.MultiplayerClient && Bloom > 0)
+				{
+					NetMessage.SendData(MessageID.SyncItem, -1, -1, null, Bloom, 1f);
+				}
 			}
 		}
 

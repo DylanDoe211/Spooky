@@ -88,7 +88,10 @@ namespace Spooky.Content.NPCs.Friendly
 
         public override string GetChat()
 		{
-            ModContent.GetInstance<MiscAchievementDumbZomboid>().DumbZomboidCondition.Complete();
+            if (Main.netMode != NetmodeID.Server)
+            {
+                ModContent.GetInstance<MiscAchievementDumbZomboid>().DumbZomboidCondition.Complete();
+            }
 
             int DialogueChoice = Main.rand.Next(1, 3);
             int PlayerDialogueChoice = Main.rand.Next(1, 3);

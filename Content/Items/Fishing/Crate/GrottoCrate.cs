@@ -2,9 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.ItemDropRules;
-using Terraria.GameContent.Creative;
 
-using Spooky.Core;
 using Spooky.Content.Items.SpiderCave;
 
 namespace Spooky.Content.Items.Fishing.Crate
@@ -38,6 +36,20 @@ namespace Spooky.Content.Items.Fishing.Crate
 
 		public override void ModifyItemLoot(ItemLoot itemLoot) 
 		{
+			//main items
+			int[] spiderWeapons = new int[]
+			{
+				ModContent.ItemType<AntSpiderBoomerang>(),
+				ModContent.ItemType<GlaggleOrb>(),
+				ModContent.ItemType<OrbWeaverShield>(),
+				ModContent.ItemType<OrbWeaverStaff>(),
+				ModContent.ItemType<PeacockSpiderMask>(),
+				ModContent.ItemType<SphiderFlail>(),
+				ModContent.ItemType<SpiderAntHead>()
+			};
+
+			itemLoot.Add(ItemDropRule.OneFromOptions(3, spiderWeapons));
+
 			//drop vanilla ores
 			IItemDropRule[] oreTypes = new IItemDropRule[] 
 			{

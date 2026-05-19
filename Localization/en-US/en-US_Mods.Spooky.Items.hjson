@@ -667,6 +667,11 @@ RottenSeed: {
 		'''
 }
 
+SporeEventStarter: {
+	DisplayName: Spore Globe
+	Tooltip: Throw in the spider grotto to begin a sporestorm
+}
+
 StrangeCyst: {
 	DisplayName: Strange Cyst
 	Tooltip: Use nearby the giant egg in the valley of eyes to begin the egg incursion
@@ -2691,7 +2696,7 @@ ProSlingshot: {
 
 SpiderSlingshot: {
 	DisplayName: Web Flinger
-	Tooltip: Converts Mossy Pebbles into webs that slow enemies
+	Tooltip: Converts Mossy Pebbles into webs that hatches a baby spider
 }
 
 SpiritSlingshot: {

@@ -1,22 +1,21 @@
-using Iced.Intel;
-using Microsoft.VisualBasic;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.IO;
+using Terraria.Localization;
+using Terraria.WorldBuilding;
+using Terraria.GameContent.Generation;
 using Microsoft.Xna.Framework;
+using System;
+using System.Linq;
+using System.Collections.Generic;
+
+using Spooky.Core;
 using Spooky.Content.Items.Minibiomes.Ocean;
 using Spooky.Content.Tiles.Minibiomes.Ocean;
 using Spooky.Content.Tiles.Minibiomes.Ocean.Ambient;
 using Spooky.Content.Tiles.Minibiomes.Ocean.Furniture;
 using Spooky.Content.Tiles.Minibiomes.Ocean.Tree;
-using Spooky.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Terraria;
-using Terraria.GameContent.Generation;
-using Terraria.ID;
-using Terraria.IO;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using Terraria.WorldBuilding;
 
 namespace Spooky.Content.Generation
 {
@@ -332,7 +331,7 @@ namespace Spooky.Content.Generation
 									}
 								}
 
-								if (NoDungeonBlocksNearby(PositionX, PositionY, 20, false) && !tooClose)
+								if (NoDungeonBlocksNearby(PositionX, PositionY, 20, false) && !tooClose && i % 3 == 0)
 								{
 									int OvalSizeX = WorldGen.genRand.Next(16, 19);
 									int OvalSizeY = WorldGen.genRand.Next(8, 14);
@@ -440,12 +439,16 @@ namespace Spooky.Content.Generation
 		{
 			int segments = 100;
 
-			Vector2 myCenter = Start;
-			Vector2 p0 = End;
-			Vector2 p1 = End;
-			Vector2 p2 = myCenter;
-			Vector2 p3 = myCenter;
+			bool UseAltWavePattern = Main.rand.NextBool();
 
+			Vector2 MiddlePoint = (Start + End) / 2;
+
+			Vector2 p0 = End;
+			Vector2 p1 = new Vector2(MiddlePoint.X + WorldGen.genRand.Next(-20, 21), (UseAltWavePattern ? End.Y : Start.Y) + WorldGen.genRand.Next(-50, 51));
+			Vector2 p2 = new Vector2(MiddlePoint.X + WorldGen.genRand.Next(-20, 21), (UseAltWavePattern ? Start.Y : End.Y) + WorldGen.genRand.Next(-50, 51));
+			Vector2 p3 = Start;
+
+			//dont dig a tunnel at all if the two points already have line-of-sight to each other
 			if (!Collision.CanHitLine(End * 16 - new Vector2(1, 1), 2, 2, Start * 16 - new Vector2(1, 1), 2, 2))
 			{
 				if (GoingToSurface)

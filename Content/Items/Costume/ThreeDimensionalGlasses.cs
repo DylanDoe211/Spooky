@@ -11,6 +11,11 @@ namespace Spooky.Content.Items.Costume
 	{
 		public string HeadFlippedTexture => "Spooky/Content/Items/Costume/ThreeDimensionalGlasses_Head_Flipped";
 
+		public override void SetStaticDefaults()
+		{
+			ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
+		}
+
 		public override void SetDefaults()
 		{
 			Item.width = 32;

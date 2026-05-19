@@ -20,7 +20,6 @@ namespace Spooky.Content.Items.Slingshots
         {
 			ItemID.Sets.IsRangedSpecialistWeapon[Type] = true;
 			ItemGlobal.IsSlingshot[Item.type] = true;
-            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<SpiritHandStaff>();
         }
 
         public override void SetDefaults()

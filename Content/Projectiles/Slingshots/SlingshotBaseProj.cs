@@ -111,11 +111,21 @@ namespace Spooky.Content.Projectiles.Slingshots
 				ProjDirection.Normalize();
 				Projectile.ai[0] = ProjDirection.X;
 				Projectile.ai[1] = ProjDirection.Y;
+				Projectile.netUpdate = true;
 			}
 
 			Vector2 direction = new Vector2(Projectile.ai[0], Projectile.ai[1]);
 
 			Projectile.direction = Projectile.spriteDirection = direction.X > 0 ? 1 : -1;
+
+			if (direction.X > 0)
+			{
+				player.direction = 1;
+			}
+			else
+			{
+				player.direction = -1;
+			}
 
 			if (Projectile.direction >= 0)
 			{
@@ -154,15 +164,6 @@ namespace Spooky.Content.Projectiles.Slingshots
 					player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.None, player.itemRotation);
 					break;
 				}
-			}
-
-			if (direction.X > 0)
-			{
-				player.direction = 1;
-			}
-			else
-			{
-				player.direction = -1;
 			}
 		}
 

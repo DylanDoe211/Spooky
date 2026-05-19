@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 
 using Spooky.Core;
+using Spooky.Content.Items.Cemetery.Contraband;
 using Spooky.Content.NPCs.Catacomb.Layer2;
 using Spooky.Content.NPCs.Minibiomes.Ocean;
 
@@ -121,13 +122,11 @@ namespace Spooky.Content.Achievements
 
     public class MiscAchievementContrabandAcc : ModAchievement
     {
-        public CustomFlagCondition ContrabandAccCondition { get; private set; }
-
         public override void SetStaticDefaults()
         {
             Achievement.SetCategory(AchievementCategory.Collector);
-            ContrabandAccCondition = AddCondition();
-        }
+			AddItemCraftCondition(new int[] { ModContent.ItemType<AnalogHorrorTape>(), ModContent.ItemType<Creepypasta>() });
+		}
     }
 
     public class MiscAchievementDumbZomboid : ModAchievement

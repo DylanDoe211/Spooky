@@ -11,6 +11,7 @@ using System.Collections.Generic;
 
 using Spooky.Content.Dusts;
 using Spooky.Content.Items.Food;
+using Spooky.Content.Items.SpookyHell.Misc;
 
 namespace Spooky.Content.NPCs.SpookyHell
 {
@@ -111,6 +112,7 @@ namespace Spooky.Content.NPCs.SpookyHell
 
         public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CreepyChunk>(), 3, 1, 2));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<EyeChocolate>(), 100));
         }
 
