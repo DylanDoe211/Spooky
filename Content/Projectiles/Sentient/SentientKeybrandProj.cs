@@ -17,17 +17,18 @@ namespace Spooky.Content.Projectiles.Sentient
 {
     public class SentientKeybrandProj : ModProjectile
     {
-		public float SwingRadians = MathHelper.Pi * 1.35f;
+		float SwingRadians = MathHelper.Pi * 1.35f;
 		
-		private bool initialized = false;
+		bool initialized = false;
 
 		Vector2 direction = Vector2.Zero;
 
-		private bool flip = false;
+		bool flip = false;
 
-		private float rotation;
+		float rotation;
 
-		public int SwingDirection
+		int SwingDirection;
+		/*
 		{
 			get
 			{
@@ -39,6 +40,7 @@ namespace Spooky.Content.Projectiles.Sentient
 				};
 			}
 		}
+		*/
 
 		private static Asset<Texture2D> ProjTexture;
 		private static Asset<Texture2D> SlashTexture;
@@ -54,6 +56,9 @@ namespace Spooky.Content.Projectiles.Sentient
             writer.Write(initialized);
 			writer.Write(flip);
 
+			//int
+			writer.Write(SwingDirection);
+
 			//floats
             writer.Write(SwingRadians);
 			writer.Write(rotation);
@@ -67,6 +72,9 @@ namespace Spooky.Content.Projectiles.Sentient
             //bools
             initialized = reader.ReadBoolean();
 			flip = reader.ReadBoolean();
+
+			//int
+			SwingDirection = reader.ReadInt32();
 
 			//floats
             SwingRadians = reader.ReadSingle();
@@ -199,18 +207,19 @@ namespace Spooky.Content.Projectiles.Sentient
 
 			if (!initialized)
 			{
-				initialized = true;
-
 				if (Projectile.owner == Main.myPlayer)
 				{
 					direction = player.DirectionTo(Main.MouseWorld);
 					direction.Normalize();
 					Projectile.rotation = direction.ToRotation();
+					Projectile.netUpdate = true;
 				}
 
-				if (Projectile.ai[1] == 1) flip = !flip;
 				if (direction.X < 0) flip = !flip;
 
+				SwingDirection = -1 * Math.Sign(direction.X);
+
+				initialized = true;
 				Projectile.netUpdate = true;
 			}
 
