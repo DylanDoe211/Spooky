@@ -213,7 +213,6 @@ namespace Spooky.Content.Projectiles.Sentient
 					ProjDirection.Normalize();
 					Projectile.ai[1] = ProjDirection.X;
 					Projectile.ai[2] = ProjDirection.Y;
-					Projectile.rotation = ProjDirection.ToRotation();
 					Projectile.netUpdate = true;
 				}
 
@@ -237,6 +236,7 @@ namespace Spooky.Content.Projectiles.Sentient
 				Projectile.Kill();
 			}
 
+			Projectile.rotation = direction.ToRotation();
 			rotation = Projectile.rotation + MathHelper.Lerp(SwingRadians / 2 * SwingDirection, -SwingRadians / 2 * SwingDirection, GetProgress());
 
 			player.direction = Math.Sign(direction.X);
