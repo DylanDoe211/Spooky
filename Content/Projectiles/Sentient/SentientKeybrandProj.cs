@@ -7,6 +7,7 @@ using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.IO;
 
 using Spooky.Core;
 using Spooky.Content.Buffs.Debuff;
@@ -47,6 +48,42 @@ namespace Spooky.Content.Projectiles.Sentient
 		private static Asset<Texture2D> SlashTexture;
 
 		public static readonly SoundStyle CrunchSound = new("Spooky/Content/Sounds/SentientKeybrandCrunch", SoundType.Sound);
+
+		public override void SendExtraAI(BinaryWriter writer)
+        {
+			//vector2 
+			writer.WriteVector2(direction);
+
+            //bools
+            writer.Write(initialized);
+			writer.Write(flip);
+
+            //int
+			writer.Write(Phase);
+            writer.Write(Timer);
+
+			//floats
+            writer.Write(SwingRadians);
+			writer.Write(rotation);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+			//vector2
+			direction = reader.ReadVector2();
+
+            //bools
+            initialized = reader.ReadBoolean();
+			flip = reader.ReadBoolean();
+
+			//int
+            Phase = reader.ReadInt32();
+			Timer = reader.ReadInt32();
+
+			//floats
+            SwingRadians = reader.ReadSingle();
+			rotation = reader.ReadSingle();
+        }
 
 		public override void SetDefaults()
 		{
