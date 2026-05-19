@@ -1,3 +1,4 @@
+-Added new boss checklist entry for the spore storm event
 -Added the spore globe, a new item from old hunters quests that lets you manually begin a spore storm in the spider grotto
 -Changed all in game texts for the spore storm to not say "sporestorm" with no spaces
 -Changed whip spider besitary to reflect its venom abilities, also because the spider pheremone debuff was removed
@@ -14,10 +15,11 @@
 -Fixed yuletide keyboard and bookcase being craftable by hand and not at workbenches
 -Fixed spider grotto vines making block digging sounds and not grass sounds when broken
 -Fixed big dunk chase theme playing for players outside of the rotten depths
--Fixed blooms not dropping anything in multiplayer when broken
+-Fixed blooms not dropping anything when broken in multiplayer
 -Fixed blooms re-appearing after being broken in multiplayer, exiting then re-entering the world
 -Fixed rot gourd sometimes phasing through the ground after landing from his jump attacks above you on platforms
 -Fixed many instances where spooky mod achievements are set as complete not having proper checks to make sure they dont run on servers incorrectly
 -Fixed issue with many spooky mod holdout projectiles not syncing their rotation and animations to other players in multiplayer
 -Fixed root trees drawing too low and not looking as if they are attached to the block above them
+-Fixed brainy in a jar thrown jar dealing damage to enemies
 -Fixed tar flinger shimmering into rod of hands

@@ -24,6 +24,11 @@ namespace Spooky.Content.Projectiles.SpookyHell
             Projectile.penetrate = -1;
         }
 
+        public override bool? CanDamage()
+        {
+            return false;
+        }
+
         public override void AI()
         {
 			Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.02f * (float)Projectile.direction;
