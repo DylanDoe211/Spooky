@@ -186,12 +186,13 @@ namespace Spooky.Content.Projectiles.Sentient
 
 				if (Phase == 1) flip = !flip;
 				if (direction.X < 0) flip = !flip;
+
+				Projectile.netUpdate = true;
 			}
 
 			Projectile.Center = player.MountedCenter + (direction.RotatedBy(-1.57f) * 20);
 
 			Timer++;
-
 			if (Timer > SwingTime)
 			{
 				Projectile.Kill();
@@ -212,6 +213,8 @@ namespace Spooky.Content.Projectiles.Sentient
 			if (player.direction != 1)
 			{
 				player.itemRotation -= 3.14f;
+
+				Projectile.netUpdate = true;
 			}
 
 			player.itemRotation = MathHelper.WrapAngle(player.itemRotation);
