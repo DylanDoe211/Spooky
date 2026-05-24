@@ -18,7 +18,7 @@ namespace Spooky.Content.NPCs.Quest
         
         public override void SetDefaults()
 		{
-            NPC.lifeMax = 5;
+            NPC.lifeMax = 25;
             NPC.width = 42;
 			NPC.height = 30;
             NPC.npcSlots = 0f;

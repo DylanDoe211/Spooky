@@ -312,6 +312,8 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 					//charge down
 					if (NPC.localAI[0] == 20)
 					{
+						NPC.noGravity = true;
+						
 						NPC.velocity.X = 0;
 						NPC.velocity.Y = 35;
 					}
@@ -328,7 +330,6 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 					//slam the ground
 					if (NPC.localAI[0] >= 20 && NPC.localAI[1] == 0 && (CollidingWithGround || NPC.velocity.Y == 0))
 					{
-						NPC.noGravity = true;
 						NPC.velocity = Vector2.Zero;
 
 						Screenshake.ShakeScreenWithIntensity(NPC.Center, 7f, 350f);

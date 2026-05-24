@@ -1,4 +1,5 @@
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Microsoft.Xna.Framework;
@@ -88,7 +89,10 @@ namespace Spooky.Core
         {
             if (CemeterySeed && DandelionSeed && DragonfruitSeed && FallSeed && FossilSeed && FungusSeed && SeaSeed && SpringSeed && SummerSeed && TomatoSeed && VegetableSeed && WinterSeed)
             {
-                ModContent.GetInstance<MiscAchievementBloomSeeds>().BloomSeedsCondition.Complete();
+                if (Main.netMode != NetmodeID.Server)
+                {
+                    ModContent.GetInstance<MiscAchievementBloomSeeds>().BloomSeedsCondition.Complete();
+                }
             }
         }
     }

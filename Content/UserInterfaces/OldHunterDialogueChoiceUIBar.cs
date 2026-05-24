@@ -293,6 +293,19 @@ namespace Spooky.Content.UserInterfaces
 								DialogueUI.Visible = true;
 								DialogueUI.Add(chain);
 							}
+							else
+							{
+								DialogueChain chain = new();
+								chain.Add(new(UITexture.Value, Main.npc[OldHunter],
+								Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.NoQuest"),
+								Language.GetTextValue("Mods.Spooky.Dialogue.OldHunterDialogue.PlayerNoQuest"),
+								TalkSound, 2f, 0f, modifier, NPCID: Main.npc[OldHunter].type))
+								.Add(new(UITexture.Value, Main.npc[OldHunter], null, null, TalkSound, 2f, 0f, modifier, true));
+								chain.OnPlayerResponseTrigger += PlayerResponse;
+								chain.OnEndTrigger += EndDialogue;
+								DialogueUI.Visible = true;
+								DialogueUI.Add(chain);
+							}
 						}
 						//display quest completed dialogue
 						else
@@ -368,6 +381,7 @@ namespace Spooky.Content.UserInterfaces
 			{
 				DrawTextDescription(spriteBatch, UITopLeft1 + new Vector2(-52f, -10f), Choice1, textColor1);
 			}
+			
 			DrawTextDescription(spriteBatch, RematchBarPosition + new Vector2(-52f, -10f), Choice2, textColor2);
         }
 

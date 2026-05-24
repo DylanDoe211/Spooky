@@ -306,7 +306,8 @@ namespace Spooky.Core
                     //mushroom moss mini-biome spawns
                     if (spawnInfo.Player.InModBiome(ModContent.GetInstance<SpookyBiomeUgGlowshroom>()))
                     {
-                        pool.Add(ModContent.NPCType<Bungus>(), 3);
+						pool.Add(ModContent.NPCType<Bungus>(), 3);
+                        pool.Add(ModContent.NPCType<BuffBungus>(), 2);
                         pool.Add(ModContent.NPCType<Chungus>(), 3);
 
 						//do not spawn chudshrooms if one already exists
@@ -441,7 +442,6 @@ namespace Spooky.Core
 						pool.Add(ModContent.NPCType<BoneStackerBase>(), 4);
 						pool.Add(ModContent.NPCType<ZomboidNecromancer>(), 3);
 						pool.Add(ModContent.NPCType<ZomboidPyromancer>(), 3);
-						//pool.Add(ModContent.NPCType<ZomboidGlyphomancer>(), 3);
 						pool.Add(ModContent.NPCType<ZomboidSuspiciomancer>(), 2);
 					}
 					else
@@ -601,7 +601,7 @@ namespace Spooky.Core
 							{
 								if (!NPC.AnyNPCs(ModContent.NPCType<ArchdukeSpider>()))
 								{
-									pool.Add(ModContent.NPCType<ArchdukeSpider>(), 0.35f);
+									pool.Add(ModContent.NPCType<ArchdukeSpider>(), 0.4f);
 								}
 							}
 						}

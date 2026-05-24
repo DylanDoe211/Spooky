@@ -101,13 +101,13 @@ namespace Spooky.Content.Tiles.Blooms
 		{
 			Tile tile = Framing.GetTileSafely(i, j);
 
-			if (frameX == 216)
+			if (frameX == 216 && Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				bool ShouldDropExtra = Main.LocalPlayer.GetModPlayer<BloomBuffsPlayer>().FallWaterGourd && Main.rand.NextBool(4);
 				if (ShouldDropExtra)
 				{
 					int Seed = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<CemeterySeed>());
-					if (Main.netMode == NetmodeID.MultiplayerClient && Seed > 0)
+					if (Main.netMode == NetmodeID.Server && Seed > 0)
 					{
 						NetMessage.SendData(MessageID.SyncItem, -1, -1, null, Seed, 1f);
 					}
@@ -118,15 +118,10 @@ namespace Spooky.Content.Tiles.Blooms
 				if (frameY == 54) Bloom = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<CemeteryMarigold>(), ShouldDropExtra ? 2 : 1);
 				if (frameY == 108) Bloom = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<CemeteryPoppy>(), ShouldDropExtra ? 2 : 1);
 				if (frameY == 162) Bloom = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<CemeteryRose>(), ShouldDropExtra ? 2 : 1);
-				if (Main.netMode == NetmodeID.MultiplayerClient && Bloom > 0)
+				if (Main.netMode == NetmodeID.Server && Bloom > 0)
 				{
 					NetMessage.SendData(MessageID.SyncItem, -1, -1, null, Bloom, 1f);
 				}
-			}
-
-			if (Main.netMode == NetmodeID.MultiplayerClient)
-			{
-				NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
 			}
 		}
 

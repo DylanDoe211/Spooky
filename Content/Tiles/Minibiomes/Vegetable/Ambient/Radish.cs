@@ -17,9 +17,9 @@ namespace Spooky.Content.Tiles.Minibiomes.Vegetable.Ambient
             Main.tileSolid[Type] = false;
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
-            TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
 			TileObjectData.newTile.Origin = new Point16(1, 2);
+            TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.DrawYOffset = 2;
             TileObjectData.addTile(Type);
             AddMapEntry(new Color(181, 75, 154));

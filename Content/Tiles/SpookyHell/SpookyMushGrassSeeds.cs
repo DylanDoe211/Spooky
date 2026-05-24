@@ -40,6 +40,13 @@ namespace Spooky.Content.Tiles.SpookyHell
                 Main.tile[Player.tileTargetX, Player.tileTargetY].TileType = (ushort)ModContent.TileType<SpookyMushGrass>();
 
                 SoundEngine.PlaySound(SoundID.Dig, player.Center);
+
+				player.inventory[player.selectedItem].stack--;
+
+				if (Main.netMode != NetmodeID.SinglePlayer)
+				{
+					NetMessage.SendTileSquare(player.whoAmI, Player.tileTargetX, Player.tileTargetY);
+				}
             }
         }
     }

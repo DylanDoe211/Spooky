@@ -23,6 +23,11 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean
             MinPick = 110;
 		}
 
+        public override bool CanReplace(int i, int j, int tileTypeBeingPlaced)
+		{
+			return tileTypeBeingPlaced != ModContent.TileType<LabMetalPlateSafe>();
+		}
+
         public override void PostTileFrame(int i, int j, int up, int down, int left, int right, int upLeft, int upRight, int downLeft, int downRight)
         {
             const int HorizontalFrames = 7; //number of horizontal frames in each row of custom textures

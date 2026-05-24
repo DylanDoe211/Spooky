@@ -89,7 +89,7 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 			//draw aura
 			if (!NPC.IsABestiaryIconDummy)
 			{
-				for (int i = 0; i < 360; i += 30)
+				for (int i = 0; i < 360; i += 60)
 				{
 					Color color1 = Color.OrangeRed;
 					Color color2 = Color.Orange;
@@ -104,7 +104,7 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 
 					Vector2 circular = new Vector2(Main.rand.NextFloat(3.5f, 5f), 0).RotatedBy(MathHelper.ToRadians(i));
 
-					Main.EntitySpriteDraw(AuraTexture.Value, NPC.Center + circular - screenPos, NPC.frame, color * 0.75f, NPC.rotation, NPC.frame.Size() / 2, NPC.scale * 1.05f, effects, 0);
+					Main.EntitySpriteDraw(AuraTexture.Value, NPC.Center + circular - screenPos, NPC.frame, color, NPC.rotation, NPC.frame.Size() / 2, NPC.scale * 1.05f, effects, 0);
 				}
 			}
 

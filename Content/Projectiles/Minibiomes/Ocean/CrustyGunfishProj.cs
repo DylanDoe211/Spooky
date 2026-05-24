@@ -94,6 +94,8 @@ namespace Spooky.Content.Projectiles.Minibiomes.Ocean
 					Projectile.Kill();
 				}
 			}
+
+			player.SetDummyItemTime(2);
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)

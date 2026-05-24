@@ -98,20 +98,20 @@ namespace Spooky.Content.Tiles.Blooms
 		{
 			Tile tile = Framing.GetTileSafely(i, j);
 
-			if (frameX == 216)
+			if (frameX == 216 && Main.netMode != NetmodeID.MultiplayerClient)
 			{
 				bool ShouldDropExtra = Main.LocalPlayer.GetModPlayer<BloomBuffsPlayer>().FallWaterGourd && Main.rand.NextBool(4);
 				if (ShouldDropExtra)
 				{
 					int Seed = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<DragonfruitSeed>());
-					if (Main.netMode == NetmodeID.MultiplayerClient && Seed > 0)
+					if (Main.netMode == NetmodeID.Server && Seed > 0)
 					{
 						NetMessage.SendData(MessageID.SyncItem, -1, -1, null, Seed, 1f);
 					}
 				}
 
 				int Bloom = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<Dragonfruit>(), ShouldDropExtra ? 2 : 1);
-				if (Main.netMode == NetmodeID.MultiplayerClient && Bloom > 0)
+				if (Main.netMode == NetmodeID.Server && Bloom > 0)
 				{
 					NetMessage.SendData(MessageID.SyncItem, -1, -1, null, Bloom, 1f);
 				}
@@ -154,12 +154,7 @@ namespace Spooky.Content.Tiles.Blooms
 		{
 			Tile tile = Framing.GetTileSafely(i, j);
 
-			int[] ValidBlooms = { ModContent.TileType<DandelionBloomPlant>(), ModContent.TileType<FallBloomPlant>(),
-			ModContent.TileType<SpringBloomPlant>(), ModContent.TileType<SummerBloomPlant>(), ModContent.TileType<WinterBloomPlant>(),
-			ModContent.TileType<CemeteryBloomPlant>(), ModContent.TileType<FossilBloomPlant>(), 
-			ModContent.TileType<SeaBloomPlant>(), ModContent.TileType<VegetableBloomPlant>() };
-
-			if (ValidBlooms.Contains(tile.TileType))
+			if (TileGlobal.Blooms.Contains(tile.TileType))
 			{
 				int left = i - tile.TileFrameX / 18 % 3;
 				int top = j - tile.TileFrameY / 18 % 3;

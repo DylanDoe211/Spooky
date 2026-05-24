@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.Localization;
 using Terraria.GameContent.ItemDropRules;
-using Terraria.DataStructures;
+using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -22,7 +22,6 @@ using Spooky.Content.Items.SpookyHell.Misc;
 using Spooky.Content.NPCs.Boss.Orroboro;
 using Spooky.Content.NPCs.Catacomb;
 using Spooky.Content.NPCs.Catacomb.Layer1;
-using Spooky.Content.NPCs.SpiderCave.SpiderWar;
 using Spooky.Content.NPCs.Tameable;
 using Spooky.Content.Projectiles.Blooms;
 using Spooky.Content.Projectiles.Catacomb;
@@ -51,6 +50,9 @@ namespace Spooky.Core
 		public bool NPCTamed = false; //use for all instances of a tameable animal in spooky mod
 
 		public static bool[] IsSpookyModMiniboss = NPCID.Sets.Factory.CreateBoolSet();
+
+		private static Asset<Texture2D> HunterScarfMarkTexture;
+		private static Asset<Texture2D> PeacockIntimidatedTexture;
 
 		public override void SendExtraAI(NPC npc, BitWriter bitWriter, BinaryWriter binaryWriter)
 		{
@@ -216,6 +218,69 @@ namespace Spooky.Core
 
 			return true;
         }
+
+		bool MarkShake = false;
+		bool PeacockShake = false;
+		float MarkRotation = 0f;
+		float PeacockRotation = 0f;
+		public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+		{
+			if (npc.HasBuff(ModContent.BuffType<HunterScarfMark>()))
+			{
+				HunterScarfMarkTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Buffs/Debuff/HunterScarfMarkIcon");
+
+				Rectangle Frame = new Rectangle(0, 0, HunterScarfMarkTexture.Width(), HunterScarfMarkTexture.Height());
+				Vector2 drawOrigin = new Vector2(HunterScarfMarkTexture.Width() * 0.5f, HunterScarfMarkTexture.Height() * 0.5f);
+
+				if (MarkShake)
+				{
+					MarkRotation += 0.05f;
+					if (MarkRotation > 0.3f)
+					{
+						MarkShake = false;
+					}
+				}
+				else
+				{
+					MarkRotation -= 0.05f;
+					if (MarkRotation < -0.3f)
+					{
+						MarkShake = true;
+					}
+				}
+
+				Main.EntitySpriteDraw(HunterScarfMarkTexture.Value, npc.Center - screenPos, Frame, Color.White * 0.5f, MarkRotation, drawOrigin, 1f, SpriteEffects.None, 0);
+			}
+
+			if (npc.HasBuff(ModContent.BuffType<PeacockSpiderMaskDebuff>()))
+			{
+				PeacockIntimidatedTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Buffs/Debuff/PeacockSpiderMaskDebuffIcon");
+
+				Rectangle Frame = new Rectangle(0, 0, PeacockIntimidatedTexture.Width(), PeacockIntimidatedTexture.Height());
+				Vector2 drawOrigin = new Vector2(PeacockIntimidatedTexture.Width() * 0.5f, PeacockIntimidatedTexture.Height() * 0.5f);
+
+				if (PeacockShake)
+				{
+					PeacockRotation += 0.05f;
+					if (PeacockRotation > 0.3f)
+					{
+						PeacockShake = false;
+					}
+				}
+				else
+				{
+					PeacockRotation -= 0.05f;
+					if (PeacockRotation < -0.3f)
+					{
+						PeacockShake = true;
+					}
+				}
+
+				Main.EntitySpriteDraw(PeacockIntimidatedTexture.Value, (npc.Top - new Vector2(0, 15)) - screenPos, Frame, Color.White * 0.75f, PeacockRotation, drawOrigin, 1f, SpriteEffects.None, 0);
+			}
+
+			base.PostDraw(npc, spriteBatch, screenPos, drawColor);
+		}
 
 		public override void ModifyShop(NPCShop shop)
 		{
@@ -574,7 +639,7 @@ namespace Spooky.Core
 
 		//use for when npcs should do special things when colliding with tiles, but dont use NPC.tileCollide
 		//also useful for npcs that should only collide with solid tiles excluding platforms, planter boxes, ect
-		public static bool IsColliding(NPC npc)
+		public static bool IsColliding(NPC npc, int CustomWidth = 0, int CustomHeight = 0)
 		{
 			int minTilePosX = (int)(npc.position.X / 16) - 1;
 			int maxTilePosX = (int)((npc.position.X + npc.width) / 16) + 1;
@@ -607,7 +672,20 @@ namespace Spooky.Core
 						Vector2 vector2;
 						vector2.X = (float)(i * 16);
 						vector2.Y = (float)(j * 16);
-						if (npc.position.X + npc.width > vector2.X && npc.position.X < vector2.X + 16.0 && (npc.position.Y + npc.height > (double)vector2.Y && npc.position.Y < vector2.Y + 16.0))
+
+						bool CollideX = npc.position.X + npc.width > vector2.X && npc.position.X < vector2.X + 16.0;
+						bool CollideY = npc.position.Y + npc.height > vector2.Y && npc.position.Y < vector2.Y + 16.0;
+
+						if (CustomWidth > 0)
+						{
+							CollideX = (npc.Center.X - CustomWidth / 2) + CustomWidth > vector2.X && npc.position.X < vector2.X + 16.0;
+						}
+						if (CustomHeight > 0)
+						{
+							CollideY = (npc.Center.Y - CustomHeight / 2) + CustomHeight > vector2.Y && npc.position.Y < vector2.Y + 16.0;
+						}
+
+						if (CollideX && CollideY)
 						{
 							return true;
 						}

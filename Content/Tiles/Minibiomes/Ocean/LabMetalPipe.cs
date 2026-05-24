@@ -20,6 +20,11 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean
             HitSound = SoundID.Item52;
 		}
 
+		public override bool CanReplace(int i, int j, int tileTypeBeingPlaced)
+		{
+			return tileTypeBeingPlaced != ModContent.TileType<LabMetalPipeSafe>();
+		}
+
 		public override bool Slope(int i, int j)
 		{
 			return false;
@@ -36,7 +41,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean
 			Main.tileBrick[Type] = true;
 			Main.tileBlockLight[Type] = true;
             AddMapEntry(new Color(119, 124, 149));
-            DustType = -1;
+            DustType = DustID.Iron;
             HitSound = SoundID.Item52;
 		}
 

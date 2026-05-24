@@ -177,7 +177,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
 							Vector2 muzzleOffset = Vector2.Normalize(new Vector2(ShootSpeed.X, ShootSpeed.Y)) * 40f;
 
-							Projectile.NewProjectile(Projectile.GetSource_FromAI(), ParentCenter + muzzleOffset, ShootSpeed, ModContent.ProjectileType<VenomHarpoonSpit>(), Projectile.damage / 2, Projectile.knockBack, Projectile.owner);
+							Projectile.NewProjectile(Projectile.GetSource_FromAI(), ParentCenter + muzzleOffset, ShootSpeed, ModContent.ProjectileType<VenomHarpoonSpit>(), Projectile.damage / 3, Projectile.knockBack, Projectile.owner);
 						}
 
 						ParentProjectile.timeLeft = 10;

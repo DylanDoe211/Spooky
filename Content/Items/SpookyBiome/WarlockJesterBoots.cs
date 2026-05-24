@@ -23,8 +23,8 @@ namespace Spooky.Content.Items.SpookyBiome
 		public override void UpdateAccessory(Player player, bool hideVisual)
 		{
 			player.autoJump = true;
-			player.accRunSpeed = 6.5f;
-			player.maxRunSpeed = 6.5f;
+			player.accRunSpeed = 6f;
+			player.maxRunSpeed = 6f;
 			player.GetJumpState<WarlockJesterBootJump1>().Enable();
 			player.GetJumpState<WarlockJesterBootJump2>().Enable();
 			player.GetJumpState<WarlockJesterBootJump3>().Enable();

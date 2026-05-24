@@ -239,6 +239,8 @@ namespace Spooky.Core
 					{
 						NetMessage.SendData(MessageID.WorldData);
 					}
+
+					return;
 				}
 
 				if (EventTimeLeft < 21600)

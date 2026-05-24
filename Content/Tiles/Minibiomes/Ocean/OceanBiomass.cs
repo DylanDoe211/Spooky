@@ -21,6 +21,11 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean
 			HitSound = SoundID.NPCDeath1;
 		}
 
+		public override bool CanReplace(int i, int j, int tileTypeBeingPlaced)
+		{
+			return tileTypeBeingPlaced != ModContent.TileType<OceanBiomassSafe>();
+		}
+
 		public override void PostTileFrame(int i, int j, int up, int down, int left, int right, int upLeft, int upRight, int downLeft, int downRight)
         {
             const int HorizontalFrames = 3; //number of horizontal frames in each row of custom textures

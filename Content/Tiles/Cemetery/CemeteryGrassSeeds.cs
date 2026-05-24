@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Terraria.Audio;
 
+using Spooky.Core;
 using Spooky.Content.Tiles.Catacomb;
 
 namespace Spooky.Content.Tiles.Cemetery
@@ -31,11 +32,6 @@ namespace Spooky.Content.Tiles.Cemetery
 
         public override void UseAnimation(Player player)
 		{
-            if (Main.myPlayer != player.whoAmI)
-			{
-				return;
-			}
-
 			Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
 
             if (tile.HasTile && tile.TileType == ModContent.TileType<CemeteryDirt>() && player.IsInTileInteractionRange(Player.tileTargetX, Player.tileTargetY, TileReachCheckSettings.Simple))
@@ -43,6 +39,13 @@ namespace Spooky.Content.Tiles.Cemetery
                 Main.tile[Player.tileTargetX, Player.tileTargetY].TileType = (ushort)ModContent.TileType<CemeteryGrass>();
 
                 SoundEngine.PlaySound(SoundID.Dig, player.Center);
+
+				player.inventory[player.selectedItem].stack--;
+
+				if (Main.netMode != NetmodeID.SinglePlayer)
+				{
+					NetMessage.SendTileSquare(player.whoAmI, Player.tileTargetX, Player.tileTargetY);
+				}
             }
 
 			if (tile.HasTile && tile.TileType == ModContent.TileType<CatacombBrick1Safe>() && player.IsInTileInteractionRange(Player.tileTargetX, Player.tileTargetY, TileReachCheckSettings.Simple))
@@ -50,6 +53,13 @@ namespace Spooky.Content.Tiles.Cemetery
                 Main.tile[Player.tileTargetX, Player.tileTargetY].TileType = (ushort)ModContent.TileType<CatacombBrick1GrassSafe>();
 
                 SoundEngine.PlaySound(SoundID.Dig, player.Center);
+
+				player.inventory[player.selectedItem].stack--;
+
+				if (Main.netMode != NetmodeID.SinglePlayer)
+				{
+					NetMessage.SendTileSquare(player.whoAmI, Player.tileTargetX, Player.tileTargetY);
+				}
             }
 
 			if (tile.HasTile && tile.TileType == ModContent.TileType<CatacombBrick2Safe>() && player.IsInTileInteractionRange(Player.tileTargetX, Player.tileTargetY, TileReachCheckSettings.Simple))
@@ -57,6 +67,13 @@ namespace Spooky.Content.Tiles.Cemetery
                 Main.tile[Player.tileTargetX, Player.tileTargetY].TileType = (ushort)ModContent.TileType<CatacombBrick2GrassSafe>();
 
                 SoundEngine.PlaySound(SoundID.Dig, player.Center);
+
+				player.inventory[player.selectedItem].stack--;
+
+				if (Main.netMode != NetmodeID.SinglePlayer)
+				{
+					NetMessage.SendTileSquare(player.whoAmI, Player.tileTargetX, Player.tileTargetY);
+				}
             }
 		}
     }

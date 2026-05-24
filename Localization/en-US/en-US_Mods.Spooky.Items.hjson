@@ -669,7 +669,7 @@ RottenSeed: {
 
 SporeEventStarter: {
 	DisplayName: Spore Globe
-	Tooltip: Throw in the spider grotto to begin a sporestorm
+	Tooltip: Throw in the spider grotto to begin a spore storm
 }
 
 StrangeCyst: {
@@ -1297,6 +1297,11 @@ HatHead: {
 	Tooltip: "'Great for impersonating spooky mod devs!'"
 }
 
+KekcrocHat: {
+	DisplayName: Kekcroc's Hat
+	Tooltip: "'Great for impersonating spooky mod devs!'"
+}
+
 KrakenHead: {
 	DisplayName: HugeKraken's Mask
 	Tooltip: "'Great for impersonating spooky mod devs!'"
@@ -1821,7 +1826,7 @@ StockingStaff: {
 
 CactusClub: {
 	DisplayName: Cactus Club
-	Tooltip: Flings around poison thorns on enemy hits
+	Tooltip: Flings thorns on enemy hits
 }
 
 CactusGlove: {
@@ -2954,7 +2959,7 @@ PeacockSpiderMask: {
 	Tooltip:
 		'''
 		When you get hit, all nearby enemies will be intimidated
-		Intimidated enemies take more damage
+		Intimidated enemies take 15% more damage
 		'''
 }
 
@@ -5342,7 +5347,7 @@ SpookyTownNightBox: {
 }
 
 SporeEventBox: {
-	DisplayName: Music Box (Sporestorm)
+	DisplayName: Music Box (Spore Storm)
 	Tooltip: "[c/FF8D00:The Fog Is Coming] by BananaLizard"
 }
 

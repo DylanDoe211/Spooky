@@ -22,6 +22,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
 		
 		bool initialized = false;
 		bool flip = false;
+		bool hasHitSomething = false;
 
 		Vector2 direction = Vector2.Zero;
 
@@ -63,7 +64,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
 
 		public override void SetDefaults()
 		{
-			Projectile.Size = new Vector2(35, 35);
+			Projectile.Size = new Vector2(40, 40);
 			Projectile.DamageType = DamageClass.Melee;
 			Projectile.friendly = true;
 			Projectile.tileCollide = false;
@@ -134,6 +135,40 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
 		{
 			modifiers.HitDirectionOverride = Math.Sign(direction.X);
 		}
+
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) 
+		{
+			Player player = Main.player[Projectile.owner];
+
+            if (!hasHitSomething)
+            {
+                hasHitSomething = true;
+
+                for (int numProjectiles = 0; numProjectiles < 5; numProjectiles++)
+                {
+                    if (Main.netMode != NetmodeID.MultiplayerClient && Projectile.owner == Main.myPlayer)
+                    {
+						Vector2 ShootSpeed = Main.MouseWorld - player.MountedCenter;
+						ShootSpeed.Normalize();
+						ShootSpeed *= Main.rand.NextFloat(8f, 17f);
+
+						Vector2 position = player.MountedCenter;
+						Vector2 muzzleOffset = Vector2.Normalize(new Vector2(ShootSpeed.X, ShootSpeed.Y)) * 25f;
+						if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
+						{
+							position += muzzleOffset;
+						}
+
+						Vector2 newVelocity = ShootSpeed.RotatedByRandom(MathHelper.ToRadians(22));
+
+						int Needle = Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, newVelocity, 
+						ModContent.ProjectileType<CactusNeedle>(), Projectile.damage / 2, Projectile.knockBack, Projectile.owner);
+						Main.projectile[Needle].DamageType = DamageClass.Melee;
+						Main.projectile[Needle].penetrate = 2;
+                    }
+                }
+            }
+        }
 
 		public override void AI()
 		{

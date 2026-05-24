@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 using Microsoft.Xna.Framework;
+using System.Linq;
 
 using Spooky.Content.Biomes;
 using Spooky.Content.Buffs.Debuff;
@@ -153,6 +154,23 @@ namespace Spooky.Core
 					{
 						npc.AddBuff(ModContent.BuffType<HazmatMinionToxic>(), 2);
 					}
+				}
+			}
+
+			//dont allow tombstones to be inside of boss areans as they cant be broken
+			int[] Tombstones = { ProjectileID.Tombstone, ProjectileID.GraveMarker, ProjectileID.CrossGraveMarker, ProjectileID.Headstone, ProjectileID.Gravestone, ProjectileID.Obelisk,
+			ProjectileID.RichGravestone1, ProjectileID.RichGravestone2, ProjectileID.RichGravestone3, ProjectileID.RichGravestone4, ProjectileID.RichGravestone5 };
+			if (projectile.active && Tombstones.Contains(projectile.type))
+			{ 
+				Rectangle DaffodilRect = new Rectangle((int)(Flags.DaffodilPosition.X - 750), (int)(Flags.DaffodilPosition.Y - 275), 1490, 600);
+				Rectangle BigBoneRect = new Rectangle((int)(Flags.FlowerPotPosition.X - 835), (int)(Flags.FlowerPotPosition.Y - 500), 1650, 1050);
+				Rectangle OldHunterRect = new Rectangle((int)(Flags.OldHunterPosition.X - 600), (int)(Flags.OldHunterPosition.Y - 400), 1200, 415);
+
+				if ((Flags.DaffodilPosition != Vector2.Zero && projectile.Hitbox.Intersects(DaffodilRect)) ||
+				(Flags.FlowerPotPosition != Vector2.Zero && projectile.Hitbox.Intersects(BigBoneRect)) ||
+				(Flags.OldHunterPosition != Vector2.Zero && projectile.Hitbox.Intersects(OldHunterRect)))
+				{
+					projectile.Kill();
 				}
 			}
 

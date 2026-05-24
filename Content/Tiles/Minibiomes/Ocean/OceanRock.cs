@@ -28,6 +28,11 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean
 			MinPick = 110;
 		}
 
+		public override bool CanReplace(int i, int j, int tileTypeBeingPlaced)
+		{
+			return tileTypeBeingPlaced != ModContent.TileType<OceanRockSafe>();
+		}
+
 		public override bool CanExplode(int i, int j)
 		{
 			return false;

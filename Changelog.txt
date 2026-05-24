@@ -1,25 +1,31 @@
--Added new boss checklist entry for the spore storm event
--Added the spore globe, a new item from old hunters quests that lets you manually begin a spore storm in the spider grotto
--Changed all in game texts for the spore storm to not say "sporestorm" with no spaces
--Changed whip spider besitary to reflect its venom abilities, also because the spider pheremone debuff was removed
--Tortumors and giant tortumors now drop monster meat
--Yuletide wood and old birch wood now count as wood types for recipes that use any wood
--Spider grotto fishing crates can now drop a random spider enemy weapon drop (Prehardmode crate has prehardmode drops, and hardmode crate has hardmode drops)
--Watering gourd bloom now makes blooms you break have a 1 in 4 (25%) chance to drop an extra bloom, which is buffed from its previous 1 in 7 (14%) chance
--Changed rotten depths tunnel generation to be a bit more curvy and random, helps make it more natural (If you have started a playthrough, this change is small and doesnt impact gameplay so dont feel like you need a new world again)
--Orro & Boro achievement now requires you to kill both worms to unlock it
--Fixed oversight where staff of the weaver was not part of the spider grotto chest loot pool
--Fixed oversight where gnome homes were unobtainable, they are now sometimes given to you by the old hunter when you complete his quests
--Fixed 3d glasses not drawing the players hair when worn
--Fixed mossless stone bricks being uncraftable
--Fixed yuletide keyboard and bookcase being craftable by hand and not at workbenches
--Fixed spider grotto vines making block digging sounds and not grass sounds when broken
--Fixed big dunk chase theme playing for players outside of the rotten depths
--Fixed blooms not dropping anything when broken in multiplayer
--Fixed blooms re-appearing after being broken in multiplayer, exiting then re-entering the world
--Fixed rot gourd sometimes phasing through the ground after landing from his jump attacks above you on platforms
--Fixed many instances where spooky mod achievements are set as complete not having proper checks to make sure they dont run on servers incorrectly
--Fixed issue with many spooky mod holdout projectiles not syncing their rotation and animations to other players in multiplayer
--Fixed root trees drawing too low and not looking as if they are attached to the block above them
--Fixed brainy in a jar thrown jar dealing damage to enemies
--Fixed tar flinger shimmering into rod of hands
+-Added buff bungus
+-Added kekcroc's hat
+-Added dialogue for when old hunter has no more new quests available
+-Added new indicator textures for when an enemy is inflicted with the hunters scarf mark or peacock mask intimidated debuffs
+-Changed peacock oni mask tooltip to actually say the amount of damage increase it gives against enemies
+-Nose cultists now use spooky mod's dialogue system along with a unique UI box sprite
+-Actually implemented the cactus club's enemy on-hit ability because I forgot
+-Increased the cactus club's hitbox size because it was too small
+-Slightly reduced the spooky striders movement speed increase (Internal value from 6.5 -> 6)
+-Purple horseshoe balloon now gives a luck increase like vanilla horseshoe balloons
+-Dying in spooky mod boss arenas that inflict creative shock no longer spawns a gravestone
+-Spook fishron flamethrower attack in both phases now follows the player at a delay, with it being faster in phase 2
+-Spook fishrons rotation is now way smoother looking and no longer instantly snaps to where it should be rotating
+-Spook fishron now becomes invincible if you are outside of the ocean
+-Slightly increased archduke spider spawnrate
+-Buffed el gourdo damage from 100 -> 110
+-Buffed disco skull damage from 75 -> 80
+-Fixed 3d glasses not drawing the players hair correctly (Again)
+-Fixed rot gourd falling down way too slowly when spawned in
+-Fixed bloom plants dropping multiple blooms in multiplayer
+-Fixed spooky mod grass seeds not being consumed when placed
+-Fixed spooky forest destroying the dungeon (Issue would occur with the spooky forest at spawn option turned off)
+-Fixed issue where big dunk would get stuck in tiles and prevent him from pathfinding, now if this happens big dunk will simply move towards the closest rotten depths cave
+-Fixed "Index outside the bounds of array" error that would occur if all players left the eye valley during the egg incursion event
+-Fixed another achievement being unlocked without the correct check to make it not run on servers incorrectly, I accidentally forgot it last patch
+-Fixed crusty gunfish allowing you to switch weapons when thrown out, resulting in the thrown gunfish shooting the projectile of the weapon you switched to
+-Fixed glowshroom moss turning into mossy stone when exploded instead of being destroyed like its supposed to
+-Fixed issue where rotten depths blocks could be block swapped with their unsafe versions
+-Fixed diva dragonfruit bloom not converting fungus or tomato bloom plants
+-Fixed even more in game texts for the spore storm to not say "sporestorm" with no spaces
+-Fixed a couple more typos in the mod

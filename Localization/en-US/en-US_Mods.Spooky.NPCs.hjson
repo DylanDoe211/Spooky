@@ -254,6 +254,7 @@ SkeletonBouncer.DisplayName: Skeleton Bouncer
 SuspiciousSkeleton.DisplayName: Suspicious Skeleton
 LabComputerDummy.DisplayName: ""
 //spooky biome
+BuffBungus.DisplayName: Buff Bungus
 Bungus.DisplayName: Bungus
 CandleMonster.DisplayName: Candle Monster
 Chungus.DisplayName: Chunky Fungus

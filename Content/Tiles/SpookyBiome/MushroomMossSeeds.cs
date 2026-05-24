@@ -40,6 +40,13 @@ namespace Spooky.Content.Tiles.SpookyBiome
                 Main.tile[Player.tileTargetX, Player.tileTargetY].TileType = (ushort)ModContent.TileType<MushroomMoss>();
 
                 SoundEngine.PlaySound(SoundID.Dig, player.Center);
+
+				player.inventory[player.selectedItem].stack--;
+
+				if (Main.netMode != NetmodeID.SinglePlayer)
+				{
+					NetMessage.SendTileSquare(player.whoAmI, Player.tileTargetX, Player.tileTargetY);
+				}
             }
         }
     }

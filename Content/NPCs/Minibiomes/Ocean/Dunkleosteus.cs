@@ -387,6 +387,28 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 
 			NPC.rotation = NPC.rotation.AngleTowards(RotateDirection - MathHelper.TwoPi, RotateSpeed);
 
+			//if big dunk gets stuck in tiles for any reason, then have him move to the closest node quickly to get un-stuck
+			if (NPCGlobalHelper.IsColliding(NPC, 25, 25))
+			{
+				BiomePositionDistances.Clear();
+				
+				//get the distance between the player and every position in the zombie biome and add them to the position distances list
+				foreach (Vector2 pos in Flags.ZombieBiomePositions)
+				{
+					int Dist = (int)NPC.Distance(pos * 16);
+					BiomePositionDistances.Add(Dist);
+				}
+
+				//find the minimum distance values index and set the position to pathfind to
+				int minimumValueIndex = BiomePositionDistances.IndexOf(BiomePositionDistances.Min());
+				Vector2 RealPosition = Flags.ZombieBiomePositions[minimumValueIndex] * 16;
+
+				Vector2 desiredVelocity = NPC.DirectionTo(RealPosition) * 8;
+           	 	NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
+
+				return;
+			}
+
 			if (Aggression > 2)
 			{
 				foreach (var proj in Main.ActiveProjectiles)
@@ -692,7 +714,7 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 					}
 				}
 
-				if (Aggression == 1)
+				if (Aggression == 1 || TargetedPlayer.dead)
 				{
 					SoundStyle[] Sounds = new SoundStyle[] { GrowlSound1, GrowlSound2 };
 
@@ -855,6 +877,8 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 				Vector2 direction = -GetPathDirection(checkPoints, Speed);
 
 				NPC.velocity = Vector2.Lerp(NPC.velocity, direction, 0.08f);
+
+				NPC.netUpdate = true;
 			}
 		}
 

@@ -13,7 +13,7 @@ namespace Spooky.Content.Items.Costume
 
 		public override void SetStaticDefaults()
 		{
-			ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
+			ArmorIDs.Head.Sets.DrawFullHair[Item.headSlot] = true;
 		}
 
 		public override void SetDefaults()

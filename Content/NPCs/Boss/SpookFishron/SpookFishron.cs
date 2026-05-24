@@ -198,7 +198,7 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 			//draw aura
 			if (!NPC.IsABestiaryIconDummy)
 			{
-				for (int i = 0; i < 360; i += 30)
+				for (int i = 0; i < 360; i += 60)
 				{
 					Color color1 = Color.OrangeRed;
 					Color color2 = Color.Orange;
@@ -213,7 +213,7 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 
 					Vector2 circular = new Vector2(Main.rand.NextFloat(3.5f, 5f), 0).RotatedBy(MathHelper.ToRadians(i));
 
-					Main.EntitySpriteDraw(AuraTexture.Value, NPC.Center + circular - screenPos, NPC.frame, color * 0.75f, NPC.rotation, NPC.frame.Size() / 2, NPC.scale * 1.05f, effects, 0);
+					Main.EntitySpriteDraw(AuraTexture.Value, NPC.Center + circular - screenPos, NPC.frame, color, NPC.rotation, NPC.frame.Size() / 2, NPC.scale * 1.05f, effects, 0);
 				}
 			}
 
@@ -353,7 +353,14 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 			}
 		}
 
-		//unique AI????!?!??!?
+		public static bool ZoneOcean(Player player)
+		{
+			int tileX = (int)((player.position.X + (player.width >> 1)) * 0.0625f);
+			int tileY = (int)((player.position.Y + player.height) * 0.0625f);
+
+			return (tileX < 380 || tileX > Main.maxTilesX - 380) && tileY < Main.rockLayer;
+		}
+
 		public override void AI()
 		{
 			NPC.TargetClosest(true);
@@ -387,15 +394,14 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 			
 			NPC.damage = SpawnedDuringFrostMoon ? 9999 : NPC.defDamage;
 
-			int dustType = SpawnedDuringFrostMoon ? DustID.IceTorch : DustID.OrangeTorch;
-
-			if (!DontFacePlayer)
+			if (!DontFacePlayer && !Charging)
 			{
-				//EoC rotation
-				Vector2 vector = new Vector2(NPC.Center.X, NPC.Center.Y);
-				float RotateX = player.Center.X - vector.X;
-				float RotateY = player.Center.Y - vector.Y;
-				NPC.rotation = (float)Math.Atan2((double)RotateY, (double)RotateX) + 4.71f;
+				Vector2 RotateTowards = player.Center - NPC.Center;
+
+                float RotateDirection = (float)Math.Atan2(RotateTowards.Y, RotateTowards.X) + 4.71f;
+                float RotateSpeed = 0.085f;
+
+                NPC.rotation = NPC.rotation.AngleTowards(RotateDirection - MathHelper.TwoPi, RotateSpeed);
 			}
 
 			NPC.spriteDirection = NPC.direction;
@@ -407,7 +413,6 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 				Charging = false;
 				CurrentFrameX = 0;
 				SpinMultiplier = 0;
-				NPC.rotation = 0;
 				NPC.localAI[0] = 0;
 				NPC.localAI[1] = 0;
 				NPC.localAI[2] = 0;
@@ -422,7 +427,6 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 				Charging = false;
 				CurrentFrameX = 0;
 				SpinMultiplier = 0;
-				NPC.rotation = 0;
 				NPC.localAI[0] = 0;
 				NPC.localAI[1] = 0;
 				NPC.localAI[2] = 0;
@@ -439,7 +443,21 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 				return;
 			}
 
-			//TODO: make fishron either immortal or enrage if you leave the ocean
+			if (NPC.ai[0] > 0)
+			{
+				if (!ZoneOcean(player))
+				{
+					NPC.immortal = true;
+					NPC.dontTakeDamage = true;
+				}
+				else
+				{
+					NPC.immortal = false;
+					NPC.dontTakeDamage = false;
+				}
+			}
+
+			int dustType = SpawnedDuringFrostMoon ? DustID.IceTorch : DustID.OrangeTorch;
 
 			//while charging spawn dust the same way duke fishron does
 			if (Charging)
@@ -764,7 +782,7 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 					break;
 				}
 
-				//flame thrower attack, phase 1 shoot towards saved location, phase 2 shoot towards the player
+				//flame thrower attack
 				case 2:
 				{
 					NPC.localAI[0]++;
@@ -794,6 +812,10 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 					{
 						SoundEngine.PlaySound(SoundID.Zombie9 with { Pitch = -1f }, NPC.Center);
 
+						DontFacePlayer = true;
+
+						SavePlayerPosition = player.Center;
+						SaveDirection = NPC.spriteDirection;
 						SavePosition = NPC.Center;
 
 						NPC.netUpdate = true;
@@ -806,29 +828,28 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 						NPC.Center += Main.rand.NextVector2Square(-7, 7);
 					}
 
-					if (NPC.localAI[0] == 110)
-					{
-						SavePlayerPosition = player.Center;
-						SaveDirection = NPC.spriteDirection;
-					}
-
-					//rotate towards the saved player position in phase 1
-					if (!Phase2 && NPC.localAI[0] >= 120 && NPC.localAI[0] <= 300)
+					if (NPC.localAI[0] > 85 && NPC.localAI[0] < 120)
 					{
 						NPC.direction = SaveDirection;
 						NPC.spriteDirection = SaveDirection;
+					}
 
-						Vector2 NewNector = new Vector2(NPC.Center.X, NPC.Center.Y);
-						float NewRotateX = SavePlayerPosition.X - NewNector.X;
-						float NewRotateY = SavePlayerPosition.Y - NewNector.Y;
-						NPC.rotation = (float)Math.Atan2((double)NewRotateY, (double)NewRotateX) + 4.71f;
+					//rotate towards the saved player position in phase 1
+					if (NPC.localAI[0] >= 120 && NPC.localAI[0] <= 300)
+					{
+						Vector2 RotateTowards = player.Center - NPC.Center;
+
+                		float RotateDirection = (float)Math.Atan2(RotateTowards.Y, RotateTowards.X) + 4.71f;
+                		float RotateSpeed = Phase2 ? 0.02f : 0.015f;
+
+                		NPC.rotation = NPC.rotation.AngleTowards(RotateDirection - MathHelper.TwoPi, RotateSpeed);
 					}
 
 					if (NPC.localAI[0] >= 120 && NPC.localAI[0] <= 240)
 					{
 						CurrentFrameX = 1;
 
-						Vector2 ShootSpeed = Phase2 ? player.oldPosition - NPC.Center : SavePlayerPosition - NPC.Center;
+						Vector2 ShootSpeed = (NPC.Center + new Vector2(0, 45).RotatedBy(NPC.rotation)) - NPC.Center;
 						ShootSpeed.Normalize();
 						ShootSpeed *= 15;
 
@@ -862,6 +883,8 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 
 					if (NPC.localAI[0] >= 300)
 					{
+						DontFacePlayer = false;
+
 						NPC.localAI[0] = 0;
 						NPC.localAI[1] = 0;
 						NPC.ai[0]++;

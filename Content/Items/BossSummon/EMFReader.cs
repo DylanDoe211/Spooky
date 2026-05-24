@@ -124,7 +124,8 @@ namespace Spooky.Content.Items.BossSummon
 
 							if (Main.netMode != NetmodeID.MultiplayerClient)
 							{
-								Projectile.NewProjectile(new EntitySource_TileInteraction(player, SpawnX, SpawnY), new Vector2(SpawnX, SpawnY), new Vector2(0, -1), ModContent.ProjectileType<SpookySpiritSpawn>(), 0, 0);
+								Projectile.NewProjectile(new EntitySource_TileInteraction(player, SpawnX, SpawnY), new Vector2(SpawnX, SpawnY), 
+								new Vector2(0, -1), ModContent.ProjectileType<SpookySpiritSpawn>(), 0, 0, player.whoAmI);
 							}
 						}
 					}

@@ -1,8 +1,8 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-
-using Spooky.Core;
+using Terraria.DataStructures;
+using Terraria.Audio;
 
 namespace Spooky.Content.Tiles.SpiderCave
 {
@@ -35,9 +35,12 @@ namespace Spooky.Content.Tiles.SpiderCave
 
 			Tile tile = Framing.GetTileSafely(Player.tileTargetX, Player.tileTargetY);
 
-			if (tile.HasTile && tile.TileType == ModContent.TileType<DampSoil>() && ItemGlobal.WithinPlacementRange(player, Player.tileTargetX, Player.tileTargetY))
+			if (tile.HasTile && tile.TileType == ModContent.TileType<DampSoil>() && player.IsInTileInteractionRange(Player.tileTargetX, Player.tileTargetY, TileReachCheckSettings.Simple))
 			{
 				WorldGen.PlaceTile(Player.tileTargetX, Player.tileTargetY, ModContent.TileType<DampMushroomGrass>(), forced: true);
+				
+				SoundEngine.PlaySound(SoundID.Dig, player.Center);
+
 				player.inventory[player.selectedItem].stack--;
 
 				if (Main.netMode != NetmodeID.SinglePlayer)

@@ -30,8 +30,6 @@ namespace Spooky.Content.NPCs.Friendly
 
         Vector2 modifier = new(-200, -75);
 
-        Player PlayerTalkingTo = null;
-
         private static Asset<Texture2D> ShirtTexture;
         private static Asset<Texture2D> ShirtLogoTexture;
         private static Asset<Texture2D> PantsTexture;
@@ -378,7 +376,6 @@ namespace Spooky.Content.NPCs.Friendly
 
 		public void EndDialogue(Dialogue dialogue, int ID)
 		{
-            PlayerTalkingTo = null;
 			DialogueUI.Visible = false;
 		}
     }

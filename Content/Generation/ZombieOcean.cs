@@ -315,7 +315,7 @@ namespace Spooky.Content.Generation
 							float radialMod2 = WorldGen.genRand.NextFloat(2.5f, 4.5f) * (15f * 1.8f);
 							if (Math.Sqrt(i * i + j * j) < radius - radialMod1 && Math.Sqrt(i * i + j * j) >= radius - radialMod2)
 							{
-								float MinDistanceBetweenCaves = 48;
+								float MinDistanceBetweenCaves = 52;
 
 								Tile tile = Framing.GetTileSafely(PositionX, PositionY);
 
@@ -331,12 +331,12 @@ namespace Spooky.Content.Generation
 									}
 								}
 
-								if (NoDungeonBlocksNearby(PositionX, PositionY, 20, false) && !tooClose && i % 3 == 0)
+								if (NoDungeonBlocksNearby(PositionX, PositionY, 20, false) && !tooClose)
 								{
 									int OvalSizeX = WorldGen.genRand.Next(16, 19);
 									int OvalSizeY = WorldGen.genRand.Next(8, 14);
 
-									int YOffset = WorldGen.genRand.Next(-10, 11);
+									int YOffset = WorldGen.genRand.Next(5, 13);
 
 									SpookyWorldMethods.PlaceOval(PositionX, PositionY + YOffset, -1, 0, OvalSizeX, OvalSizeY, 1f, true, false);
 									PlaceDepthsOval(PositionX, PositionY + YOffset, ModContent.TileType<OceanSand>(), ModContent.WallType<OceanSandWall>(), OvalSizeX + 2, OvalSizeY + 2, 1f, true, true);
@@ -444,8 +444,8 @@ namespace Spooky.Content.Generation
 			Vector2 MiddlePoint = (Start + End) / 2;
 
 			Vector2 p0 = End;
-			Vector2 p1 = new Vector2(MiddlePoint.X + WorldGen.genRand.Next(-20, 21), (UseAltWavePattern ? End.Y : Start.Y) + WorldGen.genRand.Next(-50, 51));
-			Vector2 p2 = new Vector2(MiddlePoint.X + WorldGen.genRand.Next(-20, 21), (UseAltWavePattern ? Start.Y : End.Y) + WorldGen.genRand.Next(-50, 51));
+			Vector2 p1 = new Vector2(MiddlePoint.X + WorldGen.genRand.Next(-30, 31), (UseAltWavePattern ? End.Y : Start.Y) + WorldGen.genRand.Next(-50, 51));
+			Vector2 p2 = new Vector2(MiddlePoint.X + WorldGen.genRand.Next(-30, 31), (UseAltWavePattern ? Start.Y : End.Y) + WorldGen.genRand.Next(-50, 51));
 			Vector2 p3 = Start;
 
 			//dont dig a tunnel at all if the two points already have line-of-sight to each other

@@ -2,16 +2,31 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Localization;
+using Terraria.Audio;
+using ReLogic.Content;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System.Linq;
 
 using Spooky.Core;
 using Spooky.Content.Dusts;
+using Spooky.Content.UserInterfaces;
 
 namespace Spooky.Content.NPCs.NoseCult
 {
 	public class NoseCultistBruteIdle : ModNPC
 	{
+		public Vector2 modifier = new(-200, -75);
+
+		private static Asset<Texture2D> UITexture;
+
+        public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/TalkSounds/NoseCultistTalk", SoundType.Sound) { Volume = 0.35f, Pitch = -1f, PitchVariance = 0.75f };
+
+		public override void Load()
+		{
+			UITexture = ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/DialogueUINoseCultist");
+		}
+
 		public override void SetStaticDefaults()
 		{	
 			Main.npcFrameCount[NPC.type] = 3;
@@ -75,8 +90,19 @@ namespace Spooky.Content.NPCs.NoseCult
 
 		public override string GetChat()
 		{
-			return Language.GetTextValue("Mods.Spooky.Dialogue.NoseBrute.Dialogue" + Main.rand.Next(1, 4));
-		}
+            DialogueChain chain = new();
+            chain.Add(new(UITexture.Value, NPC,
+            Language.GetTextValue("Mods.Spooky.Dialogue.NoseBrute.Dialogue" + Main.rand.Next(1, 4)),
+            Language.GetTextValue("..."),
+            TalkSound, 2f, 0f, modifier, NPCID: NPC.type))
+            .Add(new(UITexture.Value, NPC, null, null, TalkSound, 2f, 0f, modifier, true));
+            chain.OnPlayerResponseTrigger += PlayerResponse;
+            chain.OnEndTrigger += EndDialogue;
+            DialogueUI.Visible = true;
+            DialogueUI.Add(chain);
+
+            return string.Empty;
+        }
 
 		public override void AI()
 		{
@@ -116,5 +142,18 @@ namespace Spooky.Content.NPCs.NoseCult
 				}
 			}
         }
+
+		public void PlayerResponse(Dialogue dialogue, string Text, int ID)
+		{
+			Dialogue newDialogue = new(ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/DialogueUIPlayer").Value, Main.LocalPlayer,
+			Text, null, SoundID.Item1, 2f, 0f, default, NotPlayer: false);
+			DialogueUI.Visible = true;
+			DialogueUI.Add(newDialogue);
+		}
+
+		public void EndDialogue(Dialogue dialogue, int ID)
+		{
+			DialogueUI.Visible = false;
+		}
     }
 }

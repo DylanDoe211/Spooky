@@ -27,6 +27,7 @@ namespace Spooky.Content.Items.SpookyBiome
 			player.GetJumpState<MoldJarJump>().Enable();
 			player.jumpBoost = true;
 			player.noFallDmg = true;
+			player.luck += 0.05f;
 		}
 
 		public override void AddRecipes()

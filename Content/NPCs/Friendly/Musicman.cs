@@ -134,7 +134,8 @@ namespace Spooky.Content.NPCs.Friendly
             .Add<SeasaltHead>()
             .Add<WaasephiHead>()
             .Add<DandyHead>()
-            .Add<HatHead>();
+            .Add<HatHead>()
+            .Add<KekcrocHat>();
 
             npcShop.Register();
         }

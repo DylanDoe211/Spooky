@@ -173,15 +173,8 @@ NoseGunner: {
 }
 
 NoseLeader: {
-	Button: Blessing (Give Snot Glob)
 	NoseBlessing: Here my little follower, for you a blessing straight from my nose. Use it wisely...
-	NoseBlessingBroke: Did you come to me and expect to yield results with no sacred snot? Shameful.
-	Dialogue1: My little disciple, have you come to sacrifice yourself for the holy one?
-	Dialogue2: I am out of holy booger blasters. I can make you into one, though.
-	Dialogue3: What are you doing away from the shrine? It is worshipping hour.
-	Dialogue4: Sniffle... you know, you look like you could use more snot. on your cloak.
-	Dialogue5: Our rituals have allowed us to turn those sacred moclings back into the great one. Only those who are worthy may witness it in all its glory.
-	Dialogue6: The nose that sneezed out the nose that sneezed out the nose. This is the process that created our kind and this world.
+	Dialogue: My little disciple, have you come to sacrifice yourself for the holy one? Or perhaps give an offering of snot? It looks like you do not have any... thou is unworthy.
 }
 
 NoseMage: {
@@ -518,7 +511,7 @@ LittleEyeDialogue: {
 	QuestComplete5-3: Oh I would never, not without reason. You were bound to win, your power precedes you! And rewards you did get, after slaying the beast, so there's no need to complain my guinea p-
 	PlayerQuestComplete5-3: ...
 	QuestComplete5-4: AAAAUAAUUUGH!
-	PlayerQuestComplete5-4: I told you I poke you if you called me that again.
+	PlayerQuestComplete5-4: I told you I would poke you if you called me that again.
 	QuestComplete5-5: OH MY GOD OH MY EYE! OW OW OW OW!
 	PlayerQuestComplete5-5: ...
 	QuestComplete5-6: OH MY GOD I CAN'T SEE! I CAN'T SEE IT BURNS SO BAD!
@@ -740,4 +733,7 @@ OldHunterDialogue: {
 	PlayerPostSpiderWar5: Huh?
 	PostSpiderWar6: Yer speakin' humbug again aren't yah? Still, glad ya ain't down the gutter.
 	PlayerPostSpiderWar6: I guess bro.
+	//no quests available
+	NoQuest: Sorry chap, I ain't got anymore new jobs for ya to do right now.
+	PlayerNoQuest: Ok.
 }

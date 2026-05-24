@@ -40,6 +40,13 @@ namespace Spooky.Content.Tiles.Minibiomes.Vegetable
                 Main.tile[Player.tileTargetX, Player.tileTargetY].TileType = (ushort)ModContent.TileType<JungleSoilGrass>();
 
                 SoundEngine.PlaySound(SoundID.Dig, player.Center);
+
+				player.inventory[player.selectedItem].stack--;
+
+				if (Main.netMode != NetmodeID.SinglePlayer)
+				{
+					NetMessage.SendTileSquare(player.whoAmI, Player.tileTargetX, Player.tileTargetY);
+				}
             }
 		}
     }

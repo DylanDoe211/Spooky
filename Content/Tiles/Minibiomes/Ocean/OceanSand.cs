@@ -25,6 +25,11 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean
 			MineResist = 0.65f;
 		}
 
+        public override bool CanReplace(int i, int j, int tileTypeBeingPlaced)
+		{
+			return tileTypeBeingPlaced != ModContent.TileType<OceanSandSafe>();
+		}
+
 		public override void NearbyEffects(int i, int j, bool closer)
         {
             if (!Main.dedServ && Main.LocalPlayer.InModBiome(ModContent.GetInstance<ZombieOceanBiome>()))

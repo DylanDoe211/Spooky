@@ -226,8 +226,15 @@ namespace Spooky.Content.NPCs.PandoraBox
                         {
                             Vector2 GoTo = SavePosition;
 
-                            float vel = MathHelper.Clamp(NPC.Distance(GoTo) / 12, 6, Main.rand.Next(7, 12));
-                            NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(GoTo) * vel, 0.08f);
+                            if (NPC.Distance(GoTo) >= 15)
+                            {
+                                float vel = MathHelper.Clamp(NPC.Distance(GoTo) / 12, 6, 10);
+                                NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(GoTo) * vel, 0.08f);
+                            }
+                            else
+                            {
+                                NPC.velocity *= 0.95f;
+                            }
                         }
 
                         if (NPC.localAI[0] >= 120)
@@ -259,10 +266,16 @@ namespace Spooky.Content.NPCs.PandoraBox
                     {
                         Vector2 GoTo = player.Center;
                         GoTo.X += (NPC.Center.X < player.Center.X) ? -250 : 250;
-                        GoTo.Y += 0;
 
-                        float vel = MathHelper.Clamp(NPC.Distance(GoTo) / 12, 8, 12);
-                        NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(GoTo) * vel, 0.08f);
+                        if (NPC.Distance(GoTo) >= 15)
+                        {
+                            float vel = MathHelper.Clamp(NPC.Distance(GoTo) / 12, 8, 12);
+                            NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(GoTo) * vel, 0.08f);
+                        }
+                        else
+                        {
+                            NPC.velocity *= 0.95f;
+                        }
                     }
 
                     if (NPC.localAI[0] == 60)
