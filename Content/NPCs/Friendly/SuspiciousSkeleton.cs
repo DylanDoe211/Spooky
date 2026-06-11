@@ -46,7 +46,12 @@ namespace Spooky.Content.NPCs.Friendly
             SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.RaveyardBiome>().Type };
         }
 
-        public override bool CanChat() 
+		public override bool UsesPartyHat()
+		{
+			return false;
+		}
+
+		public override bool CanChat() 
         {
 			return true;
 		}

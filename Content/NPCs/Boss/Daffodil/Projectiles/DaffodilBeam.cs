@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 using Spooky.Content.Dusts;
 
@@ -19,7 +20,6 @@ namespace Spooky.Content.NPCs.Boss.Daffodil.Projectiles
         }
 
         public float LaserLength = 0;
-        public float LaserScale = 0;
         public int LaserSegmentLength = 10;
         public int LaserWidth = 40;
         public int LaserEndSegmentLength = 22;
@@ -51,27 +51,46 @@ namespace Spooky.Content.NPCs.Boss.Daffodil.Projectiles
         {
             float beamRotation = unit.ToRotation() + rotation;
             
-            //body
-            for (float i = transDist; i <= (maxDist * (1 / LaserScale)); i += LaserSegmentLength)
+            for (float i = transDist; i <= (maxDist * (1 / Projectile.scale)); i += LaserSegmentLength)
             {
-                var origin = start + i * unit;
-                Main.EntitySpriteDraw(texture, origin - Main.screenPosition + new Vector2(0, Projectile.gfxOffY), new Rectangle((int)(LaserWidth * Frame), 
-                LaserEndSegmentLength, LaserWidth, LaserSegmentLength), color, beamRotation, new Vector2(LaserWidth / 2, LaserSegmentLength / 2), scale, 0, 0);
-            }
+                //scaling stuff to make the laser look wavy, helix must only be applied to the X-scale and not the Y-scale otherwise it will make the laser look weird
+                float alphaMult = (255 - Projectile.alpha) / 255f;
+                float otherMult = 1f - i / (maxDist * (1 / Projectile.scale));
+                float helix = otherMult * alphaMult * 0.8f * (float)Math.Sin(MathHelper.ToRadians(Projectile.localAI[0] * -16 + i));
 
-            //base
-            Main.EntitySpriteDraw(texture, start + unit * (transDist - LaserEndSegmentLength) - Main.screenPosition + new Vector2(0, Projectile.gfxOffY),
-            new Rectangle((int)(LaserWidth * Frame), 0, LaserWidth, LaserEndSegmentLength), color, beamRotation, new Vector2(LaserWidth / 2, LaserSegmentLength / 2), scale, 0, 0);
-           
-            //tip
-            Main.EntitySpriteDraw(texture, start + maxDist * (1 / scale) * unit - Main.screenPosition + new Vector2(0, Projectile.gfxOffY),
-            new Rectangle((int)(LaserWidth * Frame), LaserSegmentLength + LaserEndSegmentLength, LaserWidth, LaserEndSegmentLength), color, beamRotation, new Vector2(LaserWidth / 2, LaserSegmentLength / 2), scale, 0, 0);
+                for (int j = 0; j < 360; j += 90)
+                {
+                    Vector2 circular = new Vector2(6f, 0).RotatedBy(MathHelper.ToRadians(j));
+                    Color RealColor = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(color);
+
+                    //laser body
+                    var origin = start + i * unit;
+                    Main.EntitySpriteDraw(texture, origin + circular - Main.screenPosition + new Vector2(0, Projectile.gfxOffY), new Rectangle((int)(LaserWidth * Frame), LaserEndSegmentLength, LaserWidth, LaserSegmentLength), 
+                    RealColor, beamRotation, new Vector2(LaserWidth / 2, LaserSegmentLength / 2), new Vector2(scale + (helix / 1.75f), scale), 0, 0);
+
+                    //base
+                    if (i == transDist)
+                    {
+                        Main.EntitySpriteDraw(texture, start + unit * (transDist - LaserEndSegmentLength) + circular - Main.screenPosition + new Vector2(0, Projectile.gfxOffY),
+                        new Rectangle((int)(LaserWidth * Frame), 0, LaserWidth, LaserEndSegmentLength), RealColor, beamRotation, 
+                        new Vector2(LaserWidth / 2, LaserSegmentLength / 2), new Vector2(scale + (helix / 1.75f), scale), 0, 0);
+                    }
+                
+                    //tip
+                    if (i == (maxDist * (1 / Projectile.scale)))
+                    {
+                        Main.EntitySpriteDraw(texture, start + maxDist * (1 / scale) * unit + circular - Main.screenPosition + new Vector2(0, Projectile.gfxOffY), 
+                        new Rectangle((int)(LaserWidth * Frame), LaserSegmentLength + LaserEndSegmentLength, LaserWidth, LaserEndSegmentLength), 
+                        RealColor, beamRotation, new Vector2(LaserWidth / 2, LaserSegmentLength / 2), new Vector2(scale + (helix / 1.75f), scale), 0, 0);
+                    }
+                }
+            }
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
-            DrawLaser(ModContent.Request<Texture2D>(Texture).Value, Projectile.Center + (new Vector2(Projectile.width, 0).RotatedBy(Projectile.rotation) * LaserScale), 
-            new Vector2(1f, 0).RotatedBy(Projectile.rotation) * LaserScale, -1.57f, LaserScale, LaserLength, Color.Gold * 0.75f, (int)FirstSegmentDrawDist);
+            DrawLaser(ModContent.Request<Texture2D>(Texture).Value, Projectile.Center + (new Vector2(Projectile.width, 0).RotatedBy(Projectile.rotation) * Projectile.scale), 
+            new Vector2(1f, 0).RotatedBy(Projectile.rotation) * Projectile.scale, -1.57f, 1f, LaserLength, Projectile.GetAlpha(Color.Gold * 0.85f), (int)FirstSegmentDrawDist);
 
             return false;
         }
@@ -100,26 +119,16 @@ namespace Spooky.Content.NPCs.Boss.Daffodil.Projectiles
 
             Projectile.rotation = Projectile.velocity.ToRotation();
 
-            if (Projectile.localAI[0] == 0)
-            {
-                LaserScale = 0.1f;
-            }
-
-            Vector2 LaserOrigin = new(Parent.Center.X, Parent.Center.Y + 10);
+            Vector2 LaserOrigin = new Vector2(Parent.Center.X, Parent.Center.Y + 10);
             Projectile.Center = LaserOrigin;
 
             if (Projectile.timeLeft > 10)
             {
                 Projectile.velocity = Projectile.velocity.RotatedBy(Projectile.ai[1]);
             }
-
-            if (Projectile.localAI[0] <= 10)
+            else
             {
-                LaserScale += 0.09f;
-            }
-            else if (Projectile.timeLeft < 10)
-            {
-                LaserScale -= 0.1f;
+                Projectile.alpha += 25;
             }
 
             EndpointTileCollision();
@@ -192,7 +201,7 @@ namespace Spooky.Content.NPCs.Boss.Daffodil.Projectiles
             Vector2 unit = new Vector2(1.1f, 0).RotatedBy(Projectile.rotation);
             float point = 0f;
 
-            if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + unit * LaserLength, Projectile.width * LaserScale, ref point))
+            if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + unit * LaserLength, Projectile.width * Projectile.scale, ref point))
             {
                 return true;
             }

@@ -198,9 +198,9 @@ namespace Spooky.Core
 						}
 
 						//do not spawn putty amalgams if it already exists
-						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<PuttyAmalgam>()))
+						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<PuttyAmalgam>()) && !spawnInfo.Player.HasItem(ModContent.ItemType<OldHunterEnemyRemover>()))
 						{
-							pool.Add(ModContent.NPCType<PuttyAmalgam>(), 0.35f);
+							pool.Add(ModContent.NPCType<PuttyAmalgam>(), Flags.OldHunterQuest5 ? 0.2f : 0.6f);
 						}
 					}
 				}
@@ -311,9 +311,9 @@ namespace Spooky.Core
                         pool.Add(ModContent.NPCType<Chungus>(), 3);
 
 						//do not spawn chudshrooms if one already exists
-						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<Chudshroom>()))
+						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<Chudshroom>()) && !spawnInfo.Player.HasItem(ModContent.ItemType<OldHunterEnemyRemover>()))
 						{
-							pool.Add(ModContent.NPCType<Chudshroom>(), 0.35f);
+							pool.Add(ModContent.NPCType<Chudshroom>(), Flags.OldHunterQuest3 ? 0.35f : 0.75f);
 						}
                     }
 
@@ -379,9 +379,9 @@ namespace Spooky.Core
 					}
 
 					//do not spawn harold if he already exists
-					if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<Harold>()))
+					if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<Harold>()) && !spawnInfo.Player.HasItem(ModContent.ItemType<OldHunterEnemyRemover>()))
 					{
-						pool.Add(ModContent.NPCType<Harold>(), 0.5f);
+						pool.Add(ModContent.NPCType<Harold>(), Flags.OldHunterQuest2 ? 0.2f : 0.6f);
 					}
                 }
 			}
@@ -624,9 +624,9 @@ namespace Spooky.Core
 						pool.Add(ModContent.NPCType<RustMite>(), 2);
 
 						//do not spawn an evil mite if one already exists
-						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<EvilMite>()))
+						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<EvilMite>()) && !spawnInfo.Player.HasItem(ModContent.ItemType<OldHunterEnemyRemover>()))
 						{
-							pool.Add(ModContent.NPCType<EvilMite>(), 0.2f);
+							pool.Add(ModContent.NPCType<EvilMite>(), Flags.OldHunterQuest1 ? 0.2f : 0.6f);
 						}
 					}
 				}
@@ -859,9 +859,9 @@ namespace Spooky.Core
 						}
 
 						//do not spawn triplets if they already exist
-						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<TripletsBody>()))
+						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<TripletsBody>()) && !spawnInfo.Player.HasItem(ModContent.ItemType<OldHunterEnemyRemover>()))
 						{
-							pool.Add(ModContent.NPCType<TripletsBody>(), 0.35f);
+							pool.Add(ModContent.NPCType<TripletsBody>(), Flags.OldHunterQuest4 ? 0.35f : 0.75f);
 						}
 					}
 				}
@@ -881,9 +881,9 @@ namespace Spooky.Core
 						pool.Add(ModContent.NPCType<Tarrar>(), 5);
 
 						//do not spawn a tar pig if one already exists
-						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<TarPig>()))
+						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<TarPig>()) && !spawnInfo.Player.HasItem(ModContent.ItemType<OldHunterEnemyRemover>()))
 						{
-							pool.Add(ModContent.NPCType<TarPig>(), 0.5f);
+							pool.Add(ModContent.NPCType<TarPig>(), Flags.OldHunterQuest8 ? 0.6f : 1f);
 						}
 					}
 					else
@@ -937,9 +937,9 @@ namespace Spooky.Core
 						}
 
 						//do not spawn an alligator if one already exists
-						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<PotatoGator>()))
+						if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<PotatoGator>()) && !spawnInfo.Player.HasItem(ModContent.ItemType<OldHunterEnemyRemover>()))
 						{
-							pool.Add(ModContent.NPCType<PotatoGator>(), 0.2f);
+							pool.Add(ModContent.NPCType<PotatoGator>(), Flags.OldHunterQuest6 ? 0.2f : 0.6f);
 						}
 					}
 				}
@@ -1003,9 +1003,9 @@ namespace Spooky.Core
 					}
 
 					//do not spawn an alligator if one already exists
-					if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<ChristmasTreeMimic>()))
+					if (Flags.downedOldHunter && !NPC.AnyNPCs(ModContent.NPCType<ChristmasTreeMimic>()) && !spawnInfo.Player.HasItem(ModContent.ItemType<OldHunterEnemyRemover>()))
 					{
-						pool.Add(ModContent.NPCType<ChristmasTreeMimic>(), 0.15f);
+						pool.Add(ModContent.NPCType<ChristmasTreeMimic>(), Flags.OldHunterQuest7 ? 0.15f : 0.45f);
 					}
 				}
 			}

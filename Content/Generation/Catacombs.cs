@@ -107,9 +107,12 @@ namespace Spooky.Content.Generation
 
 				for (int Y = (int)Main.worldSurface - 32; Y <= (int)Main.worldSurface + layer1Depth + 45; Y++)
                 {
-                    Main.tile[X, Y].ClearEverything();
-                    WorldGen.PlaceTile(X, Y, ModContent.TileType<CatacombBrick1>());
-                    WorldGen.PlaceWall(X, Y, ModContent.WallType<CatacombBrickWall1>());
+                    if (Main.tile[X, Y].TileType != ModContent.TileType<CatacombBrick1Safe>() && Main.tile[X, Y].WallType != ModContent.WallType<CatacombBrickWall1Safe>())
+                    {
+                        Main.tile[X, Y].ClearEverything();
+                        WorldGen.PlaceTile(X, Y, ModContent.TileType<CatacombBrick1>());
+                        WorldGen.PlaceWall(X, Y, ModContent.WallType<CatacombBrickWall1>());
+                    }
                 }
             }
 
@@ -1583,7 +1586,7 @@ namespace Spooky.Content.Generation
                 }
 
                 //ambient tiles for layer 2
-                for (int Y = DaffodilArenaY + 50; Y <= BigBoneArenaY - 30; Y++)
+                for (int Y = DaffodilArenaY - 30; Y <= BigBoneArenaY + 60; Y++)
                 {
                     Tile tile = Main.tile[X, Y];
                     Tile tileAbove = Main.tile[X, Y - 1];
@@ -1614,6 +1617,7 @@ namespace Spooky.Content.Generation
                             tileAbove.TileFrameX = (short)(WorldGen.genRand.Next(18) * 18);
                         }
                     }
+                    
                     if (tile.TileType == ModContent.TileType<CatacombVines>())
                     {
                         int[] ValidTiles = { ModContent.TileType<CatacombBrick1Grass>(), ModContent.TileType<CatacombBrick1GrassSafe>(),

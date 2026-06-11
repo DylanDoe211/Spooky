@@ -166,7 +166,7 @@ namespace Spooky.Content.Tiles.Blooms
 						Tile CheckTile = Framing.GetTileSafely(x, y);
 						CheckTile.TileType = (ushort)ModContent.TileType<DragonfruitBloomPlant>();
 
-						if (x == left + 1 && y == top + 1) 
+						if (x == left + 1 && y == top + 1)
 						{
 							SoundEngine.PlaySound(SoundID.NPCDeath42 with { Pitch = 0.75f, Volume = 0.1f }, new Vector2(x * 16, y * 16));
 							SoundEngine.PlaySound(SparkleSound, new Vector2(x * 16, y * 16));

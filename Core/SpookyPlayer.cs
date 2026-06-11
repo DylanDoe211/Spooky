@@ -711,7 +711,7 @@ namespace Spooky.Core
                         Vector2 SpawnPosition = target.Center + new Vector2(0, Main.rand.Next(260, 301)).RotatedByRandom(360);
 
                         Projectile.NewProjectile(target.GetSource_OnHit(target), SpawnPosition, Vector2.Zero, 
-                        ModContent.ProjectileType<PossessedDagger>(), damageDone, hit.Knockback, Player.whoAmI, 0, target.whoAmI);
+                        ModContent.ProjectileType<PossessedDagger>(), damageDone / 3, hit.Knockback, Player.whoAmI, 0, target.whoAmI);
                     }
                 }
             }
@@ -1757,7 +1757,7 @@ namespace Spooky.Core
 					}
 
 					//crate
-					if (attempt.uncommon && attempt.crate)
+					if (attempt.rare && attempt.crate)
 					{
 						itemDrop = Main.hardMode ? ModContent.ItemType<SpookyCrate2>() : ModContent.ItemType<SpookyCrate>();
                     }
@@ -1773,7 +1773,7 @@ namespace Spooky.Core
                     }
 
 					//crate
-					if (attempt.uncommon && attempt.crate && Flags.downedSpookySpirit)
+					if (attempt.rare && attempt.crate && Flags.downedSpookySpirit)
 					{
 						itemDrop = Main.hardMode ? ModContent.ItemType<CatacombCrate2>() : ModContent.ItemType<CatacombCrate>();
 					}
@@ -1789,7 +1789,7 @@ namespace Spooky.Core
                     }
 
                     //crate
-                    if (attempt.uncommon && attempt.crate)
+                    if (attempt.rare && attempt.crate)
                     {
                         itemDrop = Main.hardMode ? ModContent.ItemType<CatacombCrate2>() : ModContent.ItemType<CatacombCrate>();
                     }
@@ -1805,7 +1805,7 @@ namespace Spooky.Core
                     }
 
 					//crate
-					if (attempt.uncommon && attempt.crate)
+					if (attempt.rare && attempt.crate)
 					{
 						itemDrop = Main.hardMode ? ModContent.ItemType<GrottoCrate2>() : ModContent.ItemType<GrottoCrate>();
                     }
@@ -1864,7 +1864,7 @@ namespace Spooky.Core
                 }
 
 				//crate
-				if (attempt.uncommon && attempt.crate)
+				if (attempt.rare && attempt.crate)
 				{
 					itemDrop = Main.hardMode ? ModContent.ItemType<SpookyHellCrate2>() : ModContent.ItemType<SpookyHellCrate>();
 				}

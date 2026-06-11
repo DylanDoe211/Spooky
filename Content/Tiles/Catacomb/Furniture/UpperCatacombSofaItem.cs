@@ -15,7 +15,8 @@ namespace Spooky.Content.Tiles.Catacomb.Furniture
 		public override void AddRecipes()
         {
             CreateRecipe()
-            .AddIngredient(ModContent.ItemType<CatacombBrick1Item>(), 8)
+            .AddIngredient(ModContent.ItemType<CatacombBrick1Item>(), 5)
+            .AddIngredient(ItemID.Silk)
             .AddTile(TileID.WorkBenches)
             .Register();
         }

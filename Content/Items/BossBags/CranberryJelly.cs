@@ -12,6 +12,7 @@ namespace Spooky.Content.Items.BossBags
         public override void SetStaticDefaults() 
         {
 			Item.ResearchUnlockCount = 30;
+			ItemID.Sets.WorksInVoidBag[Type] = true;
 		}
 
 		public override void SetDefaults()

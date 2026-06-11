@@ -55,7 +55,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 			Projectile.DamageType = DamageClass.Magic;
             Projectile.friendly = true;
 			Projectile.tileCollide = false;
-			Projectile.timeLeft = 600;
+			Projectile.timeLeft = 300;
 			Projectile.penetrate = -1;
 		}
 

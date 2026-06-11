@@ -298,9 +298,9 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 					NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center, new Vector2(Main.rand.Next(-6, 7), Main.rand.Next(-25, -12)), ModContent.ProjectileType<SharkronFireball>(), NPC.damage / 2, 4.5f, 1);
 				}
 
-				for (int numGores = 1; numGores <= 3; numGores++)
+				if (Main.netMode != NetmodeID.Server) 
 				{
-					if (Main.netMode != NetmodeID.Server) 
+					for (int numGores = 1; numGores <= 3; numGores++)
 					{
 						Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.Center.X, NPC.Center.Y - 15), NPC.velocity, ModContent.Find<ModGore>("Spooky/SpookSharkronGore" + numGores).Type);
 					}

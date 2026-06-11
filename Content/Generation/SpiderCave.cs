@@ -81,8 +81,6 @@ namespace Spooky.Content.Generation
                 }
             }
 
-            int cavePerlinSeed = WorldGen.genRand.Next();
-
             Point origin = new Point(startPosX, startPosY);
             Vector2 center = origin.ToVector2() * 16f + new Vector2(8f);
 
@@ -102,6 +100,11 @@ namespace Spooky.Content.Generation
             Vector2 biomeOffset = Vector2.UnitY * biomeSpacing;
             Vector2 biomeTop = center - biomeOffset;
             Vector2 biomeBottom = center + biomeOffset;
+
+            //old hunter house positions
+            int HunterHouseOffsetY = Main.maxTilesY / 37;
+            int HunterHouseDivideY = Main.maxTilesY >= 2400 ? 25 : 18;
+            int HunterHousePositionY = startPosY + (Main.maxTilesY / HunterHouseDivideY);
 
 			//first place a bunch of spider caves as a barrier around the biome
 			for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
@@ -151,7 +154,7 @@ namespace Spooky.Content.Generation
 				int EndValue = origin.X + biomeSize + 2;
 				progress.Set((X - StartValue) / (EndValue - StartValue));
 
-				for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y += YIncrement)
+				for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= HunterHousePositionY + (HunterHouseOffsetY / 2); Y += YIncrement)
 				{
 					if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
 					{
@@ -440,6 +443,14 @@ namespace Spooky.Content.Generation
                 }
             }
 
+            //place old hunter arena
+            Vector2 ArenaOrigin = new Vector2(startPosX - 50, (HunterHousePositionY + (HunterHouseOffsetY / 2)) - 25);
+
+            SpookyWorldMethods.PlaceCircle((int)ArenaOrigin.X + 50, (int)ArenaOrigin.Y, -1, 0, 20, true, false);
+
+            StructureHelper.API.Generator.GenerateStructure("Content/Structures/SpiderCave/OldHunterArena.shstruct", ArenaOrigin.ToPoint16(), Mod);
+            Flags.OldHunterPosition = new Vector2(startPosX * 16, (HunterHousePositionY + (HunterHouseOffsetY / 2) + 13) * 16);
+
             //place structures in the biome
             for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
 			{
@@ -503,7 +514,7 @@ namespace Spooky.Content.Generation
                                         break;
                                     }
                                     case 3:
-                                    {   
+                                    {
                                         Vector2 HouseOrigin = new Vector2(X - 12, Y - 13);
                                         StructureHelper.API.Generator.GenerateStructure("Content/Structures/SpiderCave/GrottoRuins4.shstruct", HouseOrigin.ToPoint16(), Mod);
                                         break;
@@ -517,25 +528,6 @@ namespace Spooky.Content.Generation
                                 }
                             }
                         }
-                    }
-                }
-            }
-
-            //spread grass again after house generation
-            for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
-            {
-				for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
-                {
-                    if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
-                    {
-                        Tile tile = Main.tile[X, Y];
-                        Tile tileAbove = Main.tile[X, Y - 1];
-                        Tile tileBelow = Main.tile[X, Y + 1];
-                        Tile tileLeft = Main.tile[X - 1, Y];
-                        Tile tileRight = Main.tile[X + 1, Y];
-
-                        //spread grass onto the dirt blocks throughout the biome
-                        WorldGen.SpreadGrass(X, Y, ModContent.TileType<DampSoil>(), ModContent.TileType<DampGrass>(), false);
                     }
                 }
             }
@@ -567,28 +559,22 @@ namespace Spooky.Content.Generation
                     }
                 }
             }
-            
-            //place old hunter arena
-			int HunterHouseOffsetY = Main.maxTilesY / 37;
 
-            int HunterHouseDivideY = Main.maxTilesY >= 2400 ? 25 : 18;
-            int HunterHousePositionY = startPosY + (Main.maxTilesY / HunterHouseDivideY);
-
-            Vector2 ArenaOrigin = new Vector2(startPosX - 50, (HunterHousePositionY + (HunterHouseOffsetY / 2)) - 25);
-
-            SpookyWorldMethods.PlaceCircle((int)ArenaOrigin.X + 50, (int)ArenaOrigin.Y, -1, 0, 15, true, false);
-
-            StructureHelper.API.Generator.GenerateStructure("Content/Structures/SpiderCave/OldHunterArena.shstruct", ArenaOrigin.ToPoint16(), Mod);
-            Flags.OldHunterPosition = new Vector2(startPosX * 16, (HunterHousePositionY + (HunterHouseOffsetY / 2) + 13) * 16);
-
-            //place soil blocks so the old hunters house isnt floating
-            for (int X = (int)startPosX - 45; X <= (int)startPosX + 45; X++)
+            //spread grass again after house generation
+            for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
             {
-				for (int Y = (HunterHousePositionY + (HunterHouseOffsetY / 2)) + 18; Y <= origin.Y + verticalRadius + 3; Y++)
+				for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
                 {
-					if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
-					{
-                        WorldGen.PlaceTile(X, Y, ModContent.TileType<DampSoil>());
+                    if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
+                    {
+                        Tile tile = Main.tile[X, Y];
+                        Tile tileAbove = Main.tile[X, Y - 1];
+                        Tile tileBelow = Main.tile[X, Y + 1];
+                        Tile tileLeft = Main.tile[X - 1, Y];
+                        Tile tileRight = Main.tile[X + 1, Y];
+
+                        //spread grass onto the dirt blocks throughout the biome
+                        WorldGen.SpreadGrass(X, Y, ModContent.TileType<DampSoil>(), ModContent.TileType<DampGrass>(), false);
                     }
                 }
             }
@@ -1121,7 +1107,8 @@ namespace Spooky.Content.Generation
 			{
 				for (int y = PositionY - TileCheckDistance; y <= PositionY + TileCheckDistance; y++)
 				{
-					if (Main.tile[x, y].TileType == ModContent.TileType<BirchWood>() || Main.tile[x, y].TileType == ModContent.TileType<DampStoneBricks>())
+					if (Main.tile[x, y].TileType == ModContent.TileType<BirchWood>() || Main.tile[x, y].TileType == ModContent.TileType<DampStoneBricks>() ||
+                    Main.tile[x, y].TileType == ModContent.TileType<OldHunterBrick>() || Main.tile[x, y].TileType == TileID.RedDynastyShingles)
 					{
 						return false;
 					}

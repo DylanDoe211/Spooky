@@ -52,7 +52,12 @@ namespace Spooky.Content.NPCs.Friendly
             NPC.aiStyle = 0;
         }
 
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
+		public override bool UsesPartyHat()
+		{
+			return false;
+		}
+
+		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
         {
             bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
             {

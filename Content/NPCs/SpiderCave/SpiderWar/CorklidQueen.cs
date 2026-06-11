@@ -20,6 +20,7 @@ using Spooky.Content.Tiles.Trophy;
 
 namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 {
+	[AutoloadBossHead]
 	public class CorklidQueen : ModNPC
 	{
 		int CurrentFrameX = 0; //0 = pop out of ground animation  1 = walking animation
@@ -356,7 +357,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 						else
 						{
 							bool HasLineOfSight = Collision.CanHitLine(player.position, player.width, player.height, NPC.position, NPC.width, NPC.height);
-							if (!HasLineOfSight)
+							if (!HasLineOfSight || NPC.Distance(player.Center) >= 1200f)
 							{
 								NPC.localAI[2]++;
 							}
@@ -638,13 +639,19 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 						destinationY = (ushort)chosenTile.Y;
 						NPC.netUpdate = true;
 					}
+					else if (NPCGlobalHelper.TeleportToSpot(NPC, player, ref chosenTile, point.X, point.Y, 55, TelefragDistance, false))
+					{
+						destinationX = (ushort)chosenTile.X;
+						destinationY = (ushort)chosenTile.Y;
+						NPC.netUpdate = true;
+					}
 				}
 
 				TeleportTimer++;
 				if (TeleportTimer >= 30 && destinationX != 0 && destinationY != 0)
 				{
 					TeleportDelay++;
-					if (TeleportDelay <= 10)
+					if (TeleportDelay <= 40)
 					{
 						Dust dust = Dust.NewDustDirect(new Vector2((destinationX * 16f) - 30, (destinationY * 16f) - 20), NPC.width, NPC.height, DustID.Mud, Main.rand.NextFloat(-4f, 4f), Main.rand.NextFloat(-12f, -8f), 50, Color.White, 2.5f);
 						dust.color = Color.White;

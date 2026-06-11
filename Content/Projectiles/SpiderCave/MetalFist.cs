@@ -69,7 +69,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (!HasHitEnemy)
+            if (!HasHitEnemy && !target.GetGlobalNPC<NPCGlobal>().HasMetalFistAttached)
             {
                 Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, Vector2.Zero, ModContent.ProjectileType<MetalFistStick>(), Projectile.damage, Projectile.knockBack, Projectile.owner,
                 ai0: Projectile.rotation, ai1: target.whoAmI);

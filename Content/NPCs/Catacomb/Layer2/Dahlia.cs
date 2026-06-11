@@ -112,7 +112,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
 
                 for (int numGores = 1; numGores <= 9; numGores++)
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    if (Main.netMode != NetmodeID.Server)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center + new Vector2(Main.rand.Next(-30, 30), Main.rand.Next(-30, 30)), NPC.velocity, ModContent.Find<ModGore>("Spooky/DahliaGore" + Main.rand.Next(1, 3)).Type);
                     }

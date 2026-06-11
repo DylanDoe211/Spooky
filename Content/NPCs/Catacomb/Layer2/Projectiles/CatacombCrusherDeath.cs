@@ -57,9 +57,9 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2.Projectiles
             Screenshake.ShakeScreenWithIntensity(Projectile.Center, 5f, 350f);
 
             //spawn crusher gores
-            for (int numGores = 1; numGores <= 4; numGores++)
+            if (Main.netMode != NetmodeID.Server) 
             {
-                if (Main.netMode != NetmodeID.Server) 
+                for (int numGores = 1; numGores <= 4; numGores++)
                 {
                     Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center, new Vector2(Main.rand.Next(-5, 5), Main.rand.Next(-5, -2)), ModContent.Find<ModGore>("Spooky/CatacombCrusher1Gore" + numGores).Type);
                 }
@@ -92,9 +92,9 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2.Projectiles
             Screenshake.ShakeScreenWithIntensity(Projectile.Center, 5f, 350f);
 
             //spawn crusher gores
-            for (int numGores = 1; numGores <= 4; numGores++)
+            if (Main.netMode != NetmodeID.Server) 
             {
-                if (Main.netMode != NetmodeID.Server) 
+                for (int numGores = 1; numGores <= 4; numGores++)
                 {
                     Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center, new Vector2(Main.rand.Next(-5, 5), Main.rand.Next(-5, -2)), ModContent.Find<ModGore>("Spooky/CatacombCrusher2Gore" + numGores).Type);
                 }
@@ -127,9 +127,9 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2.Projectiles
             Screenshake.ShakeScreenWithIntensity(Projectile.Center, 5f, 350f);
 
             //spawn crusher gores
-            for (int numGores = 1; numGores <= 4; numGores++)
+            if (Main.netMode != NetmodeID.Server) 
             {
-                if (Main.netMode != NetmodeID.Server) 
+                for (int numGores = 1; numGores <= 4; numGores++)
                 {
                     Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center, new Vector2(Main.rand.Next(-5, 5), Main.rand.Next(-5, -2)), ModContent.Find<ModGore>("Spooky/CatacombCrusher3Gore" + numGores).Type);
                 }
@@ -162,9 +162,9 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2.Projectiles
             Screenshake.ShakeScreenWithIntensity(Projectile.Center, 5f, 350f);
 
             //spawn crusher gores
-            for (int numGores = 1; numGores <= 7; numGores++)
+            if (Main.netMode != NetmodeID.Server) 
             {
-                if (Main.netMode != NetmodeID.Server) 
+                for (int numGores = 1; numGores <= 4; numGores++)
                 {
                     Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center, new Vector2(Main.rand.Next(-5, 5), Main.rand.Next(-5, -2)), ModContent.Find<ModGore>("Spooky/CatacombCrusher4Gore" + numGores).Type);
                 }

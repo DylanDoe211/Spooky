@@ -78,10 +78,10 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
 				Vector2 vector12 = Vector2.UnitX * 0f;
 				vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
 				vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
-				int num104 = Dust.NewDust(Projectile.Center, 0, 0, DustID.Asphalt, 0f, 0f, 100, default, 2f);
-				Main.dust[num104].noGravity = true;
-				Main.dust[num104].position = Projectile.Center + vector12;
-				Main.dust[num104].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
+				int newDust = Dust.NewDust(Projectile.Center, 0, 0, DustID.Asphalt, 0f, 0f, 100, default, 2f);
+				Main.dust[newDust].noGravity = true;
+				Main.dust[newDust].position = Projectile.Center + vector12;
+				Main.dust[newDust].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
 				currentAmount++;
 			}
 			

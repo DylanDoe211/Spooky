@@ -1,31 +1,84 @@
--Added buff bungus
--Added kekcroc's hat
--Added dialogue for when old hunter has no more new quests available
--Added new indicator textures for when an enemy is inflicted with the hunters scarf mark or peacock mask intimidated debuffs
--Changed peacock oni mask tooltip to actually say the amount of damage increase it gives against enemies
--Nose cultists now use spooky mod's dialogue system along with a unique UI box sprite
--Actually implemented the cactus club's enemy on-hit ability because I forgot
--Increased the cactus club's hitbox size because it was too small
--Slightly reduced the spooky striders movement speed increase (Internal value from 6.5 -> 6)
--Purple horseshoe balloon now gives a luck increase like vanilla horseshoe balloons
--Dying in spooky mod boss arenas that inflict creative shock no longer spawns a gravestone
--Spook fishron flamethrower attack in both phases now follows the player at a delay, with it being faster in phase 2
--Spook fishrons rotation is now way smoother looking and no longer instantly snaps to where it should be rotating
--Spook fishron now becomes invincible if you are outside of the ocean
--Slightly increased archduke spider spawnrate
--Buffed el gourdo damage from 100 -> 110
--Buffed disco skull damage from 75 -> 80
--Fixed 3d glasses not drawing the players hair correctly (Again)
--Fixed rot gourd falling down way too slowly when spawned in
--Fixed bloom plants dropping multiple blooms in multiplayer
--Fixed spooky mod grass seeds not being consumed when placed
--Fixed spooky forest destroying the dungeon (Issue would occur with the spooky forest at spawn option turned off)
--Fixed issue where big dunk would get stuck in tiles and prevent him from pathfinding, now if this happens big dunk will simply move towards the closest rotten depths cave
--Fixed "Index outside the bounds of array" error that would occur if all players left the eye valley during the egg incursion event
--Fixed another achievement being unlocked without the correct check to make it not run on servers incorrectly, I accidentally forgot it last patch
--Fixed crusty gunfish allowing you to switch weapons when thrown out, resulting in the thrown gunfish shooting the projectile of the weapon you switched to
--Fixed glowshroom moss turning into mossy stone when exploded instead of being destroyed like its supposed to
--Fixed issue where rotten depths blocks could be block swapped with their unsafe versions
--Fixed diva dragonfruit bloom not converting fungus or tomato bloom plants
--Fixed even more in game texts for the spore storm to not say "sporestorm" with no spaces
--Fixed a couple more typos in the mod
+Daffodil Fight Changes:
+-Attack 1: Previously laser beams -> Is now pollen attack where daffodil shoots pollen balls at you which explode and do some AoE damage to nearby players
+-Attack 2: Previously shot homing flowers from her hands -> Daffodil still shoots from her hands, but the flowers now alternate and home a bit differently
+-Attack 3: Previously was bouncing thorn balls -> Thorn balls are now attached to thorny tendrils that hurt you, thorn balls will also go towards you before spawning big thorns
+-Attack 4: Previously fly bullet hell -> Daffodil creates a corpsebloom attached to herself that attracts flies towards it from the edges of the arena
+-Attack 5: Previously was thorn pillars -> Is basically the same, but the seeds now spawn from daffodils hands, also visually improved the thorns that grow from the seeds
+-Attack 6: Previously sweeping laser and multi-lasers -> This attack is the same, but the lasers have been visually improved
+-Improved visuals and collision for daffodils floor and wall blocking thorn pillars in phase 2
+-Removed punch attack in phase 2
+
+Additions/Changes:
+-Added a WIP new config option that allows you to force teleport all players inside of combat rooms in the temple of moco in multiplayer (This only applies for players that are already inside the temple of moco, and this option is turned off by default)
+-Added new config option that allows you to prevent spooky mod's custom dialogue from panning your camera to the NPC that you are talking to
+-Added new christmas themed vanity from krampus quest presents
+-Added a bunch more gores for rot gourd
+-Nerfed stitches health from 4500 -> 3800
+-Big bone flowers in both phases now loose way less velocity when bouncing off of surfaces, but are shot at you a bit slower now
+-Big bone flowers in phase 2 no longer bounce towards you if they are too close to you
+-Added map icons for all the spider war minibosses (Which also means they now have boss health bars too)
+-Corklid queen now has a longer delay before emerging out of the ground when teleporting
+-Archduke spider now shows up as a rare enemy with the lifeform analyzer
+-Spider war minibosses now have a 1 in 5 chance to drop items before the final wave, instead of 1 in 10
+-Old hunter bounty quest enemies now have much higher spawnrates if you haven't completed that corresponding quest yet
+-Skeletoid fish in the rotten depths are now guaranteed to drop fishbone chunks instead of only a 50% chance
+-Yellow flower skeletoids in the upper catacombs no longer shoot a laser at you
+-Made tummy-achers more orange so you can differentiate them from other egg incursion enemies easier
+-Added a new paper bag item given to you by old hunter that contains the quest rewards, instead of all the rewards just being dropped on you instantly
+-Added an item you get from old hunter after all of his quests are complete, which prevents all the bounty quest enemies from spawning while in your inventory
+-Increased drop rates of catacomb chest keys from enemies in both layers from 1 in 50 -> 1 in 30
+-Lowered bag of magic beans damage from 60 -> 45
+-Lowered bag of magic beans vines lifetime from 10 seconds -> 5 seconds
+-Buffed old hunter's crossbow damage from 60 -> 70
+-Buffed bone bender damage from 35 -> 50
+-Buffed staff of the weaver damage from 20 -> 30
+-Buffed scepter of the weaver damage from 40 -> 50
+-Farmer's glove attack speed increase per bloom nerfed from 15% -> 10%
+-Reworked both orb weaver sentries to now shoot spikes directly at enemies along with an upward spread of spikes
+-Reworked dutchman pipe, it now inflicts some damage onto all enemies in its aura when you hit an enemy in the aura with a projectile
+-Conscious cutter additonal slashes now only deal half the swords base damage
+-The cross sound waves no longer deal damage to you, and the pushback is now affected by individual enemy knockback resistance
+-Possessed crown individual daggers now deal a third of your whip's damage instead of the whip's full damage
+-Flaming flairon no longer produces dust rings while being swung
+-Flaming flairon bubbles that are shot at enemies while swinging the flail now last for less time before fading away, and added a sound when it shoots bubbles while swung
+-Changed sound effects for femur fracturer and skull smasher when fully charged
+-Added dust ring indicators for femur fracturer and skull smasher when they are ready to be thrown
+-Changed hat in a river's mask to sulfur's mask to properly reflect their newer username
+-Pumpkin spice latte, cranberry jelly, and cranberry juice now work from/can now be used from the void bag
+-Broccoli trees in the fetid farms now drop strange mulch when broken
+-Changed nose temple generation so that all 5 combat rooms (Or 3 rooms on small worlds) are different, so no combat rooms will be duplicates anymore
+-Big bone's arena background now has more details such as more dirt with grass, and the stems with glowy bits are now brighter so you can see them better
+
+Bug/Oversight Fixes:
+-Attempted to fix corklid queen not digging in the ground and teleporting if the player gets too far from it
+-Spook fishron not taking up npc slots, causing pumpkin moon enemies to spawn during the fight
+-Various friendly npcs in the mod having party hats during a party because they are not intended to have them
+-Kekcroc's hat not having a sell value of 10 gold like the other developer vanity headpieces
+-Box o' fist allowing multiple explosive fists to be attached to an enemy at the same time
+-Spooky mod biome crates using the incorrect catch rarity, causing them to unintentionally replace other fishing loot
+-Spooky mod biome chest key tooltips incorrectly saying the chests are found in the dungeon and not the catacombs
+-Ghostly slingshot projectile splitting into bolts every 4 shots instead of every 3 shots
+-Pro-slingshot and crossbow slingshot tooltips not saying the correct number of times they allow projectiles to pierce
+-Tsar thrower rock debris projectiles counting as minion shots (This means it was counted as a projectile shot by a minion, which it is not)
+-Web catcher projectiles not slowing down enemies
+-Upper catacombs sofa not using silk and using the incorrect number of brick blocks in its recipe
+-Tar cactus bookcase not requiring a workbench to be crafted
+-Bottomless pebble bag requiring 99 to reasearch instead of just one
+-Catacombs entrance getting generated over by the catacombs itself if it generated too close to the underground layer
+-Cemetery sometimes generating way too low, with the edges of the biomes being in holes or corruption craters
+-Cemetery sometimes being flooded during world generation
+-Old hunter's arena generation sometimes destroying other structures around it
+-Old hunter's arena sometimes being generated over by lakes in the spider grotto
+-Naturally generated rusty metal plating being able to get destroyed by explosions
+-Tar pits biome taking priority over the dungeon
+-Spider war event progress UI not using localized text
+-Fixed even more typos throughout the mod
+
+Multiplayer Fixes:
+-Attempted to fix orro-boro egg sometimes spawning orro-boro multiple times at once
+-Old hunter friendly npc displaying post defeat dialogue before being defeated
+-Multiple sentries not shooting any projectiles at all
+-Attempted to fix putty amalgam being janky
+-Attempted to fix harvestmen being janky
+-Spooky buster not spawning explosive skulls on enemy hits
+-Some enemies producing multiple sets gores on death (I have not gotten around to all of them yet)

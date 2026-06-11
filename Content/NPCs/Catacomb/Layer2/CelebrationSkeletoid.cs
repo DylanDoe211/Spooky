@@ -81,7 +81,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
 
         public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CatacombChestKeyLower>(), 50));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CatacombChestKeyLower>(), 30));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CandyCorn>(), 100));
         }
 
@@ -89,9 +89,9 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
         {
 			if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 6; numGores++)
+                if (Main.netMode != NetmodeID.Server) 
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 6; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/CelebrationSkeletoid1Gore" + numGores).Type);
                     }
@@ -115,9 +115,9 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
         {
 			if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 6; numGores++)
+                if (Main.netMode != NetmodeID.Server) 
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 6; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/CelebrationSkeletoid2Gore" + numGores).Type);
                     }
@@ -141,9 +141,9 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
         {
 			if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 6; numGores++)
+                if (Main.netMode != NetmodeID.Server) 
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 6; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/CelebrationSkeletoid3Gore" + numGores).Type);
                     }
@@ -167,9 +167,9 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
         {
 			if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 6; numGores++)
+                if (Main.netMode != NetmodeID.Server) 
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 6; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/CelebrationSkeletoid4Gore" + numGores).Type);
                     }
@@ -193,9 +193,9 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
         {
 			if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 6; numGores++)
+                if (Main.netMode != NetmodeID.Server) 
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 6; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/CelebrationSkeletoid5Gore" + numGores).Type);
                     }

@@ -48,7 +48,7 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 
 	 	List<int> BiomePositionDistances = new List<int>();
 
-		Player TargetedPlayer = null;
+		int TargetedPlayer = -1;
 
 		private static Asset<Texture2D> NPCTexture;
 		private static Asset<Texture2D> GlowTexture;
@@ -93,6 +93,7 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 			writer.Write(BiteAnimationTimer);
 			writer.Write(RoarAnimationTimer);
 			writer.Write(Aggression);
+			writer.Write(TargetedPlayer);
 
 			//bools
 			writer.Write(BiteAnimation);
@@ -113,6 +114,7 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 			BiteAnimationTimer = reader.ReadInt32();
 			RoarAnimationTimer = reader.ReadInt32();
 			Aggression = reader.ReadInt32();
+			TargetedPlayer = reader.ReadInt32();
 
 			//bools
 			BiteAnimation = reader.ReadBoolean();
@@ -166,9 +168,9 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 
 			var effects = NPC.velocity.X > 0f ? SpriteEffects.None : SpriteEffects.FlipVertically;
 
-			if (NPC.ai[1] > 0 && Aggression <= 0 && TargetedPlayer != null)
+			if (NPC.ai[1] > 0 && Aggression <= 0 && TargetedPlayer != -1)
 			{
-				effects = NPC.Center.X < TargetedPlayer.Center.X ? SpriteEffects.None : SpriteEffects.FlipVertically;
+				effects = NPC.Center.X < Main.player[TargetedPlayer].Center.X ? SpriteEffects.None : SpriteEffects.FlipVertically;
 			}
 
 			//draw body
@@ -277,18 +279,18 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 
 		public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
 		{
-			if (NPC.ai[1] <= 0 && Aggression <= 0 && TargetedPlayer == null)
+			if (NPC.ai[1] <= 0 && Aggression <= 0 && TargetedPlayer == -1)
 			{
-				TargetedPlayer = player;
+				TargetedPlayer = player.whoAmI;
 				NPC.ai[1] = 1;
 				NPC.netUpdate = true;
 			}
 		}
 		public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
 		{
-			if (NPC.ai[1] <= 0 && Aggression <= 0 && TargetedPlayer == null)
+			if (NPC.ai[1] <= 0 && Aggression <= 0 && TargetedPlayer == -1)
 			{
-				TargetedPlayer = Main.player[projectile.owner];
+				TargetedPlayer = Main.player[projectile.owner].whoAmI;
 				NPC.ai[1] = 1;
 				NPC.netUpdate = true;
 			}
@@ -328,11 +330,13 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 
 		public override void AI()
 		{
-			if (TargetedPlayer != null)
+			if (TargetedPlayer != -1)
 			{
-				if (!TargetedPlayer.active || TargetedPlayer.dead)
+				if (!Main.player[TargetedPlayer].active || Main.player[TargetedPlayer].dead)
 				{
 					Aggression = 0;
+					TargetedPlayer = -1;
+					NPC.netUpdate = true;
 				}
 			}
 
@@ -375,9 +379,9 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
             float RotateDirection = (float)Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + MathHelper.TwoPi;
 			float RotateSpeed = 0.04f;
 
-			if (NPC.ai[1] > 0 && Aggression <= 0 && TargetedPlayer != null)
+			if (NPC.ai[1] > 0 && Aggression <= 0 && TargetedPlayer != -1)
 			{
-				Vector2 RotateTowards = TargetedPlayer.Center - NPC.Center;
+				Vector2 RotateTowards = Main.player[TargetedPlayer].Center - NPC.Center;
                 RotateDirection = (float)Math.Atan2(RotateTowards.Y, RotateTowards.X) + MathHelper.TwoPi;
 			}
 			else
@@ -433,9 +437,9 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 			}
 
 			//explode when it eats a bomb
-			if (AteBomb && TargetedPlayer != null)
+			if (AteBomb && TargetedPlayer != -1)
 			{
-				Vector2 desiredVelocity = NPC.DirectionTo(TargetedPlayer.Center) * 1;
+				Vector2 desiredVelocity = NPC.DirectionTo(Main.player[TargetedPlayer].Center) * 1;
 				NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
 				NPC.velocity *= 0.98f;
 
@@ -502,7 +506,7 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 						NetMessage.SendData(MessageID.WorldData);
 					}
 
-					TargetedPlayer.ApplyDamageToNPC(NPC, NPC.lifeMax * 2, 0, 0, false, null, true);
+					Main.player[TargetedPlayer].ApplyDamageToNPC(NPC, NPC.lifeMax * 2, 0, 0, false, null, true);
 				}
 
 				return;
@@ -528,7 +532,7 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 			Vector2 InfrontOfDunk = new Vector2(110, 0).RotatedBy(NPC.rotation + MathHelper.TwoPi) + NPC.Center;
 			Vector2 BigDunkBody = -new Vector2(60, 0).RotatedBy(NPC.rotation + MathHelper.TwoPi) + NPC.Center;
 
-			if (NPC.ai[1] <= 0 && Aggression <= 0 && TargetedPlayer == null)
+			if (NPC.ai[1] <= 0 && Aggression <= 0 && TargetedPlayer == -1)
 			{
 				foreach (Player player in Main.ActivePlayers)
 				{
@@ -539,10 +543,10 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 
 						if (ShouldBecomeAggressive)
 						{
-							TargetedPlayer = player;
+							TargetedPlayer = player.whoAmI;
 							NPC.ai[1] = 1;
 
-							if (TargetedPlayer.whoAmI == Main.myPlayer && Main.netMode != NetmodeID.Server)
+							if (Main.netMode != NetmodeID.Server)
                	 			{
 								ModContent.GetInstance<MiscAchievementBigDunkEat>().BigDunkEatCondition.Complete();
 							}
@@ -591,9 +595,9 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 			//passive roaming pathfinding movement
 			if (Aggression <= 0)
 			{
-				if (NPC.ai[1] > 0 && TargetedPlayer != null)
+				if (NPC.ai[1] > 0 && TargetedPlayer != -1)
 				{
-					Vector2 desiredVelocity = NPC.DirectionTo(TargetedPlayer.Center) * 1;
+					Vector2 desiredVelocity = NPC.DirectionTo(Main.player[TargetedPlayer].Center) * 1;
 					NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
 				}
 				else
@@ -673,34 +677,34 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 				NPC.ai[0] = 0;
 				NPC.ai[1] = 0;
 
-				float Speed = TargetedPlayer.Distance(NPC.Center) >= 300f ? 3f : 2.5f;
+				float Speed = Main.player[TargetedPlayer].Distance(NPC.Center) >= 300f ? 3f : 2.5f;
 
 				if (Main.expertMode && !Main.masterMode)
 				{
-					Speed = TargetedPlayer.Distance(NPC.Center) >= 300f ? 3.5f : 3f;
+					Speed = Main.player[TargetedPlayer].Distance(NPC.Center) >= 300f ? 3.5f : 3f;
 				}
 				else if (Main.masterMode)
 				{
-					Speed = TargetedPlayer.Distance(NPC.Center) >= 300f ? 3.8f : 3.5f;
+					Speed = Main.player[TargetedPlayer].Distance(NPC.Center) >= 300f ? 3.8f : 3.5f;
 				}
 
 				//quickly loose aggression if the player leaves the biome
-				if (!TargetedPlayer.InModBiome<ZombieOceanBiome>())
+				if (!Main.player[TargetedPlayer].InModBiome<ZombieOceanBiome>())
 				{
 					Aggression -= 20;
 				}
 				else
 				{
-					if (TargetedPlayer.Distance(NPC.Center) <= 150f)
+					if (Main.player[TargetedPlayer].Distance(NPC.Center) <= 150f)
 					{
 						BiteAnimationTimer = 36;
 					}
 
 					//only use pathfinding if it doesnt have line of sight to the player
-					bool PlayerLineOfSight = Collision.CanHitLine(TargetedPlayer.Center - new Vector2(1, 1), 2, 2, NPC.position, NPC.width, NPC.height);
+					bool PlayerLineOfSight = Collision.CanHitLine(Main.player[TargetedPlayer].Center - new Vector2(1, 1), 2, 2, NPC.position, NPC.width, NPC.height);
 					if (!PlayerLineOfSight)
 					{
-						PathfindingMovement(TargetedPlayer.Center, Speed, 150, 7000, true);
+						PathfindingMovement(Main.player[TargetedPlayer].Center, Speed, 150, 7000, true);
 						NPC.noTileCollide = true;
 
 						//decrease aggression
@@ -708,13 +712,13 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 					}
 					else
 					{
-						Vector2 desiredVelocity = NPC.DirectionTo(TargetedPlayer.Center) * Speed;
+						Vector2 desiredVelocity = NPC.DirectionTo(Main.player[TargetedPlayer].Center) * Speed;
 						NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
 						NPC.noTileCollide = false;
 					}
 				}
 
-				if (Aggression == 1 || TargetedPlayer.dead)
+				if (Aggression == 1 || Main.player[TargetedPlayer].dead)
 				{
 					SoundStyle[] Sounds = new SoundStyle[] { GrowlSound1, GrowlSound2 };
 
@@ -722,7 +726,7 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 
 					RoarAnimationTimer = 75;
 
-					TargetedPlayer = null;
+					TargetedPlayer = -1;
 
 					Aggression = 0;
 					NPC.ai[2] = 0;

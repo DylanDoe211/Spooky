@@ -109,7 +109,7 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 				for (int oldPos = 0; oldPos < Projectile.oldPos.Length && oldPos < StateTimer; oldPos++)
 				{
 					Vector2 drawPos = Projectile.oldPos[oldPos] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-					Color color = Projectile.GetAlpha(Color.Orange) * ((float)(Projectile.oldPos.Length - oldPos) / (float)Projectile.oldPos.Length);
+					Color color = Projectile.GetAlpha(Color.OrangeRed) * ((float)(Projectile.oldPos.Length - oldPos) / (float)Projectile.oldPos.Length);
 					
 					Main.spriteBatch.Draw(ProjTexture.Value, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale - oldPos / (float)Projectile.oldPos.Length / 3, spriteEffects, 0f);
 				}
@@ -226,13 +226,17 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 						{
 							bool lineOfSight = Collision.CanHitLine(NPC.position, NPC.width, NPC.height, Projectile.position, Projectile.width, Projectile.height);
 
-							if (lineOfSight && SpinningStateTimer % 8 == 0)
+							if (lineOfSight && SpinningStateTimer % 10 == 0)
 							{
+								SoundEngine.PlaySound(SoundID.Item111 with { Volume = 0.5f }, Projectile.Center);
+
 								Vector2 ShootSpeed = (NPC.Center + NPC.velocity) - Projectile.Center;
 								ShootSpeed.Normalize();
 								ShootSpeed *= 15f;
 
-								Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, ShootSpeed, ModContent.ProjectileType<SpookFishronFlailBubble>(), Projectile.damage / 2, 0f, Projectile.owner);
+								int Proj = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, ShootSpeed, 
+								ModContent.ProjectileType<SpookFishronFlailBubble>(), Projectile.damage / 2, 0f, Projectile.owner);
+								Main.projectile[Proj].timeLeft = 180;
 							}
 
 							break;
@@ -243,27 +247,6 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 					if (ChargeTimer <= 300)
 					{
 						ChargeTimer++;
-
-						if (ChargeTimer % 60 == 0)
-						{
-							float maxAmount = 30;
-							int currentAmount = 0;
-							while (currentAmount <= maxAmount)
-							{
-								Vector2 velocity = new Vector2(2f, 2f);
-								Vector2 Bounds = new Vector2(3f, 3f);
-								float intensity = 2f;
-
-								Vector2 vector12 = Vector2.UnitX * 0f;
-								vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
-								vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
-								int num104 = Dust.NewDust(player.Center, 0, 0, DustID.Torch, 0f, 0f, 100, default, 3f);
-								Main.dust[num104].noGravity = true;
-								Main.dust[num104].position = player.Center + vector12;
-								Main.dust[num104].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
-								currentAmount++;
-							}
-						}
 					}
 
                     break;

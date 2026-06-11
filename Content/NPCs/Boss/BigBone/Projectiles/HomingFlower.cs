@@ -98,9 +98,11 @@ namespace Spooky.Content.NPCs.Boss.BigBone.Projectiles
 			if (Projectile.ai[1] == 0)
 			{
 				double Velocity = Math.Atan2(target.position.Y - Projectile.position.Y, target.position.X - Projectile.position.X);
-				Projectile.velocity = new Vector2((float)Math.Cos(Velocity), (float)Math.Sin(Velocity)) * 16;
+				Projectile.velocity = new Vector2((float)Math.Cos(Velocity), (float)Math.Sin(Velocity)) * 14;
 
 				Projectile.ai[1] = 1;
+
+				Projectile.netUpdate = true;
 			}
 
 			Projectile.ai[0]++;
@@ -124,10 +126,26 @@ namespace Spooky.Content.NPCs.Boss.BigBone.Projectiles
 
 			SoundEngine.PlaySound(SoundID.NPCHit7 with { Volume = 0.5f }, Projectile.Center);
 
-			double Velocity = Math.Atan2(target.position.Y - Projectile.position.Y, target.position.X - Projectile.position.X);
-			Vector2 actualSpeed = new Vector2((float)Math.Cos(Velocity), (float)Math.Sin(Velocity)) * 14;
+			if (Projectile.Distance(target.Center) >= 500)
+			{
+				double Velocity = Math.Atan2(target.position.Y - Projectile.position.Y, target.position.X - Projectile.position.X);
+				Vector2 actualSpeed = new Vector2((float)Math.Cos(Velocity), (float)Math.Sin(Velocity)) * 14;
 
-			Projectile.velocity = actualSpeed;
+				Projectile.velocity = actualSpeed;
+			}
+			else
+			{
+				if (Projectile.velocity.X != oldVelocity.X)
+				{
+					Projectile.position.X = Projectile.position.X + Projectile.velocity.X;
+					Projectile.velocity.X = -oldVelocity.X * 0.95f;
+				}
+				if (Projectile.velocity.Y != oldVelocity.Y)
+				{
+					Projectile.position.Y = Projectile.position.Y + Projectile.velocity.Y;
+					Projectile.velocity.Y = -oldVelocity.Y * 0.95f;
+				}
+			}
 
 			return false;
 		}

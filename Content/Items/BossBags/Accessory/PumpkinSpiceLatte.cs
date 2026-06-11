@@ -10,6 +10,11 @@ namespace Spooky.Content.Items.BossBags.Accessory
 {
 	public class PumpkinSpiceLatte : ModItem
 	{
+		public override void SetStaticDefaults()
+		{
+			ItemID.Sets.WorksInVoidBag[Type] = true;
+		}
+
 		public override void SetDefaults()
         {
 			Item.healLife = 200;

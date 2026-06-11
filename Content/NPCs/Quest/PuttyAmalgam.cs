@@ -8,6 +8,7 @@ using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.IO;
 using System.Collections.Generic;
 
 using Spooky.Core;
@@ -28,6 +29,20 @@ namespace Spooky.Content.NPCs.Quest
 			Main.npcFrameCount[NPC.type] = 7;
 			NPCGlobal.IsSpookyModMiniboss[Type] = true;
 		}
+
+		public override void SendExtraAI(BinaryWriter writer)
+        {
+            //floats
+            writer.Write((ushort)destinationX);
+            writer.Write((ushort)destinationY);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+            //floats
+            destinationX = reader.ReadUInt16();
+            destinationY = reader.ReadUInt16();
+        }
 
 		public override void SetDefaults()
 		{

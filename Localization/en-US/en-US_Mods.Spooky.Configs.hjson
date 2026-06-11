@@ -31,6 +31,15 @@ SpookyConfig: {
 			Can be changed between Normal, Fast, and Instant
 			'''
 	}
+
+	DialogueFocus: {
+		Label: Dialogue Focuses On Talking NPC
+		Tooltip:
+			'''
+			Allows you to determine if spooky mod's special dialogue pans your camera on the NPC you are talking to
+			Enabling this will pan you camera to the NPC, and disabling this will not pan your camera to the NPC
+			'''
+	}
 }
 
 SpookyServerConfig: {
@@ -44,6 +53,16 @@ SpookyServerConfig: {
 			Keep this option on if you want terraria's halloween seasonal content always active while playing
 			Keep this option off if you want terraria's halloween event to only occur when it normally should
 			(Like during the month of October, or when you make it to wave 15 of the pumpkin moon before daytime)
+			'''
+	}
+
+	NoseTempleMaxPlayers: {
+		Label: Moco Temple Ambushes Require All Players
+		Tooltip:
+			'''
+			Allows you to force all players into a nose temple combat room if any player activates it
+			If turned off, then the combat rooms in the temple of moco will work normally and won't account for other players
+			If turned on, then every single player inside the temple of moco will immediately be teleported into the room
 			'''
 	}
 }

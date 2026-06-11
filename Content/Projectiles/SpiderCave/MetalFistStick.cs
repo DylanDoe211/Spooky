@@ -96,18 +96,16 @@ namespace Spooky.Content.Projectiles.SpiderCave
 			dust.noGravity = true;
             dust.noLight = true;
 
-            int npcTarget = (int)Projectile.ai[1];
-            if (npcTarget < 0 || npcTarget >= 200)
+            NPC target = Main.npc[(int)Projectile.ai[1]];
+            if (target.active && !target.dontTakeDamage) 
             {
-                Projectile.Kill();
-            }
-            else if (Main.npc[npcTarget].active && !Main.npc[npcTarget].dontTakeDamage) 
-            {
-                Projectile.Center = Main.npc[npcTarget].Center - Projectile.velocity * 2f;
-                Projectile.gfxOffY = Main.npc[npcTarget].gfxOffY;
+                target.GetGlobalNPC<NPCGlobal>().HasMetalFistAttached = true;
+                Projectile.Center = target.Center - Projectile.velocity * 2f;
+                Projectile.gfxOffY = target.gfxOffY;
             }
             else 
             {
+                target.GetGlobalNPC<NPCGlobal>().HasMetalFistAttached = false;
                 Projectile.Kill();
             }
 		}
@@ -115,6 +113,9 @@ namespace Spooky.Content.Projectiles.SpiderCave
         public override void OnKill(int timeLeft)
 		{
             Player player = Main.player[Projectile.owner];
+
+            NPC target = Main.npc[(int)Projectile.ai[1]];
+            target.GetGlobalNPC<NPCGlobal>().HasMetalFistAttached = false;
 
             SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot with { Volume = 0.25f }, Projectile.Center);
             SoundEngine.PlaySound(SoundID.DD2_BetsyFireballImpact with { Volume = 0.25f }, Projectile.Center);

@@ -18,6 +18,7 @@ using Spooky.Content.Tiles.Trophy;
 
 namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 {
+	[AutoloadBossHead]
 	public class EmpressJoro : ModNPC
 	{
 		int SaveDirection;

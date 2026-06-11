@@ -1,116 +1,310 @@
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
+using System.IO;
 
 namespace Spooky.Content.NPCs.Boss.Daffodil.Projectiles
-{ 
-    public class ThornPillarBarrierSide : ModProjectile
+{
+	public class ThornPillarBarrierSide : ModProjectile
 	{
-        private static Asset<Texture2D> ProjTexture;
+		public override string Texture => "Spooky/Content/NPCs/Boss/Daffodil/Projectiles/ThornBarrier";
 
-        public static readonly SoundStyle ThornSpawnSound = new("Spooky/Content/Sounds/Daffodil/ThornBarrier", SoundType.Sound);
+		bool runOnce = true;
+		Vector2[] trailLength = new Vector2[25];
+		Rectangle[] trailHitboxes = new Rectangle[25];
+		float[] rotations = new float[25];
+
+		float SaveRotation;
+
+		private static Asset<Texture2D> ProjTexture;
+		private static Asset<Texture2D> GlowTexture;
+		private static Asset<Texture2D> TrailTexture;
+		private static Asset<Texture2D> TrailGlowTexture;
+
+		public static readonly SoundStyle ThornSpawnSound = new("Spooky/Content/Sounds/Daffodil/ThornBarrier", SoundType.Sound);
+
+		public override void SendExtraAI(BinaryWriter writer)
+        {
+			for (int i = 0; i < trailLength.Length; i++)
+            {
+                writer.WriteVector2(trailLength[i]);
+				writer.Write(rotations[i]);
+            }
+
+            //bools
+            writer.Write(runOnce);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+			for (int i = 0; i < trailLength.Length; i++)
+            {
+                trailLength[i] = reader.ReadVector2();
+				rotations[i] = reader.ReadSingle();
+            }
+
+            //bools
+            runOnce = reader.ReadBoolean();
+        }
 
 		public override void SetDefaults()
 		{
-			DrawOffsetX = 0;
-			DrawOriginOffsetY = -16;
-			DrawOriginOffsetX = -80;
-			Projectile.width = 2;
-			Projectile.height = 2;
+			Projectile.width = 66;
+			Projectile.height = 66;
+            Projectile.friendly = false;
 			Projectile.hostile = true;
 			Projectile.tileCollide = false;
-			Projectile.hide = true;
-            Projectile.penetrate = -1;
-			Projectile.timeLeft = 600;
+			Projectile.timeLeft = 2;
+			Projectile.penetrate = -1;
 		}
 
-		public override bool? CanDamage()
+		public override bool PreDraw(ref Color lightColor)
 		{
-			return Projectile.ai[1] > 0 ? null : false;
-		}
+			DrawChain(false);
 
-		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-		{
-			Vector2 unit = new Vector2(1, 0).RotatedBy(Projectile.rotation);
-			float Distance = Projectile.ai[1];
+			ProjTexture ??= ModContent.Request<Texture2D>(Texture);
+			GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
 
-			float point = 0f;
-			return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, Projectile.Center + unit * Distance, 5, ref point);
-		}
+			Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
+			Vector2 vector = new Vector2(Projectile.Center.X, Projectile.Center.Y) - Main.screenPosition + new Vector2(0, Projectile.gfxOffY);
+			Rectangle rectangle = new(0, ProjTexture.Height() / Main.projFrames[Projectile.type] * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
 
-        public override void OnHitPlayer(Player target, Player.HurtInfo info)
-        {
-            target.velocity.X = target.Center.X > Projectile.Center.X ? 10 : -10;
-        }
+			Color color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)(Projectile.Center.Y / 16));
 
-        public override bool PreDraw(ref Color lightColor)
-		{
-            ProjTexture ??= ModContent.Request<Texture2D>(Texture);
-
-			if (Projectile.ai[1] > 0)
-            {
-				float fade = (float)Math.Cos((double)(Main.GlobalTimeWrappedHourly % 2.5f / 2.5f * 6f)) / 2f + 0.5f;
-
-		    	Main.EntitySpriteDraw(ProjTexture.Value, Projectile.Center - Main.screenPosition, 
-                new Rectangle(487 - (int)Projectile.ai[1], Projectile.frame, (int)Projectile.ai[1] + 17, 42), Color.White, 
-                Projectile.rotation, new Vector2(17, 17), Projectile.scale + fade / 6, SpriteEffects.None, 0);
-            }
+			Main.EntitySpriteDraw(ProjTexture.Value, vector, rectangle, Projectile.GetAlpha(color), SaveRotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+			Main.EntitySpriteDraw(GlowTexture.Value, vector, rectangle, Projectile.GetAlpha(Color.White), SaveRotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
 
 			return false;
 		}
 
-        public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)
-        {
-			behindNPCsAndTiles.Add(index);
-		}
-
-		//The AI of the projectile
-		public override void AI()
+		public bool DrawChain(bool SpawnGore)
 		{
-			Lighting.AddLight(Projectile.Center, 0f, 0.4f, 0f);
-
-            if (Projectile.localAI[0] == 0)
+			if (runOnce)
 			{
-				SoundEngine.PlaySound(ThornSpawnSound, Projectile.Center);
-
-				Projectile.localAI[0] = 1;
-				Projectile.rotation = Projectile.ai[0];
-				Projectile.ai[0] = 0;
+				return false;
 			}
 
-			if (Projectile.ai[0] < 60)
+			TrailTexture ??= ModContent.Request<Texture2D>(Texture + "Stem");
+			TrailGlowTexture ??= ModContent.Request<Texture2D>(Texture + "StemGlow");
+
+			Vector2 drawOrigin = new Vector2(TrailTexture.Width() * 0.5f, TrailTexture.Height() * 0.5f);
+			Vector2 previousPosition = Projectile.Center;
+
+			for (int k = 0; k < trailLength.Length; k++)
 			{
-				Projectile.ai[1] += 20;
-
-				if (Projectile.ai[1] > 487)
+				if (trailLength[k] == Vector2.Zero)
 				{
-					Projectile.ai[1] = 487;
-
-					Projectile.ai[0]++;
+					return false;
 				}
-			}
-			else
-			{
-				//do not retract unless daffodil is not active
-				if (!NPC.AnyNPCs(ModContent.NPCType<DaffodilEye>()))
+
+				Color color = Lighting.GetColor((int)trailLength[k].X / 16, (int)(trailLength[k].Y / 16));
+
+				Vector2 drawPos = trailLength[k] - Main.screenPosition;
+				Vector2 currentPos = trailLength[k];
+				Vector2 betweenPositions = previousPosition - currentPos;
+
+				drawPos = previousPosition + -betweenPositions - Main.screenPosition;
+
+				if (!SpawnGore)
 				{
-					Projectile.ai[1] -= 20;
+					Main.spriteBatch.Draw(TrailTexture.Value, drawPos, null, color, rotations[k], drawOrigin, 1f, SpriteEffects.None, 0f);
+					Main.spriteBatch.Draw(TrailGlowTexture.Value, drawPos, null, Color.White, rotations[k], drawOrigin, 1f, SpriteEffects.None, 0f);
 				}
 				else
 				{
-					Projectile.timeLeft = 60;
+					if (Main.rand.NextBool())
+					{
+						if (Main.netMode != NetmodeID.Server) 
+						{
+							//Gore.NewGore(Projectile.GetSource_Death(), previousPosition + -betweenPositions, Vector2.Zero, ModContent.Find<ModGore>("Spooky/MagicBeanstalkStemGore").Type);
+						}
+					}
 				}
 
-				if (Projectile.ai[1] <= 0)
+				previousPosition = currentPos;
+			}
+
+			return false;
+		}
+
+		public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
+			bool CollidingWithStem = false;
+
+			if (!runOnce)
+			{
+				for (int i = 0; i < trailHitboxes.Length; i++)
 				{
-					Projectile.Kill();
+					if (trailHitboxes[i] != Rectangle.Empty && targetHitbox.Intersects(trailHitboxes[i]))
+					{
+						CollidingWithStem = true;
+						break;
+					}
+					else
+					{
+						CollidingWithStem = false;
+					}
 				}
 			}
+
+			return targetHitbox.Intersects(projHitbox) || CollidingWithStem;
+		}
+
+		public override bool OnTileCollide(Vector2 oldVelocity)
+		{
+			return false;
+		}
+
+		public override void AI()
+		{
+			Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+			Projectile.rotation += 0f * (float)Projectile.direction;
+
+			if (NPC.AnyNPCs(ModContent.NPCType<DaffodilEye>()))
+			{
+				Projectile.timeLeft = 2;
+			}
+
+			if (runOnce)
+			{
+				for (int i = 0; i < trailLength.Length; i++)
+				{
+					trailLength[i] = Vector2.Zero;
+					trailHitboxes[i] = Rectangle.Empty;
+					rotations[i] = 0f;
+				}
+
+				runOnce = false;
+
+				Projectile.netUpdate = true;
+			}
+
+			//player knockback stuff
+			foreach (Player player in Main.ActivePlayers)
+			{
+				foreach (Rectangle hitBox in trailHitboxes)
+				{
+					if (player.Hitbox.Intersects(hitBox))
+					{
+						Vector2 Pushback = player.Center - new Vector2(hitBox.Center().X, hitBox.Center().Y);
+						Pushback.Normalize();
+						Pushback *= 5;
+
+						player.velocity = Pushback;
+					}
+				}
+
+				if (player.Hitbox.Intersects(new Rectangle((int)(Projectile.Center.X - 10), (int)(Projectile.Center.Y - 10), 20, 20)))
+				{
+					Vector2 Pushback = player.Center - Projectile.Center;
+					Pushback.Normalize();
+					Pushback *= 3;
+
+					player.velocity = Pushback;
+				}
+			}
+
+			Projectile.localAI[2]++;
+			if (Projectile.localAI[2] == 2)
+			{
+				SoundEngine.PlaySound(ThornSpawnSound, Projectile.Center);
+			}
+
+			bool StopMoving = true;
+			foreach (Vector2 thing in trailLength)
+			{
+				if (thing == Vector2.Zero)
+				{
+					StopMoving = false;
+				}
+			}
+			if (!StopMoving)
+			{
+				int ProjDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Grass);
+				Main.dust[ProjDust].noGravity = true;
+				Main.dust[ProjDust].scale = 1.8f;
+				Main.dust[ProjDust].velocity /= 4f;
+				Main.dust[ProjDust].velocity += Projectile.velocity / 2;
+
+				//save previous positions, rotations, and direction
+				if (Projectile.velocity != Vector2.Zero && Projectile.localAI[2] % 2 == 0)
+				{
+					Vector2 current = Projectile.Center;
+					float currentRot = Projectile.rotation;
+					for (int i = 0; i < trailLength.Length; i++)
+					{
+						Vector2 previousPosition = trailLength[i];
+						trailLength[i] = current;
+						current = previousPosition;
+
+						float previousRot = rotations[i];
+						rotations[i] = currentRot;
+						currentRot = previousRot;
+
+						trailHitboxes[i] = new Rectangle((int)current.X - 10, (int)current.Y - 10, 20, 20);
+					}
+				}
+
+				float WaveIntensity = 6f;
+				float Wave = 6f;
+
+				bool Flip = Projectile.ai[2] > 0;
+
+				Projectile.ai[0]++;
+				if (Projectile.ai[1] == 0)
+				{
+					if (Projectile.ai[0] > Wave * 0.5f)
+					{
+						Projectile.ai[0] = 0;
+						Projectile.ai[1] = 1;
+					}
+					else
+					{
+						Vector2 perturbedSpeed = new Vector2(Projectile.velocity.X, Projectile.velocity.Y).RotatedBy(MathHelper.ToRadians(Flip ? WaveIntensity : -WaveIntensity));
+						Projectile.velocity = perturbedSpeed;
+					}
+				}
+				else
+				{
+					if (Projectile.ai[0] <= Wave)
+					{
+						Vector2 perturbedSpeed = new Vector2(Projectile.velocity.X, Projectile.velocity.Y).RotatedBy(MathHelper.ToRadians(Flip ? -WaveIntensity : WaveIntensity));
+						Projectile.velocity = perturbedSpeed;
+					}
+					else
+					{
+						Vector2 perturbedSpeed = new Vector2(Projectile.velocity.X, Projectile.velocity.Y).RotatedBy(MathHelper.ToRadians(Flip ? WaveIntensity : -WaveIntensity));
+						Projectile.velocity = perturbedSpeed;
+					}
+					if (Projectile.ai[0] >= Wave * 2)
+					{
+						Projectile.ai[0] = 0;
+					}
+				}
+
+				SaveRotation = Projectile.rotation;
+			}
+			else
+			{
+				Projectile.rotation = SaveRotation;
+				Projectile.velocity = Vector2.Zero;
+			}
+		}
+
+		public override void OnKill(int timeLeft)
+		{
+			SoundEngine.PlaySound(SoundID.Grass, Projectile.Center);
+
+			if (Main.netMode != NetmodeID.Server) 
+			{
+				//Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ModContent.Find<ModGore>("Spooky/MagicBeanstalkTopGore").Type);
+			}
+
+			DrawChain(true);
 		}
 	}
 }

@@ -857,9 +857,9 @@ namespace Spooky.Content.NPCs.Boss.Orroboro
 
         public override bool CheckDead()
         {
-            for (int numGores = 1; numGores <= 2; numGores++)
+            if (Main.netMode != NetmodeID.Server)
             {
-                if (Main.netMode != NetmodeID.Server) 
+                for (int numGores = 1; numGores <= 2; numGores++)
                 {
                     Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity / 2, ModContent.Find<ModGore>("Spooky/OrroHeadGore" + numGores).Type);
                 }

@@ -13,7 +13,6 @@ namespace Spooky.Content.Items.Slingshots.Ammo
 		public override void SetStaticDefaults() 
         {
 			ItemGlobal.IsSlingshotAmmo[Item.type] = true;
-			Item.ResearchUnlockCount = 99;
 		}
 
 		public override void SetDefaults() 

@@ -103,15 +103,13 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
             {
                 SoundEngine.PlaySound(SoundID.Item17 with { Volume = 0.35f }, Projectile.Center);
 
-                if (Main.netMode != NetmodeID.MultiplayerClient)
-                {
-                    int Needle = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, 
-                    4f * Projectile.DirectionTo(new Vector2(Projectile.Center.X, Projectile.Center.Y - 50)).RotatedByRandom(MathHelper.ToRadians(85)),
-                    ModContent.ProjectileType<CactusNeedle>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
-                    Main.projectile[Needle].DamageType = DamageClass.Summon;
-                }
+                int Needle = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, 
+                4f * Projectile.DirectionTo(new Vector2(Projectile.Center.X, Projectile.Center.Y - 50)).RotatedByRandom(MathHelper.ToRadians(85)),
+                ModContent.ProjectileType<CactusNeedle>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                Main.projectile[Needle].DamageType = DamageClass.Summon;
             
                 Projectile.ai[0] = 0;
+                Projectile.netUpdate = true;
             }
 		}
     }

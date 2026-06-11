@@ -63,7 +63,12 @@ namespace Spooky.Content.NPCs.Friendly
 			SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.SpookyBiome>().Type };
 		}
 
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
+		public override bool UsesPartyHat()
+		{
+			return false;
+		}
+
+		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
         {
 			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
             {

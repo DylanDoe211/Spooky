@@ -453,13 +453,16 @@ namespace Spooky.Content.Generation
 			{
 				if (GoingToSurface)
 				{
+					p1 = End;
+					p2 = Start;
+
 					for (int i = 0; i < segments; i++)
 					{
 						float t = i / (float)segments;
 						Vector2 Position = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
 						t = (i + 1) / (float)segments;
 
-						if (i % 3 == 0 && NoDungeonBlocksNearby((int)Position.X, (int)Position.Y, 6, false))
+						if (i % 2 == 0 && NoDungeonBlocksNearby((int)Position.X, (int)Position.Y, 6, false))
 						{
 							int Size = WorldGen.genRand.Next(9, 11);
 							int SizeY = 0;

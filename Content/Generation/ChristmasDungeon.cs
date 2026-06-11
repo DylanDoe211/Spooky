@@ -85,7 +85,7 @@ namespace Spooky.Content.Generation
 			int Increment = JungleOnLeftSide ? 20 : -20;
 
 			//find a valid position in the underground snow biome
-			for (int Y = Main.maxTilesY - 300; Y >= Main.worldSurface + 90; Y -= 5)
+			for (int Y = Main.maxTilesY - 300; Y >= Main.worldSurface + 40; Y -= 5)
 			{
 				for (int X = Start; JungleOnLeftSide ? X <= End : X >= End; X += Increment)
 				{

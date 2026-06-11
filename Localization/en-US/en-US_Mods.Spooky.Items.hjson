@@ -5,12 +5,12 @@ Bonemeal: {
 
 DaylightSavings: {
 	DisplayName: Daylight Savings
-	Tooltip: 20% chance for your bloom buffs to continue for 2 extra minutes when they run out
+	Tooltip: Your bloom buffs have a 20% chance to continue for 2 extra minutes when they run out
 }
 
 FarmerGlove: {
 	DisplayName: Farmer's Glove
-	Tooltip: Grants 15% increased attack speed for each bloom buff you have
+	Tooltip: Grants 10% increased attack speed for each bloom buff you have
 }
 
 HerbShaker: {
@@ -169,8 +169,8 @@ FossilDutchmanPipe: {
 	DisplayName: Dutchman's Pipe
 	Tooltip:
 		'''
-		Creates a large aura around you
-		Enemies inside of this aura will take 10% more damage from attacks
+		Creates a large dutchman pipe aura around you
+		Hitting enemies in the aura with projectiles causes all enemies in the aura to take damage
 		5 minute duration
 		'''
 }
@@ -928,7 +928,7 @@ PandoraCross: {
 	Tooltip:
 		'''
 		Press the Accessory Hotkey to release powerful sound around you for 5 seconds
-		The sound will deal damage to surrounding enemies, but will also damage you a little bit
+		The sound will deal damage to surrounding enemies and push them away
 		This ability has a 40 second cooldown before it can be used again
 		'Heart-crushing Bass'
 		'''
@@ -1202,7 +1202,7 @@ Creepypasta: {
 
 CemeteryKey: {
 	DisplayName: Swampy Cemetery Key
-	Tooltip: Unlocks a cemetery chest in the dungeon
+	Tooltip: Unlocks a cemetery chest in the catacombs
 }
 
 CemeterySolution: {
@@ -1277,6 +1277,36 @@ BoroMask: {
 	Tooltip: ""
 }
 
+ChristmasOutfitBodyBlue: {
+	DisplayName: Blue Krampus Helper Tunic
+	Tooltip: ""
+}
+
+ChristmasOutfitBodyGreen: {
+	DisplayName: Green Krampus Helper Tunic
+	Tooltip: ""
+}
+
+ChristmasOutfitBodyRed: {
+	DisplayName: Red Krampus Helper Tunic
+	Tooltip: ""
+}
+
+ChristmasOutfitHeadBlue: {
+	DisplayName: Blue Krampus Helper Hat
+	Tooltip: ""
+}
+
+ChristmasOutfitHeadGreen: {
+	DisplayName: Green Krampus Helper Hat
+	Tooltip: ""
+}
+
+ChristmasOutfitHeadRed: {
+	DisplayName: Red Krampus Helper Hat
+	Tooltip: ""
+}
+
 DaffodilMask: {
 	DisplayName: Daffodil Mask
 	Tooltip: ""
@@ -1293,7 +1323,7 @@ FlowerPotHead: {
 }
 
 HatHead: {
-	DisplayName: Hat in a River's Mask
+	DisplayName: Sulfur's Mask
 	Tooltip: "'Great for impersonating spooky mod devs!'"
 }
 
@@ -2475,6 +2505,15 @@ StitchedCloak: {
 		'''
 }
 
+OldHunterBag: {
+	DisplayName: Old Paper Bag
+	Tooltip:
+		'''
+		{$CommonItemTooltip.RightClickToOpen}
+		Contains a bunch of old junk and other stuff
+		'''
+}
+
 OldHunterCloth: {
 	DisplayName: Haunted Cloth
 	Tooltip:
@@ -2545,6 +2584,11 @@ OldHunterSac: {
 		It is still leaking blood... gross
 		The Old Hunter may be interested in this
 		'''
+}
+
+OldHunterEnemyRemover: {
+	DisplayName: Timeworn Spice
+	Tooltip: Prevents rare bounty enemies from spawning while in your inventory
 }
 
 SummonItem1: {
@@ -2671,7 +2715,7 @@ HighVelocitySlingshot: {
 	Tooltip:
 		'''
 		A heavy slingshot that takes a while to pull, but fires at extremely high speed
-		Projectiles shot by this will pierce through enemies 3 times
+		Projectiles shot by this will pierce through enemies twice
 		'''
 }
 
@@ -2696,7 +2740,7 @@ OpalSlingshot: {
 
 ProSlingshot: {
 	DisplayName: Pro Slingshot
-	Tooltip: Projectiles shot by this will pierce through enemies twice
+	Tooltip: Projectiles shot by this will pierce through enemies once
 }
 
 SpiderSlingshot: {
@@ -2844,7 +2888,7 @@ SpiderChitin: {
 
 SpiderKey: {
 	DisplayName: Spider Grotto Key
-	Tooltip: Unlocks a spider chest in the dungeon
+	Tooltip: Unlocks a spider chest in the catacombs
 }
 
 AntSpiderBoomerang: {
@@ -3037,7 +3081,7 @@ SpiderWarFlail: {
 	Tooltip:
 		'''
 		Rapidly shoots missiles while being swung
-		Creates a devestating shockwave that sends debris everywhere when dropped
+		Creates a devastating shockwave that sends debris everywhere when dropped
 		'''
 }
 
@@ -3225,7 +3269,7 @@ SinisterSnailItem: {
 
 SpookyBiomeKey: {
 	DisplayName: Spooky Forest Key
-	Tooltip: Unlocks a spooky chest in the dungeon
+	Tooltip: Unlocks a spooky chest in the catacombs
 }
 
 SpookyGlowshroom: {
@@ -3687,7 +3731,7 @@ SnotGlob: {
 
 SpookyHellKey: {
 	DisplayName: Eye Valley Key
-	Tooltip: Unlocks an eye chest in the dungeon
+	Tooltip: Unlocks an eye chest in the catacombs
 }
 
 SpookyHellSolution: {
@@ -7092,7 +7136,7 @@ Bestiary: {
 }
 
 DownedReset: {
-	DisplayName: Boss Downed Reset
+	DisplayName: Bosses Defeated Reset
 	Tooltip:
 		'''
 		Sets all spooky mod bosses as not defeated
@@ -7101,7 +7145,7 @@ DownedReset: {
 }
 
 DownedRedowner: {
-	DisplayName: Boss Downer
+	DisplayName: Bosses Defeated
 	Tooltip:
 		'''
 		Sets all spooky mod bosses as defeated
@@ -7128,7 +7172,7 @@ KrampusQuestReset: {
 }
 
 EggEventDowned: {
-	DisplayName: Egg Event Downed
+	DisplayName: Egg Event Complete
 	Tooltip:
 		'''
 		Sets the egg incursion event to completed

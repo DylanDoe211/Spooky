@@ -128,7 +128,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
 
 		public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CatacombChestKeyLower>(), 50));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CatacombChestKeyLower>(), 30));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CandyCorn>(), 100));
         }
 

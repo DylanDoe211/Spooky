@@ -44,7 +44,12 @@ namespace Spooky.Content.NPCs.Friendly
             NPC.aiStyle = -1;
         }
 
-        public override void FindFrame(int frameHeight)
+		public override bool UsesPartyHat()
+		{
+			return false;
+		}
+
+		public override void FindFrame(int frameHeight)
         {   
             //walking animation
             NPC.frameCounter++;

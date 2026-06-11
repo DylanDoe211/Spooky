@@ -119,7 +119,7 @@ namespace Spooky.Content.NPCs.EggEvent
 
             if (NPC.ai[0] == 0)
             {
-                NPC.rotation += 0.02f * (float)NPC.direction + (NPC.velocity.X / 40);
+                NPC.rotation += (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) * 0.02f * (float)NPC.direction;
 
                 Vector2 GoTo = player.Center;
 

@@ -18,6 +18,7 @@ using Spooky.Content.Tiles.Trophy;
 
 namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 {
+	[AutoloadBossHead]
 	public class EmperorMortar : ModNPC
 	{
 		bool SpawnedSegments = false;

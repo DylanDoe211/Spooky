@@ -149,6 +149,7 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 			NPC.defense = 70;
 			NPC.width = 150;
 			NPC.height = 150;
+			NPC.npcSlots = 15f;
 			NPC.knockBackResist = 0f;
 			NPC.value = Item.buyPrice(0, 25, 0, 0);
 			NPC.lavaImmune = true;
@@ -866,13 +867,9 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 							SoundEngine.PlaySound(SoundID.DD2_BetsyFlameBreath, NPC.Center);
 						}
 
-						if (NPC.localAI[0] % 2 == 0)
+						if (NPC.localAI[0] % 4 == 0)
 						{
-							int Spread = Phase2 ? 3 : 6;
-
-							Vector2 newVelocity = ShootSpeed.RotatedByRandom(MathHelper.ToRadians(Spread));
-
-							NPCGlobalHelper.ShootHostileProjectile(NPC, position, newVelocity, ModContent.ProjectileType<SpookyFlames>(), NPC.damage, 4.5f);
+							NPCGlobalHelper.ShootHostileProjectile(NPC, position, ShootSpeed, ModContent.ProjectileType<SpookyFlames>(), NPC.damage, 4.5f);
 						}
 					}
 
@@ -1669,13 +1666,13 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
         {
 			if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 8; numGores++)
-                {
-					if (Main.netMode != NetmodeID.Server) 
-                    {
-                    	Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/SpookFishronGore" + numGores).Type);
+				if (Main.netMode != NetmodeID.Server)
+            	{
+					for (int numGores = 1; numGores <= 8; numGores++)
+					{
+						Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/SpookFishronGore" + numGores).Type);
 					}
-                }
+				}
 			}
 		}
 

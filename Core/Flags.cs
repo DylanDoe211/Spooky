@@ -110,6 +110,7 @@ namespace Spooky.Core
 		public static bool SpawnDaffodil = false;
 		public static bool SpawnBigBone = false;
 		public static bool SpawnOldHunter = false;
+		public static bool SpawnOrroboro = false;
 		public static bool SpawnGhostAmbush = false;
 		public static int MocoSpawnX;
         public static int MocoSpawnY;

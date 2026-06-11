@@ -56,9 +56,9 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
                 }
                 else
                 {
-                    for (int numGores = 1; numGores <= 2; numGores++)
+                    if (Main.netMode != NetmodeID.Server)
                     {
-                        if (Main.netMode != NetmodeID.Server) 
+                        for (int numGores = 1; numGores <= 2; numGores++)
                         {
                             Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/BoneStackerThornGore" + numGores).Type);
                         }
@@ -120,9 +120,9 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
         {
 			if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 2; numGores++)
+                if (Main.netMode != NetmodeID.Server)
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 2; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/BoneStackerThornGore" + numGores).Type);
                     }

@@ -867,22 +867,6 @@ namespace Spooky.Core
 				FossilBlackPepperStacks = 0;
 			}
 
-			//dutchman pipe gives nearby enemies in the aura a debuff so they take more damage
-			if (FossilDutchmanPipe)
-			{
-				Lighting.AddLight(Player.Center, Color.Red.ToVector3());
-
-				for (int i = 0; i < Main.maxNPCs; i++)
-				{
-					NPC NPC = Main.npc[i];
-
-					if (NPC.active && NPC.CanBeChasedBy(Player) && !NPC.friendly && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type] && Vector2.Distance(Player.Center, NPC.Center) <= 240f)
-					{
-						NPC.AddBuff(ModContent.BuffType<DutchmanPipeDebuff>(), 2);
-					}
-				}
-			}
-
 			//fossil protea slam shakes the screen and flings diamond projectiles everywhere
 			if (FossilProtea)
 			{
@@ -1019,7 +1003,7 @@ namespace Spooky.Core
 				{
 					if (var != string.Empty)
 					{
-						Player.GetAttackSpeed(DamageClass.Generic) += 0.15f;
+						Player.GetAttackSpeed(DamageClass.Generic) += 0.1f;
 					}
 				}
 			}
@@ -1096,10 +1080,7 @@ namespace Spooky.Core
 
 				if (WinterGooseberryHits > 2)
 				{
-					if (Main.rand.NextBool(3))
-					{
-						Projectile.NewProjectile(target.GetSource_OnHurt(Player), target.Center, new Vector2(Main.rand.Next(-3, 4), Main.rand.Next(-5, -2)), ModContent.ProjectileType<GooseberryBoost>(), 0, 0, Player.whoAmI);
-					}
+					Projectile.NewProjectile(target.GetSource_OnHurt(Player), target.Center, new Vector2(Main.rand.Next(-3, 4), Main.rand.Next(-5, -2)), ModContent.ProjectileType<GooseberryBoost>(), 0, 0, Player.whoAmI);
 
 					WinterGooseberryHits = 0;
 				}
@@ -1148,7 +1129,6 @@ namespace Spooky.Core
 			}
 			if (FungusRedCage && Main.rand.NextBool(3))
 			{
-				//big bone slingshot attaches a flower to enemies
 				if (!target.GetGlobalNPC<NPCGlobal>().HasRedCageAttached)
 				{
 					Projectile.NewProjectile(target.GetSource_OnHit(Player), target.Center, Vector2.Zero, ModContent.ProjectileType<CageFungusProj>(), 0, 0f, Player.whoAmI, target.whoAmI);
@@ -1173,6 +1153,16 @@ namespace Spooky.Core
 
 				Projectile.NewProjectile(target.GetSource_OnHurt(Player), target.Center + new Vector2(randomX, randomY), Vector2.Zero,
 				ModContent.ProjectileType<Barnacle>(), proj.damage / 2, hit.Knockback, Player.whoAmI, ai0: target.whoAmI, ai1: randomX, ai2: randomY);
+			}
+
+			//dutchman pipe damages nearby enemies
+			if (FossilDutchmanPipe)
+			{
+				if (!target.friendly && !target.dontTakeDamage && !NPCID.Sets.CountsAsCritter[target.type] && target.Distance(Player.Center) <= 240f && 
+				Player.ownedProjectileCounts[ModContent.ProjectileType<DutchmanPipeHitProj>()] < 1)
+				{
+					Projectile.NewProjectile(target.GetSource_OnHit(Player), Player.Center, Vector2.Zero, ModContent.ProjectileType<DutchmanPipeHitProj>(), hit.Damage / 3, 0f, Player.whoAmI, target.whoAmI);
+				}
 			}
 		}
 	}

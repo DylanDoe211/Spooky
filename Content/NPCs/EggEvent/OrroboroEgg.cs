@@ -28,8 +28,6 @@ namespace Spooky.Content.NPCs.EggEvent
         float addedStretch = 0f;
 		float stretchRecoil = 0f;
 
-        bool OrroboroDoesNotExist;
-
         private static Asset<Texture2D> NPCTexture;
         private static Asset<Texture2D> BaseTexture;
         private static Asset<Texture2D> AuraTexture1;
@@ -45,18 +43,6 @@ namespace Spooky.Content.NPCs.EggEvent
             Main.npcFrameCount[NPC.type] = 6;
 
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
-        }
-
-        public override void SendExtraAI(BinaryWriter writer)
-        {
-            //bools
-            writer.Write(OrroboroDoesNotExist);
-        }
-
-        public override void ReceiveExtraAI(BinaryReader reader)
-        {
-            //bools
-            OrroboroDoesNotExist = reader.ReadBoolean();
         }
 
         public override void SetDefaults()
@@ -151,7 +137,7 @@ namespace Spooky.Content.NPCs.EggEvent
 		{
 			if (NPC.ai[0] == 0)
 			{
-				if (OrroboroDoesNotExist)
+				if (!NPC.AnyNPCs(ModContent.NPCType<OrroHeadP1>()) && !NPC.AnyNPCs(ModContent.NPCType<OrroHead>()) && !NPC.AnyNPCs(ModContent.NPCType<BoroHead>()))
 				{
 					NPC.frame.Y = 0 * frameHeight;
 				}
@@ -177,8 +163,6 @@ namespace Spooky.Content.NPCs.EggEvent
 
             Flags.OrroboroSpawnX = (int)NPC.Center.X;
             Flags.OrroboroSpawnY = (int)NPC.Center.Y;
-
-            OrroboroDoesNotExist = !NPC.AnyNPCs(ModContent.NPCType<OrroHeadP1>()) && !NPC.AnyNPCs(ModContent.NPCType<OrroHead>()) && !NPC.AnyNPCs(ModContent.NPCType<BoroHead>());
 
             if (EggEventWorld.EggEventActive || !Flags.downedEggEvent) 
             {
@@ -254,21 +238,9 @@ namespace Spooky.Content.NPCs.EggEvent
                 //spawn orroboro, reset ai variables
                 else
                 {
-                    SoundEngine.PlaySound(EggCrackSound2, NPC.Center);
-
-                    if (OrroboroDoesNotExist)
+                    if (!NPC.AnyNPCs(ModContent.NPCType<OrroHeadP1>()) && !NPC.AnyNPCs(ModContent.NPCType<OrroHead>()) && !NPC.AnyNPCs(ModContent.NPCType<BoroHead>()))
                     {
-                        //spawn message
-                        string text = Language.GetTextValue("Mods.Spooky.EventsAndBosses.OrroboroSpawn");
-
-                        if (Main.netMode == NetmodeID.Server)
-                        {
-                            ChatHelper.BroadcastChatMessage(NetworkText.FromKey(text), new Color(171, 64, 255));
-                        }
-						else if (Main.netMode == NetmodeID.SinglePlayer)
-						{
-							Main.NewText(text, 171, 64, 255);
-                        }
+                        SoundEngine.PlaySound(EggCrackSound2, NPC.Center);
 
                         if (Main.netMode != NetmodeID.SinglePlayer)
                         {
@@ -278,16 +250,16 @@ namespace Spooky.Content.NPCs.EggEvent
                         }
                         else
                         {
-                            NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OrroHeadP1>(), 0, -1);
+                            Flags.SpawnOrroboro = true;
                         }
-					}
 
-                    //spawn egg gores
-                    for (int numGores = 1; numGores <= 7; numGores++)
-                    {
-                        if (Main.netMode != NetmodeID.Server) 
+                        //spawn egg gores
+                        for (int numGores = 1; numGores <= 7; numGores++)
                         {
-                            Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center, new Vector2(Main.rand.Next(-8, 8), Main.rand.Next(-7, -3)), ModContent.Find<ModGore>("Spooky/OrroboroEggGore" + numGores).Type);
+                            if (Main.netMode != NetmodeID.Server) 
+                            {
+                                Gore.NewGore(NPC.GetSource_FromAI(), NPC.Center, new Vector2(Main.rand.Next(-8, 8), Main.rand.Next(-7, -3)), ModContent.Find<ModGore>("Spooky/OrroboroEggGore" + numGores).Type);
+                            }
                         }
                     }
 

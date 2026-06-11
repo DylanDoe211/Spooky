@@ -99,7 +99,7 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 
 		public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FishboneChunk>(), 2, 1, 2));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FishboneChunk>(), 1, 1, 2));
 		}
 
         public override void HitEffect(NPC.HitInfo hit) 

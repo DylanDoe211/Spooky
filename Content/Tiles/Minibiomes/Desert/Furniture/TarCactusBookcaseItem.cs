@@ -17,6 +17,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Desert.Furniture
             CreateRecipe()
             .AddIngredient(ModContent.ItemType<TarPitCactusBlockItem>(), 20)
 			.AddIngredient(ItemID.Book, 10)
+            .AddTile(TileID.WorkBenches)
             .Register();
         }
 	}

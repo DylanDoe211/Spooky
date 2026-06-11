@@ -53,6 +53,11 @@ namespace Spooky.Content.NPCs.Friendly
             NPC.aiStyle = -1;
 		}
 
+		public override bool UsesPartyHat()
+		{
+			return false;
+		}
+
 		public override bool CanBeHitByNPC(NPC attacker)
 		{
 			return false;

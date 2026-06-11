@@ -64,7 +64,12 @@ namespace Spooky.Content.NPCs.Friendly
             NPC.aiStyle = 7;
         }
 
-        public override void FindFrame(int frameHeight)
+		public override bool UsesPartyHat()
+		{
+			return false;
+		}
+
+		public override void FindFrame(int frameHeight)
         {   
             //walking animation
             NPC.frameCounter++;
@@ -112,7 +117,7 @@ namespace Spooky.Content.NPCs.Friendly
 
         public override string GetChat()
 		{
-            if (!Flags.OldHunterDefeatDialogue)
+            if (!Flags.OldHunterDefeatDialogue && Flags.downedOldHunter)
             {
                 DialogueChain chain = new();
                 chain.Add(new(UITexture.Value, NPC,
@@ -141,11 +146,15 @@ namespace Spooky.Content.NPCs.Friendly
                 DialogueUI.Visible = true;
                 DialogueUI.Add(chain);
             }
-            if (Flags.OldHunterDefeatDialogue && !DialogueUI.Visible)
+            else
             {
-                OldHunterDialogueChoiceUI.OldHunter = NPC.whoAmI;
-                OldHunterDialogueChoiceUI.UIOpen = true;
+                if (!DialogueUI.Visible)
+                {
+                    OldHunterDialogueChoiceUI.OldHunter = NPC.whoAmI;
+                    OldHunterDialogueChoiceUI.UIOpen = true;
+                }
             }
+            
             return string.Empty;
 		}
 

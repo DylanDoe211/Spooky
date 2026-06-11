@@ -32,6 +32,11 @@ namespace Spooky.Content.NPCs.Friendly
             NPC.aiStyle = -1;
 		}
 
+		public override bool UsesPartyHat()
+		{
+			return false;
+		}
+
 		public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
 		{
 			return false;

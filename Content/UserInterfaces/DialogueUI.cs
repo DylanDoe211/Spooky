@@ -90,7 +90,7 @@ namespace Spooky.Content.UserInterfaces
 				DisplayingPlayerResponse = !dialogue.NotPlayer && dialogue.textFinished;
 
 				//shift camera to the entity the dialogue belongs to, only if it is not a player
-				if (dialogue.NotPlayer)
+				if (ModContent.GetInstance<SpookyConfig>().DialogueFocus && dialogue.NotPlayer)
 				{
 					Main.instance.CameraModifiers.Add(new CameraPanning(dialogue.entity.Center, 20));
 				}

@@ -90,9 +90,9 @@ namespace Spooky.Content.NPCs.Boss.RotGourd.Projectiles
                 Projectile.rotation += MathHelper.Pi;
             }
 
-            int index1 = (int)Projectile.ai[1];
+            int ParentWhoAmI = (int)Projectile.ai[1];
             
-            if (Main.npc[index1].active && Main.npc[index1].type == ModContent.NPCType<RotGourd>())
+            if (Main.npc[ParentWhoAmI].active && Main.npc[ParentWhoAmI].type == ModContent.NPCType<RotGourd>())
             {
                 Projectile.timeLeft = 300;
             }
@@ -120,35 +120,35 @@ namespace Spooky.Content.NPCs.Boss.RotGourd.Projectiles
                 //home in on rot gourd if it exists
                 case 0:
                 {
-                    if (Main.npc[index1].active && Main.npc[index1].type == ModContent.NPCType<RotGourd>())
+                    if (Main.npc[ParentWhoAmI].active && Main.npc[ParentWhoAmI].type == ModContent.NPCType<RotGourd>())
                     {
-                        float goToX = Main.npc[index1].Center.X - Projectile.Center.X + Main.rand.Next(-200, 200);
-                        float goToY = Main.npc[index1].Center.Y - Projectile.Center.Y + Main.rand.Next(-200, 200);
+                        float goToX = Main.npc[ParentWhoAmI].Center.X - Projectile.Center.X + Main.rand.Next(-200, 200);
+                        float goToY = Main.npc[ParentWhoAmI].Center.Y - Projectile.Center.Y + Main.rand.Next(-200, 200);
 
                         //if rot gourd is flying in his desperation phase, make them go to the bottom of him
-                        if (Main.npc[index1].ai[0] == 6)
+                        if (Main.npc[ParentWhoAmI].ai[0] == 6)
                         {
-                            goToX = Main.npc[index1].Center.X - Projectile.Center.X + Main.rand.Next(-100, 100);
-                            goToY = Main.npc[index1].Center.Y - Projectile.Center.Y + Main.rand.Next(35, 100);
+                            goToX = Main.npc[ParentWhoAmI].Center.X - Projectile.Center.X + Main.rand.Next(-100, 100);
+                            goToY = Main.npc[ParentWhoAmI].Center.Y - Projectile.Center.Y + Main.rand.Next(35, 100);
                         }
 
                         //if the flies are above the player during cripple phase, then fly above them
-                        if (Main.npc[index1].ai[0] == 7 && Projectile.localAI[1] == 1)
+                        if (Main.npc[ParentWhoAmI].ai[0] == 7 && Projectile.localAI[1] == 1)
                         {
                             goToX = Main.LocalPlayer.Center.X - Projectile.Center.X + Main.rand.Next(-350, 350);
                             goToY = Main.LocalPlayer.Center.Y - Projectile.Center.Y + Main.rand.Next(-500, -400);
                         }
 
-                        if (Main.npc[index1].ai[0] == 7 && Projectile.localAI[1] == 2)
+                        if (Main.npc[ParentWhoAmI].ai[0] == 7 && Projectile.localAI[1] == 2)
                         {
-                            goToX = Main.npc[index1].Center.X - Projectile.Center.X + Main.rand.Next(-200, 200);
-                            goToY = Main.npc[index1].Center.Y - Projectile.Center.Y + Main.rand.Next(-200, 200);
+                            goToX = Main.npc[ParentWhoAmI].Center.X - Projectile.Center.X + Main.rand.Next(-200, 200);
+                            goToY = Main.npc[ParentWhoAmI].Center.Y - Projectile.Center.Y + Main.rand.Next(-200, 200);
                         }
 
-                        float speedLimit = Main.npc[index1].ai[0] == 6 ? 8f : 5f;
-                        float speed = Main.npc[index1].ai[0] == 6 ? 0.1f : 0.08f;
+                        float speedLimit = Main.npc[ParentWhoAmI].ai[0] == 6 ? 8f : 5f;
+                        float speed = Main.npc[ParentWhoAmI].ai[0] == 6 ? 0.1f : 0.08f;
 
-                        if (Vector2.Distance(Projectile.Center, Main.npc[index1].Center) >= 135)
+                        if (Vector2.Distance(Projectile.Center, Main.npc[ParentWhoAmI].Center) >= 135)
                         {
                             speed = speedLimit;
                         }

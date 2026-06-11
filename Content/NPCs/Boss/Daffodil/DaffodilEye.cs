@@ -37,10 +37,20 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
 
         Vector2[] SavePoint = new Vector2[5];
 
+        public enum AnimationState
+		{
+			Closed, OpenHalf, OpenFull, OpenWide
+		}
+
+		private AnimationState CurrentAnimation
+        {
+			get => (AnimationState)NPC.ai[3];
+			set => NPC.ai[3] = (float)value;
+		}
+
         private static Asset<Texture2D> EyeTexture;
 
         public static readonly SoundStyle SeedSpawnSound = new("Spooky/Content/Sounds/Daffodil/SeedSpawn", SoundType.Sound);
-        public static readonly SoundStyle FlySound = new("Spooky/Content/Sounds/FlyBuzzing", SoundType.Sound);
 
         public override void SetStaticDefaults()
         {
@@ -155,16 +165,16 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                 spriteBatch.Draw(EyeTexture.Value, drawPos, null, drawColor, NPC.rotation, drawOrigin, NPC.scale, SpriteEffects.None, 0f);
             }
 
-            if ((NPC.ai[0] == 6 && NPC.localAI[0] >= 160 && NPC.localAI[0] <= 260) || (NPC.ai[0] == 7 && NPC.localAI[0] >= 90 && NPC.localAI[0] <= 190))
+            if ((NPC.ai[0] == 5 && NPC.localAI[0] >= 160 && NPC.localAI[0] <= 260) || (NPC.ai[0] == 6 && NPC.localAI[0] >= 90 && NPC.localAI[0] <= 190))
             {
                 //draw sparkle
                 Vector2 vector = new Vector2(NPC.Center.X, NPC.Center.Y + 10) - Main.screenPosition;
-                float time = (float)Math.Cos((double)(Main.GlobalTimeWrappedHourly % 0.5f / 2.5f * 150f)) / 2f + 0.5f;
+                float time = (float)Math.Cos((double)(Main.GlobalTimeWrappedHourly % 0.5f / 2.5f * 150f)) / 2f + 1f;
                 DrawPrettyStarSparkle(NPC.Opacity, SpriteEffects.None, vector, Color.Gold, Color.Gold, 0.5f, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(5f * time, 4f * time), new Vector2(5, 5));
             }
         }
 
-        private static void DrawPrettyStarSparkle(float opacity, SpriteEffects dir, Vector2 drawpos, Color drawColor, Color shineColor, float flareCounter, float fadeInStart, float fadeInEnd, float fadeOutStart, float fadeOutEnd, float rotation, Vector2 scale, Vector2 fatness) 
+        public void DrawPrettyStarSparkle(float opacity, SpriteEffects dir, Vector2 drawpos, Color drawColor, Color shineColor, float flareCounter, float fadeInStart, float fadeInEnd, float fadeOutStart, float fadeOutEnd, float rotation, Vector2 scale, Vector2 fatness) 
         {
 			Texture2D Texture = TextureAssets.Extra[98].Value;
 			Color color = shineColor * opacity * 0.5f;
@@ -176,97 +186,36 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
 			Vector2 vector2 = new Vector2(fatness.Y * 0.5f, scale.Y) * Intensity;
 			color *= Intensity;
 			color2 *= Intensity;
-			Main.EntitySpriteDraw(Texture, drawpos, null, color, (float)Math.PI / 2f + rotation, origin, vector, dir);
-			Main.EntitySpriteDraw(Texture, drawpos, null, color, 0f + rotation, origin, vector2, dir);
-			Main.EntitySpriteDraw(Texture, drawpos, null, color2, (float)Math.PI / 2f + rotation, origin, vector * 0.6f, dir);
-			Main.EntitySpriteDraw(Texture, drawpos, null, color2, 0f + rotation, origin, vector2 * 0.6f, dir);
+
+            for (int i = 0; i < 360; i += 90)
+			{
+                Vector2 circular = new Vector2(Main.rand.NextFloat(3.5f, 5f), 0).RotatedBy(MathHelper.ToRadians(i));
+
+                Color RealColor = new Color(125 - NPC.alpha, 125 - NPC.alpha, 125 - NPC.alpha, 0).MultiplyRGBA(color);
+                Color RealColor2 = new Color(125 - NPC.alpha, 125 - NPC.alpha, 125 - NPC.alpha, 0).MultiplyRGBA(color);
+
+                Main.EntitySpriteDraw(Texture, drawpos + circular, null, RealColor, (float)Math.PI / 2f + rotation, origin, vector, dir);
+                Main.EntitySpriteDraw(Texture, drawpos + circular, null, RealColor, 0f + rotation, origin, vector2, dir);
+            }
 		}
 
         public override void FindFrame(int frameHeight)
         {
-            //frame numbers:
-            //0 = fully closed 
-            //1 = slightly open
-            //2 = open
-            //3 = wide open
-
-            //open eye when awoken
-            if (NPC.ai[0] == -1)
-            {
-                if (NPC.localAI[0] <= 30)
-                {
-                    NPC.frame.Y = frameHeight * 0;
-                }
-                if (NPC.localAI[0] <= 60 && NPC.localAI[0] > 30)
-                {
-                    NPC.frame.Y = frameHeight * 1;
-                }
-                if (NPC.localAI[0] <= 90 && NPC.localAI[0] > 60)
-                {
-                    NPC.frame.Y = frameHeight * 2;
-                }
+            if (CurrentAnimation == AnimationState.Closed)
+			{
+                NPC.frame.Y = 0 * frameHeight;
             }
-            else if (NPC.ai[0] == -2)
-            {
-                NPC.frame.Y = frameHeight * 2;
+            else if (CurrentAnimation == AnimationState.OpenHalf)
+			{
+                NPC.frame.Y = 1 * frameHeight;
             }
-            //close eye at the end of the ending dialogue
-            else if (NPC.ai[0] == -3)
-            {
-                if (NPC.localAI[2] >= 450)
-                {
-                    NPC.frame.Y = frameHeight * 1;
-                }
-                else
-                {
-                    NPC.frame.Y = frameHeight * 2;
-                }
+            else if (CurrentAnimation == AnimationState.OpenFull)
+			{
+                NPC.frame.Y = 2 * frameHeight;
             }
-            //slightly open eye during the joke awakening
-            else if (NPC.ai[0] == -4)
-            {
-                NPC.frame.Y = frameHeight * 1;
-            }
-            //close eye when despawning
-            else if (NPC.ai[0] == -5)
-            {
-                if (NPC.localAI[1] >= 90)
-                {
-                    NPC.frame.Y = frameHeight * 1;
-                }
-                else
-                {
-                    NPC.frame.Y = frameHeight * 2;
-                }
-            }
-            else if (NPC.ai[0] == 0 && NPC.localAI[0] >= 60 && NPC.localAI[0] <= 155)
-            {
-                NPC.frame.Y = frameHeight * 3;
-            }
-            else if (NPC.ai[0] == 3 && NPC.localAI[0] >= 120 && NPC.localAI[0] < 400)
-            {
-                NPC.frame.Y = frameHeight * 0;
-            }
-            else if (NPC.ai[0] == 4 && NPC.localAI[0] >= 70 && NPC.localAI[0] <= 135)
-            {
-                NPC.frame.Y = frameHeight * 3;
-            }
-            else if (NPC.ai[0] == 5 && NPC.localAI[0] >= 120 && NPC.localAI[0] <= 300)
-            {
-                NPC.frame.Y = frameHeight * 0;
-            }
-            else if (NPC.ai[0] == 6 && NPC.localAI[0] > 160 && NPC.localAI[0] < 280)
-            {
-                NPC.frame.Y = frameHeight * 3;
-            }
-            else if (NPC.ai[0] == 7 && NPC.localAI[0] >= 160 && NPC.localAI[0] <= 240)
-            {
-                NPC.frame.Y = frameHeight * 3;
-            }
-            //if none of the above is true, use the default open eye frame
-            else
-            {
-                NPC.frame.Y = frameHeight * 2;
+            else if (CurrentAnimation == AnimationState.OpenWide)
+			{
+                NPC.frame.Y = 3 * frameHeight;
             }
         }
 
@@ -309,8 +258,6 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                 Music = MusicLoader.GetMusicSlot(Mod, "Content/Sounds/Music/DaffodilWithIntro2");
             }
 
-            int Damage = Main.masterMode ? 60 / 3 : Main.expertMode ? 40 / 2 : 30;
-
             //despawn if the player dies or leaves the biome
             if (player.dead || !player.active || !player.InModBiome(ModContent.GetInstance<Biomes.CatacombBiome>()))
             {
@@ -330,13 +277,13 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
 
             if (!SpawnedHands)
             {
-                NPC.ai[2] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DaffodilHandLeft>(), ai2: NPC.whoAmI);
-                NPC.ai[3] = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DaffodilHandRight>(), ai3: NPC.whoAmI);
+                int LeftHand = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DaffodilHandLeft>(), ai2: NPC.whoAmI);
+                int RightHand = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DaffodilHandRight>(), ai2: NPC.whoAmI);
                 
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    NetMessage.SendData(MessageID.SyncNPC, number: (int)NPC.ai[2]);
-                    NetMessage.SendData(MessageID.SyncNPC, number: (int)NPC.ai[3]);
+                    NetMessage.SendData(MessageID.SyncNPC, number: LeftHand);
+                    NetMessage.SendData(MessageID.SyncNPC, number: RightHand);
                 }
 
                 SpawnedHands = true;
@@ -366,6 +313,8 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
 
                     if (NPC.localAI[0] == 1)
                     {
+                        CurrentAnimation = AnimationState.OpenHalf;
+
                         NPC.immortal = true;
                         NPC.dontTakeDamage = true;
                     }
@@ -479,19 +428,19 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                     //spawn permanent thorn pillars that cover the whole arena
                     if (NPC.localAI[0] == 200)
                     {
-                        //spawn pillars on the walls
-                        NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X - 678, NPC.Center.Y + 400), Vector2.Zero, 
-                        ModContent.ProjectileType<ThornPillarBarrierSide>(), NPC.damage, 0f, ai0: new Vector2(0, 32).ToRotation() + MathHelper.Pi, ai1: -16 * 60);
-
-                        NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X + 672, NPC.Center.Y + 400), Vector2.Zero, 
-                        ModContent.ProjectileType<ThornPillarBarrierSide>(), NPC.damage, 0f, ai0: new Vector2(0, 32).ToRotation() + MathHelper.Pi, ai1: -16 * 60);
-
                         //spawn pillars on the floor
-                        NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X, NPC.Center.Y + 385), Vector2.Zero, 
-                        ModContent.ProjectileType<ThornPillarBarrierFloor>(), NPC.damage, 0f, ai0: new Vector2(32, 0).ToRotation(), ai1: -16 * 60);
+                        NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X - 690, NPC.Center.Y + 380), new Vector2(10, 0), 
+                        ModContent.ProjectileType<ThornPillarBarrierFloor>(), NPC.damage, 0f);
 
-                        NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X, NPC.Center.Y + 391), Vector2.Zero, 
-                        ModContent.ProjectileType<ThornPillarBarrierFloor>(), NPC.damage, 0f, ai0: new Vector2(-32, 0).ToRotation(), ai1: -16 * 60);
+                        NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X + 690, NPC.Center.Y + 395), new Vector2(-10, 0), 
+                        ModContent.ProjectileType<ThornPillarBarrierFloor>(), NPC.damage, 0f, ai2: 1);
+
+                        //spawn pillars on the walls
+                        NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X - 678, NPC.Center.Y + 380), new Vector2(0, -10), 
+                        ModContent.ProjectileType<ThornPillarBarrierSide>(), NPC.damage, 0f);
+
+                        NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X + 678, NPC.Center.Y + 380), new Vector2(0, -10), 
+                        ModContent.ProjectileType<ThornPillarBarrierSide>(), NPC.damage, 0f, ai2: 1);
                     }
 
                     if (NPC.localAI[0] == 360)
@@ -528,6 +477,15 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                     {
                         NPC.immortal = true;
                         NPC.dontTakeDamage = true;
+                    }
+
+                    if (NPC.localAI[0] == 20)
+                    {   
+                        CurrentAnimation = AnimationState.OpenHalf;
+                    }
+                    if (NPC.localAI[0] == 40)
+                    {   
+                        CurrentAnimation = AnimationState.OpenFull;
                     }
 
                     if (!Flags.downedDaffodil)
@@ -583,20 +541,21 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                     break;
                 }
 
-                //fire solar laser barrage at the player
+                //fire pollen barrage at the player
                 case 0:
                 {
                     NPC.localAI[0]++;
-
-                    if (NPC.localAI[0] >= 60 && NPC.localAI[0] < 85)
+                    if (NPC.localAI[0] >= 60 && NPC.localAI[0] < 80)
                     {
+                        CurrentAnimation = AnimationState.OpenWide;
+
                         int MaxDusts = Main.rand.Next(5, 15);
                         for (int numDusts = 0; numDusts < MaxDusts; numDusts++)
                         {
                             Vector2 dustPos = (Vector2.One * new Vector2((float)NPC.width / 3f, (float)NPC.height / 3f) * Main.rand.NextFloat(1.25f, 1.75f)).RotatedBy((double)((float)(numDusts - (MaxDusts / 2 - 1)) * 6.28318548f / (float)MaxDusts), default(Vector2)) + NPC.Center;
                             Vector2 velocity = dustPos - NPC.Center;
                             int dustEffect = Dust.NewDust(dustPos + velocity, 0, 0, ModContent.DustType<GlowyDust>(), velocity.X * 2f, velocity.Y * 2f, 100, default, 0.1f);
-                            Main.dust[dustEffect].color = Color.Gold;
+                            Main.dust[dustEffect].color = Color.LightGray;
                             Main.dust[dustEffect].noGravity = true;
                             Main.dust[dustEffect].noLight = false;
                             Main.dust[dustEffect].velocity = Vector2.Normalize(velocity) * Main.rand.NextFloat(-5f, -2f);
@@ -604,23 +563,27 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                         }
                     }
 
-                    if (NPC.localAI[0] >= 85 && NPC.localAI[0] <= 145)
+                    if (NPC.localAI[0] >= 80 && NPC.localAI[0] <= 200 && NPC.localAI[0] % 20 == 0)
                     {
-                        if (Main.rand.NextBool(3))
-                        {
-                            SoundEngine.PlaySound(SoundID.Item12, NPC.Center);
+                        SoundEngine.PlaySound(SoundID.Item64, NPC.Center);
 
-                            Vector2 ShootSpeed = player.Center - NPC.Center;
-                            ShootSpeed.Normalize();
-                            ShootSpeed *= 25f;
+                        Vector2 NPCRandomPos = new Vector2(NPC.Center.X + Main.rand.Next(-30, 31), NPC.Center.Y + Main.rand.Next(-30, 31));
 
-                            NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X + Main.rand.Next(-5, 5), NPC.Center.Y + 10 + Main.rand.Next(-5, 5)), 
-                            ShootSpeed, ModContent.ProjectileType<SolarLaser>(), NPC.damage, 4.5f);
-                        }
+                        Vector2 ShootSpeed = player.Center - NPCRandomPos;
+                        ShootSpeed.Normalize();
+                        ShootSpeed *= 12f;
+
+                        NPCGlobalHelper.ShootHostileProjectile(NPC, NPCRandomPos, ShootSpeed, ModContent.ProjectileType<DaffodilPollen>(), NPC.damage, 4.5f);
                     }
 
-                    if (NPC.localAI[0] >= 240)
+                    if (NPC.localAI[0] == 270)
                     {
+                        CurrentAnimation = AnimationState.OpenHalf;
+                    }
+                    if (NPC.localAI[0] >= 280)
+                    {
+                        CurrentAnimation = AnimationState.OpenFull;
+
                         NPC.localAI[0] = 0;
                         NPC.ai[0]++;
                         NPC.netUpdate = true;
@@ -629,13 +592,28 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                     break;
                 }
 
-                //raise hands up, then shoot chlorophyll blasts from them (code for this attack is handled in each hand's ai)
+                //shoot out homing splitting flowers from hands (This attack is handled in the AI of daffodils hands)
                 case 1:
                 {
                     NPC.localAI[0]++;
 
-                    if (NPC.localAI[0] >= 420)
+                    if (NPC.localAI[0] == 60)
+                    {   
+                        CurrentAnimation = AnimationState.OpenHalf;
+                    }
+                    if (NPC.localAI[0] == 70)
+                    {   
+                        CurrentAnimation = AnimationState.Closed;
+                    }
+
+                    if (NPC.localAI[0] == 450)
                     {
+                        CurrentAnimation = AnimationState.OpenHalf;
+                    }
+                    if (NPC.localAI[0] >= 460)
+                    {
+                        CurrentAnimation = AnimationState.OpenFull;
+
                         NPC.localAI[0] = 0;
                         NPC.ai[0]++;
                         NPC.netUpdate = true;
@@ -644,24 +622,24 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                     break;
                 }
 
-                //create bouncing thorn balls that petrude out thorns
+                //shoot out thorn balls attached to daffodil that shoot out spikes from them
                 case 2:
                 {
                     NPC.localAI[0]++;
-
-                    if (NPC.localAI[0] == 120)
+                    if (NPC.localAI[0] == 80)
                     {
                         SoundEngine.PlaySound(SoundID.DD2_DarkMageSummonSkeleton, NPC.Center);
                     }
 
-                    if (NPC.localAI[0] >= 120 && NPC.localAI[0] < 145)
+                    Vector2 NPCBelowPos = new Vector2(NPC.Center.X, NPC.Center.Y + 200);
+
+                    if (NPC.localAI[0] >= 80 && NPC.localAI[0] < 110)
                     {
                         int MaxDusts = Main.rand.Next(5, 15);
                         for (int numDusts = 0; numDusts < MaxDusts; numDusts++)
                         {
-                            Vector2 NPCCenter = new Vector2(NPC.Center.X, NPC.Center.Y + 200);
-                            Vector2 dustPos = (Vector2.One * new Vector2((float)NPC.width / 3f, (float)NPC.height / 3f) * Main.rand.NextFloat(1.25f, 1.75f)).RotatedBy((double)((float)(numDusts - (MaxDusts / 2 - 1)) * 6.28318548f / (float)MaxDusts), default(Vector2)) + NPCCenter;
-                            Vector2 velocity = dustPos - NPCCenter;
+                            Vector2 dustPos = (Vector2.One * new Vector2((float)NPC.width / 3f, (float)NPC.height / 3f) * Main.rand.NextFloat(1.25f, 1.75f)).RotatedBy((double)((float)(numDusts - (MaxDusts / 2 - 1)) * 6.28318548f / (float)MaxDusts), default(Vector2)) + NPCBelowPos;
+                            Vector2 velocity = dustPos - NPCBelowPos;
                             int dustEffect = Dust.NewDust(dustPos + velocity, 0, 0, ModContent.DustType<GlowyDust>(), velocity.X * 2f, velocity.Y * 2f, 100, default, 0.1f);
                             Main.dust[dustEffect].color = Main.rand.NextBool() ? Color.Lime : Color.Red;
                             Main.dust[dustEffect].noGravity = true;
@@ -671,19 +649,18 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                         }
                     }
 
-                    if (NPC.localAI[0] == 160 || NPC.localAI[0] == 190 || NPC.localAI[0] == 220)
+                    if (NPC.localAI[0] >= 120 && NPC.localAI[0] <= 360 && NPC.localAI[0] % 60 == 0)
                     {
                         SoundEngine.PlaySound(SoundID.Item17, NPC.Center);
 
-                        int MaxProjectiles = Main.rand.Next(3, 6);
-                        for (int numProj = 0; numProj < MaxProjectiles; numProj++)
-                        {
-                            NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X, NPC.Center.Y + 200), 
-                            new Vector2(Main.rand.NextFloat(-15f, 15f), Main.rand.NextFloat(-7f, -3f)), ModContent.ProjectileType<ThornBall>(), NPC.damage, 4.5f);
-                        }
+                        Vector2 ShootSpeed = player.Center - NPCBelowPos;
+                        ShootSpeed.Normalize();
+                        ShootSpeed *= 6f;
+
+                        NPCGlobalHelper.ShootHostileProjectile(NPC, NPCBelowPos, ShootSpeed, ModContent.ProjectileType<ThornBall>(), NPC.damage, 4.5f);
                     }
 
-                    if (NPC.localAI[0] >= 580)
+                    if (NPC.localAI[0] >= 610)
                     {
                         NPC.localAI[0] = 0;
                         NPC.ai[0]++;
@@ -697,55 +674,35 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                 case 3:
                 {
                     NPC.localAI[0]++;
-
-                    if (NPC.localAI[0] == 60)
+                    if (NPC.localAI[0] == 80)
                     {
-                        SoundEngine.PlaySound(SoundID.DD2_SkeletonSummoned with { Volume = SoundID.DD2_SkeletonSummoned.Volume * 80f }, NPC.Center);
+                        SoundEngine.PlaySound(SoundID.DD2_DarkMageSummonSkeleton, NPC.Center);
                     }
 
-                    if (NPC.localAI[0] >= 120 && NPC.localAI[0] < 300)
+                    Vector2 NPCBelowPos = new Vector2(NPC.Center.X, NPC.Center.Y + 150);
+
+                    if (NPC.localAI[0] >= 80 && NPC.localAI[0] < 110)
                     {
-                        //spawn flies from the left
-                        if (Main.rand.NextBool(17))
+                        int MaxDusts = Main.rand.Next(5, 15);
+                        for (int numDusts = 0; numDusts < MaxDusts; numDusts++)
                         {
-                            //shake the screen for funny rumbling effect
-                            Screenshake.ShakeScreenWithIntensity(NPC.Center, 3f, 350f);
-
-                            SoundEngine.PlaySound(FlySound, NPC.Center);
-
-                            NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X - 800, NPC.Center.Y + Main.rand.Next(-100, 450)), 
-                            new Vector2(Main.rand.Next(7, 11), 0), ModContent.ProjectileType<DaffodilFly>(), NPC.damage, 4.5f);
-                        }
-
-                        //shoot flies from the right
-                        if (Main.rand.NextBool(17))
-                        {
-                            //shake the screen for funny rumbling effect
-                            Screenshake.ShakeScreenWithIntensity(NPC.Center, 3f, 350f);
-
-                            SoundEngine.PlaySound(FlySound, NPC.Center);
-
-                            NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X + 800, NPC.Center.Y + Main.rand.Next(-100, 450)), 
-                            new Vector2(Main.rand.Next(-10, -6), 0), ModContent.ProjectileType<DaffodilFly>(), NPC.damage, 4.5f);
+                            Vector2 dustPos = (Vector2.One * new Vector2((float)NPC.width / 3f, (float)NPC.height / 3f) * Main.rand.NextFloat(1.25f, 1.75f)).RotatedBy((double)((float)(numDusts - (MaxDusts / 2 - 1)) * 6.28318548f / (float)MaxDusts), default(Vector2)) + NPCBelowPos;
+                            Vector2 velocity = dustPos - NPCBelowPos;
+                            int dustEffect = Dust.NewDust(dustPos + velocity, 0, 0, ModContent.DustType<GlowyDust>(), velocity.X * 2f, velocity.Y * 2f, 100, default, 0.1f);
+                            Main.dust[dustEffect].color = Main.rand.NextBool() ? Color.Lime : Color.Red;
+                            Main.dust[dustEffect].noGravity = true;
+                            Main.dust[dustEffect].noLight = false;
+                            Main.dust[dustEffect].velocity = Vector2.Normalize(velocity) * Main.rand.NextFloat(-5f, -2f);
+                            Main.dust[dustEffect].fadeIn = 1.3f;
                         }
                     }
 
-                    if (NPC.localAI[0] >= 480)
+                    if (NPC.localAI[0] == 110)
                     {
-                        NPC.localAI[0] = 0;
-                        NPC.ai[0] = Phase2 ? 4 : 5;
-                        NPC.netUpdate = true;
+                        NPCGlobalHelper.ShootHostileProjectile(NPC, NPCBelowPos, new Vector2(0, 3), ModContent.ProjectileType<Corpsebloom>(), NPC.damage, 4.5f);
                     }
 
-                    break;
-                }
-
-                //raise hands up, then punch the player (code for this attack is handled in each hand's ai)
-                case 4:
-                {
-                    NPC.localAI[0]++;
-
-                    if (NPC.localAI[0] >= 260)
+                    if (NPC.localAI[0] >= 750)
                     {
                         NPC.localAI[0] = 0;
                         NPC.ai[0]++;
@@ -755,34 +712,33 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                     break;
                 }
 
-                //drop seeds from the ceiling that spawn thorn pillars 
-                case 5:
+                //drop seeds from hands that spawn thorn pillars 
+                case 4:
                 {
                     NPC.localAI[0]++;
 
+                    if (NPC.localAI[0] == 50)
+                    {   
+                        CurrentAnimation = AnimationState.OpenHalf;
+                    }
                     if (NPC.localAI[0] == 60)
-                    {
-                        SoundEngine.PlaySound(SoundID.DD2_DarkMageSummonSkeleton, NPC.Center);
+                    {   
+                        CurrentAnimation = AnimationState.Closed;
                     }
 
-                    if (NPC.localAI[0] >= 120 && NPC.localAI[0] < 300)
+                    if (NPC.localAI[0] == 210)
                     {
-                        //shake the screen for rumbling effect
-                        Screenshake.ShakeScreenWithIntensity(NPC.Center, 3f, 350f);
-
-                        if (NPC.localAI[0] % 10 == 2)
-                        {
-                            SoundEngine.PlaySound(SeedSpawnSound, NPC.Center);
-
-                            NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X + Main.rand.Next(-750, 750), NPC.Center.Y - 50), 
-                            new Vector2(0, 8), ModContent.ProjectileType<ThornPillarSeed>(), NPC.damage, 4.5f);
-                        }
+                        CurrentAnimation = AnimationState.OpenHalf;
+                    }
+                    if (NPC.localAI[0] == 220)
+                    {   
+                        CurrentAnimation = AnimationState.OpenFull;
                     }
 
-                    if (NPC.localAI[0] >= 570)
+                    if (NPC.localAI[0] >= 540)
                     {
                         NPC.localAI[0] = 0;
-                        NPC.ai[0] = Phase2 ? 7 : 6;
+                        NPC.ai[0] = Phase2 ? 6 : 5;
                         NPC.netUpdate = true;
                     }
 
@@ -790,7 +746,7 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                 }
 
                 //fire constant deathray at the player that follows them, unable to go through blocks
-                case 6:
+                case 5:
                 {
                     NPC.localAI[0]++;
 
@@ -798,6 +754,11 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                     {
                         NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X - 470, NPC.Center.Y + 350), Vector2.Zero, ModContent.ProjectileType<TakeCoverTelegraph>(), 0, 0f);
                         NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X + 485, NPC.Center.Y + 350), Vector2.Zero, ModContent.ProjectileType<TakeCoverTelegraph>(), 0, 0f);
+                    }
+
+                    if (NPC.localAI[0] == 60)
+                    {
+                        CurrentAnimation = AnimationState.OpenWide;
                     }
 
                     if (NPC.localAI[0] >= 60 && NPC.localAI[0] < 120)
@@ -829,6 +790,11 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                         NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center, new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta)), ModContent.ProjectileType<DaffodilBeam>(), NPC.damage + 30, 0f, ai0: NPC.whoAmI, ai1: rotation);
                     }
 
+                    if (NPC.localAI[0] == 300)
+                    {
+                        CurrentAnimation = AnimationState.OpenFull;
+                    }
+
                     if (NPC.localAI[0] >= 360)
                     {
                         NPC.localAI[0] = 0;
@@ -839,8 +805,8 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                     break;
                 }
                 
-                //Save positions, then shoot solar deathrays at them
-                case 7:
+                //save positions, then shoot solar deathrays at them
+                case 6:
                 {
                     NPC.localAI[0]++;
 
@@ -881,6 +847,11 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                         }
                     }
 
+                    if (NPC.localAI[0] == 70)
+                    {
+                        CurrentAnimation = AnimationState.OpenWide;
+                    }
+
                     if (NPC.localAI[0] == 90)
                     {
                         Screenshake.ShakeScreenWithIntensity(NPC.Center, 12f, 350f);
@@ -893,6 +864,11 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
 
                             NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center, new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta)), ModContent.ProjectileType<DaffodilBeam>(), NPC.damage + 30, 0f, ai0: NPC.whoAmI);
                         }
+                    }
+
+                    if (NPC.localAI[0] == 230)
+                    {
+                        CurrentAnimation = AnimationState.OpenFull;
                     }
                     
                     if (NPC.localAI[0] >= 290)

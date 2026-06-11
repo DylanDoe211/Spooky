@@ -125,7 +125,6 @@ Columbo.DisplayName: Columbo
 ColumboFinger.DisplayName: Columbo
 ShroomWhipProj.DisplayName: Spore Smacker
 ShroomWhipSpore.DisplayName: Shroom Spore
-ChlorophyllFlower.DisplayName: Chlorophyll Flower
 FleshPillarTelegraph.DisplayName: Telegraph
 FleshPillar.DisplayName: Flesh Pillar
 GourdFlailProj.DisplayName: Rotty's Wrath
@@ -134,7 +133,6 @@ GourdSlingshotProj.DisplayName: Stinky Slinger
 MoldyPelletProj.DisplayName: Moldy Pellet
 MoldPelletFly.DisplayName: Mold Fly
 SkullGoop.DisplayName: Skull Goop
-SolarLaser.DisplayName: Solar Laser
 ThornBall.DisplayName: Thorn Ball
 ThornBallSpike.DisplayName: Thorn Spike
 DaffodilFly.DisplayName: Large Fly
@@ -744,3 +742,7 @@ SlingshotAttachFlower.DisplayName: Flower
 CageFungusProj.DisplayName: Red Cage Fungus
 SporeEventStarterProj.DisplayName: Spore Globe
 SpiderSlingshotBaby.DisplayName: Tiny Spider
+HomingDaffodil.DisplayName: Flower
+DaffodilPollen.DisplayName: Pollen Puff
+Corpsebloom.DisplayName: Corpsebloom
+DutchmanPipeHitProj.DisplayName: ""

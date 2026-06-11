@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
+using Spooky.Content.Buffs.Debuff;
 using Spooky.Content.NPCs.SpiderCave.Projectiles;
 
 namespace Spooky.Content.Projectiles.SpiderCave
@@ -63,6 +64,11 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
             return false;
         }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+		{
+			target.AddBuff(ModContent.BuffType<SpiderWarWebSlowDebuff>(), 60);
+		}
 
         public override void AI()
         {

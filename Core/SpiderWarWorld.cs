@@ -337,10 +337,11 @@ namespace Spooky.Core
 				Rectangle waveBackground = Utils.CenteredRectangle(new Vector2(Main.screenWidth - OffsetX - 100f, Main.screenHeight - OffsetY - 23f), new Vector2(width, height));
 				Utils.DrawInvBG(spriteBatch, waveBackground, new Color(130, 92, 58, 255) * 0.785f);
 
-				string waveText = "Wave " + SpiderWarWave + ": " + ((SpiderWarPoints * 100) / SpiderWarMaxPoints) + "%";
+				string waveText = Language.GetTextValue("Mods.Spooky.EventsAndBosses.SpiderWarWave") + " " + SpiderWarWave + ": " + ((SpiderWarPoints * 100) / SpiderWarMaxPoints) + "%";
 				if (SpiderWarWave >= 10)
 				{
-					waveText = "Wave " + SpiderWarWave + ": " + SpiderWarPoints + " " + "Kills";
+					waveText = Language.GetTextValue("Mods.Spooky.EventsAndBosses.SpiderWarWave") + " " + 
+					SpiderWarWave + ": " + SpiderWarPoints + " " + Language.GetTextValue("Mods.Spooky.EventsAndBosses.SpiderWarKills");
 				}
 
 				Utils.DrawBorderString(spriteBatch, waveText, new Vector2(waveBackground.Center.X, waveBackground.Y + 5), Color.White, Scale, 0.5f, -0.1f);

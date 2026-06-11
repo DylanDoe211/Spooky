@@ -98,9 +98,11 @@ namespace Spooky.Content.NPCs.Boss.BigBone.Projectiles
 			if (Projectile.ai[0] == 0)
 			{
 				double Velocity = Math.Atan2(target.position.Y - Projectile.position.Y, target.position.X - Projectile.position.X);
-				Projectile.velocity = new Vector2((float)Math.Cos(Velocity), (float)Math.Sin(Velocity)) * 16;
+				Projectile.velocity = new Vector2((float)Math.Cos(Velocity), (float)Math.Sin(Velocity)) * 14;
 
 				Projectile.ai[0] = 1;
+
+				Projectile.netUpdate = true;
 			}
 
 			if (Projectile.timeLeft < 60)
@@ -116,12 +118,12 @@ namespace Spooky.Content.NPCs.Boss.BigBone.Projectiles
 			if (Projectile.velocity.X != oldVelocity.X)
 			{
 				Projectile.position.X = Projectile.position.X + Projectile.velocity.X;
-				Projectile.velocity.X = -oldVelocity.X * 0.8f;
+				Projectile.velocity.X = -oldVelocity.X * 0.95f;
 			}
 			if (Projectile.velocity.Y != oldVelocity.Y)
 			{
 				Projectile.position.Y = Projectile.position.Y + Projectile.velocity.Y;
-				Projectile.velocity.Y = -oldVelocity.Y * 0.8f;
+				Projectile.velocity.Y = -oldVelocity.Y * 0.95f;
 			}
 
 			return false;

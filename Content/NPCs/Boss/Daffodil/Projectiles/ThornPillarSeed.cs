@@ -5,12 +5,13 @@ using Terraria.Audio;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Spooky.Content.NPCs.Boss.Daffodil.Projectiles
 {
     public class ThornPillarSeed : ModProjectile
     {
-        private static Asset<Texture2D> ProjTexture;
+        Vector2 GoToPosition = Vector2.Zero;
 
         public static readonly SoundStyle ThornSpawnSound = new("Spooky/Content/Sounds/Daffodil/SeedThorn", SoundType.Sound);
 
@@ -24,67 +25,102 @@ namespace Spooky.Content.NPCs.Boss.Daffodil.Projectiles
             Projectile.penetrate = 1;
         }
 
-        public override bool PreDraw(ref Color lightColor)
-        {
-            ProjTexture ??= ModContent.Request<Texture2D>(Texture);
-
-            Color color = new Color(125, 125, 125, 0).MultiplyRGBA(Color.Lime);
-
-            Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
-
-            for (int numEffect = 0; numEffect < 3; numEffect++)
-            {
-                Color newColor = color;
-                newColor = Projectile.GetAlpha(newColor);
-                newColor *= 1f;
-                Vector2 vector = new Vector2(Projectile.Center.X, Projectile.Center.Y) + (numEffect / 3 * 6 + Projectile.rotation + 0f).ToRotationVector2() - Main.screenPosition + new Vector2(0, Projectile.gfxOffY) - Projectile.velocity * numEffect;
-                Rectangle rectangle = new(0, ProjTexture.Height() / Main.projFrames[Projectile.type] * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
-                Main.EntitySpriteDraw(ProjTexture.Value, vector, rectangle, newColor, Projectile.rotation, drawOrigin, Projectile.scale * 1.2f, SpriteEffects.None, 0);
-            }
-
-            return true;
-        }
-
-        public override bool CanHitPlayer(Player target)
-        {
-            return false;
-        }
+        public override bool? CanDamage()
+		{
+			return false;
+		}
 
         public override void AI()
         {
+            NPC Parent = Main.npc[(int)Projectile.ai[2]];
+
             //add light for visibility
             Lighting.AddLight(Projectile.Center, 0.2f, 0.35f, 0f);
 
             Projectile.ai[0]++;
-			if (Projectile.ai[0] >= 60)
-			{
-				Projectile.velocity *= 0;
+
+            if (Projectile.ai[0] <= 30)
+            {
+                Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.02f * (float)Projectile.direction;
+            }
+            else
+            {
+                Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+			    Projectile.rotation += 0f * (float)Projectile.direction;
+
+                if (GoToPosition == Vector2.Zero)
+                {
+                    GoToPosition = new Vector2(Parent.Center.X + Main.rand.Next(-750, 750), Parent.Center.Y + 400);
+                }
+                else
+                {
+                    if (Projectile.Center.Y > GoToPosition.Y && IsColliding())
+                    {
+                        Projectile.velocity *= 0.5f;
+
+                        Projectile.ai[1]++;
+                        if (Projectile.ai[1] >= 40)
+                        {
+                            SoundEngine.PlaySound(ThornSpawnSound, Projectile.Center);
+
+                            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(0, -12),
+                            ModContent.ProjectileType<ThornPillar>(), Projectile.damage, 0, Main.myPlayer);
+
+                            Projectile.Kill();
+                        }
+                    }
+                    else
+                    {
+                        Vector2 desiredVelocity = Projectile.DirectionTo(GoToPosition) * 8;
+				        Projectile.velocity = Vector2.Lerp(Projectile.velocity, desiredVelocity, 1f / 20);
+                    }
+                }
+            }
+        }
+
+        public bool IsColliding()
+        {
+            int minTilePosX = (int)(Projectile.position.X / 16) - 1;
+            int maxTilePosX = (int)((Projectile.position.X + Projectile.width) / 16) + 2;
+            int minTilePosY = (int)(Projectile.position.Y / 16) - 1;
+            int maxTilePosY = (int)((Projectile.position.Y + Projectile.height) / 16) + 2;
+            if (minTilePosX < 0)
+            {
+                minTilePosX = 0;
+            }
+            if (maxTilePosX > Main.maxTilesX)
+            {
+                maxTilePosX = Main.maxTilesX;
+            }
+            if (minTilePosY < 0)
+            {
+                minTilePosY = 0;
+            }
+            if (maxTilePosY > Main.maxTilesY)
+            {
+                maxTilePosY = Main.maxTilesY;
             }
 
-            if (Projectile.ai[0] == 90)
-			{
-                Vector2 lineDirection = new Vector2(Main.rand.Next(-5, 6), 16);
+            for (int i = minTilePosX; i < maxTilePosX; ++i)
+            {
+                for (int j = minTilePosY; j < maxTilePosY; ++j)
+                {
+                    if (Main.tile[i, j] != null && (Main.tile[i, j].HasTile && (Main.tileSolid[(int)Main.tile[i, j].TileType])))
+                    {
+                        Vector2 vector2;
+                        vector2.X = (float)(i * 16);
+                        vector2.Y = (float)(j * 16);
 
-                if (Main.netMode != NetmodeID.MultiplayerClient)
-				{
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center.X, Projectile.Center.Y, Vector2.Zero.X, Vector2.Zero.Y,
-                    ModContent.ProjectileType<ThornPillar>(), Projectile.damage, 0, Main.myPlayer, lineDirection.ToRotation() + MathHelper.Pi, -16 * 60);
+                        if (Projectile.position.X + Projectile.width > vector2.X && Projectile.position.X < vector2.X + 16.0 && 
+                        (Projectile.position.Y + Projectile.height > (double)vector2.Y && Projectile.position.Y < vector2.Y + 16.0))
+                        {
+                            return true;
+                        }
+                    }
                 }
             }
 
-            if (Projectile.ai[0] >= 90)
-			{
-                Projectile.alpha += 5;
-            }
-
-            if (Projectile.ai[0] == 138)
-			{
-                SoundEngine.PlaySound(ThornSpawnSound, Projectile.Center);
-            }
-            if (Projectile.ai[0] >= 140)
-			{
-                Projectile.Kill();
-            }
+            return false;
         }
     }
 }

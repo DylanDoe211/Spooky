@@ -193,13 +193,49 @@ namespace Spooky.Content.Projectiles.Catacomb
                 //play sound when fully charged
                 if (Projectile.ai[0] == 120)
                 {
-                    SoundEngine.PlaySound(SoundID.DD2_DarkMageHealImpact with { Volume = SoundID.DD2_DarkMageHealImpact.Volume * 100f }, Projectile.Center);
+                    SoundEngine.PlaySound(SoundID.Item20 with { Volume = 3f }, Projectile.Center);
+
+                    float maxAmount = 30;
+                    int currentAmount = 0;
+                    while (currentAmount <= maxAmount)
+                    {
+                        Vector2 velocity = new Vector2(Main.rand.NextFloat(2f, 7f), Main.rand.NextFloat(2f, 7f));
+                        Vector2 Bounds = new Vector2(Main.rand.NextFloat(2f, 7f), Main.rand.NextFloat(2f, 7f));
+                        float intensity = Main.rand.NextFloat(2f, 7f);
+
+                        Vector2 vector12 = Vector2.UnitX * 0f;
+                        vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
+                        vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
+                        int newDust = Dust.NewDust(player.Center, 0, 0, DustID.GreenTorch, 0f, 0f, 100, default, 3f);
+                        Main.dust[newDust].noGravity = true;
+                        Main.dust[newDust].position = player.Center + vector12;
+                        Main.dust[newDust].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
+                        currentAmount++;
+                    }
                 }
 
                 //play different sound when super charged
                 if (Projectile.ai[0] == 240)
                 {
-                    SoundEngine.PlaySound(SoundID.DD2_DarkMageSummonSkeleton with { Volume = SoundID.DD2_DarkMageSummonSkeleton.Volume * 3.5f }, Projectile.Center);
+                    SoundEngine.PlaySound(SoundID.Item20 with { Pitch = -0.5f, Volume = 3f }, Projectile.Center);
+
+                    float maxAmount = 30;
+                    int currentAmount = 0;
+                    while (currentAmount <= maxAmount)
+                    {
+                        Vector2 velocity = new Vector2(Main.rand.NextFloat(6f, 10f), Main.rand.NextFloat(6f, 10f));
+                        Vector2 Bounds = new Vector2(Main.rand.NextFloat(6f, 10f), Main.rand.NextFloat(6f, 10f));
+                        float intensity = Main.rand.NextFloat(6f, 10f);
+
+                        Vector2 vector12 = Vector2.UnitX * 0f;
+                        vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
+                        vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
+                        int newDust = Dust.NewDust(player.Center, 0, 0, DustID.GreenTorch, 0f, 0f, 100, default, 3f);
+                        Main.dust[newDust].noGravity = true;
+                        Main.dust[newDust].position = player.Center + vector12;
+                        Main.dust[newDust].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
+                        currentAmount++;
+                    }
                 }
 
                 SetProjectilePosition(player);

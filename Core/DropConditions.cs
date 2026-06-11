@@ -374,7 +374,7 @@ namespace Spooky.Core
                         }
                         else
                         {
-                            return Main.rand.NextBool(10);
+                            return Main.rand.NextBool(5);
                         }
                     }
                 }
@@ -424,7 +424,7 @@ namespace Spooky.Core
 						}
 						else
 						{
-							return Main.rand.NextBool(10);
+							return Main.rand.NextBool(5);
 						}
 					}
 				}
@@ -460,6 +460,34 @@ namespace Spooky.Core
 				return result;
 			}
 		}
+
+        //drops for when all old hunter quests are complete
+        public class AllOldHunterQuestsDoneCondition : IItemDropRuleCondition
+        {
+            public bool CanDrop(DropAttemptInfo info) 
+            {
+                if (!info.IsInSimulation) 
+                {
+                    if (Flags.OldHunterQuest1 && Flags.OldHunterQuest2 && Flags.OldHunterQuest3 && Flags.OldHunterQuest4 &&
+                    Flags.OldHunterQuest5 && Flags.OldHunterQuest6 && Flags.OldHunterQuest7 && Flags.OldHunterQuest8)
+                    {
+                        return true;
+                    }
+                }
+                
+                return false;
+            }
+
+            public bool CanShowItemDropInUI() 
+            {
+                return false;
+            }
+            
+            public string GetConditionDescription()
+            {
+                return null;
+            }
+        }
 
 
         //all the conditions below this point exist because with orro & boro, only the last worm alive should drop items

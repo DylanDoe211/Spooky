@@ -354,7 +354,7 @@ namespace Spooky.Core
             }
 
             Texture2D DutchmanPipeRingTex1 = ModContent.Request<Texture2D>("Spooky/Content/Projectiles/Blooms/DutchmanPipeRing").Value;
-            Texture2D DutchmanPipeRingTex2 = ModContent.Request<Texture2D>("Spooky/Content/Projectiles/Blooms/DutchmanPipeRingPattern").Value;
+            //Texture2D DutchmanPipeRingTex2 = ModContent.Request<Texture2D>("Spooky/Content/Projectiles/Blooms/DutchmanPipeRingPattern").Value;
 
             float num = 1f;
             float num2 = 0.1f;
@@ -400,11 +400,8 @@ namespace Spooky.Core
                     Vector2 circular = new Vector2(Main.rand.NextFloat(1f, 12f), Main.rand.NextFloat(1f, 12f)).RotatedBy(MathHelper.ToRadians(j));
 
                     drawInfo.DrawDataCache.Add(new DrawData(DutchmanPipeRingTex1, drawInfo.drawPlayer.MountedCenter - Main.screenPosition + circular, new Rectangle(0, 0, 348, 348), 
-					Color.Red * 0.5f * num5, DutchmanRingRotation + (float)Math.PI / 3f * i, new Vector2(348 / 2, 348 / 2), num4 * 1.5f, SpriteEffects.None, 0f));
+					Color.Red * 0.25f * num5, DutchmanRingRotation + (float)Math.PI / 3f * i, new Vector2(348 / 2, 348 / 2), num4 * 1.5f, SpriteEffects.None, 0f));
                 }
-
-                drawInfo.DrawDataCache.Add(new DrawData(DutchmanPipeRingTex2, drawInfo.drawPlayer.MountedCenter - Main.screenPosition, new Rectangle(0, 0, 348, 348), 
-				Color.White * num5, DutchmanRingRotation + (float)Math.PI / 3f * i, new Vector2(348 / 2, 348 / 2), num4 * 1.5f, SpriteEffects.None, 0f));
             }
         }
     }

@@ -95,11 +95,6 @@ namespace Spooky
                     NPC.NewNPC(null, Flags.MocoSpawnX, Flags.MocoSpawnY, ModContent.NPCType<MocoSpawner>());
 					break;
                 }
-                case SpookyMessageType.SpawnOrroboro:
-                {
-                    NPC.NewNPC(null, Flags.OrroboroSpawnX, Flags.OrroboroSpawnY, ModContent.NPCType<OrroHeadP1>(), ai0: -1);
-                    break;
-                }
                 case SpookyMessageType.SpawnDaffodil:
                 {
                     Flags.SpawnDaffodil = true;
@@ -115,6 +110,12 @@ namespace Spooky
                 case SpookyMessageType.SpawnOldHunter:
                 {
                     Flags.SpawnOldHunter = true;
+                    NetMessage.SendData(MessageID.WorldData);
+                    break;
+				}
+                case SpookyMessageType.SpawnOrroboro:
+                {
+                    Flags.SpawnOrroboro = true;
                     NetMessage.SendData(MessageID.WorldData);
                     break;
 				}

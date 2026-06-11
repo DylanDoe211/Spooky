@@ -23,6 +23,10 @@ namespace Spooky
 		[DefaultValue(DialogueSpeedEnum.Normal)]
 		[DrawTicks]
 		public DialogueSpeedEnum DialogueSpeed;
+
+		[BackgroundColor(250, 175, 0, 125)]
+        [DefaultValue(true)]
+        public bool DialogueFocus { get; set; }
 	}
 
 	[BackgroundColor(80, 12, 0, 150)]
@@ -53,6 +57,10 @@ namespace Spooky
         [BackgroundColor(250, 175, 0, 125)]
         [DefaultValue(true)]
         public bool HalloweenEnabled { get; set; }
+
+		[BackgroundColor(250, 175, 0, 125)]
+        [DefaultValue(false)]
+        public bool NoseTempleMaxPlayers { get; set; }
     }
 
 	public enum EyeValleyPosEnum

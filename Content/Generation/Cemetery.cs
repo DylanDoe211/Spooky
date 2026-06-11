@@ -26,6 +26,9 @@ namespace Spooky.Content.Generation
         public static int BiomeWidth = Main.maxTilesX >= 8400 ? 500 : (Main.maxTilesX >= 6400 ? 420 : 250);
 
 		static int initialStartPosX;
+        
+        static int LeftY = 0;
+		static int RightY = 0;
 
         public static WorldGen.GrowTreeSettings TreeSettings;
 
@@ -182,20 +185,17 @@ namespace Spooky.Content.Generation
 			int XMiddle = Catacombs.PositionX;
 			int XEdge = Catacombs.PositionX + (BiomeWidth / 2);
 
-			int LeftY = 0;
-			int RightY = 0;
-
 			bool foundSurfaceLeft = false;
 			int attemptsLeft = 0;
 
             //get the two surface points at the left and right of the cemetery biome
 			while (!foundSurfaceLeft && attemptsLeft++ < 100000)
 			{
-				while ((!IsCemeteryTile(XStart - 1, LeftY) || !NoFloatingIsland(XStart - 1, LeftY)) && LeftY <= Main.maxTilesY)
+				while ((!IsCemeteryTile(XStart, LeftY) || !NoFloatingIsland(XStart, LeftY)) && LeftY <= Main.maxTilesY)
 				{
 					LeftY++;
 				}
-				if ((WorldGen.SolidTile(XStart - 1, LeftY) || Main.tile[XStart - 1, LeftY].WallType > 0) && NoFloatingIsland(XStart - 1, LeftY))
+				if ((WorldGen.SolidTile(XStart, LeftY) || Main.tile[XStart, LeftY].WallType > 0) && NoFloatingIsland(XStart, LeftY))
 				{
 					foundSurfaceLeft = true;
 				}
@@ -206,18 +206,18 @@ namespace Spooky.Content.Generation
 
 			while (!foundSurfaceRight && attemptsRight++ < 100000)
 			{
-				while ((!IsCemeteryTile(XEdge + 1, RightY) || !NoFloatingIsland(XEdge + 1, RightY)) && RightY <= Main.maxTilesY)
+				while ((!IsCemeteryTile(XEdge, RightY) || !NoFloatingIsland(XEdge, RightY)) && RightY <= Main.maxTilesY)
 				{
 					RightY++;
 				}
-				if ((WorldGen.SolidTile(XEdge + 1, RightY) || Main.tile[XEdge + 1, RightY].WallType > 0) && NoFloatingIsland(XEdge + 1, RightY))
+				if ((WorldGen.SolidTile(XEdge, RightY) || Main.tile[XEdge, RightY].WallType > 0) && NoFloatingIsland(XEdge, RightY))
 				{
 					foundSurfaceRight = true;
 				}
 			}
 
             //flatten the terrain by making a line
-			ConnectPoints(new Vector2(XStart, LeftY), new Vector2(XEdge, RightY));
+			FlattenSurface(new Vector2(XStart, LeftY), new Vector2(XEdge, RightY), false);
 
 			//tile sloping
             double heightLimit = Main.worldSurface * 0.35f;
@@ -232,51 +232,6 @@ namespace Spooky.Content.Generation
                     }
                 }
             }
-		}
-
-		public void ConnectPoints(Vector2 Start, Vector2 End)
-		{
-			int segments = 10000;
-
-			Vector2 myCenter = Start;
-			Vector2 p0 = End;
-			Vector2 p1 = End;
-			Vector2 p2 = myCenter;
-			Vector2 p3 = myCenter;
-
-			for (int i = 0; i < segments; i++)
-			{
-				float t = i / (float)segments;
-				Vector2 Position = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
-				t = (i + 1) / (float)segments;
-
-                //place tiles below the line to create flattened terrain
-				for (int Y = (int)Position.Y; Y <= Main.worldSurface; Y++)
-				{
-					if (!Main.tile[(int)Position.X, Y].HasTile)
-					{
-						WorldGen.PlaceTile((int)Position.X, Y, ModContent.TileType<CemeteryDirt>());
-                        WorldGen.PlaceWall((int)Position.X, Y + 3, ModContent.WallType<CemeteryDirtWall>());
-                        Main.tile[(int)Position.X, Y + 3].WallType = (ushort)ModContent.WallType<CemeteryDirtWall>();
-					}
-				}
-
-                //destory all tiles above the line to get rid of unwanted hills/mountains
-                double heightLimit = Main.worldSurface * 0.35f;
-
-                for (int Y = (int)heightLimit; Y < (int)Position.Y; Y++)
-				{
-					if (IsCemeteryTile((int)Position.X, Y) || Main.tile[(int)Position.X, Y].WallType == ModContent.WallType<CemeteryGrassWall>() || Main.tile[(int)Position.X, Y].WallType == ModContent.WallType<CemeteryDirtWall>())
-					{
-                        Main.tile[(int)Position.X, Y].ClearEverything();
-					}
-				}
-
-                if (Main.tile[(int)Position.X, (int)Position.Y].WallType == ModContent.WallType<CemeteryGrassWall>() || Main.tile[(int)Position.X, (int)Position.Y].WallType == ModContent.WallType<CemeteryDirtWall>())
-                {
-                    WorldGen.KillWall((int)Position.X, (int)Position.Y);
-                }
-			}
 		}
 
         private void CemeteryBlockClusters(GenerationProgress progress, GameConfiguration configuration)
@@ -423,6 +378,73 @@ namespace Spooky.Content.Generation
             GenerateStructure((XMiddle + XEdge) / 2, StartPosY, "RuinedHouse2", 14, 20);
         }
 
+        public void CemeteryLiquidRemoval(GenerationProgress progress, GameConfiguration configuration)
+        {
+            int XStart = Catacombs.PositionX - (BiomeWidth / 2);
+            int XMiddle = Catacombs.PositionX;
+            int XEdge = Catacombs.PositionX + (BiomeWidth / 2);
+
+			FlattenSurface(new Vector2(XStart, LeftY), new Vector2(XEdge, RightY), true);
+        }
+
+        public void FlattenSurface(Vector2 Start, Vector2 End, bool Liquids)
+		{
+			int segments = 10000;
+
+			Vector2 myCenter = Start;
+			Vector2 p0 = End;
+			Vector2 p1 = End;
+			Vector2 p2 = myCenter;
+			Vector2 p3 = myCenter;
+
+			for (int i = 0; i < segments; i++)
+			{
+				float t = i / (float)segments;
+				Vector2 Position = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
+				t = (i + 1) / (float)segments;
+                
+                //destory all tiles above the line to get rid of unwanted hills/mountains
+                double heightLimit = Main.worldSurface * 0.35f;
+
+                if (!Liquids)
+                {
+                    //place tiles below the line to create flattened terrain
+                    for (int Y = (int)Position.Y; Y <= Main.worldSurface; Y++)
+                    {
+                        if (!Main.tile[(int)Position.X, Y].HasTile)
+                        {
+                            WorldGen.PlaceTile((int)Position.X, Y, ModContent.TileType<CemeteryDirt>());
+                            WorldGen.PlaceWall((int)Position.X, Y + 3, ModContent.WallType<CemeteryDirtWall>());
+                            Main.tile[(int)Position.X, Y + 3].WallType = (ushort)ModContent.WallType<CemeteryDirtWall>();
+                        }
+                    }
+
+                    for (int Y = (int)heightLimit; Y < (int)Position.Y; Y++)
+                    {
+                        if (IsCemeteryTile((int)Position.X, Y) || Main.tile[(int)Position.X, Y].WallType == ModContent.WallType<CemeteryGrassWall>() || Main.tile[(int)Position.X, Y].WallType == ModContent.WallType<CemeteryDirtWall>())
+                        {
+                            Main.tile[(int)Position.X, Y].ClearEverything();
+                        }
+                    }
+
+                    if (Main.tile[(int)Position.X, (int)Position.Y].WallType == ModContent.WallType<CemeteryGrassWall>() || Main.tile[(int)Position.X, (int)Position.Y].WallType == ModContent.WallType<CemeteryDirtWall>())
+                    {
+                        if (!Liquids)
+                        {
+                            WorldGen.KillWall((int)Position.X, (int)Position.Y);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int Y = (int)heightLimit; Y < (int)Position.Y; Y++)
+                    {
+                        Main.tile[(int)Position.X, Y].LiquidAmount = 0;
+                    }
+                }
+			}
+		}
+
         //method for finding a valid surface and placing the structure on it
         public void GenerateStructure(int startX, int startY, string StructureFile, int offsetX, int offsetY)
         {
@@ -551,17 +573,25 @@ namespace Spooky.Content.Generation
 
 		public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
         {
-            int GenIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Dirt Rock Wall Runner"));
-			if (GenIndex == -1)
+            int GenIndex1 = tasks.FindIndex(genpass => genpass.Name.Equals("Dirt Rock Wall Runner"));
+			if (GenIndex1 == -1)
 			{
 				return;
 			}
 
-            tasks.Insert(GenIndex + 1, new PassLegacy("Cemetery", PlaceCemetery));
-			tasks.Insert(GenIndex + 2, new PassLegacy("Cemetery Flattening", CemeteryFlattening));
-            tasks.Insert(GenIndex + 3, new PassLegacy("Cemetery Clusters", CemeteryBlockClusters));
-            tasks.Insert(GenIndex + 4, new PassLegacy("Cemetery Structures", GenerateCemeteryStructures));
-            tasks.Insert(GenIndex + 5, new PassLegacy("Cemetery Ambience", CemeteryAmbience));
+            tasks.Insert(GenIndex1 + 1, new PassLegacy("Cemetery", PlaceCemetery));
+			tasks.Insert(GenIndex1 + 2, new PassLegacy("Cemetery Flattening", CemeteryFlattening));
+            tasks.Insert(GenIndex1 + 3, new PassLegacy("Cemetery Clusters", CemeteryBlockClusters));
+            tasks.Insert(GenIndex1 + 4, new PassLegacy("Cemetery Structures", GenerateCemeteryStructures));
+            tasks.Insert(GenIndex1 + 5, new PassLegacy("Cemetery Ambience", CemeteryAmbience));
+
+            int GenIndex2 = tasks.FindIndex(genpass => genpass.Name.Equals("Remove Water From Sand"));
+			if (GenIndex2 == -1)
+			{
+				return;
+			}
+
+            tasks.Insert(GenIndex2 + 1, new PassLegacy("Cemetery Liquid Removal", CemeteryLiquidRemoval));
         }
 
         public override void PostWorldGen()

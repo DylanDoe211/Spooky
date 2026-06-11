@@ -76,7 +76,7 @@ namespace Spooky.Content.NPCs.Boss.BigBone
                 {
                     float time = (float)Math.Cos((double)(Main.GlobalTimeWrappedHourly % 2.5f / 2.5f * 6f)) / 2f + 0.5f;
 
-                    Color color = Color.Lerp(Color.Transparent, Color.Gold * 0.15f, time);
+                    Color color = Color.Lerp(Color.Transparent, Color.White * 0.5f, time);
 
                     spriteBatch.Draw(BGRootGlowTexture.Value, DrawPosition, new Rectangle(0, 0, 1680, 1102), color);
                 }

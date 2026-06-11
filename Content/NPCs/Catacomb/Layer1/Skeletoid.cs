@@ -83,7 +83,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
 
         public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CatacombChestKeyUpper>(), 50));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CatacombChestKeyUpper>(), 30));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Bonemeal>(), 50));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CandyCorn>(), 100));
         }
@@ -92,9 +92,9 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
         {
 			if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 6; numGores++)
+                if (Main.netMode != NetmodeID.Server)
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 6; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/SkeletoidGore" + numGores).Type);
                     }
@@ -105,16 +105,6 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
 
     public class Skeletoid2 : Skeletoid1
     {
-        public override void SendExtraAI(BinaryWriter writer)
-        {
-            writer.Write(NPC.localAI[0]);
-        }
-
-        public override void ReceiveExtraAI(BinaryReader reader)
-        {
-            NPC.localAI[0] = reader.ReadSingle();
-        }
-
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
         {
 			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
@@ -124,78 +114,13 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
 			});
         }
 
-        public override void FindFrame(int frameHeight)
-        {
-            //running animation
-            NPC.frameCounter++;
-            if (NPC.frameCounter > 4)
-            {
-                NPC.frame.Y = NPC.frame.Y + frameHeight;
-                NPC.frameCounter = 0;
-            }
-            if (NPC.frame.Y >= frameHeight * 6)
-            {
-                NPC.frame.Y = 0 * frameHeight;
-            }
-
-            //frame when falling/jumping
-            if (NPC.velocity.Y > 0 || NPC.velocity.Y < 0)
-            {
-                NPC.frame.Y = 4 * frameHeight;
-            }
-
-            //shooting frame
-            if (NPC.localAI[0] > 300)
-            {
-                NPC.frame.Y = 0 * frameHeight;
-            }
-        }
-
-        public override void AI()
-		{
-            Player player = Main.player[NPC.target];
-
-            NPC.spriteDirection = NPC.direction;
-
-            NPC.localAI[0]++;
-
-            if (NPC.localAI[0] <= 300)
-            {
-                NPC.aiStyle = 3;
-                AIType = NPCID.DesertGhoul;
-            }
-
-            if (NPC.localAI[0] > 300)
-            {
-                NPC.aiStyle = 0;
-
-                NPC.velocity.Y += 0.35f;
-
-                if (NPC.localAI[0] == 340)
-                {
-                    SoundEngine.PlaySound(SoundID.Item8, NPC.Center);
-
-                    Vector2 ShootSpeed = player.Center - NPC.Center;
-                    ShootSpeed.Normalize();
-                    ShootSpeed *= 4.5f;
-
-                    NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X, NPC.Center.Y - 25), ShootSpeed, ModContent.ProjectileType<SolarLaser>(), NPC.damage, 2.5f);
-                }
-            }
-
-            if (NPC.localAI[0] >= 370)
-            {
-                NPC.localAI[0] = 0;
-            }
-        }
-
         public override void HitEffect(NPC.HitInfo hit) 
         {
 			if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 6; numGores++)
+                if (Main.netMode != NetmodeID.Server)
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 6; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/SkeletoidFlowerGore" + numGores).Type);
                     }
@@ -219,9 +144,9 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
         {
 			if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 6; numGores++)
+                if (Main.netMode != NetmodeID.Server)
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 6; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/SkeletoidVineGore" + numGores).Type);
                     }
@@ -250,9 +175,9 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
         {
 			if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 6; numGores++)
+                if (Main.netMode != NetmodeID.Server)
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 6; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/SkeletoidThornGore" + numGores).Type);
                     }

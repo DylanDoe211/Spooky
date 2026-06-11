@@ -182,7 +182,7 @@ namespace Spooky.Content.Biomes
 			bool BiomeCondition = ModContent.GetInstance<TileCount>().tarPitsTiles >= 500 && (ModContent.GetInstance<TileCount>().tarPitsTiles > Main.SceneMetrics.SandTileCount / 5);
 			bool UndergroundCondition = player.ZoneDirtLayerHeight || player.ZoneRockLayerHeight;
 
-            return BiomeCondition && UndergroundCondition;
+            return BiomeCondition && UndergroundCondition && !player.ZoneDungeon;
         }
     }
 }

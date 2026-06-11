@@ -588,43 +588,10 @@ namespace Spooky.Content.UserInterfaces
             	{
 					ModContent.GetInstance<MiscAchievementOldHunterQuest>().OldHunterQuestCondition.Complete();
 				}
-
-				SpawnItem(ModContent.ItemType<OldHunterPaintingItem>(), 1);
 			}
 
-			//unique weapons
-			int[] MainItem = new int[] { ModContent.ItemType<ProSlingshot>(), ModContent.ItemType<MagicBeanBag>(), ModContent.ItemType<MetalFistBox>(), 
-			ModContent.ItemType<PossessedCrown>(), ModContent.ItemType<TrackingCrossbow>(), ModContent.ItemType<WrestlingBelt>() };
-			SpawnItem(Main.rand.Next(MainItem), 1);
-
-			//gnome homes
-			if (Main.rand.NextBool(5))
-			{
-				int[] GnomeHomes = new int[] { ModContent.ItemType<GnomeHouse1Item>(), ModContent.ItemType<GnomeHouse2Item>(), ModContent.ItemType<GnomeHouse3Item>(), ModContent.ItemType<GnomeHouse4Item>() };
-				SpawnItem(Main.rand.Next(GnomeHomes), 1);
-			}
-
-			//gnome homes
-			if (Main.rand.NextBool())
-			{
-				SpawnItem(ModContent.ItemType<SporeEventStarter>(), 1);
-			}
-
-			//give souls of night or light
-			int[] Souls = new int[] { ItemID.SoulofNight, ItemID.SoulofLight };
-			SpawnItem(Main.rand.Next(Souls), Main.rand.Next(8, 16));
-
-			//give random tier 2 or 3 hardmode bars 
-			int[] Bars = new int[] { ItemID.MythrilBar, ItemID.OrichalcumBar, ItemID.AdamantiteBar, ItemID.TitaniumBar };
-			SpawnItem(Main.rand.Next(Bars), Main.rand.Next(12, 26));
-
-			//give potions
-			int[] Potions = new int[] { ItemID.BattlePotion, ItemID.CalmingPotion, ItemID.EndurancePotion, ItemID.LuckPotionGreater, ItemID.IronskinPotion,
-			ItemID.LifeforcePotion, ItemID.MagicPowerPotion, ItemID.RegenerationPotion, ItemID.SummoningPotion, ItemID.WrathPotion };
-			SpawnItem(Main.rand.Next(Potions), Main.rand.Next(2, 6));
-
-			//coins
-			SpawnItem(ItemID.GoldCoin, Main.rand.Next(5, 11));
+			//loot bag
+			SpawnItem(ModContent.ItemType<OldHunterBag>(), 1);
 		}
     }
 }

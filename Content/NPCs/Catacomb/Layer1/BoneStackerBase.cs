@@ -84,7 +84,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
 
         public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CatacombChestKeyUpper>(), 50));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CatacombChestKeyUpper>(), 30));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CandyCorn>(), 100));
         }
 
@@ -92,9 +92,9 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
         {
 			if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 2; numGores++)
+                if (Main.netMode != NetmodeID.Server)
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 2; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/BoneStackerBaseGore" + numGores).Type);
                     }

@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Terraria.GameContent.ItemDropRules;
 
 using Spooky.Content.Items.Blooms.Accessory;
+using Spooky.Content.Items.Costume;
 using Spooky.Content.Tiles.Blooms;
 using Spooky.Content.Tiles.Minibiomes.Christmas;
 using Spooky.Content.Tiles.Painting;
@@ -86,6 +87,17 @@ namespace Spooky.Content.Items.Minibiomes.Christmas
 				ItemDropRule.Common(ModContent.ItemType<ChristmasSlabRedItem>(), 1, 250, 500),
 			};
 			itemLoot.Add(new OneFromRulesRule(1, KrampusSlabs));
+
+			IItemDropRule[] Vanity = new IItemDropRule[]
+			{
+				ItemDropRule.Common(ModContent.ItemType<ChristmasOutfitBodyBlue>(), 1),
+				ItemDropRule.Common(ModContent.ItemType<ChristmasOutfitBodyGreen>(), 1),
+				ItemDropRule.Common(ModContent.ItemType<ChristmasOutfitBodyRed>(), 1),
+				ItemDropRule.Common(ModContent.ItemType<ChristmasOutfitHeadBlue>(), 1),
+				ItemDropRule.Common(ModContent.ItemType<ChristmasOutfitHeadGreen>(), 1),
+				ItemDropRule.Common(ModContent.ItemType<ChristmasOutfitHeadRed>(), 1)
+			};
+			itemLoot.Add(new OneFromRulesRule(2, Vanity));
 
 			//yuletide wood
 			itemLoot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<ChristmasWoodItem>(), 1, 250, 500));

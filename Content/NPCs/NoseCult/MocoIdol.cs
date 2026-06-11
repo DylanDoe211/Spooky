@@ -20,6 +20,8 @@ namespace Spooky.Content.NPCs.NoseCult
     {
         public override string Texture => "Spooky/Content/NPCs/NoseCult/MocoIdol";
 
+		public int SaveWhoAmI = -1;
+
         public bool AnyCultistsExist = false;
         public bool Shake = false;
 
@@ -168,36 +170,45 @@ namespace Spooky.Content.NPCs.NoseCult
         {
             Rectangle CollisionRectangle = new Rectangle((int)NPC.Center.X - 525, (int)NPC.Center.Y - 180, 1050, 300);
 
-            for (int i = 0; i < Main.maxPlayers; i++)
-            {
-                Player player = Main.player[i];
-
+            foreach (Player player in Main.ActivePlayers) 
+			{
                 //int playerCount = 0;
                 int playerInEventCount = 0;
 
-				if (player.active && !player.dead && player.Hitbox.Intersects(CollisionRectangle))
+				bool playerDisguised = player.GetModPlayer<SpookyPlayer>().NoseCultistDisguise1 && player.GetModPlayer<SpookyPlayer>().NoseCultistDisguise2;
+
+				if (playerDisguised)
+				{
+					if (Main.netMode != NetmodeID.Server)
+					{
+						ModContent.GetInstance<MiscAchievementNoseCultist>().NoseCultistCondition.Complete();
+					}
+				}
+
+				if (!player.dead && player.Hitbox.Intersects(CollisionRectangle) && !playerDisguised)
                 {
                     playerInEventCount++;
                 }
 
                 if (playerInEventCount >= 1)
                 {
-                    return true;
+					SaveWhoAmI = player.whoAmI;
+					return true;
                 }
             }
 
             return false;
         }
 
-        public bool AnyPlayersInBiome()
+		public bool AnyPlayersInBiome()
         {
             foreach (Player player in Main.ActivePlayers)
             {
                 int playerInBiomeCount = 0;
 
-                //for this player count specifically, do not check if the players are dead
-                //this is so the nose temple rooms and event dont actually reset and respawn the idle enemies until the player actually respawns
-                if (player.InModBiome(ModContent.GetInstance<NoseTempleBiome>()))
+				//for this player count specifically, do not check if the players are dead
+				//this is so the nose temple rooms and event dont actually reset and respawn the idle enemies until the player actually respawns
+				if (player.InModBiome(ModContent.GetInstance<NoseTempleBiome>()))
                 {
                     playerInBiomeCount++;
                 }
@@ -221,32 +232,35 @@ namespace Spooky.Content.NPCs.NoseCult
             AnyCultistsExist = NPC.AnyNPCs(ModContent.NPCType<NoseCultistBrute>()) || NPC.AnyNPCs(ModContent.NPCType<NoseCultistGrunt>()) || NPC.AnyNPCs(ModContent.NPCType<NoseCultistGunner>()) || 
             NPC.AnyNPCs(ModContent.NPCType<NoseCultistMage>()) || NPC.AnyNPCs(ModContent.NPCType<NoseCultistWinged>()) || NPC.AnyNPCs(ModContent.NPCType<NoseCultistLeader>());
 
-			bool playerDisguised = player.GetModPlayer<SpookyPlayer>().NoseCultistDisguise1 && player.GetModPlayer<SpookyPlayer>().NoseCultistDisguise2;
-
 			if (AnyPlayersInRange() && NPC.ai[1] == 0)
             {
-                if (playerDisguised)
-                {
-                    if (Main.netMode != NetmodeID.Server)
-                    {
-                        ModContent.GetInstance<MiscAchievementNoseCultist>().NoseCultistCondition.Complete();
-                    }
-                }
-                else
-                {
-                    //activate every single nose cultist attatched to this altar
-                    NPC.ai[1] = 1;
+                //activate every single nose cultist attatched to this altar
+                NPC.ai[1] = 1;
+
+				if (ModContent.GetInstance<SpookyServerConfig>().NoseTempleMaxPlayers && Main.netMode == NetmodeID.Server)
+				{
+					foreach (Player currentPlayer in Main.ActivePlayers)
+					{
+						if (currentPlayer.whoAmI != SaveWhoAmI)
+						{
+							currentPlayer.Center = Main.player[SaveWhoAmI].Center;
+						}
+					}
+				}
                     
-                    NoseCultAmbushWorld.AmbushActive = true;
+                NoseCultAmbushWorld.AmbushActive = true;
 
-                    if (Main.netMode == NetmodeID.Server)
-                    {
-                        NetMessage.SendData(MessageID.WorldData);
-                    }
-
-                    NPC.netUpdate = true;
+                if (Main.netMode == NetmodeID.Server)
+                {
+                    NetMessage.SendData(MessageID.WorldData);
                 }
+
+                NPC.netUpdate = true;
             }
+			else
+			{
+				SaveWhoAmI = -1;
+			}
 
             if (NPC.ai[1] > 0 && NoseCultAmbushWorld.AmbushActive)
 			{

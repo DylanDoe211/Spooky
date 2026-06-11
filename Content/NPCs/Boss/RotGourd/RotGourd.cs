@@ -38,7 +38,6 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 		public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 2;
-			NPCID.Sets.MPAllowedEnemies[NPC.type] = true;
 
 			NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
@@ -1106,13 +1105,13 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
         {
 			if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 4; numGores++)
-                {
-					if (Main.netMode != NetmodeID.Server) 
-                    {
-                    	Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/RotGourdGore" + numGores).Type);
+				if (Main.netMode != NetmodeID.Server)
+            	{
+					for (int numGores = 1; numGores <= 7; numGores++)
+					{
+						Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/RotGourdGore" + numGores).Type);
 					}
-                }
+				}
 
 				for (int numDusts = 0; numDusts < 45; numDusts++)
 				{

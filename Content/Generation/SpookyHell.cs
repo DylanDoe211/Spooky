@@ -937,6 +937,7 @@ namespace Spooky.Content.Generation
 
             //place the actual dungeon rooms and hallways on the opposite side of the Arena
             int MaxDungeonRooms = IsSmallWorld ? 2 : 4;
+            List<int> RoomsList = new List<int> { 1, 2, 3, 4, 5 };
 
             for (int dungeonRoomLoop = 0; dungeonRoomLoop <= MaxDungeonRooms; dungeonRoomLoop++)
             {
@@ -953,7 +954,7 @@ namespace Spooky.Content.Generation
                             DungeonX += (StartPosition < Main.maxTilesX / 2 ? 20 : -19);
                         }
 
-                        GenerateNoseTempleStructure(DungeonX, NoseTemplePositionY + 27, "Hallway-" + WorldGen.genRand.Next(1, 9), 10, 10);
+                        GenerateNoseTempleStructure(DungeonX, NoseTemplePositionY + 27, "Hallway" + WorldGen.genRand.Next(1, 9), 10, 10);
 
                         DungeonX += (StartPosition < Main.maxTilesX / 2 ? 20 : -20);
                     }
@@ -1004,7 +1005,10 @@ namespace Spooky.Content.Generation
 
                         SpookyWorldMethods.PlaceCircle(DungeonX + (StartPosition < Main.maxTilesX / 2 ? 26 : -27), NoseTemplePositionY + 3, ModContent.TileType<SpookyMush>(), 0, 35, false, false);
 
-                        GenerateNoseTempleStructure(DungeonX + (StartPosition < Main.maxTilesX / 2 ? 26 : -27), NoseTemplePositionY + 18, "CombatRoom-" + WorldGen.genRand.Next(1, 6), 36, 19);
+                        //generate actual combat room
+                        int RoomToGenerate = WorldGen.genRand.Next(RoomsList.Count);
+                        GenerateNoseTempleStructure(DungeonX + (StartPosition < Main.maxTilesX / 2 ? 26 : -27), NoseTemplePositionY + 18, "CombatRoom" + RoomsList[RoomToGenerate], 36, 19);
+                        RoomsList.RemoveAt(RoomToGenerate);
 
                         //when the very end of the dungeon is reached, place the fire exit room and hallway tunnel that loops back to the entrance
                         if (dungeonRoomLoop == MaxDungeonRooms)

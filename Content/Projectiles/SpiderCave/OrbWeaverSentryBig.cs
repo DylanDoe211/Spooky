@@ -51,7 +51,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
         public override void AI()
         {
-            if (!isAttacking || (isAttacking && Projectile.ai[0] < 50))
+            if (!isAttacking || (isAttacking && Projectile.ai[0] < 20))
             {
                 Projectile.frameCounter++;
                 if (Projectile.frameCounter >= 6)
@@ -64,7 +64,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
                     }
                 }
             }
-            if (isAttacking && numAttacks < 10 && Projectile.ai[0] >= 50)
+            if (isAttacking && numAttacks < 10 && Projectile.ai[0] >= 20)
             {
                 Projectile.frame = 4;
             }
@@ -118,36 +118,39 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
             if (numAttacks < 10)
             {
-                if (Projectile.ai[0] == 50)
+                if (Projectile.ai[0] == 20)
                 {
                     SoundEngine.PlaySound(SoundID.Item17, Projectile.Center);
 
-                    float Velocity = Main.rand.NextFloat(15f, 26f);
+                    Vector2 ShootSpeed = target.Center - Projectile.Center;
+                    ShootSpeed.Normalize();
+                    ShootSpeed *= 25f;
+                            
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(Projectile.Center.X, Projectile.Center.Y - 5), ShootSpeed, 
+                    ModContent.ProjectileType<OrbWeaverSentryBigSpike>(), Projectile.damage, 3f, Projectile.owner);
 
-                    for (int numProjectiles = -3; numProjectiles <= -1; numProjectiles++)
+                    //shoot additional spreads of spikes
+                    for (int numProjectiles = -2; numProjectiles <= -1; numProjectiles++)
                     {
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                        {
-                            Projectile.NewProjectile(Projectile.GetSource_FromAI(), new Vector2(Projectile.Center.X - 10, Projectile.Center.Y), 
-                            Velocity * Projectile.DirectionTo(new Vector2(Projectile.Center.X, Projectile.Center.Y - 100)).RotatedBy(MathHelper.ToRadians(10) * numProjectiles),
-                            ModContent.ProjectileType<OrbWeaverSentryBigSpike>(), Projectile.damage, 3f, Projectile.owner);
-                        }
+                        float Velocity = Main.rand.NextFloat(14f, 22f);
+
+                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), new Vector2(Projectile.Center.X - 10, Projectile.Center.Y - 5), 
+                        Velocity * Projectile.DirectionTo(new Vector2(Projectile.Center.X, Projectile.Center.Y - 100)).RotatedBy(MathHelper.ToRadians(10) * numProjectiles),
+                        ModContent.ProjectileType<OrbWeaverSentryBigSpike>(), Projectile.damage, 3f, Projectile.owner, ai0: 1);
                     }
-
-                    for (int numProjectiles = 1; numProjectiles <= 3; numProjectiles++)
+                    for (int numProjectiles = 1; numProjectiles <= 2; numProjectiles++)
                     {
-                        if (Main.netMode != NetmodeID.MultiplayerClient)
-                        {
-                            Projectile.NewProjectile(Projectile.GetSource_FromAI(), new Vector2(Projectile.Center.X + 10, Projectile.Center.Y), 
-                            Velocity * Projectile.DirectionTo(new Vector2(Projectile.Center.X, Projectile.Center.Y - 100)).RotatedBy(MathHelper.ToRadians(10) * numProjectiles),
-                            ModContent.ProjectileType<OrbWeaverSentryBigSpike>(), Projectile.damage, 3f, Projectile.owner);
-                        }
+                        float Velocity = Main.rand.NextFloat(14f, 22f);
+
+                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), new Vector2(Projectile.Center.X + 10, Projectile.Center.Y - 5), 
+                        Velocity * Projectile.DirectionTo(new Vector2(Projectile.Center.X, Projectile.Center.Y - 100)).RotatedBy(MathHelper.ToRadians(10) * numProjectiles),
+                        ModContent.ProjectileType<OrbWeaverSentryBigSpike>(), Projectile.damage, 3f, Projectile.owner, ai0: 1);
                     }
                 }
             }
-            else 
+            else
             {
-                if (Projectile.ai[0] >= 50)
+                if (Projectile.ai[0] >= 20)
                 {
                     //set where the it should be jumping towards
                     Vector2 JumpTo = new Vector2(target.Center.X, target.Center.Y - 100);
@@ -165,11 +168,13 @@ namespace Spooky.Content.Projectiles.SpiderCave
                         velocity.X *= 1.2f;
                         velocity.Y *= 0.5f;
                         Projectile.velocity = velocity * speed;
+
+                        Projectile.netUpdate = true;
                     }
                 }
             }
 
-            if (Projectile.ai[0] >= 80)
+            if (Projectile.ai[0] >= 40)
             {
                 if (numAttacks < 10)
                 {
@@ -182,6 +187,8 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
                 Projectile.ai[1] = 0;
                 Projectile.ai[0] = 0;
+
+                Projectile.netUpdate = true;
             }
 		}
     }

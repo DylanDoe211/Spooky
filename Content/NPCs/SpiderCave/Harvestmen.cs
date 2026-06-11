@@ -35,6 +35,16 @@ namespace Spooky.Content.NPCs.SpiderCave
             };
         }
 
+		public override void SendExtraAI(BinaryWriter writer)
+        {
+			writer.WriteVector2(SavePosition);
+		}
+
+		public override void ReceiveExtraAI(BinaryReader reader)
+        {
+			SavePosition = reader.ReadVector2();
+		}
+
 		public override void SetDefaults()
 		{
             NPC.lifeMax = 80;
@@ -136,6 +146,7 @@ namespace Spooky.Content.NPCs.SpiderCave
 					if (SavePosition == Vector2.Zero)
 					{
 						SavePosition = player.Center + new Vector2(Main.rand.Next(-200, 200), Main.rand.Next(-200, 200));
+						NPC.netUpdate = true;
 					}
 					else
 					{
@@ -145,6 +156,7 @@ namespace Spooky.Content.NPCs.SpiderCave
 						if (NPC.Distance(SavePosition) <= 50f)
 						{
 							SavePosition = Vector2.Zero;
+							NPC.netUpdate = true;
 						}
 					}
 				}

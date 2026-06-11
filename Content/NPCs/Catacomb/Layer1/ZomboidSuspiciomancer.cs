@@ -98,11 +98,11 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
                     }
                 }
 
-                for (int Repeats = 0; Repeats <= 5; Repeats++)
+                if (Main.netMode != NetmodeID.Server) 
                 {
-                    for (int numGores = 1; numGores <= 3; numGores++)
+                    for (int Repeats = 0; Repeats <= 5; Repeats++)
                     {
-                        if (Main.netMode != NetmodeID.Server) 
+                        for (int numGores = 1; numGores <= 3; numGores++)
                         {
                             Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity / 2, GoreID.Smoke1);
                             Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity / 2, GoreID.Smoke2);

@@ -535,11 +535,6 @@ CucumberStomachDebuff: {
 	Description: ""
 }
 
-DutchmanPipeDebuff: {
-	DisplayName: Dutchman Pipe Debuff
-	Description: ""
-}
-
 ColumboneBuff: {
 	DisplayName: Columbone
 	Description: The being of bone
@@ -737,5 +732,10 @@ WolfSpiderMinionBuff: {
 
 PeacockSpiderMaskDebuff: {
 	DisplayName: Peacock Spider Mask Debuff
+	Description: ""
+}
+
+SpiderWarWebSlowDebuff: {
+	DisplayName: Spider War Web Slow
 	Description: ""
 }

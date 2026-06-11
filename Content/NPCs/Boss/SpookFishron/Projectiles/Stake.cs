@@ -16,7 +16,7 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron.Projectiles
 
 		public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
         }
 

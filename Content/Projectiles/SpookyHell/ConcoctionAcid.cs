@@ -121,7 +121,10 @@ namespace Spooky.Content.Projectiles.SpookyHell
 
 						if (Flags.downedEggEvent)
 						{
-							npc.ai[0] += 0.2f;
+							if (npc.ai[0] < 1)
+							{
+								npc.ai[0] += 0.2f;
+							}
 						}
 						else
 						{

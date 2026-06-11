@@ -46,6 +46,7 @@ namespace Spooky.Core
         public bool HasGooChompterAttached = false;
 		public bool HasSlingshotFlowerAttached = false;
 		public bool HasRedCageAttached = false;
+		public bool HasMetalFistAttached = false;
 
 		public bool NPCTamed = false; //use for all instances of a tameable animal in spooky mod
 
@@ -424,11 +425,6 @@ namespace Spooky.Core
 			{
 				modifiers.FinalDamage *= 1.15f;
 			}
-			//dutchman pipe causes enemies to take 10% more damage
-			if (npc.HasBuff(ModContent.BuffType<DutchmanPipeDebuff>()))
-			{
-				modifiers.FinalDamage *= 1.1f;
-			}
 			//enemies inflicted with the cursed doll effect take 15% more damage from magic attacks
 			if (npc.HasBuff(ModContent.BuffType<CursedDollDebuff>()) && modifiers.DamageType == DamageClass.Magic)
 			{
@@ -556,7 +552,7 @@ namespace Spooky.Core
 
 			if (Main.netMode != NetmodeID.MultiplayerClient)
 			{
-				int NewProj = Projectile.NewProjectile(npc.GetSource_FromAI(), position, velocity, projType, damage, knockback, Main.myPlayer, ai0, ai1, ai2);
+				Projectile.NewProjectile(npc.GetSource_FromAI(), position, velocity, projType, damage, knockback, Main.myPlayer, ai0, ai1, ai2);
 			}
 		}
 

@@ -40,7 +40,7 @@ namespace Spooky.Content.Projectiles.Slingshots
 
 					int Type = GetProjectileToShoot(player, ModContent.ProjectileType<SpiritSlingshotGhost>());
 					
-					int NumShotsForEffect = 3;
+					int NumShotsForEffect = 2;
 					if (Projectile.ai[2] < NumShotsForEffect)
 					{
 						Projectile.ai[2]++;

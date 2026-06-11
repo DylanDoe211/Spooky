@@ -257,7 +257,6 @@ namespace Spooky.Content.NPCs.Boss.BigBone
                     }
                     
                     float fade = (float)Math.Cos((double)(Main.GlobalTimeWrappedHourly % 2.5f / 2.5f * 6f)) / 2f + 0.5f;
-                    //Color StemDrawColor = Phase2 ? Color.Lerp(drawColor, Color.Firebrick, fade) : drawColor;
 
 					Main.EntitySpriteDraw(NeckTexture.Value, drawPos2 - Main.screenPosition, Frame, NPC.GetAlpha(drawColor), rotation, drawOrigin, NPC.scale, SpriteEffects.None, 0f);
 

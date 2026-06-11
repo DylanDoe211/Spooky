@@ -85,10 +85,8 @@ namespace Spooky.Content.Projectiles.Sentient
                 {
                     if (NPC.CanBeChasedBy(this) && !NPC.friendly && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type] && NPC.Distance(player.Center) <= 450f)
                     {
-                        float divide = 1.75f;
-
                         Projectile.NewProjectile(player.GetSource_OnHit(target), NPC.Center, Vector2.Zero, 
-                        ModContent.ProjectileType<SentientKatanaSlashSpawner>(), Projectile.damage / (int)divide, Projectile.knockBack, player.whoAmI);
+                        ModContent.ProjectileType<SentientKatanaSlashSpawner>(), Projectile.damage / 2, Projectile.knockBack, player.whoAmI);
                     }
                 }
 

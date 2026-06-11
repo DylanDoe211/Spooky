@@ -33,6 +33,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 			NPC.dontCountMe = true;
             NPC.HitSound = SoundID.NPCHit1;
 			NPC.DeathSound = SoundID.NPCDeath1;
+			NPC.rarity = 2;
             NPC.aiStyle = 0;
 			SpawnModBiomes = new int[2] { ModContent.GetInstance<Biomes.SpiderWarBiome>().Type, ModContent.GetInstance<Biomes.SpiderCaveBiome>().Type };
 		}

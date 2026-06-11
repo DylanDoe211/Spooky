@@ -109,28 +109,24 @@ namespace Spooky.Content.NPCs.Boss.Orroboro
 
         public void SpawnGores()
         {
+            if (Main.netMode == NetmodeID.Server)
+            {
+                return;
+            }
+
             for (int numGores = 1; numGores <= 4; numGores++)
             {
-                if (Main.netMode != NetmodeID.Server) 
-                {
-                    Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/BodyGore" + Main.rand.Next(1, 3)).Type);
-                }
+                Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/BodyGore" + Main.rand.Next(1, 3)).Type);
             }
 
             if (NPC.type == ModContent.NPCType<OrroBody>() && Main.rand.NextBool())
             {
-                if (Main.netMode != NetmodeID.Server) 
-                {
-                    Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/OrroEyeGore").Type);
-                }
+                Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/OrroEyeGore").Type);
             }
 
             if (NPC.type == ModContent.NPCType<BoroBody>() && Main.rand.NextBool())
             {
-                if (Main.netMode != NetmodeID.Server) 
-                {
-                    Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/BoroMouthGore").Type);
-                }
+                Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/BoroMouthGore").Type);
             }
         }
 

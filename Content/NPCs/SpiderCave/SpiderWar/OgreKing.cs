@@ -19,6 +19,7 @@ using Spooky.Content.Tiles.Trophy;
 
 namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 {
+	[AutoloadBossHead]
 	public class OgreKing : ModNPC
 	{
 		public int Spin = 0;
