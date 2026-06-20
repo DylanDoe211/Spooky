@@ -147,7 +147,7 @@ namespace Spooky
             LogoSquishIntensity *= 0.9f;
             if (Main.mouseLeft && !HasClicked && Math.Abs(Main.MouseScreen.X - logoCenter.X) < 300f && Math.Abs(Main.MouseScreen.Y - logoCenter.Y) < 70f)
             {
-                LogoSquishIntensity = 1f;
+                LogoSquishIntensity = 0.85f;
 
                 if (Math.Abs(LogoSquishIntensity) < 0.1f)
                 {

@@ -197,7 +197,7 @@ ColumboBuff: {
 }
 
 FlyPetBuff: {
-	DisplayName: Cornelious the Fly
+	DisplayName: Frank the Fly
 	Description: He hovers around you menacingly
 }
 

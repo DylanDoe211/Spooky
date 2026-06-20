@@ -12,6 +12,6 @@ Thank you to all of the people who helped make this project possible!
 
 Developers: DylanDoe21, Hugekraken, Tortilla, Waasephi, Seasalt, Dandy, Sulfur, Astrobit, Kekcroc, Bananalizard, Rockwizard5, Luxcapacitor, Minnaria
 
-Contributors: Grae, Graydee, Lion8cake, HondaCivicMoment, RocketLauncher, Guck, Ennway, Tomat, Vortex of Rainbows, Flye
+Contributors: Grae, Graydee, Lion8cake, HondaCivicMoment, RocketLauncher, Guck, Ennway, Tomat, Vortex of Rainbows, Flye, Halmska, Dawnables
 
 Also credit to zapsplat.com, a free sound library where most of the custom sound effects used in this mod come from

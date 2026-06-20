@@ -429,17 +429,17 @@ namespace Spooky.Content.Generation
 
                     if (Main.tile[(int)Position.X, (int)Position.Y].WallType == ModContent.WallType<CemeteryGrassWall>() || Main.tile[(int)Position.X, (int)Position.Y].WallType == ModContent.WallType<CemeteryDirtWall>())
                     {
-                        if (!Liquids)
-                        {
-                            WorldGen.KillWall((int)Position.X, (int)Position.Y);
-                        }
+                        WorldGen.KillWall((int)Position.X, (int)Position.Y);
                     }
                 }
                 else
                 {
                     for (int Y = (int)heightLimit; Y < (int)Position.Y; Y++)
-                    {
-                        Main.tile[(int)Position.X, Y].LiquidAmount = 0;
+                    {   
+                        if (Main.tile[(int)Position.X, Y].LiquidAmount > 0 && NoFloatingIsland((int)Position.X, Y))
+                        {
+                            Main.tile[(int)Position.X, Y].LiquidAmount = 0;
+                        }
                     }
                 }
 			}

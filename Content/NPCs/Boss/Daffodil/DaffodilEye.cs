@@ -34,12 +34,13 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
         bool Phase2 = false;
         bool SpawnedHands = false;
         bool ActuallyDead = false;
+        bool Blink = false;
 
         Vector2[] SavePoint = new Vector2[5];
 
         public enum AnimationState
 		{
-			Closed, OpenHalf, OpenFull, OpenWide
+			Closed, OpenHalf, OpenFull, OpenWide, Blink
 		}
 
 		private AnimationState CurrentAnimation
@@ -59,9 +60,9 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
 			{
                 CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/DaffodilBestiary",
-                Position = new Vector2(1f, 30f),
-                PortraitPositionXOverride = 2f,
-                PortraitPositionYOverride = 30f
+                Position = new Vector2(9f, 90f),
+                PortraitPositionXOverride = 7f,
+                PortraitPositionYOverride = 85f
             };
 
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
@@ -80,6 +81,7 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
 			writer.Write(Phase2);
             writer.Write(SpawnedHands);
             writer.Write(ActuallyDead);
+            writer.Write(Blink);
 
             //floats
             writer.Write(NPC.localAI[0]);
@@ -100,6 +102,7 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
 			Phase2 = reader.ReadBoolean();
             SpawnedHands = reader.ReadBoolean();
             ActuallyDead = reader.ReadBoolean();
+            Blink = reader.ReadBoolean();
 
             //floats
             NPC.localAI[0] = reader.ReadSingle();
@@ -113,8 +116,8 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
             NPC.lifeMax = 22000;
             NPC.damage = 50;
             NPC.defense = 25;
-            NPC.width = 58;
-            NPC.height = 58;
+            NPC.width = 60;
+            NPC.height = 56;
             NPC.npcSlots = 12f;
             NPC.knockBackResist = 0f;
             NPC.value = Item.buyPrice(0, 6, 0, 0);
@@ -217,6 +220,13 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
 			{
                 NPC.frame.Y = 3 * frameHeight;
             }
+            else if (CurrentAnimation == AnimationState.Blink)
+            {
+                if (NPC.ai[2] == 6 || NPC.ai[2] == 12)
+                {
+                    NPC.frame.Y = NPC.frame.Y - frameHeight;
+                }
+            }
         }
 
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
@@ -277,8 +287,8 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
 
             if (!SpawnedHands)
             {
-                int LeftHand = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DaffodilHandLeft>(), ai2: NPC.whoAmI);
-                int RightHand = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DaffodilHandRight>(), ai2: NPC.whoAmI);
+                int LeftHand = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X - 40, (int)Parent.Bottom.Y, ModContent.NPCType<DaffodilHandLeft>(), ai2: NPC.whoAmI);
+                int RightHand = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X + 40, (int)Parent.Bottom.Y, ModContent.NPCType<DaffodilHandRight>(), ai2: NPC.whoAmI);
                 
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
@@ -294,6 +304,32 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
             if (Parent.type != ModContent.NPCType<DaffodilBody>())
             {
                 NPC.active = false;
+            }
+
+            if (CurrentAnimation == AnimationState.OpenFull)
+            {
+                if (Main.rand.NextBool(100))
+                {
+                    Blink = true;
+                }
+            }
+            
+            if (Blink)
+            {
+                NPC.ai[2]++;
+                if (NPC.ai[2] < 20)
+                {
+                    CurrentAnimation = AnimationState.Blink;
+                }
+                else
+                {
+                    CurrentAnimation = AnimationState.OpenFull;
+
+                    NPC.ai[2] = 0;
+                    Blink = false;
+
+                    NPC.netUpdate = true;
+                }
             }
 
             //set to phase 2 transition when she reaches half health
@@ -404,6 +440,8 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                     //kill every single hostile projectile to prevent unfair hits or deaths during the transition
                     if (NPC.localAI[0] <= 5)
                     {
+                        CurrentAnimation = AnimationState.OpenFull;
+
                         foreach (var Proj in Main.ActiveProjectiles)
                         {
                             if (Proj != null && Proj.hostile)
@@ -425,6 +463,11 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                         }
                     }
 
+                    if (NPC.localAI[0] == 120)
+                    {
+                        CurrentAnimation = AnimationState.Closed;
+                    }
+
                     //spawn permanent thorn pillars that cover the whole arena
                     if (NPC.localAI[0] == 200)
                     {
@@ -441,6 +484,15 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
 
                         NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X + 678, NPC.Center.Y + 380), new Vector2(0, -10), 
                         ModContent.ProjectileType<ThornPillarBarrierSide>(), NPC.damage, 0f, ai2: 1);
+                    }
+
+                    if (NPC.localAI[0] == 300)
+                    {
+                        CurrentAnimation = AnimationState.OpenHalf;
+                    }
+                    if (NPC.localAI[0] == 310)
+                    {
+                        CurrentAnimation = AnimationState.OpenFull;
                     }
 
                     if (NPC.localAI[0] == 360)
@@ -500,6 +552,11 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                             CustomPopupText.SpawnText(NPC.Top, Language.GetTextValue("Mods.Spooky.Dialogue.Daffodil.PreDefeatIntro2"), Color.Gold, new Vector2(NPC.direction * 2, -2f), 140);
                         }
 
+                        if (NPC.localAI[0] == 360)
+                        {
+                            CustomPopupText.SpawnText(player.Top, Language.GetTextValue("Mods.Spooky.Dialogue.Daffodil.PreDefeatIntroPlayer"), Color.White, new Vector2(player.direction * 2, -2f), 100);
+                        }
+
                         if (NPC.localAI[0] == 480)
                         {
                             CustomPopupText.SpawnText(NPC.Top, Language.GetTextValue("Mods.Spooky.Dialogue.Daffodil.PreDefeatIntro3"), Color.Gold, new Vector2(NPC.direction * 2, -2f), 140);
@@ -547,8 +604,6 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                     NPC.localAI[0]++;
                     if (NPC.localAI[0] >= 60 && NPC.localAI[0] < 80)
                     {
-                        CurrentAnimation = AnimationState.OpenWide;
-
                         int MaxDusts = Main.rand.Next(5, 15);
                         for (int numDusts = 0; numDusts < MaxDusts; numDusts++)
                         {
@@ -563,27 +618,31 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                         }
                     }
 
-                    if (NPC.localAI[0] >= 80 && NPC.localAI[0] <= 200 && NPC.localAI[0] % 20 == 0)
+                    if (NPC.localAI[0] >= 80 && NPC.localAI[0] <= 200)
                     {
-                        SoundEngine.PlaySound(SoundID.Item64, NPC.Center);
+                        if (!Blink)
+                        {
+                            Blink = true;
+                        }
 
-                        Vector2 NPCRandomPos = new Vector2(NPC.Center.X + Main.rand.Next(-30, 31), NPC.Center.Y + Main.rand.Next(-30, 31));
+                        if (NPC.localAI[0] % 20 == 0)
+                        {
+                            SoundEngine.PlaySound(SoundID.Item64, NPC.Center);
 
-                        Vector2 ShootSpeed = player.Center - NPCRandomPos;
-                        ShootSpeed.Normalize();
-                        ShootSpeed *= 12f;
+                            CurrentAnimation = AnimationState.OpenFull;
 
-                        NPCGlobalHelper.ShootHostileProjectile(NPC, NPCRandomPos, ShootSpeed, ModContent.ProjectileType<DaffodilPollen>(), NPC.damage, 4.5f);
+                            Vector2 NPCRandomPos = new Vector2(NPC.Center.X + Main.rand.Next(-30, 31), NPC.Center.Y + Main.rand.Next(-30, 31));
+
+                            Vector2 ShootSpeed = player.Center - NPCRandomPos;
+                            ShootSpeed.Normalize();
+                            ShootSpeed *= 12f;
+
+                            NPCGlobalHelper.ShootHostileProjectile(NPC, NPCRandomPos, ShootSpeed, ModContent.ProjectileType<DaffodilPollen>(), NPC.damage, 4.5f);
+                        }
                     }
 
-                    if (NPC.localAI[0] == 270)
-                    {
-                        CurrentAnimation = AnimationState.OpenHalf;
-                    }
                     if (NPC.localAI[0] >= 280)
                     {
-                        CurrentAnimation = AnimationState.OpenFull;
-
                         NPC.localAI[0] = 0;
                         NPC.ai[0]++;
                         NPC.netUpdate = true;
@@ -598,22 +657,26 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                     NPC.localAI[0]++;
 
                     if (NPC.localAI[0] == 60)
-                    {   
+                    {
                         CurrentAnimation = AnimationState.OpenHalf;
                     }
                     if (NPC.localAI[0] == 70)
                     {   
+                        Blink = false;
                         CurrentAnimation = AnimationState.Closed;
                     }
 
-                    if (NPC.localAI[0] == 450)
+                    if (NPC.localAI[0] == 320)
                     {
                         CurrentAnimation = AnimationState.OpenHalf;
                     }
-                    if (NPC.localAI[0] >= 460)
+                    if (NPC.localAI[0] == 330)
                     {
                         CurrentAnimation = AnimationState.OpenFull;
+                    }
 
+                    if (NPC.localAI[0] >= 460)
+                    {
                         NPC.localAI[0] = 0;
                         NPC.ai[0]++;
                         NPC.netUpdate = true;
@@ -631,7 +694,7 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                         SoundEngine.PlaySound(SoundID.DD2_DarkMageSummonSkeleton, NPC.Center);
                     }
 
-                    Vector2 NPCBelowPos = new Vector2(NPC.Center.X, NPC.Center.Y + 200);
+                    Vector2 NPCBelowPos = new Vector2(NPC.Center.X, NPC.Center.Y + 300);
 
                     if (NPC.localAI[0] >= 80 && NPC.localAI[0] < 110)
                     {
@@ -670,7 +733,7 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                     break;
                 }
 
-                //hold hands out, and create a bullet hell of flies all over the place
+                //hold hands out, and spawn a corpsebloom to summon flies
                 case 3:
                 {
                     NPC.localAI[0]++;
@@ -679,7 +742,7 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                         SoundEngine.PlaySound(SoundID.DD2_DarkMageSummonSkeleton, NPC.Center);
                     }
 
-                    Vector2 NPCBelowPos = new Vector2(NPC.Center.X, NPC.Center.Y + 150);
+                    Vector2 NPCBelowPos = new Vector2(NPC.Center.X, NPC.Center.Y + 160);
 
                     if (NPC.localAI[0] >= 80 && NPC.localAI[0] < 110)
                     {
@@ -699,7 +762,7 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
 
                     if (NPC.localAI[0] == 110)
                     {
-                        NPCGlobalHelper.ShootHostileProjectile(NPC, NPCBelowPos, new Vector2(0, 3), ModContent.ProjectileType<Corpsebloom>(), NPC.damage, 4.5f);
+                        NPCGlobalHelper.ShootHostileProjectile(NPC, NPCBelowPos, Vector2.Zero, ModContent.ProjectileType<Corpsebloom>(), NPC.damage, 4.5f);
                     }
 
                     if (NPC.localAI[0] >= 750)

@@ -1,16 +1,16 @@
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
-using ReLogic.Content;
+using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-
-using Spooky.Core;
+using ReLogic.Content;
 using Spooky.Content.Dusts;
 using Spooky.Content.NPCs.Boss.Daffodil.Projectiles;
+using Spooky.Core;
+using System;
+using System.IO;
+using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace Spooky.Content.NPCs.Boss.Daffodil
 {
@@ -31,7 +31,8 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
 			set => NPC.ai[3] = (float)value;
 		}
 
-        private static Asset<Texture2D> ChainTexture;
+        private static Asset<Texture2D> ArmUpperTexture;
+        private static Asset<Texture2D> ArmLowerTexture;
 
         public override void SetStaticDefaults()
         {
@@ -63,20 +64,23 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
             NPC.lifeMax = 18000;
             NPC.damage = 50;
             NPC.defense = 0;
-            NPC.width = 56;
-            NPC.height = 56;
+            NPC.width = 100;
+            NPC.height = 104;
             NPC.npcSlots = 0f;
             NPC.knockBackResist = 0f;
 			NPC.immortal = true;
 			NPC.dontTakeDamage = true;
             NPC.lavaImmune = true;
             NPC.noGravity = true;
-            NPC.noTileCollide = false;
+            NPC.noTileCollide = true;
             NPC.netAlways = true;
             NPC.dontCountMe = true;
             NPC.behindTiles = true;
             NPC.aiStyle = -1;
         }
+
+        public static Vector2 OffsetWithRotation(float rotation, float x, float y) => PolarVector(x, rotation) + PolarVector(y, rotation + MathHelper.PiOver2);
+        public static Vector2 PolarVector(float radius, float theta) => new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta)) * radius;
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
@@ -85,39 +89,43 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
             //only draw if the parent is active
             if (Parent.active && Parent.type == ModContent.NPCType<DaffodilEye>())
             {
-                ChainTexture ??= ModContent.Request<Texture2D>("Spooky/Content/NPCs/Boss/Daffodil/DaffodilArm");
-                
-                Vector2 ParentCenter = Parent.Center;
+                ArmUpperTexture ??= ModContent.Request<Texture2D>("Spooky/Content/NPCs/Boss/Daffodil/DaffodilArmUpper");
+                ArmLowerTexture ??= ModContent.Request<Texture2D>("Spooky/Content/NPCs/Boss/Daffodil/DaffodilArmLower");
 
-                Rectangle? chainSourceRectangle = null;
-                float chainHeightAdjustment = 0f;
+				//get frame origins for arms
+                Vector2 frameOriginUpper = (ArmUpperTexture.Size() / 2) + new Vector2(34, 11);
+				Rectangle frameUpper = new Rectangle(0, 0, ArmUpperTexture.Width(), ArmUpperTexture.Height());
 
-                Vector2 chainOrigin = chainSourceRectangle.HasValue ? (chainSourceRectangle.Value.Size() / 2f) : (ChainTexture.Size() / 2f);
-                Vector2 chainDrawPosition = NPC.Center;
-                Vector2 vectorToParent = ParentCenter.MoveTowards(chainDrawPosition, 4f) - chainDrawPosition;
-                Vector2 unitVectorToParent = vectorToParent.SafeNormalize(Vector2.Zero);
-                float chainSegmentLength = (chainSourceRectangle.HasValue ? chainSourceRectangle.Value.Height : ChainTexture.Height()) + chainHeightAdjustment;
+				Vector2 ParentCenter = Parent.Center + new Vector2(-40, 20);
 
-                if (chainSegmentLength == 0)
-                {
-                    chainSegmentLength = 10;
-                }
+				//rotation from the hand to the parent daffodil body offsets
+				float RotationToParent = (float)Math.Atan2(ParentCenter.Y - NPC.Center.Y, ParentCenter.X - NPC.Center.X) + 4.71f;
 
-                float chainRotation = unitVectorToParent.ToRotation() + MathHelper.PiOver2;
-                int chainCount = 0;
-                float chainLengthRemainingToDraw = vectorToParent.Length() + chainSegmentLength / 2f;
+				//bottom of the upper arm, where the lower arm should be drawn from
+				Vector2 LowerArmPos = ParentCenter + OffsetWithRotation(RotationToParent, -3, 199);
 
-                while (chainLengthRemainingToDraw > 0f)
-                {
-                    Color chainDrawColor = Lighting.GetColor((int)chainDrawPosition.X / 16, (int)(chainDrawPosition.Y / 16f));
+				//rotation of the upper arm from the bottom of the upper arm to the parent center offset
+				float upperArmRotation = (float)Math.Atan2(LowerArmPos.Y - ParentCenter.Y, (LowerArmPos.X + 50) - ParentCenter.X) + 1.57f;
 
-                    Main.spriteBatch.Draw(ChainTexture.Value, chainDrawPosition - Main.screenPosition, chainSourceRectangle, chainDrawColor, chainRotation, chainOrigin, 1f, SpriteEffects.None, 0f);
+				//change lower arm position again based on the rotation of the upper arm
+				LowerArmPos = ParentCenter + OffsetWithRotation(upperArmRotation, -3, 199);
 
-                    chainDrawPosition += unitVectorToParent * chainSegmentLength;
-                    chainCount++;
-                    chainLengthRemainingToDraw -= chainSegmentLength;
-                }
-            }
+				//draw upper arm segment
+                Color UpperArmColor = Lighting.GetColor((int)ParentCenter.X / 16, (int)ParentCenter.Y / 16);
+				spriteBatch.Draw(ArmUpperTexture.Value, ParentCenter - screenPos, null, NPC.GetAlpha(UpperArmColor),
+				upperArmRotation, new Vector2(34, 11), NPC.scale, SpriteEffects.None, 0);
+
+				//lower arm rotation is based off of the bottom of the upper arm to the hand
+				float lowerArmRotation = (LowerArmPos - NPC.Center).ToRotation() + MathHelper.PiOver2;
+
+				//scale the lower arm texture based on the distance of the hand to the position so that the hand does not randomly just disconnect from the bottom of the lower arm
+				Vector2 armScale = new(1, NPC.Distance(LowerArmPos) / 136f);
+
+                //draw lower arm segment
+                Color LowerArmColor = Lighting.GetColor((int)LowerArmPos.X / 16, (int)LowerArmPos.Y / 16);
+				spriteBatch.Draw(ArmLowerTexture.Value, LowerArmPos - screenPos, null, NPC.GetAlpha(LowerArmColor), 
+				lowerArmRotation, new Vector2(29, 8), armScale, SpriteEffects.None, 0);
+			}
 
             return true;
         }
@@ -154,58 +162,64 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
 
             Player player = Main.player[Parent.target];
 
-            //kill the hand if the parent does not exist
-            if (!Parent.active || Parent.type != ModContent.NPCType<DaffodilEye>())
+			bool RightHand = NPC.type == ModContent.NPCType<DaffodilHandRight>();
+
+			//kill the hand if the parent does not exist
+			if (!Parent.active || Parent.type != ModContent.NPCType<DaffodilEye>())
             {
                 NPC.active = false;
             }
 
-            if (Parent.active && Parent.type == ModContent.NPCType<DaffodilEye>())
-            {
-                //set rotation based on the parent npc
-                Vector2 vector = new Vector2(NPC.Center.X, NPC.Center.Y);
-                float RotateX = Parent.Center.X - vector.X;
-                float RotateY = Parent.Center.Y - vector.Y;
-                NPC.rotation = (float)Math.Atan2((double)RotateY, (double)RotateX) + 4.71f;
-            }
+			if (Parent.active && Parent.type == ModContent.NPCType<DaffodilEye>())
+			{
+				Vector2 ParentCenter = Parent.Center + new Vector2(RightHand ? 40 : -40, 20);
 
-            bool RightHand = NPC.type == ModContent.NPCType<DaffodilHandRight>();
+				float RotationToParent = (float)Math.Atan2(Parent.Center.Y - NPC.Center.Y, Parent.Center.X - NPC.Center.X) + 4.71f;
+
+				Vector2 LowerArmPos = ParentCenter + OffsetWithRotation(RotationToParent, RightHand ? 3 : -3, 199);
+
+				float upperArmRotation = (float)Math.Atan2(LowerArmPos.Y - ParentCenter.Y, (LowerArmPos.X + (RightHand ? -50 : 50)) - ParentCenter.X) + 1.57f;
+
+				LowerArmPos = ParentCenter + OffsetWithRotation(upperArmRotation, RightHand ? 3 : -3, 199);
+
+				NPC.rotation = (float)Math.Atan2(LowerArmPos.Y - NPC.Center.Y, LowerArmPos.X - NPC.Center.X) + MathHelper.PiOver2;
+			}
 
             switch ((int)Parent.ai[0])
             {
                 case -5: 
                 {
-                    GoToPosition(0, 0);
+                    GoToPosition(150, 300);
                     break;
                 }
 
                 case -4: 
                 {
-                    GoToPosition(0, 0);
+                    GoToPosition(150, 300);
                     break;
                 }
 
                 case -3: 
                 {
-                    GoToPosition(0, 0, false);
+                    GoToPosition(150, 300);
                     break;
                 }
 
                 case -2: 
                 {
-                    if (Parent.localAI[0] < 180 || Parent.localAI[0] >= 360)
+                    if (Parent.localAI[0] < 140 || Parent.localAI[0] >= 360)
                     {
                         CurrentAnimation = AnimationState.Normal;
 
-                        GoToPosition(130, 180);
+                        GoToPosition(150, 300);
                     }
 
-                    if (Parent.localAI[0] == 180)
+                    if (Parent.localAI[0] == 140)
                     {
                         CurrentAnimation = AnimationState.HandOpen;
                     }
 
-                    if (Parent.localAI[0] > 180 && Parent.localAI[0] <= 300)
+                    if (Parent.localAI[0] > 140 && Parent.localAI[0] <= 300)
                     {
                         Screenshake.ShakeScreenWithIntensity(NPC.Center, 5f, 250f);
 
@@ -223,9 +237,9 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                         }
                     }
 
-                    if (Parent.localAI[0] > 180 && Parent.localAI[0] <= 360)
+                    if (Parent.localAI[0] > 140 && Parent.localAI[0] <= 360)
                     {
-                        GoToPosition(240, 25);
+                        GoToPosition(400, 0);
                     }
 
                     break;
@@ -233,28 +247,36 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
 
                 case -1: 
                 {
-                    GoToPosition(130, 180);
+                    GoToPosition(150, 300);
                     break;
                 }
 
+                //pollen attack
                 case 0: 
                 {
-                    GoToPosition(130, 180);
+                    GoToPosition(150, 300);
                     break;
                 }
 
+                //homing flowers
                 case 1: 
                 {
-                    GoToPosition(300, -25);
+                    if (Parent.localAI[0] < 390)
+                    {
+                        GoToPosition(400, 0);
+                    }
 
                     int TimeOffset = RightHand ? 15 : 0;
+
+                    if (Parent.localAI[0] == 70)
+                    {
+                        CurrentAnimation = AnimationState.HandOpen;
+                    }
 
                     //shoot out flowers with a delay so it alternates from left hand to right hand
                     if (Parent.localAI[0] == 90 + TimeOffset || Parent.localAI[0] == 120 + TimeOffset || Parent.localAI[0] == 150 + TimeOffset || 
                     Parent.localAI[0] == 180 + TimeOffset || Parent.localAI[0] == 210 + TimeOffset || Parent.localAI[0] == 240 + TimeOffset)
                     {
-                        CurrentAnimation = AnimationState.HandOpen;
-
                         SoundEngine.PlaySound(SoundID.Grass, NPC.Center);
 
                         Vector2 ShootSpeed = NPC.Center - Parent.Center;
@@ -264,23 +286,30 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                         NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center, ShootSpeed, ModContent.ProjectileType<HomingDaffodil>(), NPC.damage, 4.5f);
                     }
 
-                    if (Parent.localAI[0] >= 250)
+                    if (Parent.localAI[0] >= 320)
                     {
                         CurrentAnimation = AnimationState.Normal;
+                    }
+
+                    //preemptively go to the position for the next attack
+                    if (Parent.localAI[0] >= 390)
+                    {
+                        GoToPosition(5, 300, false);
                     }
 
                     break;
                 }
 
+                //thornball vine attacks
                 case 2: 
                 {
-                    GoToPosition(10, 200, false);
+                    GoToPosition(5, 300, false);
 
                     if (Parent.localAI[0] == 80)
                     {
                         CurrentAnimation = AnimationState.HandOpen;
                     }
-                    if (Parent.localAI[0] == 370)
+                    if (Parent.localAI[0] == 590)
                     {
                         CurrentAnimation = AnimationState.Normal;
                     }
@@ -288,9 +317,10 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                     break;
                 }
 
+                //corpsebloom fly attack
                 case 3: 
                 {
-                    GoToPosition(10, 150, false);
+                    GoToPosition(10, 165, false);
 
                     if (Parent.localAI[0] == 80)
                     {
@@ -304,9 +334,17 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                     break;
                 }
 
+                //spawn seeds out of hands
                 case 4: 
                 {
-                    GoToPosition(200, 0, false);
+                    if (Parent.localAI[0] <= 50)
+                    {
+                        GoToPosition(300, 180);
+                    }
+                    else
+                    {
+                        GoToPosition(400, 0);
+                    }
 
                     if (Parent.localAI[0] == 50)
                     {
@@ -334,15 +372,17 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                     break;
                 }
 
+                //sweeping laser attack phase 1
                 case 5: 
                 {
-                    GoToPosition(130, 180);
+                    GoToPosition(150, 300);
                     break;
                 }
 
+                //solar laser attack phase 2
                 case 6: 
                 {
-                    GoToPosition(130, 180);
+                    GoToPosition(150, 300);
                     break;
                 }
             }
@@ -350,12 +390,18 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
 
         public void GoToPosition(float X, float Y, bool ExtraMovement = true)
         {
+            /*
+            var ParentPos = target.Center - new Vector2(0, 16 * 5);
+            float speed = MathHelper.Clamp(NPC.Distance(ParentPos) / 16, 0, 8);
+            NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(ParentPos) * speed, .0075f);
+            */
+
             NPC Parent = Main.npc[(int)NPC.ai[2]];
 
             bool Switch = NPC.type == ModContent.NPCType<DaffodilHandRight>();
 
-            float goToX = (Parent.Center.X + (!Switch ? -X : X));
-            float goToY = (Parent.Center.Y + Y);
+            float goToX = (!Switch ? -X : X);
+            float goToY = Y;
 
             if (ExtraMovement)
             {
@@ -363,82 +409,73 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
 
                 if (!Switch)
                 {
-                    goToX += (float)Math.Sin(NPC.localAI[1] / 30) * 15;
+                    goToX += (float)Math.Sin(NPC.localAI[1] / 30) * 20;
                 }
                 else
                 {
-                    goToX -= (float)Math.Sin(NPC.localAI[1] / 30) * 15;
+                    goToX -= (float)Math.Sin(NPC.localAI[1] / 30) * 20;
                 }
 
-                goToY += (float)Math.Sin(NPC.localAI[1] / 30) * 15;
+                goToY += (float)Math.Sin(NPC.localAI[1] / 30) * 20;
             }
 
-            if (NPC.Distance(new Vector2(goToX, goToY)) <= 5f)
-            {
-                if (!ExtraMovement)
-                {
-                    NPC.velocity = Vector2.Zero;
-                }
-                else
-                {
-                    NPC.velocity *= 0.9f;
-                }
-            }
-			else
-			{
-				Vector2 desiredVelocity = NPC.DirectionTo(new Vector2(goToX, goToY)) * 8;
-				NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
-			}
+            Vector2 ParentPos = Parent.Center + new Vector2(goToX, goToY);
+            float speed = MathHelper.Clamp(NPC.Distance(ParentPos) / 16, 0, 12);
+            NPC.velocity = Vector2.Lerp(NPC.velocity, NPC.DirectionTo(ParentPos) * speed, 0.075f);
         }
     }
 
     public class DaffodilHandRight : DaffodilHandLeft
     {
-        private static Asset<Texture2D> ChainTexture;
-        private static Asset<Texture2D> NPCTexture;
+		private static Asset<Texture2D> ArmUpperTexture;
+		private static Asset<Texture2D> ArmLowerTexture;
 
-        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
-        {
-            NPC Parent = Main.npc[(int)NPC.ai[2]];
+		public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+		{
+			NPC Parent = Main.npc[(int)NPC.ai[2]];
 
-            //only draw if the parent is active
-            if (Parent.active && Parent.type == ModContent.NPCType<DaffodilEye>())
-            {
-                ChainTexture ??= ModContent.Request<Texture2D>("Spooky/Content/NPCs/Boss/Daffodil/DaffodilArm");
-                
-                Vector2 ParentCenter = Parent.Center;
+			//only draw if the parent is active
+			if (Parent.active && Parent.type == ModContent.NPCType<DaffodilEye>())
+			{
+				ArmUpperTexture ??= ModContent.Request<Texture2D>("Spooky/Content/NPCs/Boss/Daffodil/DaffodilArmUpper");
+				ArmLowerTexture ??= ModContent.Request<Texture2D>("Spooky/Content/NPCs/Boss/Daffodil/DaffodilArmLower");
 
-                Rectangle? chainSourceRectangle = null;
-                float chainHeightAdjustment = 0f;
+				//get frame origins for arms
+				Vector2 frameOriginUpper = (ArmUpperTexture.Size() / 2) + new Vector2(34, 11);
+				Rectangle frameUpper = new Rectangle(0, 0, ArmUpperTexture.Width(), ArmUpperTexture.Height());
 
-                Vector2 chainOrigin = chainSourceRectangle.HasValue ? (chainSourceRectangle.Value.Size() / 2f) : (ChainTexture.Size() / 2f);
-                Vector2 chainDrawPosition = NPC.Center;
-                Vector2 vectorToParent = ParentCenter.MoveTowards(chainDrawPosition, 4f) - chainDrawPosition;
-                Vector2 unitVectorToParent = vectorToParent.SafeNormalize(Vector2.Zero);
-                float chainSegmentLength = (chainSourceRectangle.HasValue ? chainSourceRectangle.Value.Height : ChainTexture.Height()) + chainHeightAdjustment;
+				Vector2 ParentCenter = Parent.Center + new Vector2(40, 20);
 
-                if (chainSegmentLength == 0)
-                {
-                    chainSegmentLength = 10;
-                }
+				//rotation from the hand to the parent daffodil body offsets
+				float RotationToParent = (float)Math.Atan2(ParentCenter.Y - NPC.Center.Y, ParentCenter.X - NPC.Center.X) + 4.71f;
 
-                float chainRotation = unitVectorToParent.ToRotation() + MathHelper.PiOver2;
-                int chainCount = 0;
-                float chainLengthRemainingToDraw = vectorToParent.Length() + chainSegmentLength / 2f;
+				//bottom of the upper arm, where the lower arm should be drawn from
+				Vector2 LowerArmPos = ParentCenter + OffsetWithRotation(RotationToParent, 3, 199);
 
-                while (chainLengthRemainingToDraw > 0f)
-                {
-                    Color chainDrawColor = Lighting.GetColor((int)chainDrawPosition.X / 16, (int)(chainDrawPosition.Y / 16f));
+				//rotation of the upper arm from the bottom of the upper arm to the parent center offset
+				float upperArmRotation = (float)Math.Atan2(LowerArmPos.Y - ParentCenter.Y, (LowerArmPos.X - 50) - ParentCenter.X) + 1.57f;
 
-                    Main.spriteBatch.Draw(ChainTexture.Value, chainDrawPosition - Main.screenPosition, chainSourceRectangle, chainDrawColor, chainRotation, chainOrigin, 1f, SpriteEffects.None, 0f);
+				//change lower arm position again based on the rotation of the upper arm
+				LowerArmPos = ParentCenter + OffsetWithRotation(upperArmRotation, 3, 199);
 
-                    chainDrawPosition += unitVectorToParent * chainSegmentLength;
-                    chainCount++;
-                    chainLengthRemainingToDraw -= chainSegmentLength;
-                }
-            }
+				//draw upper arm segment
+                Color UpperArmColor = Lighting.GetColor((int)ParentCenter.X / 16, (int)ParentCenter.Y / 16);
+				spriteBatch.Draw(ArmUpperTexture.Value, ParentCenter - screenPos, null, NPC.GetAlpha(UpperArmColor),
+				upperArmRotation, new Vector2(34, 11), NPC.scale, SpriteEffects.FlipHorizontally, 0);
 
-            return true;
-        }
-    }
+				//lower arm rotation is based off of the bottom of the upper arm to the hand
+				float lowerArmRotation = (LowerArmPos - NPC.Center).ToRotation() + MathHelper.PiOver2;
+
+				//scale the lower arm texture based on the distance of the hand to the position so that the hand does not randomly just disconnect from the bottom of the lower arm
+				Vector2 armScale = new(1, NPC.Distance(LowerArmPos) / 136f);
+
+                //draw lower arm segment
+                Color LowerArmColor = Lighting.GetColor((int)LowerArmPos.X / 16, (int)LowerArmPos.Y / 16);
+				spriteBatch.Draw(ArmLowerTexture.Value, LowerArmPos - screenPos, null, NPC.GetAlpha(LowerArmColor),
+				lowerArmRotation, new Vector2(29, 8), armScale, SpriteEffects.FlipHorizontally, 0);
+			}
+
+			return true;
+		}
+	}
 }

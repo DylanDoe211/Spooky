@@ -50,16 +50,16 @@ namespace Spooky.Content.NPCs.Boss.Daffodil.Projectiles
 
                 if (GoToPosition == Vector2.Zero)
                 {
-                    GoToPosition = new Vector2(Parent.Center.X + Main.rand.Next(-750, 750), Parent.Center.Y + 400);
+                    GoToPosition = new Vector2(Parent.Center.X + Main.rand.Next(-700, 700), Parent.Center.Y + 400);
                 }
                 else
                 {
                     if (Projectile.Center.Y > GoToPosition.Y && IsColliding())
                     {
-                        Projectile.velocity *= 0.5f;
+                        Projectile.velocity *= 0.35f;
 
                         Projectile.ai[1]++;
-                        if (Projectile.ai[1] >= 40)
+                        if (Projectile.ai[1] >= 50)
                         {
                             SoundEngine.PlaySound(ThornSpawnSound, Projectile.Center);
 
@@ -71,7 +71,7 @@ namespace Spooky.Content.NPCs.Boss.Daffodil.Projectiles
                     }
                     else
                     {
-                        Vector2 desiredVelocity = Projectile.DirectionTo(GoToPosition) * 8;
+                        Vector2 desiredVelocity = Projectile.DirectionTo(GoToPosition) * 12;
 				        Projectile.velocity = Vector2.Lerp(Projectile.velocity, desiredVelocity, 1f / 20);
                     }
                 }

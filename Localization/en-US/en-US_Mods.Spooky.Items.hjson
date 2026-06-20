@@ -1307,6 +1307,11 @@ ChristmasOutfitHeadRed: {
 	Tooltip: ""
 }
 
+ChristmasOutfitLegs: {
+	DisplayName: Krampus Helper Tights
+	Tooltip: ""
+}
+
 DaffodilMask: {
 	DisplayName: Daffodil Mask
 	Tooltip: ""
@@ -2376,7 +2381,7 @@ SmallDaffodil: {
 	DisplayName: Daffodil Sprout
 	Tooltip:
 		'''
-		Summons Cornelious
+		Summons Frank the fly
 		'It smells very yummy!'
 		'''
 }

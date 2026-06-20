@@ -108,8 +108,8 @@ namespace Spooky.Core
                     if (Main.netMode != NetmodeID.MultiplayerClient)
 					{
                         int Daffodil = NPC.NewNPC(null, (int)Flags.DaffodilPosition.X, (int)Flags.DaffodilPosition.Y, ModContent.NPCType<DaffodilBody>());
-                        Main.npc[Daffodil].position.X -= 9;
-                        Main.npc[Daffodil].position.Y += 10;
+                        Main.npc[Daffodil].position.X -= 3;
+                        Main.npc[Daffodil].position.Y += 44;
 
                         if (Main.netMode == NetmodeID.Server)
                         {

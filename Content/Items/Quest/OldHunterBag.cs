@@ -27,12 +27,7 @@ namespace Spooky.Content.Items.Quest
 			Item.rare = ItemRarityID.Quest;
 			Item.maxStack = 9999;
 		}
-
-		public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
-		{
-			itemGroup = ContentSamples.CreativeHelper.ItemGroup.Crates;
-		}
-
+		
 		public override bool CanRightClick()
 		{
 			return true;

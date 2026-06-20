@@ -54,7 +54,7 @@ namespace Spooky.Core
                             
                             if (Main.netMode != NetmodeID.MultiplayerClient)
                             {
-                                int Daffodil = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X, (int)npc.Center.Y + 30, 
+                                int Daffodil = NPC.NewNPC(npc.GetSource_FromAI(), (int)npc.Center.X - 7, (int)npc.Center.Y + 29, 
                                 ModContent.NPCType<DaffodilEye>(), ai0: Main.rand.NextBool(20) && Flags.downedDaffodil ? -4 : -1, ai1: npc.whoAmI);
 
                                 if (Main.netMode == NetmodeID.Server)

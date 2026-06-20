@@ -18,7 +18,7 @@ namespace Spooky.Content.Items.Minibiomes.Christmas
 	{
 		public override void SetStaticDefaults()
 		{
-			Item.ResearchUnlockCount = 3;
+			Item.ResearchUnlockCount = 5;
 		}
 
 		public override void SetDefaults()
@@ -28,11 +28,6 @@ namespace Spooky.Content.Items.Minibiomes.Christmas
 			Item.consumable = true;
 			Item.rare = ItemRarityID.Quest;
 			Item.maxStack = 9999;
-		}
-
-		public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
-		{
-			itemGroup = ContentSamples.CreativeHelper.ItemGroup.Crates;
 		}
 
 		public override bool CanRightClick()
@@ -52,7 +47,6 @@ namespace Spooky.Content.Items.Minibiomes.Christmas
 				ModContent.ItemType<KrampusShapeBox>(),
 				ModContent.ItemType<DaylightSavings>()
 			};
-
 			itemLoot.Add(ItemDropRule.FewFromOptions(2, 1, Accessories));
 
 			//accessory drops
@@ -67,8 +61,23 @@ namespace Spooky.Content.Items.Minibiomes.Christmas
 				ModContent.ItemType<SnowBag>(),
 				ModContent.ItemType<StockingStaff>(),
 			};
-
 			itemLoot.Add(ItemDropRule.FewFromOptions(2, 1, Weapons));
+
+			IItemDropRule[] VanityHead = new IItemDropRule[]
+			{
+				ItemDropRule.Common(ModContent.ItemType<ChristmasOutfitHeadBlue>(), 1),
+				ItemDropRule.Common(ModContent.ItemType<ChristmasOutfitHeadGreen>(), 1),
+				ItemDropRule.Common(ModContent.ItemType<ChristmasOutfitHeadRed>(), 1)
+			};
+			IItemDropRule[] VanityBody = new IItemDropRule[]
+			{
+				ItemDropRule.Common(ModContent.ItemType<ChristmasOutfitBodyBlue>(), 1),
+				ItemDropRule.Common(ModContent.ItemType<ChristmasOutfitBodyGreen>(), 1),
+				ItemDropRule.Common(ModContent.ItemType<ChristmasOutfitBodyRed>(), 1)
+			};
+			itemLoot.Add(new OneFromRulesRule(2, VanityHead));
+			itemLoot.Add(new OneFromRulesRule(2, VanityBody));
+			itemLoot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<ChristmasOutfitLegs>(), 2));
 
 			//bricks
 			IItemDropRule[] KrampusBricks = new IItemDropRule[]
@@ -87,17 +96,6 @@ namespace Spooky.Content.Items.Minibiomes.Christmas
 				ItemDropRule.Common(ModContent.ItemType<ChristmasSlabRedItem>(), 1, 250, 500),
 			};
 			itemLoot.Add(new OneFromRulesRule(1, KrampusSlabs));
-
-			IItemDropRule[] Vanity = new IItemDropRule[]
-			{
-				ItemDropRule.Common(ModContent.ItemType<ChristmasOutfitBodyBlue>(), 1),
-				ItemDropRule.Common(ModContent.ItemType<ChristmasOutfitBodyGreen>(), 1),
-				ItemDropRule.Common(ModContent.ItemType<ChristmasOutfitBodyRed>(), 1),
-				ItemDropRule.Common(ModContent.ItemType<ChristmasOutfitHeadBlue>(), 1),
-				ItemDropRule.Common(ModContent.ItemType<ChristmasOutfitHeadGreen>(), 1),
-				ItemDropRule.Common(ModContent.ItemType<ChristmasOutfitHeadRed>(), 1)
-			};
-			itemLoot.Add(new OneFromRulesRule(2, Vanity));
 
 			//yuletide wood
 			itemLoot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<ChristmasWoodItem>(), 1, 250, 500));

@@ -225,8 +225,8 @@ namespace Spooky.Core
 			//Daffodil
 			var DaffodilPortrait = (SpriteBatch spriteBatch, Rectangle rect, Color color) => 
             {
-				Texture2D texture = ModContent.Request<Texture2D>("Spooky/Content/NPCs/NPCDisplayTextures/DaffodilBestiary").Value;
-				Vector2 centered = new Vector2(rect.X + (rect.Width / 2) - (texture.Width / 2), rect.Y + (rect.Height / 2) - (texture.Height / 2));
+				Texture2D texture = ModContent.Request<Texture2D>("Spooky/Content/NPCs/NPCDisplayTextures/DaffodilBossChecklist").Value;
+				Vector2 centered = new Vector2(rect.X + (rect.Width / 2) - (texture.Width / 2), rect.Y + (rect.Height / 2) - (texture.Height / 2) - 45);
 				spriteBatch.Draw(texture, centered, color);
 			};
 

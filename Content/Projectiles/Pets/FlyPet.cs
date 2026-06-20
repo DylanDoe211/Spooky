@@ -21,8 +21,8 @@ namespace Spooky.Content.Projectiles.Pets
 
         public override void SetDefaults()
         {
-            Projectile.width = 38;
-            Projectile.height = 30;
+            Projectile.width = 28;
+            Projectile.height = 26;
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
@@ -46,7 +46,7 @@ namespace Spooky.Content.Projectiles.Pets
             }
 
             Projectile.frameCounter++;
-            if (Projectile.frameCounter > 2)
+            if (Projectile.frameCounter > 1)
             {
                 Projectile.frame++;
                 Projectile.frameCounter = 0;
