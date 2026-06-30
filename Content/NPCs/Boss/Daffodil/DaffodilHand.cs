@@ -226,7 +226,7 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
                         int MaxDusts = Main.rand.Next(5, 15);
                         for (int numDusts = 0; numDusts < MaxDusts; numDusts++)
                         {
-                            Vector2 dustPos = (Vector2.One * new Vector2((float)NPC.width / 2, (float)NPC.height / 2) * Main.rand.NextFloat(1.25f, 1.75f)).RotatedBy((double)((float)(numDusts - (MaxDusts / 2 - 1)) * 6.28318548f / (float)MaxDusts), default(Vector2)) + NPC.Center;
+                            Vector2 dustPos = (Vector2.One * new Vector2((float)NPC.width / 2, (float)NPC.height / 2) * Main.rand.NextFloat(0.2f, 1.12f)).RotatedBy((double)((float)(numDusts - (MaxDusts / 2 - 1)) * 6.28318548f / (float)MaxDusts), default(Vector2)) + NPC.Center;
                             Vector2 velocity = dustPos - NPC.Center;
                             int dustEffect = Dust.NewDust(dustPos + velocity, 0, 0, ModContent.DustType<GlowyDust>(), velocity.X * 2f, velocity.Y * 2f, 100, default, 0.12f);
                             Main.dust[dustEffect].color = Color.Green;

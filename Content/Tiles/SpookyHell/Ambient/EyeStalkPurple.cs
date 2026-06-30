@@ -21,6 +21,7 @@ namespace Spooky.Content.Tiles.SpookyHell.Ambient
             Main.tileSolid[Type] = false;
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
+            TileID.Sets.BreakableWhenPlacing[Type] = true;
 			TileObjectData.newTile.Width = 3;
 			TileObjectData.newTile.Height = 6;
 			TileObjectData.newTile.Origin = new Point16(1, 5);
@@ -70,6 +71,7 @@ namespace Spooky.Content.Tiles.SpookyHell.Ambient
             Main.tileSolid[Type] = false;
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
+            TileID.Sets.BreakableWhenPlacing[Type] = true;
 			TileObjectData.newTile.Width = 3;
 			TileObjectData.newTile.Height = 5;
 			TileObjectData.newTile.Origin = new Point16(1, 4);
@@ -104,6 +106,7 @@ namespace Spooky.Content.Tiles.SpookyHell.Ambient
             Main.tileSolid[Type] = false;
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
+            TileID.Sets.BreakableWhenPlacing[Type] = true;
 			TileObjectData.newTile.Width = 4;
 			TileObjectData.newTile.Height = 4;
 			TileObjectData.newTile.Origin = new Point16(2, 4);
@@ -138,6 +141,7 @@ namespace Spooky.Content.Tiles.SpookyHell.Ambient
             Main.tileSolid[Type] = false;
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
+            TileID.Sets.BreakableWhenPlacing[Type] = true;
 			TileObjectData.newTile.Width = 3;
 			TileObjectData.newTile.Height = 9;
 			TileObjectData.newTile.Origin = new Point16(1, 8);

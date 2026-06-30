@@ -2,6 +2,8 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using Spooky.Content.Tiles.Minibiomes.Desert.Furniture;
+
 namespace Spooky.Content.Tiles.Minibiomes.Desert
 {
     public class TarPitCactusBlockItem : ModItem
@@ -22,6 +24,11 @@ namespace Spooky.Content.Tiles.Minibiomes.Desert
         {
             CreateRecipe()
             .AddIngredient(ModContent.ItemType<TarPitCactusWallItem>(), 4)
+            .AddTile(TileID.WorkBenches)
+            .Register();
+
+            CreateRecipe()
+            .AddIngredient(ModContent.ItemType<TarCactusPlatformItem>(), 2)
             .AddTile(TileID.WorkBenches)
             .Register();
         }

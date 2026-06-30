@@ -22,8 +22,8 @@ namespace Spooky.Content.Tiles.SpookyHell.Ambient
         public override void SetStaticDefaults()
         {
             Main.tileFrameImportant[Type] = true;
-			Main.tileLighted[Type] = true;
 			Main.tileSolid[Type] = false;
+            TileID.Sets.BreakableWhenPlacing[Type] = true;
 			TileObjectData.newTile.Width = 1;
 			TileObjectData.newTile.Height = 3;
 			TileObjectData.newTile.Origin = new Point16(0, 2);

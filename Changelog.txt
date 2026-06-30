@@ -6,3 +6,7 @@ New Stuff:
 Changes:
 -Krampus quest reward presents now need 5 to research for journey mode
 -Krampus quest reward presents now have a separate drop chance for each piece of the krampus helper vanity
+
+Fixes:
+-Tar cactus platforms not being craftable back into tar cactus blocks
+-Many spooky mod ambient tiles not being destroyed when you place blocks on them

@@ -57,19 +57,22 @@ namespace Spooky.Content.NPCs.Boss.Daffodil.Projectiles
 				SoundEngine.PlaySound(GrowSound, Projectile.Center);
 			}
 
-			if (Projectile.ai[0] % 45 == 0)
+			if (Projectile.timeLeft >= 240)
 			{
-				Vector2 FlyPosition = (Vector2.One * new Vector2((float)Projectile.width / 2f, (float)Projectile.height / 2f) * 15f).RotatedBy(Main.rand.NextFloat(0f, 361f)) + Projectile.Center;
+				if (Projectile.ai[0] % 45 == 0)
+				{
+					Vector2 FlyPosition = (Vector2.One * new Vector2((float)Projectile.width / 2f, (float)Projectile.height / 2f) * 15f).RotatedBy(Main.rand.NextFloat(0f, 361f)) + Projectile.Center;
 
-				SoundEngine.PlaySound(FlySound, FlyPosition);
-			}
-			if (Projectile.ai[0] % 4 == 0 && Projectile.timeLeft >= 240)
-			{
-				Vector2 FlyPosition = (Vector2.One * new Vector2((float)Projectile.width / 2f, (float)Projectile.height / 2f) * 15f).RotatedBy(Main.rand.NextFloat(0f, 361f)) + Projectile.Center;
-				Vector2 velocity = FlyPosition - Projectile.Center;
+					SoundEngine.PlaySound(FlySound, FlyPosition);
+				}
+				if (Projectile.ai[0] % 4 == 0)
+				{
+					Vector2 FlyPosition = (Vector2.One * new Vector2((float)Projectile.width / 2f, (float)Projectile.height / 2f) * 15f).RotatedBy(Main.rand.NextFloat(0f, 361f)) + Projectile.Center;
+					Vector2 velocity = FlyPosition - Projectile.Center;
 
-				Projectile.NewProjectile(Projectile.GetSource_FromAI(), FlyPosition + velocity, Vector2.Normalize(velocity) * -7f,
-				ModContent.ProjectileType<DaffodilFly>(), Projectile.damage, Projectile.knockBack, Main.myPlayer);
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), FlyPosition + velocity, Vector2.Normalize(velocity) * -7f,
+					ModContent.ProjectileType<DaffodilFly>(), Projectile.damage, Projectile.knockBack, Main.myPlayer);
+				}
 			}
 		}
 

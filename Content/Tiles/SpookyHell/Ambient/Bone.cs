@@ -15,7 +15,7 @@ namespace Spooky.Content.Tiles.SpookyHell.Ambient
         {
             Main.tileFrameImportant[Type] = true;
             Main.tileSolid[Type] = false;
-            Main.tileLighted[Type] = true;
+            TileID.Sets.BreakableWhenPlacing[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
             TileObjectData.newTile.DrawYOffset = 2;
             TileObjectData.addTile(Type);

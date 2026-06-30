@@ -16,7 +16,7 @@ namespace Spooky.Content.Tiles.SpookyHell.Ambient
 		{
 			Main.tileFrameImportant[Type] = true;
             Main.tileSolid[Type] = false;
-            Main.tileLighted[Type] = true;
+			TileID.Sets.BreakableWhenPlacing[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);
 			TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
 			TileObjectData.newTile.DrawYOffset = 2;

@@ -19,6 +19,7 @@ namespace Spooky.Content.Tiles.SpookyBiome.Ambient
 			Main.tileLavaDeath[Type] = true;
 			Main.tileLighted[Type] = true;
 			TileID.Sets.MultiTileSway[Type] = true;
+			TileID.Sets.BreakableWhenPlacing[Type] = true;
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style1xX);
 			TileObjectData.newTile.Height = 3;
 			TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };

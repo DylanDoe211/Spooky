@@ -17,6 +17,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Vegetable.Ambient
             Main.tileSolid[Type] = false;
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
+            TileID.Sets.BreakableWhenPlacing[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
             TileObjectData.newTile.Width = 2;
 			TileObjectData.newTile.Height = 3;
@@ -45,6 +46,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Vegetable.Ambient
             Main.tileSolid[Type] = false;
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
+            TileID.Sets.BreakableWhenPlacing[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
             TileObjectData.newTile.Width = 2;
 			TileObjectData.newTile.Height = 4;

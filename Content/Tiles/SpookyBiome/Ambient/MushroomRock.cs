@@ -20,6 +20,7 @@ namespace Spooky.Content.Tiles.SpookyBiome.Ambient
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
             Main.tileLighted[Type] = true;
+            TileID.Sets.BreakableWhenPlacing[Type] = true;
             TileObjectData.newTile.Width = 4;
 			TileObjectData.newTile.Height = 3;
 			TileObjectData.newTile.Origin = new Point16(2, 2);
@@ -50,6 +51,7 @@ namespace Spooky.Content.Tiles.SpookyBiome.Ambient
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
             Main.tileLighted[Type] = true;
+            TileID.Sets.BreakableWhenPlacing[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
             TileObjectData.newTile.Origin = new Point16(1, 1);
             TileObjectData.newTile.DrawYOffset = 2;
@@ -75,6 +77,7 @@ namespace Spooky.Content.Tiles.SpookyBiome.Ambient
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
             Main.tileLighted[Type] = true;
+            TileID.Sets.BreakableWhenPlacing[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
             TileObjectData.newTile.Origin = new Point16(0, 1);
             TileObjectData.newTile.DrawYOffset = 2;

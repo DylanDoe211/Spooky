@@ -18,6 +18,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Vegetable.Ambient
 			Main.tileFrameImportant[Type] = true;
 			Main.tileNoAttach[Type] = true;
 			TileID.Sets.MultiTileSway[Type] = true;
+			TileID.Sets.BreakableWhenPlacing[Type] = true;
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
 			TileObjectData.newTile.Width = 2;
 			TileObjectData.newTile.Height = 4;

@@ -19,6 +19,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean.Ambient
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
             Main.tileLighted[Type] = true;
+            TileID.Sets.BreakableWhenPlacing[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
 			TileObjectData.newTile.Origin = new Point16(1, 2);
             TileObjectData.newTile.DrawYOffset = 2;

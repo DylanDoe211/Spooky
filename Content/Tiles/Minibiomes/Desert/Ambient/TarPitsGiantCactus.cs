@@ -21,7 +21,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Desert.Ambient
             Main.tileFrameImportant[Type] = true;
 			Main.tileSolid[Type] = false;
 			Main.tileLighted[Type] = true;
-			TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
+            TileID.Sets.BreakableWhenPlacing[Type] = true;
 			TileObjectData.newTile.Width = 4;
 			TileObjectData.newTile.Height = 5;
 			TileObjectData.newTile.Origin = new Point16(2, 4);

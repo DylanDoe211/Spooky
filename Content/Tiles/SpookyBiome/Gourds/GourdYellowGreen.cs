@@ -26,6 +26,7 @@ namespace Spooky.Content.Tiles.SpookyBiome.Gourds
             Main.tileSolid[Type] = false;
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
+            TileID.Sets.BreakableWhenPlacing[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);
             TileObjectData.newTile.Width = 4;
 			TileObjectData.newTile.Height = 3;

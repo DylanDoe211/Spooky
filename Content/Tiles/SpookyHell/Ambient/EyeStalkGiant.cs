@@ -19,6 +19,7 @@ namespace Spooky.Content.Tiles.SpookyHell.Ambient
             Main.tileSolid[Type] = false;
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
+            TileID.Sets.BreakableWhenPlacing[Type] = true;
 			TileObjectData.newTile.Width = 3;
 			TileObjectData.newTile.Height = 5;
 			TileObjectData.newTile.Origin = new Point16(1, 4);
