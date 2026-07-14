@@ -9,5 +9,8 @@
 	  <Reference Include="StructureHelper">
       <HintPath>lib\StructureHelper.dll</HintPath>
     </Reference>
+      <Reference Include="SpiritReforged">
+      <HintPath>lib\SpiritReforged.dll</HintPath>
+    </Reference>
 	</ItemGroup>
 </Project>

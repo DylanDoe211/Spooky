@@ -5,6 +5,7 @@ using Terraria.Localization;
 
 using Spooky.Content.Items.SpookyBiome;
 using Spooky.Content.Tiles.Minibiomes.Christmas;
+using Spooky.Content.Tiles.Shipyard;
 using Spooky.Content.Tiles.SpiderCave;
 using Spooky.Content.Tiles.SpookyBiome;
 
@@ -21,6 +22,7 @@ namespace Spooky.Core
             wood.ValidItems.Add(ModContent.ItemType<SpookyWoodItem>());
             wood.ValidItems.Add(ModContent.ItemType<ChristmasWoodItem>());
             wood.ValidItems.Add(ModContent.ItemType<BirchWoodItem>());
+            wood.ValidItems.Add(ModContent.ItemType<RotWoodItem>());
 
             //custom recipe groups
 			RecipeGroup BaseGroup(object GroupName, object GroupName2, int[] Items)

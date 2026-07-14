@@ -112,38 +112,15 @@ namespace Spooky.Content.Generation
                         WorldGen.KillWall(X, Y);
                     }
                 }
-			}
-
-			//place clumps of blocks along both edges of the biome so it transitions with the rest of the underworld more nicely
-			for (int X = StartPosition - 50; X <= StartPosition; X++)
-            {
-                for (int Y = Main.maxTilesY - 110; Y < Main.maxTilesY - 20; Y++)
-                {
-                    if (WorldGen.genRand.NextBool(30))
-                    {
-                        SpookyWorldMethods.PlaceCircle(X, Y, ModContent.TileType<SpookyMush>(), ModContent.WallType<SpookyMushWall>(), WorldGen.genRand.Next(5, 20), true, true);
-                    }
-                }
-            }
-            for (int X = BiomeEdge; X <= BiomeEdge + 50; X++)
-            {
-                for (int Y = Main.maxTilesY - 110; Y < Main.maxTilesY - 20; Y++)
-                {
-                    if (WorldGen.genRand.NextBool(30))
-                    {
-                        SpookyWorldMethods.PlaceCircle(X, Y, ModContent.TileType<SpookyMush>(), ModContent.WallType<SpookyMushWall>(), WorldGen.genRand.Next(5, 20), true, true);
-                    }
-                }
-            }
-
-            //place ceiling of blocks across the top of the biome
-            for (int X = StartPosition - 50; X <= BiomeEdge + 50; X += 10)
-            {
+                
                 for (int Y = Main.maxTilesY - 215; Y <= Main.maxTilesY - 198; Y += 3)
                 {
-                    SpookyWorldMethods.PlaceCircle(X, Y, ModContent.TileType<SpookyMush>(), ModContent.WallType<SpookyMushWall>(), WorldGen.genRand.Next(5, 7), true, true);
+                    if (X % 10 == 0)
+                    {
+                        SpookyWorldMethods.PlaceCircle(X, Y, ModContent.TileType<SpookyMush>(), ModContent.WallType<SpookyMushWall>(), WorldGen.genRand.Next(5, 7), true, true);
+                    }
                 }
-            }
+			}
 
             //roughen up the terrain so it looks more natural
             int lastMaxTileX = 0;
@@ -151,11 +128,11 @@ namespace Spooky.Content.Generation
 
             for (int X = StartPosition - 50; X <= BiomeEdge + 50; X++)
             {
-				// flat ellipses
+				//flat ellipses
 				if (WorldGen.genRand.NextBool(40) && X > lastMaxTileX + lastXRadius)
                 {
                     int roughingPosition = 0;
-                    // Look for a Y position to put ellipses
+                    //look for a Y position to put ellipses
                     for (int lookupY = Main.maxTilesY - 150; lookupY <= Main.maxTilesY - 130; lookupY++)
                     {
                         if (Framing.GetTileSafely(X, lookupY).HasTile)
@@ -250,9 +227,15 @@ namespace Spooky.Content.Generation
                 }
             }
 
+            progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.EyeValleyPolish").Value;
+
             //place pillars of flesh walls with plateaus in them for more varied terrain
             for (int X = StartPosition + 70; X <= BiomeEdge - 70; X++)
             {
+                int StartValue = StartPosition + 70;
+				int EndValue = BiomeEdge - 70;
+				progress.Set((float)(X - StartValue) / (EndValue - StartValue));
+
                 if (WorldGen.genRand.NextBool(75))
                 {
                     PlaceWallPillar(X);
@@ -941,7 +924,9 @@ namespace Spooky.Content.Generation
 
             for (int dungeonRoomLoop = 0; dungeonRoomLoop <= MaxDungeonRooms; dungeonRoomLoop++)
             {
-                progress.Set((float)dungeonRoomLoop / MaxDungeonRooms);
+                int StartValue = 0;
+				int EndValue = MaxDungeonRooms;
+				progress.Set((float)(dungeonRoomLoop - StartValue) / (EndValue - StartValue));
 
                 int numHallsBeforeRoom = Main.maxTilesX >= 8400 ? WorldGen.genRand.Next(2, 4) : (Main.maxTilesX >= 6400 ? WorldGen.genRand.Next(1, 3) : 1);
 

@@ -2,6 +2,7 @@ displayName = [c/F68E34:Spooky] [c/55CB3A:Mod]
 author = The Spooky Mod Team
 version = 1.4.4
 dllReferences = StructureHelper
+weakReferences = SpiritReforged@0.2.1.1
 hideCode = true
 hideResources = true
 includeSource = false

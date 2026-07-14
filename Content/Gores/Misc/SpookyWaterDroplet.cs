@@ -161,4 +161,8 @@ namespace Spooky.Content.Gores.Misc
 	public class BloodWaterDroplet : SpookyWaterDroplet
 	{
 	}
+
+	public class ShipyardWaterDroplet : SpookyWaterDroplet
+	{
+	}
 }

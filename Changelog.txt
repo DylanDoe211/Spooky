@@ -1,11 +1,14 @@
 New Stuff:
--Daffodil resprite
+-Daffodil resprite, along with small tweaks to the fight to fit the new sprite
 -Added krampus helper outfit leggings
+-Added sac of flesh as a replacement for items that are fished in the valley of eyes, its an openable item that gives you a bunch of eye valley blocks
 -Added new game tip to tell players about spooky mods config options
 
 Changes:
+-Charm of the flies no longer has a cooldown that prevents flies from spawning when you get hit
 -Krampus quest reward presents now need 5 to research for journey mode
 -Krampus quest reward presents now have a separate drop chance for each piece of the krampus helper vanity
+-Made spooky mod world generation fill up the progress bar better to track how far along each biome is done generating
 
 Fixes:
 -Tar cactus platforms not being craftable back into tar cactus blocks

@@ -98,7 +98,7 @@ namespace Spooky.Content.Generation
 				progress.Set((float)(X - StartValue) / (EndValue - StartValue));
 
 				//non-edge biome stuff so the dithering added later works correctly
-				if (X >= XMiddle - (BiomeWidth / 2) && X <= XMiddle + (BiomeWidth / 2))
+				if (X >= XMiddle - (BiomeWidth / 2) - 12 && X <= XMiddle + (BiomeWidth / 2) + 12)
 				{
 					for (int Y = (int)heightLimit; Y <= Main.worldSurface; Y++)
 					{
@@ -188,17 +188,21 @@ namespace Spooky.Content.Generation
 			bool foundSurfaceLeft = false;
 			int attemptsLeft = 0;
 
+            double SkyHeight = Main.worldSurface * 0.35f;
+            LeftY = (int)SkyHeight;
+            RightY = (int)SkyHeight;
+
             //get the two surface points at the left and right of the cemetery biome
 			while (!foundSurfaceLeft && attemptsLeft++ < 100000)
 			{
-				while ((!IsCemeteryTile(XStart, LeftY) || !NoFloatingIsland(XStart, LeftY)) && LeftY <= Main.maxTilesY)
+                if ((!IsCemeteryTile(XStart, LeftY) || !NoFloatingIsland(XStart, LeftY)) && Main.tile[XStart, LeftY].WallType <= 0 && LeftY <= Main.worldSurface)
 				{
 					LeftY++;
 				}
-				if ((WorldGen.SolidTile(XStart, LeftY) || Main.tile[XStart, LeftY].WallType > 0) && NoFloatingIsland(XStart, LeftY))
+                else //if (IsCemeteryTile(XStart, LeftY) || Main.tile[XStart, LeftY].WallType > 0)
 				{
-					foundSurfaceLeft = true;
-				}
+                    foundSurfaceLeft = true;
+                }
 			}
 
 			bool foundSurfaceRight = false;
@@ -206,14 +210,14 @@ namespace Spooky.Content.Generation
 
 			while (!foundSurfaceRight && attemptsRight++ < 100000)
 			{
-				while ((!IsCemeteryTile(XEdge, RightY) || !NoFloatingIsland(XEdge, RightY)) && RightY <= Main.maxTilesY)
+                if ((!IsCemeteryTile(XEdge, RightY) || !NoFloatingIsland(XEdge, RightY)) && Main.tile[XEdge, RightY].WallType <= 0 && RightY <= Main.worldSurface)
 				{
 					RightY++;
 				}
-				if ((WorldGen.SolidTile(XEdge, RightY) || Main.tile[XEdge, RightY].WallType > 0) && NoFloatingIsland(XEdge, RightY))
+                else //if (IsCemeteryTile(XEdge, RightY) || Main.tile[XEdge, RightY].WallType > 0)
 				{
-					foundSurfaceRight = true;
-				}
+                    foundSurfaceLeft = true;
+                }
 			}
 
             //flatten the terrain by making a line
@@ -242,11 +246,35 @@ namespace Spooky.Content.Generation
                 int X = WorldGen.genRand.Next(0, Main.maxTilesX);
                 int Y = WorldGen.genRand.Next(0, Main.maxTilesY - 2);
 
-                if (Main.tile[X, Y] != null && Main.tile[X, Y].HasTile)
+                if (!IsCemeteryTile(X, Y))
                 {
-                    if (Main.tile[X, Y].TileType == ModContent.TileType<CemeteryDirt>())
+                    continue;
+                }
+                else
+                {
+                    bool CanPlace = true;
+                    bool StopLoop = false;
+                    if (!StopLoop)
                     {
-                        WorldGen.TileRunner(X, Y, WorldGen.genRand.Next(10, 18), WorldGen.genRand.Next(10, 18), ModContent.TileType<CemeteryStone>(), false, 0f, 0f, false, true);
+                        for (int m = X - 2; m <= X + 2; m++)
+                        {
+                            for (int n = Y - 2; n <= Y + 2; n++)
+                            {
+                                if (!IsCemeteryTile(m, n))
+                                {
+                                    CanPlace = false;
+                                    StopLoop = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if (CanPlace && Main.tile[X, Y] != null && Main.tile[X, Y].HasTile)
+                    {
+                        if (Main.tile[X, Y].TileType == ModContent.TileType<CemeteryDirt>())
+                        {
+                            WorldGen.TileRunner(X, Y, WorldGen.genRand.Next(10, 18), WorldGen.genRand.Next(10, 18), ModContent.TileType<CemeteryStone>(), false, 0f, 0f, false, true);
+                        }
                     }
                 }
             }
@@ -257,14 +285,38 @@ namespace Spooky.Content.Generation
 				int X = WorldGen.genRand.Next(0, Main.maxTilesX);
 				int Y = WorldGen.genRand.Next(0, Main.maxTilesY / 2);
 
-				if (Main.tile[X, Y] != null && Main.tile[X, Y].HasTile)
-				{
-					if (Main.tile[X, Y].TileType == ModContent.TileType<CemeteryDirt>())
-					{
-						WorldGen.TileRunner(X, Y, WorldGen.genRand.Next(5, 11), WorldGen.genRand.Next(5, 11),
-						ModContent.TileType<BloomSoil>(), false, 0f, 0f, false, true);
-					}
-				}
+                if (!IsCemeteryTile(X, Y))
+                {
+                    continue;
+                }
+                else
+                {
+                    bool CanPlace = true;
+                    bool StopLoop = false;
+                    if (!StopLoop)
+                    {
+                        for (int m = X - 2; m <= X + 2; m++)
+                        {
+                            for (int n = Y - 2; n <= Y + 2; n++)
+                            {
+                                if (!IsCemeteryTile(m, n))
+                                {
+                                    CanPlace = false;
+                                    StopLoop = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if (CanPlace && Main.tile[X, Y] != null && Main.tile[X, Y].HasTile)
+                    {
+                        if (Main.tile[X, Y].TileType == ModContent.TileType<CemeteryDirt>())
+                        {
+                            WorldGen.TileRunner(X, Y, WorldGen.genRand.Next(5, 11), WorldGen.genRand.Next(5, 11),
+                            ModContent.TileType<BloomSoil>(), false, 0f, 0f, false, true);
+                        }
+                    }
+                }
 			}
         }
 
@@ -389,7 +441,11 @@ namespace Spooky.Content.Generation
 
         public void FlattenSurface(Vector2 Start, Vector2 End, bool Liquids)
 		{
-			int segments = 10000;
+			int segments = 0;
+			for (int i = (int)Start.X; i < (int)End.X; i++)
+			{
+				segments += 2;
+			}
 
 			Vector2 myCenter = Start;
 			Vector2 p0 = End;

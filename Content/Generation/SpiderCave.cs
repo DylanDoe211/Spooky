@@ -126,6 +126,10 @@ namespace Spooky.Content.Generation
 
             for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
 			{
+                int StartValue = origin.X - biomeSize - 2;
+				int EndValue = origin.X + biomeSize + 2;
+				progress.Set((float)(X - StartValue) / (EndValue - StartValue));
+
 				for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
 				{
 					if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
@@ -360,9 +364,11 @@ namespace Spooky.Content.Generation
                 }
             }
 
+            progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.SpiderCavePolish").Value;
+
             //clean out small floating chunks of blocks and walls
-            CleanOutSmallClumps(true);
-            CleanOutSmallClumps(false);
+            CleanOutSmallClumps(true, progress);
+            CleanOutSmallClumps(false, progress);
 
             //put dithering around the edge of the biome after all tile chunk removal is done
             for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
@@ -939,7 +945,7 @@ namespace Spooky.Content.Generation
 		}
 
         //method to clean up small clumps of tiles
-        public static void CleanOutSmallClumps(bool Tiles)
+        public static void CleanOutSmallClumps(bool Tiles, GenerationProgress progress)
         {
             int cutoffLimit = 200;
             
@@ -1016,6 +1022,10 @@ namespace Spooky.Content.Generation
 
             for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
             {
+                int StartValue = origin.X - biomeSize - 2;
+				int EndValue = origin.X + biomeSize + 2;
+				progress.Set((float)(X - StartValue) / (EndValue - StartValue));
+
                 for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
                 {
                     if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))

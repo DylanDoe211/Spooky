@@ -80,7 +80,7 @@ namespace Spooky.Content.Biomes
 
         public override void SpecialVisuals(Player player, bool isActive)
         {
-            isActive = player.InModBiome<CemeteryBiome>() && !player.InModBiome(ModContent.GetInstance<RaveyardBiome>()) &&
+            isActive = player.InModBiome<CemeteryBiome>() && !player.InModBiome(ModContent.GetInstance<RaveyardBiome>()) && !player.InModBiome(ModContent.GetInstance<ShipyardBiome>()) &&
             !player.InModBiome(ModContent.GetInstance<CatacombBiome>()) && !player.InModBiome(ModContent.GetInstance<CatacombBiome2>());
             player.ManageSpecialBiomeVisuals("Spooky:CemeterySky", isActive, player.Center);
         }
@@ -98,10 +98,10 @@ namespace Spooky.Content.Biomes
         //conditions to be in the biome
         public override bool IsBiomeActive(Player player)
         {
-            bool BiomeCondition = ModContent.GetInstance<TileCount>().cemeteryTiles >= 650;
+            bool BiomeCondition = ModContent.GetInstance<TileCount>().cemeteryTiles >= 700;
             bool SurfaceCondition = player.ZoneOverworldHeight;
 
-            return BiomeCondition && SurfaceCondition && !player.ZoneBeach;
+            return BiomeCondition && SurfaceCondition && !player.ZoneBeach && !player.InModBiome(ModContent.GetInstance<ShipyardBiome>());
         }
     }
 }

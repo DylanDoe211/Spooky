@@ -185,7 +185,10 @@ namespace Spooky.Content.UserInterfaces
 			Main.LocalPlayer.mouseInterface = true;
 			Main.LocalPlayer.GetModPlayer<SpookyPlayer>().DisablePlayerControls = true;
 
-            Main.instance.CameraModifiers.Add(new CameraPanning(Main.npc[LittleEye].Center, 20));
+            if (ModContent.GetInstance<SpookyConfig>().DialogueFocus)
+			{
+            	Main.instance.CameraModifiers.Add(new CameraPanning(Main.npc[LittleEye].Center, 20));
+			}
 
             Texture2D UIBoxTexture = ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/LittleEyeQuestUIBar").Value;
             Vector2 UIBoxScale = Vector2.One * Main.UIScale;

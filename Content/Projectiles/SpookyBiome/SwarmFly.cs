@@ -65,7 +65,7 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 
             if (!player.active || player.dead || !player.GetModPlayer<SpookyPlayer>().FlyAmulet)
 			{
-				Projectile.alpha += 10;
+				Projectile.alpha += 25;
 
                 if (Projectile.alpha >= 255)
                 {

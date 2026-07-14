@@ -80,15 +80,10 @@ namespace Spooky.Content.Generation
 			int SizeX = Main.maxTilesX / 5;
 			int SizeY = Main.maxTilesY / 3;
 
-			PlaceSpookyForestEllipse(PositionX, PositionY, SizeX / 6, SizeY, false);
+			PlaceSpookyForestEllipse(PositionX, PositionY, SizeX / 6, SizeY, false, progress);
 
 			//position where the glowshroom minibiome begins
 			GlowshroomPosY = (int)Main.worldSurface + (Main.maxTilesY / 9);
-
-			for (double i = 0; i < 0.25; i += 0.00001)
-			{
-				progress.Set(i);
-			}
 
 			//place clumps of green grass using a temporary dirt tile clone that will be replaced later in generation
 			for (int greenGrass = 0; greenGrass < (int)((double)(Main.maxTilesX * GlowshroomPosY * 27) * 15E-05); greenGrass++)
@@ -128,11 +123,6 @@ namespace Spooky.Content.Generation
 						ModContent.TileType<SpookyStone>(), false, 0f, 0f, false, true);
 					}
 				}
-			}
-
-			for (double i = 0.25; i < 0.5; i += 0.00001)
-			{
-				progress.Set(i);
 			}
 
 			//dig out noise caves in the biome
@@ -199,11 +189,6 @@ namespace Spooky.Content.Generation
 						}
 					}
 				}
-			}
-
-			for (double i = 0.5; i < 0.75; i += 0.00001)
-			{
-				progress.Set(i);
 			}
 
 			//place clumps of bloom soil throughout the biome
@@ -298,8 +283,10 @@ namespace Spooky.Content.Generation
                 }
             }
 
+			progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.SpookyForestPolish").Value;
+
 			//add biome dithering
-			PlaceSpookyForestEllipse(PositionX, PositionY, SizeX / 6, SizeY, true);
+			PlaceSpookyForestEllipse(PositionX, PositionY, SizeX / 6, SizeY, true, progress);
 
 			//remove walls that arent surrounded fully by blocks
 			for (int X = PositionX - Main.maxTilesX / 12; X <= PositionX + Main.maxTilesX / 12; X++)
@@ -353,11 +340,6 @@ namespace Spooky.Content.Generation
 						Tile.SmoothSlope(X, Y);
 					}
 				}
-			}
-
-			for (double i = 0.75; i < 1; i += 0.00001)
-			{
-				progress.Set(i);
 			}
 		}
 
@@ -995,12 +977,16 @@ namespace Spooky.Content.Generation
 			}
 		}
 
-		public static void PlaceSpookyForestEllipse(int X, int Y, int radius, int radiusY, bool Dithering)
+		public static void PlaceSpookyForestEllipse(int X, int Y, int radius, int radiusY, bool Dithering, GenerationProgress progress)
 		{
 			float scale = radiusY / (float)radius;
 			float invertScale = (float)radius / radiusY;
 			for (int x = -radius; x <= radius; x++)
 			{
+				int StartValue = -radius;
+				int EndValue = radius;
+				progress.Set((float)(x - StartValue) / (EndValue - StartValue));
+
 				for (float y = -radius; y <= radius; y += (invertScale * 0.85f))
 				{
 					float radialMod = WorldGen.genRand.NextFloat(2.5f, 4.5f) * 2f;

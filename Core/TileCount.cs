@@ -1,4 +1,5 @@
-﻿using Terraria.ModLoader;
+﻿using Terraria.ID;
+using Terraria.ModLoader;
 using System;
 
 using Spooky.Content.Tiles.Cemetery;
@@ -6,6 +7,7 @@ using Spooky.Content.Tiles.Cemetery.Furniture;
 using Spooky.Content.Tiles.Minibiomes.Desert;
 using Spooky.Content.Tiles.Minibiomes.Ocean;
 using Spooky.Content.Tiles.Minibiomes.Vegetable;
+using Spooky.Content.Tiles.Shipyard;
 using Spooky.Content.Tiles.SpiderCave;
 using Spooky.Content.Tiles.SpiderCave.Furniture;
 using Spooky.Content.Tiles.SpookyBiome;
@@ -23,6 +25,8 @@ namespace Spooky.Core
 		public int vegetableTiles;
 		public int tarPitsTiles;
 		public int zombieOceanTiles;
+		public int shipyardTiles;
+		public int sandForShipyardTiles;
 		public int sporeMonolith;
 		public int raveyardMonolith;
 
@@ -36,6 +40,7 @@ namespace Spooky.Core
 			vegetableTiles = tileCounts[ModContent.TileType<JungleMoss>()] + tileCounts[ModContent.TileType<JungleSoilGrass>()];
 			tarPitsTiles = tileCounts[ModContent.TileType<DesertSand>()] + tileCounts[ModContent.TileType<DesertSandstone>()];
 			zombieOceanTiles = tileCounts[ModContent.TileType<OceanSand>()] + tileCounts[ModContent.TileType<OceanBiomass>()] + tileCounts[ModContent.TileType<OceanRock>()];
+			shipyardTiles = tileCounts[ModContent.TileType<BlackSand>()] + tileCounts[ModContent.TileType<BlackSandstone>()] + tileCounts[ModContent.TileType<BlackSandstoneMoss>()];
 			sporeMonolith = tileCounts[ModContent.TileType<SporeMonolithOn>()];
 			raveyardMonolith = tileCounts[ModContent.TileType<RaveyardMonolithOn>()];
 		}

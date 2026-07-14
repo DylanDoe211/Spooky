@@ -272,9 +272,6 @@ namespace Spooky.Content.Tiles.SpiderCave.Tree
                 xOff = 0;
             }
 
-            int frameSize = 16;
-            int frameSizeY = 16;
-
             Vector2 WavyOffset = new Vector2((xOff * 2), -2);
             Vector2 pos = TileGlobal.TileCustomPosition(i, j);
 
@@ -292,7 +289,7 @@ namespace Spooky.Content.Tiles.SpiderCave.Tree
             }
 
             //draw the actual tree
-            spriteBatch.Draw(RootTexture.Value, pos + WavyOffset, new Rectangle(tile.TileFrameX, tile.TileFrameY, frameSize, frameSizeY), col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(RootTexture.Value, pos + WavyOffset, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
             return false;
         }

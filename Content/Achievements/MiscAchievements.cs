@@ -9,6 +9,7 @@ using Spooky.Core;
 using Spooky.Content.Items.Cemetery.Contraband;
 using Spooky.Content.NPCs.Catacomb.Layer2;
 using Spooky.Content.NPCs.Minibiomes.Ocean;
+using Terraria.GameContent.Bestiary;
 
 namespace Spooky.Content.Achievements
 {

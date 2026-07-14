@@ -481,7 +481,7 @@ FlyCharm: {
 		'''
 		Summons a swarm of flies around you over time, up to 10 total
 		Each active fly will give you one extra point of defense
-		When you get hit, the flies will die and respawn after thirty seconds
+		When you get hit, the flies will vanish instantly
 		'''
 }
 
@@ -1509,6 +1509,20 @@ PumpkinBobber: {
 
 FishingSpiderRod: {
 	DisplayName: Fishing Spider Rod
+	Tooltip: ""
+}
+
+FleshSac: {
+	DisplayName: Sac of Flesh
+	Tooltip:
+		'''
+		Contains nasty organic stuff
+		{$CommonItemTooltip.RightClickToOpen}
+		'''
+}
+
+GhostFish: {
+	DisplayName: Ghost Knifefish
 	Tooltip: ""
 }
 
@@ -7237,4 +7251,34 @@ PetCommander: {
 		Click on any nearby tamed turkey while holding this to give it commands
 		Allows the turkey to roam freely, follow you, or stay put
 		'''
+}
+
+BlackSandItem: {
+	DisplayName: Black Sand
+	Tooltip: ""
+}
+
+BlackSandstoneItem: {
+	DisplayName: Black Sandstone
+	Tooltip: ""
+}
+
+BlackSandstoneWallItem: {
+	DisplayName: Black Sandstone Wall
+	Tooltip: ""
+}
+
+BlackSandWallItem: {
+	DisplayName: Black Sand Wall
+	Tooltip: ""
+}
+
+RotWoodItem: {
+	DisplayName: Rotted Wood
+	Tooltip: ""
+}
+
+RotWoodWallItem: {
+	DisplayName: Rotted Wood Wall
+	Tooltip: ""
 }

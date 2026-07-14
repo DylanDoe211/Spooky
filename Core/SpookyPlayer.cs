@@ -34,8 +34,6 @@ using Spooky.Content.Projectiles.Sentient;
 using Spooky.Content.Projectiles.SpiderCave;
 using Spooky.Content.Projectiles.SpookyBiome;
 using Spooky.Content.Projectiles.SpookyHell;
-using Spooky.Content.Tiles.SpookyHell;
-using Spooky.Content.Tiles.SpookyHell.Tree;
 
 namespace Spooky.Core
 {
@@ -781,7 +779,13 @@ namespace Spooky.Core
             {
                 if (Player.ownedProjectileCounts[ModContent.ProjectileType<SwarmFly>()] > 0)
                 {
-                    Player.AddBuff(ModContent.BuffType<FlyCooldown>(), 1800);
+                    foreach (var Proj in Main.ActiveProjectiles)
+				    {
+                        if (Proj.owner == Player.whoAmI && Proj.type == ModContent.ProjectileType<SwarmFly>()) 
+                        {
+                            Proj.Kill();
+                        }
+                    }
                 }
             }
 
@@ -1070,12 +1074,12 @@ namespace Spooky.Core
                 {
                     FlySpawnTimer++;
 
-                    if (FlySpawnTimer == 300)
+                    if (FlySpawnTimer == 240)
                     {
                         Vector2 randomVelocity = Vector2.UnitY.RotatedByRandom(1.5f) * new Vector2(5f, 3f);
 
                         Projectile.NewProjectile(null, Player.Center.X, Player.Center.Y, randomVelocity.X, 
-                        randomVelocity.Y, ModContent.ProjectileType<SwarmFly>(), 0, 0f, Main.myPlayer);
+                        randomVelocity.Y, ModContent.ProjectileType<SwarmFly>(), 0, 0f, Player.whoAmI);
 
                         FlySpawnTimer = 0;
                     }
@@ -1110,7 +1114,7 @@ namespace Spooky.Core
                     //the damage for this projectile should always be the same regardless of difficulty
                     int Damage = Main.masterMode ? 30 / 4 : Main.expertMode ? 30 / 3 : 30;
 
-                    Projectile.NewProjectile(null, Player.Center, Vector2.Zero, ModContent.ProjectileType<PandoraCrossSound>(), Damage, 0f, Main.myPlayer);
+                    Projectile.NewProjectile(null, Player.Center, Vector2.Zero, ModContent.ProjectileType<PandoraCrossSound>(), Damage, 0f, Player.whoAmI);
                 }
             }
 
@@ -1130,13 +1134,13 @@ namespace Spooky.Core
                             //prioritize bosses over normal enemies
                             if (NPC.boss)
                             {
-                                Projectile.NewProjectile(null, Player.Center, Vector2.Zero, ModContent.ProjectileType<PandoraCuffProj>(), 0, 0f, Main.myPlayer, i);
+                                Projectile.NewProjectile(null, Player.Center, Vector2.Zero, ModContent.ProjectileType<PandoraCuffProj>(), 0, 0f, Player.whoAmI, i);
                                 
                                 break;
                             }
                             else
                             {
-                                Projectile.NewProjectile(null, Player.Center, Vector2.Zero, ModContent.ProjectileType<PandoraCuffProj>(), 0, 0f, Main.myPlayer, i);
+                                Projectile.NewProjectile(null, Player.Center, Vector2.Zero, ModContent.ProjectileType<PandoraCuffProj>(), 0, 0f, Player.whoAmI, i);
 
                                 break;
                             }
@@ -1157,7 +1161,7 @@ namespace Spooky.Core
                 if (RosaryHandTimer >= 325)
                 {
                     Projectile.NewProjectile(null, Player.Center.X, Player.Center.Y, 0, 0,
-                    ModContent.ProjectileType<PandoraRosaryHand>(), 0, 0f, Main.myPlayer, 0f, Main.rand.Next(0, 360));
+                    ModContent.ProjectileType<PandoraRosaryHand>(), 0, 0f, Player.whoAmI, 0f, Main.rand.Next(0, 360));
 
                     RosaryHandTimer = 0;
                 }
@@ -1202,7 +1206,7 @@ namespace Spooky.Core
                     center.Y = y * 16;
                 }
 
-                int NewProj = Projectile.NewProjectile(null, center.X, center.Y, 0, -0.3f, ModContent.ProjectileType<NaturesMockery>(), 0, 0, Main.myPlayer, 0, 0, 4);
+                int NewProj = Projectile.NewProjectile(null, center.X, center.Y, 0, -0.3f, ModContent.ProjectileType<NaturesMockery>(), 0, 0, Player.whoAmI, 0, 0, 4);
                 Main.projectile[NewProj].frame = AnalogHorrorTape ? 4 : Main.rand.Next(0, 4);
             }
 
@@ -1217,7 +1221,7 @@ namespace Spooky.Core
 
                     if (CarnisSporeSpawnTimer >= 30)
                     {
-                        Projectile.NewProjectile(null, Player.Center.X, Player.Center.Y, 0, 0, ModContent.ProjectileType<FoodEnhancerSpore>(), 0, 0f, Main.myPlayer);
+                        Projectile.NewProjectile(null, Player.Center.X, Player.Center.Y, 0, 0, ModContent.ProjectileType<FoodEnhancerSpore>(), 0, 0f, Player.whoAmI);
                         CarnisSporeSpawnTimer = 0;
                     }
                 }
@@ -1834,84 +1838,89 @@ namespace Spooky.Core
 						itemDrop = ModContent.ItemType<CarrotFish>();
 					}
 				}
-			}
 
-            //alternate blood moon enemy catches
-            if (Player.InModBiome<SpookyHellBiome>())
-            {
-                //random blocks and junk normally fished out of the blood lake
-                int[] BloodLakeItems = { ModContent.ItemType<EyeBlockItem>(), ModContent.ItemType<LivingFleshItem>(),
-                ModContent.ItemType<SpookyMushItem>(), ModContent.ItemType<ValleyStoneItem>(), ModContent.ItemType<EyeSeed>() };
-
-                itemDrop = Main.rand.Next(BloodLakeItems);
-
-                //do not allow any other npcs to be caught in the eye valley besides the enemies below
-                //this is specifically to prevent any regular blood moon fishing enemies from being caught in the blood lake if a blood moon is happening
-                npcSpawn = NPCID.None;
-
-                //quest fishes
-                if (attempt.questFish == ModContent.ItemType<BoogerFish>() && attempt.uncommon)
+                //shipyard
+				if (Player.InModBiome<ShipyardBiome>())
 				{
-                    itemDrop = ModContent.ItemType<BoogerFish>();
-
-                    return;
-                }
-                if (attempt.questFish == ModContent.ItemType<OrroEel>() && attempt.uncommon)
-				{
-                    itemDrop = ModContent.ItemType<OrroEel>();
-
-                    return;
-                }
-
-				//crate
-				if (attempt.rare && attempt.crate)
-				{
-					itemDrop = Main.hardMode ? ModContent.ItemType<SpookyHellCrate2>() : ModContent.ItemType<SpookyHellCrate>();
+					if (Main.rand.NextBool(3) && attempt.common)
+					{
+						itemDrop = ModContent.ItemType<GhostFish>();
+					}
 				}
 
-                //the sludge
-                if (attempt.legendary)
+                //eye valley
+                if (Player.InModBiome<SpookyHellBiome>())
                 {
-                    itemDrop = ModContent.ItemType<TheSludge>();
-                }
+                    itemDrop = ModContent.ItemType<FleshSac>();
 
-				//do not allow blood lake enemy catches if any of the enemies already exist in the world
-				bool BloodFishingEnemiesExist = NPC.AnyNPCs(ModContent.NPCType<ValleyFish>()) || NPC.AnyNPCs(ModContent.NPCType<ValleyMerman>()) || 
-                NPC.AnyNPCs(ModContent.NPCType<ValleySquid>()) || NPC.AnyNPCs(ModContent.NPCType<ValleyNautilus>()) || 
-                NPC.AnyNPCs(ModContent.NPCType<ValleyEelHead>()) || NPC.AnyNPCs(ModContent.NPCType<ValleyShark>());
+                    //do not allow any other npcs to be caught in the eye valley besides the enemies below
+                    //this is specifically to prevent any regular blood moon fishing enemies from being caught in the blood lake if a blood moon is happening
+                    npcSpawn = NPCID.None;
 
-                if (!BloodFishingEnemiesExist && ItemGlobal.ActiveItem(Player).type == ModContent.ItemType<SentientChumCaster>())
-                {
-                    //claret cephalopod
-                    if (Flags.downedOrroboro && Main.rand.NextBool(25))
+                    //quest fishes
+                    if (attempt.questFish == ModContent.ItemType<BoogerFish>() && attempt.uncommon)
                     {
-                        npcSpawn = ModContent.NPCType<ValleyNautilus>();
+                        itemDrop = ModContent.ItemType<BoogerFish>();
+
+                        return;
+                    }
+                    if (attempt.questFish == ModContent.ItemType<OrroEel>() && attempt.uncommon)
+                    {
+                        itemDrop = ModContent.ItemType<OrroEel>();
 
                         return;
                     }
 
-                    //aortic eel and hemostasis beast
-                    if (Main.hardMode && Main.rand.NextBool(20))
+                    //crate
+                    if (attempt.rare && attempt.crate)
                     {
-                        npcSpawn = Main.rand.NextBool() ? ModContent.NPCType<ValleyEelHead>() : ModContent.NPCType<ValleyShark>();
-
-                        return;
+                        itemDrop = Main.hardMode ? ModContent.ItemType<SpookyHellCrate2>() : ModContent.ItemType<SpookyHellCrate>();
                     }
 
-                    //clot squid
-                    if (Main.rand.NextBool(18))
+                    //the sludge
+                    if (attempt.legendary)
                     {
-                        npcSpawn = ModContent.NPCType<ValleySquid>();
-
-                        return;
+                        itemDrop = ModContent.ItemType<TheSludge>();
                     }
 
-                    //peeper fish and flesh merfolk
-                    if (Main.rand.NextBool(15))
-                    {
-                        npcSpawn = Main.rand.NextBool() ? ModContent.NPCType<ValleyFish>() : ModContent.NPCType<ValleyMerman>();
+                    //do not allow blood lake enemy catches if any of the enemies already exist in the world
+                    bool BloodFishingEnemiesExist = NPC.AnyNPCs(ModContent.NPCType<ValleyFish>()) || NPC.AnyNPCs(ModContent.NPCType<ValleyMerman>()) || 
+                    NPC.AnyNPCs(ModContent.NPCType<ValleySquid>()) || NPC.AnyNPCs(ModContent.NPCType<ValleyNautilus>()) || 
+                    NPC.AnyNPCs(ModContent.NPCType<ValleyEelHead>()) || NPC.AnyNPCs(ModContent.NPCType<ValleyShark>());
 
-                        return;
+                    if (!BloodFishingEnemiesExist && ItemGlobal.ActiveItem(Player).type == ModContent.ItemType<SentientChumCaster>())
+                    {
+                        //claret cephalopod
+                        if (Flags.downedOrroboro && Main.rand.NextBool(25))
+                        {
+                            npcSpawn = ModContent.NPCType<ValleyNautilus>();
+
+                            return;
+                        }
+
+                        //aortic eel and hemostasis beast
+                        if (Main.hardMode && Main.rand.NextBool(20))
+                        {
+                            npcSpawn = Main.rand.NextBool() ? ModContent.NPCType<ValleyEelHead>() : ModContent.NPCType<ValleyShark>();
+
+                            return;
+                        }
+
+                        //clot squid
+                        if (Main.rand.NextBool(18))
+                        {
+                            npcSpawn = ModContent.NPCType<ValleySquid>();
+
+                            return;
+                        }
+
+                        //peeper fish and flesh merfolk
+                        if (Main.rand.NextBool(15))
+                        {
+                            npcSpawn = Main.rand.NextBool() ? ModContent.NPCType<ValleyFish>() : ModContent.NPCType<ValleyMerman>();
+
+                            return;
+                        }
                     }
                 }
             }

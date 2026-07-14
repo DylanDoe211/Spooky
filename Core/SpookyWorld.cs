@@ -3,7 +3,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Localization;
 using Terraria.Chat;
-using Terraria.Audio;
 using Microsoft.Xna.Framework;
 using System;
 
@@ -11,7 +10,6 @@ using Spooky.Content.Biomes;
 using Spooky.Content.NPCs.Boss.BigBone;
 using Spooky.Content.NPCs.Boss.Daffodil;
 using Spooky.Content.NPCs.Boss.OldHunter;
-using Spooky.Content.NPCs.Cemetery.Projectiles;
 using Spooky.Content.NPCs.EggEvent;
 using Spooky.Content.NPCs.Friendly;
 using Spooky.Content.NPCs.Minibiomes.Ocean;
@@ -550,6 +548,24 @@ namespace Spooky.Core
                 sunR -= (int)(60f * Intensity * (backgroundColor.R / 255f));
                 sunG -= (int)(20f * Intensity * (backgroundColor.G / 255f));
                 sunB -= (int)(60f * Intensity * (backgroundColor.B / 255f));
+                sunR = Utils.Clamp(sunR, 15, 255);
+                sunG = Utils.Clamp(sunG, 15, 255);
+                sunB = Utils.Clamp(sunB, 15, 255);
+
+				Color LightColor = new Color(sunR, sunG, sunB);
+				backgroundColor = LightColor;
+            }
+    
+            if (Main.LocalPlayer.InModBiome(ModContent.GetInstance<ShipyardBiome>()))
+            {
+                float Intensity = ModContent.GetInstance<TileCount>().shipyardTiles / 1500f;
+                Intensity = Math.Min(Intensity, 1f);
+                int sunR = backgroundColor.R;
+                int sunG = backgroundColor.G;
+                int sunB = backgroundColor.B;
+                sunR -= (int)(70f * Intensity * (backgroundColor.R / 255f));
+                sunG -= (int)(40f * Intensity * (backgroundColor.G / 255f));
+                sunB -= (int)(43f * Intensity * (backgroundColor.B / 255f));
                 sunR = Utils.Clamp(sunR, 15, 255);
                 sunG = Utils.Clamp(sunG, 15, 255);
                 sunB = Utils.Clamp(sunB, 15, 255);
