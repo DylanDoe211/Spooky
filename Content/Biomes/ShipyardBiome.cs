@@ -78,13 +78,14 @@ namespace Spooky.Content.Biomes
             player.ManageSpecialBiomeVisuals("Spooky:ShipyardSky", isActive, player.Center);
         }
 
-        public override void OnInBiome(Player player)
+		public override void OnInBiome(Player player)
         {
-			player.ZoneDesert = false;
-			player.ZoneCrimson = false;
-			player.ZoneCorrupt = false;
-			player.ZoneHallow = false;
-			player.ZoneJungle = false;
+            //graveyard visuals
+            if (!player.InModBiome(ModContent.GetInstance<CatacombBiome>()) && !player.InModBiome(ModContent.GetInstance<CatacombBiome2>()))
+            {
+                player.ZoneGraveyard = true;
+                Main.GraveyardVisualIntensity = 0.1f;
+            }
         }
 
 		public bool InOcean(int x, int y)
@@ -97,6 +98,7 @@ namespace Spooky.Content.Biomes
 			{
 				return true;
 			}
+			
 			return false;
 		}
 

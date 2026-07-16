@@ -10,12 +10,11 @@ namespace Spooky.Content.Dusts
 		public override void OnSpawn(Dust dust)
 		{
 			dust.velocity *= 0f;
-			dust.scale *= Main.rand.NextFloat(1f, 1.5f);
 			dust.noGravity = true;
 			dust.noLight = true;
 			dust.alpha = 0;
 			dust.fadeIn = 12f;
-			dust.frame = new Rectangle(0, 0, 8, 8);
+			dust.frame = new Rectangle(0, 12 * Main.rand.Next(0, 3), 10, 10);
 		}
 
 		public override Color? GetAlpha(Dust dust, Color lightColor)
@@ -55,9 +54,9 @@ namespace Spooky.Content.Dusts
 
 			float divide = 1000f;
 
-			float r = 39f / divide;
+			float r = 54f / divide;
 			float g = 199f / divide;
-			float b = 135f / divide;
+			float b = 191f / divide;
 
 			Lighting.AddLight((int)(dust.position.X / 16f), (int)(dust.position.Y / 16f), r * dust.scale, g * dust.scale, b * dust.scale);
 

@@ -13,11 +13,11 @@ namespace Spooky.Content.Backgrounds.Shipyard
 {
 	public class ShipyardBG : ModSurfaceBackgroundStyle
 	{
-		public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b) => -1;
+		public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b) => BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG1");
 
-		public override int ChooseMiddleTexture() => -1;
+		public override int ChooseMiddleTexture() => BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG2");
 
-		public override int ChooseFarTexture() => BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG");
+		public override int ChooseFarTexture() => BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG3");
 
 		public override void ModifyFarFades(float[] fades, float transitionSpeed)
 		{

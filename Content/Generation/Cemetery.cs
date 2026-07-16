@@ -195,11 +195,11 @@ namespace Spooky.Content.Generation
             //get the two surface points at the left and right of the cemetery biome
 			while (!foundSurfaceLeft && attemptsLeft++ < 100000)
 			{
-                if ((!IsCemeteryTile(XStart, LeftY) || !NoFloatingIsland(XStart, LeftY)) && Main.tile[XStart, LeftY].WallType <= 0 && LeftY <= Main.worldSurface)
+                if ((!IsCemeteryTile(XStart, LeftY) || !NoFloatingIsland(XStart, LeftY)) && LeftY <= Main.worldSurface)
 				{
 					LeftY++;
 				}
-                else //if (IsCemeteryTile(XStart, LeftY) || Main.tile[XStart, LeftY].WallType > 0)
+                else
 				{
                     foundSurfaceLeft = true;
                 }
@@ -210,11 +210,11 @@ namespace Spooky.Content.Generation
 
 			while (!foundSurfaceRight && attemptsRight++ < 100000)
 			{
-                if ((!IsCemeteryTile(XEdge, RightY) || !NoFloatingIsland(XEdge, RightY)) && Main.tile[XEdge, RightY].WallType <= 0 && RightY <= Main.worldSurface)
+                if ((!IsCemeteryTile(XEdge, RightY) || !NoFloatingIsland(XEdge, RightY)) && RightY <= Main.worldSurface)
 				{
 					RightY++;
 				}
-                else //if (IsCemeteryTile(XEdge, RightY) || Main.tile[XEdge, RightY].WallType > 0)
+                else
 				{
                     foundSurfaceLeft = true;
                 }
@@ -609,7 +609,7 @@ namespace Spooky.Content.Generation
             {
                 return false;
             }
-            else if (numDesertTiles > 250)
+            else if (numDesertTiles > 400)
             {
                 return false;
             }

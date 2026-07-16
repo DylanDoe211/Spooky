@@ -119,7 +119,7 @@ namespace Spooky.Content.Generation
 					//otherwise save the tile type at the surface for the sake of mod compatibility (mostly for calamity sulphur sea)
 					else
 					{
-						SurfaceTileType = Main.tile[TunnelX, TunnelY].TileType;
+						SurfaceTileType = TileID.Sand; //Main.tile[TunnelX, TunnelY].TileType;
 					}
 
 					FoundSurface = true;

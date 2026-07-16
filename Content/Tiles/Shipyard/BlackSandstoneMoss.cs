@@ -24,7 +24,7 @@ namespace Spooky.Content.Tiles.Shipyard
 			Main.tileSolid[Type] = true;
 			Main.tileBlockLight[Type] = true;
 			Main.tileLighted[Type] = true;
-            AddMapEntry(new Color(39, 199, 135));
+            AddMapEntry(new Color(38, 167, 160));
             DustType = ModContent.DustType<ShipyardMossDust>();
 			HitSound = SoundID.Tink;
 		}
@@ -33,9 +33,9 @@ namespace Spooky.Content.Tiles.Shipyard
 		{
 			float divide = 2000f;
 
-			r = 39f / divide;
+			r = 54f / divide;
 			g = 199f / divide;
-			b = 135f / divide;
+			b = 191f / divide;
         }
 
 		public override bool CanExplode(int i, int j)

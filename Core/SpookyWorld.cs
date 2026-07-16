@@ -563,9 +563,9 @@ namespace Spooky.Core
                 int sunR = backgroundColor.R;
                 int sunG = backgroundColor.G;
                 int sunB = backgroundColor.B;
-                sunR -= (int)(70f * Intensity * (backgroundColor.R / 255f));
-                sunG -= (int)(40f * Intensity * (backgroundColor.G / 255f));
-                sunB -= (int)(43f * Intensity * (backgroundColor.B / 255f));
+                sunR -= (int)(53f * Intensity * (backgroundColor.R / 255f));
+                sunG -= (int)(62f * Intensity * (backgroundColor.G / 255f));
+                sunB -= (int)(19f * Intensity * (backgroundColor.B / 255f));
                 sunR = Utils.Clamp(sunR, 15, 255);
                 sunG = Utils.Clamp(sunG, 15, 255);
                 sunB = Utils.Clamp(sunB, 15, 255);
