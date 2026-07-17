@@ -10,7 +10,7 @@ using Spooky.Core;
 
 namespace Spooky.Content.Tiles.Catacomb.Ambient
 {
-    internal class BigFlower : ModTile
+    public class BigFlower : ModTile
     {
         //reminder:
         //X frame 0 = normal tree segment
@@ -124,13 +124,24 @@ namespace Spooky.Content.Tiles.Catacomb.Ambient
             //kill the tree if there are no tiles below it
             if (!Framing.GetTileSafely(i, j + 1).HasTile)
             {
-                WorldGen.KillTile(i, j, false, false, false);
-
+                (int x, int y) = (i, j);
+                KillEntireTree(ref x, ref y);
+            }
+        }
+        
+        private void KillEntireTree(ref int x, ref int y)
+        {
+            while (Main.tile[x, y].TileType == Type)
+			{
+                WorldGen.KillTile(x, y, false, false, false);
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
-                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
+                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, x, y);
                 }
-            }
+                y--;
+			}
+
+            y++;
         }
 
         public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)

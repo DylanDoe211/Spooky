@@ -36,6 +36,7 @@ namespace Spooky.Content.Tiles.SpiderCave.Tree
             Main.tileBlockLight[Type] = false;
             LocalizedText name = CreateMapEntryName();
             AddMapEntry(new Color(201, 175, 139), name);
+            RegisterItemDrop(ModContent.ItemType<RootWoodItem>());
             DustType = DustID.Web;
 			HitSound = SoundID.Dig;
         }
@@ -198,24 +199,27 @@ namespace Spooky.Content.Tiles.SpiderCave.Tree
             //kill the side roots of the root if they arent attached to the main root itself
             if (Framing.GetTileSafely(i + 1, j).TileType != ModContent.TileType<GiantRoot>() && Framing.GetTileSafely(i - 1, j).TileType != ModContent.TileType<GiantRoot>() && Framing.GetTileSafely(i, j).TileFrameX == 54)
             {
-                //spawn root from the trees when broken
-                int NewItem = Item.NewItem(new EntitySource_TileBreak(i, j), (new Vector2(i, j) * 16), ModContent.ItemType<RootWoodItem>());
-
-                if (Main.netMode == NetmodeID.MultiplayerClient && NewItem >= 0)
-                {
-                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, NewItem, 1f);
-                }
-
-                WorldGen.KillTile(i, j, false, false, false);
-
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                {
-                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
-                }
+                (int x, int y) = (i, j);
+                KillEntireTree(ref x, ref y);
             }
         }
 
-        private void CheckEntireRoot(ref int x, ref int y)
+        private void KillEntireTree(ref int x, ref int y)
+        {
+            while (Main.tile[x, y].TileType == Type)
+			{
+                WorldGen.KillTile(x, y, false, false, false);
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, x, y);
+                }
+                y++;
+			}
+
+            y--;
+        }
+
+        private void CheckEntireTree(ref int x, ref int y)
         {
             while (Main.tile[x, y].TileType == Type)
 			{
@@ -232,7 +236,7 @@ namespace Spooky.Content.Tiles.SpiderCave.Tree
             if (fail && !effectOnly && !noItem)
             {
                 (int x, int y) = (i, j);
-                CheckEntireRoot(ref x, ref y);
+                CheckEntireTree(ref x, ref y);
             }
 
             if (fail)

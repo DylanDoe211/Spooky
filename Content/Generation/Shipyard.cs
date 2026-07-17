@@ -57,12 +57,12 @@ namespace Spooky.Content.Generation
 			{
 				if (OceanOnLeft)
 				{
-					if (Cemetery.IsCemeteryTile(leftBound, LeftY) && Cemetery.NoFloatingIsland(leftBound, LeftY) && Main.tile[leftBound, LeftY].TileType != TileID.Sand)
+					if (WorldGen.SolidTile(leftBound, LeftY) && Cemetery.NoFloatingIsland(leftBound, LeftY) && Main.tile[leftBound, LeftY].TileType != TileID.Sand)
 					{
 						LeftY -= 30;
 						leftBound -= 5;
 					}
-					if ((!Cemetery.IsCemeteryTile(leftBound, LeftY) || !Cemetery.NoFloatingIsland(leftBound, LeftY)) && Main.tile[leftBound, LeftY].WallType <= 0 && LeftY <= Main.worldSurface)
+					if ((!WorldGen.SolidTile(leftBound, LeftY) || !Cemetery.NoFloatingIsland(leftBound, LeftY)) && Main.tile[leftBound, LeftY].WallType <= 0 && LeftY <= Main.worldSurface)
 					{
 						LeftY++;
 					}
@@ -91,12 +91,12 @@ namespace Spooky.Content.Generation
 			{
 				if (!OceanOnLeft)
 				{
-					if (Cemetery.IsCemeteryTile(rightBound, RightY) && Cemetery.NoFloatingIsland(rightBound, RightY) && Main.tile[rightBound, RightY].TileType != TileID.Sand)
+					if (WorldGen.SolidTile(rightBound, RightY) && Cemetery.NoFloatingIsland(rightBound, RightY) && Main.tile[rightBound, RightY].TileType != TileID.Sand)
 					{
 						RightY -= 30;
 						rightBound += 5;
 					}
-					if ((!Cemetery.IsCemeteryTile(rightBound, RightY) || !Cemetery.NoFloatingIsland(rightBound, RightY)) && Main.tile[rightBound, RightY].WallType <= 0 && RightY <= Main.worldSurface)
+					if ((!WorldGen.SolidTile(rightBound, RightY) || !Cemetery.NoFloatingIsland(rightBound, RightY)) && Main.tile[rightBound, RightY].WallType <= 0 && RightY <= Main.worldSurface)
 					{
 						RightY++;
 					}
@@ -421,6 +421,14 @@ namespace Spooky.Content.Generation
 			{
 				for (int Y = 10; Y <= Main.worldSurface; Y++)
 				{
+					if (WorldGen.genRand.NextBool(4) && WorldGen.InWorld(X, Y, 10) && CanPlaceMangrove(X, Y) && WorldGen.SolidTile(X, Y) &&
+					!WorldGen.SolidTile(X, Y - 1) && !WorldGen.SolidTile(X - 1, Y - 1) && !WorldGen.SolidTile(X + 1, Y - 1) &&
+					!Main.tile[X, Y].LeftSlope && !Main.tile[X, Y].RightSlope && !Main.tile[X, Y].IsHalfBlock && Main.tile[X, Y - 1].LiquidAmount <= 0 &&
+					(Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>()))
+					{
+						MangroveTree.Grow(X, Y - 1, 5, 13);
+					}
+
 					if (WorldGen.genRand.NextBool() && WorldGen.InWorld(X, Y, 10) && CanPlaceCoralTree(X, Y) && WorldGen.SolidTile(X, Y) &&
 					!WorldGen.SolidTile(X, Y - 1) && !WorldGen.SolidTile(X - 1, Y - 1) && !WorldGen.SolidTile(X + 1, Y - 1) &&
 					((Main.tile[X, Y - 1].LiquidAmount > 0 && Main.tile[X, Y - 1].LiquidType == LiquidID.Water) || Main.tile[X, Y - 1].WallType > 0) &&
@@ -775,6 +783,23 @@ namespace Spooky.Content.Generation
 
 			return false;
 		}
+
+		//dont allow trees to naturally grow too close to each other
+		public static bool CanPlaceMangrove(int X, int Y)
+        {
+            for (int i = X - 4; i < X + 4; i++)
+            {
+                for (int j = Y - 4; j < Y + 4; j++)
+                {
+                    if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<MangroveTree>())
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
 
 		//dont allow coral trees to naturally grow too close to each other
 		public static bool CanPlaceCoralTree(int X, int Y)

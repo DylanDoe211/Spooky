@@ -40,6 +40,7 @@ namespace Spooky.Content.Tiles.SpookyBiome.Tree
             Main.tileBlockLight[Type] = false;
             LocalizedText name = CreateMapEntryName();
             AddMapEntry(new Color(208, 162, 44), name);
+            RegisterItemDrop(ModContent.ItemType<SpookyGlowshroomYellow>());
             DustType = DustID.Slush;
 			HitSound = SoundID.Dig;
         }
@@ -170,20 +171,24 @@ namespace Spooky.Content.Tiles.SpookyBiome.Tree
             //kill the tree if there are no tiles below it
             if (!Framing.GetTileSafely(i, j + 1).HasTile)
             {
-                int NewItem = Item.NewItem(new EntitySource_TileInteraction(Main.LocalPlayer, i, j), (new Vector2(i, j) * 16), ModContent.ItemType<SpookyGlowshroomYellow>());
+                (int x, int y) = (i, j);
+                KillEntireTree(ref x, ref y);
+            }
+        }
 
-                if (Main.netMode == NetmodeID.MultiplayerClient && NewItem >= 0)
-                {
-                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, NewItem, 1f);
-                }
-
-                WorldGen.KillTile(i, j, false, false, false);
-
+        private void KillEntireTree(ref int x, ref int y)
+        {
+            while (Main.tile[x, y].TileType == Type)
+			{
+                WorldGen.KillTile(x, y, false, false, false);
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
-                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
+                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, x, y);
                 }
-            }
+                y--;
+			}
+
+            y++;
         }
 
         private void CheckEntireTree(ref int x, ref int y)

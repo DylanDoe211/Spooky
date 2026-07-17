@@ -110,23 +110,6 @@ namespace Spooky.Content.Tiles.Shipyard
                     NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
                 }
 			}
-
-			//spread grass
-            List<Point> adjacents = TileGlobal.OpenAdjacents(i, j, ModContent.TileType<BlackSandstone>());
-
-            if (adjacents.Count > 0)
-            {
-                Point tilePoint = adjacents[Main.rand.Next(adjacents.Count)];
-                if (TileGlobal.HasOpening(tilePoint.X, tilePoint.Y))
-                {
-                    Framing.GetTileSafely(tilePoint.X, tilePoint.Y).TileType = (ushort)ModContent.TileType<BlackSandstoneMoss>();
-
-                    if (Main.netMode == NetmodeID.Server)
-                    {
-                        NetMessage.SendTileSquare(-1, tilePoint.X, tilePoint.Y, 1, TileChangeType.None);
-                    }
-                }
-            }
 		}
 	}
 }

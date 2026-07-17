@@ -1,23 +1,38 @@
-using Terraria;
 using Terraria.ModLoader;
-using Terraria.GameContent;
-using Terraria.Graphics.Effects;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Reflection;
-
-using Spooky.Core;
 
 namespace Spooky.Content.Backgrounds.Shipyard
 {
 	public class ShipyardBG : ModSurfaceBackgroundStyle
 	{
-		public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b) => BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG1");
-
 		public override int ChooseMiddleTexture() => BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG2");
 
 		public override int ChooseFarTexture() => BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG3");
+
+		//uses special animation
+		private static int SurfaceFrameCounter;
+		private static int SurfaceFrame;
+		public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b)
+		{
+			if (++SurfaceFrameCounter > 12)
+			{
+				SurfaceFrame = (SurfaceFrame + 1) % 4;
+				SurfaceFrameCounter = 0;
+			}
+
+			switch (SurfaceFrame)
+			{
+				case 0:
+					return BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG1-1");
+				case 1:
+					return BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG1-2");
+				case 2:
+					return BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG1-3");
+				case 3:
+					return BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG1-4");
+				default:
+					return -1;
+			}
+		}
 
 		public override void ModifyFarFades(float[] fades, float transitionSpeed)
 		{

@@ -138,13 +138,24 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
                 }
                 */
 
-                WorldGen.KillTile(i, j, false, false, false);
+                (int x, int y) = (i, j);
+                KillEntireTree(ref x, ref y);
+            }
+        }
 
+        private void KillEntireTree(ref int x, ref int y)
+        {
+            while (Main.tile[x, y].TileType == Type)
+			{
+                WorldGen.KillTile(x, y, false, false, false);
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
-                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
+                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, x, y);
                 }
-            }
+                y--;
+			}
+
+            y++;
         }
 
         private void CheckEntireTree(ref int x, ref int y)
