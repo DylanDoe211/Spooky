@@ -31,57 +31,22 @@ namespace Spooky.Content.Tiles.Shipyard.Ambient
 			TileObjectData.newTile.Origin = new Point16(3, 3);
             TileObjectData.newTile.DrawYOffset = 2;
             TileObjectData.addTile(Type);
-            AddMapEntry(new Color(50, 46, 43));
+			Main.tileLighted[Type] = true;
+			AddMapEntry(new Color(50, 46, 43));
 			DustType = DustID.Ash;
 			HitSound = SoundID.Dig;
 		}
+		
+		public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
+		{
+			float divide = 1300f;
 
-		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            GlowTexture1 ??= ModContent.Request<Texture2D>(Texture + "Glow");
-			GlowTexture2 ??= ModContent.Request<Texture2D>(Texture + "SandGlow");
-
-            Tile tile = Framing.GetTileSafely(i, j);
-            Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange);
-            int yOffset = TileObjectData.GetTileData(tile).DrawYOffset;
-            spriteBatch.Draw(GlowTexture1.Value, new Vector2(i * 16, j * 16 + yOffset) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Color.White * 0.5f);
-			spriteBatch.Draw(GlowTexture2.Value, new Vector2(i * 16, j * 16 + yOffset) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Color.White * 0.15f);
-        }
+			r = 54f / divide;
+			g = 199f / divide;
+			b = 191f / divide;
+		}
 	}
 
-	public class MossyAnchor2 : MossyAnchor1
-	{
-		private Asset<Texture2D> GlowTexture1;
-		private Asset<Texture2D> GlowTexture2;
-
-		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            GlowTexture1 ??= ModContent.Request<Texture2D>(Texture + "Glow");
-			GlowTexture2 ??= ModContent.Request<Texture2D>(Texture + "SandGlow");
-
-            Tile tile = Framing.GetTileSafely(i, j);
-            Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange);
-            int yOffset = TileObjectData.GetTileData(tile).DrawYOffset;
-            spriteBatch.Draw(GlowTexture1.Value, new Vector2(i * 16, j * 16 + yOffset) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Color.White * 0.5f);
-			spriteBatch.Draw(GlowTexture2.Value, new Vector2(i * 16, j * 16 + yOffset) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Color.White * 0.15f);
-        }
-	}
-
-	public class MossyAnchor3 : MossyAnchor1
-	{
-		private Asset<Texture2D> GlowTexture1;
-		private Asset<Texture2D> GlowTexture2;
-
-		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            GlowTexture1 ??= ModContent.Request<Texture2D>(Texture + "Glow");
-			GlowTexture2 ??= ModContent.Request<Texture2D>(Texture + "SandGlow");
-
-            Tile tile = Framing.GetTileSafely(i, j);
-            Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange);
-            int yOffset = TileObjectData.GetTileData(tile).DrawYOffset;
-            spriteBatch.Draw(GlowTexture1.Value, new Vector2(i * 16, j * 16 + yOffset) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Color.White * 0.5f);
-			spriteBatch.Draw(GlowTexture2.Value, new Vector2(i * 16, j * 16 + yOffset) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Color.White * 0.15f);
-        }
-	}
+	public class MossyAnchor2 : MossyAnchor1{}
+	public class MossyAnchor3 : MossyAnchor1{}
 }
