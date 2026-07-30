@@ -200,7 +200,7 @@ namespace Spooky.Content.NPCs.NoseCult
                 {
 					SaveWhoAmI = player.whoAmI;
                     NPC.netUpdate = true;
-                    
+
 					return true;
                 }
             }
@@ -230,6 +230,23 @@ namespace Spooky.Content.NPCs.NoseCult
             return false;
         }
 
+        private Vector2? destination;
+        private Vector2? TeleportPlayer(Player player, Vector2 Destination)
+        {
+            Vector2 finalDestination = Destination;
+            Vector2 pointPoisition = Vector2.Zero;
+            pointPoisition.X = finalDestination.X;
+            pointPoisition.Y = finalDestination.Y - (player.height * 0.5f);
+
+            //dont allow teleporting outside of the world
+            if (!(pointPoisition.X > 50f) || !(pointPoisition.X < (float)(Main.maxTilesX * 16 - 50)) || !(pointPoisition.Y > 50f) || !(pointPoisition.Y < (float)(Main.maxTilesY * 16 - 50)))
+            {
+                return null;
+            }
+
+            return pointPoisition;
+        }
+
         //handle all of the cultist enemy spawn and event varaibles
         public void HandleCultistAmbush()
         {
@@ -251,7 +268,12 @@ namespace Spooky.Content.NPCs.NoseCult
 					{
 						if (currentPlayer.whoAmI != SaveWhoAmI)
 						{
-							currentPlayer.Center = Main.player[SaveWhoAmI].Center;
+                            destination = TeleportPlayer(currentPlayer, Main.player[SaveWhoAmI].Center);
+                            if (destination != null)
+                            {
+                                currentPlayer.Teleport(destination.Value, 1);
+                                NetMessage.SendData(MessageID.TeleportEntity, -1, -1, null, 0, currentPlayer.whoAmI, destination.Value.X, destination.Value.Y, 1);
+                            }
 						}
 					}
 				}
