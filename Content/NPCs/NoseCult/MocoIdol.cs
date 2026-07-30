@@ -176,7 +176,7 @@ namespace Spooky.Content.NPCs.NoseCult
         {
             Rectangle CollisionRectangle = new Rectangle((int)NPC.Center.X - 525, (int)NPC.Center.Y - 180, 1050, 300);
 
-            foreach (Player player in Main.ActivePlayers) 
+            foreach (Player player in Main.ActivePlayers)
 			{
                 //int playerCount = 0;
                 int playerInEventCount = 0;
@@ -262,11 +262,12 @@ namespace Spooky.Content.NPCs.NoseCult
                 //activate every single nose cultist attatched to this altar
                 NPC.ai[1] = 1;
 
+                //if the config for this option is turned on, then teleport all players inside of the nose temple into the currently actived combat room
 				if (ModContent.GetInstance<SpookyServerConfig>().NoseTempleMaxPlayers)
 				{
 					foreach (Player currentPlayer in Main.ActivePlayers)
 					{
-						if (currentPlayer.whoAmI != SaveWhoAmI)
+						if (currentPlayer.whoAmI != SaveWhoAmI && currentPlayer.InModBiome(ModContent.GetInstance<NoseTempleBiome>()))
 						{
                             destination = TeleportPlayer(currentPlayer, Main.player[SaveWhoAmI].Center);
                             if (destination != null)
