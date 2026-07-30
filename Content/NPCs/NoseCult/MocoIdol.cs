@@ -36,6 +36,9 @@ namespace Spooky.Content.NPCs.NoseCult
 
 		public override void SendExtraAI(BinaryWriter writer)
 		{
+            //ints
+            writer.Write(SaveWhoAmI);
+
 			//bools
 			writer.Write(AnyCultistsExist);
 			writer.Write(Shake);
@@ -49,6 +52,9 @@ namespace Spooky.Content.NPCs.NoseCult
 
 		public override void ReceiveExtraAI(BinaryReader reader)
 		{
+            //ints
+            SaveWhoAmI = reader.ReadInt32();
+
 			//bools
 			AnyCultistsExist = reader.ReadBoolean();
 			Shake = reader.ReadBoolean();
@@ -193,6 +199,8 @@ namespace Spooky.Content.NPCs.NoseCult
                 if (playerInEventCount >= 1)
                 {
 					SaveWhoAmI = player.whoAmI;
+                    NPC.netUpdate = true;
+                    
 					return true;
                 }
             }
@@ -237,7 +245,7 @@ namespace Spooky.Content.NPCs.NoseCult
                 //activate every single nose cultist attatched to this altar
                 NPC.ai[1] = 1;
 
-				if (ModContent.GetInstance<SpookyServerConfig>().NoseTempleMaxPlayers && Main.netMode == NetmodeID.Server)
+				if (ModContent.GetInstance<SpookyServerConfig>().NoseTempleMaxPlayers)
 				{
 					foreach (Player currentPlayer in Main.ActivePlayers)
 					{
@@ -415,7 +423,7 @@ namespace Spooky.Content.NPCs.NoseCult
 
             if (NPC.ai[1] > 0)
             {
-                int Divide = Lighting.NotRetro ? 10 : 50;
+                int Divide = Lighting.NotRetro ? 10 : 40;
 
                 Lighting.AddLight(NPC.Center, Color.LightGreen.ToVector3() * (NPC.ai[2] / Divide));
             }

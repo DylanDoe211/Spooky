@@ -49,6 +49,8 @@ namespace Spooky.Content.Generation
 
 			bool OceanOnLeft = ((leftBound + rightBound) / 2) < (Main.maxTilesY / 2);
 
+			double heightLimit = Main.worldSurface * 0.35f;
+
 			bool foundSurfaceLeft = false;
 			int attemptsLeft = 0;
 
@@ -59,7 +61,7 @@ namespace Spooky.Content.Generation
 				{
 					if (WorldGen.SolidTile(leftBound, LeftY) && Cemetery.NoFloatingIsland(leftBound, LeftY) && Main.tile[leftBound, LeftY].TileType != TileID.Sand)
 					{
-						LeftY -= 30;
+						LeftY = (int)heightLimit;
 						leftBound -= 5;
 					}
 					if ((!WorldGen.SolidTile(leftBound, LeftY) || !Cemetery.NoFloatingIsland(leftBound, LeftY)) && Main.tile[leftBound, LeftY].WallType <= 0 && LeftY <= Main.worldSurface)
@@ -93,7 +95,7 @@ namespace Spooky.Content.Generation
 				{
 					if (WorldGen.SolidTile(rightBound, RightY) && Cemetery.NoFloatingIsland(rightBound, RightY) && Main.tile[rightBound, RightY].TileType != TileID.Sand)
 					{
-						RightY -= 30;
+						RightY = (int)heightLimit;
 						rightBound += 5;
 					}
 					if ((!WorldGen.SolidTile(rightBound, RightY) || !Cemetery.NoFloatingIsland(rightBound, RightY)) && Main.tile[rightBound, RightY].WallType <= 0 && RightY <= Main.worldSurface)
@@ -140,8 +142,6 @@ namespace Spooky.Content.Generation
 
 			Vector2 p4 = End2;
 			Vector2 p5 = Start2;
-
-			double heightLimit = Main.worldSurface * 0.35f;
 
 			//place terrain
 			for (int i = 0; i < segments; i++)
