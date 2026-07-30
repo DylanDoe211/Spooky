@@ -2,6 +2,7 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Localization;
+using Terraria.GameContent.Drawing;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -107,7 +108,7 @@ namespace Spooky.Content.Tiles.Catacomb.Ambient
                 //place the tree top at the top of the tree
                 if (numSegments == height - 1)
                 {
-                    Framing.GetTileSafely(i, j - numSegments).TileFrameX = 16;
+                    Framing.GetTileSafely(i, j - numSegments).TileFrameX = 18;
                 }
 
                 if (Main.netMode != NetmodeID.SinglePlayer)
@@ -126,6 +127,11 @@ namespace Spooky.Content.Tiles.Catacomb.Ambient
             {
                 (int x, int y) = (i, j);
                 KillEntireTree(ref x, ref y);
+            }
+
+            if (Framing.GetTileSafely(i, j).TileFrameX == 16)
+            {
+                Framing.GetTileSafely(i, j).TileFrameX = 18;
             }
         }
         
@@ -159,46 +165,42 @@ namespace Spooky.Content.Tiles.Catacomb.Ambient
             int belowFrame = Framing.GetTileSafely(i, j + 1).TileFrameX;
 
             //if theres any remaining segments below, turn it into a stub top segment
-            if (belowFrame == 0 || belowFrame == 16)
+            if (belowFrame < 36)
             {
                 Framing.GetTileSafely(i, j + 1).TileFrameX = 36;
             }
         }
 
-        public static void DrawTreeTops(int i, int j, Texture2D tex, Rectangle? source, Vector2 scaleVec, Vector2? offset = null, Vector2? origin = null)
-        {
-            Vector2 drawPos = new Vector2(i, j).ToWorldCoordinates() - Main.screenPosition + (offset ?? new Vector2(0, -2));
-			Color color = TileGlobal.GetTileColorWithPaint(i + 1, j + 1, Lighting.GetColor(i + 1, j + 1));
+        public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
+		{
+			TopTexture ??= ModContent.Request<Texture2D>(Texture + "Tops");
+			StemTexture ??= ModContent.Request<Texture2D>(Texture);
 
-			Main.spriteBatch.Draw(tex, drawPos, source, color, 0, origin ?? source.Value.Size() / 3f, 1f, SpriteEffects.None, 0f);
+			Tile tile = Framing.GetTileSafely(i, j);
+			Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
+			Vector2 pos = TileGlobal.TileCustomPosition(i, j, TileGlobal.TileOffset);
+
+            //divide tops texture width by 3 since there are 3 horizontal frames, then divide it by 2 to get half the width for the individual frame
+            int TopsTexRealWidth = (TopTexture.Width() / 3) / 2;
+
+            int frame = tile.TileFrameY / 18;
+
+            //draw the actual tree
+            spriteBatch.Draw(StemTexture.Value, pos, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+            //draw tree tops
+            if (Framing.GetTileSafely(i, j).TileFrameX == 18)
+            {
+                spriteBatch.Draw(TopTexture.Value, pos + new Vector2(TopsTexRealWidth / 2 - 11, 2), new Rectangle(76 * frame, 0, 74, 80), col, 0f, 
+				new Vector2(TopsTexRealWidth, TopTexture.Height()), 1f, SpriteEffects.None, 0f);
+            }
         }
 
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
-			TopTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/Catacomb/Ambient/BigFlowerTops");
-			StemTexture ??= ModContent.Request<Texture2D>(Texture);
+			Main.instance.TilesRenderer.AddSpecialPoint(i, j, TileDrawing.TileCounterType.CustomNonSolid);
 
-			Tile tile = Framing.GetTileSafely(i, j);
-            Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
-            Vector2 pos = TileGlobal.TileCustomPosition(i, j);
-
-			//draw the tree tops
-			if (Framing.GetTileSafely(i, j).TileFrameX == 16)
-			{
-				int frame = tile.TileFrameY / 18;
-
-				//reminder: offset negative numbers are right and down, while positive is left and up
-
-				//divide the top width by 3 first since there are 3 horizontal frames, then divide it further after that
-				Vector2 offset = new Vector2(((TopTexture.Width() / 3) / 4) + 3, TopTexture.Height() - 10);
-
-				DrawTreeTops(i - 1, j - 1, TopTexture.Value, new Rectangle(76 * frame, 0, 74, 80), default, TileGlobal.TileOffset, offset);
-			}
-
-			//draw the actual tree
-            spriteBatch.Draw(StemTexture.Value, pos, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-
-            return false;
+			return false;
         }
 	}
 }

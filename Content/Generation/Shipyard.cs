@@ -416,12 +416,12 @@ namespace Spooky.Content.Generation
 			SettleLiquids();
 
 			//ambient tiles
-			//first, grow coral trees
+			//first, grow trees
 			for (int X = leftBound - 10; X <= rightBound + 10; X++)
 			{
 				for (int Y = 10; Y <= Main.worldSurface; Y++)
 				{
-					if (WorldGen.genRand.NextBool(4) && WorldGen.InWorld(X, Y, 10) && CanPlaceMangrove(X, Y) && WorldGen.SolidTile(X, Y) &&
+					if (WorldGen.genRand.NextBool(5) && WorldGen.InWorld(X, Y, 10) && CanPlaceMangrove(X, Y) && WorldGen.SolidTile(X, Y) &&
 					!WorldGen.SolidTile(X, Y - 1) && !WorldGen.SolidTile(X - 1, Y - 1) && !WorldGen.SolidTile(X + 1, Y - 1) &&
 					!Main.tile[X, Y].LeftSlope && !Main.tile[X, Y].RightSlope && !Main.tile[X, Y].IsHalfBlock && Main.tile[X, Y - 1].LiquidAmount <= 0 &&
 					(Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>()))
@@ -429,14 +429,17 @@ namespace Spooky.Content.Generation
 						MangroveTree.Grow(X, Y - 1, 5, 13);
 					}
 
-					if (WorldGen.genRand.NextBool() && WorldGen.InWorld(X, Y, 10) && CanPlaceCoralTree(X, Y) && WorldGen.SolidTile(X, Y) &&
-					!WorldGen.SolidTile(X, Y - 1) && !WorldGen.SolidTile(X - 1, Y - 1) && !WorldGen.SolidTile(X + 1, Y - 1) &&
-					((Main.tile[X, Y - 1].LiquidAmount > 0 && Main.tile[X, Y - 1].LiquidType == LiquidID.Water) || Main.tile[X, Y - 1].WallType > 0) &&
-					!Main.tile[X, Y].LeftSlope && !Main.tile[X, Y].RightSlope && !Main.tile[X, Y].IsHalfBlock &&
+					if (WorldGen.genRand.NextBool() && WorldGen.InWorld(X, Y, 10) && CanPlaceCoralTree(X, Y) && WorldGen.SolidTile(X, Y) && //make sure the tree can place on a solid tile and not nearby other trees
+					!WorldGen.SolidTile(X, Y - 1) && !WorldGen.SolidTile(X - 1, Y - 1) && !WorldGen.SolidTile(X + 1, Y - 1) && //make sure theres no tiles around where the tree will grow
+					Main.tile[X, Y - 1].LiquidAmount > 0 && Main.tile[X, Y - 1].LiquidType == LiquidID.Water && //must be water above the tile it grows on
+					!Main.tile[X, Y].LeftSlope && !Main.tile[X, Y].RightSlope && !Main.tile[X, Y].IsHalfBlock && //tree cannot be placed on slopes
 					(Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>() ||
 					Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>()))
 					{
-						BleachedCoralTree.Grow(X, Y - 1, 2, 7, WorldGen.genRand.Next(0, 6));
+						int[] Types = new int[] { ModContent.TileType<CoralTreeBlue>(), ModContent.TileType<CoralTreeGreen>(), 
+						ModContent.TileType<CoralTreePink>(), ModContent.TileType<CoralTreePurple>(), ModContent.TileType<CoralTreeTeal>() };
+
+						CoralTreeBlue.Grow(X, Y - 1, 5, 8, WorldGen.genRand.Next(Types));
 					}
 				}
 			}
@@ -509,7 +512,7 @@ namespace Spooky.Content.Generation
 							}
 
 							//ghost flowers 
-							int InWaterChance = tileAbove.LiquidAmount <= 0 ? 25 : 10;
+							int InWaterChance = tileAbove.LiquidAmount <= 0 ? 15 : 8;
 							if (WorldGen.genRand.NextBool(InWaterChance))
 							{
 								WorldGen.PlaceObject(X, Y - 1, (ushort)ModContent.TileType<GhostFlower>(), true, WorldGen.genRand.Next(0, 2));
@@ -589,6 +592,7 @@ namespace Spooky.Content.Generation
 						}
 					}
 
+					//place shelf corals on walls
 					if (Main.tile[X, Y].WallType == ModContent.WallType<BlackSandstoneWall>() && WorldGen.InWorld(X, Y, 10))
 					{
 						if (WorldGen.genRand.NextBool(150))
@@ -800,7 +804,7 @@ namespace Spooky.Content.Generation
 
             return true;
         }
-
+		
 		//dont allow coral trees to naturally grow too close to each other
 		public static bool CanPlaceCoralTree(int X, int Y)
         {
@@ -808,7 +812,8 @@ namespace Spooky.Content.Generation
             {
                 for (int j = Y - 4; j < Y + 4; j++)
                 {
-                    if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<BleachedCoralTree>())
+                    if (Main.tile[i, j].HasTile && (Main.tile[i, j].TileType == ModContent.TileType<CoralTreeBlue>() || Main.tile[i, j].TileType == ModContent.TileType<CoralTreeGreen>() ||
+					Main.tile[i, j].TileType == ModContent.TileType<CoralTreePink>() || Main.tile[i, j].TileType == ModContent.TileType<CoralTreePurple>() || Main.tile[i, j].TileType == ModContent.TileType<CoralTreeTeal>()))
                     {
                         return false;
                     }

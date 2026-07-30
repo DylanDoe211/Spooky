@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria.DataStructures;
+using Terraria.GameContent.Drawing;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -31,75 +32,104 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean.Ambient
             DustType = -1;
         }
 
-        public static void DrawPlant(int i, int j, Texture2D tex, Rectangle? source, Vector2? offset = null, Vector2? origin = null)
-		{
-			Vector2 drawPos = new Vector2(i, j).ToWorldCoordinates() - Main.screenPosition + (offset ?? new Vector2(0, -2));
-
-			Main.spriteBatch.Draw(tex, drawPos, source, Lighting.GetColor(i, j), 0, origin ?? source.Value.Size() / 3f, 1f, SpriteEffects.None, 0f);
-		}
-
-		public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
-		{
-			//do not draw the tile texture itself
-			return false;
-		}
-
-		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+        public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
 		{
 			PlantTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/Minibiomes/Ocean/Ambient/TubeCoralBlue");
-			
-			Tile tile = Framing.GetTileSafely(i, j);
 
-			//draw the tile only on the bottom center of each tiles y-frame
-			if (tile.TileFrameX == 18 && tile.TileFrameY == 36)
-			{
-                //reminder: offset negative numbers are right and down, while positive is left and up
-                Vector2 offset = new Vector2((PlantTexture.Width() / 2) - 4, (PlantTexture.Height() / 3) - 12);
+            Tile tile = Framing.GetTileSafely(i, j);
+			Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
+			Vector2 pos = TileGlobal.TileCustomPosition(i, j, TileGlobal.TileOffset);
 
-                DrawPlant(i, j, PlantTexture.Value, new Rectangle(0, 66 * 0, 62, 64), TileGlobal.TileOffset, offset);
-			}
-		}
+            int PlantTexRealWidth = PlantTexture.Width() / 2;
+
+            int frame = tile.TileFrameY / 18;
+
+            //draw the coral, only draw it on the very first frame of the tile so it only draws once
+            if (Framing.GetTileSafely(i, j).TileFrameX == 0 && Framing.GetTileSafely(i, j).TileFrameY == 0)
+            {
+                spriteBatch.Draw(PlantTexture.Value, pos + new Vector2(PlantTexRealWidth / 2 + 8, (PlantTexture.Height() / 3) / 2 + 19), new Rectangle(0, 0, 62, 64), col, 0f, 
+                new Vector2(PlantTexRealWidth, PlantTexture.Height() / 3), 1f, SpriteEffects.None, 0f);
+            }
+        }
+
+        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+            if (Framing.GetTileSafely(i, j).TileFrameX == 0 && Framing.GetTileSafely(i, j).TileFrameY == 0)
+            {
+			    Main.instance.TilesRenderer.AddSpecialPoint(i, j, TileDrawing.TileCounterType.CustomNonSolid);
+            }
+
+			return false;
+        }
     }
 
     public class TubeCoralBlue2 : TubeCoralBlue1
     {
         private Asset<Texture2D> PlantTexture;
         
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+        public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
 		{
 			PlantTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/Minibiomes/Ocean/Ambient/TubeCoralBlue");
-			
-			Tile tile = Framing.GetTileSafely(i, j);
 
-			//draw the tile only on the bottom center of each tiles y-frame
-			if (tile.TileFrameX == 18 && tile.TileFrameY == 36)
-			{
-                //reminder: offset negative numbers are right and down, while positive is left and up
-                Vector2 offset = new Vector2((PlantTexture.Width() / 2) - 4, (PlantTexture.Height() / 3) - 12);
+            Tile tile = Framing.GetTileSafely(i, j);
+			Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
+			Vector2 pos = TileGlobal.TileCustomPosition(i, j, TileGlobal.TileOffset);
 
-                DrawPlant(i, j, PlantTexture.Value, new Rectangle(0, 66 * 1, 62, 64), TileGlobal.TileOffset, offset);
-			}
-		}
+            int PlantTexRealWidth = PlantTexture.Width() / 2;
+
+            int frame = tile.TileFrameY / 18;
+
+            //draw the coral, only draw it on the very first frame of the tile so it only draws once
+            if (Framing.GetTileSafely(i, j).TileFrameX == 0 && Framing.GetTileSafely(i, j).TileFrameY == 0)
+            {
+                spriteBatch.Draw(PlantTexture.Value, pos + new Vector2(PlantTexRealWidth / 2 + 8, (PlantTexture.Height() / 3) / 2 + 19), new Rectangle(0, 66, 62, 64), col, 0f, 
+                new Vector2(PlantTexRealWidth, PlantTexture.Height() / 3), 1f, SpriteEffects.None, 0f);
+            }
+        }
+
+        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+            if (Framing.GetTileSafely(i, j).TileFrameX == 0 && Framing.GetTileSafely(i, j).TileFrameY == 0)
+            {
+			    Main.instance.TilesRenderer.AddSpecialPoint(i, j, TileDrawing.TileCounterType.CustomNonSolid);
+            }
+
+			return false;
+        }
     }
 
     public class TubeCoralBlue3 : TubeCoralBlue1
     {
         private Asset<Texture2D> PlantTexture;
 
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+        public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
 		{
 			PlantTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/Minibiomes/Ocean/Ambient/TubeCoralBlue");
-			
-			Tile tile = Framing.GetTileSafely(i, j);
 
-			//draw the tile only on the bottom center of each tiles y-frame
-			if (tile.TileFrameX == 18 && tile.TileFrameY == 36)
-			{
-                //reminder: offset negative numbers are right and down, while positive is left and up
-                Vector2 offset = new Vector2((PlantTexture.Width() / 2) - 4, (PlantTexture.Height() / 3) - 12);
+            Tile tile = Framing.GetTileSafely(i, j);
+			Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
+			Vector2 pos = TileGlobal.TileCustomPosition(i, j, TileGlobal.TileOffset);
 
-                DrawPlant(i, j, PlantTexture.Value, new Rectangle(0, 66 * 2, 62, 64), TileGlobal.TileOffset, offset);
-			}
-		}
+            int PlantTexRealWidth = PlantTexture.Width() / 2;
+
+            int frame = tile.TileFrameY / 18;
+
+            //draw the coral, only draw it on the very first frame of the tile so it only draws once
+            if (Framing.GetTileSafely(i, j).TileFrameX == 0 && Framing.GetTileSafely(i, j).TileFrameY == 0)
+            {
+                spriteBatch.Draw(PlantTexture.Value, pos + new Vector2(PlantTexRealWidth / 2 + 8, (PlantTexture.Height() / 3) / 2 + 19), new Rectangle(0, 66 * 2, 62, 64), col, 0f, 
+                new Vector2(PlantTexRealWidth, PlantTexture.Height() / 3), 1f, SpriteEffects.None, 0f);
+            }
+        }
+
+        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+            if (Framing.GetTileSafely(i, j).TileFrameX == 0 && Framing.GetTileSafely(i, j).TileFrameY == 0)
+            {
+			    Main.instance.TilesRenderer.AddSpecialPoint(i, j, TileDrawing.TileCounterType.CustomNonSolid);
+            }
+
+			return false;
+        }
     }
 }

@@ -27,7 +27,8 @@ namespace Spooky.Content.NPCs.Quest.Projectiles
         {
 			Projectile.width = 14;
             Projectile.height = 22;
-			Projectile.friendly = true;
+			Projectile.friendly = false;
+			Projectile.hostile = true;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = false;
             Projectile.timeLeft = 300;
@@ -75,16 +76,6 @@ namespace Spooky.Content.NPCs.Quest.Projectiles
 
 			return true;
 		}
-
-		public override bool? CanDamage()
-        {
-			return false;
-        }
-
-        public override bool? CanCutTiles()
-        {
-            return false;
-        }
 
         public override void AI()
         {

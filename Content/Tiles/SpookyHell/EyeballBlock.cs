@@ -44,34 +44,22 @@ namespace Spooky.Content.Tiles.SpookyHell
 			Main.instance.TilesRenderer.AddSpecialPoint(i, j, TileDrawing.TileCounterType.CustomSolid);
 		}
 
-		public static void DrawEyeball(int i, int j, Texture2D tex, Rectangle? source, Vector2 scaleVec, Vector2? offset = null, Vector2? origin = null, bool Glow = false)
-		{
-			Vector2 drawPos = new Vector2(i, j).ToWorldCoordinates() - Main.screenPosition + (offset ?? new Vector2(0, -2));
-			Color color = Lighting.GetColor(i, j, WorldGen.paintColor(Main.tile[i, j].TileColor));
-
-			if (Glow)
-			{
-				Main.spriteBatch.Draw(tex, drawPos, source, Color.White, 0, origin ?? source.Value.Size() / 3f, 1f * (Vector2.One + (0.1f * scaleVec)), SpriteEffects.None, 0f);
-			}
-			else
-			{
-				Main.spriteBatch.Draw(tex, drawPos, source, color, 0, origin ?? source.Value.Size() / 3f, 1f * (Vector2.One + (0.1f * scaleVec)), SpriteEffects.None, 0f);
-			}
-		}
-
 		public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch) 
 		{
 			EyeTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/SpookyHell/EyeBallBlockDraw");
 			EyeGlowTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/SpookyHell/EyeBallBlockDrawGlow");
 
 			Tile tile = Framing.GetTileSafely(i, j);
+			Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
+			Vector2 pos = TileGlobal.TileCustomPosition(i, j, TileGlobal.TileOffset);
 
 			int frame = tile.TileFrameNumber % 3;
 
-			Vector2 offset = new Vector2((EyeTexture.Width() / 2) + 192, ((EyeTexture.Height() / 3) / 2) + 192);
+			spriteBatch.Draw(EyeTexture.Value, pos + new Vector2(EyeTexture.Width() / 2 - 6, EyeTexture.Height() / 2 - 6), new Rectangle(0, 28 * frame, 28, 28), col, 0f, 
+			new Vector2(EyeTexture.Width() / 2, EyeTexture.Height() / 2), 1f, SpriteEffects.None, 0f);
 
-            DrawEyeball(i, j, EyeTexture.Value, new Rectangle(0, 28 * frame, 28, 28), default, TileGlobal.TileOffset, offset);
-			DrawEyeball(i, j, EyeGlowTexture.Value, new Rectangle(0, 28 * frame, 28, 28), default, TileGlobal.TileOffset, offset, true);
+			spriteBatch.Draw(EyeGlowTexture.Value, pos + new Vector2(EyeTexture.Width() / 2 - 6, EyeTexture.Height() / 2 - 6), new Rectangle(0, 28 * frame, 28, 28), TileGlobal.GetTileColorWithPaint(i, j, Color.White), 0f, 
+			new Vector2(EyeTexture.Width() / 2, EyeTexture.Height() / 2), 1f, SpriteEffects.None, 0f);
 		}
     }
 }

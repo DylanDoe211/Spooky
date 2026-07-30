@@ -439,7 +439,7 @@ namespace Spooky.Content.Generation
 		{
 			int segments = 100;
 
-			bool UseAltWavePattern = Main.rand.NextBool();
+			bool UseAltWavePattern = WorldGen.genRand.NextBool();
 
 			Vector2 MiddlePoint = (Start + End) / 2;
 

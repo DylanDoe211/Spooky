@@ -1,8 +1,9 @@
 ﻿using Terraria;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.Localization;
 using Terraria.DataStructures;
+using Terraria.GameContent.Drawing;
 using Terraria.Audio;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
@@ -205,114 +206,65 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean.Tree
             }
         }
 
-        public static void DrawTreeBottom(int i, int j, Texture2D tex, Rectangle? source, Vector2? offset = null, Vector2? origin = null, bool Glow = false)
-        {
-            Tile tile = Main.tile[i, j];
-            Vector2 drawPos = new Vector2(i, j).ToWorldCoordinates() - Main.screenPosition + (offset ?? new Vector2(0, -2));
-            Color color = TileGlobal.GetTileColorWithPaint(i + 1, j + 1, Lighting.GetColor(i + 1, j + 1));
-
-            if (!Glow)
-            {
-                Main.spriteBatch.Draw(tex, drawPos, source, color, 0, origin ?? source.Value.Size() / 3f, 1f, SpriteEffects.None, 0f);
-            }
-            else
-            {
-                float glowspeed = Main.GameUpdateCount * 0.01f;
-			    float glowbrightness = (float)MathF.Sin((j + 2) / 5f - glowspeed);
-
-                for (int circle = 0; circle < 360; circle += 90)
-                {
-                    Vector2 circular = new Vector2(2.5f, 0).RotatedBy(MathHelper.ToRadians(circle));
-
-                    Main.spriteBatch.Draw(tex, drawPos + circular, source, (Color.Lime * 0.5f) * glowbrightness, 0, origin ?? source.Value.Size() / 3f, 1f, SpriteEffects.None, 0f);
-                }
-            }
-        }
-
-        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            BottomGlowTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/Minibiomes/Ocean/Tree/BoneFishTreeHangingBottomGlow");
+        public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
+		{
+            BottomTexture ??= ModContent.Request<Texture2D>(Texture + "Bottom");
+            BottomGlowTexture ??= ModContent.Request<Texture2D>(Texture + "BottomGlow");
+            StemTexture ??= ModContent.Request<Texture2D>(Texture);
 			StemGlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
 
-			Tile tile = Framing.GetTileSafely(i, j);
-
             float xOff = (float)Math.Sin((j * 19) * 0.04f) * 1.2f;
-            if (xOff == 1 && (j / 4f) == 0)
-            {
-                xOff = 0;
-            }
-
-            int frameSize = 16;
-            int frameSizeY = 16;
-
             Vector2 WavyOffset = new Vector2((xOff * 2), 0);
-            Vector2 pos = TileGlobal.TileCustomPosition(i, j);
 
-            if (tile.TileFrameX == 18)
-            {
-                int frame = tile.TileFrameY / 18;
-
-				//reminder: offset negative numbers are right and down, while positive is left and up
-
-				//divide the top width by 2 first since there are 2 horizontal frames, then divide it further after that
-				Vector2 offset = new Vector2(((BottomGlowTexture.Width() / 2) / 2) - 17, BottomGlowTexture.Height() - 56);
-
-				//draw tree tops
-				DrawTreeBottom(i - 1, j - 1, BottomGlowTexture.Value, new Rectangle(46 * frame, 0, 46, 34), TileGlobal.TileOffset + WavyOffset, offset, true);
-            }
+            Tile tile = Framing.GetTileSafely(i, j);
+			Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
+			Vector2 pos = TileGlobal.TileCustomPosition(i, j, TileGlobal.TileOffset);
 
             float glowspeed = Main.GameUpdateCount * 0.01f;
 			float glowbrightness = (float)MathF.Sin(j / 5f - glowspeed);
 
-            if (glowbrightness > 0)
+			if (glowbrightness > 0)
+			{
+				Lighting.AddLight(new Vector2(i * 16, j * 16), Color.Lime.ToVector3() * 0.35f * glowbrightness);
+			}
+
+            //divide texture width by 4 since there are 4 horizontal frames, then divide it by 2 to get half the width for the individual frame
+			int BottomTexRealWidth = (BottomTexture.Width() / 2) / 2;
+
+            int frame = tile.TileFrameY / 18;
+
+            //draw tree glow stuff
+            if (tile.TileFrameX == 18)
             {
-                Lighting.AddLight(new Vector2(i * 16, j * 16), Color.Lime.ToVector3() * 0.35f * glowbrightness);
+                for (int circle = 0; circle < 360; circle += 90)
+                {
+                    Vector2 circular = new Vector2(2f, 0).RotatedBy(MathHelper.ToRadians(circle));
+
+				    spriteBatch.Draw(BottomGlowTexture.Value, pos + new Vector2(BottomTexRealWidth / 2 - 2, 16) + WavyOffset + circular, new Rectangle(46 * frame, 0, 46, 34), Color.Lime * 0.85f * glowbrightness, 0f, 
+				    new Vector2(BottomTexRealWidth, 0), 1f, SpriteEffects.None, 0f);
+                }
             }
 
-			spriteBatch.Draw(StemGlowTexture.Value, pos + WavyOffset + new Vector2(2, 0), new Rectangle(tile.TileFrameX, tile.TileFrameY, frameSize, frameSizeY),
+			spriteBatch.Draw(StemGlowTexture.Value, pos + WavyOffset + new Vector2(2, 0), new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16),
 			Color.Lime * 0.85f * glowbrightness, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-			spriteBatch.Draw(StemGlowTexture.Value, pos + WavyOffset + new Vector2(-2, 0), new Rectangle(tile.TileFrameX, tile.TileFrameY, frameSize, frameSizeY),
+			spriteBatch.Draw(StemGlowTexture.Value, pos + WavyOffset + new Vector2(-2, 0), new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16),
 			Color.Lime * 0.85f * glowbrightness, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-
-			return false;
-        }
-
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            BottomTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/Minibiomes/Ocean/Tree/BoneFishTreeHangingBottom");
-			StemTexture ??= ModContent.Request<Texture2D>(Texture);
-
-            Tile tile = Framing.GetTileSafely(i, j);
-            Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
-
-            float xOff = (float)Math.Sin((j * 19) * 0.04f) * 1.2f;
-
-            if (xOff == 1 && (j / 4f) == 0)
-            {
-                xOff = 0;
-            }
-
-            int frameSize = 16;
-            int frameSizeY = 16;
-
-            Vector2 WavyOffset = new Vector2((xOff * 2), 0);
-            Vector2 pos = TileGlobal.TileCustomPosition(i, j);
 
             //draw the actual tree itself
             if (tile.TileFrameX == 18)
             {
-                int frame = tile.TileFrameY / 18;
-
-				//reminder: offset negative numbers are right and down, while positive is left and up
-
-				//divide the top width by 2 first since there are 2 horizontal frames, then divide it further after that
-				Vector2 offset = new Vector2(((BottomTexture.Width() / 2) / 2) - 17, BottomTexture.Height() - 56);
-
-				//draw tree tops
-				DrawTreeBottom(i - 1, j - 1, BottomTexture.Value, new Rectangle(46 * frame, 0, 46, 34), TileGlobal.TileOffset + WavyOffset, offset, false);
+                spriteBatch.Draw(BottomTexture.Value, pos + new Vector2(BottomTexRealWidth / 2 - 2, 16) + WavyOffset, new Rectangle(46 * frame, 0, 46, 34), col, 0f, 
+                new Vector2(BottomTexRealWidth, 0), 1f, SpriteEffects.None, 0f);
             }
 
-            spriteBatch.Draw(StemTexture.Value, pos + WavyOffset, new Rectangle(tile.TileFrameX, tile.TileFrameY, frameSize, frameSizeY), col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(StemTexture.Value, pos + WavyOffset, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        }
+
+        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+			Main.instance.TilesRenderer.AddSpecialPoint(i, j, TileDrawing.TileCounterType.CustomNonSolid);
+
+			return false;
         }
     }
 }

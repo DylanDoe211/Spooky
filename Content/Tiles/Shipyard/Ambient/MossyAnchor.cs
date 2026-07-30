@@ -21,6 +21,7 @@ namespace Spooky.Content.Tiles.Shipyard.Ambient
 			Main.tileFrameImportant[Type] = true;
 			Main.tileNoAttach[Type] = true;
 			Main.tileLavaDeath[Type] = true;
+			Main.tileLighted[Type] = true;
 			TileID.Sets.BreakableWhenPlacing[Type] = true;
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
 			TileObjectData.newTile.StyleHorizontal = true;
@@ -31,7 +32,6 @@ namespace Spooky.Content.Tiles.Shipyard.Ambient
 			TileObjectData.newTile.Origin = new Point16(3, 3);
             TileObjectData.newTile.DrawYOffset = 2;
             TileObjectData.addTile(Type);
-			Main.tileLighted[Type] = true;
 			AddMapEntry(new Color(50, 46, 43));
 			DustType = DustID.Ash;
 			HitSound = SoundID.Dig;
@@ -39,7 +39,7 @@ namespace Spooky.Content.Tiles.Shipyard.Ambient
 		
 		public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 		{
-			float divide = 1300f;
+			float divide = 1000f;
 
 			r = 54f / divide;
 			g = 199f / divide;
@@ -47,6 +47,11 @@ namespace Spooky.Content.Tiles.Shipyard.Ambient
 		}
 	}
 
-	public class MossyAnchor2 : MossyAnchor1{}
-	public class MossyAnchor3 : MossyAnchor1{}
+	public class MossyAnchor2 : MossyAnchor1
+	{	
+	}
+
+	public class MossyAnchor3 : MossyAnchor1
+	{
+	}
 }

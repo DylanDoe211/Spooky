@@ -415,7 +415,9 @@ namespace Spooky.Content.NPCs.NoseCult
 
             if (NPC.ai[1] > 0)
             {
-                Lighting.AddLight(NPC.Center, Color.LightGreen.ToVector3() * (NPC.ai[2] / 10));
+                int Divide = Lighting.NotRetro ? 10 : 50;
+
+                Lighting.AddLight(NPC.Center, Color.LightGreen.ToVector3() * (NPC.ai[2] / Divide));
             }
 
             HandleCultistAmbush();

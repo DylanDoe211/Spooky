@@ -143,5 +143,9 @@ BirchChest.MapEntry: Old Birch Chest
 BroccoliSapling.MapEntry: Broccoli Sapling
 TubeWormSapling.MapEntry: Tube Worm Polyp
 TarCactusChest.MapEntry: Tar Cactus Chest
-BleachedCoralTree.MapEntry: Bleached Coral
 MangroveTree.MapEntry: Mangrove Tree
+CoralTreeBlue.MapEntry: Giant Bleached Coral
+CoralTreeGreen.MapEntry: Giant Bleached Coral
+CoralTreePink.MapEntry: Giant Bleached Coral
+CoralTreePurple.MapEntry: Giant Bleached Coral
+CoralTreeTeal.MapEntry: Giant Bleached Coral

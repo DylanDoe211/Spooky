@@ -1,8 +1,9 @@
 ﻿using Terraria;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.Localization;
 using Terraria.DataStructures;
+using Terraria.GameContent.Drawing;
 using Terraria.Audio;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
@@ -306,60 +307,29 @@ namespace Spooky.Content.Tiles.SpookyHell.Tree
             }
         }
 
-        public static void DrawTreeStuff(int i, int j, Texture2D tex, Rectangle? source, Vector2? offset = null, Vector2? origin = null, bool Glow = false)
-        {
-            Tile tile = Main.tile[i, j];
-            Vector2 drawPos = new Vector2(i, j).ToWorldCoordinates() - Main.screenPosition + (offset ?? new Vector2(0, -2));
-            Color color = TileGlobal.GetTileColorWithPaint(i + 1, j + 1, Lighting.GetColor(i + 1, j + 1));
-
-            Main.spriteBatch.Draw(tex, drawPos, source, Glow ? Color.White : color, 0, origin ?? source.Value.Size() / 3f, 1f, SpriteEffects.None, 0f);
-        }
-
-        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-			TopTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/SpookyHell/Tree/EyeTreeShortTops");
-            BranchLeftTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/SpookyHell/Tree/EyeTreeShortBranchLeft");
-            BranchRightTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/SpookyHell/Tree/EyeTreeShortBranchRight");
+        public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
+		{
+			TopTexture ??= ModContent.Request<Texture2D>(Texture + "Tops");
+            TopGlowTexture ??= ModContent.Request<Texture2D>(Texture + "TopsGlow");
+            BranchLeftTexture ??= ModContent.Request<Texture2D>(Texture + "BranchLeft");
+            BranchLeftGlowTexture ??= ModContent.Request<Texture2D>(Texture + "BranchLeftGlow");
+            BranchRightTexture ??= ModContent.Request<Texture2D>(Texture + "BranchRight");
+            BranchRightGlowTexture ??= ModContent.Request<Texture2D>(Texture + "BranchRightGlow");
 			StemTexture ??= ModContent.Request<Texture2D>(Texture);
+            StemGlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
 
 			Tile tile = Framing.GetTileSafely(i, j);
-            Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
+			Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
+			Vector2 pos = TileGlobal.TileCustomPosition(i, j, TileGlobal.TileOffset);
 
-            Vector2 pos = TileGlobal.TileCustomPosition(i, j);
+            //divide tops texture width by 3 since there are 3 horizontal frames, then divide it by 2 to get half the width for the individual frame
+            int TopsTexRealWidth = (TopTexture.Width() / 3) / 2;
 
-            if (Framing.GetTileSafely(i, j).TileFrameX == 18)
-            {
-                int frame = tile.TileFrameY / 18;
+            //divide branches texture width by 3 since there are 3 vertical frames, then divide it by 2 to get half the height for the individual frame
+            int BranchLeftTexRealWidth = BranchLeftTexture.Width() / 2;
+            int BranchRightTexRealWidth = BranchRightTexture.Width() / 2;
 
-				//reminder: offset negative numbers are right and down, while positive is left and up
-
-				//divide the top width by 3 first since there are 3 horizontal frames, then divide it further after that
-				Vector2 offset = new Vector2(((TopTexture.Width() / 3) / 2) - 16, TopTexture.Height() - 10);
-
-				//draw tree tops
-				DrawTreeStuff(i - 1, j - 1, TopTexture.Value, new Rectangle(60 * frame, 0, 58, 44), TileGlobal.TileOffset, offset, false);
-            }
-
-            //draw branches
-            //left branches
-            if (Framing.GetTileSafely(i, j).TileFrameX == 36 || Framing.GetTileSafely(i, j).TileFrameX == 72)
-            {
-                int frame = tile.TileFrameY / 18;
-
-                Vector2 offset = new Vector2((BranchLeftTexture.Width() / 2) + 18, -(BranchLeftTexture.Height() / 3) + 54);
-
-                DrawTreeStuff(i - 1, j - 1, BranchLeftTexture.Value, new Rectangle(0, 46 * frame, 58, 44), TileGlobal.TileOffset, offset, false);
-            }
-
-            //right branches
-            if (Framing.GetTileSafely(i, j).TileFrameX == 54 || Framing.GetTileSafely(i, j).TileFrameX == 72)
-            {
-                int frame = tile.TileFrameY / 18;
-
-                Vector2 offset = new Vector2(-(BranchRightTexture.Width() / 2) + 8, -(BranchRightTexture.Height() / 3) + 54);
-
-                DrawTreeStuff(i - 1, j - 1, BranchRightTexture.Value, new Rectangle(0, 46 * frame, 58, 44), TileGlobal.TileOffset, offset, false);
-            }
+            int frame = tile.TileFrameY / 18;
 
             //draw extra tile below so it looks attached to the ground
             if (Main.tile[i, j + 1].TileType != Type)
@@ -369,58 +339,44 @@ namespace Spooky.Content.Tiles.SpookyHell.Tree
 
             //draw the actual tree
             spriteBatch.Draw(StemTexture.Value, pos, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(StemGlowTexture.Value, pos, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), TileGlobal.GetTileColorWithPaint(i, j, Color.White), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
-            return false;
-        }
-
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            TopGlowTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/SpookyHell/Tree/EyeTreeShortTopsGlow");
-            BranchLeftGlowTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/SpookyHell/Tree/EyeTreeShortBranchLeftGlow");
-            BranchRightGlowTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/SpookyHell/Tree/EyeTreeShortBranchRightGlow");
-			StemGlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
-
-            Tile tile = Framing.GetTileSafely(i, j);
-            Color col = Lighting.GetColor(i, j);
-
-            Vector2 pos = TileGlobal.TileCustomPosition(i, j);
-
+            //draw tree tops
             if (Framing.GetTileSafely(i, j).TileFrameX == 18)
             {
-                int frame = tile.TileFrameY / 18;
+                spriteBatch.Draw(TopTexture.Value, pos + new Vector2(TopsTexRealWidth / 2 - 7, 4), new Rectangle(60 * frame, 0, 58, 44), col, 0f, 
+				new Vector2(TopsTexRealWidth, TopTexture.Height()), 1f, SpriteEffects.None, 0f);
 
-				//reminder: offset negative numbers are right and down, while positive is left and up
-
-				//divide the top width by 3 first since there are 3 horizontal frames, then divide it further after that
-				Vector2 offset = new Vector2(((TopGlowTexture.Width() / 3) / 2) - 16, TopGlowTexture.Height() - 10);
-
-				//draw tree tops
-				DrawTreeStuff(i - 1, j - 1, TopGlowTexture.Value, new Rectangle(60 * frame, 0, 58, 44), TileGlobal.TileOffset, offset, true);
+                spriteBatch.Draw(TopGlowTexture.Value, pos + new Vector2(TopsTexRealWidth / 2 - 7, 4), new Rectangle(60 * frame, 0, 58, 44), TileGlobal.GetTileColorWithPaint(i, j, Color.White), 0f, 
+				new Vector2(TopsTexRealWidth, TopTexture.Height()), 1f, SpriteEffects.None, 0f);
             }
 
-            //draw branches
             //left branches
             if (Framing.GetTileSafely(i, j).TileFrameX == 36 || Framing.GetTileSafely(i, j).TileFrameX == 72)
             {
-                int frame = tile.TileFrameY / 18;
+                spriteBatch.Draw(BranchLeftTexture.Value, pos + new Vector2(BranchLeftTexRealWidth / 2 - 43, -3), new Rectangle(0, 46 * frame, 58, 44), col, 0f, 
+				new Vector2(BranchLeftTexRealWidth, TopTexture.Height() / 3), 1f, SpriteEffects.None, 0f);
 
-                Vector2 offset = new Vector2((BranchLeftGlowTexture.Width() / 2) + 18, -(BranchLeftGlowTexture.Height() / 3) + 54);
-
-                DrawTreeStuff(i - 1, j - 1, BranchLeftGlowTexture.Value, new Rectangle(0, 46 * frame, 58, 44), TileGlobal.TileOffset, offset, true);
+                spriteBatch.Draw(BranchLeftGlowTexture.Value, pos + new Vector2(BranchLeftTexRealWidth / 2 - 43, -3), new Rectangle(0, 46 * frame, 58, 44), TileGlobal.GetTileColorWithPaint(i, j, Color.White), 0f, 
+				new Vector2(BranchLeftTexRealWidth, TopTexture.Height() / 3), 1f, SpriteEffects.None, 0f);
             }
 
             //right branches
             if (Framing.GetTileSafely(i, j).TileFrameX == 54 || Framing.GetTileSafely(i, j).TileFrameX == 72)
             {
-                int frame = tile.TileFrameY / 18;
+                spriteBatch.Draw(BranchRightTexture.Value, pos + new Vector2(BranchRightTexRealWidth / 2 + 31, -3), new Rectangle(0, 46 * frame, 58, 44), col, 0f, 
+				new Vector2(BranchRightTexRealWidth, TopTexture.Height() / 3), 1f, SpriteEffects.None, 0f);
 
-                Vector2 offset = new Vector2(-(BranchRightGlowTexture.Width() / 2) + 8, -(BranchRightGlowTexture.Height() / 3) + 54);
-
-                DrawTreeStuff(i - 1, j - 1, BranchRightGlowTexture.Value, new Rectangle(0, 46 * frame, 58, 44), TileGlobal.TileOffset, offset, true);
+                spriteBatch.Draw(BranchRightGlowTexture.Value, pos + new Vector2(BranchRightTexRealWidth / 2 + 31, -3), new Rectangle(0, 46 * frame, 58, 44), TileGlobal.GetTileColorWithPaint(i, j, Color.White), 0f, 
+				new Vector2(BranchRightTexRealWidth, TopTexture.Height() / 3), 1f, SpriteEffects.None, 0f);
             }
+        }
 
-            //draw the actual tree
-            spriteBatch.Draw(StemGlowTexture.Value, pos, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+			Main.instance.TilesRenderer.AddSpecialPoint(i, j, TileDrawing.TileCounterType.CustomNonSolid);
+
+			return false;
         }
     }
 }

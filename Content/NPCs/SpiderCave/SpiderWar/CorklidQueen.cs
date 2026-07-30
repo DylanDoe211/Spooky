@@ -674,6 +674,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 						Screenshake.ShakeScreenWithIntensity(NPC.Center, 3f, 300f);
 
 						JustTeleported = true;
+						NPC.noGravity = false;
 						NPC.netUpdate = true;
 					}
 				}

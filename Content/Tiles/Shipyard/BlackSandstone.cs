@@ -11,7 +11,6 @@ namespace Spooky.Content.Tiles.Shipyard
 	{
 		public override void SetStaticDefaults()
 		{
-			TileID.Sets.CanBeDugByShovel[Type] = true;
 			TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;
 			TileID.Sets.GeneralPlacementTiles[Type] = false;
 			Main.tileMergeDirt[Type] = true;

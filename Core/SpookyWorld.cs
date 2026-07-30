@@ -29,6 +29,8 @@ namespace Spooky.Core
         public static bool DaySwitched;
         public static bool LastTime;
 
+        public double TreeWindCounter { get; private set; }
+
 		//check to make sure the player isnt in a subworld so that all of the npcs meant to be saved and spawned in specific world locations are not spawned in subworlds
 		public static bool IsInSubworld()
         {
@@ -516,6 +518,24 @@ namespace Spooky.Core
 
             LastTime = Main.dayTime;
         }
+
+        public float GetTreeSway(int i, int j, ref Vector2 position)
+        {
+			float rot = Main.instance.TilesRenderer.GetWindCycle(i, j, TreeWindCounter);
+            position.X += rot * 2f;
+            position.Y += Math.Abs(rot) * 2f;
+            return rot;
+		}
+
+        public override void PreUpdateWorld()
+		{
+			if (!Main.dedServ)
+			{
+				double num = Math.Abs(Main.WindForVisuals);
+				num = Utils.GetLerpValue(0.08f, 1.2f, (float)num, clamped: true);
+				TreeWindCounter += 0.0041666666666666666 + 0.0041666666666666666 * num * 2.0;
+			}
+		}
 
 		public override void ModifySunLightColor(ref Color tileColor, ref Color backgroundColor)
         {

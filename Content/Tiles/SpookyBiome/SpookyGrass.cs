@@ -60,12 +60,9 @@ namespace Spooky.Content.Tiles.SpookyBiome
             if (Main.tile[i - 1, j].TileType == ModContent.TileType<SpookyGrassGreen>() || Main.tile[i + 1, j].TileType == ModContent.TileType<SpookyGrassGreen>() ||
             Main.tile[i, j - 1].TileType == ModContent.TileType<SpookyGrassGreen>() || Main.tile[i, j + 1].TileType == ModContent.TileType<SpookyGrassGreen>())
             {
-                if (!Main.tile[i, j].LeftSlope && !Main.tile[i, j].RightSlope && !Main.tile[i, j].IsHalfBlock)
-                {
-                    MergeTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/SpookyBiome/SpookyGrassBlend");
+                MergeTexture ??= ModContent.Request<Texture2D>(Texture + "Blend");
 
-                    TileGlobal.PostDrawTileWithSlopes(i, j, MergeTexture.Value, Lighting.GetColor(i, j), Vector2.Zero);
-                }
+                TileGlobal.PostDrawTileWithSlopes(i, j, MergeTexture.Value, Lighting.GetColor(i, j), Vector2.Zero);
             }
         }
 

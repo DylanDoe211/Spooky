@@ -66,9 +66,8 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean
                 //grow weeds
                 if (Main.rand.NextBool(15))
                 {
-                    WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<OceanWeeds>(), true);
-                    Above.TileFrameX = (short)(WorldGen.genRand.Next(12) * 18);
-					NetMessage.SendTileSquare(-1, i, j - 1, 1, TileChangeType.None);
+                    WorldGen.PlaceObject(i, j - 1, (ushort)ModContent.TileType<OceanWeeds>(), true, WorldGen.genRand.Next(0, 12));
+                    NetMessage.SendObjectPlacement(-1, i, j - 1, (ushort)ModContent.TileType<OceanWeeds>(), 0, 0, -1, -1);
 				}
 
 				//grow light plants
@@ -78,7 +77,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean
 
                     ushort newObject = Main.rand.Next(LightPlants);
 
-                    WorldGen.PlaceObject(i, j - 1, newObject, true, Main.rand.Next(0, 2));
+                    WorldGen.PlaceObject(i, j - 1, newObject, true);
                     NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
                 }
 
@@ -90,7 +89,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean
 
                     ushort newObject = Main.rand.Next(BigLightPlants);
 
-                    WorldGen.PlaceObject(i, j - 1, newObject, true, Main.rand.Next(0, 2));
+                    WorldGen.PlaceObject(i, j - 1, newObject, true);
                     NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
                 }
 
@@ -108,7 +107,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean
 
                     ushort newObject = Main.rand.Next(Corals);
 
-                    WorldGen.PlaceObject(i, j - 1, newObject, true, Main.rand.Next(0, 2));
+                    WorldGen.PlaceObject(i, j - 1, newObject, true);
                     NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
                 }
             }
@@ -131,13 +130,5 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean
             DustType = DustID.Sand;
 			MineResist = 0.65f;
 		}
-
-        public override void NearbyEffects(int i, int j, bool closer)
-        {
-            if (!Main.dedServ && Main.LocalPlayer.InModBiome(ModContent.GetInstance<ZombieOceanBiome>()))
-			{
-                Main.SceneMetrics.ActiveFountainColor = ModContent.GetInstance<ZombieWaterStyle>().Slot;
-			}
-        }
 	}
 }

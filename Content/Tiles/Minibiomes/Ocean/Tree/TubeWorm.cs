@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Terraria.Localization;
+using Terraria.GameContent.Drawing;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -154,81 +155,73 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean.Tree
             y++;
         }
 
-        public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
-        {
-            Tile tile = Framing.GetTileSafely(i, j);
+		public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem)
+		{
+			Tile tile = Framing.GetTileSafely(i, j);
 
-            if (fail && !effectOnly && !noItem)
-            {
-                (int x, int y) = (i, j);
-                CheckEntireTree(ref x, ref y);
-            }
+			if (fail && !effectOnly && !noItem)
+			{
+				(int x, int y) = (i, j);
+				CheckEntireTree(ref x, ref y);
+			}
 
-            if (fail)
-            {
-                return;
-            }
+			if (fail)
+			{
+				return;
+			}
 
-            int belowFrame = Framing.GetTileSafely(i, j + 1).TileFrameX;
+			int belowFrame = Framing.GetTileSafely(i, j + 1).TileFrameX;
 
-            //if theres any remaining segments below, turn it into a stub top segment
-            if (belowFrame == 0)
-            {
-                Framing.GetTileSafely(i, j + 1).TileFrameX = 18;
-            }
+			//if theres any remaining segments below, turn it into a stub top segment
+			if (belowFrame == 0)
+			{
+				Framing.GetTileSafely(i, j + 1).TileFrameX = 18;
+			}
 
-            if (tile.TileFrameX == 18)
-            {
-                //spawn a seed from the tree
-                int NewItem = Item.NewItem(new EntitySource_TileBreak(i, j), (new Vector2(i, j) * 16) + new Vector2(Main.rand.Next(-22, 22), Main.rand.Next(-22, 22)), 
-                ModContent.ItemType<TubeWormSaplingItem>(), Main.rand.Next(1, 3));
+			if (tile.TileFrameX == 18)
+			{
+				//spawn a seed from the tree
+				int NewItem = Item.NewItem(new EntitySource_TileBreak(i, j), (new Vector2(i, j) * 16) + new Vector2(Main.rand.Next(-22, 22), Main.rand.Next(-22, 22)),
+				ModContent.ItemType<TubeWormSaplingItem>(), Main.rand.Next(1, 3));
 
-                if (Main.netMode == NetmodeID.MultiplayerClient && NewItem >= 0)
-                {
-                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, NewItem, 1f);
-                }
-            }
-        }
+				if (Main.netMode == NetmodeID.MultiplayerClient && NewItem >= 0)
+				{
+					NetMessage.SendData(MessageID.SyncItem, -1, -1, null, NewItem, 1f);
+				}
+			}
+		}
 
-        public static void DrawTreeTop(int i, int j, Texture2D tex, Rectangle source, Vector2 offset)
-        {
-            Tile tile = Main.tile[i, j];
-            Vector2 drawPos = new Vector2(i, j).ToWorldCoordinates() - Main.screenPosition + offset;
-            Color color = TileGlobal.GetTileColorWithPaint(i + 1, j + 1, Lighting.GetColor(i + 1, j + 1));
-
-			float Update = Main.GameUpdateCount * 0.0052f;
-			float Rotation = (float)MathF.Sin(i / 20f - Update);
-
-			Main.spriteBatch.Draw(tex, drawPos, source, color, Rotation * 0.35f, new Vector2((tex.Width / 4) / 2, tex.Height), 1f, SpriteEffects.None, 0f);
-        }
-
-        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
-        {
+        public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
+		{
 			StemTexture ??= ModContent.Request<Texture2D>(Texture);
-            TopTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/Minibiomes/Ocean/Tree/TubeWormTop");
+            TopTexture ??= ModContent.Request<Texture2D>(Texture + "Top");
 
 			Tile tile = Framing.GetTileSafely(i, j);
-            Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
+			Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
+			Vector2 pos = TileGlobal.TileCustomPosition(i, j, TileGlobal.TileOffset);
+            
+            //divide tops texture width by 4 since there are 4 horizontal frames, then divide it by 2 to get half the width for the individual frame
+			int TopsTexRealWidth = (TopTexture.Width() / 4) / 2;
 
-            int frameSize = 16;
-            int frameSizeY = 16;
-
-            Vector2 pos = TileGlobal.TileCustomPosition(i, j);
+            int frame = tile.TileFrameY / 18;
 
 			//draw the actual tree
-			spriteBatch.Draw(StemTexture.Value, pos, new Rectangle(tile.TileFrameX, tile.TileFrameY, frameSize, frameSizeY), col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+			spriteBatch.Draw(StemTexture.Value, pos, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
 			//draw the tree tops over the tree itself
 			if (Framing.GetTileSafely(i, j).TileFrameX == 18)
 			{
-				int frame = tile.TileFrameY / 18;
+				float Update = Main.GameUpdateCount * 0.0052f;
+				float Rotation = (float)MathF.Sin(i / 20f - Update) * 0.35f;
 
-				//divide the top width by 3 first since there are 3 horizontal frames, then divide it further after that
-				Vector2 offset = new Vector2(17, 12);
-
-				//draw tree tops
-				DrawTreeTop(i - 1, j - 1, TopTexture.Value, new Rectangle(28 * frame, 0, 26, 54), TileGlobal.TileOffset + offset);
+				spriteBatch.Draw(TopTexture.Value, pos + new Vector2(TopsTexRealWidth / 2 + 2, 6), new Rectangle(28 * frame, 0, 26, 54), col, Rotation, 
+				new Vector2(TopsTexRealWidth, TopTexture.Height()), 1f, SpriteEffects.None, 0f);
 			}
+        }
+
+        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+			Main.instance.TilesRenderer.AddSpecialPoint(i, j, TileDrawing.TileCounterType.CustomNonSolid);
 
 			return false;
         }

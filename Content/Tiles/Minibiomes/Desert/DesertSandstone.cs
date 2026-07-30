@@ -34,7 +34,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Desert
 			}
 
 			//grow giant cactuses
-			if (Main.rand.NextBool(20))
+			if (Main.rand.NextBool(30) && TarPits.CanPlaceCactus(i, j))
 			{
 				ushort[] Cactuses = new ushort[] { (ushort)ModContent.TileType<TarPitsGiantCactus1>(), (ushort)ModContent.TileType<TarPitsGiantCactus2>() };
 

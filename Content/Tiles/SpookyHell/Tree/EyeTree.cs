@@ -1,8 +1,9 @@
 ﻿using Terraria;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.Localization;
 using Terraria.DataStructures;
+using Terraria.GameContent.Drawing;
 using Terraria.Audio;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
@@ -29,7 +30,6 @@ namespace Spooky.Content.Tiles.SpookyHell.Tree
         public override void SetStaticDefaults()
         {
             TileID.Sets.IsATreeTrunk[Type] = true;
-            TileID.Sets.DrawTileInSolidLayer[Type] = true;
 			Main.tileFrameImportant[Type] = true;
             Main.tileAxe[Type] = true;
             Main.tileMergeDirt[Type] = false;
@@ -251,37 +251,21 @@ namespace Spooky.Content.Tiles.SpookyHell.Tree
             }
         }
 
-        public static void DrawTreeTop(int i, int j, Texture2D tex, Rectangle? source, Vector2? offset = null, Vector2? origin = null, bool Glow = false)
-        {
-            Tile tile = Main.tile[i, j];
-            Vector2 drawPos = new Vector2(i, j).ToWorldCoordinates() - Main.screenPosition + (offset ?? new Vector2(0, -2));
-            Color color = TileGlobal.GetTileColorWithPaint(i + 1, j + 1, Lighting.GetColor(i + 1, j + 1));
-
-            Main.spriteBatch.Draw(tex, drawPos, source, Glow ? Color.White : color, 0, origin ?? source.Value.Size() / 3f, 1f, SpriteEffects.None, 0f);
-        }
-
-        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-			TopTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/SpookyHell/Tree/EyeTreeTops");
+        public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
+		{
+			TopTexture ??= ModContent.Request<Texture2D>(Texture + "Tops");
+            TopGlowTexture ??= ModContent.Request<Texture2D>(Texture + "TopsGlow");
 			StemTexture ??= ModContent.Request<Texture2D>(Texture);
+            StemGlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
 
 			Tile tile = Framing.GetTileSafely(i, j);
-            Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
+			Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
+			Vector2 pos = TileGlobal.TileCustomPosition(i, j, TileGlobal.TileOffset);
 
-            Vector2 pos = TileGlobal.TileCustomPosition(i, j);
+            //divide tops texture width by 3 since there are 3 horizontal frames, then divide it by 2 to get half the width for the individual frame
+            int TopsTexRealWidth = (TopTexture.Width() / 3) / 2;
 
-            if (Framing.GetTileSafely(i, j).TileFrameX == 18)
-            {
-                int frame = tile.TileFrameY / 18;
-
-				//reminder: offset negative numbers are right and down, while positive is left and up
-
-				//divide the top width by 3 first since there are 3 horizontal frames, then divide it further after that
-				Vector2 offset = new Vector2(((TopTexture.Width() / 3) / 2) - 16, TopTexture.Height() - 10);
-
-				//draw tree tops
-				DrawTreeTop(i - 1, j - 1, TopTexture.Value, new Rectangle(260 * frame, 0, 258, 106), TileGlobal.TileOffset, offset, false);
-            }
+            int frame = tile.TileFrameY / 18;
 
             //draw extra tile below so it looks attached to the ground
             if (Main.tile[i, j + 1].TileType != Type)
@@ -289,38 +273,26 @@ namespace Spooky.Content.Tiles.SpookyHell.Tree
                 spriteBatch.Draw(StemTexture.Value, pos, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), col, 0f, new Vector2(0, -6), 1f, SpriteEffects.None, 0f);
             }
 
-            //draw the actual tree
+            //draw the actual tree and glow
             spriteBatch.Draw(StemTexture.Value, pos, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(StemGlowTexture.Value, pos, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), TileGlobal.GetTileColorWithPaint(i, j, Color.White), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
-            return false;
-        }
-
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            Tile tile = Framing.GetTileSafely(i, j);
-            Color col = Lighting.GetColor(i, j);
-
-            int frameSize = 16;
-            int frameSizeY = 16;
-
-            Vector2 pos = TileGlobal.TileCustomPosition(i, j);
-
+            //draw tree tops
             if (Framing.GetTileSafely(i, j).TileFrameX == 18)
             {
-                TopGlowTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/SpookyHell/Tree/EyeTreeTopsGlow");
-                int frame = tile.TileFrameY / 18;
+                spriteBatch.Draw(TopTexture.Value, pos + new Vector2(TopsTexRealWidth / 2 - 57, 4), new Rectangle(260 * frame, 0, 258, 106), col, 0f, 
+				new Vector2(TopsTexRealWidth, TopTexture.Height()), 1f, SpriteEffects.None, 0f);
 
-				//divide the top width by 3 first since there are 3 horizontal frames, then divide it further after that
-				Vector2 offset = new Vector2(((TopTexture.Width() / 3) / 2) - 16, TopTexture.Height() - 10);
-
-				//draw tree tops
-				DrawTreeTop(i - 1, j - 1, TopGlowTexture.Value, new Rectangle(260 * frame, 0, 258, 106), TileGlobal.TileOffset, offset, true);
+                spriteBatch.Draw(TopGlowTexture.Value, pos + new Vector2(TopsTexRealWidth / 2 - 57, 4), new Rectangle(260 * frame, 0, 258, 106), TileGlobal.GetTileColorWithPaint(i, j, Color.White), 0f, 
+				new Vector2(TopsTexRealWidth, TopTexture.Height()), 1f, SpriteEffects.None, 0f);
             }
+        }
 
-            StemGlowTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/SpookyHell/Tree/EyeTreeGlow");
+        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+			Main.instance.TilesRenderer.AddSpecialPoint(i, j, TileDrawing.TileCounterType.CustomNonSolid);
 
-            //draw the actual tree
-            spriteBatch.Draw(StemGlowTexture.Value, pos, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+			return false;
         }
     }
 }

@@ -16,9 +16,8 @@ namespace Spooky.Content.Tiles.Shipyard
 		{
 			TileID.Sets.Grass[Type] = true;
 			TileID.Sets.NeedsGrassFraming[Type] = true;
-			TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;
-			TileID.Sets.GeneralPlacementTiles[Type] = false;
-			TileID.Sets.Conversion.Moss[Type] = true;
+            TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;
+            TileID.Sets.GeneralPlacementTiles[Type] = false;
 			Main.tileMergeDirt[Type] = true;
             Main.tileBlendAll[Type] = true;
 			Main.tileSolid[Type] = true;

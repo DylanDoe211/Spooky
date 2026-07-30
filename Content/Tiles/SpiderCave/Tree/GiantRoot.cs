@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Terraria.Localization;
 using Terraria.ObjectData;
 using Terraria.DataStructures;
+using Terraria.GameContent.Drawing;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -253,49 +254,38 @@ namespace Spooky.Content.Tiles.SpiderCave.Tree
             }
         }
 
-        public static void DrawRootBottom(int i, int j, Texture2D tex, Rectangle? source, Vector2? offset = null, Vector2? origin = null)
-        {
-            Tile tile = Main.tile[i, j];
-            Vector2 drawPos = new Vector2(i, j).ToWorldCoordinates() - Main.screenPosition + (offset ?? new Vector2(0, -2));
-            Color color = TileGlobal.GetTileColorWithPaint(i + 1, j + 1, Lighting.GetColor(i + 1, j + 1));
-
-            Main.spriteBatch.Draw(tex, drawPos, source, color, 0, origin ?? source.Value.Size() / 3f, 1f, SpriteEffects.None, 0f);
-        }
-
-        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-			BottomTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/SpiderCave/Tree/GiantRootBottom");
+        public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
+		{
+            BottomTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/SpiderCave/Tree/GiantRootBottom");
 			RootTexture ??= ModContent.Request<Texture2D>(Texture);
 
-			Tile tile = Framing.GetTileSafely(i, j);
-            Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
-
             float xOff = (float)Math.Sin((j * 19) * 0.04f) * 1.2f;
-            if (xOff == 1 && (j / 4f) == 0)
-            {
-                xOff = 0;
-            }
-
             Vector2 WavyOffset = new Vector2((xOff * 2), -2);
-            Vector2 pos = TileGlobal.TileCustomPosition(i, j);
+
+			Tile tile = Framing.GetTileSafely(i, j);
+			Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
+			Vector2 pos = TileGlobal.TileCustomPosition(i, j, TileGlobal.TileOffset);
+
+            //divide texture width by 3 since there are 3 horizontal frames, then divide it by 2 to get half the width for the individual frame
+			int BottomTexRealWidth = (BottomTexture.Width() / 3) / 2;
+
+            int frame = tile.TileFrameY / 18;
 
             if (tile.TileFrameX == 18)
             {
-                int frame = tile.TileFrameY / 18;
-
-				//reminder: offset negative numbers are right and down, while positive is left and up
-
-				//divide the top width by 3 first since there are 3 horizontal frames, then divide it further after that
-				Vector2 offset = new Vector2(((BottomTexture.Width() / 3) / 2) - 18, -(BottomTexture.Height() / 3) + 4);
-
-				//draw tree tops
-				DrawRootBottom(i - 1, j - 1, BottomTexture.Value, new Rectangle(88 * frame, 0, 86, 82), TileGlobal.TileOffset + WavyOffset, offset);
+                spriteBatch.Draw(BottomTexture.Value, pos + new Vector2(BottomTexRealWidth / 2 - 12, 14) + WavyOffset, new Rectangle(88 * frame, 0, 86, 82), col, 0f, 
+                new Vector2(BottomTexRealWidth, 0), 1f, SpriteEffects.None, 0f);
             }
 
             //draw the actual tree
             spriteBatch.Draw(RootTexture.Value, pos + WavyOffset, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        }
 
-            return false;
+        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+			Main.instance.TilesRenderer.AddSpecialPoint(i, j, TileDrawing.TileCounterType.CustomNonSolid);
+
+			return false;
         }
     }
 }

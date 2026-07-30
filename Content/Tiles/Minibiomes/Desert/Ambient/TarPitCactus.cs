@@ -1,8 +1,9 @@
 ﻿using Terraria;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.Localization;
 using Terraria.DataStructures;
+using Terraria.GameContent.Drawing;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -222,53 +223,21 @@ namespace Spooky.Content.Tiles.Minibiomes.Desert.Ambient
             }
         }
 
-        public static void DrawBranch(int i, int j, Texture2D tex, Rectangle? source, Vector2? offset = null, Vector2? origin = null)
-        {
-            Tile tile = Main.tile[i, j];
-            Vector2 drawPos = new Vector2(i, j).ToWorldCoordinates() - Main.screenPosition + (offset ?? new Vector2(0, -2));
-			Color color = TileGlobal.GetTileColorWithPaint(i + 1, j + 1, Lighting.GetColor(i + 1, j + 1));
-
-			Main.spriteBatch.Draw(tex, drawPos, source, color, 0, origin ?? source.Value.Size() / 3f, 1f, SpriteEffects.None, 0f);
-        }
-
-		public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+		public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
 		{
-			BranchLeftTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/Minibiomes/Desert/Ambient/TarPitCactusBranchLeft");
-			BranchRightTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/Minibiomes/Desert/Ambient/TarPitCactusBranchRight");
+			BranchLeftTexture ??= ModContent.Request<Texture2D>(Texture + "BranchLeft");
+			BranchRightTexture ??= ModContent.Request<Texture2D>(Texture + "BranchRight");
             GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
 			TileTexture ??= ModContent.Request<Texture2D>(Texture);
 
 			Tile tile = Framing.GetTileSafely(i, j);
 			Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
-			float xOff = (float)Math.Sin((j * 19) * 0.04f) * 1.2f;
+			Vector2 pos = TileGlobal.TileCustomPosition(i, j, TileGlobal.TileOffset);
 
-			if (xOff == 1 && (j / 4f) == 0)
-			{
-				xOff = 0;
-			}
+            int BranchLeftTexRealWidth = BranchLeftTexture.Width() / 2;
+            int BranchRightTexRealWidth = BranchRightTexture.Width() / 2;
 
-			Vector2 pos = TileGlobal.TileCustomPosition(i, j);
-
-			if (Framing.GetTileSafely(i, j).TileFrameX == 18)
-			{
-				int frame = tile.TileFrameY / 18;
-
-				//divide the top width by 3 first since there are 3 horizontal frames, then divide it further after that
-				Vector2 offset = new Vector2((BranchLeftTexture.Width() / 2) - 1, (BranchLeftTexture.Height() / 3) - 26);
-
-				//draw tree tops
-				DrawBranch(i - 1, j - 1, BranchLeftTexture.Value, new Rectangle(0, 18 * frame, 16, 16), TileGlobal.TileOffset, offset);
-			}
-			if (Framing.GetTileSafely(i, j).TileFrameX == 36)
-			{
-				int frame = tile.TileFrameY / 18;
-
-				//divide the top width by 3 first since there are 3 horizontal frames, then divide it further after that
-				Vector2 offset = new Vector2((BranchRightTexture.Width() / 2) - 33, (BranchRightTexture.Height() / 3) - 26);
-
-				//draw tree tops
-				DrawBranch(i - 1, j - 1, BranchRightTexture.Value, new Rectangle(0, 18 * frame, 16, 16), TileGlobal.TileOffset, offset);
-			}
+            int frame = tile.TileFrameY / 18;
 
             //draw extra tile below so it looks attached to the ground
             if (Main.tile[i, j + 1].TileType != Type)
@@ -280,7 +249,24 @@ namespace Spooky.Content.Tiles.Minibiomes.Desert.Ambient
 			spriteBatch.Draw(TileTexture.Value, pos, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
             spriteBatch.Draw(GlowTexture.Value, pos, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
-			return false;
+            //draw branches
+			if (Framing.GetTileSafely(i, j).TileFrameX == 18)
+			{
+                spriteBatch.Draw(BranchLeftTexture.Value, pos + new Vector2(BranchLeftTexRealWidth / 2 - 7, 14), new Rectangle(0, 18 * frame, 16, 16), col, 0f, 
+				new Vector2(BranchLeftTexRealWidth, BranchLeftTexture.Height() / 3), 1f, SpriteEffects.None, 0f);
+			}
+			if (Framing.GetTileSafely(i, j).TileFrameX == 36)
+			{
+				spriteBatch.Draw(BranchRightTexture.Value, pos + new Vector2(BranchRightTexRealWidth / 2 + 17, 14), new Rectangle(0, 18 * frame, 16, 16), col, 0f, 
+				new Vector2(BranchRightTexRealWidth, BranchRightTexture.Height() / 3), 1f, SpriteEffects.None, 0f);
+			}
 		}
+
+        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+			Main.instance.TilesRenderer.AddSpecialPoint(i, j, TileDrawing.TileCounterType.CustomNonSolid);
+
+			return false;
+        }
     }
 }

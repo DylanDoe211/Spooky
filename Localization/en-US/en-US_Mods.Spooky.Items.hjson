@@ -7287,3 +7287,8 @@ RotWoodWallItem: {
 	DisplayName: Rotted Wood Wall
 	Tooltip: ""
 }
+
+TintedGlassItem: {
+	DisplayName: Tinted Glass
+	Tooltip: ""
+}
