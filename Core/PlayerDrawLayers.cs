@@ -2,6 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
+using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -10,157 +11,14 @@ using Spooky.Content.Buffs.Debuff;
 
 namespace Spooky.Core
 {
-	//special helmet drawing stuff
-	public interface ISpecialArmorDraw
-	{
-		string HeadTexture => string.Empty;
-        string HeadFlippedTexture => string.Empty;
-		string GlowTexture => string.Empty;
-
-		Vector2 Offset => Vector2.Zero;
-
-		Vector2 GlowOffset => Vector2.Zero;
-	}
-
-    //special drawing for helmets, such as helmets that are too long, too tall, or for glowmasks
-    public class SpecialHelmetDrawLayer : PlayerDrawLayer
-    {
-        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Head);
-
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Item headItem = drawPlayer.armor[0];
-
-            if (drawPlayer.armor[10].type > ItemID.None)
-            {
-                headItem = drawPlayer.armor[10];
-            }
-
-			//otherwise use normal visibility conditions
-            return drawInfo.shadow == 0f || !drawInfo.drawPlayer.dead;
-        }
-
-        protected override void Draw(ref PlayerDrawSet drawInfo)
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-            Item headItem = drawPlayer.armor[0];
-
-            if (drawPlayer.armor[10].type > ItemID.None)
-            {
-                headItem = drawPlayer.armor[10];
-            }
-
-            if (ModContent.GetModItem(headItem.type) is ISpecialArmorDraw HelmetDrawer)
-            {
-                string equipSlotName = headItem.ModItem.Name;
-                int equipSlot = EquipLoader.GetEquipSlot(Mod, equipSlotName, EquipType.Head);
-
-                if (!drawInfo.drawPlayer.dead && equipSlot == drawPlayer.head)
-                {
-					//draw the actual texture if its defined
-					if (HelmetDrawer.HeadTexture != string.Empty)
-					{
-						Texture2D Tex = ModContent.Request<Texture2D>(HelmetDrawer.HeadTexture).Value;
-
-						Rectangle frame = Tex.Frame(1, 20, 0, drawPlayer.bodyFrame.Y / drawPlayer.bodyFrame.Height);
-						Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(drawPlayer.width / 2 - frame.Width / 2, drawPlayer.height - frame.Height + 4f) + drawPlayer.headPosition;
-						drawPos = drawPos.Floor();
-						Vector2 origin = drawInfo.headVect;
-						float rotation = drawPlayer.headRotation;
-
-						Vector2 GravityOffset = drawPlayer.gravDir == 1 ? HelmetDrawer.Offset : -HelmetDrawer.Offset - (HelmetDrawer.Offset.Y == 0 ? Vector2.Zero : new Vector2(0f, 4f));
-                        float GravityDirection = drawPlayer.gravDir == 1 ? drawPlayer.direction : -drawPlayer.direction;
-
-						DrawData drawData = new DrawData(Tex, drawPos - new Vector2(GravityOffset.X * GravityDirection, GravityOffset.Y) + origin, frame, drawInfo.colorArmorHead, rotation, origin, 1f, drawInfo.playerEffect, 0)
-						{
-							shader = drawInfo.cHead
-						};
-						drawInfo.DrawDataCache.Add(drawData);
-					}
-
-                    if (HelmetDrawer.HeadFlippedTexture != string.Empty && drawPlayer.direction == -1)
-					{
-                        Texture2D Tex = ModContent.Request<Texture2D>(HelmetDrawer.HeadFlippedTexture).Value;
-
-						Rectangle frame = Tex.Frame(1, 20, 0, drawPlayer.bodyFrame.Y / drawPlayer.bodyFrame.Height);
-						Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(drawPlayer.width / 2 - frame.Width / 2, drawPlayer.height - frame.Height + 4f) + drawPlayer.headPosition;
-						drawPos = drawPos.Floor();
-						Vector2 origin = drawInfo.headVect;
-						float rotation = drawPlayer.headRotation;
-
-						Vector2 GravityOffset = drawPlayer.gravDir == 1 ? HelmetDrawer.Offset : -HelmetDrawer.Offset - (HelmetDrawer.Offset.Y == 0 ? Vector2.Zero : new Vector2(0f, 4f));
-
-						DrawData drawData = new DrawData(Tex, drawPos - GravityOffset + origin, frame, drawInfo.colorArmorHead, rotation, origin, 1f, drawInfo.playerEffect, 0)
-						{
-							shader = drawInfo.cHead
-						};
-						drawInfo.DrawDataCache.Add(drawData);
-                    }
-
-					//draw the glowmask texture if a glowmask texture is defined
-					if (HelmetDrawer.GlowTexture != string.Empty)
-					{
-						Texture2D Tex = ModContent.Request<Texture2D>(HelmetDrawer.GlowTexture).Value;
-
-						Rectangle frame = Tex.Frame(1, 20, 0, drawPlayer.bodyFrame.Y / drawPlayer.bodyFrame.Height);
-						Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(drawPlayer.width / 2 - frame.Width / 2, drawPlayer.height - frame.Height + 4f) + drawPlayer.headPosition;
-						drawPos = drawPos.Floor();
-						Vector2 origin = drawInfo.headVect;
-						float rotation = drawPlayer.headRotation;
-
-						Vector2 GravityOffset = drawPlayer.gravDir == 1 ? HelmetDrawer.GlowOffset : -HelmetDrawer.GlowOffset - (HelmetDrawer.GlowOffset.Y == 0 ? Vector2.Zero : new Vector2(0f, 4f));
-
-						DrawData drawData = new DrawData(Tex, drawPos - GravityOffset + origin, frame, Color.White, rotation, origin, 1f, drawInfo.playerEffect, 0)
-						{
-							shader = drawInfo.cHead
-						};
-						drawInfo.DrawDataCache.Add(drawData);
-					}
-				}
-            }
-        }
-    }
-
-    public class MortarWingsDraw : PlayerDrawLayer
-    {
-        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Wings);
-
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => drawInfo.drawPlayer.wings == EquipLoader.GetEquipSlot(Mod, "MortarWings", EquipType.Wings);
-
-        protected override void Draw(ref PlayerDrawSet drawInfo)
-        {
-            Player drawPlayer = drawInfo.drawPlayer;
-
-            if (drawPlayer.dead)
-            {
-                return;
-            }
-
-            Texture2D tex = ModContent.Request<Texture2D>("Spooky/Content/Items/SpiderCave/MortarWings_RealWings").Value;
-            Texture2D glowTex = ModContent.Request<Texture2D>("Spooky/Content/Items/SpiderCave/MortarWings_RealWingsGlow").Value;
-            Vector2 Position = drawInfo.Position;
-            Vector2 pos = new Vector2((int)(Position.X - Main.screenPosition.X + (drawPlayer.width / 2) - (11 * drawPlayer.direction)), (int)(Position.Y - Main.screenPosition.Y + (drawPlayer.height / 2) - 2f * drawPlayer.gravDir));
-            Color lightColor = Lighting.GetColor((int)drawPlayer.Center.X / 16, (int)drawPlayer.Center.Y / 16, Color.White);
-            Color color = lightColor * (1 - drawInfo.shadow);
-            Color glowColor = Color.White * (1 - drawInfo.shadow);
-            
-            DrawData newData = new DrawData(tex, pos, tex.Frame(1, 7, 0, drawInfo.drawPlayer.wingFrame), color, 0f, new Vector2(tex.Width / 2, tex.Height / 14), 1f, drawInfo.playerEffect, 0);
-			newData.shader = drawInfo.drawPlayer.cWings;
-            DrawData newDataGlow = new DrawData(glowTex, pos, tex.Frame(1, 7, 0, drawInfo.drawPlayer.wingFrame), glowColor, 0f, new Vector2(tex.Width / 2, tex.Height / 14), 1f, drawInfo.playerEffect, 0);
-			newData.shader = drawInfo.drawPlayer.cWings;
-
-            drawInfo.DrawDataCache.Add(newData);
-            drawInfo.DrawDataCache.Add(newDataGlow);
-        }
-    }
-
 	public class HeadUrchin : PlayerDrawLayer
 	{
 		public float addedStretch = 0f;
 		public float stretchRecoil = 0f;
 
 		public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FinchNest);
+
+        private static Asset<Texture2D> tex;
 
 		public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
 		{
@@ -174,7 +32,7 @@ namespace Spooky.Core
 				return;
 			}
 
-			Texture2D tex = ModContent.Request<Texture2D>("Spooky/Content/Projectiles/Blooms/HeadUrchin").Value;
+			tex ??= ModContent.Request<Texture2D>("Spooky/Content/Projectiles/Blooms/HeadUrchin");
 
 			float stretch = 0f;
 
@@ -207,7 +65,7 @@ namespace Spooky.Core
 			addedStretch = -stretchRecoil;
 
 			//copied from vanilla finch minion nest drawing
-			Rectangle bodyFrame5 = new Rectangle(0, 0, tex.Width, tex.Height);
+			Rectangle bodyFrame5 = new Rectangle(0, 0, tex.Width(), tex.Height());
 			bodyFrame5.Y = 0;
 			Vector2 vector6 = new Vector2(0f, drawInfo.drawPlayer.gravDir == 1 ? -8f : 0f);
 			Color color8 = drawInfo.colorArmorHead;
@@ -217,7 +75,7 @@ namespace Spooky.Core
 				color8 = drawInfo.drawPlayer.GetImmuneAlphaPure(Lighting.GetColorClamped((int)mountedCenter.X / 16, (int)mountedCenter.Y / 16, Color.White), drawInfo.shadow);
 				vector6 = new Vector2(0f, -2f) * drawInfo.drawPlayer.Directions;
 			}
-			DrawData item = new DrawData(tex, vector6 + new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - (drawInfo.drawPlayer.bodyFrame.Width / 2) + (drawInfo.drawPlayer.width / 2)), 
+			DrawData item = new DrawData(tex.Value, vector6 + new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - (drawInfo.drawPlayer.bodyFrame.Width / 2) + (drawInfo.drawPlayer.width / 2)), 
 			(int)(drawInfo.Position.Y - Main.screenPosition.Y + drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect + Main.OffsetsPlayerHeadgear[drawInfo.drawPlayer.bodyFrame.Y / drawInfo.drawPlayer.bodyFrame.Height] * drawInfo.drawPlayer.gravDir, 
 			bodyFrame5, color8, drawInfo.drawPlayer.headRotation, drawInfo.headVect, scaleStretch, drawInfo.playerEffect);
 			drawInfo.DrawDataCache.Add(item);

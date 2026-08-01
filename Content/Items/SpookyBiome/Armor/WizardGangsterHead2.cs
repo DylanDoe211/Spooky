@@ -13,16 +13,14 @@ using Spooky.Content.Items.SpookyBiome.Misc;
 namespace Spooky.Content.Items.SpookyBiome.Armor
 {
 	[AutoloadEquip(EquipType.Head)]
-	public class WizardGangsterHead2 : ModItem, ISpecialArmorDraw
+	public class WizardGangsterHead2 : ModItem
 	{
-		public string HeadTexture => "Spooky/Content/Items/SpookyBiome/Armor/WizardGangsterHead2Hat";
-
-		public Vector2 Offset => new Vector2(0, 4f);
-
+		private static Asset<Texture2D> HatTexture;
 		private static Asset<Texture2D> GlowTexture;
 
 		public override void Load()
 		{
+			HatTexture = ModContent.Request<Texture2D>(Texture + "Hat");
 			GlowTexture = ModContent.Request<Texture2D>("Spooky/Content/Items/SpookyBiome/Armor/WizardGangsterHeadGlow");
 		}
 
@@ -38,6 +36,27 @@ namespace Spooky.Content.Items.SpookyBiome.Armor
 		{
 			drawInfo.DrawDataCache.Add(drawData);
 			drawInfo.DrawDataCache.Add(drawData with { color = Color.White, texture = GlowTexture.Value });
+
+			//draw hat
+			Rectangle frame = HatTexture.Frame(1, 20, 0, drawInfo.drawPlayer.bodyFrame.Y / drawInfo.drawPlayer.bodyFrame.Height);
+			Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(drawInfo.drawPlayer.width / 2 - frame.Width / 2,
+			drawInfo.drawPlayer.height - frame.Height + 4f) + drawInfo.drawPlayer.headPosition;
+			drawPos = drawPos.Floor();
+			Vector2 origin = drawInfo.headVect;
+
+			float OffsetY = drawInfo.drawPlayer.gravDir == 1 ? -4f : 8f;
+
+			if (Main.mapFullscreen && drawInfo.drawPlayer.gravDir != 1)
+			{
+				//OffsetY = 0f;
+			}
+
+			drawData = new DrawData(HatTexture.Value, drawPos.Floor() + origin + new Vector2(0, OffsetY), frame,
+			drawData.color, drawInfo.drawPlayer.headRotation, origin, 1f, drawInfo.playerEffect);
+			drawData.shader = drawInfo.cHead;
+
+			drawInfo.DrawDataCache.Add(drawData);
+
 			return false;
 		}
 

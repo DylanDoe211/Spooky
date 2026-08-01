@@ -3,18 +3,23 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Terraria.Localization;
+using ReLogic.Content;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using Spooky.Core;
 
 namespace Spooky.Content.Items.SpiderCave.Armor
 {
 	[AutoloadEquip(EquipType.Head)]
-	public class SporeShroomHead : ModItem, ISpecialArmorDraw
+	public class SporeShroomHead : ModItem
 	{
-		public string HeadTexture => "Spooky/Content/Items/SpiderCave/Armor/SporeShroomHeadHat";
+		private static Asset<Texture2D> TopTexture;
 
-		public Vector2 Offset => new Vector2(-3f, 20f);
+		public override void Load()
+		{
+			TopTexture = ModContent.Request<Texture2D>(Texture + "Top");
+		}
 
 		public override void SetStaticDefaults()
         {
@@ -27,6 +32,33 @@ namespace Spooky.Content.Items.SpiderCave.Armor
 			Item.width = 24;
 			Item.height = 32;
 			Item.rare = ItemRarityID.LightRed;
+		}
+
+		public override bool ModifyEquipTextureDraw(ref PlayerDrawSet drawInfo, ref DrawData drawData, EquipTexture equipTexture, string methodName)
+		{
+			drawInfo.DrawDataCache.Add(drawData);
+
+			Rectangle frame = TopTexture.Frame(1, 20, 0, drawInfo.drawPlayer.bodyFrame.Y / drawInfo.drawPlayer.bodyFrame.Height);
+			Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(drawInfo.drawPlayer.width / 2 - frame.Width / 2,
+			drawInfo.drawPlayer.height - frame.Height + 4f) + drawInfo.drawPlayer.headPosition;
+			drawPos = drawPos.Floor();
+			Vector2 origin = drawInfo.headVect;
+
+			float OffsetX = 3 * drawInfo.drawPlayer.direction;
+			float OffsetY = drawInfo.drawPlayer.gravDir == 1 ? -20f : 24f;
+
+			if (Main.mapFullscreen && drawInfo.drawPlayer.gravDir != 1)
+			{
+				//OffsetY = -16f;
+			}
+
+			drawData = new DrawData(TopTexture.Value, drawPos.Floor() + origin + new Vector2(OffsetX, OffsetY), frame,
+			drawData.color, drawInfo.drawPlayer.headRotation, origin, 1f, drawInfo.playerEffect);
+			drawData.shader = drawInfo.cHead;
+
+			drawInfo.DrawDataCache.Add(drawData);
+
+			return false;
 		}
 
 		public override bool IsArmorSet(Item head, Item body, Item legs) 
