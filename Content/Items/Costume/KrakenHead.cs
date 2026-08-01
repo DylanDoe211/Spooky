@@ -1,15 +1,22 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-
-using Spooky.Core;
+using Terraria.DataStructures;
+using ReLogic.Content;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Spooky.Content.Items.Costume
 {
 	[AutoloadEquip(EquipType.Head)]
-	public class KrakenHead : ModItem, ISpecialArmorDraw
+	public class KrakenHead : ModItem
 	{
-		public string GlowTexture => "Spooky/Content/Items/Costume/KrakenHeadGlow";
+		private static Asset<Texture2D> GlowTexture;
+
+		public override void Load()
+		{
+			GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow");
+		}
 
 		public override void SetDefaults()
 		{
@@ -18,6 +25,13 @@ namespace Spooky.Content.Items.Costume
 			Item.vanity = true;
 			Item.rare = ItemRarityID.Quest;
 			Item.value = Item.buyPrice(gold: 10);
+		}
+
+		public override bool ModifyEquipTextureDraw(ref PlayerDrawSet drawInfo, ref DrawData drawData, EquipTexture equipTexture, string methodName)
+		{
+			drawInfo.DrawDataCache.Add(drawData);
+			drawInfo.DrawDataCache.Add(drawData with { color = Color.White, texture = GlowTexture.Value });
+			return false;
 		}
 	}
 }

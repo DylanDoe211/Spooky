@@ -68,7 +68,6 @@ namespace Spooky
 				case "BossDowned":
 				{
 					string text = args[1] as string;
-					text = text.ToLower();
 					return text switch
 					{
 						nameof(Flags.downedRotGourd) => Flags.downedRotGourd,
@@ -80,6 +79,18 @@ namespace Spooky
 						nameof(Flags.downedSpookFishron) => Flags.downedSpookFishron,
 						nameof(Flags.downedBigBone) => Flags.downedBigBone,
 						_ => throw new ArgumentException(text + " Is not a valid boss downed variable name"),
+					};
+				}
+                case "EventDowned":
+				{
+					string text = args[1] as string;
+					return text switch
+					{
+						nameof(Flags.downedPandoraBox) => Flags.downedPandoraBox,
+						nameof(Flags.downedEggEvent) => Flags.downedEggEvent,
+						nameof(Flags.downedSpiderWar) => Flags.downedSpiderWar,
+						nameof(Flags.downedSporeEvent) => Flags.downedSporeEvent,
+						_ => throw new ArgumentException(text + " Is not a valid event downed variable name"),
 					};
 				}
 				default:

@@ -46,6 +46,20 @@ namespace Spooky.Content.NPCs.Boss.Moco
             NPC.dontCountMe = true;
         }
 
+        public override void FindFrame(int frameHeight)
+        {
+            NPC.frameCounter++;
+            if (NPC.frameCounter > 2)
+            {
+                NPC.frame.Y = NPC.frame.Y + frameHeight;
+                NPC.frameCounter = 0;
+            }
+            if (NPC.frame.Y >= frameHeight * 8)
+            {
+                NPC.frame.Y = 0 * frameHeight;
+            }
+        }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             NPCTexture ??= ModContent.Request<Texture2D>(Texture);
@@ -72,19 +86,10 @@ namespace Spooky.Content.NPCs.Boss.Moco
             Main.EntitySpriteDraw(GlowTexture.Value, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, NPC.GetAlpha(Color.White), NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
         }
 
-        public override void FindFrame(int frameHeight)
-        {
-            NPC.frameCounter++;
-            if (NPC.frameCounter > 2)
-            {
-                NPC.frame.Y = NPC.frame.Y + frameHeight;
-                NPC.frameCounter = 0;
-            }
-            if (NPC.frame.Y >= frameHeight * 8)
-            {
-                NPC.frame.Y = 0 * frameHeight;
-            }
-        }
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+		{
+			return false;
+		}
 
 		public override void AI()
 		{

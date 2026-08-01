@@ -14,6 +14,7 @@ using Spooky.Content.Projectiles.Slingshots;
 using Spooky.Content.Tiles.Cemetery.Tree;
 using Spooky.Content.Tiles.Minibiomes.Ocean.Tree;
 using Spooky.Content.Tiles.Minibiomes.Vegetable.Tree;
+using Spooky.Content.Tiles.Shipyard.Tree;
 using Spooky.Content.Tiles.SpiderCave.Tree;
 using Spooky.Content.Tiles.SpookyBiome.Tree;
 using Spooky.Content.Tiles.SpookyHell.Tree;
@@ -244,6 +245,11 @@ namespace Spooky.Core
 							if (tile.TileType == ModContent.TileType<BroccoliSapling>())
 							{
 								Broccoli.Grow(i, j + 1, 5, 9, true);
+							}
+
+							if (tile.TileType == ModContent.TileType<MangroveSapling>())
+							{
+								MangroveTree.Grow(i, j + 1, 5, 13, true, Main.tile[i, j].TileFrameX);
 							}
 
 							if (tile.TileType == ModContent.TileType<SpookySapling>() || tile.TileType == ModContent.TileType<SpookySaplingGreen>() ||

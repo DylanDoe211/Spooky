@@ -1457,6 +1457,16 @@ GrottoCrate2: {
 	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 }
 
+ShipyardCrate: {
+	DisplayName: Rotten Crate
+	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+}
+
+ShipyardCrate2: {
+	DisplayName: Decayed Crate
+	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+}
+
 SpookyCrate: {
 	DisplayName: Spooky Crate
 	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
@@ -7290,5 +7300,20 @@ RotWoodWallItem: {
 
 TintedGlassItem: {
 	DisplayName: Tinted Glass
+	Tooltip: ""
+}
+
+TintedGlassWallItem: {
+	DisplayName: Tinted Glass Wall
+	Tooltip: ""
+}
+
+MangroveSaplingItem: {
+	DisplayName: Mangrove Seedling
+	Tooltip: Plants mangrove saplings
+}
+
+MoyaiMask: {
+	DisplayName: Moyai Mask
 	Tooltip: ""
 }

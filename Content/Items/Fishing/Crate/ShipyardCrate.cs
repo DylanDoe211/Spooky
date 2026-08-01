@@ -2,29 +2,29 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.GameContent.Creative;
 
-using Spooky.Content.Items.BossSummon;
-using Spooky.Content.Items.Catacomb;
-using Spooky.Content.Items.Slingshots;
-using Spooky.Content.Tiles.Cemetery;
+using Spooky.Core;
+using Spooky.Content.Items.Costume;
+using Spooky.Content.Tiles.Shipyard;
+using Spooky.Content.Tiles.Shipyard.Tree;
 
 namespace Spooky.Content.Items.Fishing.Crate
 {
-	public class CatacombCrate : ModItem
+	public class ShipyardCrate : ModItem
     {
 		public override void SetStaticDefaults() 
 		{
 			Item.ResearchUnlockCount = 5;
 			ItemID.Sets.IsFishingCrate[Item.type] = true;
-			ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<ShipyardCrate>();
 		}
 
 		public override void SetDefaults() 
 		{
-            Item.DefaultToPlaceableTile(ModContent.TileType<CatacombCrateTile>());
+			Item.DefaultToPlaceableTile(ModContent.TileType<ShipyardCrateTile>());
             Item.width = 34;
 			Item.height = 34;
-			Item.rare = ItemRarityID.Green;  
+			Item.rare = ItemRarityID.Green;
 			Item.value = Item.buyPrice(gold: 1);
 		}
 
@@ -38,20 +38,9 @@ namespace Spooky.Content.Items.Fishing.Crate
 			return true;
 		}
 
-		public override void ModifyItemLoot(ItemLoot itemLoot) 
+		public override void ModifyItemLoot(ItemLoot itemLoot)
 		{
-			//main items
-			int[] catacombChestDrops = new int[] 
-			{
-				ModContent.ItemType<BoneBow>(), ModContent.ItemType<GraveCrossbow>(), ModContent.ItemType<HarvesterScythe>(), 
-                ModContent.ItemType<HighVelocitySlingshot>(), ModContent.ItemType<NineTails>(), ModContent.ItemType<ThornStaff>()
-			};
-
-            itemLoot.Add(ItemDropRule.OneFromOptions(1, catacombChestDrops));
-
-			itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<EMFReaderBroke>(), 2));
-
-            //drop vanilla ores
+			//drop vanilla ores
             IItemDropRule[] oreTypes = new IItemDropRule[] 
 			{
 				ItemDropRule.Common(ItemID.CopperOre, 1, 8, 15),
@@ -106,7 +95,11 @@ namespace Spooky.Content.Items.Fishing.Crate
 			};
 			itemLoot.Add(new OneFromRulesRule(2, highendBait));
 
-			itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<CemeteryStoneItem>(), 2, 35, 75));
+			itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<BlackSandItem>(), 2, 45, 85));
+			itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<BlackSandstoneItem>(), 2, 45, 85));
+			itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<MangroveSaplingItem>(), 5, 1, 2));
+
+			itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<MoyaiMask>(), 15));
 
             //coins
             itemLoot.Add(ItemDropRule.Common(ItemID.GoldCoin, 4, 1, 3));

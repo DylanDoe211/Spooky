@@ -9,12 +9,10 @@ using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Spooky.Content.Tiles.SpookyHell.Tree
+namespace Spooky.Content.Tiles.Shipyard.Tree
 {
-    public class EyeSapling : ModTile
+    public class MangroveSapling : ModTile
 	{
-        private Asset<Texture2D> GlowTexture;
-
         public override void SetStaticDefaults() 
 		{
 			Main.tileFrameImportant[Type] = true;
@@ -29,15 +27,15 @@ namespace Spooky.Content.Tiles.SpookyHell.Tree
 			TileObjectData.newTile.CoordinateHeights = new[] { 16, 16 };
 			TileObjectData.newTile.CoordinateWidth = 16;
 			TileObjectData.newTile.CoordinatePadding = 2;
-			TileObjectData.newTile.AnchorValidTiles = new[] { ModContent.TileType<SpookyMushGrass>(), ModContent.TileType<EyeBlock>() };
+			TileObjectData.newTile.AnchorValidTiles = new[] { ModContent.TileType<BlackSand>() };
 			TileObjectData.newTile.StyleHorizontal = true;
 			TileObjectData.newTile.DrawFlipHorizontal = true;
 			TileObjectData.newTile.WaterPlacement = LiquidPlacement.NotAllowed;
 			TileObjectData.newTile.LavaDeath = true;
 			TileObjectData.addTile(Type);
 			LocalizedText name = CreateMapEntryName();
-            AddMapEntry(new Color(168, 58, 96), name);
-            DustType = DustID.Blood;
+            AddMapEntry(new Color(101, 98, 94), name);
+            DustType = DustID.Ash;
 			AdjTiles = new int[] { TileID.Saplings };
 		}
 
@@ -67,30 +65,13 @@ namespace Spooky.Content.Tiles.SpookyHell.Tree
 
 		public override void RandomUpdate(int i, int j) 
 		{
-            if (Main.tile[i, j + 1].TileType != ModContent.TileType<EyeBlock>() && Main.tile[i, j + 1].TileType != ModContent.TileType<SpookyMushGrass>())
+            if (Main.tile[i, j + 1].TileType != ModContent.TileType<BlackSand>())
             {
-				if (WorldGen.genRand.NextBool(4))
+				if (WorldGen.genRand.NextBool(20))
 				{
-					if (WorldGen.genRand.NextBool())
-					{
-						EyeTreeShort.Grow(i, j + 1, 8, 15, true);
-					}
-					else
-					{
-						EyeTree.Grow(i, j + 1, 12, 35, true);
-					}
+					MangroveTree.Grow(i, j + 1, 5, 13, true, Main.tile[i, j].TileFrameX);
 				}
             }
-		}
-
-		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-		{
-            GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
-
-            Tile tile = Framing.GetTileSafely(i, j);
-			Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange);
-
-			spriteBatch.Draw(GlowTexture.Value, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Color.White);
 		}
 	}
 }

@@ -1,6 +1,11 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.DataStructures;
+using Terraria.Localization;
+using ReLogic.Content;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using Spooky.Core;
 using Spooky.Content.Items.SpookyHell.Misc;
@@ -11,25 +16,27 @@ namespace Spooky.Content.Items.SpookyHell.Armor
 	[AutoloadEquip(EquipType.Body)]
 	public class EyeBody : ModItem
 	{
-        public override void SetStaticDefaults()
-        {
-            if (Main.netMode == NetmodeID.Server)
-            {
-                return;
-            }
+		private static Asset<Texture2D> GlowTexture;
 
-            int equipSlot = EquipLoader.GetEquipSlot(Mod, Name, EquipType.Body);
+		public override void Load()
+		{
+			GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow");
+		}
 
-            ArmorIDs.Body.Sets.HidesArms[equipSlot] = true;
-        }
-
-        public override void SetDefaults() 
+		public override void SetDefaults() 
 		{
 			Item.defense = 5;
 			Item.width = 36;
 			Item.height = 22;
 			Item.rare = ItemRarityID.Green;
 			Item.value = Item.buyPrice(gold: 2);
+		}
+
+		public override bool ModifyEquipTextureDraw(ref PlayerDrawSet drawInfo, ref DrawData drawData, EquipTexture equipTexture, string methodName)
+		{
+			drawInfo.DrawDataCache.Add(drawData);
+			drawInfo.DrawDataCache.Add(drawData with { color = Color.White, texture = GlowTexture.Value });
+			return false;
 		}
 
 		public override void UpdateEquip(Player player) 

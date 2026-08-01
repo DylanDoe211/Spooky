@@ -47,6 +47,11 @@ namespace Spooky.Content.NPCs.Boss.Moco
             return false;
         }
 
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+		{
+			return false;
+		}
+
         public override void AI()
         {
             NPC.ai[0]++;

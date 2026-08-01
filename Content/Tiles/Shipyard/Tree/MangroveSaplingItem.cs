@@ -3,9 +3,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.Creative;
 
-namespace Spooky.Content.Tiles.SpookyHell.Tree
+namespace Spooky.Content.Tiles.Shipyard.Tree
 {
-    public class EyeSeed : ModItem
+    public class MangroveSaplingItem : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -14,7 +14,7 @@ namespace Spooky.Content.Tiles.SpookyHell.Tree
 
         public override void SetDefaults()
         {
-            Item.DefaultToPlaceableTile(ModContent.TileType<EyeSapling>());
+            Item.DefaultToPlaceableTile(ModContent.TileType<MangroveSapling>());
             Item.width = 16;
 			Item.height = 16;
         }

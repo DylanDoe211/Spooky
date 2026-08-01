@@ -2,13 +2,16 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Localization;
+using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
+using Terraria.Audio;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
 using Spooky.Core;
+using Spooky.Content.Gores.Misc;
 
 namespace Spooky.Content.Tiles.Shipyard.Tree
 {
@@ -60,8 +63,19 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
             Main.tileSolid[Framing.GetTileSafely(i, j).TileType]);
         }
 
-        public static bool Grow(int i, int j, int minSize, int maxSize)
+        public static bool Grow(int i, int j, int minSize, int maxSize, bool saplingExists = false, int TopFrame = -1)
         {
+            if (saplingExists)
+            {
+                WorldGen.KillTile(i, j, false, false, true);
+                WorldGen.KillTile(i, j - 1, false, false, true);
+
+				if (Main.netMode != NetmodeID.SinglePlayer)
+				{
+					NetMessage.SendTileSquare(-1, i, j, 2, 1, TileChangeType.None);
+				}
+			}
+
             int height = WorldGen.genRand.Next(minSize, maxSize);
             for (int k = 1; k < height; ++k)
             {
@@ -128,6 +142,10 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
                 if (numSegments == height - 1)
                 {
                     Framing.GetTileSafely(i, j - numSegments).TileFrameX = 36;
+                    if (TopFrame != -1)
+                    {
+                        Framing.GetTileSafely(i, j - numSegments).TileFrameY = (short)TopFrame;
+                    }
                 }
 
                 if (Main.netMode != NetmodeID.SinglePlayer)
@@ -153,6 +171,25 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
 				(int x, int y) = (i, j);
 				KillEntireTreeDown(ref x, ref y);
 			}
+
+            //spawn leaves from tree top when its windy enough, with the chance of a leaf spawning getting higher based on wind intensity
+            if (Framing.GetTileSafely(i, j).TileFrameX == 36 && closer)
+            {
+                double WindIntensity = Math.Abs(Main.WindForVisuals);
+                int ChanceToSpawnLeaf = 200 - ((int)WindIntensity * 165);
+                if (WindIntensity > 0.5f && Main.rand.NextBool(ChanceToSpawnLeaf))
+                {
+                    int frame = Framing.GetTileSafely(i, j).TileFrameY / 18;
+
+                    int MaxLeaves = WindIntensity > 1f ? Main.rand.Next(0, 3) : Main.rand.Next(0, 2);
+                    for (int numLeaves = 0; numLeaves <= MaxLeaves; numLeaves++)
+                    {
+                        int[] Leaves = new int[] { ModContent.GoreType<LeafMangroveOrange>(), ModContent.GoreType<LeafMangroveBlue>(), ModContent.GoreType<LeafMangroveYellow>() };
+
+                        Gore.NewGore(null, new Vector2((i * 16) + Main.rand.Next(-50, 50), (j * 16) + Main.rand.Next(-100, -25)), Vector2.Zero, Leaves[frame], 1f);
+                    }
+                }
+            }
 		}
 
 		private void KillEntireTreeDown(ref int x, ref int y)
@@ -179,6 +216,7 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
                 {
                     NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, x, y);
                 }
+
                 y--;
 			}
 
@@ -198,6 +236,31 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
             }
 
             int belowFrame = Framing.GetTileSafely(i, j + 1).TileFrameX;
+
+            //spawn leaves from tree tops
+            if (Framing.GetTileSafely(i, j).TileFrameX == 36)
+            {
+                int frame = Framing.GetTileSafely(i, j).TileFrameY / 18;
+                int MaxLeaves = Main.rand.Next(15, 25);
+                for (int numLeaf = 0; numLeaf <= MaxLeaves; numLeaf++)
+                {
+                    int[] Leaves = new int[] { ModContent.GoreType<LeafMangroveOrange>(), ModContent.GoreType<LeafMangroveBlue>(), ModContent.GoreType<LeafMangroveYellow>() };
+
+                    Gore.NewGore(null, new Vector2((i * 16) + Main.rand.Next(-50, 50), (j * 16) + Main.rand.Next(-100, -25)), Vector2.Zero, Leaves[frame], 1f);
+                }
+
+                //spawn a seed from the tree
+                if (Main.rand.NextBool(3))
+                {
+                    int NewItem = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2((i * 16) + Main.rand.Next(-50, 50), (j * 16) + Main.rand.Next(-100, -25)), 
+                    ModContent.ItemType<MangroveSaplingItem>(), Main.rand.Next(1, 4));
+
+                    if (Main.netMode == NetmodeID.MultiplayerClient && NewItem >= 0)
+					{
+						NetMessage.SendData(MessageID.SyncItem, -1, -1, null, NewItem, 1f);
+					}
+                }
+            }
 
             //if theres any remaining segments below, turn it into a stub top segment
             if (belowFrame < 54)

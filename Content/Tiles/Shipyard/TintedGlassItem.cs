@@ -25,6 +25,11 @@ namespace Spooky.Content.Tiles.Shipyard
             .AddIngredient(ModContent.ItemType<BlackSandItem>(), 2)
             .AddTile(TileID.Furnaces)
             .Register();
+
+            CreateRecipe()
+            .AddIngredient(ModContent.ItemType<TintedGlassWallItem>(), 4)
+            .AddTile(TileID.WorkBenches)
+            .Register();
         }
     }
 }

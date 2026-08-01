@@ -234,7 +234,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Vegetable.Tree
                 //right branch
                 if (Framing.GetTileSafely(i, j).TileFrameY == 18 || Framing.GetTileSafely(i, j).TileFrameY == 36)
                 {
-					spriteBatch.Draw(BranchTexture.Value, pos + new Vector2(BranchesTexRealWidth / 2 + 21, BranchTexture.Height() / 2 + 18), new Rectangle(0, 18, 18, 16), col, 0f, 
+					spriteBatch.Draw(BranchTexture.Value, pos + new Vector2(BranchesTexRealWidth / 2 + 19, BranchTexture.Height() / 2 + 18), new Rectangle(0, 18, 18, 16), col, 0f, 
 				    new Vector2(BranchesTexRealWidth, BranchTexture.Height()), 1f, SpriteEffects.None, 0f);
                 }
             }

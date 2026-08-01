@@ -534,6 +534,10 @@ namespace Spooky.Core
 
 						ShouldPlayerDie = false;
 					}
+					else
+					{
+						CemeteryLilyRevives--;
+					}
 				}
 			}
 

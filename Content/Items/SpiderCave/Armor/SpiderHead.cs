@@ -1,7 +1,11 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.DataStructures;
 using Terraria.Localization;
+using ReLogic.Content;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using Spooky.Core;
 using Spooky.Content.Items.SpiderCave.Misc;
@@ -10,9 +14,14 @@ using Spooky.Content.Tiles.SpiderCave;
 namespace Spooky.Content.Items.SpiderCave.Armor
 {
 	[AutoloadEquip(EquipType.Head)]
-	public class SpiderHead : ModItem, ISpecialArmorDraw
+	public class SpiderHead : ModItem
 	{
-		public string GlowTexture => "Spooky/Content/Items/SpiderCave/Armor/SpiderHeadGlow";
+		private static Asset<Texture2D> GlowTexture;
+
+		public override void Load()
+		{
+			GlowTexture = ModContent.Request<Texture2D>(Texture + "Glow");
+		}
 
 		public override void SetDefaults() 
 		{
@@ -20,6 +29,13 @@ namespace Spooky.Content.Items.SpiderCave.Armor
 			Item.width = 28;
 			Item.height = 22;
 			Item.rare = ItemRarityID.Blue;
+		}
+
+		public override bool ModifyEquipTextureDraw(ref PlayerDrawSet drawInfo, ref DrawData drawData, EquipTexture equipTexture, string methodName)
+		{
+			drawInfo.DrawDataCache.Add(drawData);
+			drawInfo.DrawDataCache.Add(drawData with { color = Color.White, texture = GlowTexture.Value });
+			return false;
 		}
 
 		public override bool IsArmorSet(Item head, Item body, Item legs) 

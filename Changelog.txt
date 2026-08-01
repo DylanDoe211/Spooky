@@ -10,6 +10,8 @@ Changes:
 -Krampus quest reward presents now need 5 to research for journey mode
 -Krampus quest reward presents now have a separate drop chance for each piece of the krampus helper vanity
 -Made spooky mod world generation fill up the progress bar better to track how far along each biome is done generating
+-Removing the lily of rebirth bloom buff off of yourself does not reset the number of revives you have if you don't have any revives left
+-Updated daffodil on the spooky mod menu to be her new design
 
 Fixes:
 -Tar cactus platforms not being craftable back into tar cactus blocks
@@ -18,3 +20,4 @@ Fixes:
 -Spooky mod custom trees not being destroyed immediately and breaking one by one when destroyed
 -Multiple spooky mod custom trees/tiles with special effects/drawing being blurry, and having completely incorrect offsets in retro/trippy lighting and snapshot mode
 -Orange spooky grass not drawing special merge texture with green grass when sloped
+-Config for teleporting all players into nose temple combat rooms not working

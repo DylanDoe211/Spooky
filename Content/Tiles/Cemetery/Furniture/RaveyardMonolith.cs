@@ -5,11 +5,14 @@ using Terraria.ObjectData;
 using Terraria.GameContent.Drawing;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.DataStructures;
+using Terraria.GameContent.Drawing;
 using Terraria.Audio;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+
+using Spooky.Core;
 
 namespace Spooky.Content.Tiles.Cemetery.Furniture
 {
@@ -86,7 +89,7 @@ namespace Spooky.Content.Tiles.Cemetery.Furniture
         private static Asset<Texture2D> GlowTexture;
         private static Asset<Texture2D> SpotlightTexture;
 
-		public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+		public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
 		{
             SpotlightTexture ??= ModContent.Request<Texture2D>("Spooky/Effects/LightConeUp");
 
@@ -95,17 +98,27 @@ namespace Spooky.Content.Tiles.Cemetery.Furniture
 			if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
 			{
 				Vector2 frameOrigin = new Vector2(SpotlightTexture.Width() / 2f, SpotlightTexture.Height());
-				Vector2 drawPos = new Vector2(i * 16, j * 16) + new Vector2(210, -155) - Main.screenPosition + frameOrigin + new Vector2(-SpotlightTexture.Width() / 2, 0f);
+                Vector2 pos = TileGlobal.TileCustomPosition(i, j, TileGlobal.TileOffset);
+				Vector2 drawPos = pos + new Vector2(210, -155) + frameOrigin + new Vector2(-SpotlightTexture.Width() / 2, 0f);
 
                 float Rotation = Main.GlobalTimeWrappedHourly * 0.5f;
 
-				spriteBatch.Draw(SpotlightTexture.Value, drawPos, null, new Color(Main.DiscoColor.R, Main.DiscoColor.G, Main.DiscoColor.B, 0), MathF.Sin(Rotation), frameOrigin, 0.35f, SpriteEffects.None, 0);
-                spriteBatch.Draw(SpotlightTexture.Value, drawPos, null, new Color(Main.DiscoColor.G, Main.DiscoColor.B, Main.DiscoColor.R, 0), MathF.Sin(-Rotation), frameOrigin, 0.35f, SpriteEffects.None, 0);
-                spriteBatch.Draw(SpotlightTexture.Value, drawPos, null, new Color(Main.DiscoColor.B, Main.DiscoColor.R, Main.DiscoColor.G, 0), MathF.Cos(Rotation), frameOrigin, 0.35f, SpriteEffects.None, 0);
+				spriteBatch.Draw(SpotlightTexture.Value, pos + new Vector2(17, 10), null, new Color(Main.DiscoColor.R, Main.DiscoColor.G, Main.DiscoColor.B, 0), MathF.Sin(Rotation), frameOrigin, 0.35f, SpriteEffects.None, 0);
+                spriteBatch.Draw(SpotlightTexture.Value, pos + new Vector2(17, 10), null, new Color(Main.DiscoColor.G, Main.DiscoColor.B, Main.DiscoColor.R, 0), MathF.Sin(-Rotation), frameOrigin, 0.35f, SpriteEffects.None, 0);
+                spriteBatch.Draw(SpotlightTexture.Value, pos + new Vector2(17, 10), null, new Color(Main.DiscoColor.B, Main.DiscoColor.R, Main.DiscoColor.G, 0), MathF.Cos(Rotation), frameOrigin, 0.35f, SpriteEffects.None, 0);
 			}
-
-            return true;
 		}
+
+        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+            Tile tile = Framing.GetTileSafely(i, j);
+            if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
+			{
+			    Main.instance.TilesRenderer.AddSpecialPoint(i, j, TileDrawing.TileCounterType.CustomNonSolid);
+            }
+
+			return true;
+        }
 
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
