@@ -38,21 +38,18 @@ namespace Spooky.Content.Items.SpiderCave.Armor
 		{
 			drawInfo.DrawDataCache.Add(drawData);
 
+			//offset values
+			int OffsetY = drawInfo.drawPlayer.gravDir == 1 ? -20 : -24;
+			Vector2 HeadOffset = new Vector2(3, OffsetY) * drawInfo.drawPlayer.Directions;
+
+			//draw mushroom top
 			Rectangle frame = TopTexture.Frame(1, 20, 0, drawInfo.drawPlayer.bodyFrame.Y / drawInfo.drawPlayer.bodyFrame.Height);
 			Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(drawInfo.drawPlayer.width / 2 - frame.Width / 2,
-			drawInfo.drawPlayer.height - frame.Height + 4f) + drawInfo.drawPlayer.headPosition;
+			drawInfo.drawPlayer.height - frame.Height + 4f) + drawInfo.drawPlayer.headPosition + HeadOffset;
 			drawPos = drawPos.Floor();
 			Vector2 origin = drawInfo.headVect;
 
-			float OffsetX = 3 * drawInfo.drawPlayer.direction;
-			float OffsetY = drawInfo.drawPlayer.gravDir == 1 ? -20f : 24f;
-
-			if (Main.mapFullscreen && drawInfo.drawPlayer.gravDir != 1)
-			{
-				//OffsetY = -16f;
-			}
-
-			drawData = new DrawData(TopTexture.Value, drawPos.Floor() + origin + new Vector2(OffsetX, OffsetY), frame,
+			drawData = new DrawData(TopTexture.Value, drawPos.Floor() + origin, frame,
 			drawData.color, drawInfo.drawPlayer.headRotation, origin, 1f, drawInfo.playerEffect);
 			drawData.shader = drawInfo.cHead;
 

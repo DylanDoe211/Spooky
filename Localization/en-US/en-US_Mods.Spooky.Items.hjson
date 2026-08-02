@@ -6677,18 +6677,8 @@ GourdGreenCarvedItem: {
 	Tooltip: ""
 }
 
-GourdGreenCarvedLitItem: {
-	DisplayName: Green Gourd 'O Lantern
-	Tooltip: ""
-}
-
 GourdLimeCarvedItem: {
 	DisplayName: Lime Carved Gourd
-	Tooltip: ""
-}
-
-GourdLimeCarvedLitItem: {
-	DisplayName: Lime Gourd 'O Lantern
 	Tooltip: ""
 }
 
@@ -6697,18 +6687,8 @@ GourdLimeOrangeCarvedItem: {
 	Tooltip: ""
 }
 
-GourdLimeOrangeCarvedLitItem: {
-	DisplayName: Lime-Orange Gourd 'O Lantern
-	Tooltip: ""
-}
-
 GourdOrangeCarvedItem: {
 	DisplayName: Orange Carved Gourd
-	Tooltip: ""
-}
-
-GourdOrangeCarvedLitItem: {
-	DisplayName: Orange Gourd 'O Lantern
 	Tooltip: ""
 }
 
@@ -6717,18 +6697,8 @@ GourdRedCarvedItem: {
 	Tooltip: ""
 }
 
-GourdRedCarvedLitItem: {
-	DisplayName: Red Gourd 'O Lantern
-	Tooltip: ""
-}
-
 GourdRottenCarvedItem: {
 	DisplayName: Rotten Carved Gourd
-	Tooltip: ""
-}
-
-GourdRottenCarvedLitItem: {
-	DisplayName: Rotten Gourd 'O Lantern
 	Tooltip: ""
 }
 
@@ -6737,28 +6707,13 @@ GourdWhiteCarvedItem: {
 	Tooltip: ""
 }
 
-GourdWhiteCarvedLitItem: {
-	DisplayName: White Gourd 'O Lantern
-	Tooltip: ""
-}
-
 GourdYellowCarvedItem: {
 	DisplayName: Yellow Carved Gourd
 	Tooltip: ""
 }
 
-GourdYellowCarvedLitItem: {
-	DisplayName: Yellow Gourd 'O Lantern
-	Tooltip: ""
-}
-
 GourdYellowGreenCarvedItem: {
 	DisplayName: Yellow-Green Carved Gourd
-	Tooltip: ""
-}
-
-GourdYellowGreenCarvedLitItem: {
-	DisplayName: Yellow-Green Gourd 'O Lantern
 	Tooltip: ""
 }
 

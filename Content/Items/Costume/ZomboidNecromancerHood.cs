@@ -13,10 +13,6 @@ namespace Spooky.Content.Items.Costume
 	[AutoloadEquip(EquipType.Head)]
 	public class ZomboidNecromancerHood : ModItem
 	{
-		//public string HeadTexture => "Spooky/Content/Items/Costume/ZomboidNecromancerHoodTop";
-
-		//public Vector2 Offset => new Vector2(0, 4f);
-
 		private static Asset<Texture2D> HatTexture;
 
 		public override void Load()
@@ -36,21 +32,18 @@ namespace Spooky.Content.Items.Costume
 		{
 			drawInfo.DrawDataCache.Add(drawData);
 
+			//offset values
+			int OffsetY = drawInfo.drawPlayer.gravDir == 1 ? -4 : -8;
+			Vector2 HeadOffset = new Vector2(0, OffsetY) * drawInfo.drawPlayer.Directions;
+
 			//draw hat
 			Rectangle frame = HatTexture.Frame(1, 20, 0, drawInfo.drawPlayer.bodyFrame.Y / drawInfo.drawPlayer.bodyFrame.Height);
 			Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(drawInfo.drawPlayer.width / 2 - frame.Width / 2,
-			drawInfo.drawPlayer.height - frame.Height + 4f) + drawInfo.drawPlayer.headPosition;
+			drawInfo.drawPlayer.height - frame.Height + 4f) + drawInfo.drawPlayer.headPosition + HeadOffset;
 			drawPos = drawPos.Floor();
 			Vector2 origin = drawInfo.headVect;
 
-			float OffsetY = drawInfo.drawPlayer.gravDir == 1 ? -4f : 8f;
-
-			if (Main.mapFullscreen && drawInfo.drawPlayer.gravDir != 1)
-			{
-				//OffsetY = 0f;
-			}
-
-			drawData = new DrawData(HatTexture.Value, drawPos.Floor() + origin + new Vector2(0, OffsetY), frame,
+			drawData = new DrawData(HatTexture.Value, drawPos.Floor() + origin, frame,
 			drawData.color, drawInfo.drawPlayer.headRotation, origin, 1f, drawInfo.playerEffect);
 			drawData.shader = drawInfo.cHead;
 
