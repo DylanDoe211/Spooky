@@ -259,7 +259,7 @@ namespace Spooky.Content.Tiles.SpookyHell.Tree
                 }
 
                 //spawn gores out of the tree
-                for (int numGores = 0; numGores <= Main.rand.Next(2, 4); numGores++)
+                for (int numGores = 0; numGores <= Main.rand.Next(1, 3); numGores++)
                 {
                     if (Main.netMode != NetmodeID.Server) 
                     {

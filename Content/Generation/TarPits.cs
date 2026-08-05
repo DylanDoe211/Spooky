@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using Spooky.Content.Tiles.Catacomb;
 using Spooky.Content.Tiles.Minibiomes.Desert;
 using Spooky.Content.Tiles.Minibiomes.Desert.Ambient;
+using Spooky.Content.Tiles.Minibiomes.Desert.Furniture;
 
 namespace Spooky.Content.Generation
 {
@@ -300,6 +301,13 @@ namespace Spooky.Content.Generation
 							ushort[] Stalagmites = new ushort[] { (ushort)ModContent.TileType<DesertStalagmite1>(), (ushort)ModContent.TileType<DesertStalagmite2>(), (ushort)ModContent.TileType<DesertStalagmite3>() };
 
 							WorldGen.PlaceObject(i, j - 1, WorldGen.genRand.Next(Stalagmites));
+						}
+
+						//place pots last
+						if (WorldGen.genRand.NextBool() && !Main.tile[i, j - 1].HasTile)
+						{
+							WorldGen.PlaceObject(i, j - 1, ModContent.TileType<TarPitsPots>(), true, WorldGen.genRand.Next(0, 3));
+							NetMessage.SendObjectPlacement(-1, i, j - 1, ModContent.TileType<TarPitsPots>(), 0, 0, -1, -1);
 						}
 					}
 				}

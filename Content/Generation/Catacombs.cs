@@ -1302,7 +1302,7 @@ namespace Spooky.Content.Generation
                         //place grass walls
                         if (WorldGen.genRand.NextBool(250) && !tile.HasTile && Y < BigBoneArenaY - 50)
                         {
-                            int[] ValidTiles = { ModContent.TileType<CatacombBrick2>(), ModContent.TileType<GildedBrick>() };
+                            int[] ValidTiles = { ModContent.TileType<CatacombBrick2>(), ModContent.TileType<CatacombBrick2Arena>(), ModContent.TileType<GildedBrick>() };
 
                             SpookyWorldMethods.PlaceOval(X, Y, ModContent.TileType<CatacombBrick2Grass>(), ModContent.WallType<CatacombGrassWall2>(),
                             WorldGen.genRand.Next(7, 13), WorldGen.genRand.Next(7, 13), 1f, true, false, true, ValidTiles);
@@ -1643,6 +1643,30 @@ namespace Spooky.Content.Generation
 						}
 					}
 				}
+            }
+
+            //place pots
+            for (int X = XMiddle - 300; X <= XMiddle + 300; X++)
+            {
+                for (int Y = (int)Main.worldSurface - 10; Y <= BigBoneArenaY - 30; Y++)
+                {
+                    Tile tile = Main.tile[X, Y];
+
+                    if (tile.WallType == ModContent.WallType<CatacombBrickWall1>())
+                    {
+                        if (WorldGen.genRand.NextBool(3))
+					    {
+                            //WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<UpperCatacombPots>(), true, Main.rand.Next(0, 3));
+                        }
+                    }
+                    if (tile.WallType == ModContent.WallType<CatacombBrickWall2>())
+                    {
+                        if (WorldGen.genRand.NextBool(3))
+					    {
+                            WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<LowerCatacombPots>(), true, Main.rand.Next(0, 3));
+                        }
+                    }   
+                }
             }
         }
 

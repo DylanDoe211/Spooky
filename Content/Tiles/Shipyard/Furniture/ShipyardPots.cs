@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria.DataStructures;
+using Terraria.Localization;
 using Terraria.Audio;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
@@ -17,7 +18,8 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
 			Main.tileSolid[Type] = false;
             Main.tileFrameImportant[Type] = true;
             Main.tileNoAttach[Type] = true;
-            TileID.Sets.BreakableWhenPlacing[Type] = true;
+			Main.tileSpelunker[Type] = true;
+            TileID.Sets.BreakableWhenPlacing[Type] = false;
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
 			TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.Height = 2;
@@ -25,7 +27,7 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
             TileObjectData.newTile.Origin = new Point16(0, 1);
             TileObjectData.newTile.DrawYOffset = 2;
 			TileObjectData.addTile(Type);
-            AddMapEntry(new Color(158, 170, 192));
+            AddMapEntry(new Color(149, 80, 81), Language.GetText("MapObject.Pot"));
             DustType = DustID.Slush;
 		}
 
@@ -63,7 +65,12 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
 				//wooden arrows
 				case 4:
 				{
-					yield return new Item(ItemID.WoodenArrow, Main.rand.Next(10, 21));
+					int[] Ammos = new int[] { ItemID.WoodenArrow, ItemID.MusketBall };
+					if (Main.hardMode)
+					{
+						Ammos = new int[] { ItemID.UnholyArrow, (WorldGen.SavedOreTiers.Silver == TileID.Silver ? ItemID.SilverBullet : ItemID.TungstenBullet) };
+					}
+					yield return new Item(Main.rand.Next(Ammos), Main.rand.Next(10, 21));
 					break;
 				}
 			}

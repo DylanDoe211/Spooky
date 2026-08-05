@@ -81,17 +81,6 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 
 		public override void OnKill(int timeLeft)
 		{
-            if (Main.rand.NextBool(5))
-            {
-                for (int numGores = 1; numGores <= 2; numGores++)
-                {
-                    if (Main.netMode != NetmodeID.Server) 
-                    {
-                        Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center, Projectile.velocity, ModContent.Find<ModGore>("Spooky/OldWoodArrowGore" + numGores).Type);
-                    }
-                }
-            }
-
 			for (int numDusts = 0; numDusts < 10; numDusts++)
 			{
 				int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.WoodFurniture, 0f, -2f, 0, default, 1f);

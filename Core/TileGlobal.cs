@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent;
 using Terraria.DataStructures;
+using Terraria.ObjectData;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Linq;
@@ -195,6 +196,42 @@ namespace Spooky.Core
 					}
 				}
 			}
+		}
+
+		//modified version of WorldGen.PlaceObject but it preforms a tile check where the tile will be placed so it doesnt destroy other cuttable tiles
+		public static bool PlaceObject(int x, int y, int type, bool mute = false, int style = 0, int alternate = 0, int random = -1, int direction = -1)
+		{
+			TileObject toBePlaced;
+			if (!TileObject.CanPlace(x, y, type, style, direction, out toBePlaced, false))
+			{
+				return false;
+			}
+
+			//preform a tile check based on the size of the tile object that is trying to be placed, dont allow it to place if there are tiles already there
+			TileObjectData tileData = TileObjectData.GetTileData(toBePlaced.type, toBePlaced.style, toBePlaced.alternate);
+			int ObjectX = toBePlaced.xCoord;
+			int ObjectY = toBePlaced.yCoord;
+			for (int i = 0; i < tileData.Width; i++)
+			{
+				for (int j = 0; j < tileData.Height; j++)
+				{
+					//for debugging
+					//WorldGen.PlaceWall(num6 + i, num7 + j, WallID.Dirt);
+
+					Tile tileSafely = Framing.GetTileSafely(ObjectX + i, ObjectY + j);
+					if (tileSafely.HasTile)
+					{
+						return false;
+					}
+				}
+			}
+
+			toBePlaced.random = random;
+
+			WorldGen.PlaceObject(x, y, type, mute, style, alternate, random, direction);
+			NetMessage.SendObjectPlacement(-1, x, y, type, style, alternate, random, direction);
+
+			return true;
 		}
 
 		public int GetTileTreeIsOn(int i, int j)

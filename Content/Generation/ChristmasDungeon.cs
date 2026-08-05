@@ -961,6 +961,18 @@ namespace Spooky.Content.Generation
 				}
 			}
 
+			//place pots randomly in the dungeon
+			for (int i = PositionX - 25 - (Width / 2); i <= PositionX + 25 + (Width / 2); i++)
+			{
+				for (int j = PositionY - 25 - (Height / 2); j <= PositionY + 25 + (Height / 2); j++)
+				{
+					if (WorldGen.genRand.NextBool(3))
+					{
+						WorldGen.PlaceObject(i, j - 1, ModContent.TileType<ChristmasPresentPots>(), true, WorldGen.genRand.Next(0, 3));
+					}
+				}
+			}
+
 			//place paintings
 			for (int i = PositionX - (Width / 2) - 25; i <= PositionX + (Width / 2) + 25; i++)
 			{

@@ -76,25 +76,21 @@ namespace Spooky.Content.Tiles.Shipyard
 				//grow small weeds
                 if (Main.rand.NextBool())
                 {
-                    WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<BlackSandstoneMossWeeds>(), true);
-                    Above.TileFrameX = (short)(WorldGen.genRand.Next(6) * 18);
-					NetMessage.SendTileSquare(-1, i, j - 1, 1, TileChangeType.None);
+					TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<BlackSandstoneMossWeeds>(), true, Main.rand.Next(0, 6));
 				}
 
 				//grow bleached corals
                 int InWaterChance1 = Above.LiquidAmount <= 0 ? 20 : 12;
                 if (Main.rand.NextBool(InWaterChance1))
                 {
-                    WorldGen.PlaceObject(i, j - 1, ModContent.TileType<BleachedCoral>(), true, Main.rand.Next(0, 8));
-                    NetMessage.SendObjectPlacement(-1, i, j - 1, ModContent.TileType<BleachedCoral>(), 0, 0, -1, -1);
+                    TileGlobal.PlaceObject(i, j - 1, ModContent.TileType<BleachedCoral>(), true, Main.rand.Next(0, 8));
 				}
 
 				//ghost flowers 
                 int InWaterChance2 = Above.LiquidAmount <= 0 ? 45 : 30;
                 if (Main.rand.NextBool(InWaterChance2))
                 {
-                    WorldGen.PlaceObject(i, j - 1, (ushort)ModContent.TileType<GhostFlower>(), true, Main.rand.Next(0, 2));
-                    NetMessage.SendObjectPlacement(-1, i, j - 1, (ushort)ModContent.TileType<GhostFlower>(), 0, 0, -1, -1);
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<GhostFlower>(), true, Main.rand.Next(0, 2));
                 }
 
                 //giant bleached coral 
@@ -102,11 +98,7 @@ namespace Spooky.Content.Tiles.Shipyard
                 {
                     ushort[] GiantCorals = new ushort[] { (ushort)ModContent.TileType<BleachedCoralGiant1>(), (ushort)ModContent.TileType<BleachedCoralGiant2>(), (ushort)ModContent.TileType<BleachedCoralGiant3>(),
                     (ushort)ModContent.TileType<BleachedCoralGiant4>(), (ushort)ModContent.TileType<BleachedCoralGiant5>(), (ushort)ModContent.TileType<BleachedCoralGiant6>() };
-
-                    ushort newObject = Main.rand.Next(GiantCorals);
-
-                    WorldGen.PlaceObject(i, j - 1, newObject, true);
-                    NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
+                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(GiantCorals), true);
                 }
 			}
 		}

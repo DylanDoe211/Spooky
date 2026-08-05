@@ -229,7 +229,7 @@ namespace Spooky.Content.Generation
 
             progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.EyeValleyPolish").Value;
 
-            //place pillars of flesh walls with plateaus in them for more varied terrain
+            //place pillars of flesh walls
             for (int X = StartPosition + 70; X <= BiomeEdge - 70; X++)
             {
                 int StartValue = StartPosition + 70;
@@ -490,7 +490,7 @@ namespace Spooky.Content.Generation
                 for (int Y = Main.maxTilesY - 200; Y < Main.maxTilesY - 15; Y++)
                 {
                     //eye vines
-                    if (Main.tile[X, Y].TileType == ModContent.TileType<SpookyMushGrass>() && !Main.tile[X, Y + 1].HasTile)
+                    if ((Main.tile[X, Y].TileType == ModContent.TileType<SpookyMushGrass>() || Main.tile[X, Y].TileType == ModContent.TileType<EyeBlock>()) && !Main.tile[X, Y + 1].HasTile)
                     {
                         if (WorldGen.genRand.NextBool(8))
                         {
@@ -499,7 +499,7 @@ namespace Spooky.Content.Generation
                     }
                     if (Main.tile[X, Y].TileType == ModContent.TileType<EyeVine>())
                     {
-                        int[] ValidTiles = { ModContent.TileType<SpookyMushGrass>() };
+                        int[] ValidTiles = { ModContent.TileType<SpookyMushGrass>(), ModContent.TileType<EyeBlock>() };
 
                         SpookyWorldMethods.PlaceVines(X, Y, ModContent.TileType<EyeVine>(), ValidTiles);
                     }

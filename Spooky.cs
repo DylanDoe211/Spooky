@@ -78,6 +78,7 @@ namespace Spooky
 						nameof(Flags.downedOrroboro) => Flags.downedOrroboro,
 						nameof(Flags.downedSpookFishron) => Flags.downedSpookFishron,
 						nameof(Flags.downedBigBone) => Flags.downedBigBone,
+                        nameof(Flags.downedDunkleosteus) => Flags.downedDunkleosteus,
 						_ => throw new ArgumentException(text + " Is not a valid boss downed variable name"),
 					};
 				}
@@ -91,6 +92,18 @@ namespace Spooky
 						nameof(Flags.downedSpiderWar) => Flags.downedSpiderWar,
 						nameof(Flags.downedSporeEvent) => Flags.downedSporeEvent,
 						_ => throw new ArgumentException(text + " Is not a valid event downed variable name"),
+					};
+				}
+				case "BiomePositions":
+				{
+					string text = args[1] as string;
+					return text switch
+					{
+						nameof(Flags.SpiderGrottoCenter) => Flags.SpiderGrottoCenter,
+						nameof(Flags.EyeValleyCenter) => Flags.EyeValleyCenter,
+						nameof(Flags.ZombieOceanTopLeft) => Flags.ZombieOceanTopLeft,
+						nameof(Flags.ZombieOceanBottomRight) => Flags.ZombieOceanBottomRight,
+						_ => throw new ArgumentException(text + " Is not a valid biome position variable name"),
 					};
 				}
 				default:

@@ -48,7 +48,7 @@ namespace Spooky.Content.Items.SpookyBiome.Armor
 			drawPos = drawPos.Floor();
 			Vector2 origin = drawInfo.headVect;
 
-			drawData = new DrawData(HatTexture.Value, drawPos.Floor() + origin + new Vector2(0, OffsetY), frame,
+			drawData = new DrawData(HatTexture.Value, drawPos.Floor() + origin, frame,
 			drawData.color, drawInfo.drawPlayer.headRotation, origin, 1f, drawInfo.playerEffect);
 			drawData.shader = drawInfo.cHead;
 

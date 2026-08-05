@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
+using Spooky.Core;
 using Spooky.Content.Tiles.Shipyard.Ambient;
 
 namespace Spooky.Content.Tiles.Shipyard
@@ -33,17 +34,14 @@ namespace Spooky.Content.Tiles.Shipyard
                 //grow small weeds
                 if (Main.rand.NextBool() && Above.LiquidAmount <= 0)
                 {
-                    WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<PaleSeaOats>(), true);
-                    Above.TileFrameX = (short)(WorldGen.genRand.Next(14) * 18);
-					NetMessage.SendTileSquare(-1, i, j - 1, 1, TileChangeType.None);
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<PaleSeaOats>(), true, Main.rand.Next(0, 14));
 				}
 
 				//grow bleached corals
                 int InWaterChance1 = Above.LiquidAmount <= 0 ? 25 : 15;
                 if (Main.rand.NextBool(InWaterChance1))
                 {
-                    WorldGen.PlaceObject(i, j - 1, ModContent.TileType<BleachedCoral>(), true, Main.rand.Next(0, 8));
-                    NetMessage.SendObjectPlacement(-1, i, j - 1, ModContent.TileType<BleachedCoral>(), 0, 0, -1, -1);
+                    TileGlobal.PlaceObject(i, j - 1, ModContent.TileType<BleachedCoral>(), true, Main.rand.Next(0, 8));
 				}
 			}
 		}

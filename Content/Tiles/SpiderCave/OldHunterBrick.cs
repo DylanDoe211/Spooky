@@ -60,9 +60,7 @@ namespace Spooky.Content.Tiles.SpiderCave
                 //grow small weeds
                 if (Main.rand.NextBool(4))
                 {
-                    WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<SpiderCaveWeeds>(), true);
-                    Above.TileFrameX = (short)(WorldGen.genRand.Next(36) * 18);
-					NetMessage.SendTileSquare(-1, i, j - 1, 1, TileChangeType.None);
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<SpiderCaveWeeds>(), true, Main.rand.Next(0, 36));
 				}
 			}
 		}

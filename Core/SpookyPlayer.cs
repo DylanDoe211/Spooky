@@ -150,6 +150,7 @@ namespace Spooky.Core
         public bool ChalupoPet = false;
         public bool MushroomFriendPet = false;
         public bool SludgePet = false;
+        public bool FireflyPet = false;
 
         //misc bools
         public bool EatenByGooSlug = false;
@@ -369,6 +370,7 @@ namespace Spooky.Core
             ChalupoPet = false;
             MushroomFriendPet = false;
             SludgePet = false;
+            FireflyPet = false;
 
             //misc bools
             EatenByGooSlug = false;

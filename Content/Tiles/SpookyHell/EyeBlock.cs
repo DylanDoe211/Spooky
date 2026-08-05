@@ -5,7 +5,7 @@ using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Spooky.Content.Dusts;
+using Spooky.Core;
 using Spooky.Content.Tiles.SpookyHell.Ambient;
 
 namespace Spooky.Content.Tiles.SpookyHell
@@ -50,6 +50,67 @@ namespace Spooky.Content.Tiles.SpookyHell
         {
             dustType = DustID.Blood;
             makeDust = true;
+        }
+
+        public override void RandomUpdate(int i, int j)
+        {
+            Tile Tile = Framing.GetTileSafely(i, j);
+            Tile Below = Framing.GetTileSafely(i, j + 1);
+            Tile Above = Framing.GetTileSafely(i, j - 1);
+
+            if (!Below.HasTile && Below.LiquidAmount <= 0 && !Tile.BottomSlope)
+            {
+                //grow vines
+                if (Main.rand.NextBool(35)) 
+                {
+                    WorldGen.PlaceTile(i, j + 1, (ushort)ModContent.TileType<EyeVine>(), true);
+					NetMessage.SendTileSquare(-1, i, j + 1, 1, TileChangeType.None);
+				}
+
+                //hanging arteries
+                if (Main.rand.NextBool(35))
+                {
+                    ushort[] Arteries = new ushort[] { (ushort)ModContent.TileType<ArteryHanging1>(), (ushort)ModContent.TileType<ArteryHanging2>() };
+                    TileGlobal.PlaceObject(i, j + 2, WorldGen.genRand.Next(Arteries), true);
+                }
+            }
+
+            if (!Above.HasTile && Above.LiquidAmount <= 0 && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock) 
+            {
+                //grow small weeds
+                if (Main.rand.NextBool(5))
+                {
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<SpookyHellWeeds>(), true, Main.rand.Next(0, 6));
+				}
+
+                //eye stalks
+                if (Main.rand.NextBool(20))
+                {
+                    ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkThinShort>(), (ushort)ModContent.TileType<EyeStalkThin>(), 
+                    (ushort)ModContent.TileType<EyeStalkThinTall>(), (ushort)ModContent.TileType<EyeStalkThinVeryTall>() };
+                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Stalks), true);
+                }
+                if (Main.rand.NextBool(25))
+                {
+                    ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkSmall1>(), (ushort)ModContent.TileType<EyeStalkSmall2>() };
+                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Stalks), true);
+                }
+                if (Main.rand.NextBool(30))
+                {
+                    ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkMedium1>(), (ushort)ModContent.TileType<EyeStalkMedium2>() };
+                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Stalks), true);
+                }
+                if (Main.rand.NextBool(35))
+                {
+                    ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkBig1>(), (ushort)ModContent.TileType<EyeStalkBig2>() };
+                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Stalks), true);
+                }
+                if (Main.rand.NextBool(35))
+                {
+                    ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkGiant1>(), (ushort)ModContent.TileType<EyeStalkGiant2>() };
+                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Stalks), true);
+                }
+            }
         }
     }
 }

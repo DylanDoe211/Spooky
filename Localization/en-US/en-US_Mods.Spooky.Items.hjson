@@ -1352,6 +1352,11 @@ MocoMask: {
 	Tooltip: ""
 }
 
+MoyaiMask: {
+	DisplayName: Moyai Mask
+	Tooltip: ""
+}
+
 NoseCultistHood: {
 	DisplayName: Nose Cultist Hood
 	Tooltip: Disguise as a cultist when worn with the cultist robe
@@ -1571,6 +1576,11 @@ ZomboidFish: {
 	Tooltip: "'Caught in Spooky Forest'"
 }
 
+BlackBerries: {
+	DisplayName: Black Berries
+	Tooltip: ""
+}
+
 BlackLicorice: {
 	DisplayName: Black Licorice
 	Tooltip:
@@ -1578,6 +1588,11 @@ BlackLicorice: {
 		Minor deterioration to all stats
 		'Why would you eat this?'
 		'''
+}
+
+BlackRadish: {
+	DisplayName: Black Radish
+	Tooltip: ""
 }
 
 CandyCorn: {
@@ -1596,6 +1611,16 @@ CaramelApple: {
 		Minor improvements to all stats
 		'Don't know how the apple got caramel on it'
 		'''
+}
+
+Cranberry: {
+	DisplayName: Cranberry
+	Tooltip: ""
+}
+
+Durian: {
+	DisplayName: Durian
+	Tooltip: ""
 }
 
 EyeChocolate: {
@@ -1632,6 +1657,15 @@ GoofyPretzel: {
 		'''
 		Minor improvements to all stats
 		'It looks disturbed, hope it isn't alive'
+		'''
+}
+
+Lean: {
+	DisplayName: Lean
+	Tooltip:
+		'''
+		Gives you a completely random buff
+		'Who knows what's in this...'
 		'''
 }
 
@@ -2284,6 +2318,11 @@ DissolvedBone: {
 ExpiredCheese: {
 	DisplayName: Expired Cheese
 	Tooltip: Summons a pet albino rat
+}
+
+FireflyLight: {
+	DisplayName: Firefly Flashlight
+	Tooltip: Summons a baby firefly to light the way
 }
 
 FriendlyShroom: {
@@ -6014,6 +6053,56 @@ StitchSpiderRelicItem: {
 	Tooltip: ""
 }
 
+MangroveSaplingItem: {
+	DisplayName: Mangrove Seedling
+	Tooltip: Plants mangrove saplings
+}
+
+BlackSandItem: {
+	DisplayName: Black Sand
+	Tooltip: ""
+}
+
+BlackSandstoneItem: {
+	DisplayName: Black Sandstone
+	Tooltip: ""
+}
+
+BlackSandstoneSlabItem: {
+	DisplayName: Black Sandstone Slab
+	Tooltip: ""
+}
+
+BlackSandstoneWallItem: {
+	DisplayName: Black Sandstone Wall
+	Tooltip: ""
+}
+
+BlackSandWallItem: {
+	DisplayName: Black Sand Wall
+	Tooltip: ""
+}
+
+RotWoodItem: {
+	DisplayName: Rotted Wood
+	Tooltip: ""
+}
+
+RotWoodWallItem: {
+	DisplayName: Rotted Wood Wall
+	Tooltip: ""
+}
+
+TintedGlassItem: {
+	DisplayName: Tinted Glass
+	Tooltip: ""
+}
+
+TintedGlassWallItem: {
+	DisplayName: Tinted Glass Wall
+	Tooltip: ""
+}
+
 BirchBathtubItem: {
 	DisplayName: Old Birch Bathtub
 	Tooltip: ""
@@ -7216,59 +7305,4 @@ PetCommander: {
 		Click on any nearby tamed turkey while holding this to give it commands
 		Allows the turkey to roam freely, follow you, or stay put
 		'''
-}
-
-BlackSandItem: {
-	DisplayName: Black Sand
-	Tooltip: ""
-}
-
-BlackSandstoneItem: {
-	DisplayName: Black Sandstone
-	Tooltip: ""
-}
-
-BlackSandstoneSlabItem: {
-	DisplayName: Black Sandstone Slab
-	Tooltip: ""
-}
-
-BlackSandstoneWallItem: {
-	DisplayName: Black Sandstone Wall
-	Tooltip: ""
-}
-
-BlackSandWallItem: {
-	DisplayName: Black Sand Wall
-	Tooltip: ""
-}
-
-RotWoodItem: {
-	DisplayName: Rotted Wood
-	Tooltip: ""
-}
-
-RotWoodWallItem: {
-	DisplayName: Rotted Wood Wall
-	Tooltip: ""
-}
-
-TintedGlassItem: {
-	DisplayName: Tinted Glass
-	Tooltip: ""
-}
-
-TintedGlassWallItem: {
-	DisplayName: Tinted Glass Wall
-	Tooltip: ""
-}
-
-MangroveSaplingItem: {
-	DisplayName: Mangrove Seedling
-	Tooltip: Plants mangrove saplings
-}
-
-MoyaiMask: {
-	DisplayName: Moyai Mask
-	Tooltip: ""
 }
