@@ -464,7 +464,6 @@ namespace Spooky.Content.Generation
 								ushort newObject = WorldGen.genRand.Next(Anchors);
 
 								WorldGen.PlaceObject(X, Y - 1, newObject, true);
-								NetMessage.SendObjectPlacement(-1, X, Y - 1, newObject, 0, 0, -1, -1);
 							}
 
 							//giant bleached coral 
@@ -477,7 +476,6 @@ namespace Spooky.Content.Generation
 								ushort newObject = WorldGen.genRand.Next(GiantCorals);
 
 								WorldGen.PlaceObject(X, Y - 1, newObject, true);
-								NetMessage.SendObjectPlacement(-1, X, Y - 1, newObject, 0, 0, -1, -1);
 							}
 
 							//small bleached corals/stafishes
@@ -487,12 +485,10 @@ namespace Spooky.Content.Generation
 								if (WorldGen.genRand.NextBool())
 								{
 									WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<BleachedCoral>(), true, WorldGen.genRand.Next(0, 8));
-									NetMessage.SendObjectPlacement(-1, X, Y - 1, ModContent.TileType<BleachedCoral>(), 0, 0, -1, -1);
 								}
 								else
 								{
 									WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<PaleStarfish>(), true, WorldGen.genRand.Next(0, 4));
-									NetMessage.SendObjectPlacement(-1, X, Y - 1, ModContent.TileType<PaleStarfish>(), 0, 0, -1, -1);
 								}
 							}
 						}
@@ -508,7 +504,6 @@ namespace Spooky.Content.Generation
 								ushort newObject = WorldGen.genRand.Next(SandPiles);
 
 								WorldGen.PlaceObject(X, Y - 1, newObject, true);
-								NetMessage.SendObjectPlacement(-1, X, Y - 1, newObject, 0, 0, -1, -1);
 							}
 
 							//ghost flowers 
@@ -516,7 +511,6 @@ namespace Spooky.Content.Generation
 							if (WorldGen.genRand.NextBool(InWaterChance))
 							{
 								WorldGen.PlaceObject(X, Y - 1, (ushort)ModContent.TileType<GhostFlower>(), true, WorldGen.genRand.Next(0, 2));
-								NetMessage.SendObjectPlacement(-1, X, Y - 1, (ushort)ModContent.TileType<GhostFlower>(), 0, 0, -1, -1);
 							}
 						}
 
@@ -533,7 +527,6 @@ namespace Spooky.Content.Generation
 								ushort newObject = WorldGen.genRand.Next(BigRockPiles);
 
 								WorldGen.PlaceObject(X, Y - 1, newObject, true);
-								NetMessage.SendObjectPlacement(-1, X, Y - 1, newObject, 0, 0, -1, -1);
 							}
 
 							//small pebbles
@@ -587,7 +580,6 @@ namespace Spooky.Content.Generation
 							if (WorldGen.genRand.NextBool() && !tileAbove.HasTile)
 							{
 								WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<ShipyardPots>(), true, WorldGen.genRand.Next(0, 5));
-								NetMessage.SendObjectPlacement(-1, X, Y - 1, ModContent.TileType<ShipyardPots>(), 0, 0, -1, -1);
 							}
 						}
 					}

@@ -1,9 +1,11 @@
 New Stuff:
 -Daffodil resprite, along with small tweaks to the fight to fit the new sprite
 -Added krampus helper outfit leggings
--Added sac of flesh as a replacement for items that are fished in the valley of eyes, its an openable item that gives you a bunch of eye valley blocks
--Added a bunch of new unique pots that generate in all the different spooky mod biomes (Except for the cemetery because of the gravestone ambush loot)
--Added new uncommon firefly light pet that drops from spider war minibosses
+-Added sac of flesh as a replacement for items that are fished in the valley of eyes, its an right-clickable item that gives you a bunch of eye valley blocks
+-Added a bunch of new unique pots that generate in all the different spooky mod biomes (Except for the cemetery and eye valley)
+-Added new firefly light pet that drops from spider war minibosses
+-Added a new crab pet from fishing in the spooky forest
+-Added a new achievement for completing the entire spooky mod bestiary
 -Added new game tip to tell players about spooky mods config options
 -Added modcalls for various things in spooky mod like boss defeated, event defeated, and more variables
 
@@ -13,7 +15,7 @@ Changes:
 -Krampus quest reward presents now have a separate drop chance for each piece of the krampus helper vanity
 -Made spooky mod world generation fill up the progress bar better to track how far along each biome is done generating
 -Removing the lily of rebirth bloom buff off of yourself does not reset the number of revives you have if you don't have any revives left
--Removed gourd o' lantern items, now breaking a lit up carved gourd just drops the regular carved gourd and the candle
+-Removed gourd o' lantern items, breaking a lit up carved gourd now just drops the regular carved gourd and the candle
 -Eye blocks now grow various eye valley ambient objects on them naturally
 -Updated daffodil on the spooky mod menu to her new design
 
@@ -22,6 +24,7 @@ Fixes:
 -Many spooky mod ambient objects not being destroyed when you place blocks on them
 -Spooky mod ambient objects destroying other ambient tiles/objects when growing
 -Haunting harold ghost projectiles not doing damage
+-Temple of moco ambush room idols giving off way too much light on retro/trippy lighting modes
 -Spooky mod custom trees not being destroyed immediately and breaking one by one when destroyed
 -Multiple spooky mod custom trees/tiles with special effects/drawing being blurry, and having completely incorrect offsets in retro/trippy lighting and snapshot mode
 -Orange spooky grass not drawing special merge texture with green grass when sloped

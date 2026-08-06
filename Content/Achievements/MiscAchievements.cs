@@ -3,6 +3,7 @@ using Terraria.ModLoader;
 using Terraria.Achievements;
 using Terraria.GameContent.Achievements;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using Spooky.Core;
@@ -171,4 +172,15 @@ namespace Spooky.Content.Achievements
             AddNPCKilledCondition(ModContent.NPCType<Dahlia>());
         }
     }
+
+	public class MiscAchievementSpookyBestiary : ModAchievement
+	{
+		public CustomFlagCondition SpookyBestiaryCondition { get; private set; }
+
+		public override void SetStaticDefaults()
+		{
+			Achievement.SetCategory(AchievementCategory.Challenger);
+			SpookyBestiaryCondition = AddCondition();
+		}
+	}
 }

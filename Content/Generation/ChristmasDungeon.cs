@@ -966,7 +966,7 @@ namespace Spooky.Content.Generation
 			{
 				for (int j = PositionY - 25 - (Height / 2); j <= PositionY + 25 + (Height / 2); j++)
 				{
-					if (WorldGen.genRand.NextBool(3))
+					if (WorldGen.genRand.NextBool(4) && WallTypes.Contains(Main.tile[i, j].WallType))
 					{
 						WorldGen.PlaceObject(i, j - 1, ModContent.TileType<ChristmasPresentPots>(), true, WorldGen.genRand.Next(0, 3));
 					}

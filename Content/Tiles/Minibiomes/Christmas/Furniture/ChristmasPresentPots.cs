@@ -37,7 +37,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Christmas.Furniture
 
 		public override IEnumerable<Item> GetItemDrops(int i, int j)
 		{
-			switch (Main.rand.Next(5))
+			switch (Main.rand.Next(4))
 			{
 				//torches
 				case 0:
@@ -63,14 +63,8 @@ namespace Spooky.Content.Tiles.Minibiomes.Christmas.Furniture
 					yield return new Item(Main.rand.Next(Potions));
 					break;
 				}
-				//bombs
-				case 3:
-				{
-					yield return new Item(ItemID.Bomb, Main.rand.Next(2, 4));
-					break;
-				}
 				//ammos
-				case 4:
+				case 3:
 				{
 					int[] Ammos = new int[] { ModContent.ItemType<OldWoodArrow>(), ModContent.ItemType<RustedBullet>(), 
 					(Main.hardMode ? ModContent.ItemType<MossyBoulder>() : ModContent.ItemType<MossyPebble>()) };

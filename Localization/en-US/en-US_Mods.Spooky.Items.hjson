@@ -2306,6 +2306,11 @@ ChalupoPepper: {
 	Tooltip: Summons chalupo and chalupa
 }
 
+CrabClaw: {
+	DisplayName: Purple Crab Claw
+	Tooltip: Summons a pet vampire crab
+}
+
 DissolvedBone: {
 	DisplayName: Slightly Dissolved Bone
 	Tooltip:

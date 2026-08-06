@@ -1,5 +1,4 @@
 using Terraria;
-using Terraria.Localization;
 using Microsoft.Xna.Framework;
 
 namespace Spooky.Core

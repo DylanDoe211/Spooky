@@ -151,6 +151,7 @@ namespace Spooky.Core
         public bool MushroomFriendPet = false;
         public bool SludgePet = false;
         public bool FireflyPet = false;
+        public bool CrabPet = false;
 
         //misc bools
         public bool EatenByGooSlug = false;
@@ -371,6 +372,7 @@ namespace Spooky.Core
             MushroomFriendPet = false;
             SludgePet = false;
             FireflyPet = false;
+            CrabPet = false;
 
             //misc bools
             EatenByGooSlug = false;
@@ -1762,6 +1764,12 @@ namespace Spooky.Core
 						itemDrop = ModContent.ItemType<DumboOctopoid>();
 					}
 
+                    //crab pet
+                    if (attempt.legendary)
+                    {
+                        itemDrop = ModContent.ItemType<CrabClaw>();
+                    }
+
 					//crate
 					if (attempt.rare && attempt.crate)
 					{
@@ -1848,6 +1856,12 @@ namespace Spooky.Core
 					{
 						itemDrop = ModContent.ItemType<GhostFish>();
 					}
+
+					//crate
+					if (attempt.rare && attempt.crate)
+					{
+						itemDrop = Main.hardMode ? ModContent.ItemType<ShipyardCrate2>() : ModContent.ItemType<ShipyardCrate>();
+                    }
 				}
 
                 //eye valley

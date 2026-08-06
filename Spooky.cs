@@ -10,6 +10,7 @@ using System.IO;
 using Spooky.Core;
 using Spooky.Content.Backgrounds;
 using Spooky.Content.Backgrounds.Cemetery;
+using Spooky.Content.Backgrounds.Shipyard;
 using Spooky.Content.Backgrounds.SpiderCave;
 using Spooky.Content.Backgrounds.SpookyHell;
 using Spooky.Content.Biomes;
@@ -146,7 +147,7 @@ namespace Spooky
                 SkyManager.Instance["Spooky:CemeterySky"] = new CemeterySky();
 
                 Filters.Scene["Spooky:ShipyardSky"] = new Filter(new SpookyScreenShader("FilterMiniTower").UseColor(149f, 131f, 217f).UseOpacity(0.0005f), EffectPriority.VeryHigh);
-                SkyManager.Instance["Spooky:ShipyardSky"] = new CemeterySky();
+                SkyManager.Instance["Spooky:ShipyardSky"] = new ShipyardSky();
 
                 Filters.Scene["Spooky:RaveyardSky"] = new Filter(new SpookyScreenShader("FilterMiniTower").UseColor(0f, 0f, 0f).UseOpacity(0f), EffectPriority.VeryHigh);
                 SkyManager.Instance["Spooky:RaveyardSky"] = new RaveyardSky();

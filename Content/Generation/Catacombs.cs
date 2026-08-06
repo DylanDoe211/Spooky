@@ -258,7 +258,23 @@ namespace Spooky.Content.Generation
                     //rare moyai room
                     if (WorldGen.genRand.NextBool(35) && !PlacedMoyaiRoom)
                     {
-                        StructureHelper.API.Generator.GenerateStructure("Content/Structures/CatacombLayer1/MoyaiRoom.shstruct", origin.ToPoint16(), Mod);
+						int[] RandomYCoord = new int[]
+						{
+							(int)Main.worldSurface + 10, (int)Main.worldSurface + 55, (int)Main.worldSurface + 100, (int)Main.worldSurface + layer1Depth
+						};
+
+						if (Main.maxTilesY >= 1800)
+						{
+							RandomYCoord.Append((int)Main.worldSurface + 145);
+						}
+						if (Main.maxTilesY >= 2400)
+						{
+							RandomYCoord.Append((int)Main.worldSurface + 190);
+						}
+
+						Vector2 rareRoomOrigin = new Vector2(X - 18, WorldGen.genRand.Next(RandomYCoord) - 18);
+
+						StructureHelper.API.Generator.GenerateStructure("Content/Structures/CatacombLayer1/MoyaiRoom.shstruct", rareRoomOrigin.ToPoint16(), Mod);
                         PlacedMoyaiRoom = true;
                     }
                 }
@@ -553,9 +569,26 @@ namespace Spooky.Content.Generation
                         StructureHelper.API.Generator.GenerateStructure("Content/Structures/CatacombLayer2/Room" + WorldGen.genRand.Next(1, TotalRoomVariants2 + 1) + ".shstruct", origin.ToPoint16(), Mod);
                     }
 
+					//rare avarice pot room
                     if (WorldGen.genRand.NextBool(25) && !PlacedAvariceRoom)
                     {
-                        StructureHelper.API.Generator.GenerateStructure("Content/Structures/CatacombLayer2/AvaricePotRoom.shstruct", origin.ToPoint16(), Mod);
+						int[] RandomYCoord = new int[]
+						{
+							layer2Start, layer2Start + 42, layer2Start + 84, (int)Main.worldSurface + layer1Depth + layer2Depth
+						};
+
+						if (Main.maxTilesY >= 1800)
+						{
+							RandomYCoord.Append(layer2Start + 126);
+						}
+						if (Main.maxTilesY >= 2400)
+						{
+							RandomYCoord.Append(layer2Start + 168);
+						}
+
+						Vector2 rareRoomOrigin = new Vector2(X - 35, WorldGen.genRand.Next(RandomYCoord) - 18);
+
+						StructureHelper.API.Generator.GenerateStructure("Content/Structures/CatacombLayer2/AvaricePotRoom.shstruct", rareRoomOrigin.ToPoint16(), Mod);
                         PlacedAvariceRoom = true;
                     }
 
@@ -1654,14 +1687,14 @@ namespace Spooky.Content.Generation
 
                     if (tile.WallType == ModContent.WallType<CatacombBrickWall1>())
                     {
-                        if (WorldGen.genRand.NextBool(3))
+                        if (WorldGen.genRand.NextBool(4))
 					    {
                             WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<UpperCatacombPots>(), true, Main.rand.Next(0, 3));
                         }
                     }
                     if (tile.WallType == ModContent.WallType<CatacombBrickWall2>())
                     {
-                        if (WorldGen.genRand.NextBool(3))
+                        if (WorldGen.genRand.NextBool(4))
 					    {
                             WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<LowerCatacombPots>(), true, Main.rand.Next(0, 3));
                         }

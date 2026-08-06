@@ -7,9 +7,9 @@ using System;
 
 using Spooky.Core;
 
-namespace Spooky.Content.Backgrounds.Cemetery
+namespace Spooky.Content.Backgrounds.Shipyard
 {
-    public class CemeterySky : CustomSky
+    public class ShipyardSky : CustomSky
     {
         public bool skyActive;
         public float opacity;
@@ -27,17 +27,17 @@ namespace Spooky.Content.Backgrounds.Cemetery
         }
 
 		//sky color code from: https://github.com/GabeHasWon/SpiritReforged/blob/master/Content/Savanna/Biome/SavannaSky.cs
-		public static float TimeProgress()
-		{
-			if (Main.dayTime)
-			{
-				return (float)Math.Sin(Math.PI * Main.time / Main.dayLength);
-			}
-			else
-			{
-				return (float)Math.Sin(Math.PI * Main.time / Main.nightLength);
-			}
-		}
+        public static float TimeProgress()
+        {
+            if (Main.dayTime)
+            {
+                return (float)Math.Sin(Math.PI * Main.time / Main.dayLength);
+            }
+            else
+            {
+                return (float)Math.Sin(Math.PI * Main.time / Main.nightLength);
+            }
+        }
 
 		private static Color SkyColor()
 		{
@@ -46,8 +46,8 @@ namespace Spooky.Content.Backgrounds.Cemetery
 
 			sunRiseSetFactor = Main.dayTime ? EaseFunction.EaseQuadOut.Ease(sunRiseSetFactor) : EaseFunction.EaseCircularIn.Ease(sunRiseSetFactor);
 
-			var midDayColor = new Color(162, 185, 162, 200);
-			var sunRiseSetColor = new Color(104, 130, 123);
+			var midDayColor = new Color(0, 255, 238, 200);
+			var sunRiseSetColor = new Color(113, 96, 237);
 
 			var finalColor = Color.Lerp(sunRiseSetColor, midDayColor, EaseFunction.EaseQuadOut.Ease(midDayFactor));
 
@@ -67,7 +67,7 @@ namespace Spooky.Content.Backgrounds.Cemetery
         {    
             if (maxDepth >= 3E+38f && minDepth < 3E+38f && !Main.gameMenu)
             {
-				Texture2D SkyTexture = ModContent.Request<Texture2D>("Spooky/Content/Backgrounds/Cemetery/CemeterySky").Value;
+				Texture2D SkyTexture = ModContent.Request<Texture2D>("Spooky/Content/Backgrounds/Shipyard/ShipyardSky").Value;
 
 				float dayProgress = Main.dayTime ? TimeProgress() : 0;
 				dayProgress = EaseFunction.EaseQuadOut.Ease(dayProgress);

@@ -16,6 +16,7 @@ using Spooky.Content.NPCs.EggEvent;
 using Spooky.Content.NPCs.Friendly;
 using Spooky.Content.Tiles.NoseTemple;
 using Spooky.Content.Tiles.NoseTemple.Furniture;
+using Spooky.Content.Tiles.Painting;
 using Spooky.Content.Tiles.SpookyHell;
 using Spooky.Content.Tiles.SpookyHell.Ambient;
 using Spooky.Content.Tiles.SpookyHell.Furniture;
@@ -998,6 +999,8 @@ namespace Spooky.Content.Generation
                         //when the very end of the dungeon is reached, place the fire exit room and hallway tunnel that loops back to the entrance
                         if (dungeonRoomLoop == MaxDungeonRooms)
                         {
+                            bool PlacedCrucifix = false;
+
                             if (DungeonX > (Main.maxTilesX / 2))
                             {
                                 GenerateNoseTempleStructure(DungeonX - 70, NoseTemplePositionY + 27, "FireExitLeft", 7, 10);
@@ -1006,6 +1009,12 @@ namespace Spooky.Content.Generation
                                 for (int X = DungeonX - 60; X <= NoseTempleEntranceTunnelX + 2; X++)
                                 {
                                     GenerateNoseTempleStructure(X, NoseTemplePositionY + 45, "FireExitTunnelSegment", 4, 8);
+
+                                    if (!PlacedCrucifix && WorldGen.genRand.NextBool(2))
+                                    {
+                                        WorldGen.PlaceObject(X - 3, NoseTemplePositionY + 45, ModContent.TileType<ColumboCrucifix>());
+                                        PlacedCrucifix = true;
+                                    }
 
                                     if (X == NoseTempleEntranceTunnelX + 2)
                                     {
@@ -1021,6 +1030,12 @@ namespace Spooky.Content.Generation
                                 for (int X = DungeonX + 68; X >= NoseTempleEntranceTunnelX + 2; X--)
                                 {
                                     GenerateNoseTempleStructure(X, NoseTemplePositionY + 45, "FireExitTunnelSegment", 4, 8);
+
+                                    if (!PlacedCrucifix && WorldGen.genRand.NextBool(2))
+                                    {
+                                        WorldGen.PlaceObject(X + 3, NoseTemplePositionY + 45, ModContent.TileType<ColumboCrucifix>());
+                                        PlacedCrucifix = true;
+                                    }
 
                                     if (X == NoseTempleEntranceTunnelX + 2)
                                     {
@@ -1068,7 +1083,8 @@ namespace Spooky.Content.Generation
                         tile.WallType == ModContent.WallType<NoseTempleFancyWallPurple>() ||
                         tile.WallType == ModContent.WallType<NoseTempleWallBGPurple>())
                         {
-                            if (WorldGen.genRand.NextBool(3))
+                            int PotChance = Y >= NoseTemplePositionY + 45 ? 20 : 3;
+                            if (WorldGen.genRand.NextBool(PotChance))
                             {
                                 WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<NoseTemplePots>(), true, Main.rand.Next(0, 3));
                             }
