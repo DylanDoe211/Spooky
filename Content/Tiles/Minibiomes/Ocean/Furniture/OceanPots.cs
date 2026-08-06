@@ -8,6 +8,11 @@ using Terraria.Audio;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
+using Spooky.Content.Items.Catacomb;
+using Spooky.Content.Items.Minibiomes.Ocean;
+using Spooky.Content.Items.Slingshots.Ammo;
+using Spooky.Content.Items.SpookyBiome;
+
 namespace Spooky.Content.Tiles.Minibiomes.Ocean.Furniture
 {
 	public class OceanPots : ModTile
@@ -33,7 +38,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean.Furniture
 
 		public override IEnumerable<Item> GetItemDrops(int i, int j)
 		{
-			switch (Main.rand.Next(4))
+			switch (Main.rand.Next(5))
 			{
 				//torches
 				case 0:
@@ -41,28 +46,35 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean.Furniture
 					yield return new Item(ItemID.Glowstick, Main.rand.Next(4, 13));
 					break;
 				}
-				//healing or mana potions
+				//fishbones
 				case 1:
 				{
+					yield return new Item(ModContent.ItemType<FishboneChunk>(), Main.rand.Next(1, 4));
+					break;
+				}
+				//healing or mana potions
+				case 2:
+				{
 					int[] Potions = new int[] { ItemID.LesserHealingPotion, ItemID.LesserManaPotion };
-					yield return new Item(Main.rand.Next(Potions), Main.rand.Next(3, 7));
+					if (Main.hardMode)
+					{
+						Potions = new int[] { ItemID.HealingPotion, ItemID.ManaPotion };
+					}
+					yield return new Item(Main.rand.Next(Potions));
 					break;
 				}
 				//random potions
-				case 2:
+				case 3:
 				{
-					int[] Potions = new int[] { ItemID.BattlePotion, ItemID.CratePotion, ItemID.FishingPotion, ItemID.SonarPotion };
+					int[] Potions = new int[] { ItemID.BattlePotion, ItemID.CratePotion, ItemID.FishingPotion, ItemID.SonarPotion, ItemID.RecallPotion };
 					yield return new Item(Main.rand.Next(Potions));
 					break;
 				}
 				//ammos
-				case 3:
+				case 4:
 				{
-					int[] Ammos = new int[] { ItemID.WoodenArrow, ItemID.MusketBall };
-					if (Main.hardMode)
-					{
-						Ammos = new int[] { ItemID.UnholyArrow, (WorldGen.SavedOreTiers.Silver == TileID.Silver ? ItemID.SilverBullet : ItemID.TungstenBullet) };
-					}
+					int[] Ammos = new int[] { ModContent.ItemType<OldWoodArrow>(), ModContent.ItemType<RustedBullet>(), 
+					(Main.hardMode ? ModContent.ItemType<MossyBoulder>() : ModContent.ItemType<MossyPebble>()) };
 					yield return new Item(Main.rand.Next(Ammos), Main.rand.Next(10, 21));
 					break;
 				}

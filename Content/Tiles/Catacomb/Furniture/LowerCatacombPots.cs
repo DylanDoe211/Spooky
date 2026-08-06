@@ -48,22 +48,27 @@ namespace Spooky.Content.Tiles.Catacomb.Furniture
 				//healing or mana potions
 				case 1:
 				{
-					int[] Potions = new int[] { ItemID.HealingPotion, ItemID.ManaPotion };
-					yield return new Item(Main.rand.Next(Potions), Main.rand.Next(3, 7));
+					int[] Potions = new int[] { ItemID.LesserHealingPotion, ItemID.LesserManaPotion };
+					if (Main.hardMode)
+					{
+						Potions = new int[] { ItemID.HealingPotion, ItemID.ManaPotion };
+					}
+					yield return new Item(Main.rand.Next(Potions));
 					break;
 				}
 				//random potions
 				case 2:
 				{
 					int[] Potions = new int[] { ItemID.RegenerationPotion, ItemID.IronskinPotion, ItemID.SpelunkerPotion, ItemID.ThornsPotion, 
-					ItemID.RecallPotion, ItemID.SwiftnessPotion, ItemID.TrapsightPotion, ItemID.PotionOfReturn };
+					ItemID.SwiftnessPotion, ItemID.TrapsightPotion, ItemID.RecallPotion, ItemID.PotionOfReturn };
 					yield return new Item(Main.rand.Next(Potions));
 					break;
 				}
 				//ammos
 				case 3:
 				{
-					int[] Ammos = new int[] { ModContent.ItemType<OldWoodArrow>(), ModContent.ItemType<RustedBullet>(), ModContent.ItemType<MossyBoulder>() };
+					int[] Ammos = new int[] { ModContent.ItemType<OldWoodArrow>(), ModContent.ItemType<RustedBullet>(), 
+					(Main.hardMode ? ModContent.ItemType<MossyBoulder>() : ModContent.ItemType<MossyPebble>()) };
 					yield return new Item(Main.rand.Next(Ammos), Main.rand.Next(10, 21));
 					break;
 				}

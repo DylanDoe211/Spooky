@@ -1056,6 +1056,27 @@ namespace Spooky.Content.Generation
 				}
             }
 
+            for (int X = StartPosition - 50; X <= BiomeEdge + 50; X++)
+            {
+                for (int Y = Main.maxTilesY - 200; Y <= Main.maxTilesY - 10; Y++)
+                {
+                    if (WorldGen.InWorld(X, Y))
+                    {
+                        Tile tile = Main.tile[X, Y];
+
+                        if (tile.WallType == ModContent.WallType<NoseTempleWallPurple>() || 
+                        tile.WallType == ModContent.WallType<NoseTempleFancyWallPurple>() ||
+                        tile.WallType == ModContent.WallType<NoseTempleWallBGPurple>())
+                        {
+                            if (WorldGen.genRand.NextBool(3))
+                            {
+                                WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<NoseTemplePots>(), true, Main.rand.Next(0, 3));
+                            }
+                        }
+                    }
+                }
+            }
+
             //brick color variance
             int Brick = ModContent.TileType<NoseTempleBrickPurple>();
             int FancyBrick = ModContent.TileType<NoseTempleFancyBrickPurple>();

@@ -106,16 +106,75 @@ namespace Spooky.Content.Projectiles.Pets
                 Projectile.Center = player.Center;
             }
 
-			Vector2 GoTo = new Vector2(player.Center.X, player.Center.Y - 80);
+			float velAdjustment = 0.2f;
+            float speedLimit = 7f;
+            Vector2 playerVec = player.Center - Projectile.Center;
+            playerVec.Y += player.gfxOffY - 70;
 
-            if (Projectile.Distance(GoTo) > 10f)
+            float playerDist = playerVec.Length();
+            if (playerDist > 1000f)
             {
-                float vel = MathHelper.Clamp(Projectile.Distance(GoTo) / 6, 15, 100);
-                Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(GoTo) * vel, 0.08f);
+                Projectile.position.X += playerVec.X;
+                Projectile.position.Y += playerVec.Y;
+            }
+            if (playerDist < 10f && player.velocity.Length() < speedLimit && player.velocity.Y == 0f)
+            {
+                Projectile.localAI[0] = 0f;
+            }
+            speedLimit = 12f;
+            if (playerDist < speedLimit)
+            {
+                Projectile.velocity = playerVec;
             }
             else
             {
-                Projectile.velocity *= 0.875f;
+                playerDist = speedLimit / playerDist;
+                Projectile.velocity = playerVec * playerDist;
+            }
+            if (playerDist < 10f)
+            {
+                Projectile.velocity.X = playerVec.X;
+                Projectile.velocity.Y = playerVec.Y;
+                if (playerDist < speedLimit)
+                {
+                    Projectile.position += Projectile.velocity;
+                    Projectile.velocity *= 0f;
+                    velAdjustment = 0f;
+                }
+            }
+            playerDist = speedLimit / playerDist;
+            playerVec *= playerDist;
+            if (Projectile.velocity.X < playerVec.X)
+            {
+                Projectile.velocity.X += velAdjustment;
+                if (Projectile.velocity.X < 0f)
+                {
+                    Projectile.velocity.X *= 0.99f;
+                }
+            }
+            if (Projectile.velocity.X > playerVec.X)
+            {
+                Projectile.velocity.X -= velAdjustment;
+                if (Projectile.velocity.X > 0f)
+                {
+                    Projectile.velocity.X *= 0.99f;
+                }
+            }
+            if (Projectile.velocity.Y < playerVec.Y)
+            {
+                Projectile.velocity.Y += velAdjustment;
+                if (Projectile.velocity.Y < 0f)
+                {
+                    Projectile.velocity.Y *= 0.99f;
+                }
+            }
+            if (Projectile.velocity.Y > playerVec.Y)
+            {
+                Projectile.velocity.Y -= velAdjustment;
+                if (Projectile.velocity.Y > 0f)
+                {
+                    Projectile.velocity.Y *= 0.99f;
+                }
             }
 		}
 	}

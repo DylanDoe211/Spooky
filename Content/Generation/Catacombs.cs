@@ -1656,7 +1656,7 @@ namespace Spooky.Content.Generation
                     {
                         if (WorldGen.genRand.NextBool(3))
 					    {
-                            //WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<UpperCatacombPots>(), true, Main.rand.Next(0, 3));
+                            WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<UpperCatacombPots>(), true, Main.rand.Next(0, 3));
                         }
                     }
                     if (tile.WallType == ModContent.WallType<CatacombBrickWall2>())

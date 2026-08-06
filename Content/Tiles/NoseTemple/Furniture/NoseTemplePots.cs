@@ -11,10 +11,11 @@ using System.Collections.Generic;
 using Spooky.Content.Items.Catacomb;
 using Spooky.Content.Items.Slingshots.Ammo;
 using Spooky.Content.Items.SpookyBiome;
+using Spooky.Content.Tiles.SpookyHell.Furniture;
 
-namespace Spooky.Content.Tiles.Minibiomes.Desert.Furniture
+namespace Spooky.Content.Tiles.NoseTemple.Furniture
 {
-	public class TarPitsPots : ModTile
+	public class NoseTemplePots : ModTile
 	{
 		public override void SetStaticDefaults()
 		{
@@ -32,56 +33,46 @@ namespace Spooky.Content.Tiles.Minibiomes.Desert.Furniture
             TileObjectData.newTile.DrawYOffset = 2;
 			TileObjectData.addTile(Type);
             AddMapEntry(new Color(149, 80, 81), Language.GetText("MapObject.Pot"));
-            DustType = 28;
+            DustType = DustID.Stone;
 		}
 
 		public override IEnumerable<Item> GetItemDrops(int i, int j)
 		{
-			switch (Main.rand.Next(5))
+			switch (Main.rand.Next(4))
 			{
 				//torches
 				case 0:
 				{
-					yield return new Item(ItemID.DesertTorch, Main.rand.Next(4, 13));
+					yield return new Item(ModContent.ItemType<SpookyHellTorchItem>(), Main.rand.Next(4, 13));
 					break;
 				}
-				//healing or mana potions
+				//strange brew potion
 				case 1:
 				{
-					int[] Potions = new int[] { ItemID.LesserHealingPotion, ItemID.LesserManaPotion };
-					if (Main.hardMode)
-					{
-						Potions = new int[] { ItemID.HealingPotion, ItemID.ManaPotion };
-					}
-					yield return new Item(Main.rand.Next(Potions));
+					yield return new Item(ItemID.StrangeBrew);
 					break;
 				}
 				//random potions
 				case 2:
 				{
-					int[] Potions = new int[] { ItemID.ShinePotion, ItemID.SpelunkerPotion, ItemID.EndurancePotion, ItemID.RecallPotion };
+					int[] Potions = new int[] { ItemID.BattlePotion, ItemID.GravitationPotion, ItemID.HeartreachPotion, 
+					ItemID.MagicPowerPotion, ItemID.RagePotion, ItemID.RecallPotion, ItemID.PotionOfReturn };
 					yield return new Item(Main.rand.Next(Potions));
 					break;
 				}
-				//bombs
-				case 3:
-				{
-					yield return new Item(ItemID.Bomb, Main.rand.Next(2, 4));
-					break;
-				}
 				//ammos
-				case 4:
+				case 3:
 				{
 					int[] Ammos = new int[] { ModContent.ItemType<OldWoodArrow>(), ModContent.ItemType<RustedBullet>(), 
 					(Main.hardMode ? ModContent.ItemType<MossyBoulder>() : ModContent.ItemType<MossyPebble>()) };
 					yield return new Item(Main.rand.Next(Ammos), Main.rand.Next(10, 21));
 					break;
 				}
+			}
 
-				if (Main.rand.NextBool(3))
-				{
-					yield return new Item(ItemID.SilverCoin, Main.rand.Next(1, 11));
-				}
+			if (Main.rand.NextBool(3))
+			{
+				yield return new Item(ItemID.SilverCoin, Main.rand.Next(1, 11));
 			}
 		}
 
@@ -109,11 +100,6 @@ namespace Spooky.Content.Tiles.Minibiomes.Desert.Furniture
 				Vector2 gorePos = new Vector2(spawnX, spawnY);
 				SoundEngine.PlaySound(SoundID.Shatter, gorePos);
 				Vector2 goreVelocity = default(Vector2);
-
-				for (int numGores = 1; numGores <= 3; numGores++)
-				{
-					Gore.NewGore(WorldGen.GetItemSource_FromTileBreak(x, y), gorePos, goreVelocity, ModContent.Find<ModGore>("Spooky/TarPitsPotGore").Type);
-				}
 			}
 		}
 	}
