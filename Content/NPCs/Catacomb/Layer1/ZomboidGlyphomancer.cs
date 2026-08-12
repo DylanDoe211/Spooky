@@ -1,4 +1,3 @@
-/*
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -9,9 +8,11 @@ using Microsoft.Xna.Framework;
 using System.IO;
 using System.Collections.Generic;
 
+using Spooky.Core;
 using Spooky.Content.Dusts;
 using Spooky.Content.Items.Catacomb;
 using Spooky.Content.Items.Food;
+using Spooky.Content.NPCs.Catacomb.Layer1.Projectiles;
 
 namespace Spooky.Content.NPCs.Catacomb.Layer1
 {
@@ -50,6 +51,8 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
             NPC.value = Item.buyPrice(0, 0, 3, 0);
             NPC.HitSound = SoundID.NPCHit1;
 			NPC.DeathSound = SoundID.NPCDeath2;
+            NPC.aiStyle = 3;
+            AIType = NPCID.Crab;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.CatacombBiome>().Type };
 		}
 
@@ -86,19 +89,21 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
             //attacking frames
             else
             {
-                if (NPC.localAI[2] == 0)
-                {
-                    NPC.frame.Y = 6 * frameHeight;
-                }
-                if (NPC.localAI[2] == 1)
-                {
-                    NPC.frame.Y = 7 * frameHeight;
-                }
-                if (NPC.localAI[2] == 2)
-                {
-                    NPC.frame.Y = 8 * frameHeight;
-                }
-            }
+				if (NPC.frame.Y < frameHeight * 7)
+				{
+					NPC.frame.Y = 6 * frameHeight;
+				}
+
+				if (NPC.frameCounter > 6)
+				{
+					NPC.frame.Y = NPC.frame.Y + frameHeight;
+					NPC.frameCounter = 0;
+				}
+				if (NPC.frame.Y >= frameHeight * 9)
+				{
+					NPC.frame.Y = 8 * frameHeight;
+				}
+			}
         }
         
         public override void AI()
@@ -111,66 +116,50 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
             {
                 case 0:
                 {
-                    if (player.Distance(NPC.Center) <= 300f || NPC.localAI[1] >= 120)
+					bool HasLineOfSight = Collision.CanHitLine(player.position, player.width, player.height, NPC.position, NPC.width, NPC.height);
+                    if ((player.Distance(NPC.Center) <= 420f && HasLineOfSight) || NPC.localAI[1] >= 100)
                     {
-                        //NPC.localAI[1]++;
+                        NPC.localAI[1]++;
                     }
 
-                    if (NPC.localAI[1] < 180)
-                    {
-                        NPC.aiStyle = 3;
-                        AIType = NPCID.Crab;
-                    }
+                    NPC.aiStyle = 3;
+                    AIType = NPCID.Crab;
 
-                    if (NPC.localAI[1] >= 180)
+                    //start actually attacking
+                    if (NPC.localAI[1] == 150)
                     {
-                        int MaxDusts = Main.rand.Next(3, 8);
-                        for (int numDusts = 0; numDusts < MaxDusts; numDusts++)
-                        {
-                            Vector2 dustPos = (Vector2.One * new Vector2((float)NPC.width / 3f, (float)NPC.height / 3f) * Main.rand.NextFloat(1.25f, 1.75f)).RotatedBy((double)((float)(numDusts - (MaxDusts / 2 - 1)) * 6.28318548f / (float)MaxDusts), default(Vector2)) + NPC.Center;
-                            Vector2 velocity = dustPos - NPC.Center;
-                            int dustEffect = Dust.NewDust(dustPos + velocity, 0, 0, ModContent.DustType<GlowyDust>(), velocity.X * 2f, velocity.Y * 2f, 100, default, 1f);
-                            Main.dust[dustEffect].color = Color.Orange;
-                            Main.dust[dustEffect].scale = 0.1f;
-                            Main.dust[dustEffect].noGravity = true;
-                            Main.dust[dustEffect].noLight = false;
-                            Main.dust[dustEffect].velocity = Vector2.Normalize(velocity) * Main.rand.NextFloat(-2f, -1f);
-                            Main.dust[dustEffect].fadeIn = 1.3f;
-                        }
-
-                        //start actually attacking
-                        if (NPC.localAI[1] == 115)
-                        {
-                            NPC.localAI[1] = 0;
-                            NPC.localAI[2] = Main.rand.Next(0, 3);
-                            //NPC.localAI[0]++;
-                        }
+                        NPC.localAI[1] = 0;
+                        NPC.localAI[0]++;
+                        NPC.netUpdate = true;
                     }
 
                     break;
                 }
 
+                //projectile attack
                 case 1:
                 {
-                    switch (NPC.localAI[2])
+					NPC.aiStyle = 0;
+					NPC.velocity.X *= 0.5f;
+
+                    NPC.localAI[1]++;
+					if (NPC.localAI[1] == 1)
+					{
+						SoundEngine.PlaySound(SoundID.Item175 with { Pitch = -0.5f }, NPC.Center);
+					}
+                    if (NPC.localAI[1] == 30)
                     {
-                        //punching attack
-                        case 0:
-                        {
-                            break;
-                        }
+						SoundEngine.PlaySound(SoundID.Item20, NPC.Center);
 
-                        //scissor attack
-                        case 1:
-                        {
-                            break;
-                        }
+                        NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center + new Vector2(15 * NPC.direction, -10), 
+						Vector2.Zero, ModContent.ProjectileType<GlyphomancerBolt>(), NPC.damage, 4.5f, ai2: NPC.direction);
+                    }
 
-                        //finger gun attack
-                        case 2:
-                        {
-                            break;
-                        }
+                    if (NPC.localAI[1] >= 150)
+                    {
+                        NPC.localAI[1] = 0;
+                        NPC.localAI[0] = 0;
+                        NPC.netUpdate = true;
                     }
 
                     break;
@@ -200,4 +189,3 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
         }
     }
 }
-*/

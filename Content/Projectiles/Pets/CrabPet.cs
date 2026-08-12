@@ -24,7 +24,7 @@ namespace Spooky.Content.Projectiles.Pets
 
         public override void SetDefaults()
         {
-            Projectile.width = 20;
+            Projectile.width = 36;
             Projectile.height = 20;
             Projectile.friendly = true;
             Projectile.tileCollide = true;

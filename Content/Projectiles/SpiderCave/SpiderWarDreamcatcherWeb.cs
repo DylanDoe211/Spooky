@@ -85,7 +85,9 @@ namespace Spooky.Content.Projectiles.SpiderCave
                 Scale += 0.02f;
                 Projectile.rotation += 0.1f;
 
-                if (Main.rand.NextBool(30))
+                Projectile.ai[0]++;
+
+                if (Projectile.ai[0] % 10 == 0)
                 {
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {

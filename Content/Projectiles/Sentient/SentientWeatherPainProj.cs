@@ -145,7 +145,9 @@ namespace Spooky.Content.Projectiles.Sentient
                     ShootSpeed.Normalize();
                     ShootSpeed *= 25;
 
-                    Vector2 muzzleOffset = Vector2.Normalize(new Vector2(ShootSpeed.X, ShootSpeed.Y)) * 40f;
+                    bool MouseTooClose = Main.MouseWorld.Distance(player.Center) <= 55f;
+
+                    Vector2 muzzleOffset = Vector2.Normalize(new Vector2(ShootSpeed.X, ShootSpeed.Y)) * (MouseTooClose ? 0f : 40f);
 
                     Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center + muzzleOffset, ShootSpeed, 
                     ModContent.ProjectileType<SentientWeatherPainTornado>(), Projectile.damage, Projectile.knockBack, Projectile.owner, ai1: Main.rand.Next(0, 4));

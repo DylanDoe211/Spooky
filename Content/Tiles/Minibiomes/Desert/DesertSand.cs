@@ -30,7 +30,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Desert
 			Tile Above = Framing.GetTileSafely(i, j - 1);
 
 			//grow cactus
-			if (Main.rand.NextBool(15) && !Above.HasTile && TarPits.CanPlaceCactus(i, j) && !Main.tile[i, j].LeftSlope && !Main.tile[i, j].RightSlope && !Main.tile[i, j].IsHalfBlock)
+			if (Main.rand.NextBool(10) && !Above.HasTile && TarPits.CanPlaceCactus(i, j) && !Main.tile[i, j].LeftSlope && !Main.tile[i, j].RightSlope && !Main.tile[i, j].IsHalfBlock)
 			{
 				TarPitCactus.Grow(i, j - 1, 5, 12);
 			}

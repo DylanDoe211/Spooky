@@ -96,8 +96,8 @@ namespace Spooky.Content.Backgrounds.Shipyard
 
 				//offsets for each individual background layer
 				int CloseBGYOffset = -30;
-				int MiddleBGYOffset = 100;
-				int FarBGYOffset = 200;
+				int MiddleBGYOffset = 80;
+				int FarBGYOffset = 250;
 
 				//back layer mountain
 				var bgScale = 0.9f;
@@ -121,7 +121,7 @@ namespace Spooky.Content.Backgrounds.Shipyard
 						Main.spriteBatch.Draw(TextureAssets.Background[textureSlots[0]].Value, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + FarBGYOffset), 
 						new Rectangle(0, 0, Width, Height), BGActualColor, 0f, default(Vector2), bgScale, SpriteEffects.None, 0f);
 						Main.spriteBatch.Draw(TextureAssets.Background[glowTextureSlots[0]].Value, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + FarBGYOffset), 
-						new Rectangle(0, 0, Width, Height), Color.White * 0.2f, 0f, default(Vector2), bgScale, SpriteEffects.None, 0f);
+						new Rectangle(0, 0, Width, Height), Color.White * 0.25f, 0f, default(Vector2), bgScale, SpriteEffects.None, 0f);
 					}
 				}
 

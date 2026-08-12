@@ -513,32 +513,27 @@ namespace Spooky.Content.Generation
                         {
                             ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkThinShort>(), (ushort)ModContent.TileType<EyeStalkThin>(), 
                             (ushort)ModContent.TileType<EyeStalkThinTall>(), (ushort)ModContent.TileType<EyeStalkThinVeryTall>() };
-
-                            WorldGen.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Stalks), true);
+                            TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Stalks), true);
                         }
                         if (WorldGen.genRand.NextBool(25))
                         {
                             ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkSmall1>(), (ushort)ModContent.TileType<EyeStalkSmall2>() };
-
-                            WorldGen.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Stalks), true);
+                            TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Stalks), true);
                         }
                         if (WorldGen.genRand.NextBool(30))
                         {
                             ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkMedium1>(), (ushort)ModContent.TileType<EyeStalkMedium2>() };
-
-                            WorldGen.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Stalks), true);
+                            TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Stalks), true);
                         }
                         if (WorldGen.genRand.NextBool(35))
                         {
                             ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkBig1>(), (ushort)ModContent.TileType<EyeStalkBig2>() };
-
-                            WorldGen.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Stalks), true);
+                            TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Stalks), true);
                         }
                         if (WorldGen.genRand.NextBool(35))
                         {
                             ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkGiant1>(), (ushort)ModContent.TileType<EyeStalkGiant2>() };
-
-                            WorldGen.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Stalks), true);
+                            TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Stalks), true);
                         }
 
                         //purple eye stalks
@@ -547,31 +542,26 @@ namespace Spooky.Content.Generation
                             ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkPurple1>(), (ushort)ModContent.TileType<EyeStalkPurple2>(), 
                             (ushort)ModContent.TileType<EyeStalkPurple3>(), (ushort)ModContent.TileType<EyeStalkPurple4>(),
                             (ushort)ModContent.TileType<EyeStalkPurple5>(), (ushort)ModContent.TileType<EyeStalkPurple6>() };
-
-                            WorldGen.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Stalks), true);
+                            TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Stalks), true);
                         }
 
                         //bones
                         if (WorldGen.genRand.NextBool(25))
                         {
                             ushort[] Bones = new ushort[] { (ushort)ModContent.TileType<Bone1>(), (ushort)ModContent.TileType<Bone2>(), (ushort)ModContent.TileType<Bone3>(), (ushort)ModContent.TileType<Bone4>() };
-
-                            WorldGen.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Bones), true);
+                            TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Bones), true);
                         }
 
                         //arteries
                         if (WorldGen.genRand.NextBool(12))
                         {
                             ushort[] Arteries = new ushort[] { (ushort)ModContent.TileType<Artery1>(), (ushort)ModContent.TileType<Artery2>() };
-
-                            WorldGen.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Arteries), true);
+                            TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Arteries), true);
                         }
                         if (WorldGen.genRand.NextBool(15))
                         {
                             ushort[] Arteries = new ushort[] { (ushort)ModContent.TileType<ArteryHanging1>(), (ushort)ModContent.TileType<ArteryHanging2>() };
-
-                            WorldGen.PlaceObject(X, Y + 1, WorldGen.genRand.Next(Arteries), true);
-                            WorldGen.PlaceObject(X, Y + 2, WorldGen.genRand.Next(Arteries), true);
+                            TileGlobal.PlaceObject(X, Y + 2, WorldGen.genRand.Next(Arteries), true);
                         }
 
                         //hanging fingers
@@ -580,10 +570,10 @@ namespace Spooky.Content.Generation
                             ushort[] HangingFinger = new ushort[] { (ushort)ModContent.TileType<FingerHanging1>(), (ushort)ModContent.TileType<FingerHanging2>() };
 
                             //cannot be bothered to check which one actually works
-                            WorldGen.PlaceObject(X, Y + 1, WorldGen.genRand.Next(HangingFinger));
-                            WorldGen.PlaceObject(X, Y + 2, WorldGen.genRand.Next(HangingFinger));    
-                            WorldGen.PlaceObject(X, Y + 3, WorldGen.genRand.Next(HangingFinger));
-                            WorldGen.PlaceObject(X, Y + 4, WorldGen.genRand.Next(HangingFinger));
+                            TileGlobal.PlaceObject(X, Y + 1, WorldGen.genRand.Next(HangingFinger));
+                            TileGlobal.PlaceObject(X, Y + 2, WorldGen.genRand.Next(HangingFinger));    
+                            TileGlobal.PlaceObject(X, Y + 3, WorldGen.genRand.Next(HangingFinger));
+                            TileGlobal.PlaceObject(X, Y + 4, WorldGen.genRand.Next(HangingFinger));
                         }
                     }
 
@@ -592,19 +582,13 @@ namespace Spooky.Content.Generation
                     {
                         if (WorldGen.genRand.NextBool(10) && !Main.tile[X, Y - 1].HasTile && !Main.tile[X, Y].LeftSlope && !Main.tile[X, Y].RightSlope && !Main.tile[X, Y].IsHalfBlock)
                         {
-                            WorldGen.PlaceTile(X, Y - 1, (ushort)ModContent.TileType<SpookyHellWeeds>());
-                            Main.tile[X, Y - 1].TileFrameX = (short)(WorldGen.genRand.Next(6) * 18);
-                            WorldGen.SquareTileFrame(X, Y + 1, true);
-                            if (Main.netMode == NetmodeID.Server)
-                            {
-                                NetMessage.SendTileSquare(-1, X, Y - 1, 1, TileChangeType.None);
-                            }
+                            TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<SpookyHellWeeds>(), true, WorldGen.genRand.Next(0, 6));
                         }
 
                         //ambient manhole teeth
                         if (WorldGen.genRand.NextBool(20))
                         {
-                            WorldGen.PlaceObject(X, Y - 1, (ushort)ModContent.TileType<Tooth>(), true);
+                            TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<Tooth>(), true);
                         }
                     }
 
@@ -615,8 +599,7 @@ namespace Spooky.Content.Generation
                         if (WorldGen.genRand.NextBool(8))
                         {
                             ushort[] Fingers = new ushort[] { (ushort)ModContent.TileType<Finger1>(), (ushort)ModContent.TileType<Finger2>() };
-
-                            WorldGen.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Fingers));    
+                            TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Fingers));
                         }
                     }
                 }
@@ -1012,7 +995,7 @@ namespace Spooky.Content.Generation
 
                                     if (!PlacedCrucifix && WorldGen.genRand.NextBool(2))
                                     {
-                                        WorldGen.PlaceObject(X - 3, NoseTemplePositionY + 45, ModContent.TileType<ColumboCrucifix>());
+                                        TileGlobal.PlaceObject(X - 3, NoseTemplePositionY + 45, ModContent.TileType<ColumboCrucifix>());
                                         PlacedCrucifix = true;
                                     }
 
@@ -1033,7 +1016,7 @@ namespace Spooky.Content.Generation
 
                                     if (!PlacedCrucifix && WorldGen.genRand.NextBool(2))
                                     {
-                                        WorldGen.PlaceObject(X + 3, NoseTemplePositionY + 45, ModContent.TileType<ColumboCrucifix>());
+                                        TileGlobal.PlaceObject(X + 3, NoseTemplePositionY + 45, ModContent.TileType<ColumboCrucifix>());
                                         PlacedCrucifix = true;
                                     }
 
@@ -1086,7 +1069,7 @@ namespace Spooky.Content.Generation
                             int PotChance = Y >= NoseTemplePositionY + 45 ? 20 : 3;
                             if (WorldGen.genRand.NextBool(PotChance))
                             {
-                                WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<NoseTemplePots>(), true, Main.rand.Next(0, 3));
+                                TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<NoseTemplePots>(), true, Main.rand.Next(0, 3));
                             }
                         }
                     }

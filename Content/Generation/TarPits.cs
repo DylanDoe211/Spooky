@@ -628,7 +628,7 @@ namespace Spooky.Content.Generation
 			{
 				for (int j = Y - 4; j < Y + 4; j++)
 				{
-					if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<TarPitCactus>())
+					if (Main.tile[i, j].TileType == ModContent.TileType<TarPitCactus>() && Main.tile[i, j].TileType == ModContent.TileType<TarPitsGiantCactus1>() && Main.tile[i, j].TileType == ModContent.TileType<TarPitsGiantCactus2>())
 					{
 						return false;
 					}
@@ -670,18 +670,10 @@ namespace Spooky.Content.Generation
 					{
 						numDesertTiles++;
 					}
-
-					/*
-					//do not place near protected structures ever
-					if (!GenVars.structures.CanPlace(new Rectangle(i, j, 1, 1), 15))
-					{
-						return false;
-					}
-					*/
 				}
 			}
 
-			int AmountOfTilesNeeded = (SizeX * SizeY) / 4;
+			int AmountOfTilesNeeded = (SizeX * SizeY) / 2;
 
 			if (numDesertTiles >= AmountOfTilesNeeded)
 			{

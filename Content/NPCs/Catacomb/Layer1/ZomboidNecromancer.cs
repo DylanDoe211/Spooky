@@ -117,7 +117,6 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
                 if (NPC.localAI[0] > 360)
                 {
                     NPC.aiStyle = 0;
-
                     NPC.velocity.X *= 0.5f;
                 }
                 else

@@ -3,9 +3,11 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent;
 using ReLogic.Content;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Spooky.Content.Gores.Misc;
+using Spooky.Content.Items.Food;
 using Spooky.Content.Tiles.Catacomb;
 using Spooky.Content.Tiles.SpookyBiome;
 
@@ -81,6 +83,11 @@ namespace Spooky.Content.Tiles.Cemetery.Tree
         public override bool Shake(int x, int y, ref bool createLeaves)
         {
             createLeaves = true;
+
+			if (Main.rand.NextBool(15))
+			{
+				Item.NewItem(WorldGen.GetItemSource_FromTreeShake(x, y), new Vector2(x, y) * 16, ModContent.ItemType<BlackBerries>());
+			}
 
             return false;
         }

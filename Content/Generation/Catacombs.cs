@@ -260,19 +260,22 @@ namespace Spooky.Content.Generation
                     {
 						int[] RandomYCoord = new int[]
 						{
-							(int)Main.worldSurface + 10, (int)Main.worldSurface + 55, (int)Main.worldSurface + 100, (int)Main.worldSurface + layer1Depth
+							0, 
+                            45, 
+                            45 * 2, 
+                            45 * 3
 						};
 
 						if (Main.maxTilesY >= 1800)
 						{
-							RandomYCoord.Append((int)Main.worldSurface + 145);
+							RandomYCoord.Append(45 * 4);
 						}
 						if (Main.maxTilesY >= 2400)
 						{
-							RandomYCoord.Append((int)Main.worldSurface + 190);
+							RandomYCoord.Append(45 * 5);
 						}
 
-						Vector2 rareRoomOrigin = new Vector2(X - 18, WorldGen.genRand.Next(RandomYCoord) - 18);
+						Vector2 rareRoomOrigin = new Vector2(X - 18, ((int)Main.worldSurface + 10 + WorldGen.genRand.Next(RandomYCoord)) - 18);
 
 						StructureHelper.API.Generator.GenerateStructure("Content/Structures/CatacombLayer1/MoyaiRoom.shstruct", rareRoomOrigin.ToPoint16(), Mod);
                         PlacedMoyaiRoom = true;
@@ -572,21 +575,24 @@ namespace Spooky.Content.Generation
 					//rare avarice pot room
                     if (WorldGen.genRand.NextBool(25) && !PlacedAvariceRoom)
                     {
-						int[] RandomYCoord = new int[]
+                        int[] RandomYCoord = new int[]
 						{
-							layer2Start, layer2Start + 42, layer2Start + 84, (int)Main.worldSurface + layer1Depth + layer2Depth
+							0, 
+                            42, 
+                            42 * 2, 
+                            42 * 3
 						};
 
 						if (Main.maxTilesY >= 1800)
 						{
-							RandomYCoord.Append(layer2Start + 126);
+							RandomYCoord.Append(42 * 4);
 						}
 						if (Main.maxTilesY >= 2400)
 						{
-							RandomYCoord.Append(layer2Start + 168);
+							RandomYCoord.Append(42 * 5);
 						}
 
-						Vector2 rareRoomOrigin = new Vector2(X - 35, WorldGen.genRand.Next(RandomYCoord) - 18);
+						Vector2 rareRoomOrigin = new Vector2(X - 35, (layer2Start + WorldGen.genRand.Next(RandomYCoord)) - 18);
 
 						StructureHelper.API.Generator.GenerateStructure("Content/Structures/CatacombLayer2/AvaricePotRoom.shstruct", rareRoomOrigin.ToPoint16(), Mod);
                         PlacedAvariceRoom = true;

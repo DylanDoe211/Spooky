@@ -64,7 +64,7 @@ namespace Spooky.Content.Generation
 						LeftY = (int)heightLimit;
 						leftBound -= 5;
 					}
-					if ((!WorldGen.SolidTile(leftBound, LeftY) || !Cemetery.NoFloatingIsland(leftBound, LeftY)) && Main.tile[leftBound, LeftY].WallType <= 0 && LeftY <= Main.worldSurface)
+					if ((!WorldGen.SolidTile(leftBound, LeftY) || !Cemetery.NoFloatingIsland(leftBound, LeftY)) && LeftY <= Main.worldSurface)
 					{
 						LeftY++;
 					}
@@ -75,7 +75,12 @@ namespace Spooky.Content.Generation
 				}
 				else
 				{
-					if ((!Cemetery.IsCemeteryTile(leftBound, LeftY) || !Cemetery.NoFloatingIsland(leftBound, LeftY)) && Main.tile[leftBound, LeftY].WallType <= 0 && LeftY <= Main.worldSurface)
+					if (WorldGen.SolidTile(leftBound, LeftY) && Cemetery.NoFloatingIsland(leftBound, LeftY) && !Cemetery.IsCemeteryTile(leftBound, LeftY))
+					{
+						LeftY = (int)heightLimit;
+						leftBound -= 5;
+					}
+					if ((!Cemetery.IsCemeteryTile(leftBound, LeftY) || !Cemetery.NoFloatingIsland(leftBound, LeftY)) && LeftY <= Main.worldSurface)
 					{
 						LeftY++;
 					}
@@ -98,7 +103,7 @@ namespace Spooky.Content.Generation
 						RightY = (int)heightLimit;
 						rightBound += 5;
 					}
-					if ((!WorldGen.SolidTile(rightBound, RightY) || !Cemetery.NoFloatingIsland(rightBound, RightY)) && Main.tile[rightBound, RightY].WallType <= 0 && RightY <= Main.worldSurface)
+					if ((!WorldGen.SolidTile(rightBound, RightY) || !Cemetery.NoFloatingIsland(rightBound, RightY)) && RightY <= Main.worldSurface)
 					{
 						RightY++;
 					}
@@ -109,13 +114,18 @@ namespace Spooky.Content.Generation
 				}
 				else
 				{
-					if ((!Cemetery.IsCemeteryTile(rightBound, RightY) || !Cemetery.NoFloatingIsland(rightBound, RightY)) && Main.tile[rightBound, RightY].WallType <= 0 && RightY <= Main.worldSurface)
+					if (WorldGen.SolidTile(rightBound, RightY) && Cemetery.NoFloatingIsland(rightBound, RightY) && !Cemetery.IsCemeteryTile(rightBound, RightY))
+					{
+						RightY = (int)heightLimit;
+						rightBound += 5;
+					}
+					if ((!Cemetery.IsCemeteryTile(rightBound, RightY) || !Cemetery.NoFloatingIsland(rightBound, RightY)) && RightY <= Main.worldSurface)
 					{
 						RightY++;
 					}
 					else
 					{
-						foundSurfaceRight = true;
+						foundSurfaceLeft = true;
 					}
 				}
 			}
@@ -376,7 +386,7 @@ namespace Spooky.Content.Generation
 				}
 			}
 
-			//spread grass on black sandstone
+			//spread grass on black sandstone and slope blocks
 			for (int X = leftBound - 10; X <= rightBound + 10; X++)
 			{
 				for (int Y = 10; Y <= Main.worldSurface; Y++)
@@ -460,10 +470,7 @@ namespace Spooky.Content.Generation
 							if (WorldGen.genRand.NextBool())
 							{
 								ushort[] Anchors = new ushort[] { (ushort)ModContent.TileType<MossyAnchor1>(), (ushort)ModContent.TileType<MossyAnchor2>(), (ushort)ModContent.TileType<MossyAnchor3>() };
-
-								ushort newObject = WorldGen.genRand.Next(Anchors);
-
-								WorldGen.PlaceObject(X, Y - 1, newObject, true);
+								TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Anchors), true);
 							}
 
 							//giant bleached coral 
@@ -472,10 +479,7 @@ namespace Spooky.Content.Generation
 							{
 								ushort[] GiantCorals = new ushort[] { (ushort)ModContent.TileType<BleachedCoralGiant1>(), (ushort)ModContent.TileType<BleachedCoralGiant2>(), (ushort)ModContent.TileType<BleachedCoralGiant3>(),
 								(ushort)ModContent.TileType<BleachedCoralGiant4>(), (ushort)ModContent.TileType<BleachedCoralGiant5>(), (ushort)ModContent.TileType<BleachedCoralGiant6>() };
-
-								ushort newObject = WorldGen.genRand.Next(GiantCorals);
-
-								WorldGen.PlaceObject(X, Y - 1, newObject, true);
+								TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(GiantCorals), true);
 							}
 
 							//small bleached corals/stafishes
@@ -484,11 +488,11 @@ namespace Spooky.Content.Generation
 							{
 								if (WorldGen.genRand.NextBool())
 								{
-									WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<BleachedCoral>(), true, WorldGen.genRand.Next(0, 8));
+									TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<BleachedCoral>(), true, WorldGen.genRand.Next(0, 8));
 								}
 								else
 								{
-									WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<PaleStarfish>(), true, WorldGen.genRand.Next(0, 4));
+									TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<PaleStarfish>(), true, WorldGen.genRand.Next(0, 4));
 								}
 							}
 						}
@@ -500,17 +504,17 @@ namespace Spooky.Content.Generation
 							if (WorldGen.genRand.NextBool(3) && tileAbove.LiquidAmount <= 0)
 							{
 								ushort[] SandPiles = new ushort[] { (ushort)ModContent.TileType<BlackSandPile1>(), (ushort)ModContent.TileType<BlackSandPile2>(), (ushort)ModContent.TileType<BlackSandPile3>() };
-
-								ushort newObject = WorldGen.genRand.Next(SandPiles);
-
-								WorldGen.PlaceObject(X, Y - 1, newObject, true);
+								TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(SandPiles), true);
 							}
+						}
 
+						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>())
+						{
 							//ghost flowers 
-							int InWaterChance = tileAbove.LiquidAmount <= 0 ? 15 : 8;
+							int InWaterChance = tileAbove.LiquidAmount <= 0 ? 8 : 5;
 							if (WorldGen.genRand.NextBool(InWaterChance))
 							{
-								WorldGen.PlaceObject(X, Y - 1, (ushort)ModContent.TileType<GhostFlower>(), true, WorldGen.genRand.Next(0, 2));
+								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<GhostFlower>(), true);
 							}
 						}
 
@@ -523,53 +527,32 @@ namespace Spooky.Content.Generation
 							{
 								ushort[] BigRockPiles = new ushort[] { (ushort)ModContent.TileType<BlacksandstoneRock1>(), (ushort)ModContent.TileType<BlacksandstoneRock2>(), 
 								(ushort)ModContent.TileType<BlacksandstoneRock3>(), (ushort)ModContent.TileType<BlacksandstoneRock4>() };
-
-								ushort newObject = WorldGen.genRand.Next(BigRockPiles);
-
-								WorldGen.PlaceObject(X, Y - 1, newObject, true);
+								TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(BigRockPiles), true);
 							}
 
 							//small pebbles
 							int Chance2 = Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>() ? 8 : 3;
 							if (WorldGen.genRand.NextBool(Chance2))
 							{
-								WorldGen.PlaceTile(X, Y - 1, (ushort)ModContent.TileType<BlacksandstoneRockSmall>());
-								tileAbove.TileFrameX = (short)(WorldGen.genRand.Next(5) * 18);
-								WorldGen.SquareTileFrame(X, Y + 1, true);
-								if (Main.netMode == NetmodeID.Server)
-								{
-									NetMessage.SendTileSquare(-1, X, Y - 1, 1, TileChangeType.None);
-								}
+								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<BlacksandstoneRockSmall>(), true, WorldGen.genRand.Next(0, 5));
 							}
 						}
 
 						//grow pale sea oats
-						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>())
+						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>())
 						{
 							if (WorldGen.genRand.NextBool() && tileAbove.LiquidAmount <= 0)
 							{
-								WorldGen.PlaceTile(X, Y - 1, (ushort)ModContent.TileType<PaleSeaOats>());
-								tileAbove.TileFrameX = (short)(WorldGen.genRand.Next(14) * 18);
-								WorldGen.SquareTileFrame(X, Y + 1, true);
-								if (Main.netMode == NetmodeID.Server)
-								{
-									NetMessage.SendTileSquare(-1, X, Y - 1, 1, TileChangeType.None);
-								}
+								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<PaleSeaOats>(), true, WorldGen.genRand.Next(0, 14));
 							}
 						}
 
 						//grow mossy weeds
 						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>())
 						{
-							if (WorldGen.genRand.NextBool() && tileAbove.LiquidAmount <= 0)
+							if (WorldGen.genRand.NextBool())
 							{
-								WorldGen.PlaceTile(X, Y - 1, (ushort)ModContent.TileType<BlackSandstoneMossWeeds>());
-								tileAbove.TileFrameX = (short)(WorldGen.genRand.Next(6) * 18);
-								WorldGen.SquareTileFrame(X, Y + 1, true);
-								if (Main.netMode == NetmodeID.Server)
-								{
-									NetMessage.SendTileSquare(-1, X, Y - 1, 1, TileChangeType.None);
-								}
+								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<BlackSandstoneMossWeeds>(), true, WorldGen.genRand.Next(0, 6));
 							}
 						}
 
@@ -579,7 +562,7 @@ namespace Spooky.Content.Generation
 						{
 							if (WorldGen.genRand.NextBool() && !tileAbove.HasTile)
 							{
-								WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<ShipyardPots>(), true, WorldGen.genRand.Next(0, 5));
+								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<ShipyardPots>(), true, WorldGen.genRand.Next(0, 5));
 							}
 						}
 					}
@@ -589,11 +572,11 @@ namespace Spooky.Content.Generation
 					{
 						if (WorldGen.genRand.NextBool(150))
 						{
-							WorldGen.PlaceObject(X, Y, ModContent.TileType<ShelfCoralSmall>(), true, WorldGen.genRand.Next(0, 3));
+							TileGlobal.PlaceObject(X, Y, ModContent.TileType<ShelfCoralSmall>(), true, WorldGen.genRand.Next(0, 3));
 						}
 						if (WorldGen.genRand.NextBool(135))
 						{
-							WorldGen.PlaceObject(X, Y, ModContent.TileType<ShelfCoralLarge>(), true, WorldGen.genRand.Next(0, 3));
+							TileGlobal.PlaceObject(X, Y, ModContent.TileType<ShelfCoralLarge>(), true, WorldGen.genRand.Next(0, 3));
 						}
 					}
 				}

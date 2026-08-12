@@ -12,16 +12,15 @@ namespace Spooky.Content.Items.Food
 	{
 		public override void SetDefaults()
         {
-			Item.healLife = 200;
-			Item.width = 42;
-			Item.height = 28;
+			Item.width = 30;
+			Item.height = 36;
 			Item.useTime = 20;
 			Item.useAnimation = 20;
-			Item.expert = true;
+			Item.maxStack = 9999;
 			Item.noMelee = true;
 			Item.consumable = true;
-            Item.rare = ItemRarityID.Yellow;
-			Item.value = Item.buyPrice(gold: 50);
+            Item.rare = ItemRarityID.Blue;
+			Item.value = Item.buyPrice(gold: 2);
 			Item.UseSound = SoundID.Item3;
             Item.useStyle = ItemUseStyleID.DrinkLiquid;
 			Item.holdStyle = ItemHoldStyleID.HoldFront;
@@ -36,6 +35,11 @@ namespace Spooky.Content.Items.Food
 
 		public override bool? UseItem(Player player)
 		{
+			int[] RandomBuffs = { BuffID.Regeneration, BuffID.Swiftness, BuffID.Gills, BuffID.Ironskin, BuffID.Featherfall, BuffID.Spelunker,
+			BuffID.Shine, BuffID.NightOwl, BuffID.Battle, BuffID.Thorns, BuffID.Gravitation, BuffID.Endurance };
+
+			player.AddBuff(Main.rand.Next(RandomBuffs), 18000);
+
             return true;
         }
 	}

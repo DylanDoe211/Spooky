@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Spooky.Content.Gores.Misc;
+using Spooky.Content.Items.Food;
 using Spooky.Content.Items.Pets;
 using Spooky.Content.Tiles.SpiderCave;
 
@@ -83,9 +84,13 @@ namespace Spooky.Content.Tiles.SpiderCave.Tree
         {
             createLeaves = true;
 
-			if (Main.rand.NextBool(15))
+			if (Main.rand.NextBool(20))
 			{
 				Item.NewItem(WorldGen.GetItemSource_FromTreeShake(x, y), new Vector2(x, y) * 16, ModContent.ItemType<InchwormApple>());
+			}
+			if (Main.rand.NextBool(15))
+			{
+				Item.NewItem(WorldGen.GetItemSource_FromTreeShake(x, y), new Vector2(x, y) * 16, ModContent.ItemType<Cranberry>());
 			}
 
             return false;
