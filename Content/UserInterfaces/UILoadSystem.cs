@@ -2,6 +2,7 @@
 using Terraria.UI;
 using Terraria.ModLoader;
 using System.Collections.Generic;
+using Spooky.Content.UserInterfaces.LittleEyeQuests;
 
 namespace Spooky.Content.UserInterfaces
 {
@@ -70,7 +71,7 @@ namespace Spooky.Content.UserInterfaces
 				//little eye bounty UI
 				layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer("Little Eye Bounty UI", () =>
                 {
-                    LittleEyeQuestUI.Draw(Main.spriteBatch);
+                    LittleEyeQuestUI.Draw();
                     return true;
                 },
                 InterfaceScaleType.None));
@@ -120,6 +121,7 @@ namespace Spooky.Content.UserInterfaces
 						TextLayer.Update(Main._drawInterfaceGameTime);
 						TextBox.Draw(Main.spriteBatch);
 					}
+
 					return true;
 				}, InterfaceScaleType.None));
 			}

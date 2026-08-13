@@ -12,6 +12,7 @@ using System.Collections.Generic;
 
 using Spooky.Core;
 using Spooky.Content.UserInterfaces;
+using Spooky.Content.UserInterfaces.LittleEyeQuests;
 
 namespace Spooky.Content.NPCs.Friendly
 {
