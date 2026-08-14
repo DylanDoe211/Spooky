@@ -151,7 +151,11 @@ namespace Spooky.Content.NPCs.Friendly
             {
 				LittleEyeDialogueChoiceUI.LittleEye = NPC.whoAmI;
 				LittleEyeDialogueChoiceUI.UIOpen = true;
+
+				//var ui = ModContent.GetInstance<UILoadSystem>().EyeQuestUI;
+				//ui.SetState(new EyeQuestUIState(NPC.whoAmI));
 			}
+
             return string.Empty;
 		}
 

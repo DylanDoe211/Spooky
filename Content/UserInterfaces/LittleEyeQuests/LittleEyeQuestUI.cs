@@ -12,6 +12,9 @@ using Spooky.Core;
 using Spooky.Content.Items.BossSummon;
 using Spooky.Content.Items.Quest;
 using System;
+using System.Collections.Generic;
+using Terraria.ModLoader.UI;
+using tModPorter;
 
 namespace Spooky.Content.UserInterfaces.LittleEyeQuests;
 
@@ -27,7 +30,7 @@ public class LittleEyeQuestUI : ModSystem
 	internal static bool IsHoveringOverAnyButton = false;
 
 	public static readonly Vector2 PositionModifier = new(-200, -75);
-	public static readonly Vector2 UITopLeft = new(Main.screenWidth / 2, Main.screenHeight / 2);
+	public static Vector2 UITopLeft = new(Main.screenWidth / 2, Main.screenHeight / 2);
 
 	public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/TalkSounds/LittleEyeTalk", SoundType.Sound) { Volume = 3f, PitchVariance = 0.75f };
 
@@ -45,17 +48,22 @@ public class LittleEyeQuestUI : ModSystem
 	private static string QuestCompleteRematchText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.BountyCompletedItem");
 	private static string QuestNewItemText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.BountyNewItem");
 
-	//actual icon textures
+	// Actual icon textures
 	private static readonly Asset<Texture2D>[] BountyIconDone = new Asset<Texture2D>[5];
 	private static readonly Asset<Texture2D>[] BountyIconNotDone = new Asset<Texture2D>[5];
 
-	//misc icon textures
+	// Misc icon textures
 	private static Asset<Texture2D> BountyIconSelectedOutline;
 	private static Asset<Texture2D> BountyIconLocked;
 	private static Asset<Texture2D> BountyIcon5Locked;
 
 	internal static Asset<Texture2D> UITexture;
+	internal static Asset<Texture2D> ButtonTex;
 	internal static Asset<Texture2D> DialogueUIPlayer;
+
+	private static string _hoverText = null;
+	private static int _firstVisibleQuest = 0;
+	private static float _xOffset = 0;
 
 	public override void Load()
 	{
@@ -72,6 +80,7 @@ public class LittleEyeQuestUI : ModSystem
 		BountyIcon5Locked ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/LittleEyeQuests/Icons/BountyIcon5Locked");
 
 		UITexture ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/DialogueUILittleEye");
+		ButtonTex ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/LittleEyeQuests/PageButton");
 		DialogueUIPlayer ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/DialogueUIPlayer");
 	}
 
@@ -107,6 +116,7 @@ public class LittleEyeQuestUI : ModSystem
 
 	public static void DrawTextDescription(SpriteBatch spriteBatch, Vector2 TextTopLeft, string Condition, string Accept, string Warning, Color ConditionColor)
 	{
+		return;
 		Vector2 scale = new Vector2(1f, 1.025f) * MathHelper.Clamp(Main.screenHeight / 1440f, 0.825f, 1f) * Main.UIScale;
 
 		//first draw the condition text for the biome you find the miniboss in
@@ -177,6 +187,8 @@ public class LittleEyeQuestUI : ModSystem
 			return;
 		}
 
+		UITopLeft.X = Main.screenWidth / 2;
+
 		if (DialogueUI.Visible && DialogueUI.Dialogue.Count > 0)
 			return;
 
@@ -208,34 +220,126 @@ public class LittleEyeQuestUI : ModSystem
 			Main.instance.CameraModifiers.Add(new CameraPanning(Main.npc[LittleEye].Center, 20));
 
 		Texture2D UIBoxTexture = ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/LittleEyeQuestUIBar").Value;
-		Vector2 UIBoxScale = Vector2.One * Main.UIScale;
+		Vector2 scale = Vector2.One * Main.UIScale;
+		int backWidth = UIBoxTexture.Width;
 
 		//draw the main UI box
-		Main.spriteBatch.Draw(UIBoxTexture, UITopLeft, null, Color.White, 0f, UIBoxTexture.Size() / 2, UIBoxScale, SpriteEffects.None, 0f);
+		Main.spriteBatch.Draw(UIBoxTexture, UITopLeft - new Vector2(0, 94), null, Color.White, 0f, UIBoxTexture.Size() / 2, scale, SpriteEffects.None, 0f);
+
+		if (LittleEyeCrossmod.QuestsByMod.Count > 0)
+		{
+			Texture2D tex = ButtonTex.Value;
+			Vector2 origin = UIBoxTexture.Size() * new Vector2(0.5f, 0);
+			int yOff = -139;
+
+			// Left arrow
+			bool canClick = _firstVisibleQuest > 0;
+			Vector2 pos = UITopLeft + new Vector2(-38, yOff);
+			bool hover = new Rectangle((int)pos.X - 218, (int)pos.Y, 32, 90).Contains(Main.MouseScreen.ToPoint());
+			var src = new Rectangle(hover ? 34 : 0, 0, 32, 90);
+
+			if (Main.mouseLeftRelease && Main.mouseLeft && hover && canClick)
+				_firstVisibleQuest--;
+
+			Main.spriteBatch.Draw(tex, pos, src, canClick ? Color.White : Color.Gray, 0f, origin, scale, SpriteEffects.FlipHorizontally, 0f);
+
+			canClick = _firstVisibleQuest < 1;
+			pos = UITopLeft + new Vector2(backWidth + 4, yOff);
+			hover = new Rectangle((int)pos.X - 218, (int)pos.Y, 32, 90).Contains(Main.MouseScreen.ToPoint());
+			src = new Rectangle(hover ? 34 : 0, 0, 32, 90);
+
+			if (Main.mouseLeftRelease && Main.mouseLeft && hover && canClick)
+				_firstVisibleQuest++;
+
+			Main.spriteBatch.Draw(tex, pos, src, canClick ? Color.White : Color.Gray, 0f, origin, scale, SpriteEffects.None, 0f);
+		}
+
+		Main.spriteBatch.End();
+
+		int backHeight = UIBoxTexture.Height;
+		Rectangle priorRectangle = Main.instance.GraphicsDevice.ScissorRectangle;
+		Main.instance.GraphicsDevice.ScissorRectangle = new Rectangle((int)UITopLeft.X - backWidth / 2 + 8, (int)UITopLeft.Y - 94 - backHeight / 2, backWidth - 16, backHeight);
+		Main.Rasterizer.ScissorTestEnable = true;
+
+		UITopLeft.X -= _xOffset;
+		_xOffset = MathHelper.Lerp(_xOffset, _firstVisibleQuest * 86, 0.2f);
+
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, Main.Rasterizer, null, Main.UIScaleMatrix);
 
 		//prevent any mouse interactions while the mouse is hovering over this UI
-		if (IsMouseOverUIBox(UITopLeft, UIBoxTexture, UIBoxScale))
+		if (IsMouseOverUIBox(UITopLeft, UIBoxTexture, scale))
 		{
 			IsHoveringOverAnyButton = false;
 
 			player.mouseInterface = true;
 		}
 
-		var ButtonTopLeft = (UITopLeft + new Vector2(-525f, -110f) * UIBoxScale).ToPoint();
+		var buttonTopLeft = (UITopLeft + new Vector2(-525f, -110f) * scale).ToPoint();
 
 		if (Delay <= 20 && !Main.mouseLeft)
 			Delay++;
 
-		Quest1Logic(player, ButtonTopLeft); // Frank the Goblin
-		Quest2Logic(player, ButtonTopLeft += new Point(84, 0)); // Tome of the Spirits
-		Quest3Logic(player, ButtonTopLeft += new Point(84, 0)); // Spider Grotto
-		Quest4Logic(player, ButtonTopLeft += new Point(84, 0)); // Eye Wizard
-		OrroboroLogic(player, UIBoxScale, ButtonTopLeft += new Point(84, 0)); // Orroboro
+		Quest1Logic(player, buttonTopLeft); // Frank the Goblin
+		Quest2Logic(player, buttonTopLeft += new Point(84, 0)); // Tome of the Spirits
+		Quest3Logic(player, buttonTopLeft += new Point(84, 0)); // Spider Grotto
+		Quest4Logic(player, buttonTopLeft += new Point(84, 0)); // Eye Wizard
+		OrroboroLogic(player, scale, buttonTopLeft += new Point(84, 0)); // Orroboro
+
+		// For some reason this was hardcoded into the quest logic, didn't care to remove it, do it here
+		buttonTopLeft.X += 315;
+		buttonTopLeft.Y -= 24;
+
+		foreach (List<CrossmodQuest> quests in LittleEyeCrossmod.QuestsByMod.Values)
+		{
+			foreach (CrossmodQuest quest in quests)
+			{
+				buttonTopLeft.X += 84;
+				HandleCustomQuest(player, buttonTopLeft, quest);
+			}
+		}
+
+		Main.spriteBatch.End();
+		Main.instance.GraphicsDevice.ScissorRectangle = priorRectangle;
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
+
+		if (_hoverText is not null)
+		{
+			Vector2 position = UITopLeft + new Vector2(10, -40);
+			ReLogic.Graphics.DynamicSpriteFont font = FontAssets.DeathText.Value;
+			Vector2 size = ChatManager.GetStringSize(font, _hoverText, Vector2.One);
+			size.Y = 0;
+			ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, _hoverText, position, Color.White, 0f, size / 2f, new(0.35f));
+		}
+
+		_hoverText = null;
 	}
 
-	private static void OrroboroLogic(Player player, Vector2 scale, Point ButtonTopLeft)
+	public static void HandleCustomQuest(Player player, Point buttonTopLeft, CrossmodQuest quest)
 	{
-		Vector2 Icon5TopLeft = ButtonTopLeft.ToVector2() + new Vector2(315f, -24f) * Main.UIScale;
+		int y = 164;
+
+		if (quest.CompleteCheck())
+			y = 82;
+		else if (!quest.IsLocked?.Invoke() is not true)
+			y = 0;
+
+		Texture2D tex = quest.Icon.Value;
+		Rectangle hitbox = new Rectangle(buttonTopLeft.X, buttonTopLeft.Y, (int)(80 * Main.UIScale), (int)(80 * Main.UIScale));
+		var drawPosition = buttonTopLeft.ToVector2();
+		Main.spriteBatch.Draw(tex, drawPosition, new Rectangle(0, y, 80, 80), Color.White, 0f, Vector2.Zero, Main.UIScale, SpriteEffects.None, 0f);
+
+		if (hitbox.Contains(Main.MouseScreen.ToPoint()))
+		{
+			DrawIcon(drawPosition, BountyIconSelectedOutline.Value);
+
+			IsHoveringOverAnyButton = false;
+			player.mouseInterface = true;
+		}
+	}
+
+	private static void OrroboroLogic(Player player, Vector2 scale, Point topLeft)
+	{
+		Vector2 Icon5TopLeft = topLeft.ToVector2() + new Vector2(315f, -24f) * Main.UIScale;
 
 		bool downedAllMechs = NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3;
 		DrawIcon(Icon5TopLeft, !downedAllMechs ? BountyIcon5Locked.Value : Flags.downedOrroboro ? BountyIconDone[4].Value : BountyIconNotDone[4].Value);
@@ -338,7 +442,8 @@ public class LittleEyeQuestUI : ModSystem
 			DrawIcon(topLeft, BountyIconSelectedOutline.Value);
 
 			if (flags.IsLocked)
-				DrawTextDescription(Main.spriteBatch, UITopLeft + new Vector2(-257f, -30f) * scale, QuestAcceptedText, string.Empty, string.Empty, Color.Red);
+				_hoverText = QuestAcceptedText;
+			//DrawTextDescription(Main.spriteBatch, UITopLeft + new Vector2(-257f, -30f) * scale, QuestAcceptedText, string.Empty, string.Empty, Color.Red);
 			else if (flags.IsDown || Flags.PokedLittleEye)
 			{
 				DrawTextDescription(Main.spriteBatch, UITopLeft + new Vector2(-257f, -30f) * scale, QuestCompleteText, QuestCompleteRematchText, string.Empty, Color.Lime);
@@ -423,5 +528,11 @@ public class LittleEyeQuestUI : ModSystem
 		Dialogue newDialogue = new(DialogueUIPlayer.Value, Main.LocalPlayer, Text, null, SoundID.Item1, 2f, 0f, default, NotPlayer: false);
 		DialogueUI.Visible = true;
 		DialogueUI.Add(newDialogue);
+	}
+
+	internal static void Open()
+	{
+		UIOpen = true;
+		_firstVisibleQuest = 0;
 	}
 }

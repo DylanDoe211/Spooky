@@ -19,6 +19,7 @@ using Spooky.Content.Items.Quest;
 using Spooky.Content.Items.SpookyHell;
 using Spooky.Content.Items.SpookyHell.Sentient;
 using Spooky.Content.Tiles.Painting;
+using System;
 
 namespace Spooky.Content.UserInterfaces.LittleEyeQuests;
 
@@ -402,7 +403,7 @@ public class LittleEyeDialogueChoiceUI
 
 					LittleEyeQuestUI.LittleEye = LittleEye;
 					LittleEyeQuestUI.Delay = 0;
-					LittleEyeQuestUI.UIOpen = true;
+					LittleEyeQuestUI.Open();
 				}
 
 				UIOpen = false;
@@ -496,10 +497,7 @@ public class LittleEyeDialogueChoiceUI
 		DialogueUI.Add(newDialogue);
 	}
 
-	public static void EndDialogue(Dialogue dialogue, int ID)
-	{
-		DialogueUI.Visible = false;
-	}
+	public static void EndDialogue(Dialogue dialogue, int ID) => DialogueUI.Visible = false;
 
 	public static void EndDialogueBountyIntro(Dialogue dialogue, int ID)
 	{
