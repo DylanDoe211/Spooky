@@ -13,8 +13,6 @@ using Spooky.Content.Items.BossSummon;
 using Spooky.Content.Items.Quest;
 using System;
 using System.Collections.Generic;
-using Terraria.ModLoader.UI;
-using tModPorter;
 
 namespace Spooky.Content.UserInterfaces.LittleEyeQuests;
 
@@ -61,9 +59,21 @@ public class LittleEyeQuestUI : ModSystem
 	internal static Asset<Texture2D> ButtonTex;
 	internal static Asset<Texture2D> DialogueUIPlayer;
 
+	/// <summary>
+	/// Used to allow scissor rectangles.
+	/// </summary>
+	private static readonly RasterizerState RasterState;
+
 	private static string _hoverText = null;
 	private static int _firstVisibleQuest = 0;
 	private static float _xOffset = 0;
+	private static bool _firstDraw = true;
+
+	static LittleEyeQuestUI()
+	{
+		RasterState = RasterizerState.CullCounterClockwise;
+		RasterState.ScissorTestEnable = true;
+	}
 
 	public override void Load()
 	{
@@ -114,42 +124,6 @@ public class LittleEyeQuestUI : ModSystem
 		return validTalkArea.Intersects(Main.npc[LittleEye].Hitbox);
 	}
 
-	public static void DrawTextDescription(SpriteBatch spriteBatch, Vector2 TextTopLeft, string Condition, string Accept, string Warning, Color ConditionColor)
-	{
-		return;
-		Vector2 scale = new Vector2(1f, 1.025f) * MathHelper.Clamp(Main.screenHeight / 1440f, 0.825f, 1f) * Main.UIScale;
-
-		//first draw the condition text for the biome you find the miniboss in
-		foreach (string TextLine in Utils.WordwrapString(Condition, FontAssets.MouseText.Value, 600, 16, out _))
-		{
-			if (string.IsNullOrEmpty(TextLine))
-				continue;
-
-			ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, TextLine, TextTopLeft, ConditionColor, 0f, Vector2.Zero, scale);
-			TextTopLeft.Y += Main.UIScale * 16f;
-		}
-
-		//draw the text to tell players they have to click the button to accept the bounty
-		foreach (string TextLine in Utils.WordwrapString(Accept, FontAssets.MouseText.Value, 600, 16, out _))
-		{
-			if (string.IsNullOrEmpty(TextLine))
-				continue;
-
-			ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, TextLine, TextTopLeft, Color.Lime, 0f, Vector2.Zero, scale);
-			TextTopLeft.Y += Main.UIScale * 16f;
-		}
-
-		//finally display the warning that you cant accept another bounty until the selected one is done
-		foreach (string TextLine in Utils.WordwrapString(Warning, FontAssets.MouseText.Value, 600, 16, out _))
-		{
-			if (string.IsNullOrEmpty(TextLine))
-				continue;
-
-			ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, TextLine, TextTopLeft, Color.Red, 0f, Vector2.Zero, scale);
-			TextTopLeft.Y += Main.UIScale * 16f;
-		}
-	}
-
 	//used to draw individual icons over the main UI box
 	public static void DrawIcon(Vector2 drawPos, Texture2D texture) 
 		=> Main.spriteBatch.Draw(texture, drawPos, null, Color.White, 0f, Vector2.Zero, Main.UIScale, SpriteEffects.None, 0f);
@@ -180,14 +154,14 @@ public class LittleEyeQuestUI : ModSystem
 
 	public static void Draw()
 	{
+		UITopLeft.X = Main.screenWidth / 2;
+
 		//dont draw at all if the UI isnt open
 		if (!UIOpen)
 		{
 			LittleEye = -1;
 			return;
 		}
-
-		UITopLeft.X = Main.screenWidth / 2;
 
 		if (DialogueUI.Visible && DialogueUI.Dialogue.Count > 0)
 			return;
@@ -235,7 +209,7 @@ public class LittleEyeQuestUI : ModSystem
 			// Left arrow
 			bool canClick = _firstVisibleQuest > 0;
 			Vector2 pos = UITopLeft + new Vector2(-38, yOff);
-			bool hover = new Rectangle((int)pos.X - 218, (int)pos.Y, 32, 90).Contains(Main.MouseScreen.ToPoint());
+			bool hover = new Rectangle((int)pos.X - 218, (int)pos.Y, 32, 90).Contains(Main.MouseScreen.ToPoint()) && canClick;
 			var src = new Rectangle(hover ? 34 : 0, 0, 32, 90);
 
 			if (Main.mouseLeftRelease && Main.mouseLeft && hover && canClick)
@@ -245,7 +219,7 @@ public class LittleEyeQuestUI : ModSystem
 
 			canClick = _firstVisibleQuest < 1;
 			pos = UITopLeft + new Vector2(backWidth + 4, yOff);
-			hover = new Rectangle((int)pos.X - 218, (int)pos.Y, 32, 90).Contains(Main.MouseScreen.ToPoint());
+			hover = new Rectangle((int)pos.X - 218, (int)pos.Y, 32, 90).Contains(Main.MouseScreen.ToPoint()) && canClick;
 			src = new Rectangle(hover ? 34 : 0, 0, 32, 90);
 
 			if (Main.mouseLeftRelease && Main.mouseLeft && hover && canClick)
@@ -259,12 +233,11 @@ public class LittleEyeQuestUI : ModSystem
 		int backHeight = UIBoxTexture.Height;
 		Rectangle priorRectangle = Main.instance.GraphicsDevice.ScissorRectangle;
 		Main.instance.GraphicsDevice.ScissorRectangle = new Rectangle((int)UITopLeft.X - backWidth / 2 + 8, (int)UITopLeft.Y - 94 - backHeight / 2, backWidth - 16, backHeight);
-		Main.Rasterizer.ScissorTestEnable = true;
 
 		UITopLeft.X -= _xOffset;
 		_xOffset = MathHelper.Lerp(_xOffset, _firstVisibleQuest * 86, 0.2f);
 
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, Main.Rasterizer, null, Main.UIScaleMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, RasterState, null, Main.UIScaleMatrix);
 
 		//prevent any mouse interactions while the mouse is hovering over this UI
 		if (IsMouseOverUIBox(UITopLeft, UIBoxTexture, scale))
@@ -285,18 +258,25 @@ public class LittleEyeQuestUI : ModSystem
 		Quest4Logic(player, buttonTopLeft += new Point(84, 0)); // Eye Wizard
 		OrroboroLogic(player, scale, buttonTopLeft += new Point(84, 0)); // Orroboro
 
-		// For some reason this was hardcoded into the quest logic, didn't care to remove it, do it here
-		buttonTopLeft.X += 315;
-		buttonTopLeft.Y -= 24;
-
-		foreach (List<CrossmodQuest> quests in LittleEyeCrossmod.QuestsByMod.Values)
+		// Also for some reason, on first draw the scissor rectangle doesn't work properly.
+		// This avoids a visual issue when opening the UI for the first time.
+		if (!_firstDraw)
 		{
-			foreach (CrossmodQuest quest in quests)
+			// For some reason this was hardcoded into the quest logic, didn't care to remove it, do it here
+			buttonTopLeft.X += 315;
+			buttonTopLeft.Y -= 24;
+
+			foreach (List<CrossmodQuest> quests in LittleEyeCrossmod.QuestsByMod.Values)
 			{
-				buttonTopLeft.X += 84;
-				HandleCustomQuest(player, buttonTopLeft, quest);
+				foreach (CrossmodQuest quest in quests)
+				{
+					buttonTopLeft.X += 84;
+					HandleCustomQuest(player, buttonTopLeft, quest);
+				}
 			}
 		}
+
+		_firstDraw = false;
 
 		Main.spriteBatch.End();
 		Main.instance.GraphicsDevice.ScissorRectangle = priorRectangle;
@@ -304,7 +284,7 @@ public class LittleEyeQuestUI : ModSystem
 
 		if (_hoverText is not null)
 		{
-			Vector2 position = UITopLeft + new Vector2(10, -40);
+			Vector2 position = UITopLeft + new Vector2(10 + _xOffset, -40);
 			ReLogic.Graphics.DynamicSpriteFont font = FontAssets.DeathText.Value;
 			Vector2 size = ChatManager.GetStringSize(font, _hoverText, Vector2.One);
 			size.Y = 0;
@@ -317,10 +297,11 @@ public class LittleEyeQuestUI : ModSystem
 	public static void HandleCustomQuest(Player player, Point buttonTopLeft, CrossmodQuest quest)
 	{
 		int y = 164;
+		bool locked = !quest.IsLocked?.Invoke() is true;
 
-		if (quest.CompleteCheck())
+		if (!quest.CompleteCheck())
 			y = 82;
-		else if (!quest.IsLocked?.Invoke() is not true)
+		else if (!locked)
 			y = 0;
 
 		Texture2D tex = quest.Icon.Value;
@@ -330,10 +311,38 @@ public class LittleEyeQuestUI : ModSystem
 
 		if (hitbox.Contains(Main.MouseScreen.ToPoint()))
 		{
-			DrawIcon(drawPosition, BountyIconSelectedOutline.Value);
-
 			IsHoveringOverAnyButton = false;
 			player.mouseInterface = true;
+
+			if (locked)
+				return;
+
+			DrawIcon(drawPosition, BountyIconSelectedOutline.Value);
+			bool inBounds = Main.instance.GraphicsDevice.ScissorRectangle.Contains(Main.MouseScreen.ToPoint());
+
+			// Post-complete refight
+			if (quest.CompleteCheck())
+			{
+				if (inBounds && Main.mouseLeftRelease && Main.mouseLeft && Delay > 20)
+				{
+					DialogueChain chain = quest.RecoverChain();
+					DialogueUI.Visible = true;
+					DialogueUI.Add(chain);
+
+					UIOpen = false;
+				}
+			}
+			else
+			{
+				if (inBounds && Main.mouseLeftRelease && Main.mouseLeft && Delay > 20)
+				{
+					DialogueChain chain = quest.IsActive() ? quest.RecoverChain() : quest.Chain();
+					DialogueUI.Visible = true;
+					DialogueUI.Add(chain);
+
+					UIOpen = false;
+				}
+			}
 		}
 	}
 
@@ -343,19 +352,17 @@ public class LittleEyeQuestUI : ModSystem
 
 		bool downedAllMechs = NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3;
 		DrawIcon(Icon5TopLeft, !downedAllMechs ? BountyIcon5Locked.Value : Flags.downedOrroboro ? BountyIconDone[4].Value : BountyIconNotDone[4].Value);
+		bool inBounds = Main.instance.GraphicsDevice.ScissorRectangle.Contains(Main.MouseScreen.ToPoint());
 
 		if (IsMouseOverUI(Icon5TopLeft, BountyIconDone[4].Value, scale))
 		{
 			IsHoveringOverAnyButton = true;
-			DrawIcon(Icon5TopLeft, BountyIconSelectedOutline.Value);
 
 			if (!downedAllMechs)
-				DrawTextDescription(Main.spriteBatch, UITopLeft + new Vector2(-257f, -30f) * scale, QuestIcon5LockedText, string.Empty, string.Empty, Color.Red);
+				DrawIcon(Icon5TopLeft, BountyIconSelectedOutline.Value);
 			else if (Flags.downedOrroboro)
 			{
-				DrawTextDescription(Main.spriteBatch, UITopLeft + new Vector2(-257f, -30f) * scale, QuestCompleteText, QuestCompleteRematchText, string.Empty, Color.Lime);
-
-				if (Main.mouseLeftRelease && Main.mouseLeft && Delay > 20 && !player.HasItem(ModContent.ItemType<Concoction>()))
+				if (inBounds && Main.mouseLeftRelease && Main.mouseLeft && Delay > 20 && !player.HasItem(ModContent.ItemType<Concoction>()))
 				{
 					DialogueChain chain = new();
 					chain.Add(new(UITexture.Value, Main.npc[LittleEye], null, null, TalkSound, 2f, 0f, PositionModifier, true));
@@ -368,19 +375,13 @@ public class LittleEyeQuestUI : ModSystem
 				}
 			}
 			//display the actual quest text if you havent killed orro-boro but you killed the mechs
-			else
+			else if (inBounds && Main.mouseLeftRelease && Main.mouseLeft && Delay > 20)
 			{
-				DrawTextDescription(Main.spriteBatch, UITopLeft + new Vector2(-257f, -30f) * scale, QuestConditionTexts[4].Value, Quest5AcceptText, Quest5WarningText, Color.Magenta);
+				//quest accept dialogue
+				if (!Flags.downedOrroboro)
+					EyeQuestDialogue.OrroborroDialogue(PositionModifier);
 
-				//accept bounty (this specific bounty does not need to set the bounty accepted bool to true)
-				if (Main.mouseLeftRelease && Main.mouseLeft && Delay > 20)
-				{
-					//quest accept dialogue
-					if (!Flags.downedOrroboro)
-						EyeQuestDialogue.OrroborroDialogue(PositionModifier);
-
-					UIOpen = false;
-				}
+				UIOpen = false;
 			}
 		}
 	}
@@ -439,17 +440,17 @@ public class LittleEyeQuestUI : ModSystem
 		{
 			IsHoveringOverAnyButton = true;
 
-			DrawIcon(topLeft, BountyIconSelectedOutline.Value);
+			bool inBounds = Main.instance.GraphicsDevice.ScissorRectangle.Contains(Main.MouseScreen.ToPoint());
 
 			if (flags.IsLocked)
+			{
 				_hoverText = QuestAcceptedText;
-			//DrawTextDescription(Main.spriteBatch, UITopLeft + new Vector2(-257f, -30f) * scale, QuestAcceptedText, string.Empty, string.Empty, Color.Red);
+				DrawIcon(topLeft, BountyIconSelectedOutline.Value);
+			}
 			else if (flags.IsDown || Flags.PokedLittleEye)
 			{
-				DrawTextDescription(Main.spriteBatch, UITopLeft + new Vector2(-257f, -30f) * scale, QuestCompleteText, QuestCompleteRematchText, string.Empty, Color.Lime);
-
 				//give the player the item again if they wish to rematch the miniboss
-				if (Main.mouseLeftRelease && Main.mouseLeft && Delay > 20 && !player.HasItem(ModContent.ItemType<T>()))
+				if (inBounds && Main.mouseLeftRelease && Main.mouseLeft && Delay > 20 && !player.HasItem(ModContent.ItemType<T>()))
 				{
 					DialogueChain chain = new();
 					chain.Add(new(UITexture.Value, Main.npc[LittleEye], null, null, TalkSound, 2f, 0f, PositionModifier, true));
@@ -463,13 +464,8 @@ public class LittleEyeQuestUI : ModSystem
 			}
 			else
 			{
-				if (!flags.InProgress)
-					DrawTextDescription(Main.spriteBatch, UITopLeft + new Vector2(-257f, -30f) * scale, conditionText, QuestAcceptText, QuestWarningText, acceptColor);
-				else
-					DrawTextDescription(Main.spriteBatch, UITopLeft + new Vector2(-257f, -30f) * scale, QuestNewItemText, string.Empty, string.Empty, Color.White);
-
 				//accept bounty
-				if (Main.mouseLeftRelease && Main.mouseLeft && Delay > 20)
+				if (Main.mouseLeftRelease && Main.mouseLeft && Delay > 20 && inBounds)
 				{
 					//quest accept dialogue
 					if (!flags.InProgress)
