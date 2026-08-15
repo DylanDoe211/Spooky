@@ -89,27 +89,14 @@ namespace Spooky.Content.Tiles.SpookyHell
                 if (Main.rand.NextBool(20))
                 {
                     ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkThinShort>(), (ushort)ModContent.TileType<EyeStalkThin>(), 
-                    (ushort)ModContent.TileType<EyeStalkThinTall>(), (ushort)ModContent.TileType<EyeStalkThinVeryTall>() };
-                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Stalks), true);
-                }
-                if (Main.rand.NextBool(25))
-                {
-                    ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkSmall1>(), (ushort)ModContent.TileType<EyeStalkSmall2>() };
-                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Stalks), true);
-                }
-                if (Main.rand.NextBool(30))
-                {
-                    ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkMedium1>(), (ushort)ModContent.TileType<EyeStalkMedium2>() };
-                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Stalks), true);
-                }
-                if (Main.rand.NextBool(35))
-                {
-                    ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkBig1>(), (ushort)ModContent.TileType<EyeStalkBig2>() };
-                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Stalks), true);
-                }
-                if (Main.rand.NextBool(35))
-                {
-                    ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkGiant1>(), (ushort)ModContent.TileType<EyeStalkGiant2>() };
+                    (ushort)ModContent.TileType<EyeStalkThinTall>(), (ushort)ModContent.TileType<EyeStalkThinVeryTall>(),
+                    (ushort)ModContent.TileType<EyeStalkSmall1>(), (ushort)ModContent.TileType<EyeStalkSmall2>(),
+                    (ushort)ModContent.TileType<EyeStalkMedium1>(), (ushort)ModContent.TileType<EyeStalkMedium2>(),
+                    (ushort)ModContent.TileType<EyeStalkBig1>(), (ushort)ModContent.TileType<EyeStalkBig2>(),
+                    (ushort)ModContent.TileType<EyeStalkGiant1>(), (ushort)ModContent.TileType<EyeStalkGiant2>(),
+                    (ushort)ModContent.TileType<EyeStalkPurple1>(), (ushort)ModContent.TileType<EyeStalkPurple2>(),
+                    (ushort)ModContent.TileType<EyeStalkPurple3>(), (ushort)ModContent.TileType<EyeStalkPurple4>(),
+                    (ushort)ModContent.TileType<EyeStalkPurple5>(), (ushort)ModContent.TileType<EyeStalkPurple6>() };
                     TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Stalks), true);
                 }
 

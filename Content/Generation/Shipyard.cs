@@ -54,9 +54,13 @@ namespace Spooky.Content.Generation
 			bool foundSurfaceLeft = false;
 			int attemptsLeft = 0;
 
-			//get the two surface points at the left and right of the cemetery biome
+			//get the two surface points, with one being at the ocean and the other just an edge of the cemetery
+			//normally spirit reforged ectotone API would handle this automatially
+			//however, due to the way the ocean edge variable is decided in vanilla, we have to manually grab the exact edge of the beach where the sand starts
+			//this is because the vanilla variable for where beach biome starts is a set spot that is seperate from the actual beach generation, and as such isnt reliable for getting the exact physical edge of it
 			while (!foundSurfaceLeft && attemptsLeft++ < 100000)
 			{
+				//when the ocean is on the left side of the world, use the left bound and keep going left until a sand tile on the ground is found
 				if (OceanOnLeft)
 				{
 					if (WorldGen.SolidTile(leftBound, LeftY) && Cemetery.NoFloatingIsland(leftBound, LeftY) && Main.tile[leftBound, LeftY].TileType != TileID.Sand)
@@ -73,21 +77,11 @@ namespace Spooky.Content.Generation
 						foundSurfaceLeft = true;
 					}
 				}
+				//otherwise just grab the edge of the cemetery
 				else
 				{
-					if (WorldGen.SolidTile(leftBound, LeftY) && Cemetery.NoFloatingIsland(leftBound, LeftY) && !Cemetery.IsCemeteryTile(leftBound, LeftY))
-					{
-						LeftY = (int)heightLimit;
-						leftBound -= 5;
-					}
-					if ((!Cemetery.IsCemeteryTile(leftBound, LeftY) || !Cemetery.NoFloatingIsland(leftBound, LeftY)) && LeftY <= Main.worldSurface)
-					{
-						LeftY++;
-					}
-					else
-					{
-						foundSurfaceLeft = true;
-					}
+					//this needs to be the opposite, because if ocean is right, then the left edge of the shipyard is the right of the cemetery
+					LeftY = Cemetery.RightY;
 				}
 			}
 
@@ -96,6 +90,7 @@ namespace Spooky.Content.Generation
 
 			while (!foundSurfaceRight && attemptsRight++ < 100000)
 			{
+				//when the ocean is on the right side of the world, use the right bound and keep going right until a sand tile on the ground is found
 				if (!OceanOnLeft)
 				{
 					if (WorldGen.SolidTile(rightBound, RightY) && Cemetery.NoFloatingIsland(rightBound, RightY) && Main.tile[rightBound, RightY].TileType != TileID.Sand)
@@ -112,21 +107,11 @@ namespace Spooky.Content.Generation
 						foundSurfaceRight = true;
 					}
 				}
+				//otherwise just grab the edge of the cemetery
 				else
 				{
-					if (WorldGen.SolidTile(rightBound, RightY) && Cemetery.NoFloatingIsland(rightBound, RightY) && !Cemetery.IsCemeteryTile(rightBound, RightY))
-					{
-						RightY = (int)heightLimit;
-						rightBound += 5;
-					}
-					if ((!Cemetery.IsCemeteryTile(rightBound, RightY) || !Cemetery.NoFloatingIsland(rightBound, RightY)) && RightY <= Main.worldSurface)
-					{
-						RightY++;
-					}
-					else
-					{
-						foundSurfaceLeft = true;
-					}
+					//this needs to be the opposite, because if ocean is left, then the right edge of the shipyard is the left of the cemetery
+					RightY = Cemetery.LeftY;
 				}
 			}
 
@@ -147,8 +132,8 @@ namespace Spooky.Content.Generation
 			Vector2 p2 = new Vector2(MiddlePoint.X + 30, Start.Y + WorldGen.genRand.Next(-25, 26));
 			Vector2 p3 = Start;
 
-			Vector2 Start2 = !OceanOnLeft ? new Vector2(leftBound, (int)Main.worldSurface) : new Vector2(leftBound, LeftY + 8);
-			Vector2 End2 = !OceanOnLeft ? new Vector2(rightBound, RightY + 8) : new Vector2(rightBound, (int)Main.worldSurface);
+			Vector2 Start2 = !OceanOnLeft ? new Vector2(leftBound, (int)Main.worldSurface) : new Vector2(leftBound, LeftY);
+			Vector2 End2 = !OceanOnLeft ? new Vector2(rightBound, RightY) : new Vector2(rightBound, (int)Main.worldSurface);
 
 			Vector2 p4 = End2;
 			Vector2 p5 = Start2;
@@ -218,7 +203,19 @@ namespace Spooky.Content.Generation
 				//clear all tiles above the surface line
 				for (int Y = (int)heightLimit; Y < (int)Position.Y; Y++)
 				{
-					Main.tile[(int)Position.X, Y].ClearEverything();
+					double SkyIslandCheckLimit = Main.worldSurface * 0.45f;
+
+					if (Y < SkyIslandCheckLimit)
+					{
+						if (Cemetery.NoFloatingIsland((int)Position.X, Y))
+						{
+							Main.tile[(int)Position.X, Y].ClearEverything();
+						}
+					}
+					else
+					{
+						Main.tile[(int)Position.X, Y].ClearEverything();
+					}
 				}
 			}
 

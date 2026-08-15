@@ -88,7 +88,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Desert.Ambient
             int height = WorldGen.genRand.Next(minSize, maxSize);
             for (int k = 1; k < height; k++)
             {
-                if (SolidTile(i, j - k - 6))
+                if (SolidTile(i, j - k - 1))
                 {
                     height = k - 2;
                     break;

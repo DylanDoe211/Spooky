@@ -11,10 +11,11 @@ using System.Collections.Generic;
 using Spooky.Content.Items.Catacomb;
 using Spooky.Content.Items.Slingshots.Ammo;
 using Spooky.Content.Items.SpookyBiome;
+using Spooky.Content.Tiles.Cemetery.Furniture;
 
-namespace Spooky.Content.Tiles.SpookyBiome.Furniture
+namespace Spooky.Content.Tiles.SpiderCave.Furniture
 {
-	public class SpookyBiomePots : ModTile
+	public class SpiderCavePots : ModTile
 	{
 		public override void SetStaticDefaults()
 		{
@@ -32,17 +33,17 @@ namespace Spooky.Content.Tiles.SpookyBiome.Furniture
             TileObjectData.newTile.DrawYOffset = 2;
 			TileObjectData.addTile(Type);
             AddMapEntry(new Color(149, 80, 81), Language.GetText("MapObject.Pot"));
-            DustType = 28;
+            DustType = DustID.Asphalt;
 		}
 
 		public override IEnumerable<Item> GetItemDrops(int i, int j)
 		{
-			switch (Main.rand.Next(5))
+			switch (Main.rand.Next(4))
 			{
 				//torches
 				case 0:
 				{
-					yield return new Item(ModContent.ItemType<SpookyBiomeTorchItem>(), Main.rand.Next(4, 13));
+					yield return new Item(ModContent.ItemType<SpiderBiomeTorchItem>(), Main.rand.Next(4, 13));
 					break;
 				}
 				//healing or mana potions
@@ -59,18 +60,12 @@ namespace Spooky.Content.Tiles.SpookyBiome.Furniture
 				//random potions
 				case 2:
 				{
-					int[] Potions = new int[] { ItemID.IronskinPotion, ItemID.ShinePotion, ItemID.RegenerationPotion, ItemID.SwiftnessPotion, ItemID.RecallPotion };
+					int[] Potions = new int[] { ItemID.RegenerationPotion, ItemID.IronskinPotion, ItemID.ThornsPotion, ItemID.SwiftnessPotion, ItemID.TrapsightPotion, ItemID.RecallPotion };
 					yield return new Item(Main.rand.Next(Potions));
 					break;
 				}
-				//bombs
-				case 3:
-				{
-					yield return new Item(ItemID.Bomb, Main.rand.Next(2, 4));
-					break;
-				}
 				//ammos
-				case 4:
+				case 3:
 				{
 					int[] Ammos = new int[] { ModContent.ItemType<OldWoodArrow>(), ModContent.ItemType<RustedBullet>(), 
 					(Main.hardMode ? ModContent.ItemType<MossyBoulder>() : ModContent.ItemType<MossyPebble>()) };
@@ -107,25 +102,12 @@ namespace Spooky.Content.Tiles.SpookyBiome.Furniture
 				int spawnY = (y + 1) * 16 - 8;
 
 				Vector2 gorePos = new Vector2(spawnX, spawnY);
-				SoundEngine.PlaySound(SoundID.DD2_CrystalCartImpact, gorePos);
+				SoundEngine.PlaySound(SoundID.Shatter, gorePos);
 				Vector2 goreVelocity = default(Vector2);
 
 				for (int numGores = 1; numGores <= 3; numGores++)
 				{
-					int variant = frameX / 36;
-
-					if (variant == 0)
-					{
-						Gore.NewGore(WorldGen.GetItemSource_FromTileBreak(x, y), gorePos, goreVelocity, ModContent.Find<ModGore>("Spooky/SpookyPot1Gore" + numGores).Type);
-					}
-					else if (variant == 1)
-					{
-						Gore.NewGore(WorldGen.GetItemSource_FromTileBreak(x, y), gorePos, goreVelocity, ModContent.Find<ModGore>("Spooky/SpookyPot2Gore" + numGores).Type);
-					}
-					else if (variant == 2)
-					{
-						Gore.NewGore(WorldGen.GetItemSource_FromTileBreak(x, y), gorePos, goreVelocity, ModContent.Find<ModGore>("Spooky/SpookyPot3Gore" + numGores).Type);
-					}
+					Gore.NewGore(WorldGen.GetItemSource_FromTileBreak(x, y), gorePos, goreVelocity, ModContent.Find<ModGore>("Spooky/SpiderCavePotGore").Type);
 				}
 			}
 		}

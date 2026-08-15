@@ -40,7 +40,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1.Projectiles
 			{
 				Color color = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(new Color(98, 147, 64));
 
-				Vector2 circular = new Vector2(Main.rand.NextFloat(1f, 3f), Main.rand.NextFloat(1f, 3f)).RotatedBy(MathHelper.ToRadians(i));
+				Vector2 circular = new Vector2(Main.rand.NextFloat(1f, 2f), Main.rand.NextFloat(1f, 2f)).RotatedBy(MathHelper.ToRadians(i));
 
 				Main.EntitySpriteDraw(ProjTexture.Value, vector + circular, null, color, Projectile.rotation, drawOrigin, Projectile.scale, effects, 0);
 			}

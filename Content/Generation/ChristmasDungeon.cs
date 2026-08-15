@@ -686,16 +686,16 @@ namespace Spooky.Content.Generation
 
 									if (WorldGen.genRand.NextBool(5))
 									{
-										WorldGen.PlaceObject(x, j - 1, TileID.ClayPot);
-										WorldGen.PlaceObject(x, j - 2, TileID.BloomingHerbs, true, 6);
+										TileGlobal.PlaceObject(x, j - 1, TileID.ClayPot);
+										TileGlobal.PlaceObject(x, j - 2, TileID.BloomingHerbs, true, 6);
 									}
 									else if (WorldGen.genRand.NextBool(6))
 									{	
-										WorldGen.PlaceObject(x, j - 1, TileID.Presents, true, WorldGen.genRand.Next(0, 8));
+										TileGlobal.PlaceObject(x, j - 1, TileID.Presents, true, WorldGen.genRand.Next(0, 8));
 									}
 									else
 									{	
-										WorldGen.PlaceObject(x, j - 1, TileID.Books, true, WorldGen.genRand.Next(0, 5));
+										TileGlobal.PlaceObject(x, j - 1, TileID.Books, true, WorldGen.genRand.Next(0, 5));
 									}
 								}
 							}
@@ -716,16 +716,16 @@ namespace Spooky.Content.Generation
 
 									if (WorldGen.genRand.NextBool(5))
 									{
-										WorldGen.PlaceObject(x, j - 1, TileID.ClayPot);
-										WorldGen.PlaceObject(x, j - 2, TileID.BloomingHerbs, true, 6);
+										TileGlobal.PlaceObject(x, j - 1, TileID.ClayPot);
+										TileGlobal.PlaceObject(x, j - 2, TileID.BloomingHerbs, true, 6);
 									}
 									else if (WorldGen.genRand.NextBool(6))
 									{	
-										WorldGen.PlaceObject(x, j - 1, TileID.Presents, true, WorldGen.genRand.Next(0, 8));
+										TileGlobal.PlaceObject(x, j - 1, TileID.Presents, true, WorldGen.genRand.Next(0, 8));
 									}
 									else
 									{	
-										WorldGen.PlaceObject(x, j - 1, TileID.Books, true, WorldGen.genRand.Next(0, 5));
+										TileGlobal.PlaceObject(x, j - 1, TileID.Books, true, WorldGen.genRand.Next(0, 5));
 									}
 								}
 							}
@@ -841,62 +841,62 @@ namespace Spooky.Content.Generation
 							//two tables with chairs and sometimes candles/candelabras on the tables
 							case 0:
 							{
-								WorldGen.PlaceObject(i - 3, j - 1, ModContent.TileType<ChristmasTable>());
+								TileGlobal.PlaceObject(i - 3, j - 1, ModContent.TileType<ChristmasTable>());
 								if (WorldGen.genRand.NextBool())
 								{
 									int Type = WorldGen.genRand.NextBool() ? ModContent.TileType<ChristmasCandelabra>() : ModContent.TileType<ChristmasCandle>();
-									WorldGen.PlaceObject(i - 3, j - 3, Type);
+									TileGlobal.PlaceObject(i - 3, j - 3, Type);
 								}
-								WorldGen.PlaceObject(i - 5, j - 1, ModContent.TileType<ChristmasChair>(), direction: 1);
-								WorldGen.PlaceObject(i - 1, j - 1, ModContent.TileType<ChristmasChair>(), direction: -1);
+								TileGlobal.PlaceObject(i - 5, j - 1, ModContent.TileType<ChristmasChair>(), direction: 1);
+								TileGlobal.PlaceObject(i - 1, j - 1, ModContent.TileType<ChristmasChair>(), direction: -1);
 
-								WorldGen.PlaceObject(i + 3, j - 1, ModContent.TileType<ChristmasTable>());
+								TileGlobal.PlaceObject(i + 3, j - 1, ModContent.TileType<ChristmasTable>());
 								if (WorldGen.genRand.NextBool())
 								{
 									int Type = WorldGen.genRand.NextBool() ? ModContent.TileType<ChristmasCandelabra>() : ModContent.TileType<ChristmasCandle>();
-									WorldGen.PlaceObject(i + 3, j - 3, Type);
+									TileGlobal.PlaceObject(i + 3, j - 3, Type);
 								}
-								WorldGen.PlaceObject(i + 5, j - 1, ModContent.TileType<ChristmasChair>(), direction: -1);
-								WorldGen.PlaceObject(i + 1, j - 1, ModContent.TileType<ChristmasChair>(), direction: 1);
+								TileGlobal.PlaceObject(i + 5, j - 1, ModContent.TileType<ChristmasChair>(), direction: -1);
+								TileGlobal.PlaceObject(i + 1, j - 1, ModContent.TileType<ChristmasChair>(), direction: 1);
 								break;
 							}
 							//bookcases with lamps on either side of them
 							case 1:
 							{
-								WorldGen.PlaceObject(i - 6, j - 1, ModContent.TileType<ChristmasLamp>());
-								WorldGen.PlaceObject(i - 3, j - 1, ModContent.TileType<ChristmasBookcase>());
-								WorldGen.PlaceObject(i, j - 1, ModContent.TileType<ChristmasBookcase>());
-								WorldGen.PlaceObject(i + 3, j - 1, ModContent.TileType<ChristmasBookcase>());
-								WorldGen.PlaceObject(i + 6, j - 1, ModContent.TileType<ChristmasLamp>());
+								TileGlobal.PlaceObject(i - 6, j - 1, ModContent.TileType<ChristmasLamp>());
+								TileGlobal.PlaceObject(i - 3, j - 1, ModContent.TileType<ChristmasBookcase>());
+								TileGlobal.PlaceObject(i, j - 1, ModContent.TileType<ChristmasBookcase>());
+								TileGlobal.PlaceObject(i + 3, j - 1, ModContent.TileType<ChristmasBookcase>());
+								TileGlobal.PlaceObject(i + 6, j - 1, ModContent.TileType<ChristmasLamp>());
 								break;
 							}
 							//bed with some dressers and candle
 							case 2:
 							{
-								WorldGen.PlaceObject(i - 5, j - 1, (ushort)ModContent.TileType<ChristmasBed>(), direction: 1);
+								TileGlobal.PlaceObject(i - 5, j - 1, (ushort)ModContent.TileType<ChristmasBed>(), direction: 1);
 								WorldGen.PlaceChest(i, j - 1, (ushort)ModContent.TileType<ChristmasDresser>());
-								WorldGen.PlaceObject(i, j - 3, (ushort)ModContent.TileType<ChristmasCandle>());
+								TileGlobal.PlaceObject(i, j - 3, (ushort)ModContent.TileType<ChristmasCandle>());
 								WorldGen.PlaceChest(i + 3, j - 1, (ushort)ModContent.TileType<ChristmasDresser>());
-								WorldGen.PlaceObject(i + 5, j - 1, (ushort)ModContent.TileType<ChristmasChair>());
+								TileGlobal.PlaceObject(i + 5, j - 1, (ushort)ModContent.TileType<ChristmasChair>());
 								break;
 							}
 							//chair, piano, and dresser with stuff on top of it
 							case 3:
 							{
-								WorldGen.PlaceObject(i - 3, j - 1, ModContent.TileType<ChristmasChair>(), direction: 1);
-								WorldGen.PlaceObject(i, j - 1, ModContent.TileType<ChristmasPiano>());
-								WorldGen.PlaceObject(i + 3, j - 1, ModContent.TileType<ChristmasTable>());
+								TileGlobal.PlaceObject(i - 3, j - 1, ModContent.TileType<ChristmasChair>(), direction: 1);
+								TileGlobal.PlaceObject(i, j - 1, ModContent.TileType<ChristmasPiano>());
+								TileGlobal.PlaceObject(i + 3, j - 1, ModContent.TileType<ChristmasTable>());
 
 								for (int tableLength = i + 2; tableLength <= i + 4; tableLength++)
 								{
 									if (WorldGen.genRand.NextBool(6))
 									{
-										WorldGen.PlaceObject(tableLength, j - 3, TileID.ClayPot);
-										WorldGen.PlaceObject(tableLength, j - 4, TileID.BloomingHerbs, true, 6);
+										TileGlobal.PlaceObject(tableLength, j - 3, TileID.ClayPot);
+										TileGlobal.PlaceObject(tableLength, j - 4, TileID.BloomingHerbs, true, 6);
 									}
 									else
 									{
-										WorldGen.PlaceObject(tableLength, j - 3, TileID.Books, true, WorldGen.genRand.Next(0, 5));
+										TileGlobal.PlaceObject(tableLength, j - 3, TileID.Books, true, WorldGen.genRand.Next(0, 5));
 									}
 								}
 								break;
@@ -904,15 +904,15 @@ namespace Spooky.Content.Generation
 							//bathtub and sink
 							case 4:
 							{
-								WorldGen.PlaceObject(i - 3, j - 1, ModContent.TileType<ChristmasTable>());
-								WorldGen.PlaceObject(i, j - 1, ModContent.TileType<ChristmasClock>());
-								WorldGen.PlaceObject(i + 4, j - 1, ModContent.TileType<ChristmasTable>());
+								TileGlobal.PlaceObject(i - 3, j - 1, ModContent.TileType<ChristmasTable>());
+								TileGlobal.PlaceObject(i, j - 1, ModContent.TileType<ChristmasClock>());
+								TileGlobal.PlaceObject(i + 4, j - 1, ModContent.TileType<ChristmasTable>());
 								break;
 							}
 							case 5:
 							{
-								WorldGen.PlaceObject(i + 1, j - 1, ModContent.TileType<ChristmasBathtub>());
-								WorldGen.PlaceObject(i - 1, j - 1, ModContent.TileType<ChristmasSink>());
+								TileGlobal.PlaceObject(i + 1, j - 1, ModContent.TileType<ChristmasBathtub>());
+								TileGlobal.PlaceObject(i - 1, j - 1, ModContent.TileType<ChristmasSink>());
 								break;
 							}
 						}
@@ -925,17 +925,17 @@ namespace Spooky.Content.Generation
 						{
 							case 0:
 							{
-								WorldGen.PlaceObject(i, j - 1, ModContent.TileType<KrampusGiantWorkBench>());
+								TileGlobal.PlaceObject(i, j - 1, ModContent.TileType<KrampusGiantWorkBench>());
 								break;
 							}
 							case 1:
 							{
-								WorldGen.PlaceObject(i, j - 1, ModContent.TileType<KrampusDrillStation>());
+								TileGlobal.PlaceObject(i, j - 1, ModContent.TileType<KrampusDrillStation>());
 								break;
 							}
 							case 2:
 							{
-								WorldGen.PlaceObject(i, j - 1, ModContent.TileType<KrampusSawStation>());
+								TileGlobal.PlaceObject(i, j - 1, ModContent.TileType<KrampusSawStation>());
 								break;
 							}
 						}
@@ -944,19 +944,19 @@ namespace Spooky.Content.Generation
 					//lamps
 					if (WorldGen.genRand.NextBool(25) && CanPlaceFurniture(i, j, 3))
 					{
-						WorldGen.PlaceObject(i, j - 1, ModContent.TileType<ChristmasLamp>());
+						TileGlobal.PlaceObject(i, j - 1, ModContent.TileType<ChristmasLamp>());
 					}
 
 					//lanterns
 					if (WorldGen.genRand.NextBool(25) && IsFlatCeiling(i, j, 2) && CanPlaceFurniture(i, j, 4, true))
 					{
-						WorldGen.PlaceObject(i, j + 1, ModContent.TileType<ChristmasLantern>());
+						TileGlobal.PlaceObject(i, j + 1, ModContent.TileType<ChristmasLantern>());
 					}
 
 					//chandeliers
 					if (WorldGen.genRand.NextBool(32) && IsFlatCeiling(i, j, 4) && CanPlaceFurniture(i, j, 4, true))
 					{
-						WorldGen.PlaceObject(i, j + 1, ModContent.TileType<ChristmasChandelier>());
+						TileGlobal.PlaceObject(i, j + 1, ModContent.TileType<ChristmasChandelier>());
 					}
 				}
 			}
@@ -968,7 +968,7 @@ namespace Spooky.Content.Generation
 				{
 					if (WorldGen.genRand.NextBool(4) && WallTypes.Contains(Main.tile[i, j].WallType))
 					{
-						WorldGen.PlaceObject(i, j - 1, ModContent.TileType<ChristmasPresentPots>(), true, WorldGen.genRand.Next(0, 3));
+						TileGlobal.PlaceObject(i, j - 1, ModContent.TileType<ChristmasPresentPots>(), true, WorldGen.genRand.Next(0, 3));
 					}
 				}
 			}
@@ -997,7 +997,7 @@ namespace Spooky.Content.Generation
 
 						if (CanPlacePainting(i, j, Paintings))
 						{
-							WorldGen.PlaceObject(i, j, WorldGen.genRand.Next(Paintings));
+							TileGlobal.PlaceObject(i, j, WorldGen.genRand.Next(Paintings));
 						}
 					}
 				}

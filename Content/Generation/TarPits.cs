@@ -628,7 +628,9 @@ namespace Spooky.Content.Generation
 			{
 				for (int j = Y - 4; j < Y + 4; j++)
 				{
-					if (Main.tile[i, j].TileType == ModContent.TileType<TarPitCactus>() && Main.tile[i, j].TileType == ModContent.TileType<TarPitsGiantCactus1>() && Main.tile[i, j].TileType == ModContent.TileType<TarPitsGiantCactus2>())
+					if (Main.tile[i, j].TileType == ModContent.TileType<TarPitCactus>() || 
+					Main.tile[i, j].TileType == ModContent.TileType<TarPitsGiantCactus1>() || 
+					Main.tile[i, j].TileType == ModContent.TileType<TarPitsGiantCactus2>())
 					{
 						return false;
 					}

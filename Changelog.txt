@@ -19,6 +19,7 @@ Changes:
 -Eye blocks now grow various eye valley ambient objects on them naturally
 -Updated daffodil on the spooky mod menu to her new design
 -Updated eye valley background sprites
+-Updated bag of magic beans sprite
 
 Fixes:
 -Config option for teleporting all players into nose temple combat rooms not working

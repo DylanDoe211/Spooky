@@ -594,7 +594,7 @@ namespace Spooky.Content.Generation
 						if (WorldGen.genRand.NextBool(4))
 						{
 							ushort[] Vines = new ushort[] { (ushort)ModContent.TileType<HangingVine1>(), (ushort)ModContent.TileType<HangingVine2>(), (ushort)ModContent.TileType<HangingVine3>() };
-							TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Vines), true);
+							TileGlobal.PlaceObject(X, Y + 1, WorldGen.genRand.Next(Vines), true);
 						}
 
 						if (WorldGen.genRand.NextBool(3))
@@ -645,7 +645,7 @@ namespace Spooky.Content.Generation
 						{
 							WorldGen.KillTile(X, Y - 1);
 						}
-						if (WorldGen.genRand.NextBool(4))
+						if (WorldGen.genRand.NextBool(3))
 						{
 							TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<SpookyBiomePots>(), true, WorldGen.genRand.Next(0, 3));
 						}
