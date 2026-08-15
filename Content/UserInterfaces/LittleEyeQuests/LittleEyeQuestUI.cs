@@ -486,7 +486,7 @@ public class LittleEyeQuestUI : ModSystem
 	internal static void QuestAcceptAndEnd<T>(SpookyMessageType bountyType, ref bool flag) where T : ModItem
 	{
 		Player player = Main.LocalPlayer;
-		int newItem = Item.NewItem(player.GetSource_DropAsItem(), player.Hitbox, ModContent.ItemType<SummonItem1>());
+		int newItem = Item.NewItem(player.GetSource_DropAsItem(), player.Hitbox, ModContent.ItemType<T>());
 
 		if (Main.netMode != NetmodeID.SinglePlayer)
 			NetMessage.SendData(MessageID.SyncItem, -1, -1, null, newItem, 1f);
