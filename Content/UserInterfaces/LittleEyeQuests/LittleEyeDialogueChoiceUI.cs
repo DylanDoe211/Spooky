@@ -87,9 +87,9 @@ public class LittleEyeDialogueChoiceUI
 		BarHoverTexture ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/LittleEyeDialogueChoiceUIBarHover");
 		UITexture ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/DialogueUILittleEye");
 
-		Vector2 UITopLeft1 = UITopLeft + new Vector2(0, -200);
-		Vector2 UITopLeft2 = UITopLeft + new Vector2(0, -150 + BarTexture.Height() / 2 * UIBoxScale.Y);
-		Vector2 UITopLeft3 = UITopLeft + new Vector2(0, -100 + BarTexture.Height() / 2 * UIBoxScale.Y * 2);
+		Vector2 UITopLeft1 = UITopLeft + new Vector2(0, -180 * UIBoxScale.Y);
+		Vector2 UITopLeft2 = UITopLeft + new Vector2(0, -150 * UIBoxScale.Y + BarTexture.Height() / 2 * UIBoxScale.Y);
+		Vector2 UITopLeft3 = UITopLeft + new Vector2(0, -120 * UIBoxScale.Y + BarTexture.Height() / 2 * UIBoxScale.Y * 2);
 
 		spriteBatch.Draw(BarTexture.Value, UITopLeft1, null, Color.White, 0f, BarTexture.Size() / 2, UIBoxScale, SpriteEffects.None, 0f);
 		spriteBatch.Draw(BarTexture.Value, UITopLeft2, null, Color.White, 0f, BarTexture.Size() / 2, UIBoxScale, SpriteEffects.None, 0f);
@@ -447,9 +447,9 @@ public class LittleEyeDialogueChoiceUI
 			}
 		}
 
-		DrawTextDescription(spriteBatch, UITopLeft1 + new Vector2(-50f, -10f), Choice1, textColor1);
-		DrawTextDescription(spriteBatch, UITopLeft2 + new Vector2(-50f, -10f), Choice2, textColor2);
-		DrawTextDescription(spriteBatch, UITopLeft3 + new Vector2(-50f, -10f), Choice3, textColor3);
+		DrawTextDescription(spriteBatch, UITopLeft1 + new Vector2(-50f, -10f) * Main.UIScale, Choice1, textColor1);
+		DrawTextDescription(spriteBatch, UITopLeft2 + new Vector2(-50f, -10f) * Main.UIScale, Choice2, textColor2);
+		DrawTextDescription(spriteBatch, UITopLeft3 + new Vector2(-50f, -10f) * Main.UIScale, Choice3, textColor3);
 	}
 
 	public static bool InRangeOfNPC()

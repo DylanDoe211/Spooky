@@ -126,12 +126,13 @@ public class LittleEyeQuestUI : ModSystem
 
 	//used to draw individual icons over the main UI box
 	public static void DrawIcon(Vector2 drawPos, Texture2D texture) 
-		=> Main.spriteBatch.Draw(texture, drawPos, null, Color.White, 0f, Vector2.Zero, Main.UIScale, SpriteEffects.None, 0f);
+		=> Main.spriteBatch.Draw(texture, drawPos, null, Color.White, 0f, texture.Size() / 2f, Main.UIScale, SpriteEffects.None, 0f);
 
 	//check if the mouse is hovering over a specific button or UI box
 	public static bool IsMouseOverUI(Vector2 TopLeft, Texture2D texture, Vector2 backgroundScale)
 	{
-		var backgroundArea = new Rectangle((int)TopLeft.X, (int)TopLeft.Y, (int)(texture.Width * backgroundScale.X), (int)(texture.Height * backgroundScale.Y));
+		int halfSize = (int)(40 * Main.UIScale);
+		var backgroundArea = new Rectangle((int)TopLeft.X - halfSize, (int)TopLeft.Y - halfSize, (int)(texture.Width * backgroundScale.X), (int)(texture.Height * backgroundScale.Y));
 
 		if (backgroundArea.Contains(Main.mouseX, Main.mouseY))
 			return true;
@@ -206,11 +207,12 @@ public class LittleEyeQuestUI : ModSystem
 			Texture2D tex = ButtonTex.Value;
 			Vector2 origin = UIBoxTexture.Size() * new Vector2(0.5f, 0);
 			int yOff = -UIBoxTexture.Height / 2;
+			Point baseSize = new Point((int)(32 * Main.UIScale), (int)(90 * Main.UIScale));
 
 			// Left arrow
 			bool canClick = _firstVisibleQuest > 0;
-			Vector2 pos = UICenter + new Vector2(-38, yOff);
-			bool hover = new Rectangle((int)pos.X - 218, (int)pos.Y, 32, 90).Contains(Main.MouseScreen.ToPoint()) && canClick;
+			Vector2 pos = UICenter + new Vector2(-38 , yOff) * Main.UIScale;
+			bool hover = new Rectangle((int)pos.X - (int)(218 * Main.UIScale), (int)pos.Y, baseSize.X, baseSize.Y).Contains(Main.MouseScreen.ToPoint()) && canClick;
 			var src = new Rectangle(hover ? 34 : 0, 0, 32, 90);
 
 			if (Main.mouseLeftRelease && Main.mouseLeft && hover && canClick)
@@ -219,8 +221,8 @@ public class LittleEyeQuestUI : ModSystem
 			Main.spriteBatch.Draw(tex, pos, src, canClick ? Color.White : Color.Gray, 0f, origin, scale, SpriteEffects.FlipHorizontally, 0f);
 
 			canClick = _firstVisibleQuest < 1;
-			pos = UICenter + new Vector2(backWidth + 4, yOff);
-			hover = new Rectangle((int)pos.X - 218, (int)pos.Y, 32, 90).Contains(Main.MouseScreen.ToPoint()) && canClick;
+			pos = UICenter + new Vector2(backWidth + 4, yOff) * Main.UIScale;
+			hover = new Rectangle((int)pos.X - (int)(218 * Main.UIScale), (int)pos.Y, baseSize.X, baseSize.Y).Contains(Main.MouseScreen.ToPoint()) && canClick;
 			src = new Rectangle(hover ? 34 : 0, 0, 32, 90);
 
 			if (Main.mouseLeftRelease && Main.mouseLeft && hover && canClick)
@@ -229,18 +231,26 @@ public class LittleEyeQuestUI : ModSystem
 			Main.spriteBatch.Draw(tex, pos, src, canClick ? Color.White : Color.Gray, 0f, origin, scale, SpriteEffects.None, 0f);
 		}
 
+		var buttonTopLeft = (UICenter - (UIBoxTexture.Size() / 2f - new Vector2(8, 6)) * new Vector2(scale.X, 0) + new Vector2(40 * Main.UIScale, 0)).ToPoint();
+		Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(buttonTopLeft.X, buttonTopLeft.Y, 8, 8), Color.White);
+
 		Main.spriteBatch.End();
 
+		// With the spritebatch ended, scissor the next so we can "crop" the UI properly
 		int backHeight = UIBoxTexture.Height;
 		Rectangle priorRectangle = Main.instance.GraphicsDevice.ScissorRectangle;
-		Main.instance.GraphicsDevice.ScissorRectangle = new Rectangle((int)(UICenter.X - backWidth / 2 * scale.X) + 8, (int)UICenter.Y - (int)(backHeight / 2 * scale.Y), backWidth - 16, backHeight);
+		Point scisSize = (new Vector2(backWidth - 18, backHeight) * Main.UIScale).ToPoint();
+		int halfSize = (int)(40 * Main.UIScale);
+		Main.instance.GraphicsDevice.ScissorRectangle = new Rectangle(buttonTopLeft.X - halfSize, buttonTopLeft.Y - halfSize, scisSize.X, scisSize.Y);
 
 		UICenter.X -= _xOffset;
-		_xOffset = MathHelper.Lerp(_xOffset, _firstVisibleQuest * 86, 0.2f);
+		buttonTopLeft.X -= (int)_xOffset;
+		int step = (int)(84 * Main.UIScale);
+		_xOffset = MathHelper.Lerp(_xOffset, _firstVisibleQuest * step, 0.2f);
 
-		Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, RasterState, null, Main.UIScaleMatrix);
+		Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, RasterState, null);
 
-		//prevent any mouse interactions while the mouse is hovering over this UI
+		// Prevent any mouse interactions while the mouse is hovering over this UI
 		if (IsMouseOverUIBox(UICenter, UIBoxTexture, scale))
 		{
 			IsHoveringOverAnyButton = false;
@@ -248,30 +258,25 @@ public class LittleEyeQuestUI : ModSystem
 			player.mouseInterface = true;
 		}
 
-		var buttonTopLeft = (UICenter - UIBoxTexture.Size() / 2f * scale).ToPoint();
-
 		if (Delay <= 20 && !Main.mouseLeft)
 			Delay++;
 
 		Quest1Logic(player, buttonTopLeft); // Frank the Goblin
-		Quest2Logic(player, buttonTopLeft += new Point(84, 0)); // Tome of the Spirits
-		Quest3Logic(player, buttonTopLeft += new Point(84, 0)); // Spider Grotto
-		Quest4Logic(player, buttonTopLeft += new Point(84, 0)); // Eye Wizard
-		OrroboroLogic(player, scale, buttonTopLeft += new Point(84, 0)); // Orroboro
+		Quest2Logic(player, buttonTopLeft += new Point(step, 0)); // Tome of the Spirits
+		Quest3Logic(player, buttonTopLeft += new Point(step, 0)); // Spider Grotto
+		Quest4Logic(player, buttonTopLeft += new Point(step, 0)); // Eye Wizard
+		OrroboroLogic(player, scale, buttonTopLeft += new Point(step, 0)); // Orroboro
 
 		// Also for some reason, on first draw the scissor rectangle doesn't work properly.
 		// This avoids a visual issue when opening the UI for the first time.
 		if (!_firstDraw)
 		{
-			// For some reason this was hardcoded into the quest logic, didn't care to remove it, do it here
-			buttonTopLeft.X += 315;
-			buttonTopLeft.Y -= 24;
-
+			// Draw all custom quests
 			foreach (List<CrossmodQuest> quests in LittleEyeCrossmod.QuestsByMod.Values)
 			{
 				foreach (CrossmodQuest quest in quests)
 				{
-					buttonTopLeft.X += 84;
+					buttonTopLeft.X += step;
 					HandleCustomQuest(player, buttonTopLeft, quest);
 				}
 			}
@@ -283,9 +288,15 @@ public class LittleEyeQuestUI : ModSystem
 		Main.instance.GraphicsDevice.ScissorRectangle = priorRectangle;
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.UIScaleMatrix);
 
+		// Show the "hey you can't accept two quests at once" text for the Spooky quests only
 		if (_hoverText is not null)
 		{
-			Vector2 position = UICenter + new Vector2(10 + _xOffset, -40);
+			Vector2 position = new Vector2(Main.screenWidth / 2, Main.screenHeight / 2f) / Main.UIScale + new Vector2(0, -48 - 60 * (1 - Main.UIScale));
+
+			// Lazy kinda janky workaround because...too bad! - Gabe
+			if (Main.UIScale < 0.7f)
+				position.Y -= 18 / Main.UIScale;
+
 			ReLogic.Graphics.DynamicSpriteFont font = FontAssets.DeathText.Value;
 			Vector2 size = ChatManager.GetStringSize(font, _hoverText, Vector2.One);
 			size.Y = 0;
@@ -306,9 +317,10 @@ public class LittleEyeQuestUI : ModSystem
 			y = 0;
 
 		Texture2D tex = quest.Icon.Value;
-		Rectangle hitbox = new Rectangle(buttonTopLeft.X, buttonTopLeft.Y, (int)(80 * Main.UIScale), (int)(80 * Main.UIScale));
+		int halfSize = (int)(40 * Main.UIScale);
+		Rectangle hitbox = new Rectangle(buttonTopLeft.X - halfSize, buttonTopLeft.Y - halfSize, (int)(80 * Main.UIScale), (int)(80 * Main.UIScale));
 		var drawPosition = buttonTopLeft.ToVector2();
-		Main.spriteBatch.Draw(tex, drawPosition, new Rectangle(0, y, 80, 80), Color.White, 0f, Vector2.Zero, Main.UIScale, SpriteEffects.None, 0f);
+		Main.spriteBatch.Draw(tex, drawPosition, new Rectangle(0, y, 80, 80), Color.White, 0f, new Vector2(40), Main.UIScale, SpriteEffects.None, 0f);
 
 		if (hitbox.Contains(Main.MouseScreen.ToPoint()))
 		{
@@ -349,7 +361,7 @@ public class LittleEyeQuestUI : ModSystem
 
 	private static void OrroboroLogic(Player player, Vector2 scale, Point topLeft)
 	{
-		Vector2 Icon5TopLeft = topLeft.ToVector2() + new Vector2(315f, -24f) * Main.UIScale;
+		Vector2 Icon5TopLeft = topLeft.ToVector2();
 
 		bool downedAllMechs = NPC.downedMechBoss1 && NPC.downedMechBoss2 && NPC.downedMechBoss3;
 		DrawIcon(Icon5TopLeft, !downedAllMechs ? BountyIcon5Locked.Value : Flags.downedOrroboro ? BountyIconDone[4].Value : BountyIconNotDone[4].Value);
@@ -441,7 +453,10 @@ public class LittleEyeQuestUI : ModSystem
 		{
 			IsHoveringOverAnyButton = true;
 
-			bool inBounds = Main.instance.GraphicsDevice.ScissorRectangle.Contains(Main.MouseScreen.ToPoint());
+			Rectangle bounds = Main.instance.GraphicsDevice.ScissorRectangle;
+			bounds.X += 2;
+			bounds.Width -= 2;
+			bool inBounds = bounds.Contains(Main.MouseScreen.ToPoint());
 
 			if (flags.IsLocked)
 			{
