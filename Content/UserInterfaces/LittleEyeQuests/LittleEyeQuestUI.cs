@@ -28,7 +28,7 @@ public class LittleEyeQuestUI : ModSystem
 	internal static bool IsHoveringOverAnyButton = false;
 
 	public static readonly Vector2 PositionModifier = new(-200, -75);
-	public static Vector2 UITopLeft = new(Main.screenWidth / 2, Main.screenHeight / 2);
+	public static Vector2 UICenter = new(Main.screenWidth / 2, Main.screenHeight / 2);
 
 	public static readonly SoundStyle TalkSound = new("Spooky/Content/Sounds/TalkSounds/LittleEyeTalk", SoundType.Sound) { Volume = 3f, PitchVariance = 0.75f };
 
@@ -154,7 +154,8 @@ public class LittleEyeQuestUI : ModSystem
 
 	public static void Draw()
 	{
-		UITopLeft.X = Main.screenWidth / 2;
+		UICenter.X = Main.screenWidth / 2;
+		UICenter.Y = Main.screenHeight / 2 - 94;
 
 		//dont draw at all if the UI isnt open
 		if (!UIOpen)
@@ -198,17 +199,17 @@ public class LittleEyeQuestUI : ModSystem
 		int backWidth = UIBoxTexture.Width;
 
 		//draw the main UI box
-		Main.spriteBatch.Draw(UIBoxTexture, UITopLeft - new Vector2(0, 94), null, Color.White, 0f, UIBoxTexture.Size() / 2, scale, SpriteEffects.None, 0f);
+		Main.spriteBatch.Draw(UIBoxTexture, UICenter, null, Color.White, 0f, UIBoxTexture.Size() / 2, scale, SpriteEffects.None, 0f);
 
 		if (LittleEyeCrossmod.QuestsByMod.Count > 0)
 		{
 			Texture2D tex = ButtonTex.Value;
 			Vector2 origin = UIBoxTexture.Size() * new Vector2(0.5f, 0);
-			int yOff = -139;
+			int yOff = -UIBoxTexture.Height / 2;
 
 			// Left arrow
 			bool canClick = _firstVisibleQuest > 0;
-			Vector2 pos = UITopLeft + new Vector2(-38, yOff);
+			Vector2 pos = UICenter + new Vector2(-38, yOff);
 			bool hover = new Rectangle((int)pos.X - 218, (int)pos.Y, 32, 90).Contains(Main.MouseScreen.ToPoint()) && canClick;
 			var src = new Rectangle(hover ? 34 : 0, 0, 32, 90);
 
@@ -218,7 +219,7 @@ public class LittleEyeQuestUI : ModSystem
 			Main.spriteBatch.Draw(tex, pos, src, canClick ? Color.White : Color.Gray, 0f, origin, scale, SpriteEffects.FlipHorizontally, 0f);
 
 			canClick = _firstVisibleQuest < 1;
-			pos = UITopLeft + new Vector2(backWidth + 4, yOff);
+			pos = UICenter + new Vector2(backWidth + 4, yOff);
 			hover = new Rectangle((int)pos.X - 218, (int)pos.Y, 32, 90).Contains(Main.MouseScreen.ToPoint()) && canClick;
 			src = new Rectangle(hover ? 34 : 0, 0, 32, 90);
 
@@ -232,22 +233,22 @@ public class LittleEyeQuestUI : ModSystem
 
 		int backHeight = UIBoxTexture.Height;
 		Rectangle priorRectangle = Main.instance.GraphicsDevice.ScissorRectangle;
-		Main.instance.GraphicsDevice.ScissorRectangle = new Rectangle((int)UITopLeft.X - backWidth / 2 + 8, (int)UITopLeft.Y - 94 - backHeight / 2, backWidth - 16, backHeight);
+		Main.instance.GraphicsDevice.ScissorRectangle = new Rectangle((int)(UICenter.X - backWidth / 2 * scale.X) + 8, (int)UICenter.Y - (int)(backHeight / 2 * scale.Y), backWidth - 16, backHeight);
 
-		UITopLeft.X -= _xOffset;
+		UICenter.X -= _xOffset;
 		_xOffset = MathHelper.Lerp(_xOffset, _firstVisibleQuest * 86, 0.2f);
 
 		Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, RasterState, null, Main.UIScaleMatrix);
 
 		//prevent any mouse interactions while the mouse is hovering over this UI
-		if (IsMouseOverUIBox(UITopLeft, UIBoxTexture, scale))
+		if (IsMouseOverUIBox(UICenter, UIBoxTexture, scale))
 		{
 			IsHoveringOverAnyButton = false;
 
 			player.mouseInterface = true;
 		}
 
-		var buttonTopLeft = (UITopLeft + new Vector2(-525f, -110f) * scale).ToPoint();
+		var buttonTopLeft = (UICenter - UIBoxTexture.Size() / 2f * scale).ToPoint();
 
 		if (Delay <= 20 && !Main.mouseLeft)
 			Delay++;
@@ -284,7 +285,7 @@ public class LittleEyeQuestUI : ModSystem
 
 		if (_hoverText is not null)
 		{
-			Vector2 position = UITopLeft + new Vector2(10 + _xOffset, -40);
+			Vector2 position = UICenter + new Vector2(10 + _xOffset, -40);
 			ReLogic.Graphics.DynamicSpriteFont font = FontAssets.DeathText.Value;
 			Vector2 size = ChatManager.GetStringSize(font, _hoverText, Vector2.One);
 			size.Y = 0;
@@ -432,7 +433,7 @@ public class LittleEyeQuestUI : ModSystem
 	private static void QuestLogic<T>(Player player, Point uiTopLeft, FlagSet flags, TextureOptions textures, string conditionText, Color acceptColor, HookSet hooks) where T : ModItem
 	{
 		Vector2 scale = Vector2.One * Main.UIScale;
-		Vector2 topLeft = uiTopLeft.ToVector2() + new Vector2(315f, -24f) * Main.UIScale;
+		Vector2 topLeft = uiTopLeft.ToVector2();
 		Texture2D icon = (flags.IsLocked ? textures.Locked : flags.IsDown ? textures.Complete : textures.NotComplete).Value;
 		DrawIcon(topLeft, icon);
 
