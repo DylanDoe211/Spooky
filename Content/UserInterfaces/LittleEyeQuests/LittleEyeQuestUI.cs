@@ -195,7 +195,7 @@ public class LittleEyeQuestUI : ModSystem
 		if (ModContent.GetInstance<SpookyConfig>().DialogueFocus)
 			Main.instance.CameraModifiers.Add(new CameraPanning(Main.npc[LittleEye].Center, 20));
 
-		Texture2D UIBoxTexture = ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/LittleEyeQuestUIBar").Value;
+		Texture2D UIBoxTexture = ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/LittleEyeQuests/LittleEyeQuestUIBar").Value;
 		Vector2 scale = Vector2.One * Main.UIScale;
 		int backWidth = UIBoxTexture.Width;
 
@@ -453,6 +453,8 @@ public class LittleEyeQuestUI : ModSystem
 		{
 			IsHoveringOverAnyButton = true;
 
+			DrawIcon(topLeft, BountyIconSelectedOutline.Value);
+
 			Rectangle bounds = Main.instance.GraphicsDevice.ScissorRectangle;
 			bounds.X += 2;
 			bounds.Width -= 2;
@@ -461,7 +463,6 @@ public class LittleEyeQuestUI : ModSystem
 			if (flags.IsLocked)
 			{
 				_hoverText = QuestAcceptedText;
-				DrawIcon(topLeft, BountyIconSelectedOutline.Value);
 			}
 			else if (flags.IsDown || Flags.PokedLittleEye)
 			{
