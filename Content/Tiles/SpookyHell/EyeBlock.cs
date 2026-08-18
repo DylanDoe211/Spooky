@@ -84,7 +84,7 @@ namespace Spooky.Content.Tiles.SpookyHell
 				}
 
                 //ambient manhole teeth
-                if (Main.rand.NextBool(10))
+                if (Main.rand.NextBool(20))
                 {
                     TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<Tooth>(), true);
                 }
