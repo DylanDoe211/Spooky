@@ -36,15 +36,7 @@ public class LittleEyeQuestUI : ModSystem
 	private static readonly LocalizedText[] QuestConditionTexts = new LocalizedText[5];
 
 	private static string QuestIcon5LockedText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.Bounty5Locked");
-
-	private static string QuestAcceptText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.BountyAccept");
-	private static string QuestWarningText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.BountyWarning");
-	private static string Quest5AcceptText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.Bounty5Accept");
-	private static string Quest5WarningText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.Bounty5Warning");
 	private static string QuestAcceptedText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.BountyAccepted");
-	private static string QuestCompleteText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.BountyCompleted");
-	private static string QuestCompleteRematchText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.BountyCompletedItem");
-	private static string QuestNewItemText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.BountyNewItem");
 
 	// Actual icon textures
 	private static readonly Asset<Texture2D>[] BountyIconDone = new Asset<Texture2D>[5];
@@ -100,17 +92,7 @@ public class LittleEyeQuestUI : ModSystem
 			QuestConditionTexts[i] = Language.GetText($"Mods.Spooky.UI.LittleEyeBounties.Bounty{i + 1}Condition");
 
 		QuestIcon5LockedText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.Bounty5Locked");
-
-		QuestAcceptText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.BountyAccept");
-		QuestWarningText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.BountyWarning");
-		Quest5AcceptText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.Bounty5Accept");
-		Quest5WarningText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.Bounty5Warning");
-
 		QuestAcceptedText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.BountyAccepted");
-
-		QuestCompleteText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.BountyCompleted");
-		QuestCompleteRematchText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.BountyCompletedItem");
-		QuestNewItemText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.BountyNewItem");
 	}
 
 	//check if little eye is close enough
@@ -371,8 +353,12 @@ public class LittleEyeQuestUI : ModSystem
 		{
 			IsHoveringOverAnyButton = true;
 
+			DrawIcon(Icon5TopLeft, BountyIconSelectedOutline.Value);
+
 			if (!downedAllMechs)
-				DrawIcon(Icon5TopLeft, BountyIconSelectedOutline.Value);
+			{
+				_hoverText = QuestIcon5LockedText;
+			}
 			else if (Flags.downedOrroboro)
 			{
 				if (inBounds && Main.mouseLeftRelease && Main.mouseLeft && Delay > 20 && !player.HasItem(ModContent.ItemType<Concoction>()))

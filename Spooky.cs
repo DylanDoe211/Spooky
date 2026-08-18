@@ -108,6 +108,10 @@ public class Spooky : Mod
 						_ => throw new ArgumentException(text + " Is not a valid biome position variable name"),
 					};
 				}
+				case "EyeQuest":
+				{
+					return LittleEyeCrossmod.Call(args[1..]);
+				}
 				default:
 				{
 					Logger.Error($"Call Error: Context '{firstArg}' is invalid.");
