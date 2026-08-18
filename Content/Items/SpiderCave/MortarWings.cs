@@ -1,15 +1,27 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 using Terraria.Audio;
+using ReLogic.Content;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Spooky.Content.Items.SpiderCave
 {
 	[AutoloadEquip(EquipType.Wings)]
 	public class MortarWings : ModItem
 	{
+		private static Asset<Texture2D> WingTexture;
+		private static Asset<Texture2D> GlowTexture;
+
+		public override void Load()
+		{
+			WingTexture = ModContent.Request<Texture2D>("Spooky/Content/Items/SpiderCave/MortarWings_RealWings");
+			GlowTexture = ModContent.Request<Texture2D>("Spooky/Content/Items/SpiderCave/MortarWings_RealWingsGlow");
+		}
+
 		public override void SetStaticDefaults()
 		{
 			ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new Terraria.DataStructures.WingStats(180, 8f, 2f);
@@ -22,6 +34,21 @@ namespace Spooky.Content.Items.SpiderCave
 			Item.value = Item.buyPrice(gold: 50);
 			Item.rare = ItemRarityID.Yellow;
 			Item.accessory = true;
+		}
+
+		public override bool ModifyEquipTextureDraw(ref PlayerDrawSet drawInfo, ref DrawData drawData, EquipTexture equipTexture, string methodName) 
+		{
+			Vector2 playerBackPosition = drawInfo.Position - Main.screenPosition + new Vector2(drawInfo.drawPlayer.width / 2, drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height / 2) + new Vector2(0f, 7f);
+			int wingFrameCount = 7;
+			var texture = WingTexture.Value;
+			Vector2 drawPosition = playerBackPosition + new Vector2(-10, -1) * drawInfo.drawPlayer.Directions;
+			drawData = new DrawData(texture, drawPosition.Floor(), new Rectangle(0, texture.Height / wingFrameCount * drawInfo.drawPlayer.wingFrame, texture.Width, texture.Height / wingFrameCount), drawData.color, drawInfo.drawPlayer.bodyRotation, new Vector2(texture.Width / 2, texture.Height / wingFrameCount / 2), 1f, drawInfo.playerEffect);
+			drawData.shader = drawInfo.cWings;
+
+			drawInfo.DrawDataCache.Add(drawData);
+			drawInfo.DrawDataCache.Add(drawData with { color = Color.White, texture = GlowTexture.Value });
+
+			return false;
 		}
 
 		public override void UpdateAccessory(Player player, bool hideVisual)

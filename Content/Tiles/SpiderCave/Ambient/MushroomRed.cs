@@ -114,7 +114,7 @@ namespace Spooky.Content.Tiles.SpiderCave.Ambient
 			if (Flags.SporeEventHappening && Main.rand.NextBool(75) && !Main.tile[i, j - 1].HasTile && !Main.gamePaused && Main.instance.IsActive)
 			{
 				int newDust = Dust.NewDust(new Vector2((i) * 16, (j + 1) * 16), 1, 1, ModContent.DustType<MushroomSpore>());
-				Main.dust[newDust].color = new Color(0, 255, 171);
+				Main.dust[newDust].color = new Color(72, 209, 204);
 			}
 		}
 	}

@@ -65,7 +65,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
         {
             //use regular walking anim when walking
             NPC.frameCounter++;
-            if (NPC.localAI[0] <= 360)
+            if (NPC.localAI[0] <= 70)
             {
                 if (NPC.frameCounter > 10)
                 {
@@ -84,7 +84,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
                 }
             }
             //use casting animation during casting ai
-            if (NPC.localAI[0] > 360)
+            if (NPC.localAI[0] > 70)
             {
                 if (NPC.frame.Y < frameHeight * 5)
                 {
@@ -114,10 +114,9 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
             {
                 NPC.localAI[0]++;
 
-                if (NPC.localAI[0] > 360)
+                if (NPC.localAI[0] > 70)
                 {
                     NPC.aiStyle = 0;
-
                     NPC.velocity.X *= 0.5f;
                 }
                 else
@@ -127,22 +126,11 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
                 }
 
                 //spawn a revived "ghost" of a skeletoid or a rolling skull
-                if (NPC.localAI[0] >= 450)
+                if (NPC.localAI[0] >= 160)
                 {
                     int[] PhantomEnemy = new int[] { ModContent.NPCType<PhantomRollingSkull>(), ModContent.NPCType<PhantomSkeletoid>() };
 
                     int SummonedGhost = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, Main.rand.Next(PhantomEnemy));
-
-                    //set the spawned enemies stats based on how many souls have been absorbed, only if multiple souls have been absorbed
-                    if (NPC.localAI[1] > 1)
-                    {
-                        int StatScalingValue = (int)NPC.localAI[1] * 3;
-
-                        Main.npc[SummonedGhost].lifeMax += StatScalingValue;
-                        Main.npc[SummonedGhost].life = Main.npc[SummonedGhost].lifeMax;
-                        Main.npc[SummonedGhost].damage += StatScalingValue;
-                    }
-                    
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         NetMessage.SendData(MessageID.SyncNPC, number: SummonedGhost);

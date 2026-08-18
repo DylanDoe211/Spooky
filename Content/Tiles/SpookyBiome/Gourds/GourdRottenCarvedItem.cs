@@ -18,19 +18,4 @@ namespace Spooky.Content.Tiles.SpookyBiome.Gourds
 			Item.height = 16;
         }
     }
-
-    public class GourdRottenCarvedLitItem : ModItem
-    {
-        public override void SetStaticDefaults()
-        {
-            Item.ResearchUnlockCount = 5;
-        }
-
-        public override void SetDefaults()
-        {
-            Item.DefaultToPlaceableTile(ModContent.TileType<GourdRottenCarvedLit>());
-            Item.width = 16;
-			Item.height = 16;
-        }
-    }
 }

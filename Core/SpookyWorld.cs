@@ -2,10 +2,13 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Localization;
+using Terraria.GameContent.Bestiary;
 using Terraria.Chat;
 using Microsoft.Xna.Framework;
 using System;
+using System.Linq;
 
+using Spooky.Content.Achievements;
 using Spooky.Content.Biomes;
 using Spooky.Content.NPCs.Boss.BigBone;
 using Spooky.Content.NPCs.Boss.Daffodil;
@@ -517,7 +520,15 @@ namespace Spooky.Core
             }
 
             LastTime = Main.dayTime;
-        }
+
+			if (Main.BestiaryDB.GetBestiaryEntriesByMod(Spooky.mod).All(oe => oe.UIInfoProvider.GetEntryUICollectionInfo().UnlockState > BestiaryEntryUnlockState.NotKnownAtAll_0))
+			{
+				if (Main.netMode != NetmodeID.Server)
+				{
+					ModContent.GetInstance<MiscAchievementSpookyBestiary>().SpookyBestiaryCondition.Complete();
+				}
+			}
+		}
 
         public float GetTreeSway(int i, int j, ref Vector2 position)
         {

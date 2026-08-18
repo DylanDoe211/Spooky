@@ -24,9 +24,11 @@ namespace Spooky.Core
 		public static Vector2 OldHunterPosition = Vector2.Zero;
 		public static Vector2 LittleEyePosition = Vector2.Zero;
 
-        //compass positions
+        //compass/biome positions
         public static Vector2 SpiderGrottoCenter = Vector2.Zero;
         public static Vector2 EyeValleyCenter = Vector2.Zero;
+		public static Vector2 ZombieOceanTopLeft = Vector2.Zero;
+		public static Vector2 ZombieOceanBottomRight = Vector2.Zero;
 
 		//list of rotten depths biome positions for big dunk to travel between
 		public static List<Vector2> ZombieBiomePositions = new List<Vector2>();
@@ -224,6 +226,8 @@ namespace Spooky.Core
 			//biome positions for compasses
             tag[nameof(SpiderGrottoCenter)] = SpiderGrottoCenter;
             tag[nameof(EyeValleyCenter)] = EyeValleyCenter;
+			tag[nameof(ZombieOceanTopLeft)] = ZombieOceanTopLeft;
+			tag[nameof(ZombieOceanBottomRight)] = ZombieOceanBottomRight;
 
 			//list of zombie biome positions
 			tag[nameof(ZombieBiomePositions)] = ZombieBiomePositions;
@@ -324,6 +328,8 @@ namespace Spooky.Core
 			//world positions for compasses
 			SpiderGrottoCenter = tag.Get<Vector2>(nameof(SpiderGrottoCenter));
 			EyeValleyCenter = tag.Get<Vector2>(nameof(EyeValleyCenter));
+			ZombieOceanTopLeft = tag.Get<Vector2>(nameof(ZombieOceanTopLeft));
+			ZombieOceanBottomRight = tag.Get<Vector2>(nameof(ZombieOceanBottomRight));
 
 			//list of zombie biome positions
 			if (tag.ContainsKey(nameof(ZombieBiomePositions)))
@@ -424,6 +430,8 @@ namespace Spooky.Core
 			writer.WriteVector2(LittleEyePosition);
             writer.WriteVector2(SpiderGrottoCenter);
             writer.WriteVector2(EyeValleyCenter);
+			writer.WriteVector2(ZombieOceanTopLeft);
+			writer.WriteVector2(ZombieOceanBottomRight);
 
 			//downed bosses
 			writer.WriteFlags(downedRotGourd, downedSpookySpirit, downedMoco, downedDaffodil, downedOldHunter, downedOrroboro, downedBigBone, downedSpookFishron);
@@ -470,6 +478,8 @@ namespace Spooky.Core
 			LittleEyePosition = reader.ReadVector2();
             SpiderGrottoCenter = reader.ReadVector2();
             EyeValleyCenter = reader.ReadVector2();
+			ZombieOceanTopLeft = reader.ReadVector2();
+			ZombieOceanBottomRight = reader.ReadVector2();
 
 			//downed bosses
 			reader.ReadFlags(out downedRotGourd, out downedSpookySpirit, out downedMoco, out downedDaffodil, out downedOldHunter, out downedOrroboro, out downedBigBone, out downedSpookFishron);

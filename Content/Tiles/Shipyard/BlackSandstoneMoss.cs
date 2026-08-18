@@ -23,8 +23,8 @@ namespace Spooky.Content.Tiles.Shipyard
 			Main.tileSolid[Type] = true;
 			Main.tileBlockLight[Type] = true;
 			Main.tileLighted[Type] = true;
-            AddMapEntry(new Color(38, 167, 160));
-            DustType = ModContent.DustType<ShipyardMossDust>();
+            AddMapEntry(new Color(105, 144, 190));
+            DustType = ModContent.DustType<ShipyardMossGrassDust>();
 			HitSound = SoundID.Tink;
 		}
 
@@ -32,9 +32,9 @@ namespace Spooky.Content.Tiles.Shipyard
 		{
 			float divide = 2000f;
 
-			r = 54f / divide;
-			g = 199f / divide;
-			b = 191f / divide;
+			r = 66f / divide;
+			g = 138f / divide;
+			b = 255f / divide;
         }
 
 		public override bool CanExplode(int i, int j)
@@ -67,34 +67,30 @@ namespace Spooky.Content.Tiles.Shipyard
 
 		public override void RandomUpdate(int i, int j)
         {
-            Tile Tile = Framing.GetTileSafely(i, j);
+           	Tile Tile = Framing.GetTileSafely(i, j);
 			Tile Below = Framing.GetTileSafely(i, j + 1);
             Tile Above = Framing.GetTileSafely(i, j - 1);
 
             if (!Above.HasTile && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock) 
             {
 				//grow small weeds
-                if (Main.rand.NextBool())
+                if (Main.rand.NextBool(10))
                 {
-                    WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<BlackSandstoneMossWeeds>(), true);
-                    Above.TileFrameX = (short)(WorldGen.genRand.Next(6) * 18);
-					NetMessage.SendTileSquare(-1, i, j - 1, 1, TileChangeType.None);
+					TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<BlackSandstoneMossWeeds>(), true, Main.rand.Next(0, 6));
 				}
 
 				//grow bleached corals
                 int InWaterChance1 = Above.LiquidAmount <= 0 ? 20 : 12;
                 if (Main.rand.NextBool(InWaterChance1))
                 {
-                    WorldGen.PlaceObject(i, j - 1, ModContent.TileType<BleachedCoral>(), true, Main.rand.Next(0, 8));
-                    NetMessage.SendObjectPlacement(-1, i, j - 1, ModContent.TileType<BleachedCoral>(), 0, 0, -1, -1);
+                    TileGlobal.PlaceObject(i, j - 1, ModContent.TileType<BleachedCoral>(), true, Main.rand.Next(0, 8));
 				}
 
 				//ghost flowers 
-                int InWaterChance2 = Above.LiquidAmount <= 0 ? 45 : 30;
+                int InWaterChance2 = Above.LiquidAmount <= 0 ? 25 : 15;
                 if (Main.rand.NextBool(InWaterChance2))
                 {
-                    WorldGen.PlaceObject(i, j - 1, (ushort)ModContent.TileType<GhostFlower>(), true, Main.rand.Next(0, 2));
-                    NetMessage.SendObjectPlacement(-1, i, j - 1, (ushort)ModContent.TileType<GhostFlower>(), 0, 0, -1, -1);
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<GhostFlower>(), true);
                 }
 
                 //giant bleached coral 
@@ -102,13 +98,26 @@ namespace Spooky.Content.Tiles.Shipyard
                 {
                     ushort[] GiantCorals = new ushort[] { (ushort)ModContent.TileType<BleachedCoralGiant1>(), (ushort)ModContent.TileType<BleachedCoralGiant2>(), (ushort)ModContent.TileType<BleachedCoralGiant3>(),
                     (ushort)ModContent.TileType<BleachedCoralGiant4>(), (ushort)ModContent.TileType<BleachedCoralGiant5>(), (ushort)ModContent.TileType<BleachedCoralGiant6>() };
-
-                    ushort newObject = Main.rand.Next(GiantCorals);
-
-                    WorldGen.PlaceObject(i, j - 1, newObject, true);
-                    NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
+                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(GiantCorals), true);
                 }
 			}
+
+			//spread grass
+            List<Point> adjacents = TileGlobal.OpenAdjacents(i, j, ModContent.TileType<BlackSandstone>());
+
+            if (adjacents.Count > 0)
+            {
+                Point tilePoint = adjacents[Main.rand.Next(adjacents.Count)];
+                if (TileGlobal.HasOpening(tilePoint.X, tilePoint.Y))
+                {
+                    Framing.GetTileSafely(tilePoint.X, tilePoint.Y).TileType = (ushort)ModContent.TileType<BlackSandstoneMoss>();
+
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        NetMessage.SendTileSquare(-1, tilePoint.X, tilePoint.Y, 1, TileChangeType.None);
+                    }
+                }
+            }
 		}
 	}
 }

@@ -332,22 +332,22 @@ namespace Spooky.Content.NPCs.Friendly
                 {
                     case 0:
                     {
-                        EmoteBubble.NewBubble(EmoteID.PartyBalloons, new WorldUIAnchor(NPC), 200);
+                        EmoteBubble.NewBubble(EmoteID.PartyBalloons, new WorldUIAnchor(NPC), 100);
                         break;
                     }
                     case 1:
                     {
-                        EmoteBubble.NewBubble(EmoteID.PartyCake, new WorldUIAnchor(NPC), 200);
+                        EmoteBubble.NewBubble(EmoteID.PartyCake, new WorldUIAnchor(NPC), 100);
                         break;
                     }
                     case 2:
                     {
-                        EmoteBubble.NewBubble(EmoteID.PartyHats, new WorldUIAnchor(NPC), 200);
+                        EmoteBubble.NewBubble(EmoteID.PartyHats, new WorldUIAnchor(NPC), 100);
                         break;
                     }
                     case 3:
                     {
-                        EmoteBubble.NewBubble(EmoteID.PartyPresent, new WorldUIAnchor(NPC), 200);
+                        EmoteBubble.NewBubble(EmoteID.PartyPresent, new WorldUIAnchor(NPC), 100);
                         break;
                     }
                 }

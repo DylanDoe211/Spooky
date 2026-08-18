@@ -63,27 +63,29 @@ namespace Spooky.Content.Tiles.Minibiomes.Vegetable
                 //grow vines
                 if (Main.rand.NextBool(5)) 
                 {
-					WorldGen.PlaceObject(i, j + 1, (ushort)ModContent.TileType<JungleVines>(), true);
+					WorldGen.PlaceTile(i, j + 1, (ushort)ModContent.TileType<JungleVines>(), true);
 					NetMessage.SendTileSquare(-1, i, j + 1, 1, TileChangeType.None);
 				}
 
 				//radish
 				if (Main.rand.NextBool(55))
                 {
-                    WorldGen.PlaceObject(i, j + 1, (ushort)ModContent.TileType<RadishHanging>(), true, WorldGen.genRand.Next(0, 2));
-                    NetMessage.SendObjectPlacement(-1, i, j + 1, (ushort)ModContent.TileType<RadishHanging>(), 0, 0, -1, -1);
+					TileGlobal.PlaceObject(i, j + 1, (ushort)ModContent.TileType<RadishHanging>(), true, WorldGen.genRand.Next(0, 2));
+                }
+
+				//eggplant
+				if (Main.rand.NextBool(55))
+                {
+					TileGlobal.PlaceObject(i, j + 1, (ushort)ModContent.TileType<Eggplant>(), true, WorldGen.genRand.Next(0, 2));
                 }
             }
 
-			if (!Above.HasTile && Above.TileType != ModContent.TileType<JungleCabbageBoulder>() && Above2.TileType != ModContent.TileType<JungleCabbageBoulder>() &&
-			Above3.TileType != ModContent.TileType<JungleCabbageBoulder>() && Above.LiquidAmount <= 0 && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock)
+			if (!Above.HasTile && Above.LiquidAmount <= 0 && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock)
 			{
 				//grow weeds
-				if (Main.rand.NextBool(3))
+				if (Main.rand.NextBool(10))
                 {
-					WorldGen.PlaceObject(i, j - 1, (ushort)ModContent.TileType<JungleMossWeeds>(), true);
-					Above.TileFrameX = (short)(Main.rand.Next(11) * 18);
-					NetMessage.SendTileSquare(-1, i, j - 1, 1, TileChangeType.None);
+					TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<JungleMossWeeds>(), true, Main.rand.Next(0, 11));
 				}
 
 				//grow broccoli trees
@@ -95,10 +97,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Vegetable
 				//cabbage boulders
 				if (Main.rand.NextBool(30) && VegetableGarden.CanPlaceCabbageBoulder(i, j))
 				{
-					ushort newObject = (ushort)ModContent.TileType<JungleCabbageBoulder>();
-
-					WorldGen.PlaceObject(i, j - 1, newObject, true);
-					NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
+					TileGlobal.PlaceObject(i, j - 1, ModContent.TileType<JungleCabbageBoulder>(), true);
 				}
 
 				//misc plants
@@ -106,64 +105,41 @@ namespace Spooky.Content.Tiles.Minibiomes.Vegetable
 				{
 					ushort[] LeafyPlants = new ushort[] { (ushort)ModContent.TileType<JunglePlant1>(), (ushort)ModContent.TileType<JunglePlant2>(), (ushort)ModContent.TileType<JunglePlant3>(),
 					(ushort)ModContent.TileType<JunglePlant4>(), (ushort)ModContent.TileType<JunglePlant5>(), (ushort)ModContent.TileType<JunglePlant6>() };
-
-					ushort newObject = Main.rand.Next(LeafyPlants);
-
-					WorldGen.PlaceObject(i, j - 1, newObject, true);
-					NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
+					TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(LeafyPlants), true);
 				}
 
 				//carrots
 				if (Main.rand.NextBool(20))
 				{
 					ushort[] Carrots = new ushort[] { (ushort)ModContent.TileType<Carrot1>(), (ushort)ModContent.TileType<Carrot2>(), (ushort)ModContent.TileType<Carrot3>() };
-
-					ushort newObject = Main.rand.Next(Carrots);
-
-					WorldGen.PlaceObject(i, j - 1, newObject, true, Main.rand.Next(0, 2));
-					NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
+					TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Carrots), true, Main.rand.Next(0, 2));
 				}
 
 				//corns
 				if (Main.rand.NextBool(20))
 				{
 					ushort[] Corns = new ushort[] { (ushort)ModContent.TileType<Corn1>(), (ushort)ModContent.TileType<Corn2>() };
-
-					ushort newObject = Main.rand.Next(Corns);
-
-					WorldGen.PlaceObject(i, j - 1, newObject, true);
-					NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
+					TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Corns), true);
 				}
 
 				//garlic
 				if (Main.rand.NextBool(20))
 				{
-					ushort newObject = (ushort)ModContent.TileType<Garlic>();
-
-					WorldGen.PlaceObject(i, j - 1, newObject, true);
-					NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
+					TileGlobal.PlaceObject(i, j - 1, ModContent.TileType<Garlic>(), true);
 				}
 
 				//potatos
 				if (Main.rand.NextBool(20))
 				{
 					ushort[] Potatos = new ushort[] { (ushort)ModContent.TileType<Potato1>(), (ushort)ModContent.TileType<Potato2>(), (ushort)ModContent.TileType<Potato3>(), (ushort)ModContent.TileType<Potato4>() };
-
-					ushort newObject = Main.rand.Next(Potatos);
-
-					WorldGen.PlaceObject(i, j - 1, newObject, true);
-					NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
+					TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Potatos), true);
 				}
 
 				//radish
 				if (Main.rand.NextBool(35))
                 {
                     ushort[] Radishes = new ushort[] { (ushort)ModContent.TileType<Radish1>(), (ushort)ModContent.TileType<Radish2>() };
-
-                    ushort newObject = Main.rand.Next(Radishes);
-
-                    WorldGen.PlaceObject(i, j - 1, newObject, true);
-                    NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
+					TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Radishes), true);
                 }
 			}
 

@@ -5,7 +5,7 @@ using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Spooky.Content.Dusts;
+using Spooky.Core;
 using Spooky.Content.Tiles.SpookyHell.Ambient;
 
 namespace Spooky.Content.Tiles.SpookyHell
@@ -50,6 +50,60 @@ namespace Spooky.Content.Tiles.SpookyHell
         {
             dustType = DustID.Blood;
             makeDust = true;
+        }
+
+        public override void RandomUpdate(int i, int j)
+        {
+            Tile Tile = Framing.GetTileSafely(i, j);
+            Tile Below = Framing.GetTileSafely(i, j + 1);
+            Tile Above = Framing.GetTileSafely(i, j - 1);
+
+            if (!Below.HasTile && Below.LiquidAmount <= 0 && !Tile.BottomSlope)
+            {
+                //grow vines
+                if (Main.rand.NextBool(35)) 
+                {
+                    WorldGen.PlaceTile(i, j + 1, (ushort)ModContent.TileType<EyeVine>(), true);
+					NetMessage.SendTileSquare(-1, i, j + 1, 1, TileChangeType.None);
+				}
+
+                //hanging arteries
+                if (Main.rand.NextBool(35))
+                {
+                    ushort[] Arteries = new ushort[] { (ushort)ModContent.TileType<ArteryHanging1>(), (ushort)ModContent.TileType<ArteryHanging2>() };
+                    TileGlobal.PlaceObject(i, j + 2, WorldGen.genRand.Next(Arteries), true);
+                }
+            }
+
+            if (!Above.HasTile && Above.LiquidAmount <= 0)
+            {
+                //grow small weeds
+                if (Main.rand.NextBool(10))
+                {
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<SpookyHellWeeds>(), true, Main.rand.Next(0, 6));
+				}
+
+                //ambient manhole teeth
+                if (Main.rand.NextBool(20))
+                {
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<Tooth>(), true);
+                }
+
+                //eye stalks
+                if (Main.rand.NextBool(15))
+                {
+                    ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkThinShort>(), (ushort)ModContent.TileType<EyeStalkThin>(), 
+                    (ushort)ModContent.TileType<EyeStalkThinTall>(), (ushort)ModContent.TileType<EyeStalkThinVeryTall>(),
+                    (ushort)ModContent.TileType<EyeStalkSmall1>(), (ushort)ModContent.TileType<EyeStalkSmall2>(),
+                    (ushort)ModContent.TileType<EyeStalkMedium1>(), (ushort)ModContent.TileType<EyeStalkMedium2>(),
+                    (ushort)ModContent.TileType<EyeStalkBig1>(), (ushort)ModContent.TileType<EyeStalkBig2>(),
+                    (ushort)ModContent.TileType<EyeStalkGiant1>(), (ushort)ModContent.TileType<EyeStalkGiant2>(),
+                    (ushort)ModContent.TileType<EyeStalkPurple1>(), (ushort)ModContent.TileType<EyeStalkPurple2>(),
+                    (ushort)ModContent.TileType<EyeStalkPurple3>(), (ushort)ModContent.TileType<EyeStalkPurple4>(),
+                    (ushort)ModContent.TileType<EyeStalkPurple5>(), (ushort)ModContent.TileType<EyeStalkPurple6>() };
+                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Stalks), true);
+                }
+            }
         }
     }
 }

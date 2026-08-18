@@ -27,8 +27,8 @@ namespace Spooky.Content.Generation
 
 		static int initialStartPosX;
         
-        static int LeftY = 0;
-		static int RightY = 0;
+        public static int LeftY = 0;
+		public static int RightY = 0;
 
         public static WorldGen.GrowTreeSettings TreeSettings;
 

@@ -71,17 +71,15 @@ namespace Spooky.Content.Tiles.Cemetery
             if (!Above.HasTile && Above.LiquidAmount <= 0 && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock) 
             {
                 //grow weeds
-                if (Main.rand.NextBool(15))
+                if (Main.rand.NextBool(10))
                 {
-                    WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<CemeteryWeeds>(), true);
-                    Above.TileFrameX = (short)(WorldGen.genRand.Next(18) * 18);
-					NetMessage.SendTileSquare(-1, i, j - 1, 1, TileChangeType.None);
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<CemeteryWeeds>(), true, Main.rand.Next(0, 18));
 				}
 
+                //place mysterious tombstones
                 if (Main.rand.NextBool(60))
                 {
-                    WorldGen.PlaceObject(i, j - 1, (ushort)ModContent.TileType<MysteriousTombstone>(), true);
-                    NetMessage.SendObjectPlacement(-1, i, j - 1, (ushort)ModContent.TileType<MysteriousTombstone>(), 0, 0, -1, -1);
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<MysteriousTombstone>(), true, Main.rand.Next(0, 3));
                 }
             }
 

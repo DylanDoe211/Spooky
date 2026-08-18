@@ -1,10 +1,10 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.IO;
 using Terraria.Localization;
 using Terraria.WorldBuilding;
 using Terraria.GameContent.Generation;
+using Terraria.IO;
 using Microsoft.Xna.Framework;
 using System;
 using System.Linq;
@@ -99,9 +99,9 @@ namespace Spooky.Content.Generation
 
 			//dig tunnel from surface to rotten depths
 			bool FoundSurface = false;
-            int attempts = 0;
-            while (!FoundSurface && attempts++ < 100000)
-            {
+			int attempts = 0;
+			while (!FoundSurface && attempts++ < 100000)
+			{
 				int TunnelX = StartPositionX + (UnderSulphurSea ? (GenVars.dungeonSide < 0 ? -135 : 135) : 0);
 				int TunnelY = 10;
 
@@ -185,10 +185,17 @@ namespace Spooky.Content.Generation
 					}
 				}
 			}
-			
+
 			progress.Set(1);
 			TileSloping(StartPositionX, StartPositionY, SizeX, SizeY);
 			PlaceAmbience(StartPositionX, StartPositionY, SizeX, SizeY);
+
+			//define biome topleft and bottomright for modcall
+			int radius = SizeXInt * 5;
+			int radiusY = SizeYInt * 3;
+			float scale = radiusY / (float)radius;
+			Flags.ZombieOceanTopLeft = new Vector2(StartPositionX + (-radius), StartPositionY + (-radius * scale));
+			Flags.ZombieOceanBottomRight = new Vector2(StartPositionX + radius, StartPositionY + (radius * scale));
 		}
 
 		private void PlaceSurfaceLab(GenerationProgress progress, GameConfiguration configuration)
@@ -930,6 +937,23 @@ namespace Spooky.Content.Generation
 					}
 				}
 			}
+
+			//place pots
+            for (int j = (int)Main.worldSurface; j < PositionY + SizeY; j++)
+			{
+				for (int i = PositionX - SizeX; i < PositionX + SizeX; i++)
+				{
+                    if (WorldGen.InWorld(i, j, 25))
+					{
+						Tile tile = Main.tile[i, j];
+
+                        if (WorldGen.genRand.NextBool(3) && (tile.TileType == ModContent.TileType<OceanSand>() || tile.TileType == ModContent.TileType<OceanBiomass>()))
+					    {
+                            WorldGen.PlaceObject(i, j - 1, ModContent.TileType<OceanPots>(), true, Main.rand.Next(0, 3));
+                        }
+                    }
+                }
+            }
 
 			//place the rest of the ambient tiles after the bones and lockers
 			for (int j = (int)Main.worldSurface; j < PositionY + SizeY; j++)

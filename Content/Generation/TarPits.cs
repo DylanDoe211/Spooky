@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using Spooky.Content.Tiles.Catacomb;
 using Spooky.Content.Tiles.Minibiomes.Desert;
 using Spooky.Content.Tiles.Minibiomes.Desert.Ambient;
+using Spooky.Content.Tiles.Minibiomes.Desert.Furniture;
 
 namespace Spooky.Content.Generation
 {
@@ -300,6 +301,13 @@ namespace Spooky.Content.Generation
 							ushort[] Stalagmites = new ushort[] { (ushort)ModContent.TileType<DesertStalagmite1>(), (ushort)ModContent.TileType<DesertStalagmite2>(), (ushort)ModContent.TileType<DesertStalagmite3>() };
 
 							WorldGen.PlaceObject(i, j - 1, WorldGen.genRand.Next(Stalagmites));
+						}
+
+						//place pots last
+						if (WorldGen.genRand.NextBool() && !Main.tile[i, j - 1].HasTile)
+						{
+							WorldGen.PlaceObject(i, j - 1, ModContent.TileType<TarPitsPots>(), true, WorldGen.genRand.Next(0, 3));
+							NetMessage.SendObjectPlacement(-1, i, j - 1, ModContent.TileType<TarPitsPots>(), 0, 0, -1, -1);
 						}
 					}
 				}
@@ -620,7 +628,9 @@ namespace Spooky.Content.Generation
 			{
 				for (int j = Y - 4; j < Y + 4; j++)
 				{
-					if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<TarPitCactus>())
+					if (Main.tile[i, j].TileType == ModContent.TileType<TarPitCactus>() || 
+					Main.tile[i, j].TileType == ModContent.TileType<TarPitsGiantCactus1>() || 
+					Main.tile[i, j].TileType == ModContent.TileType<TarPitsGiantCactus2>())
 					{
 						return false;
 					}
@@ -662,18 +672,10 @@ namespace Spooky.Content.Generation
 					{
 						numDesertTiles++;
 					}
-
-					/*
-					//do not place near protected structures ever
-					if (!GenVars.structures.CanPlace(new Rectangle(i, j, 1, 1), 15))
-					{
-						return false;
-					}
-					*/
 				}
 			}
 
-			int AmountOfTilesNeeded = (SizeX * SizeY) / 4;
+			int AmountOfTilesNeeded = (SizeX * SizeY) / 2;
 
 			if (numDesertTiles >= AmountOfTilesNeeded)
 			{

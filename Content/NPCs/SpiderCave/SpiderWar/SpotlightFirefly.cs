@@ -107,7 +107,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
 				NPC.EncourageDespawn(30);
             }
             else
-            {            
+            {
                 Vector2 RotateTowards = Parent.Center - NPC.Center;
 
                 float RotateDirection = (float)Math.Atan2(RotateTowards.Y, RotateTowards.X) + 4.71f;

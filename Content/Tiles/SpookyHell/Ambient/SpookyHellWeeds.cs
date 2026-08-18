@@ -2,6 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace Spooky.Content.Tiles.SpookyHell.Ambient
             TileID.Sets.IgnoredByGrowingSaplings[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             TileObjectData.newTile.StyleHorizontal = true;
-            TileObjectData.newTile.AnchorValidTiles = new[] { ModContent.TileType<SpookyMushGrass>() };
+            TileObjectData.newTile.AnchorValidTiles = new[] { ModContent.TileType<SpookyMushGrass>(), ModContent.TileType<EyeBlock>() };
             TileObjectData.addTile(Type);
             AddMapEntry(new Color(139, 31, 25));
             DustType = DustID.Blood;

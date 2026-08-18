@@ -96,11 +96,11 @@ namespace Spooky.Content.NPCs.Friendly
 			//crying after eye poke
 			if (Flags.PokedLittleEye)
 			{
-				Main.EntitySpriteDraw(CryTexture.Value, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
+				Main.EntitySpriteDraw(CryTexture.Value, drawPos, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
 			}
 			else
 			{
-				Main.EntitySpriteDraw(NPCTexture.Value, drawPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
+				Main.EntitySpriteDraw(NPCTexture.Value, drawPos, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
 			}
 
 			return NPC.IsABestiaryIconDummy;

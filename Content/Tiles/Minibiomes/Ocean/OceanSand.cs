@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
+using Spooky.Core;
 using Spooky.Content.Biomes;
 using Spooky.Content.Tiles.Minibiomes.Ocean.Ambient;
 using Spooky.Content.Tiles.Water;
@@ -44,13 +45,6 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean
 			Tile Below = Framing.GetTileSafely(i, j + 1);
             Tile Above = Framing.GetTileSafely(i, j - 1);
 
-            //place kelp
-            if (WorldGen.genRand.NextBool(3) && !Above.HasTile && Above.LiquidAmount > 0 && !Tile.LeftSlope && !Tile.RightSlope && !Tile.IsHalfBlock)
-            {
-                WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<OceanKelp>(), true);
-                NetMessage.SendTileSquare(-1, i, j - 1, 1, TileChangeType.None);
-            }
-
 			if (!Below.HasTile && Below.LiquidAmount >= 255 && !Tile.BottomSlope) 
             {
                 //grow vines
@@ -61,24 +55,19 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean
                 }
             }
 
-            if (!Above.HasTile && Above.LiquidAmount >= 255 && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock) 
+            if (!Above.HasTile && Above.LiquidAmount >= 125 && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock) 
             {
                 //grow weeds
-                if (Main.rand.NextBool(15))
+                if (Main.rand.NextBool(10))
                 {
-                    WorldGen.PlaceObject(i, j - 1, (ushort)ModContent.TileType<OceanWeeds>(), true, WorldGen.genRand.Next(0, 12));
-                    NetMessage.SendObjectPlacement(-1, i, j - 1, (ushort)ModContent.TileType<OceanWeeds>(), 0, 0, -1, -1);
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<OceanWeeds>(), true, WorldGen.genRand.Next(0, 12));
 				}
 
 				//grow light plants
                 if (Main.rand.NextBool(20))
                 {
                     ushort[] LightPlants = new ushort[] { (ushort)ModContent.TileType<LightPlant1>(), (ushort)ModContent.TileType<LightPlant2>(), (ushort)ModContent.TileType<LightPlant3>() };
-
-                    ushort newObject = Main.rand.Next(LightPlants);
-
-                    WorldGen.PlaceObject(i, j - 1, newObject, true);
-                    NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
+                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(LightPlants), true);
                 }
 
 				//grow light plants
@@ -86,11 +75,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean
                 {
                     ushort[] BigLightPlants = new ushort[] { (ushort)ModContent.TileType<LightPlantBig1>(), (ushort)ModContent.TileType<LightPlantBig2>(), 
 					(ushort)ModContent.TileType<LightPlantBig3>(), (ushort)ModContent.TileType<LightPlantBig4>() };
-
-                    ushort newObject = Main.rand.Next(BigLightPlants);
-
-                    WorldGen.PlaceObject(i, j - 1, newObject, true);
-                    NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
+                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(BigLightPlants), true);
                 }
 
                 //grow corals
@@ -104,11 +89,14 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean
                     (ushort)ModContent.TileType<TubeCoralLime1>(), (ushort)ModContent.TileType<TubeCoralLime2>(), (ushort)ModContent.TileType<TubeCoralLime3>(),
                     (ushort)ModContent.TileType<TubeCoralPurple1>(), (ushort)ModContent.TileType<TubeCoralPurple2>(), (ushort)ModContent.TileType<TubeCoralPurple3>(),
                     (ushort)ModContent.TileType<TubeCoralTeal1>(), (ushort)ModContent.TileType<TubeCoralTeal2>(), (ushort)ModContent.TileType<TubeCoralTeal3>() };
+                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Corals), true);
+                }
 
-                    ushort newObject = Main.rand.Next(Corals);
-
-                    WorldGen.PlaceObject(i, j - 1, newObject, true);
-                    NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
+                //kelp
+                if (WorldGen.genRand.NextBool(15))
+                {
+                    WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<OceanKelp>(), true);
+                    NetMessage.SendTileSquare(-1, i, j - 1, 1, TileChangeType.None);
                 }
             }
 		}

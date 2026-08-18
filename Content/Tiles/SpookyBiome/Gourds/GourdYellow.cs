@@ -202,6 +202,17 @@ namespace Spooky.Content.Tiles.SpookyBiome.Gourds
             HitSound = SoundID.Dig;
         }
 
+        public override void KillMultiTile(int i, int j, int frameX, int frameY)
+		{
+            int Gourd = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<GourdYellowCarvedItem>());
+            int Candle = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i + 1, j) * 16, ModContent.ItemType<CandleItem>());
+            if (Main.netMode == NetmodeID.Server && Gourd > 0 && Candle > 0)
+            {
+                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, Gourd, 1f);
+                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, Candle, 1f);
+            }
+        }
+
         public override void MouseOver(int i, int j)
 		{
             Player player = Main.LocalPlayer;

@@ -80,8 +80,7 @@ namespace Spooky.Content.Tiles.SpookyBiome
                 //grow mushrooms
                 if (Main.rand.NextBool(5))
                 {
-                    WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<SpookyMushroom>(), true);
-                    Above.TileFrameX = (short)(WorldGen.genRand.Next(4) * 18);
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<SpookyMushroom>(), true, Main.rand.Next(0, 4));
 				}
 
                 //grow big mushrooms
@@ -89,11 +88,7 @@ namespace Spooky.Content.Tiles.SpookyBiome
                 {
                     ushort[] Shrooms = new ushort[] { (ushort)ModContent.TileType<GiantShroom1>(), (ushort)ModContent.TileType<GiantShroom2>(),
                     (ushort)ModContent.TileType<GiantShroom3>(), (ushort)ModContent.TileType<GiantShroom4>() };
-
-                    ushort newObject = Main.rand.Next(Shrooms);
-
-                    WorldGen.PlaceObject(i, j - 1, newObject, true);
-                    NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
+                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Shrooms), true);
                 }
 
                 //grow big yellow mushrooms
@@ -101,11 +96,7 @@ namespace Spooky.Content.Tiles.SpookyBiome
                 {
                     ushort[] Shrooms = new ushort[] { (ushort)ModContent.TileType<GiantShroomYellow1>(), (ushort)ModContent.TileType<GiantShroomYellow2>(),
                     (ushort)ModContent.TileType<GiantShroomYellow3>(), (ushort)ModContent.TileType<GiantShroomYellow4>() };
-
-                    ushort newObject = Main.rand.Next(Shrooms);
-
-                    WorldGen.PlaceObject(i, j - 1, newObject, true);
-                    NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
+                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Shrooms), true);
                 }
 
                 //grow mushroom trees very rarely

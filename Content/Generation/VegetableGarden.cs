@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using Spooky.Content.Tiles.Catacomb;
 using Spooky.Content.Tiles.Minibiomes.Vegetable;
 using Spooky.Content.Tiles.Minibiomes.Vegetable.Ambient;
+using Spooky.Content.Tiles.Minibiomes.Vegetable.Furniture;
 using Spooky.Content.Tiles.Minibiomes.Vegetable.Tree;
 
 using StructureHelper;
@@ -346,6 +347,13 @@ namespace Spooky.Content.Generation
 						{
 							WorldGen.PlaceObject(i, j - 1, (ushort)ModContent.TileType<JungleMossWeeds>(), true);
 							tileAbove.TileFrameX = (short)(WorldGen.genRand.Next(11) * 18);
+						}
+
+						//place pots last
+						if (WorldGen.genRand.NextBool() && !tileAbove.HasTile)
+						{
+							WorldGen.PlaceObject(i, j - 1, ModContent.TileType<FarmsPots>(), true, WorldGen.genRand.Next(0, 3));
+							NetMessage.SendObjectPlacement(-1, i, j - 1, ModContent.TileType<FarmsPots>(), 0, 0, -1, -1);
 						}
 					}
 

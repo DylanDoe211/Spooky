@@ -123,8 +123,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
             NPC.noGravity = false;
             NPC.noTileCollide = false;
             NPC.HitSound = SoundID.DD2_SkeletonHurt;
-            NPC.aiStyle = 3;
-            AIType = NPCID.ZombieMushroom;
+            NPC.aiStyle = 0;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.CatacombBiome>().Type }; 
         }
 
@@ -140,6 +139,9 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
         public override void AI()
 		{
 			NPC.spriteDirection = NPC.direction;
+
+            NPC.aiStyle = 3;
+            AIType = NPCID.ZombieMushroom;
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot) 

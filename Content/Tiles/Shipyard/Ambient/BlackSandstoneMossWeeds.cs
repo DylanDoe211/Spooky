@@ -25,8 +25,8 @@ namespace Spooky.Content.Tiles.Shipyard.Ambient
             TileObjectData.newTile.AnchorValidTiles = new[] { ModContent.TileType<BlackSandstoneMoss>() };
             TileObjectData.newTile.DrawYOffset = 2;
             TileObjectData.addTile(Type);
-            AddMapEntry(new Color(54, 199, 191));
-            DustType = ModContent.DustType<ShipyardMossDust>();
+            AddMapEntry(new Color(64, 90, 133));
+            DustType = ModContent.DustType<ShipyardMossGrassDust>();
             HitSound = SoundID.Grass;
         }
 
@@ -34,9 +34,15 @@ namespace Spooky.Content.Tiles.Shipyard.Ambient
 		{
 			float divide = 1500f;
 
-			r = 54f / divide;
-			g = 199f / divide;
-			b = 191f / divide;
+			r = 66f / divide;
+			g = 138f / divide;
+			b = 255f / divide;
+        }
+
+        public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY)
+        {
+            offsetY = -14;
+            height = 36;
         }
 
         public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects)

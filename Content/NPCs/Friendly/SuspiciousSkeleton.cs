@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Spooky.Core;
 using Spooky.Content.Items.Costume;
 using Spooky.Content.Items.Cemetery.Contraband;
+using Spooky.Content.Items.Food;
 using Spooky.Content.Items.Pets;
 
 namespace Spooky.Content.NPCs.Friendly
@@ -155,7 +156,8 @@ namespace Spooky.Content.NPCs.Friendly
             .Add(new Item(ModContent.ItemType<PetscopTool2>()) { shopCustomPrice = 100000 })
             .Add(new Item(ModContent.ItemType<PetscopTool3>()) { shopCustomPrice = 100000 })
             .Add<SirenHead>()
-            .Add<PartySkeletonSkull>();
+            .Add<PartySkeletonSkull>()
+            .Add<Lean>();
 
             npcShop.Register();
         }

@@ -76,19 +76,15 @@ namespace Spooky.Content.Tiles.Catacomb
             if (!Above.HasTile && Above.LiquidAmount <= 0 && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock) 
             {
                 //grow weeds
-                if (Main.rand.NextBool(8))
+                if (Main.rand.NextBool(10))
                 {
-                    WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<CatacombWeeds>(), true);
-                    Above.TileFrameX = (short)(WorldGen.genRand.Next(18) * 18);
-					NetMessage.SendTileSquare(-1, i, j - 1, 1, TileChangeType.None);
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<CatacombWeeds>(), true, Main.rand.Next(0, 18));
                 }
 
                 //grow mushrooms
                 if (Main.rand.NextBool(25))
                 {
-                    WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<SporeMushroom>(), true);
-                    Above.TileFrameX = (short)(WorldGen.genRand.Next(8) * 18);
-					NetMessage.SendTileSquare(-1, i, j - 1, 1, TileChangeType.None);
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<SporeMushroom>(), true, Main.rand.Next(0, 8));
                 }
 
                 //grow giant flowers
@@ -134,12 +130,12 @@ namespace Spooky.Content.Tiles.Catacomb
 		}
 
 		public override void RandomUpdate(int i, int j)
-		{
-			Tile Tile = Framing.GetTileSafely(i, j);
+        {
+            Tile Tile = Framing.GetTileSafely(i, j);
 			Tile Below = Framing.GetTileSafely(i, j + 1);
-			Tile Above = Framing.GetTileSafely(i, j - 1);
+            Tile Above = Framing.GetTileSafely(i, j - 1);
 
-			if (!Below.HasTile && Below.LiquidAmount <= 0 && !Tile.BottomSlope) 
+            if (!Below.HasTile && Below.LiquidAmount <= 0 && !Tile.BottomSlope) 
             {
                 //grow vines
                 if (Main.rand.NextBool(15)) 
@@ -154,26 +150,22 @@ namespace Spooky.Content.Tiles.Catacomb
                 //grow weeds
                 if (Main.rand.NextBool(8))
                 {
-                    WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<CatacombWeeds>(), true);
-                    Above.TileFrameX = (short)(WorldGen.genRand.Next(18) * 18);
-					NetMessage.SendTileSquare(-1, i, j - 1, 1, TileChangeType.None);
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<CatacombWeeds>(), true, Main.rand.Next(0, 18));
                 }
 
                 //grow mushrooms
                 if (Main.rand.NextBool(25))
                 {
-                    WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<SporeMushroom>(), true);
-                    Above.TileFrameX = (short)(WorldGen.genRand.Next(8) * 18);
-					NetMessage.SendTileSquare(-1, i, j - 1, 1, TileChangeType.None);
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<SporeMushroom>(), true, Main.rand.Next(0, 8));
                 }
 
                 //grow giant flowers
-                if (Main.rand.NextBool(10) && !Main.tile[i, j].LeftSlope && !Main.tile[i, j].RightSlope && !Main.tile[i, j].IsHalfBlock)
+				if (Main.rand.NextBool(10) && !Main.tile[i, j].LeftSlope && !Main.tile[i, j].RightSlope && !Main.tile[i, j].IsHalfBlock)
 				{
 					Catacombs.GrowGiantFlower(i, j, ModContent.TileType<BigFlower>());
 				}
             }
-		}
+        }
 	}
 
 	public class CatacombBrick2GrassSafe : ModTile
@@ -232,18 +224,20 @@ namespace Spooky.Content.Tiles.Catacomb
                 //grow weeds
                 if (Main.rand.NextBool(8))
                 {
-                    WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<CatacombWeeds>(), true);
-                    Above.TileFrameX = (short)(WorldGen.genRand.Next(18) * 18);
-					NetMessage.SendTileSquare(-1, i, j - 1, 1, TileChangeType.None);
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<CatacombWeeds>(), true, Main.rand.Next(0, 18));
                 }
 
                 //grow mushrooms
                 if (Main.rand.NextBool(25))
                 {
-                    WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<SporeMushroom>(), true);
-                    Above.TileFrameX = (short)(WorldGen.genRand.Next(8) * 18);
-					NetMessage.SendTileSquare(-1, i, j - 1, 1, TileChangeType.None);
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<SporeMushroom>(), true, Main.rand.Next(0, 8));
                 }
+
+                //grow giant flowers
+				if (Main.rand.NextBool(10) && !Main.tile[i, j].LeftSlope && !Main.tile[i, j].RightSlope && !Main.tile[i, j].IsHalfBlock)
+				{
+					Catacombs.GrowGiantFlower(i, j, ModContent.TileType<BigFlower>());
+				}
             }
         }
     }

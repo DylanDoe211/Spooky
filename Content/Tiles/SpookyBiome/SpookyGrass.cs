@@ -85,31 +85,24 @@ namespace Spooky.Content.Tiles.SpookyBiome
             if (!Above.HasTile && Above.LiquidAmount <= 0 && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock) 
             {
                 //grow small weeds
-                if (Main.rand.NextBool(15))
+                if (Main.rand.NextBool(10))
                 {
-                    WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<SpookyWeedsOrange>(), true);
-                    Above.TileFrameX = (short)(WorldGen.genRand.Next(10) * 18);
-					NetMessage.SendTileSquare(-1, i, j - 1, 1, TileChangeType.None);
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<SpookyWeedsOrange>(), true, Main.rand.Next(0, 10));
 				}
                 
                 //grow colored gourds
-                if (Main.rand.NextBool(40) && SpookyForest.CanGrowGourd(i, j))
+                if (Main.rand.NextBool(30) && SpookyForest.CanGrowGourd(i, j))
                 {
                     ushort[] Gourds = new ushort[] { (ushort)ModContent.TileType<GourdGreen>(), (ushort)ModContent.TileType<GourdLime>(), 
                     (ushort)ModContent.TileType<GourdLimeOrange>(), (ushort)ModContent.TileType<GourdOrange>(), (ushort)ModContent.TileType<GourdRed>(), 
                     (ushort)ModContent.TileType<GourdWhite>(), (ushort)ModContent.TileType<GourdYellow>(), (ushort)ModContent.TileType<GourdYellowGreen>() };
-
-                    ushort newObject = Main.rand.Next(Gourds);
-
-                    WorldGen.PlaceObject(i, j - 1, newObject, true, Main.rand.Next(0, 2));
-                    NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
+                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Gourds), true, Main.rand.Next(0, 2));
                 }
 
                 //grow rotten gourd
-                if (Main.rand.NextBool(50) && SpookyForest.CanGrowRottenGourd(i, j))
+                if (Main.rand.NextBool(40) && SpookyForest.CanGrowRottenGourd(i, j))
                 {
-                    WorldGen.PlaceObject(i, j - 1, (ushort)ModContent.TileType<GourdRotten>(), true, Main.rand.Next(0, 2));
-                    NetMessage.SendObjectPlacement(-1, i, j - 1, (ushort)ModContent.TileType<GourdRotten>(), 0, 0, -1, -1);
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<GourdRotten>(), true, Main.rand.Next(0, 2));
                 }
             }
 

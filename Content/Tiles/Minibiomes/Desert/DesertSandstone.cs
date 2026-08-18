@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
+using Spooky.Core;
 using Spooky.Content.Generation;
 using Spooky.Content.Tiles.Minibiomes.Desert.Ambient;
 
@@ -26,22 +27,19 @@ namespace Spooky.Content.Tiles.Minibiomes.Desert
 		public override void RandomUpdate(int i, int j)
         {
             Tile Tile = Framing.GetTileSafely(i, j);
+			Tile Above = Framing.GetTileSafely(i, j - 1);
 
 			//grow cactus
-			if (Main.rand.NextBool(15) && TarPits.CanPlaceCactus(i, j) && !Main.tile[i, j].LeftSlope && !Main.tile[i, j].RightSlope && !Main.tile[i, j].IsHalfBlock)
+			if (Main.rand.NextBool(10) && !Above.HasTile && TarPits.CanPlaceCactus(i, j) && !Main.tile[i, j].LeftSlope && !Main.tile[i, j].RightSlope && !Main.tile[i, j].IsHalfBlock)
 			{
 				TarPitCactus.Grow(i, j - 1, 5, 12);
 			}
 
 			//grow giant cactuses
-			if (Main.rand.NextBool(30) && TarPits.CanPlaceCactus(i, j))
+			if (Main.rand.NextBool(30) && !Above.HasTile && TarPits.CanPlaceCactus(i, j))
 			{
 				ushort[] Cactuses = new ushort[] { (ushort)ModContent.TileType<TarPitsGiantCactus1>(), (ushort)ModContent.TileType<TarPitsGiantCactus2>() };
-
-				ushort newObject = Main.rand.Next(Cactuses);
-
-				WorldGen.PlaceObject(i, j - 1, newObject);
-				NetMessage.SendObjectPlacement(-1, i, j - 1, newObject, 0, 0, -1, -1);
+				TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Cactuses), true);
 			}
 		}
 	}

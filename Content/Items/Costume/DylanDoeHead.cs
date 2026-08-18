@@ -28,9 +28,15 @@ namespace Spooky.Content.Items.Costume
 
 		public override bool ModifyEquipTextureDraw(ref PlayerDrawSet drawInfo, ref DrawData drawData, EquipTexture equipTexture, string methodName)
 		{
-			drawInfo.DrawDataCache.Add(drawData);
 			if (drawInfo.drawPlayer.direction == -1)
+			{
 				drawInfo.DrawDataCache.Add(drawData with { texture = FlipTexture.Value });
+			}
+			else
+			{
+				drawInfo.DrawDataCache.Add(drawData);
+			}
+			
 			return false;
 		}
 	}

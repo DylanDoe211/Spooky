@@ -1,37 +1,190 @@
+using Terraria;
 using Terraria.ModLoader;
+using Terraria.GameContent;
+using Terraria.Graphics.Effects;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Reflection;
 
 namespace Spooky.Content.Backgrounds.Shipyard
 {
 	public class ShipyardBG : ModSurfaceBackgroundStyle
 	{
-		public override int ChooseMiddleTexture() => BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG2");
+		public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b) => -1;
 
-		public override int ChooseFarTexture() => BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG3");
+		public override int ChooseMiddleTexture() => -1;
 
-		//uses special animation
-		private static int SurfaceFrameCounter;
-		private static int SurfaceFrame;
-		public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b)
+		public override int ChooseFarTexture() => -1;
+
+		public override bool PreDrawCloseBackground(SpriteBatch spriteBatch)
 		{
-			if (++SurfaceFrameCounter > 12)
+			FieldInfo screenOffField = typeof(Main).GetField("screenOff", BindingFlags.Instance | BindingFlags.NonPublic);
+			FieldInfo scAdjField = typeof(Main).GetField("scAdj", BindingFlags.Instance | BindingFlags.NonPublic);
+			FieldInfo BGColorModifiedField = typeof(Main).GetField("ColorOfSurfaceBackgroundsModified", BindingFlags.Static | BindingFlags.NonPublic);
+
+			float screenOff = (float)screenOffField.GetValue(Main.instance);
+			float scAdj = (float)scAdjField.GetValue(Main.instance);
+			Color BGColorModified = (Color)BGColorModifiedField.GetValue(null);
+
+			int[] textureSlots = new int[]
 			{
-				SurfaceFrame = (SurfaceFrame + 1) % 4;
-				SurfaceFrameCounter = 0;
+				BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG3"),
+				BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG2"),
+				BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG1"),
+			};
+
+			int[] glowTextureSlots = new int[]
+			{
+				BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG3Glow"),
+				BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG2Glow"),
+			};
+
+			//actual background color using vanillas own background color with modifications
+			Color BGActualColor = new Color(BGColorModified.R, BGColorModified.G, BGColorModified.B, BGColorModified.A);
+			
+			bool canBGDraw = false;
+
+			//only draw the background if you arent on the menu or a secret worldseed where surface backgrounds arent supposed to be drawn
+			if ((!Main.remixWorld || (Main.gameMenu && !WorldGen.remixWorldGen)) && (!WorldGen.remixWorldGen || !WorldGen.drunkWorldGen))
+			{
+				canBGDraw = true;
+			}
+			//dont draw while on the map
+			if (Main.mapFullscreen)
+			{
+				canBGDraw = false;
 			}
 
-			switch (SurfaceFrame)
+			int offset = 30;
+			if (Main.gameMenu)
 			{
-				case 0:
-					return BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG1-1");
-				case 1:
-					return BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG1-2");
-				case 2:
-					return BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG1-3");
-				case 3:
-					return BackgroundTextureLoader.GetBackgroundSlot("Spooky/Content/Backgrounds/Shipyard/ShipyardBG1-4");
-				default:
-					return -1;
+				offset = 0;
 			}
+			if (WorldGen.drunkWorldGen)
+			{
+				offset = -180;
+			}
+
+			float surfacePosition = (float)Main.worldSurface;
+			if (surfacePosition == 0f)
+			{
+				surfacePosition = 1f;
+			}
+
+			float screenPosition = Main.screenPosition.Y + (float)(Main.screenHeight / 2) - 600f;
+			double backgroundTopMagicNumber = (0f - screenPosition + screenOff / 2f) / (surfacePosition * 16f);
+			float bgGlobalScaleMultiplier = 2f;
+			int pushBGTopHack;
+			int offset2 = -180;
+
+			int menuOffset = 0;
+			if (Main.gameMenu)
+			{
+				menuOffset -= offset2;
+			}
+
+			pushBGTopHack = menuOffset;
+			pushBGTopHack += offset;
+			pushBGTopHack += offset2;
+
+			if (canBGDraw)
+			{
+				//width and height of the background sprite
+				int Width = 1024;
+				int Height = 481;
+
+				//offsets for each individual background layer
+				int CloseBGYOffset = -30;
+				int MiddleBGYOffset = 80;
+				int FarBGYOffset = 250;
+
+				//back layer mountain
+				var bgScale = 0.9f;
+				var bgParallax = 0.35;
+				var bgTopY = (int)(backgroundTopMagicNumber * 1800.0 + 1500.0) + (int)scAdj + pushBGTopHack;
+				bgScale *= bgGlobalScaleMultiplier;
+				var bgWidthScaled = (int)((float)Width * bgScale);
+				SkyManager.Instance.DrawToDepth(Main.spriteBatch, 1.2f / (float)bgParallax);
+				var bgStartX = (int)(0.0 - Math.IEEERemainder((double)Main.screenPosition.X * bgParallax, bgWidthScaled) - (double)(bgWidthScaled / 2));
+				
+				if (Main.gameMenu)
+				{
+					bgTopY = 320 + pushBGTopHack;
+				}
+
+				var bgLoops = Main.screenWidth / bgWidthScaled + 2;
+				if ((double)Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0)
+				{
+					for (int i = -bgLoops; i < bgLoops; i++)
+					{
+						Main.spriteBatch.Draw(TextureAssets.Background[textureSlots[0]].Value, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + FarBGYOffset), 
+						new Rectangle(0, 0, Width, Height), BGActualColor, 0f, default(Vector2), bgScale, SpriteEffects.None, 0f);
+						Main.spriteBatch.Draw(TextureAssets.Background[glowTextureSlots[0]].Value, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + FarBGYOffset), 
+						new Rectangle(0, 0, Width, Height), Color.White * 0.25f, 0f, default(Vector2), bgScale, SpriteEffects.None, 0f);
+					}
+				}
+
+				//far layer infront of mountain
+				Width = 1024;
+				Height = 576;
+
+				bgScale = 1.1f;
+				bgParallax = 0.43;
+				bgTopY = (int)(backgroundTopMagicNumber * 1950.0 + 1750.0) + (int)scAdj + pushBGTopHack;
+				bgScale *= bgGlobalScaleMultiplier;
+				bgWidthScaled = (int)((float)Width * bgScale);
+				SkyManager.Instance.DrawToDepth(Main.spriteBatch, 1f / (float)bgParallax);
+				bgStartX = (int)(0.0 - Math.IEEERemainder((double)Main.screenPosition.X * bgParallax, bgWidthScaled) - (double)(bgWidthScaled / 2));
+
+				if (Main.gameMenu)
+				{
+					bgTopY = 400 + pushBGTopHack;
+					bgStartX -= 80;
+				}
+
+				bgLoops = Main.screenWidth / bgWidthScaled + 2;
+				if ((double)Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0)
+				{
+					for (int i = -bgLoops; i < bgLoops; i++)
+					{
+						Main.spriteBatch.Draw(TextureAssets.Background[textureSlots[1]].Value, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + MiddleBGYOffset), 
+						new Rectangle(0, 0, Width, Height), BGActualColor, 0f, default(Vector2), bgScale, SpriteEffects.None, 0f);
+						Main.spriteBatch.Draw(TextureAssets.Background[glowTextureSlots[1]].Value, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + MiddleBGYOffset), 
+						new Rectangle(0, 0, Width, Height), Color.White * 0.25f, 0f, default(Vector2), bgScale, SpriteEffects.None, 0f);
+					}
+				}
+
+				//closer layer behind the front
+				Width = 1024;
+				Height = 549;
+
+				bgScale = 1.22f;
+				bgParallax = 0.49;
+				bgTopY = (int)(backgroundTopMagicNumber * 2100.0 + 2000.0) + (int)scAdj + pushBGTopHack;
+				bgScale *= bgGlobalScaleMultiplier;
+				bgWidthScaled = (int)((float)Width * bgScale);
+				SkyManager.Instance.DrawToDepth(Main.spriteBatch, 1f / (float)bgParallax);
+				bgStartX = (int)(0.0 - Math.IEEERemainder((double)Main.screenPosition.X * bgParallax, bgWidthScaled) - (double)(bgWidthScaled / 2));
+
+				if (Main.gameMenu)
+				{
+					bgTopY = 480 + pushBGTopHack;
+					bgStartX -= 100;
+				}
+
+				bgLoops = Main.screenWidth / bgWidthScaled + 2;
+				if ((double)Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0)
+				{
+					for (int i = -bgLoops; i < bgLoops; i++)
+					{
+						Main.spriteBatch.Draw(TextureAssets.Background[textureSlots[2]].Value, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + CloseBGYOffset), 
+						new Rectangle(0, 0, Width, Height), BGActualColor, 0f, default(Vector2), bgScale, SpriteEffects.None, 0f);
+					}
+				}
+			}
+
+			return false;
 		}
 
 		public override void ModifyFarFades(float[] fades, float transitionSpeed)

@@ -422,27 +422,32 @@ namespace Spooky.Core
 			{
                 pool.Clear();
 
-				//do not allow catacomb enemies to spawn when not behind catacomb brick wall
-				if ((Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY].WallType == ModContent.WallType<CatacombBrickWall1>() || 
-				Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY - 1].WallType == ModContent.WallType<CatacombBrickWall1>()) &&
+				int[] ValidSpawnWalls = { ModContent.WallType<CatacombBrickWall1>(), ModContent.WallType<CatacombGrassWall1>() };
+
+                //do not allow catacomb enemies to spawn when not behind catacomb brick wall
+				if ((ValidSpawnWalls.Contains(Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY].WallType) || 
+				ValidSpawnWalls.Contains(Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY - 1].WallType)) &&
 				!TileID.Sets.Platforms[Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY].TileType])
 				{
 					if (Flags.CatacombKey1)
 					{
-						pool.Add(ModContent.NPCType<Skeletoid1>(), 5);
-						pool.Add(ModContent.NPCType<Skeletoid2>(), 5);
-						pool.Add(ModContent.NPCType<Skeletoid3>(), 5);
-						pool.Add(ModContent.NPCType<Skeletoid4>(), 5);
-						pool.Add(ModContent.NPCType<SkeletoidBig>(), 3);
-						pool.Add(ModContent.NPCType<RollingSkull1>(), 4);
-						pool.Add(ModContent.NPCType<RollingSkull2>(), 4);
-						pool.Add(ModContent.NPCType<RollingSkull3>(), 4);
+						pool.Add(ModContent.NPCType<Skeletoid1>(), 3);
+						pool.Add(ModContent.NPCType<Skeletoid2>(), 3);
+						pool.Add(ModContent.NPCType<Skeletoid3>(), 3);
+						pool.Add(ModContent.NPCType<Skeletoid4>(), 3);
+						pool.Add(ModContent.NPCType<BoneWorm1>(), 2);
+						pool.Add(ModContent.NPCType<BoneWorm2>(), 2);
+						pool.Add(ModContent.NPCType<SkeletoidBig>(), 1);
+						pool.Add(ModContent.NPCType<RollingSkull1>(), 3);
+						pool.Add(ModContent.NPCType<RollingSkull2>(), 3);
+						pool.Add(ModContent.NPCType<RollingSkull3>(), 3);
 						pool.Add(ModContent.NPCType<RollingSkull4>(), 1);
-						pool.Add(ModContent.NPCType<GiantPutty>(), 5);
-						pool.Add(ModContent.NPCType<BoneStackerBase>(), 4);
-						pool.Add(ModContent.NPCType<ZomboidNecromancer>(), 3);
-						pool.Add(ModContent.NPCType<ZomboidPyromancer>(), 3);
-						pool.Add(ModContent.NPCType<ZomboidSuspiciomancer>(), 2);
+						pool.Add(ModContent.NPCType<GiantPutty>(), 3);
+						pool.Add(ModContent.NPCType<BoneStackerBase>(), 3);
+						pool.Add(ModContent.NPCType<ZomboidGlyphomancer>(), 2);
+						pool.Add(ModContent.NPCType<ZomboidNecromancer>(), 2);
+						pool.Add(ModContent.NPCType<ZomboidPyromancer>(), 2);
+						pool.Add(ModContent.NPCType<ZomboidSuspiciomancer>(), 1);
 					}
 					else
 					{
@@ -456,44 +461,46 @@ namespace Spooky.Core
 			{
                 pool.Clear();
 
+				int[] ValidSpawnWalls = { ModContent.WallType<CatacombBrickWall2>(), ModContent.WallType<CatacombGrassWall2>() };
+
                 //do not allow catacomb enemies to spawn when not behind catacomb brick wall
-				if ((Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY].WallType == ModContent.WallType<CatacombBrickWall2>() || 
-				Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY - 1].WallType == ModContent.WallType<CatacombBrickWall2>()) &&
+				if ((ValidSpawnWalls.Contains(Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY].WallType) || 
+				ValidSpawnWalls.Contains(Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY - 1].WallType)) &&
 				!TileID.Sets.Platforms[Main.tile[spawnInfo.SpawnTileX, spawnInfo.SpawnTileY].TileType])
 				{
 					if (Flags.CatacombKey2)
 					{
-						pool.Add(ModContent.NPCType<CatacombCrusherSpawner>(), 5);
-						pool.Add(ModContent.NPCType<CelebrationSkeletoid1>(), 5);
-						pool.Add(ModContent.NPCType<CelebrationSkeletoid2>(), 5);
-						pool.Add(ModContent.NPCType<CelebrationSkeletoid3>(), 5);
-						pool.Add(ModContent.NPCType<CelebrationSkeletoid4>(), 5);
-						pool.Add(ModContent.NPCType<CelebrationSkeletoid5>(), 5);
+						pool.Add(ModContent.NPCType<CatacombCrusherSpawner>(), 2);
+						pool.Add(ModContent.NPCType<CelebrationSkeletoid1>(), 3);
+						pool.Add(ModContent.NPCType<CelebrationSkeletoid2>(), 3);
+						pool.Add(ModContent.NPCType<CelebrationSkeletoid3>(), 3);
+						pool.Add(ModContent.NPCType<CelebrationSkeletoid4>(), 3);
+						pool.Add(ModContent.NPCType<CelebrationSkeletoid5>(), 3);
 						pool.Add(ModContent.NPCType<FlushBush1>(), 2);
 						pool.Add(ModContent.NPCType<FlushBush2>(), 2);
 						pool.Add(ModContent.NPCType<FlushBush3>(), 2);
 						pool.Add(ModContent.NPCType<FlushBush4>(), 2);
-						pool.Add(ModContent.NPCType<JumpingSeed1>(), 4);
-						pool.Add(ModContent.NPCType<JumpingSeed2>(), 4);
-						pool.Add(ModContent.NPCType<JumpingSeed3>(), 4);
-						pool.Add(ModContent.NPCType<LilySlime1Big>(), 3);
-						pool.Add(ModContent.NPCType<LilySlime1Small>(), 3);
-						pool.Add(ModContent.NPCType<LilySlime2Big>(), 3);
-						pool.Add(ModContent.NPCType<LilySlime2Small>(), 3);
-						pool.Add(ModContent.NPCType<OrchidStem>(), 12);
-						pool.Add(ModContent.NPCType<PitcherPlant1>(), 3);
-						pool.Add(ModContent.NPCType<PitcherPlant2>(), 3);
-						pool.Add(ModContent.NPCType<PitcherPlant3>(), 3);
-						pool.Add(ModContent.NPCType<PitcherPlant4>(), 3);
-						pool.Add(ModContent.NPCType<PlantTrap1>(), 2);
-						pool.Add(ModContent.NPCType<PlantTrap2>(), 2);
-						pool.Add(ModContent.NPCType<PlantTrap3>(), 2);
-						pool.Add(ModContent.NPCType<PlantTrap4>(), 2);
-						pool.Add(ModContent.NPCType<PlantTrap5>(), 2);
-						pool.Add(ModContent.NPCType<PlantTrap6>(), 2);
+						pool.Add(ModContent.NPCType<JumpingSeed1>(), 3);
+						pool.Add(ModContent.NPCType<JumpingSeed2>(), 3);
+						pool.Add(ModContent.NPCType<JumpingSeed3>(), 3);
+						pool.Add(ModContent.NPCType<LilySlime1Big>(), 2);
+						pool.Add(ModContent.NPCType<LilySlime1Small>(), 2);
+						pool.Add(ModContent.NPCType<LilySlime2Big>(), 2);
+						pool.Add(ModContent.NPCType<LilySlime2Small>(), 2);
+						pool.Add(ModContent.NPCType<OrchidStem>(), 3);
+						pool.Add(ModContent.NPCType<PitcherPlant1>(), 2);
+						pool.Add(ModContent.NPCType<PitcherPlant2>(), 2);
+						pool.Add(ModContent.NPCType<PitcherPlant3>(), 2);
+						pool.Add(ModContent.NPCType<PitcherPlant4>(), 2);
+						pool.Add(ModContent.NPCType<PlantTrap1>(), 1);
+						pool.Add(ModContent.NPCType<PlantTrap2>(), 1);
+						pool.Add(ModContent.NPCType<PlantTrap3>(), 1);
+						pool.Add(ModContent.NPCType<PlantTrap4>(), 1);
+						pool.Add(ModContent.NPCType<PlantTrap5>(), 1);
+						pool.Add(ModContent.NPCType<PlantTrap6>(), 1);
 						pool.Add(ModContent.NPCType<PollinatorBeeDamage>(), 2);
 						pool.Add(ModContent.NPCType<PollinatorBeeHealing>(), 2);
-						pool.Add(ModContent.NPCType<SkeletoidBandit>(), 2);
+						pool.Add(ModContent.NPCType<SkeletoidBandit>(), 1);
 						pool.Add(ModContent.NPCType<Sunflower1>(), 3);
 						pool.Add(ModContent.NPCType<Sunflower2>(), 3);
 						pool.Add(ModContent.NPCType<Sunflower3>(), 3);
@@ -1008,6 +1015,11 @@ namespace Spooky.Core
 						pool.Add(ModContent.NPCType<ChristmasTreeMimic>(), Flags.OldHunterQuest7 ? 0.15f : 0.45f);
 					}
 				}
+			}
+
+			if (spawnInfo.Player.InModBiome(ModContent.GetInstance<ShipyardBiome>()))
+			{
+				pool.Clear();
 			}
 
 			//dumb zomboid can spawn anywhere super rarely

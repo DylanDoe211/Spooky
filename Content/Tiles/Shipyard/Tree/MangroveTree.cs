@@ -12,6 +12,7 @@ using System;
 
 using Spooky.Core;
 using Spooky.Content.Gores.Misc;
+using Spooky.Content.Items.Food;
 
 namespace Spooky.Content.Tiles.Shipyard.Tree
 {
@@ -192,6 +193,25 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
             }
 		}
 
+        private void TreeShakeStuff(int x, int y)
+        {
+            while (Main.tile[x, y].TileType == Type)
+			{
+                if (Main.rand.NextBool(15) && Framing.GetTileSafely(x, y).TileFrameX == 36)
+                {
+                    int NewItem = Item.NewItem(new EntitySource_TileBreak(x, y), new Vector2((x * 16) + Main.rand.Next(-50, 50), (y * 16) + Main.rand.Next(-100, -25)), ModContent.ItemType<Durian>());
+                    if (Main.netMode == NetmodeID.MultiplayerClient && NewItem >= 0)
+					{
+						NetMessage.SendData(MessageID.SyncItem, -1, -1, null, NewItem, 1f);
+					}
+                }
+
+				y++;
+			}
+
+			y--;
+        }
+
 		private void KillEntireTreeDown(ref int x, ref int y)
 		{
 			while (Main.tile[x, y].TileType == Type)
@@ -240,6 +260,8 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
             //spawn leaves from tree tops
             if (Framing.GetTileSafely(i, j).TileFrameX == 36)
             {
+                TreeShakeStuff(i, j);
+
                 int frame = Framing.GetTileSafely(i, j).TileFrameY / 18;
                 int MaxLeaves = Main.rand.Next(15, 25);
                 for (int numLeaf = 0; numLeaf <= MaxLeaves; numLeaf++)

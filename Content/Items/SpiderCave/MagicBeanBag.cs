@@ -18,8 +18,8 @@ namespace Spooky.Content.Items.SpiderCave
 			Item.DamageType = DamageClass.Magic;
 			Item.noMelee = true;
 			Item.autoReuse = true;
-			Item.width = 28;
-			Item.height = 32;
+			Item.width = 34;
+			Item.height = 34;
 			Item.useTime = 35;
 			Item.useAnimation = 35;
 			Item.useStyle = ItemUseStyleID.RaiseLamp;

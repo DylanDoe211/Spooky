@@ -54,9 +54,9 @@ namespace Spooky.Content.Dusts
 
 			float divide = 1000f;
 
-			float r = 54f / divide;
-			float g = 199f / divide;
-			float b = 191f / divide;
+			float r = 122f / divide;
+			float g = 173f / divide;
+			float b = 233f / divide;
 
 			Lighting.AddLight((int)(dust.position.X / 16f), (int)(dust.position.Y / 16f), r * dust.scale, g * dust.scale, b * dust.scale);
 

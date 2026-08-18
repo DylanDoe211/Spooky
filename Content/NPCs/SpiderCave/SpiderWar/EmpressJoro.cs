@@ -12,6 +12,7 @@ using System.IO;
 using System.Collections.Generic;
 
 using Spooky.Core;
+using Spooky.Content.Items.Pets;
 using Spooky.Content.Items.SpiderCave;
 using Spooky.Content.NPCs.SpiderCave.Projectiles;
 using Spooky.Content.Tiles.Trophy;
@@ -489,6 +490,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
         {
             npcLoot.Add(ItemDropRule.ByCondition(new DropConditions.SpiderWarItemDropCondition(), ModContent.ItemType<SpiderWarRemote>()));
 			npcLoot.Add(ItemDropRule.ByCondition(new DropConditions.SpiderWarItemDropCondition(), ModContent.ItemType<EmpressJoroTrophyItem>()));
+			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FireflyLight>(), 30));
 		}
 
 		public override void HitEffect(NPC.HitInfo hit) 

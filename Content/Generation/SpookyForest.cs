@@ -529,7 +529,7 @@ namespace Spooky.Content.Generation
 					{
 						if (WorldGen.genRand.NextBool())
 						{
-							WorldGen.PlaceObject(X, Y - 1, (ushort)ModContent.TileType<MossyRock>());
+							TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<MossyRock>(), true);
 						}
 					}
 
@@ -548,20 +548,13 @@ namespace Spooky.Content.Generation
 							ushort[] Gourds = new ushort[] { (ushort)ModContent.TileType<GourdGreen>(), (ushort)ModContent.TileType<GourdLime>(),
 							(ushort)ModContent.TileType<GourdLimeOrange>(), (ushort)ModContent.TileType<GourdOrange>(), (ushort)ModContent.TileType<GourdRed>(),
 							(ushort)ModContent.TileType<GourdWhite>(), (ushort)ModContent.TileType<GourdYellow>(), (ushort)ModContent.TileType<GourdYellowGreen>() };
-
-							WorldGen.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Gourds), true, WorldGen.genRand.Next(0, 2));
+							TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Gourds), true, WorldGen.genRand.Next(0, 2));
 						}
 
 						//grow weeds
 						if (WorldGen.genRand.NextBool() && !tileAbove.HasTile && !tile.LeftSlope && !tile.RightSlope && !tile.IsHalfBlock)
 						{
-							WorldGen.PlaceTile(X, Y - 1, (ushort)ModContent.TileType<SpookyWeedsOrange>());
-							tileAbove.TileFrameX = (short)(WorldGen.genRand.Next(10) * 18);
-							WorldGen.SquareTileFrame(X, Y + 1, true);
-							if (Main.netMode == NetmodeID.Server)
-							{
-								NetMessage.SendTileSquare(-1, X, Y - 1, 1, TileChangeType.None);
-							}
+							TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<SpookyWeedsOrange>(), true, WorldGen.genRand.Next(0, 10));
 						}
 					}
 					if (tile.TileType == (ushort)ModContent.TileType<SpookyGrassGreen>())
@@ -569,7 +562,7 @@ namespace Spooky.Content.Generation
 						//rotten gourds
 						if (WorldGen.genRand.NextBool(5) && CanGrowRottenGourd(X, Y))
 						{
-							WorldGen.PlaceObject(X, Y - 1, (ushort)ModContent.TileType<GourdRotten>());
+							TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<GourdRotten>(), true);
 						}
 
 						//gourds
@@ -578,21 +571,13 @@ namespace Spooky.Content.Generation
 							ushort[] Gourds = new ushort[] { (ushort)ModContent.TileType<GourdGreen>(), (ushort)ModContent.TileType<GourdLime>(),
 							(ushort)ModContent.TileType<GourdLimeOrange>(), (ushort)ModContent.TileType<GourdOrange>(), (ushort)ModContent.TileType<GourdRed>(),
 							(ushort)ModContent.TileType<GourdWhite>(), (ushort)ModContent.TileType<GourdYellow>(), (ushort)ModContent.TileType<GourdYellowGreen>() };
-
-							WorldGen.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Gourds), true, WorldGen.genRand.Next(0, 2));
+							TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Gourds), true, WorldGen.genRand.Next(0, 2));
 						}
 
 						//grow weeds
 						if (WorldGen.genRand.NextBool() && !tileAbove.HasTile && !tile.LeftSlope && !tile.RightSlope && !tile.IsHalfBlock)
 						{
-							WorldGen.PlaceTile(X, Y - 1, (ushort)ModContent.TileType<SpookyWeedsGreen>());
-							tileAbove.TileFrameY = 0;
-							tileAbove.TileFrameX = (short)(WorldGen.genRand.Next(10) * 18);
-							WorldGen.SquareTileFrame(X, Y + 1, true);
-							if (Main.netMode == NetmodeID.Server)
-							{
-								NetMessage.SendTileSquare(-1, X, Y - 1, 1, TileChangeType.None);
-							}
+							TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<SpookyWeedsGreen>(), true, WorldGen.genRand.Next(0, 10));
 						}
 					}
 				}
@@ -609,13 +594,12 @@ namespace Spooky.Content.Generation
 						if (WorldGen.genRand.NextBool(4))
 						{
 							ushort[] Vines = new ushort[] { (ushort)ModContent.TileType<HangingVine1>(), (ushort)ModContent.TileType<HangingVine2>(), (ushort)ModContent.TileType<HangingVine3>() };
-
-							WorldGen.PlaceObject(X, Y + 1, WorldGen.genRand.Next(Vines));
+							TileGlobal.PlaceObject(X, Y + 1, WorldGen.genRand.Next(Vines), true);
 						}
 
 						if (WorldGen.genRand.NextBool(3))
 						{
-							WorldGen.PlaceObject(X, Y - 1, (ushort)ModContent.TileType<MossyRock>());
+							TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<MossyRock>(), true);
 						}
 					}
 
@@ -627,8 +611,7 @@ namespace Spooky.Content.Generation
 						{
 							ushort[] Shrooms = new ushort[] { (ushort)ModContent.TileType<GiantShroom1>(), (ushort)ModContent.TileType<GiantShroom2>(),
 							(ushort)ModContent.TileType<GiantShroom3>(), (ushort)ModContent.TileType<GiantShroom4>() };
-
-							WorldGen.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Shrooms));
+							TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Shrooms), true);
 						}
 
 						//grow big yellow mushrooms
@@ -636,8 +619,7 @@ namespace Spooky.Content.Generation
 						{
 							ushort[] Shrooms = new ushort[] { (ushort)ModContent.TileType<GiantShroomYellow1>(), (ushort)ModContent.TileType<GiantShroomYellow2>(),
 							(ushort)ModContent.TileType<GiantShroomYellow3>(), (ushort)ModContent.TileType<GiantShroomYellow4>() };
-
-							WorldGen.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Shrooms));
+							TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Shrooms), true);
 						}
 
 						//place mushroom rock piles
@@ -645,15 +627,27 @@ namespace Spooky.Content.Generation
 						{
 							ushort[] RockPiles = new ushort[] { (ushort)ModContent.TileType<MushroomRockGiant>(),
 							(ushort)ModContent.TileType<MushroomRockBig>(), (ushort)ModContent.TileType<MushroomRockSmall>() };
-
-							WorldGen.PlaceObject(X, Y - 1, WorldGen.genRand.Next(RockPiles));
+							TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(RockPiles), true);
 						}
 
 						//grow weeds
 						if (WorldGen.genRand.NextBool(3) && !Main.tile[X, Y - 1].HasTile && !Main.tile[X, Y].LeftSlope && !Main.tile[X, Y].RightSlope && !Main.tile[X, Y].IsHalfBlock)
 						{
-							WorldGen.PlaceTile(X, Y - 1, (ushort)ModContent.TileType<SpookyMushroom>());
-							Main.tile[X, Y - 1].TileFrameX = (short)(WorldGen.genRand.Next(4) * 18);
+							TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<SpookyMushroom>(), true, WorldGen.genRand.Next(0, 4));
+						}
+					}
+
+					//generate pots and destroy vanilla pots
+					if (Main.tile[X, Y].TileType == ModContent.TileType<SpookyStone>() || Main.tile[X, Y].TileType == ModContent.TileType<SpookyGrass>() || 
+					Main.tile[X, Y].TileType == ModContent.TileType<SpookyGrassGreen>() || Main.tile[X, Y].TileType == ModContent.TileType<MushroomMoss>())
+					{
+						if (Main.tile[X, Y - 1].TileType == 28)
+						{
+							WorldGen.KillTile(X, Y - 1);
+						}
+						if (WorldGen.genRand.NextBool(3))
+						{
+							TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<SpookyBiomePots>(), true, WorldGen.genRand.Next(0, 3));
 						}
 					}
 				}
@@ -676,27 +670,27 @@ namespace Spooky.Content.Generation
 					//table
 					if (WorldGen.genRand.NextBool(5) && IsFlatSurface(X, Y, 5))
 					{
-						WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<OldWoodTable>());
-						WorldGen.PlaceObject(X - 2, Y - 1, ModContent.TileType<OldWoodChair>(), direction: 1);
-						WorldGen.PlaceObject(X + 2, Y - 1, ModContent.TileType<OldWoodChair>(), direction: -1);
+						TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<OldWoodTable>(), true);
+						TileGlobal.PlaceObject(X - 2, Y - 1, ModContent.TileType<OldWoodChair>(), true, direction: 1);
+						TileGlobal.PlaceObject(X + 2, Y - 1, ModContent.TileType<OldWoodChair>(), true, direction: -1);
 					}
 
 					//bookcases
 					if (WorldGen.genRand.NextBool(7) && IsFlatSurface(X, Y, 3))
 					{
-						WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<OldWoodBookcase>());
+						TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<OldWoodBookcase>(), true);
 					}
 
 					//organ
 					if (WorldGen.genRand.NextBool(10) && IsFlatSurface(X, Y, 3))
 					{
-						WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<OldWoodOrgan>());
+						TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<OldWoodOrgan>(), true);
 					}
 
 					//work benches
 					if (WorldGen.genRand.NextBool(3) && IsFlatSurface(X, Y, 2))
 					{
-						WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<OldWoodWorkBench>());
+						TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<OldWoodWorkBench>(), true);
 					}
 				}
 			}

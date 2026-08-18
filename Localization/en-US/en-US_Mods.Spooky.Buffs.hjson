@@ -739,3 +739,13 @@ SpiderWarWebSlowDebuff: {
 	DisplayName: Spider War Web Slow
 	Description: ""
 }
+
+FireflyPetBuff: {
+	DisplayName: Firefly
+	Description: The firefly lights your way
+}
+
+CrabPetBuff: {
+	DisplayName: Vampire Crab
+	Description: It scuttles behind you
+}

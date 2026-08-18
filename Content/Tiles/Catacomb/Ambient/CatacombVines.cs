@@ -69,7 +69,7 @@ namespace Spooky.Content.Tiles.Catacomb.Ambient
 			ModContent.TileType<CatacombBrick1GrassArena>(), ModContent.TileType<CatacombBrick2GrassArena>() };
 
 			Tile tileBelow = Framing.GetTileSafely(i, j + 1);
-			if (Main.rand.NextBool(5) && !tileBelow.HasTile && tileBelow.LiquidType != LiquidID.Lava)
+			if (Main.rand.NextBool(12) && !tileBelow.HasTile && tileBelow.LiquidType != LiquidID.Lava)
             {
 				bool PlaceVine = false;
 				int Test = j;

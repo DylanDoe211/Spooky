@@ -663,7 +663,7 @@ namespace Spooky.Content.Generation
 						//place ceiling webs
 						if (tile.TileType == ModContent.TileType<WebBlock>())
 						{
-							WorldGen.PlaceObject(X, Y + 1, ModContent.TileType<HangingWeb>(), true, WorldGen.genRand.Next(0, 6));
+							TileGlobal.PlaceObject(X, Y + 1, ModContent.TileType<HangingWeb>(), true, WorldGen.genRand.Next(0, 6));
 						}
 
                         //place stalagmite and stalactite
@@ -671,12 +671,12 @@ namespace Spooky.Content.Generation
 						{
                             if (WorldGen.genRand.NextBool(5))
 							{
-							    WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<DampStalagmite>(), true, WorldGen.genRand.Next(0, 6));
+							    TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<DampStalagmite>(), true, WorldGen.genRand.Next(0, 6));
                             }
 
                             if (WorldGen.genRand.NextBool(5))
 							{
-							    WorldGen.PlaceObject(X, Y + 1, ModContent.TileType<DampStalactite>(), true, WorldGen.genRand.Next(0, 6));
+							    TileGlobal.PlaceObject(X, Y + 1, ModContent.TileType<DampStalactite>(), true, WorldGen.genRand.Next(0, 6));
                             }
 						}
 
@@ -686,7 +686,7 @@ namespace Spooky.Content.Generation
 							//large hanging roots
 							if (WorldGen.genRand.NextBool(5))
 							{
-								WorldGen.PlaceObject(X, Y + 1, ModContent.TileType<HangingRoots>(), true, WorldGen.genRand.Next(0, 2));
+								TileGlobal.PlaceObject(X, Y + 1, ModContent.TileType<HangingRoots>(), true, WorldGen.genRand.Next(0, 2));
 							}
 						}
 
@@ -704,20 +704,13 @@ namespace Spooky.Content.Generation
 								ushort[] Mushrooms = new ushort[] { (ushort)ModContent.TileType<MushroomBlue>(), (ushort)ModContent.TileType<MushroomRedBrown>(),
                                 (ushort)ModContent.TileType<MushroomYellow>(), (ushort)ModContent.TileType<MushroomGreen>(), (ushort)ModContent.TileType<MushroomPurple>(),
                                 (ushort)ModContent.TileType<MushroomRed>(), (ushort)ModContent.TileType<MushroomTeal>() };
-
-								WorldGen.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Mushrooms), true, WorldGen.genRand.Next(0, 2));
+								TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Mushrooms), true, WorldGen.genRand.Next(0, 2));
 							}
 
 							//grow weeds
-							if (WorldGen.genRand.NextBool() && !tileAbove.HasTile && !tile.LeftSlope && !tile.RightSlope && !tile.IsHalfBlock)
+							if (WorldGen.genRand.NextBool() && !tileAbove.HasTile)
 							{
-								WorldGen.PlaceTile(X, Y - 1, (ushort)ModContent.TileType<SpiderCaveWeeds>());
-								tileAbove.TileFrameX = (short)(WorldGen.genRand.Next(36) * 18);
-								WorldGen.SquareTileFrame(X, Y - 1, true);
-								if (Main.netMode == NetmodeID.Server)
-								{
-									NetMessage.SendTileSquare(-1, X, Y - 1, 1, TileChangeType.None);
-								}
+                                TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<SpiderCaveWeeds>(), true, WorldGen.genRand.Next(0, 36));
 							}
 						}
 
@@ -729,20 +722,22 @@ namespace Spooky.Content.Generation
 								ushort[] Mushrooms = new ushort[] { (ushort)ModContent.TileType<MushroomBlue>(), (ushort)ModContent.TileType<MushroomRedBrown>(),
                                 (ushort)ModContent.TileType<MushroomYellow>(), (ushort)ModContent.TileType<MushroomGreen>(), (ushort)ModContent.TileType<MushroomPurple>(),
                                 (ushort)ModContent.TileType<MushroomRed>(), (ushort)ModContent.TileType<MushroomTeal>() };
-
-								WorldGen.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Mushrooms), true, WorldGen.genRand.Next(0, 2));
+								TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Mushrooms), true, WorldGen.genRand.Next(0, 2));
 							}
 
-							if (WorldGen.genRand.NextBool() && !tileAbove.HasTile && !tile.LeftSlope && !tile.RightSlope && !tile.IsHalfBlock)
+							if (WorldGen.genRand.NextBool() && !tileAbove.HasTile)
 							{
-								WorldGen.PlaceTile(X, Y - 1, (ushort)ModContent.TileType<DampMushroomWeeds>());
-								tileAbove.TileFrameX = (short)(WorldGen.genRand.Next(21) * 18);
-								WorldGen.SquareTileFrame(X, Y - 1, true);
-								if (Main.netMode == NetmodeID.Server)
-								{
-									NetMessage.SendTileSquare(-1, X, Y - 1, 1, TileChangeType.None);
-								}
+								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<DampMushroomWeeds>(), true, WorldGen.genRand.Next(0, 21));
 							}
+                        }
+
+                        //place pots
+                        if (tile.TileType == ModContent.TileType<DampStone>() || tile.TileType == ModContent.TileType<DampGrass>() || tile.TileType == ModContent.TileType<DampMushroomGrass>())
+						{
+                            if (WorldGen.genRand.NextBool(5) && !tileAbove.HasTile)
+                            {
+                                TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<SpiderCavePots>(), true, WorldGen.genRand.Next(0, 3));
+                            }
                         }
 
                         //vines

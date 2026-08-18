@@ -10,6 +10,7 @@ using System.IO;
 using Spooky.Core;
 using Spooky.Content.Backgrounds;
 using Spooky.Content.Backgrounds.Cemetery;
+using Spooky.Content.Backgrounds.Shipyard;
 using Spooky.Content.Backgrounds.SpiderCave;
 using Spooky.Content.Backgrounds.SpookyHell;
 using Spooky.Content.Biomes;
@@ -79,6 +80,7 @@ public class Spooky : Mod
 						nameof(Flags.downedOrroboro) => Flags.downedOrroboro,
 						nameof(Flags.downedSpookFishron) => Flags.downedSpookFishron,
 						nameof(Flags.downedBigBone) => Flags.downedBigBone,
+                        nameof(Flags.downedDunkleosteus) => Flags.downedDunkleosteus,
 						_ => throw new ArgumentException(text + " Is not a valid boss downed variable name"),
 					};
 				}
@@ -94,11 +96,19 @@ public class Spooky : Mod
 						_ => throw new ArgumentException(text + " Is not a valid event downed variable name"),
 					};
 				}
-			case "EyeQuest":
+				case "BiomePositions":
 				{
-					return LittleEyeCrossmod.Call(args[1..]);
+					string text = args[1] as string;
+					return text switch
+					{
+						nameof(Flags.SpiderGrottoCenter) => Flags.SpiderGrottoCenter,
+						nameof(Flags.EyeValleyCenter) => Flags.EyeValleyCenter,
+						nameof(Flags.ZombieOceanTopLeft) => Flags.ZombieOceanTopLeft,
+						nameof(Flags.ZombieOceanBottomRight) => Flags.ZombieOceanBottomRight,
+						_ => throw new ArgumentException(text + " Is not a valid biome position variable name"),
+					};
 				}
-			default:
+				default:
 				{
 					Logger.Error($"Call Error: Context '{firstArg}' is invalid.");
 					return null;
@@ -137,8 +147,8 @@ public class Spooky : Mod
 			Filters.Scene["Spooky:CemeterySky"] = new Filter(new SpookyScreenShader("FilterMiniTower").UseColor(0f, 135f, 35f).UseOpacity(0.001f), EffectPriority.VeryHigh);
 			SkyManager.Instance["Spooky:CemeterySky"] = new CemeterySky();
 
-			Filters.Scene["Spooky:ShipyardSky"] = new Filter(new SpookyScreenShader("FilterMiniTower").UseColor(149f, 131f, 217f).UseOpacity(0.0005f), EffectPriority.VeryHigh);
-			SkyManager.Instance["Spooky:ShipyardSky"] = new CemeterySky();
+                Filters.Scene["Spooky:ShipyardSky"] = new Filter(new SpookyScreenShader("FilterMiniTower").UseColor(149f, 131f, 217f).UseOpacity(0.0005f), EffectPriority.VeryHigh);
+                SkyManager.Instance["Spooky:ShipyardSky"] = new ShipyardSky();
 
 			Filters.Scene["Spooky:RaveyardSky"] = new Filter(new SpookyScreenShader("FilterMiniTower").UseColor(0f, 0f, 0f).UseOpacity(0f), EffectPriority.VeryHigh);
 			SkyManager.Instance["Spooky:RaveyardSky"] = new RaveyardSky();

@@ -1,23 +1,35 @@
 New Stuff:
 -Daffodil resprite, along with small tweaks to the fight to fit the new sprite
 -Added krampus helper outfit leggings
--Added sac of flesh as a replacement for items that are fished in the valley of eyes, its an openable item that gives you a bunch of eye valley blocks
+-Added sac of flesh as a replacement for just fishing up single blocks in the eye valley, it is a right-clickable consumable item that gives you a bunch of eye valley blocks
+-Added a bunch of new unique pots that generate in all the different spooky mod biomes (Except for the cemetery and eye valley)
+-Added a new firefly light pet that drops from spider war minibosses, and a new crab pet gotten from fishing in the spooky forest
+-Added long skeletoids and zomboid glyphomancers to the upper catacombs
+-Added a new achievement for completing the entire spooky mod bestiary
 -Added new game tip to tell players about spooky mods config options
 -Added modcalls for various things in spooky mod like boss defeated, event defeated, and more variables
 
 Changes:
--Charm of the flies no longer has a cooldown that prevents flies from spawning when you get hit
+-Charm of the flies no longer has a cooldown that prevents flies from spawning after you get hit
 -Krampus quest reward presents now need 5 to research for journey mode
 -Krampus quest reward presents now have a separate drop chance for each piece of the krampus helper vanity
--Made spooky mod world generation fill up the progress bar better to track how far along each biome is done generating
--Removing the lily of rebirth bloom buff off of yourself does not reset the number of revives you have if you don't have any revives left
--Updated daffodil on the spooky mod menu to be her new design
+-Made some spooky mod world generation tasks fill up the progress bar better to track how far along each biome is done generating
+-Removing the lily of rebirth bloom buff off of yourself no longer resets the number of revives you have if you don't have any revives left
+-Removed gourd o' lantern items, breaking a carved gourd with a candle in it now just drops the regular carved gourd and the candle
+-Eye blocks now grow various eye valley ambient objects on them naturally
+-Updated daffodil on the spooky mod menu to her new design
+-Updated eye valley background sprites
+-Updated bag of magic beans sprite
 
 Fixes:
+-Config option for teleporting all players into nose temple combat rooms not working
 -Tar cactus platforms not being craftable back into tar cactus blocks
--Many spooky mod ambient tiles not being destroyed when you place blocks on them
+-Many spooky mod ambient objects not being destroyable when you build blocks and other stuff on them
+-Spooky mod ambient objects destroying other ambient objects when growing
 -Haunting harold ghost projectiles not doing damage
--Spooky mod custom trees not being destroyed immediately and breaking one by one when destroyed
--Multiple spooky mod custom trees/tiles with special effects/drawing being blurry, and having completely incorrect offsets in retro/trippy lighting and snapshot mode
+-Temple of moco ambush room idols giving off way too much light on retro/trippy lighting modes
+-Spooky mod custom trees breaking one by one when destroyed instead of being fully destroyed immediately
+-Multiple spooky mod custom trees/tiles with special effects being blurry, and some of them having completely incorrect offsets in retro/trippy lighting and snapshot mode
 -Orange spooky grass not drawing special merge texture with green grass when sloped
--Config for teleporting all players into nose temple combat rooms not working
+-Mortar jetpack drawing incorrectly offset while the player is on certain mounts
+-Grass walls in the catacombs not being considered valid for spawning enemies, resulting in low spawnrates in both catacomb layers

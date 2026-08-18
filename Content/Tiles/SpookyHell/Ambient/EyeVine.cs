@@ -31,7 +31,7 @@ namespace Spooky.Content.Tiles.SpookyHell.Ambient
 
 		public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
         {
-			int[] ValidTiles = { ModContent.TileType<EyeVine>(), ModContent.TileType<SpookyMushGrass>() };
+			int[] ValidTiles = { ModContent.TileType<EyeVine>(), ModContent.TileType<SpookyMushGrass>(), ModContent.TileType<EyeBlock>() };
 
 			if (!ValidTiles.Contains(Main.tile[i, j - 1].TileType))
 			{
@@ -43,8 +43,10 @@ namespace Spooky.Content.Tiles.SpookyHell.Ambient
 
 		public override void RandomUpdate(int i, int j)
 		{
+			int[] ValidTiles = { ModContent.TileType<SpookyMushGrass>(), ModContent.TileType<EyeBlock>() };
+
 			Tile tileBelow = Framing.GetTileSafely(i, j + 1);
-			if (!tileBelow.HasTile && tileBelow.LiquidType != LiquidID.Lava)
+			if (Main.rand.NextBool(12) && !tileBelow.HasTile && tileBelow.LiquidType != LiquidID.Lava)
             {
 				bool PlaceVine = false;
 				int Test = j;
@@ -55,7 +57,7 @@ namespace Spooky.Content.Tiles.SpookyHell.Ambient
                     {
 						break;
 					}
-					else if (!testTile.HasTile || testTile.TileType != ModContent.TileType<SpookyMushGrass>()) 
+					else if (!testTile.HasTile || !ValidTiles.Contains(testTile.TileType))
                     {
 						Test--;
 						continue;
