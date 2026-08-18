@@ -12,6 +12,7 @@ using System.Collections.Generic;
 
 using Spooky.Core;
 using Spooky.Content.UserInterfaces;
+using Spooky.Content.UserInterfaces.LittleEyeQuests;
 
 namespace Spooky.Content.NPCs.Friendly
 {
@@ -113,36 +114,18 @@ namespace Spooky.Content.NPCs.Friendly
                 NPC.frame.Y = NPC.frame.Y + frameHeight;
                 NPC.frameCounter = 0;
             }
+
             if (NPC.frame.Y >= frameHeight * 5)
             {
                 NPC.frame.Y = 0 * frameHeight;
             }
         }
 
-		public override bool CanBeHitByNPC(NPC attacker)
-		{
-			return false;
-		}
-
-		public override bool? CanBeHitByProjectile(Projectile projectile)
-		{
-			return false;
-		}
-
-		public override bool? CanBeHitByItem(Player player, Item item)
-		{
-			return false;
-		}
-
-		public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
-		{
-			return false;
-		}
-
-		public override bool CanChat() 
-        {
-			return true;
-		}
+		public override bool CanBeHitByNPC(NPC attacker) => false;
+		public override bool? CanBeHitByProjectile(Projectile projectile) => false;
+		public override bool? CanBeHitByItem(Player player, Item item) => false;
+		public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) => false;
+		public override bool CanChat() => true;
 
 		public override string GetChat()
 		{
@@ -151,6 +134,7 @@ namespace Spooky.Content.NPCs.Friendly
 				LittleEyeDialogueChoiceUI.LittleEye = NPC.whoAmI;
 				LittleEyeDialogueChoiceUI.UIOpen = true;
 			}
+
             return string.Empty;
 		}
 
