@@ -6,7 +6,7 @@ BloomBuffs: {
 }
 
 LittleEyeBounties: {
-	Bounty5Locked: Defeat all three mechanical bosses to unlock the conditions for this bounty mission
+	Bounty5Locked: Defeat all three mechanical bosses to unlock this bounty mission
 	BountyAccepted: You cannot select another bounty until you complete the current one
 }
 
