@@ -57,15 +57,8 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean
 
             if (!Above.HasTile && Above.LiquidAmount >= 125 && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock) 
             {
-                //kelp
-                if (WorldGen.genRand.NextBool(15))
-                {
-                    WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<OceanKelp>(), true);
-                    NetMessage.SendTileSquare(-1, i, j - 1, 1, TileChangeType.None);
-                }
-
                 //grow weeds
-                if (Main.rand.NextBool(8))
+                if (Main.rand.NextBool(10))
                 {
                     TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<OceanWeeds>(), true, WorldGen.genRand.Next(0, 12));
 				}
@@ -97,6 +90,13 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean
                     (ushort)ModContent.TileType<TubeCoralPurple1>(), (ushort)ModContent.TileType<TubeCoralPurple2>(), (ushort)ModContent.TileType<TubeCoralPurple3>(),
                     (ushort)ModContent.TileType<TubeCoralTeal1>(), (ushort)ModContent.TileType<TubeCoralTeal2>(), (ushort)ModContent.TileType<TubeCoralTeal3>() };
                     TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Corals), true);
+                }
+
+                //kelp
+                if (WorldGen.genRand.NextBool(15))
+                {
+                    WorldGen.PlaceTile(i, j - 1, (ushort)ModContent.TileType<OceanKelp>(), true);
+                    NetMessage.SendTileSquare(-1, i, j - 1, 1, TileChangeType.None);
                 }
             }
 		}

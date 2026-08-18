@@ -71,7 +71,7 @@ namespace Spooky.Content.Tiles.Cemetery
             if (!Above.HasTile && Above.LiquidAmount <= 0 && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock) 
             {
                 //grow weeds
-                if (Main.rand.NextBool(15))
+                if (Main.rand.NextBool(10))
                 {
                     TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<CemeteryWeeds>(), true, Main.rand.Next(0, 18));
 				}

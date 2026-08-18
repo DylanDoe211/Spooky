@@ -46,7 +46,7 @@ namespace Spooky.Content.Tiles.SpookyHell.Ambient
 			int[] ValidTiles = { ModContent.TileType<SpookyMushGrass>(), ModContent.TileType<EyeBlock>() };
 
 			Tile tileBelow = Framing.GetTileSafely(i, j + 1);
-			if (!tileBelow.HasTile && tileBelow.LiquidType != LiquidID.Lava)
+			if (Main.rand.NextBool(12) && !tileBelow.HasTile && tileBelow.LiquidType != LiquidID.Lava)
             {
 				bool PlaceVine = false;
 				int Test = j;

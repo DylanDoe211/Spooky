@@ -34,7 +34,7 @@ namespace Spooky.Content.Tiles.Shipyard
             if (!Above.HasTile && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock)
             {
                 //grow small weeds
-                if (Main.rand.NextBool(3) && Above.LiquidAmount <= 0)
+                if (Main.rand.NextBool(10) && Above.LiquidAmount <= 0)
                 {
                     TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<PaleSeaOats>(), true, Main.rand.Next(0, 14));
 				}

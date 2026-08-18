@@ -76,7 +76,7 @@ namespace Spooky.Content.Tiles.Catacomb
             if (!Above.HasTile && Above.LiquidAmount <= 0 && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock) 
             {
                 //grow weeds
-                if (Main.rand.NextBool(8))
+                if (Main.rand.NextBool(10))
                 {
                     TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<CatacombWeeds>(), true, Main.rand.Next(0, 18));
                 }

@@ -80,13 +80,19 @@ namespace Spooky.Content.Tiles.SpookyHell
             if (!Above.HasTile && Above.LiquidAmount <= 0 && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock) 
             {
                 //grow small weeds
-                if (Main.rand.NextBool(5))
+                if (Main.rand.NextBool(10))
                 {
                     TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<SpookyHellWeeds>(), true, Main.rand.Next(0, 6));
 				}
 
+                //ambient manhole teeth
+                if (Main.rand.NextBool(10))
+                {
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<Tooth>(), true);
+                }
+
                 //eye stalks
-                if (Main.rand.NextBool(20))
+                if (Main.rand.NextBool(15))
                 {
                     ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkThinShort>(), (ushort)ModContent.TileType<EyeStalkThin>(), 
                     (ushort)ModContent.TileType<EyeStalkThinTall>(), (ushort)ModContent.TileType<EyeStalkThinVeryTall>(),
@@ -100,23 +106,8 @@ namespace Spooky.Content.Tiles.SpookyHell
                     TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Stalks), true);
                 }
 
-                //purple eye stalk
-                if (Main.rand.NextBool(35))
-                {
-                    ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkPurple1>(), (ushort)ModContent.TileType<EyeStalkPurple2>(), 
-                    (ushort)ModContent.TileType<EyeStalkPurple3>(), (ushort)ModContent.TileType<EyeStalkPurple4>(),
-                    (ushort)ModContent.TileType<EyeStalkPurple5>(), (ushort)ModContent.TileType<EyeStalkPurple6>() };
-                    TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Stalks), true);
-                }
-
-                //ambient manhole teeth
-                if (Main.rand.NextBool(35))
-                {
-                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<Tooth>(), true);
-                }
-
                 //exposed nerve
-                if (Main.hardMode && Main.rand.NextBool(1000))
+                if (Main.hardMode && Main.rand.NextBool(900))
                 {
                     TileGlobal.PlaceObject(i, j - 1, ModContent.TileType<ExposedNerveTile>(), true);
                 }

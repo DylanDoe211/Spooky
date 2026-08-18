@@ -83,7 +83,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Vegetable
 			if (!Above.HasTile && Above.LiquidAmount <= 0 && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock)
 			{
 				//grow weeds
-				if (Main.rand.NextBool(3))
+				if (Main.rand.NextBool(10))
                 {
 					TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<JungleMossWeeds>(), true, Main.rand.Next(0, 11));
 				}

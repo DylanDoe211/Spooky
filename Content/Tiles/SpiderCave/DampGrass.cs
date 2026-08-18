@@ -70,13 +70,13 @@ namespace Spooky.Content.Tiles.SpiderCave
 			if (!Above.HasTile && Above.LiquidAmount <= 0 && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock) 
             {
                 //grow small weeds
-                if (Main.rand.NextBool(4))
+                if (Main.rand.NextBool(10))
                 {
                     TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<SpiderCaveWeeds>(), true, Main.rand.Next(0, 36));
 				}
 
                 //mushrooms 
-                if (Main.rand.NextBool(50))
+                if (Main.rand.NextBool(45))
                 {
                     ushort[] Mushrooms = new ushort[] { (ushort)ModContent.TileType<MushroomBlue>(), (ushort)ModContent.TileType<MushroomRedBrown>(),
                     (ushort)ModContent.TileType<MushroomYellow>(), (ushort)ModContent.TileType<MushroomGreen>(), (ushort)ModContent.TileType<MushroomPurple>(),

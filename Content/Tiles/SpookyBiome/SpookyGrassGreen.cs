@@ -70,13 +70,13 @@ namespace Spooky.Content.Tiles.SpookyBiome
             if (!Above.HasTile && Above.LiquidAmount <= 0 && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock) 
             {
                 //grow weeds
-                if (Main.rand.NextBool(8))
+                if (Main.rand.NextBool(10))
                 {
                     TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<SpookyWeedsGreen>(), true, Main.rand.Next(0, 10));
 				}
 
                 //grow colored gourds
-                if (Main.rand.NextBool(40) && SpookyForest.CanGrowGourd(i, j))
+                if (Main.rand.NextBool(30) && SpookyForest.CanGrowGourd(i, j))
                 {
                     ushort[] Gourds = new ushort[] { (ushort)ModContent.TileType<GourdGreen>(), (ushort)ModContent.TileType<GourdLime>(), 
                     (ushort)ModContent.TileType<GourdLimeOrange>(), (ushort)ModContent.TileType<GourdOrange>(), (ushort)ModContent.TileType<GourdRed>(), 
@@ -85,7 +85,7 @@ namespace Spooky.Content.Tiles.SpookyBiome
                 }
 
                 //grow rotten gourd
-                if (Main.rand.NextBool(50) && SpookyForest.CanGrowRottenGourd(i, j))
+                if (Main.rand.NextBool(40) && SpookyForest.CanGrowRottenGourd(i, j))
                 {
                     TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<GourdRotten>(), true, Main.rand.Next(0, 2));
                 }

@@ -78,13 +78,19 @@ namespace Spooky.Content.Tiles.SpookyHell
             if (!Above.HasTile && Above.LiquidAmount <= 0)
             {
                 //grow small weeds
-                if (Main.rand.NextBool(5))
+                if (Main.rand.NextBool(10))
                 {
                     TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<SpookyHellWeeds>(), true, Main.rand.Next(0, 6));
 				}
 
+                //ambient manhole teeth
+                if (Main.rand.NextBool(10))
+                {
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<Tooth>(), true);
+                }
+
                 //eye stalks
-                if (Main.rand.NextBool(20))
+                if (Main.rand.NextBool(15))
                 {
                     ushort[] Stalks = new ushort[] { (ushort)ModContent.TileType<EyeStalkThinShort>(), (ushort)ModContent.TileType<EyeStalkThin>(), 
                     (ushort)ModContent.TileType<EyeStalkThinTall>(), (ushort)ModContent.TileType<EyeStalkThinVeryTall>(),

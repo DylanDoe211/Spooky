@@ -87,7 +87,7 @@ namespace Spooky.Content.Tiles.SpiderCave
 			if (!Above.HasTile && Above.LiquidAmount <= 0 && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock) 
             {
                 //grow small weeds
-                if (Main.rand.NextBool(4))
+                if (Main.rand.NextBool(10))
                 {
                     TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<DampMushroomWeeds>(), true, Main.rand.Next(0, 21));
 				}
