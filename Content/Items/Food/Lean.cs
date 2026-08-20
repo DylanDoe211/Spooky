@@ -24,6 +24,7 @@ namespace Spooky.Content.Items.Food
 			Item.UseSound = SoundID.Item3;
             Item.useStyle = ItemUseStyleID.DrinkLiquid;
 			Item.holdStyle = ItemHoldStyleID.HoldFront;
+			Item.scale = 0.5f;
         }
 
 		public override void HoldStyle(Player player, Rectangle heldItemFrame) 

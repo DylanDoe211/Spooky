@@ -20,6 +20,7 @@ Changes:
 -Updated daffodil on the spooky mod menu to her new design
 -Updated eye valley background sprites
 -Updated bag of magic beans sprite
+-Polished sprites for spooky mod ambient grasses
 
 Fixes:
 -Config option for teleporting all players into nose temple combat rooms not working

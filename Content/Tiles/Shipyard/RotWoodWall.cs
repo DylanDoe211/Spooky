@@ -9,7 +9,7 @@ namespace Spooky.Content.Tiles.Shipyard
     {
         public override void SetStaticDefaults()
         {
-            Main.wallHouse[Type] = true;
+			Main.wallHouse[Type] = true;
             AddMapEntry(new Color(23, 25, 32));
             DustType = DustID.Ash;
         }

@@ -13,6 +13,7 @@ namespace Spooky.Content.Tiles.Shipyard
 			TileID.Sets.CanBeDugByShovel[Type] = true;
 			TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;
 			TileID.Sets.GeneralPlacementTiles[Type] = false;
+			TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
 			Main.tileMergeDirt[Type] = true;
             Main.tileBlendAll[Type] = true;
 			Main.tileSolid[Type] = true;

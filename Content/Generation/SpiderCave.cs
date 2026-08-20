@@ -1,10 +1,10 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.IO;
 using Terraria.GameContent.Generation;
 using Terraria.WorldBuilding;
 using Terraria.Localization;
+using Terraria.IO;
 using ReLogic.Utilities;
 using Microsoft.Xna.Framework;
 using System;

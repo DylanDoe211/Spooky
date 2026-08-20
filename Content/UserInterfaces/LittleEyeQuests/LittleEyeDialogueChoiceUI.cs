@@ -83,8 +83,8 @@ public class LittleEyeDialogueChoiceUI
 		string Choice2 = Language.GetTextValue("Mods.Spooky.UI.LittleEyeDialogueChoice.BountyChoice");
 		string Choice3 = Language.GetTextValue("Mods.Spooky.UI.LittleEyeDialogueChoice.CauldronChoice");
 
-		BarTexture ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/LittleEyeDialogueChoiceUIBar");
-		BarHoverTexture ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/LittleEyeDialogueChoiceUIBarHover");
+		BarTexture ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/LittleEyeQuests/LittleEyeDialogueChoiceUIBar");
+		BarHoverTexture ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/LittleEyeQuests/LittleEyeDialogueChoiceUIBarHover");
 		UITexture ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/DialogueUILittleEye");
 
 		Vector2 UITopLeft1 = UITopLeft + new Vector2(0, -180 * UIBoxScale.Y);

@@ -163,10 +163,10 @@ namespace Spooky.Content.Generation
 				//create dirt blocks below so that any terrain below the biome is filled in
 				for (int X = (int)Position.X - 15; X <= (int)Position.X + 15; X++)
 				{
-					int BottomEndPos = ((int)BottomPos.Y + 30) >= (int)Main.worldSurface ? (int)Main.worldSurface : (int)BottomPos.Y + 30;
+					int BottomEndPos = ((int)BottomPos.Y + 50) >= (int)Main.worldSurface ? (int)Main.worldSurface : (int)BottomPos.Y + 50;
 					for (int Y = (int)BottomPos.Y; Y <= BottomEndPos; Y++)
 					{
-						if (!IsEvilBiomeWall(Main.tile[X, Y].WallType))
+						if (!IsEvilBiomeWall(Main.tile[X, Y].WallType) && WorldGen.SolidTile(X, Y - 1))
 						{
 							//destroy any non-solid tiles
 							if (!WorldGen.SolidTile(X, Y) && Main.tile[X, Y].TileType != ModContent.TileType<BlackSand>())
@@ -415,6 +415,67 @@ namespace Spooky.Content.Generation
 					Main.tile[(int)Position.X - 1, Y].WallType <= 0 && Main.tile[(int)Position.X + 1, Y].WallType <= 0)
 					{
 						WorldGen.KillWall((int)Position.X, Y);
+					}
+				}
+			}
+
+			//generate structures across the surface
+			for (int i = 0; i < segments; i++)
+			{
+				float t = i / (float)segments;
+				Vector2 Position = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
+				t = (i + 1) / (float)segments;
+
+				if (WorldGen.genRand.NextBool(55))
+				{
+					int StructureY = (int)Position.Y;
+
+					bool validSurface = false;
+					int attemptsToPlace = 0;
+
+					while (!validSurface && attemptsToPlace++ < 100000)
+					{
+						if (!WorldGen.SolidTile((int)Position.X, StructureY))
+						{
+							StructureY++;
+						}
+						else
+						{
+							validSurface = true;
+						}
+					}
+
+					if (CanPlaceShipwreck((int)Position.X, StructureY))
+					{
+						Mod SpookyMod = Spooky.mod;
+						//3.4.1.335248717
+						switch (WorldGen.genRand.Next(4))
+						{
+							case 0:
+							{
+								Vector2 WreckOrigin = new Vector2((int)Position.X - 13, StructureY - 19);
+								StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckGiant" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
+								break;
+							}
+							case 1:
+							{
+								Vector2 WreckOrigin = new Vector2((int)Position.X - 9, StructureY - 11);
+								StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckMedium" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
+								break;
+							}
+							case 2:
+							{
+								Vector2 WreckOrigin = new Vector2((int)Position.X - 5, StructureY - 6);
+								StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckSmall" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
+								break;
+							}
+							case 3:
+							{
+								Vector2 WreckOrigin = new Vector2((int)Position.X - 2, StructureY - 6);
+								StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckTiny" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
+								break;
+							}
+						}
 					}
 				}
 			}
@@ -777,6 +838,23 @@ namespace Spooky.Content.Generation
             return true;
         }
 		
+		//dont allow wrecks to naturally grow too close to each other
+		public static bool CanPlaceShipwreck(int X, int Y)
+        {
+            for (int i = X - 20; i < X + 20; i++)
+            {
+                for (int j = Y - 8; j < Y + 8; j++)
+                {
+                    if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<RotWood>())
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
 		//dont allow coral trees to naturally grow too close to each other
 		public static bool CanPlaceCoralTree(int X, int Y)
         {

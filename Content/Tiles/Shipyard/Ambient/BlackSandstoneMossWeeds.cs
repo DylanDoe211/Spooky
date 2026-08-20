@@ -32,11 +32,11 @@ namespace Spooky.Content.Tiles.Shipyard.Ambient
 
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 		{
-			float divide = 1500f;
+			float divide = 900f;
 
-			r = 66f / divide;
-			g = 138f / divide;
-			b = 255f / divide;
+			r = 97f / divide;
+			g = 130f / divide;
+			b = 169f / divide;
         }
 
         public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY)

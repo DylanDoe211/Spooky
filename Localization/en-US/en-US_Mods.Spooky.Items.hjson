@@ -6058,6 +6058,11 @@ StitchSpiderRelicItem: {
 	Tooltip: ""
 }
 
+ShipyardBiomeTorchItem: {
+	DisplayName: Bleached Shipyard Torch
+	Tooltip: ""
+}
+
 MangroveSaplingItem: {
 	DisplayName: Mangrove Seedling
 	Tooltip: Plants mangrove saplings

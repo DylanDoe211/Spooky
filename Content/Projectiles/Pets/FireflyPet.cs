@@ -52,7 +52,7 @@ namespace Spooky.Content.Projectiles.Pets
 
             Color color = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(new Color(255, 255, 255, 0));
 
-			Main.EntitySpriteDraw(SpotlightTexture.Value, drawPos, null, color, Projectile.rotation, frameOrigin, new Vector2(0.5f, 0.35f), SpriteEffects.None, 0);
+			Main.EntitySpriteDraw(SpotlightTexture.Value, drawPos - new Vector2(1, 0), null, color, Projectile.rotation, frameOrigin, new Vector2(0.5f, 0.35f), SpriteEffects.None, 0);
 
 			var effects = Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
