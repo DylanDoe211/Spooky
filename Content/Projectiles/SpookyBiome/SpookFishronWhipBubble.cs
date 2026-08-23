@@ -7,30 +7,25 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
+using Spooky.Content.Dusts;
+
 namespace Spooky.Content.Projectiles.SpookyBiome
 {
-    public class SpookFishronMinionBubble : ModProjectile
+    public class SpookFishronWhipBubble : ModProjectile
     {
-        public override string Texture => "Spooky/Content/Projectiles/SpookyBiome/SpookFishronFlailBubble";
-
         float Scale = 0f;
         float GlowRotation = 0f;
 
         private static Asset<Texture2D> ProjTexture;
         private static Asset<Texture2D> GlowTexture;
 
-        public override void SetStaticDefaults()
-		{
-			ProjectileID.Sets.MinionShot[Projectile.type] = true;
-		}
-
         public override void SetDefaults()
         {
-            Projectile.width = 20;
-            Projectile.height = 20;
+            Projectile.width = 40;
+            Projectile.height = 40;
             Projectile.DamageType = DamageClass.Summon;
             Projectile.friendly = true;
-            Projectile.tileCollide = false;
+            Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
             Projectile.timeLeft = 600;
             Projectile.penetrate = 1;
@@ -63,6 +58,51 @@ namespace Spooky.Content.Projectiles.SpookyBiome
             return false;
         }
 
+        public override bool OnTileCollide(Vector2 oldVelocity)
+		{
+            if (Projectile.velocity.X != oldVelocity.X)
+            {
+                Projectile.position.X = Projectile.position.X + Projectile.velocity.X;
+                Projectile.velocity.X = -oldVelocity.X;
+            }
+            if (Projectile.velocity.Y != oldVelocity.Y)
+            {
+                Projectile.position.Y = Projectile.position.Y + Projectile.velocity.Y;
+                Projectile.velocity.Y = -oldVelocity.Y;
+            }
+
+			return false;
+		}
+
+        public override bool? CanDamage()
+        {
+            return Projectile.ai[0] > 20;
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) 
+		{
+            SoundEngine.PlaySound(SoundID.Item54 with { Volume = 2f }, Projectile.Center);
+            SoundEngine.PlaySound(SoundID.Item14, Projectile.Center);
+
+            Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<SpookFishronWhipBubbleExplosion>(), Projectile.damage, 0f, Projectile.owner);
+
+            for (int numDusts = 0; numDusts < 25; numDusts++)
+			{                                                                                  
+				int newDust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<CauldronBubble>(), 0f, -2f, 0, default, 1f);
+                Main.dust[newDust].color = Color.OrangeRed;
+				Main.dust[newDust].position.X += Main.rand.Next(-50, 51) * 0.05f - 1.5f;
+				Main.dust[newDust].position.Y += Main.rand.Next(-50, 51) * 0.05f - 1.5f;
+                Main.dust[newDust].noGravity = true;
+                
+				if (Main.dust[newDust].position != Projectile.Center)
+				{
+					Main.dust[newDust].velocity = Projectile.DirectionTo(Main.dust[newDust].position) * 1.2f;
+				}
+			}
+
+            Projectile.Kill();
+        }
+
         public override void AI()
         {
 			Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.01f * (float)Projectile.direction;
@@ -70,9 +110,9 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 
             Projectile.ai[0]++;
 
-            if (Projectile.ai[0] >= 40)
+            if (Projectile.ai[0] >= 20)
             {
-                Projectile.velocity *= 0.92f;
+                Projectile.velocity *= 0.935f;
             }
 
             if (Scale < 1f)

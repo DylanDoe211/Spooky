@@ -3572,6 +3572,17 @@ SpookFishronTome: {
 	Tooltip: Cast giant slow-moving greek fire tornados
 }
 
+SpookFishronWhip: {
+	DisplayName: Spicy Eel
+	Tooltip:
+		'''
+		10 summon tag damage
+		Your summons will focus stuck enemies
+		Hitting enemies will set them ablaze with greek fire
+		Blazing enemies create explosive lingering bubbles when hit by minions
+		'''
+}
+
 SpookFishronWings: {
 	DisplayName: Spook Fishron Wings
 	Tooltip:
@@ -3579,6 +3590,11 @@ SpookFishronWings: {
 		Allows flight and slow fall
 		Allows quick travel in water 
 		'''
+}
+
+SpookFishronYoyo: {
+	DisplayName: Spit Roast
+	Tooltip: Creates and flings small sharkrons at nearby enemies
 }
 
 ToiletPaper: {
@@ -7304,6 +7320,15 @@ OldHunterQuestReset: {
 	Tooltip:
 		'''
 		Resets all old hunters quest progress
+		Testing Item
+		'''
+}
+
+GourdGenerator: {
+	DisplayName: Gourd Generator
+	Tooltip:
+		'''
+		Generates a giant living gourd
 		Testing Item
 		'''
 }

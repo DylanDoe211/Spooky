@@ -1,6 +1,7 @@
 New Stuff:
 -Daffodil resprite, along with small tweaks to the fight to fit the new sprite
 -Added krampus helper outfit leggings
+-Added new giant living gourds that spawn in the underground spooky forest that have loot chests in them, as a replacement for the old generic wooden rooms
 -Added sac of flesh as a replacement for just fishing up single blocks in the eye valley, it is a right-clickable consumable item that gives you a bunch of eye valley blocks
 -Added a bunch of new unique pots that generate in all the different spooky mod biomes (Except for the cemetery and eye valley)
 -Added a new firefly light pet that drops from spider war minibosses, and a new crab pet gotten from fishing in the spooky forest
@@ -17,6 +18,7 @@ Changes:
 -Removing the lily of rebirth bloom buff off of yourself no longer resets the number of revives you have if you don't have any revives left
 -Removed gourd o' lantern items, breaking a carved gourd with a candle in it now just drops the regular carved gourd and the candle
 -Eye blocks now grow various eye valley ambient objects on them naturally
+-Krampus job application sign tile now lights up with spelunker potions
 -Updated daffodil on the spooky mod menu to her new design
 -Updated eye valley background sprites
 -Updated bag of magic beans sprite

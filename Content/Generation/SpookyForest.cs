@@ -1,8 +1,9 @@
 using Terraria;
 using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.IO;
+using Terraria.ModLoader;
 using Terraria.WorldBuilding;
+using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.GameContent.Generation;
 using Microsoft.Xna.Framework;
@@ -22,6 +23,7 @@ using Spooky.Content.Tiles.SpookyBiome;
 using Spooky.Content.Tiles.SpookyBiome.Ambient;
 using Spooky.Content.Tiles.SpookyBiome.Furniture;
 using Spooky.Content.Tiles.SpookyBiome.Gourds;
+using Spooky.Content.Tiles.SpookyBiome.GourdBlocks;
 using Spooky.Content.Tiles.SpookyBiome.Tree;
 
 namespace Spooky.Content.Generation
@@ -36,6 +38,18 @@ namespace Spooky.Content.Generation
 		static bool PlacedJobApplication = false;
 
 		public static WorldGen.GrowTreeSettings TreeSettings;
+
+		public static List<ushort> GourdBlockTypes = new()
+        {
+            (ushort)ModContent.TileType<GourdBlockGreen>(),
+			(ushort)ModContent.TileType<GourdBlockLime>(),
+			(ushort)ModContent.TileType<GourdBlockWhite>(),
+			(ushort)ModContent.TileType<GourdBlockLimeOrange>(),
+			(ushort)ModContent.TileType<GourdBlockOrange>(),
+			(ushort)ModContent.TileType<GourdBlockRed>(),
+			(ushort)ModContent.TileType<GourdBlockYellow>(),
+			(ushort)ModContent.TileType<GourdBlockYellowGreen>()
+        };
 
 		private void GenerateSpookyForest(GenerationProgress progress, GameConfiguration configuration)
 		{
@@ -398,8 +412,9 @@ namespace Spooky.Content.Generation
             }
         }
 
-        private void GrowSpookyTrees(GenerationProgress progress, GameConfiguration configuration)
-        {
+		private void SpookyForestAmbience(GenerationProgress progress, GameConfiguration configuration)
+		{
+			//first grow trees
 			for (int X = PositionX - Main.maxTilesX / 12; X <= PositionX + Main.maxTilesX / 12; X++)
 			{
 				for (int Y = 0; Y < (int)Main.worldSurface - 50; Y++)
@@ -444,10 +459,7 @@ namespace Spooky.Content.Generation
                     }
                 }
             }
-        }
 
-		private void SpookyForestAmbience(GenerationProgress progress, GameConfiguration configuration)
-		{
 			//place ambient objects
 			for (int X = PositionX - Main.maxTilesX / 12; X <= PositionX + Main.maxTilesX / 12; X++)
 			{
@@ -458,6 +470,11 @@ namespace Spooky.Content.Generation
 					Tile tileBelow = Main.tile[X, Y + 1];
 					Tile tileLeft = Main.tile[X - 1, Y];
 					Tile tileRight = Main.tile[X + 1, Y];
+
+					if (GourdBlockTypes.Contains(tile.TileType))
+					{
+						Tile.SmoothSlope(X, Y);
+					}
 
 					if (tile.WallType == ModContent.WallType<SpookyDirtWall>() && (!tileAbove.HasTile || !tileBelow.HasTile || !tileLeft.HasTile || !tileRight.HasTile))
 					{
@@ -788,6 +805,87 @@ namespace Spooky.Content.Generation
 			}
         }
 
+		public bool CanPlaceLootCabin(int PositionX, int PositionY)
+		{
+			//change the distance between cabins based on worldsize so each worldsize has a generally equal amount of loot cabins
+			int Distance = Main.maxTilesX / 130;
+
+			//dont allow loot cabins to place too close to each other
+			for (int i = PositionX - Distance; i < PositionX + Distance; i++)
+			{
+				for (int j = PositionY - Distance; j < PositionY + Distance; j++)
+				{
+					if (Main.tile[i, j].TileType == ModContent.TileType<SpookyWood>() || Main.tile[i, j].TileType == ModContent.TileType<OldWoodChest>() ||
+					(Main.tile[i, j].TileType == ModContent.TileType<MushroomMoss>() && j < PositionY + 25) || Main.tileDungeon[Main.tile[i, j].TileType])
+					{
+						return false;
+					}
+				}
+			}
+
+			//dont allow the cabin to place if theres any vanilla underground blocks nearby to prevent loot cabins placing on the edge of the biome
+			for (int i = PositionX - 15; i < PositionX + 15; i++)
+			{
+				for (int j = PositionY - 15; j < PositionY + 15; j++)
+				{
+					if (Main.tile[i, j].HasTile && (Main.tile[i, j].TileType == TileID.Dirt || Main.tile[i, j].TileType == TileID.Stone || 
+					Main.tile[i, j].TileType == TileID.Mud || GourdBlockTypes.Contains(Main.tile[i, j].TileType)))
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+
+		public void GenerateLargeGourds(GenerationProgress progress, GameConfiguration configuration)
+        {
+			for (int X = PositionX - Main.maxTilesX / 42; X <= PositionX + Main.maxTilesX / 42; X++)
+			{
+				for (int Y = (int)Main.worldSurface + 15; Y <= Main.maxTilesY / 2 + 50; Y++)
+				{
+					if (WorldGen.genRand.NextBool(500) && WorldGen.InWorld(X, Y, 50) && Main.tile[X, Y].TileType == ModContent.TileType<SpookyStone>() && CanPlaceGiantGourd(X, Y))
+					{
+						Point16 pos = new Point16(X, Y);
+						RottenGourd.Place(pos);
+					}
+				}
+			}
+        }
+
+		public bool CanPlaceGiantGourd(int PositionX, int PositionY)
+		{
+			//change the distance between gourds based on worldsize so each worldsize has a generally equal amount of gourds
+			int Distance = Main.maxTilesX / 80;
+
+			//dont allow gourds to place too close to each other
+			for (int i = PositionX - Distance; i < PositionX + Distance; i++)
+			{
+				for (int j = PositionY - (Distance / 2); j < PositionY + (Distance / 2); j++)
+				{
+					if (GourdBlockTypes.Contains(Main.tile[i, j].TileType) || Main.tileDungeon[Main.tile[i, j].TileType])
+					{
+						return false;
+					}
+				}
+			}
+
+			//dont place gourd near mushroom moss
+			for (int i = PositionX - 20; i < PositionX + 20; i++)
+			{
+				for (int j = PositionY - 20; j < PositionY + 20; j++)
+				{
+					if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<MushroomMoss>())
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+
 		//check for a flat surface inside of the cabins to place furniture in
 		public bool IsFlatSurface(int PositionX, int PositionY, int Width)
 		{
@@ -829,39 +927,6 @@ namespace Spooky.Content.Generation
 
             return true;
         }
-
-		public bool CanPlaceLootCabin(int PositionX, int PositionY)
-		{
-			//change the distance between cabins based on worldsize so each worldsize has a generally equal amount of loot cabins
-			int Distance = Main.maxTilesX / 130;
-
-			//dont allow loot cabins to place too close to each other
-			for (int i = PositionX - Distance; i < PositionX + Distance; i++)
-			{
-				for (int j = PositionY - Distance; j < PositionY + Distance; j++)
-				{
-					if (Main.tile[i, j].TileType == ModContent.TileType<SpookyWood>() || Main.tile[i, j].TileType == ModContent.TileType<OldWoodChest>() ||
-					(Main.tile[i, j].TileType == ModContent.TileType<MushroomMoss>() && j < PositionY + 25) || Main.tileDungeon[Main.tile[i, j].TileType])
-					{
-						return false;
-					}
-				}
-			}
-
-			//dont allow the cabin to place if theres any vanilla underground blocks nearby to prevent loot cabins placing on the edge of the biome
-			for (int i = PositionX - 12; i < PositionX + 12; i++)
-			{
-				for (int j = PositionY - 12; j < PositionY + 12; j++)
-				{
-					if (Main.tile[i, j].HasTile && (Main.tile[i, j].TileType == TileID.Dirt || Main.tile[i, j].TileType == TileID.Stone || Main.tile[i, j].TileType == TileID.Mud))
-					{
-						return false;
-					}
-				}
-			}
-
-			return true;
-		}
 
 		public void PlaceMineshaft(int x, int y)
 		{
@@ -1229,8 +1294,8 @@ namespace Spooky.Content.Generation
 
 			tasks.Insert(GenIndex2 + 1, new PassLegacy("Spooky Forest Grass", SpreadSpookyGrass));
             tasks.Insert(GenIndex2 + 2, new PassLegacy("Glowshroom Cleanup", ClearStuffAroundMushroomMoss));
-			tasks.Insert(GenIndex2 + 3, new PassLegacy("Spooky Forest Cabins", GenerateCabins));
-            tasks.Insert(GenIndex2 + 4, new PassLegacy("Spooky Forest Trees", GrowSpookyTrees));
+			tasks.Insert(GenIndex2 + 3, new PassLegacy("Spooky Forest Gourds", GenerateLargeGourds));
+			tasks.Insert(GenIndex2 + 4, new PassLegacy("Spooky Forest Cabins", GenerateCabins));
             tasks.Insert(GenIndex2 + 5, new PassLegacy("Spooky Forest Objects", SpookyForestAmbience));
         }
 
@@ -1268,7 +1333,7 @@ namespace Spooky.Content.Generation
 
 						int ItemToPutInChest = WorldGen.genRand.Next(ActualMainItem.Count);
 
-						int[] Bars = new int[] { ItemID.SilverBar, ItemID.TungstenBar, ItemID.GoldBar, ItemID.PlatinumBar };
+						int[] Bars = new int[] { ItemID.IronBar, ItemID.LeadBar, ItemID.SilverBar, ItemID.TungstenBar };
 						int[] LightSources = new int[] { ModContent.ItemType<SpookyBiomeTorchItem>(), ModContent.ItemType<CandleItem>() };
 						int[] Potions = new int[] { ItemID.NightOwlPotion, ItemID.ShinePotion, ItemID.SpelunkerPotion };
 

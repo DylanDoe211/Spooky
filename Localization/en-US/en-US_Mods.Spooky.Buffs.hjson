@@ -749,3 +749,8 @@ CrabPetBuff: {
 	DisplayName: Vampire Crab
 	Description: It scuttles behind you
 }
+
+SpookFishronWhipDebuff: {
+	DisplayName: Spook Fishron Whip Debuff
+	Description: Mods.Spooky.Buffs.SpookFishronWhipDebuff.Description
+}

@@ -1695,7 +1695,9 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
                 ModContent.ItemType<SpookFishronBow>(), 
                 ModContent.ItemType<SpookFishronTome>(), 
                 ModContent.ItemType<SpookFishronGun>(),
-                ModContent.ItemType<SpookFishronStaff>()
+                ModContent.ItemType<SpookFishronStaff>(),
+                ModContent.ItemType<SpookFishronWhip>(),
+                ModContent.ItemType<SpookFishronYoyo>()
             };
 
 			notExpertRule.OnSuccess(ItemDropRule.OneFromOptions(1, MainItem));

@@ -68,55 +68,55 @@ public class Spooky : Mod
 		switch (firstArg)
 		{
 			case "BossDowned":
+			{
+				string text = args[1] as string;
+				return text switch
 				{
-					string text = args[1] as string;
-					return text switch
-					{
-						nameof(Flags.downedRotGourd) => Flags.downedRotGourd,
-						nameof(Flags.downedSpookySpirit) => Flags.downedSpookySpirit,
-						nameof(Flags.downedMoco) => Flags.downedMoco,
-						nameof(Flags.downedDaffodil) => Flags.downedDaffodil,
-						nameof(Flags.downedOldHunter) => Flags.downedOldHunter,
-						nameof(Flags.downedOrroboro) => Flags.downedOrroboro,
-						nameof(Flags.downedSpookFishron) => Flags.downedSpookFishron,
-						nameof(Flags.downedBigBone) => Flags.downedBigBone,
-                        nameof(Flags.downedDunkleosteus) => Flags.downedDunkleosteus,
-						_ => throw new ArgumentException(text + " Is not a valid boss downed variable name"),
-					};
-				}
+					nameof(Flags.downedRotGourd) => Flags.downedRotGourd,
+					nameof(Flags.downedSpookySpirit) => Flags.downedSpookySpirit,
+					nameof(Flags.downedMoco) => Flags.downedMoco,
+					nameof(Flags.downedDaffodil) => Flags.downedDaffodil,
+					nameof(Flags.downedOldHunter) => Flags.downedOldHunter,
+					nameof(Flags.downedOrroboro) => Flags.downedOrroboro,
+					nameof(Flags.downedSpookFishron) => Flags.downedSpookFishron,
+					nameof(Flags.downedBigBone) => Flags.downedBigBone,
+					nameof(Flags.downedDunkleosteus) => Flags.downedDunkleosteus,
+					_ => throw new ArgumentException(text + " Is not a valid boss downed variable name"),
+				};
+			}
 			case "EventDowned":
+			{
+				string text = args[1] as string;
+				return text switch
 				{
-					string text = args[1] as string;
-					return text switch
-					{
-						nameof(Flags.downedPandoraBox) => Flags.downedPandoraBox,
-						nameof(Flags.downedEggEvent) => Flags.downedEggEvent,
-						nameof(Flags.downedSpiderWar) => Flags.downedSpiderWar,
-						nameof(Flags.downedSporeEvent) => Flags.downedSporeEvent,
-						_ => throw new ArgumentException(text + " Is not a valid event downed variable name"),
-					};
-				}
-				case "BiomePositions":
+					nameof(Flags.downedPandoraBox) => Flags.downedPandoraBox,
+					nameof(Flags.downedEggEvent) => Flags.downedEggEvent,
+					nameof(Flags.downedSpiderWar) => Flags.downedSpiderWar,
+					nameof(Flags.downedSporeEvent) => Flags.downedSporeEvent,
+					_ => throw new ArgumentException(text + " Is not a valid event downed variable name"),
+				};
+			}
+			case "BiomePositions":
+			{
+				string text = args[1] as string;
+				return text switch
 				{
-					string text = args[1] as string;
-					return text switch
-					{
-						nameof(Flags.SpiderGrottoCenter) => Flags.SpiderGrottoCenter,
-						nameof(Flags.EyeValleyCenter) => Flags.EyeValleyCenter,
-						nameof(Flags.ZombieOceanTopLeft) => Flags.ZombieOceanTopLeft,
-						nameof(Flags.ZombieOceanBottomRight) => Flags.ZombieOceanBottomRight,
-						_ => throw new ArgumentException(text + " Is not a valid biome position variable name"),
-					};
-				}
-				case "EyeQuest":
-				{
-					return LittleEyeCrossmod.Call(args[1..]);
-				}
-				default:
-				{
-					Logger.Error($"Call Error: Context '{firstArg}' is invalid.");
-					return null;
-				}
+					nameof(Flags.SpiderGrottoCenter) => Flags.SpiderGrottoCenter,
+					nameof(Flags.EyeValleyCenter) => Flags.EyeValleyCenter,
+					nameof(Flags.ZombieOceanTopLeft) => Flags.ZombieOceanTopLeft,
+					nameof(Flags.ZombieOceanBottomRight) => Flags.ZombieOceanBottomRight,
+					_ => throw new ArgumentException(text + " Is not a valid biome position variable name"),
+				};
+			}
+			case "EyeQuest":
+			{
+				return LittleEyeCrossmod.Call(args[1..]);
+			}
+			default:
+			{
+				Logger.Error($"Call Error: Context '{firstArg}' is invalid.");
+				return null;
+			}
 		}
 	}
 

@@ -33,7 +33,7 @@ namespace Spooky.Content.Projectiles.SpookyBiome
         public override bool PreDraw(ref Color lightColor)
         {
             ProjTexture ??= ModContent.Request<Texture2D>(Texture);
-            GlowTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Projectiles/SpookyBiome/SpookFishronFlailBubbleGlow");
+            GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
 
             Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, ProjTexture.Height() * 0.5f);
 			Vector2 vector = new Vector2(Projectile.Center.X, Projectile.Center.Y) - Main.screenPosition + new Vector2(0, Projectile.gfxOffY);

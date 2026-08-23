@@ -51,7 +51,9 @@ namespace Spooky.Content.Items.BossBags
                 ModContent.ItemType<SpookFishronBow>(), 
                 ModContent.ItemType<SpookFishronTome>(), 
                 ModContent.ItemType<SpookFishronGun>(),
-                ModContent.ItemType<SpookFishronStaff>()
+                ModContent.ItemType<SpookFishronStaff>(),
+                ModContent.ItemType<SpookFishronWhip>(),
+                ModContent.ItemType<SpookFishronYoyo>()
             };
 
 			itemLoot.Add(ItemDropRule.OneFromOptions(1, MainItem));

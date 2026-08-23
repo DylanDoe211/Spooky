@@ -616,11 +616,18 @@ namespace Spooky.Content.Generation
 
 						//generate pots after everything else
 						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>() || 
-						Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>())
+						Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>() || Main.tile[X, Y].TileType == ModContent.TileType<RotWood>())
 						{
 							if (WorldGen.genRand.NextBool() && !tileAbove.HasTile)
 							{
-								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<ShipyardPots>(), true, WorldGen.genRand.Next(0, 5));
+								if (CanPlaceShipwreckPot(X, Y))
+								{
+									TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<ShipyardPotsWood>(), true, WorldGen.genRand.Next(0, 3));
+								}
+								else
+								{
+									TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<ShipyardPots>(), true, WorldGen.genRand.Next(0, 5));
+								}
 							}
 						}
 					}
@@ -853,6 +860,23 @@ namespace Spooky.Content.Generation
             }
 
             return true;
+        }
+
+		//dont allow wooden crate pots to place too far from shipwrecks
+		public static bool CanPlaceShipwreckPot(int X, int Y)
+        {
+            for (int i = X - 5; i < X + 5; i++)
+            {
+                for (int j = Y - 5; j < Y + 5; j++)
+                {
+                    if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<RotWood>())
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
 		//dont allow coral trees to naturally grow too close to each other

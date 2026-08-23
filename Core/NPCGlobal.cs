@@ -390,6 +390,10 @@ namespace Spooky.Core
 				{
 					modifiers.FlatBonusDamage += EelTagDebuff.tagDamage;
 				}
+				if (npc.HasBuff<SpookFishronWhipDebuff>())
+				{
+					modifiers.FlatBonusDamage += SpookFishronWhipDebuff.tagDamage;
+				}
 			}
 
 			//list of every orro & boro segment

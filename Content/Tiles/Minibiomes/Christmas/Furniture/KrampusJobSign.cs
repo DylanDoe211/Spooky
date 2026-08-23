@@ -18,8 +18,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Christmas.Furniture
 		{
 			Main.tileFrameImportant[Type] = true;
 			Main.tileNoAttach[Type] = true;
-			Main.tileLavaDeath[Type] = true;
-			TileID.Sets.Clock[Type] = true;
+			Main.tileSpelunker[Type] = true;
 			TileID.Sets.DisableSmartCursor[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
 			TileObjectData.newTile.Width = 2;

@@ -219,9 +219,8 @@ namespace Spooky.Content.Projectiles.SpookyBiome
                     Projectile.localNPCHitCooldown = spinHitCooldown; // set the hit speed to the spinning hit speed
 
 					//shoot bubbles at nearby enemies
-					for (int i = 0; i < Main.maxNPCs; i++)
+					foreach (var NPC in Main.ActiveNPCs)
             		{
-						NPC NPC = Main.npc[i];
 						if (NPC.active && NPC.CanBeChasedBy(this) && !NPC.friendly && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type] && Vector2.Distance(player.Center, NPC.Center) <= 550f)
 						{
 							bool lineOfSight = Collision.CanHitLine(NPC.position, NPC.width, NPC.height, Projectile.position, Projectile.width, Projectile.height);

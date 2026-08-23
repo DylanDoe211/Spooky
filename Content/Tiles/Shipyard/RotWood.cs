@@ -20,7 +20,6 @@ namespace Spooky.Content.Tiles.Shipyard
 			Main.tileBlockLight[Type] = true;
             AddMapEntry(new Color(91, 88, 84));
             DustType = DustID.Ash;
-			MineResist = 0.5f;
 		}
 
 		public override void PostTileFrame(int i, int j, int up, int down, int left, int right, int upLeft, int upRight, int downLeft, int downRight)

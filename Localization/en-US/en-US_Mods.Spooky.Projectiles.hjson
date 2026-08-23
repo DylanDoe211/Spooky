@@ -440,7 +440,7 @@ SpookmasSwordStar.DisplayName: Christmas Star
 SharkronExplosion.DisplayName: Sharkron Explosion
 SharkronFireball.DisplayName: Sharkron Fireball
 SpookFishronGunFire.DisplayName: Spooky Flames
-SpookFishronFlailProj.DisplayName: Spicy Flairon
+SpookFishronFlailProj.DisplayName: Flaming Flairon
 SpookFishronFlailBubble.DisplayName: Spicy Bubble
 SinisterSnailPet.DisplayName: Sinister Snail
 SpookFishronMinion.DisplayName: Spooky Pigron
@@ -750,3 +750,6 @@ FireflyPet.DisplayName: Firefly
 CrabPet.DisplayName: Vampire Crab
 GlyphomancerBolt.DisplayName: ""
 GlyphomancerHand.DisplayName: Magic Hand
+SpookFishronWhipProj.DisplayName: Spicy Eel
+SpookFishronWhipBubble.DisplayName: Spicy Bubble
+SpookFishronWhipBubbleExplosion.DisplayName: Explosion

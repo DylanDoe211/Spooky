@@ -14,6 +14,7 @@ using System;
 using Spooky.Content.Biomes;
 using Spooky.Content.Buffs;
 using Spooky.Content.Buffs.Debuff;
+using Spooky.Content.Buffs.WhipDebuff;
 using Spooky.Content.Dusts;
 using Spooky.Content.Items.BossBags.Accessory;
 using Spooky.Content.Items.Fishing;
@@ -732,8 +733,14 @@ namespace Spooky.Core
 				Vector2 lineDirection = new Vector2(Direction.X, Direction.Y);
 
 				Projectile.NewProjectile(target.GetSource_OnHurt(Player), target.Center, Vector2.Zero,
-				ModContent.ProjectileType<GrowingBroccoli>(), damageDone, 0, Player.whoAmI, ai0: lineDirection.ToRotation() + MathHelper.Pi, ai2: target.whoAmI);
+				ModContent.ProjectileType<GrowingBroccoli>(), proj.damage, 0, Player.whoAmI, ai0: lineDirection.ToRotation() + MathHelper.Pi, ai2: target.whoAmI);
 			}
+
+            //spook fishron eel whip makes minion spawn bubbles 
+            if (target.HasBuff<SpookFishronWhipDebuff>() && !proj.npcProj && !proj.trap && (proj.minion || ProjectileID.Sets.MinionShot[proj.type]))
+            {
+				Projectile.NewProjectile(proj.GetSource_FromAI(), target.Center, new Vector2(0, Main.rand.Next(4, 9)).RotatedByRandom(360), ModContent.ProjectileType<SpookFishronWhipBubble>(), proj.damage, 0, Player.whoAmI);
+            }
 		}
 
 		public override void OnHurt(Player.HurtInfo info)
