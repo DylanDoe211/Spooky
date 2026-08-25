@@ -7,6 +7,7 @@ using System;
 
 using Spooky.Core;
 using Spooky.Content.Buffs.Minion;
+using Spooky.Content.Items.Cemetery.Armor;
 
 namespace Spooky.Content.Projectiles.Cemetery
 {
@@ -67,16 +68,16 @@ namespace Spooky.Content.Projectiles.Cemetery
             
             if (player.dead)
             {
-                player.GetModPlayer<SpookyPlayer>().HorsemanSet = false;
+                player.GetModPlayer<HorsemanArmorPlayer>().HorsemanSet = false;
             }
 
-            if (player.GetModPlayer<SpookyPlayer>().HorsemanSet)
+            if (player.GetModPlayer<HorsemanArmorPlayer>().HorsemanSet)
             {
                 Projectile.timeLeft = 2;
                 player.AddBuff(ModContent.BuffType<PumpkinHeadBuff>(), 1, false);
             }
             
-            if (!player.GetModPlayer<SpookyPlayer>().HorsemanSet)
+            if (!player.GetModPlayer<HorsemanArmorPlayer>().HorsemanSet)
             {
                 Projectile.Kill();
             }

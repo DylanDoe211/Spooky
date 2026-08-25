@@ -7,6 +7,10 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
 using Spooky.Content.Buffs.Debuff;
+using Spooky.Content.Items.BossBags.Accessory;
+using Spooky.Content.Items.Quest;
+using Spooky.Content.Items.SpookyBiome;
+using Spooky.Content.Items.SpookyHell.EggEvent;
 using Spooky.Content.Projectiles.Blooms;
 using Spooky.Content.Projectiles.SpookyHell;
 using Spooky.Content.Projectiles.SpookyBiome;
@@ -84,7 +88,7 @@ namespace Spooky.Core
 			if (item.damage > 0 && item.pick <= 0 && item.hammer <= 0 && item.axe <= 0 && item.mountType <= 0)
 			{
 				//make items shoot boogers when the snotty schnoz is at full charge
-				if (player.GetModPlayer<SpookyPlayer>().MocoNose && player.GetModPlayer<SpookyPlayer>().MocoBoogerCharge >= 15)
+				if (player.GetModPlayer<MocoNosePlayer>().MocoNose && player.GetModPlayer<MocoNosePlayer>().MocoBoogerCharge >= 15)
 				{
 					bool ItemDoesntShoot = item.shoot <= 0 || (item.shoot > 0 && item.shootSpeed == 0);
 
@@ -105,7 +109,7 @@ namespace Spooky.Core
 						ModContent.ProjectileType<MocoNoseSnot>(), item.damage, item.knockBack, player.whoAmI);
 					}
 
-					player.GetModPlayer<SpookyPlayer>().MocoBoogerCharge = 0;
+					player.GetModPlayer<MocoNosePlayer>().MocoBoogerCharge = 0;
 				}
 
 				//items shoot out 3 monkey orchid shurikens if you have the monkey shruiken bloom buff
@@ -163,7 +167,7 @@ namespace Spooky.Core
 				}
 
 				//shoot out a kidney stone with the stoned kidney
-				if (player.GetModPlayer<SpookyPlayer>().StonedKidney && player.GetModPlayer<SpookyPlayer>().StonedKidneyCharge >= 7.5f)
+				if (player.GetModPlayer<StonedKidneyPlayer>().StonedKidney && player.GetModPlayer<StonedKidneyPlayer>().StonedKidneyCharge >= 7.5f)
 				{
 					float mouseXDist = Main.mouseX + Main.screenPosition.X;
 					float mouseYDist = Main.mouseY + Main.screenPosition.Y;
@@ -178,11 +182,11 @@ namespace Spooky.Core
 						ModContent.ProjectileType<KidneyRock>(), 100 + (item.damage / 2), item.knockBack, player.whoAmI);
 					}
 
-					player.GetModPlayer<SpookyPlayer>().StonedKidneyCharge = 0f;
+					player.GetModPlayer<StonedKidneyPlayer>().StonedKidneyCharge = 0f;
 				}
 
 				//shoot out returning needle with the sewing thread
-				if (player.GetModPlayer<SpookyPlayer>().SewingThread && player.ownedProjectileCounts[ModContent.ProjectileType<SewingNeedle>()] < 1)
+				if (player.GetModPlayer<SewingThreadPlayer>().SewingThread && player.ownedProjectileCounts[ModContent.ProjectileType<SewingNeedle>()] < 1)
 				{
 					if (Main.rand.NextBool(8))
 					{
@@ -198,7 +202,7 @@ namespace Spooky.Core
 				}
 
 				//shoot out razor leaf with the autumn leaf
-				if (player.GetModPlayer<SpookyPlayer>().AutumnLeaf && item.DamageType == DamageClass.Melee)
+				if (player.GetModPlayer<AutumnLeafPlayer>().AutumnLeaf && item.DamageType == DamageClass.Melee)
 				{
 					if (Main.rand.NextBool(8))
 					{
@@ -214,7 +218,7 @@ namespace Spooky.Core
 				}
 
 				//shoot out an egg every 6 shots with ranged items with the egg carton
-				if (player.GetModPlayer<SpookyPlayer>().EggCarton && item.DamageType == DamageClass.Ranged)
+				if (player.GetModPlayer<EggCartonPlayer>().EggCarton && item.DamageType == DamageClass.Ranged)
 				{
 					RangedEggUses++;
 					if (RangedEggUses >= 6)

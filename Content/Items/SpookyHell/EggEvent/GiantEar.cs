@@ -25,7 +25,7 @@ namespace Spooky.Content.Items.SpookyHell.EggEvent
        
         public override void UpdateAccessory(Player player, bool hideVisual)
         { 
-            player.GetModPlayer<SpookyPlayer>().GiantEar = true;
+            player.GetModPlayer<GiantEarPlayer>().GiantEar = true;
             
             bool NotSpawned = player.ownedProjectileCounts[ModContent.ProjectileType<EarParasite>()] <= 0;
 			if (NotSpawned && player.whoAmI == Main.myPlayer)
@@ -33,6 +33,16 @@ namespace Spooky.Content.Items.SpookyHell.EggEvent
 				//leave the source as null for right now
 				Projectile.NewProjectile(null, player.position.X + (float)(player.width / 2), player.position.Y + (float)(player.height / 2), 0f, 0f, ModContent.ProjectileType<EarParasite>(), 0, 0f, player.whoAmI);
 			}
+        }
+    }
+
+    public class GiantEarPlayer : ModPlayer
+    {
+		public bool GiantEar = false;
+
+        public override void ResetEffects()
+        {
+			GiantEar = false;
         }
     }
 }

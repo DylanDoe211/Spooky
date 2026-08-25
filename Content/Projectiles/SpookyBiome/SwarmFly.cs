@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using System;
 
 using Spooky.Core;
+using Spooky.Content.Items.BossBags.Accessory;
 
 namespace Spooky.Content.Projectiles.SpookyBiome
 {
@@ -63,7 +64,7 @@ namespace Spooky.Content.Projectiles.SpookyBiome
                 Projectile.rotation += MathHelper.Pi;
             }
 
-            if (!player.active || player.dead || !player.GetModPlayer<SpookyPlayer>().FlyAmulet)
+            if (!player.active || player.dead || !player.GetModPlayer<FlyCharmPlayer>().FlyAmulet)
 			{
 				Projectile.alpha += 25;
 

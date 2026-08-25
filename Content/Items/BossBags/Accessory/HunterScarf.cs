@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 using Spooky.Core;
+using Spooky.Content.Buffs.Debuff;
 
 namespace Spooky.Content.Items.BossBags.Accessory
 {
@@ -21,7 +22,31 @@ namespace Spooky.Content.Items.BossBags.Accessory
 
 		public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<SpookyPlayer>().HunterScarf = true;
+            player.GetModPlayer<HunterScarfPlayer>().HunterScarf = true;
         }
 	}
+
+    public class HunterScarfPlayer : ModPlayer
+    {
+        public bool HunterScarf = false;
+
+        public override void ResetEffects()
+        {
+            HunterScarf = false;
+        }
+
+        public override void PreUpdate()
+        {
+            if (HunterScarf)
+            {
+                foreach (var NPC in Main.ActiveNPCs)
+                {
+                    if (!NPC.friendly && !NPC.immortal && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type] && Player.Distance(NPC.Center) <= 350f)
+                    {
+                        NPC.AddBuff(ModContent.BuffType<HunterScarfMark>(), 10);
+                    }
+                }
+            }
+        }
+    }
 }

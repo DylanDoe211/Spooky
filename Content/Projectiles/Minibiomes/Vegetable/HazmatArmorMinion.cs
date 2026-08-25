@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using System;
 
 using Spooky.Core;
+using Spooky.Content.Items.Minibiomes.Armor;
 
 namespace Spooky.Content.Projectiles.Minibiomes.Vegetable
 {
@@ -75,7 +76,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Vegetable
 
 			Projectile.spriteDirection = -Projectile.direction;
 
-			if (player.GetModPlayer<SpookyPlayer>().HazmatSet)
+			if (player.GetModPlayer<HazmatArmorPlayer>().HazmatSet)
             {
 				Projectile.timeLeft = 2;
 			}

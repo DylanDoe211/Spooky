@@ -5,9 +5,8 @@ using Terraria.Audio;
 using Microsoft.Xna.Framework;
 using System;
 
-using Spooky.Core;
+using Spooky.Content.Items.SpookyBiome;
 using Spooky.Content.Items.SpookyBiome.Misc;
-using Spooky.Content.Projectiles.Sentient;
 
 namespace Spooky.Content.Projectiles.SpookyBiome
 {
@@ -53,16 +52,16 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 
 			if (player.dead)
 			{
-				player.GetModPlayer<SpookyPlayer>().CandyBag = false;
+				player.GetModPlayer<CandyBagPlayer>().CandyBag = false;
 			}
 
-			if (player.GetModPlayer<SpookyPlayer>().CandyBag)
+			if (player.GetModPlayer<CandyBagPlayer>().CandyBag)
 			{
 				Projectile.timeLeft = 2;
 			}
 
 			//drop candy
-			if (player.GetModPlayer<SpookyPlayer>().CandyBagJustHit && player.GetModPlayer<SpookyPlayer>().CandyBagCooldown == 0)
+			if (player.GetModPlayer<CandyBagPlayer>().CandyBagJustHit && player.GetModPlayer<CandyBagPlayer>().CandyBagCooldown == 0)
 			{
 				SoundEngine.PlaySound(SoundID.MaxMana, Projectile.Center);
 
@@ -70,8 +69,8 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 				Main.rand.Next(-5, 6), Main.rand.Next(-12, -6), ModContent.ProjectileType<Candy>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
 				Main.projectile[Candy].frame = Main.rand.Next(0, 12);
 
-				player.GetModPlayer<SpookyPlayer>().CandyBagJustHit = false;
-				player.GetModPlayer<SpookyPlayer>().CandyBagCooldown = 60;
+				player.GetModPlayer<CandyBagPlayer>().CandyBagJustHit = false;
+				player.GetModPlayer<CandyBagPlayer>().CandyBagCooldown = 60;
 			}
 
 			//movement

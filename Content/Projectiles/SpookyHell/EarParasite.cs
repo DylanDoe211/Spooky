@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 using Spooky.Core;
+using Spooky.Content.Items.SpookyHell.EggEvent;
 
 namespace Spooky.Content.Projectiles.SpookyHell
 {
@@ -88,10 +89,10 @@ namespace Spooky.Content.Projectiles.SpookyHell
             
 			if (player.dead)
             {
-				player.GetModPlayer<SpookyPlayer>().GiantEar = false;
+				player.GetModPlayer<GiantEarPlayer>().GiantEar = false;
             }
 
-			if (player.GetModPlayer<SpookyPlayer>().GiantEar)
+			if (player.GetModPlayer<GiantEarPlayer>().GiantEar)
             {
 				Projectile.timeLeft = 2;
             }

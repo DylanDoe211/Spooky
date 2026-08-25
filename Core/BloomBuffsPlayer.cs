@@ -934,6 +934,15 @@ namespace Spooky.Core
 			}
 		}
 
+		public override void PostUpdateRunSpeeds()
+        {
+            if (Player.HasBuff(ModContent.BuffType<GooseberryBoostBuff>()))
+            {
+                Player.maxRunSpeed += 3f;
+                Player.runAcceleration += 0.015f;
+            }
+		}
+
 		public override void PostUpdateEquips()
 		{
 			//fall gourd increases damage if you are falling

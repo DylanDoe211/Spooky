@@ -19,7 +19,17 @@ namespace Spooky.Content.Items.SpookyBiome
 
 		public override void UpdateEquip(Player player) 
 		{
-			player.GetModPlayer<SpookyPlayer>().AutumnLeaf = true;
+			player.GetModPlayer<AutumnLeafPlayer>().AutumnLeaf = true;
+		}
+	}
+
+	public class AutumnLeafPlayer : ModPlayer
+    {
+		public bool AutumnLeaf = false;
+
+		public override void ResetEffects()
+        {
+			AutumnLeaf = false;
 		}
 	}
 }

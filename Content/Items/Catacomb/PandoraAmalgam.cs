@@ -19,10 +19,10 @@ namespace Spooky.Content.Items.Catacomb
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         { 
-            player.GetModPlayer<SpookyPlayer>().PandoraChalice = true;
-            player.GetModPlayer<SpookyPlayer>().PandoraCross = true;
-            player.GetModPlayer<SpookyPlayer>().PandoraCuffs = true;
-            player.GetModPlayer<SpookyPlayer>().PandoraRosary = true;
+            player.GetModPlayer<PandoraChalicePlayer>().PandoraChalice = true;
+            player.GetModPlayer<PandoraCrossPlayer>().PandoraCross = true;
+            player.GetModPlayer<PandoraCuffsPlayer>().PandoraCuffs = true;
+            player.GetModPlayer<PandoraRosaryPlayer>().PandoraRosary = true;
         }
 
         public override void AddRecipes()

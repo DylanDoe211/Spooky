@@ -21,7 +21,7 @@ namespace Spooky.Content.Items.Quest
 
 		public override void UpdateAccessory(Player player, bool hideVisual)
 		{
-			player.GetModPlayer<SpookyPlayer>().MagicEyeOrb = true;
+			player.GetModPlayer<MagicEyeOrbPlayer>().MagicEyeOrb = true;
 
 			bool NotSpawned = player.ownedProjectileCounts[ModContent.ProjectileType<GlassEye>()] <= 0;
 			if (NotSpawned && player.whoAmI == Main.myPlayer)
@@ -29,6 +29,16 @@ namespace Spooky.Content.Items.Quest
 				//leave the source as null for right now
 				Projectile.NewProjectile(null, player.position.X + (float)(player.width / 2), player.position.Y - 3, 0f, 0f, ModContent.ProjectileType<GlassEye>(), 0, 0f, player.whoAmI);
 			}
+		}
+	}
+
+	public class MagicEyeOrbPlayer : ModPlayer
+    {
+		public bool MagicEyeOrb = false;
+
+		public override void ResetEffects()
+        {
+			MagicEyeOrb = false;
 		}
 	}
 }

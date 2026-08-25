@@ -20,13 +20,23 @@ namespace Spooky.Content.Items.Cemetery.Contraband
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<SpookyPlayer>().SmileDogPicture = true;
+            player.GetModPlayer<SmileDogPicturePlayer>().SmileDogPicture = true;
 
             bool NotSpawned = player.ownedProjectileCounts[ModContent.ProjectileType<SmilingDog>()] <= 0;
 			if (NotSpawned && player.whoAmI == Main.myPlayer)
 			{
 				Projectile.NewProjectile(null, player.Center.X, player.Center.Y, 0f, 0f, ModContent.ProjectileType<SmilingDog>(), 30, 1f, player.whoAmI);
 			}
+        }
+    }
+
+    public class SmileDogPicturePlayer : ModPlayer
+    {
+        public bool SmileDogPicture = false;
+
+        public override void ResetEffects()
+        {
+            SmileDogPicture = false;
         }
     }
 }

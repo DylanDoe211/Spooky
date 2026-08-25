@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 using Spooky.Content.Buffs.Debuff;
+using Spooky.Content.Items.Catacomb;
+using Spooky.Content.Items.Cemetery.Contraband;
 
 namespace Spooky.Core
 {
@@ -89,7 +91,7 @@ namespace Spooky.Core
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
         {
-            return drawInfo.drawPlayer.GetModPlayer<SpookyPlayer>().CrossCharmShield && !drawInfo.drawPlayer.dead;
+            return drawInfo.drawPlayer.GetModPlayer<CrossCharmPlayer>().CrossCharmShield && !drawInfo.drawPlayer.dead;
         }
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
@@ -117,7 +119,7 @@ namespace Spooky.Core
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
         {
-            return drawInfo.drawPlayer.GetModPlayer<SpookyPlayer>().MonumentMythosPyramid && !drawInfo.drawPlayer.HasBuff(ModContent.BuffType<MonumentMythosCooldown>());
+            return drawInfo.drawPlayer.GetModPlayer<MonumentMythosPyramidPlayer>().MonumentMythosPyramid && !drawInfo.drawPlayer.HasBuff(ModContent.BuffType<MonumentMythosCooldown>());
         }
 
         protected override void Draw(ref PlayerDrawSet drawInfo)

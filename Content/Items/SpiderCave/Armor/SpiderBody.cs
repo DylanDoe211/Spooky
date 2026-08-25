@@ -21,7 +21,7 @@ namespace Spooky.Content.Items.SpiderCave.Armor
 
 		public override void UpdateEquip(Player player) 
 		{
-            player.GetModPlayer<SpookyPlayer>().SpiderSpeed = true;
+            player.GetModPlayer<SpiderArmorPlayer>().SpiderSpeed = true;
             player.GetCritChance(DamageClass.Generic) += 3;
         }
 

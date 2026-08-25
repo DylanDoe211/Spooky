@@ -31,12 +31,31 @@ namespace Spooky.Content.Items.Minibiomes.Armor
 		public override void UpdateArmorSet(Player player) 
 		{
 			player.setBonus = Language.GetTextValue("Mods.Spooky.ArmorSetBonus.GoldrushArmor");
-			player.GetModPlayer<SpookyPlayer>().GoldrushSet = true;
+			player.GetModPlayer<GoldrushArmorPlayer>().GoldrushSet = true;
 		}
 
 		public override void UpdateEquip(Player player) 
 		{
 			player.pickSpeed -= 0.1f;
+		}
+	}
+
+	public class GoldrushArmorPlayer : ModPlayer
+    {
+		public bool GoldrushSet = false;
+
+		public override void ResetEffects()
+        {
+			GoldrushSet = false;
+		}
+
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+			//goldrush set inflicts midas forever
+			if (GoldrushSet)
+			{
+				target.AddBuff(BuffID.Midas, int.MaxValue);
+			}
 		}
 	}
 }

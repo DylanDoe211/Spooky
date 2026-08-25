@@ -10,6 +10,7 @@ using System.Collections.Generic;
 
 using Spooky.Core;
 using Spooky.Content.Buffs.Debuff;
+using Spooky.Content.Items.Quest;
 
 namespace Spooky.Content.Projectiles.SpookyHell
 {
@@ -105,10 +106,10 @@ namespace Spooky.Content.Projectiles.SpookyHell
 
 			if (player.dead)
             {
-				player.GetModPlayer<SpookyPlayer>().MagicEyeOrb = false;
+				player.GetModPlayer<MagicEyeOrbPlayer>().MagicEyeOrb = false;
             }
 
-			if (player.GetModPlayer<SpookyPlayer>().MagicEyeOrb)
+			if (player.GetModPlayer<MagicEyeOrbPlayer>().MagicEyeOrb)
             {
 				Projectile.timeLeft = 2;
             }

@@ -20,7 +20,7 @@ namespace Spooky.Content.Items.SpookyBiome
        
         public override void UpdateAccessory(Player player, bool hideVisual)
         { 
-            player.GetModPlayer<SpookyPlayer>().CandyBag = true;
+            player.GetModPlayer<CandyBagPlayer>().CandyBag = true;
             
             bool NotSpawned = player.ownedProjectileCounts[ModContent.ProjectileType<CandyBagProj>()] <= 0;
 			if (NotSpawned && player.whoAmI == Main.myPlayer)
@@ -28,6 +28,39 @@ namespace Spooky.Content.Items.SpookyBiome
 				//leave the source as null for right now
 				Projectile.NewProjectile(null, player.position.X + (player.width / 2), player.position.Y + (player.height / 2), 0f, 0f, ModContent.ProjectileType<CandyBagProj>(), 18, 2f, player.whoAmI);
 			}
+        }
+    }
+
+    public class CandyBagPlayer : ModPlayer
+    {
+        public bool CandyBag = false;
+		public bool CandyBagJustHit = false;
+        public int CandyBagCooldown = 0;
+
+        public override void ResetEffects()
+        {
+            CandyBag = false;
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (CandyBag && (hit.DamageType == DamageClass.Summon || hit.DamageType == DamageClass.SummonMeleeSpeed))
+            { 
+                CandyBagJustHit = true;
+            }
+        }
+
+        public override void PreUpdate()
+        {
+            if (!CandyBag)
+			{
+				CandyBagJustHit = false;
+			}
+
+            if (CandyBagCooldown > 0)
+            {
+                CandyBagCooldown--;
+            }
         }
     }
 }

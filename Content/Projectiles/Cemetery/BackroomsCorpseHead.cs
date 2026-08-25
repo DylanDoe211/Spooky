@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Spooky.Core;
 using Spooky.Content.Buffs.Debuff;
 using Spooky.Content.Buffs.Minion;
+using Spooky.Content.Items.Cemetery.Contraband;
 
 namespace Spooky.Content.Projectiles.Cemetery
 {
@@ -49,10 +50,10 @@ namespace Spooky.Content.Projectiles.Cemetery
 
             if (player.dead)
             {
-                player.GetModPlayer<SpookyPlayer>().BackroomsCorpse = false;
+                player.GetModPlayer<BackroomsCorpsePlayer>().BackroomsCorpse = false;
             }
 
-            if (player.GetModPlayer<SpookyPlayer>().BackroomsCorpse)
+            if (player.GetModPlayer<BackroomsCorpsePlayer>().BackroomsCorpse)
             {
                 Projectile.timeLeft = 2;
             }

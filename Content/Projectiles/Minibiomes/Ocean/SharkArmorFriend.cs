@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 using Spooky.Core;
+using Spooky.Content.Items.Minibiomes.Armor;
 
 namespace Spooky.Content.Projectiles.Minibiomes.Ocean
 {
@@ -64,10 +65,10 @@ namespace Spooky.Content.Projectiles.Minibiomes.Ocean
 
             if (player.dead)
 			{
-				player.GetModPlayer<SpookyPlayer>().SharkBoneSet = false;
+				player.GetModPlayer<SharkBoneArmorPlayer>().SharkBoneSet = false;
 			}
 
-			if (player.GetModPlayer<SpookyPlayer>().SharkBoneSet)
+			if (player.GetModPlayer<SharkBoneArmorPlayer>().SharkBoneSet)
 			{
 				Projectile.timeLeft = 2;
 			}

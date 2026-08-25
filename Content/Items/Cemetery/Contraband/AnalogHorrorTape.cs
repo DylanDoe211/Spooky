@@ -4,7 +4,6 @@ using Terraria.ModLoader;
 using Terraria.DataStructures;
 
 using Spooky.Core;
-using Spooky.Content.Achievements;
 using Spooky.Content.Buffs.Debuff;
 using Spooky.Content.Projectiles.Cemetery;
 
@@ -23,17 +22,17 @@ namespace Spooky.Content.Items.Cemetery.Contraband
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<SpookyPlayer>().AnalogHorrorTape = true;
-            player.GetModPlayer<SpookyPlayer>().GeminiEntertainmentGame = true;
-            player.GetModPlayer<SpookyPlayer>().MandelaCatalogueTV = true;
-            player.GetModPlayer<SpookyPlayer>().CarnisFlavorEnhancer = true;
-            player.GetModPlayer<SpookyPlayer>().BackroomsCorpse = true;
-            player.GetModPlayer<SpookyPlayer>().Local58Telescope = true;
+            player.GetModPlayer<AnalogHorrorTapePlayer>().AnalogHorrorTape = true;
+            player.GetModPlayer<GeminiEntertainmentGamePlayer>().GeminiEntertainmentGame = true;
+            player.GetModPlayer<MandelaCatalogueTVPlayer>().MandelaCatalogueTV = true;
+            player.GetModPlayer<CarnisFlavorEnhancerPlayer>().CarnisFlavorEnhancer = true;
+            player.GetModPlayer<BackroomsCorpsePlayer>().BackroomsCorpse = true;
+            player.GetModPlayer<Local58TelescopePlayer>().Local58Telescope = true;
 
             //monument mythos pyramid defense
             if (!player.HasBuff(ModContent.BuffType<MonumentMythosCooldown>()))
             {
-                player.GetModPlayer<SpookyPlayer>().MonumentMythosPyramid = true;
+                player.GetModPlayer<MonumentMythosPyramidPlayer>().MonumentMythosPyramid = true;
                 player.endurance += 0.35f;
             }
 
@@ -64,6 +63,16 @@ namespace Spooky.Content.Items.Cemetery.Contraband
             .AddIngredient(ItemID.LunarBar, 5)
             .AddTile(TileID.TinkerersWorkbench)
             .Register();
+        }
+    }
+
+    public class AnalogHorrorTapePlayer : ModPlayer
+    {
+        public bool AnalogHorrorTape = false;
+
+        public override void ResetEffects()
+        {
+            AnalogHorrorTape = false;
         }
     }
 }

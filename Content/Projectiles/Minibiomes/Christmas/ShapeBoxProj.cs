@@ -9,6 +9,7 @@ using System;
 
 using Spooky.Core;
 using Spooky.Content.Buffs;
+using Spooky.Content.Items.Minibiomes.Christmas;
 
 namespace Spooky.Content.Projectiles.Minibiomes.Christmas
 {
@@ -80,11 +81,11 @@ namespace Spooky.Content.Projectiles.Minibiomes.Christmas
 				
 				if (Projectile.Hitbox.Intersects(player.Hitbox))
                 {
-                    //SoundEngine.PlaySound(SoundID.Item2, Projectile.Center);
+                    SoundEngine.PlaySound(SoundID.Item2, Projectile.Center);
 
 					player.AddBuff(ModContent.BuffType<KrampusShapeBuff>(), 1200);
 
-                    player.GetModPlayer<SpookyPlayer>().KrampusShapeBuffStacks++;
+                    player.GetModPlayer<KrampusShapeBoxPlayer>().KrampusShapeBuffStacks++;
 
                     Projectile.Kill();
                 }

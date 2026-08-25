@@ -9,6 +9,7 @@ using Spooky.Content.Biomes;
 using Spooky.Content.Buffs.Debuff;
 using Spooky.Content.Dusts;
 using Spooky.Content.Generation;
+using Spooky.Content.Items.Minibiomes.Armor;
 using Spooky.Content.Projectiles.Blooms;
 using Spooky.Content.Projectiles.Slingshots;
 using Spooky.Content.Tiles.Cemetery.Tree;
@@ -76,28 +77,6 @@ namespace Spooky.Core
 				Projectile.NewProjectile(projectile.GetSource_FromAI(), target.Center, Vector2.Zero, ModContent.ProjectileType<SlingshotAttachFlower>(), 
 				projectile.damage / 3, 0f, player.whoAmI, target.whoAmI, Main.rand.Next(0, 6));
 			}
-
-			//creepy candle makes magic projectiles inflict on fire
-			if (player.GetModPlayer<SpookyPlayer>().MagicCandle && projectile.DamageType == DamageClass.Magic)
-            {
-                if (Main.rand.NextBool(3))
-                {
-                    target.AddBuff(BuffID.OnFire, 120);
-                }
-            }
-
-            //root armor set makes ranged projectiles life-steal sometimes
-            if (player.GetModPlayer<SpookyPlayer>().RootSet && player.GetModPlayer<SpookyPlayer>().RootHealCooldown <= 0 && projectile.DamageType == DamageClass.Ranged && damageDone >= 2)
-            {
-                if (Main.rand.NextBool(5))
-                {
-                    //heal based on how much damage was done
-                    int LifeHealed = damageDone > 12 ? 6 : damageDone / 2;
-					player.statLife += LifeHealed;
-					player.HealEffect(LifeHealed, true);
-					player.GetModPlayer<SpookyPlayer>().RootHealCooldown = 300;
-                }
-            }
         }
 
         public override bool PreAI(Projectile projectile)
@@ -137,7 +116,7 @@ namespace Spooky.Core
 			}
 
 			//minions inflict toxic and have toxic cloud dusts with the hazmat armor set
-			if (player.GetModPlayer<SpookyPlayer>().HazmatSet && projectile.DamageType == DamageClass.Summon && projectile.minionSlots > 0)
+			if (player.GetModPlayer<HazmatArmorPlayer>().HazmatSet && projectile.DamageType == DamageClass.Summon && projectile.minionSlots > 0)
 			{
 				if (Main.rand.NextBool(18))
 				{

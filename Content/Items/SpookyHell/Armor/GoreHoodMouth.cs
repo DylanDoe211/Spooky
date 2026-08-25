@@ -30,8 +30,7 @@ namespace Spooky.Content.Items.SpookyHell.Armor
 		public override void UpdateArmorSet(Player player) 
 		{
 			player.setBonus = Language.GetTextValue("Mods.Spooky.ArmorSetBonus.GoreArmorBoro");
-			
-			player.GetModPlayer<SpookyPlayer>().GoreArmorMouth = true;
+			player.GetModPlayer<GoreArmorPlayer>().GoreArmorMouth = true;
 
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<MiniBoroHead>()] <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<MiniOrroHead>()] <= 0)
 			{

@@ -21,13 +21,23 @@ namespace Spooky.Content.Items.Cemetery.Contraband
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<SpookyPlayer>().PolybiusArcadeGame = true;
+            player.GetModPlayer<PolybiusArcadeGamePlayer>().PolybiusArcadeGame = true;
 
             bool NotSpawned = player.ownedProjectileCounts[ModContent.ProjectileType<PolybiusSwirl>()] <= 0;
 			if (NotSpawned && player.whoAmI == Main.myPlayer)
 			{
 				Projectile.NewProjectile(null, Main.MouseWorld.X, Main.MouseWorld.Y, 0f, 0f, ModContent.ProjectileType<PolybiusSwirl>(), 25, 0f, player.whoAmI);
 			}
+        }
+    }
+
+    public class PolybiusArcadeGamePlayer : ModPlayer
+    {
+        public bool PolybiusArcadeGame = false;
+
+        public override void ResetEffects()
+        {
+            PolybiusArcadeGame = false;
         }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using System;
 
 using Spooky.Core;
+using Spooky.Content.Items.Cemetery.Contraband;
 
 namespace Spooky.Content.Projectiles.Cemetery
 {
@@ -121,7 +122,7 @@ namespace Spooky.Content.Projectiles.Cemetery
                 {
                     if (!NPC.boss && !NPC.IsTechnicallyBoss())
                     {
-                        NPC.velocity *= player.GetModPlayer<SpookyPlayer>().AnalogHorrorTape ? 0.75f : 0.95f;
+                        NPC.velocity *= player.GetModPlayer<AnalogHorrorTapePlayer>().AnalogHorrorTape ? 0.75f : 0.95f;
                     }
                 }
             }

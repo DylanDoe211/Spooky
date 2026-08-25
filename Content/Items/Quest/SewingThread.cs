@@ -1,7 +1,8 @@
-using Spooky.Core;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+
+using Spooky.Core;
 
 namespace Spooky.Content.Items.Quest
 {
@@ -18,7 +19,17 @@ namespace Spooky.Content.Items.Quest
 
 		public override void UpdateAccessory(Player player, bool hideVisual)
 		{
-			player.GetModPlayer<SpookyPlayer>().SewingThread = true;
+			player.GetModPlayer<SewingThreadPlayer>().SewingThread = true;
+		}
+	}
+
+	public class SewingThreadPlayer : ModPlayer
+    {
+		public bool SewingThread = false;
+
+		public override void ResetEffects()
+        {
+			SewingThread = false;
 		}
 	}
 }

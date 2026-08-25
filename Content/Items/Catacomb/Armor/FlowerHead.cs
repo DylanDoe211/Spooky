@@ -3,12 +3,15 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Terraria.Localization;
+using Terraria.Audio;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Spooky.Core;
+using Spooky.Content.Buffs.Debuff;
 using Spooky.Content.Items.Catacomb.Misc;
+using Spooky.Content.Projectiles.Catacomb;
 
 namespace Spooky.Content.Items.Catacomb.Armor
 {
@@ -61,7 +64,7 @@ namespace Spooky.Content.Items.Catacomb.Armor
         public override void UpdateArmorSet(Player player) 
 		{
 			player.setBonus = Language.GetTextValue("Mods.Spooky.ArmorSetBonus.FlowerArmor");
-            player.GetModPlayer<SpookyPlayer>().FlowerArmorSet = true;
+            player.GetModPlayer<FlowerArmorPlayer>().FlowerArmorSet = true;
             player.lifeRegen += 5;
 		}
 
@@ -80,4 +83,31 @@ namespace Spooky.Content.Items.Catacomb.Armor
             .Register();
         }
     }
+
+	public class FlowerArmorPlayer : ModPlayer
+    {
+        public bool FlowerArmorSet = false;
+
+		public override void ResetEffects()
+        {
+            FlowerArmorSet = false;
+		}
+
+		public override void ArmorSetBonusActivated()
+		{
+			//flower armor setbonus
+			if (FlowerArmorSet && !Player.HasBuff(ModContent.BuffType<FlowerArmorCooldown>()))
+			{
+				SoundEngine.PlaySound(SoundID.DD2_BookStaffCast, Player.Center);
+
+				for (int numProjectiles = 0; numProjectiles < 12; numProjectiles++)
+				{
+					Projectile.NewProjectile(null, Player.Center.X + Main.rand.Next(-30, 30),
+					Player.Center.Y + Main.rand.Next(-30, 30), 0, 0, ModContent.ProjectileType<FlowerArmorPollen>(), 55, 2f, Player.whoAmI);
+				}
+
+				Player.AddBuff(ModContent.BuffType<FlowerArmorCooldown>(), 900);
+			}
+		}
+	}
 }

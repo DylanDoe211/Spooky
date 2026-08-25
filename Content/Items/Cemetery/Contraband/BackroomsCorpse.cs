@@ -20,13 +20,23 @@ namespace Spooky.Content.Items.Cemetery.Contraband
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<SpookyPlayer>().BackroomsCorpse = true;
+            player.GetModPlayer<BackroomsCorpsePlayer>().BackroomsCorpse = true;
 
             bool NotSpawned = player.ownedProjectileCounts[ModContent.ProjectileType<BackroomsCorpseHead>()] <= 0;
 			if (NotSpawned && player.whoAmI == Main.myPlayer)
 			{
 				Projectile.NewProjectile(null, player.Center.X, player.Center.Y, 0f, 0f, ModContent.ProjectileType<BackroomsCorpseHead>(), 0, 0f, player.whoAmI, 0f, 0f);
 			}
+        }
+    }
+
+    public class BackroomsCorpsePlayer : ModPlayer
+    {
+        public bool BackroomsCorpse = false;
+
+        public override void ResetEffects()
+        {
+            BackroomsCorpse = false;
         }
     }
 }

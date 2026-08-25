@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 using Spooky.Core;
+using Spooky.Content.Items.Quest;
 
 namespace Spooky.Content.Projectiles.Cemetery
 {
@@ -96,10 +97,10 @@ namespace Spooky.Content.Projectiles.Cemetery
 
             if (player.dead)
 			{
-				player.GetModPlayer<SpookyPlayer>().GhostBookBlue = false;
+				player.GetModPlayer<GhostBookPlayer>().GhostBookBlue = false;
 			}
 
-			if (player.GetModPlayer<SpookyPlayer>().GhostBookBlue)
+			if (player.GetModPlayer<GhostBookPlayer>().GhostBookBlue)
 			{
 				Projectile.timeLeft = 2;
 			}

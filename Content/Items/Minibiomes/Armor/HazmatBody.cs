@@ -20,7 +20,7 @@ namespace Spooky.Content.Items.Minibiomes.Armor
 
 		public override void EquipFrameEffects(Player player, EquipType type)
         {
-			player.GetModPlayer<SpookyPlayer>().DrawHazmatBack = true;
+			player.GetModPlayer<HazmatArmorPlayer>().DrawHazmatBack = true;
 		}
 
         public override void UpdateEquip(Player player) 

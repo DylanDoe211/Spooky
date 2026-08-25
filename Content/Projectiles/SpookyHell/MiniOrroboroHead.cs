@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 
 using Spooky.Core;
+using Spooky.Content.Items.SpookyHell.Armor;
 
 namespace Spooky.Content.Projectiles.SpookyHell
 {
@@ -62,10 +63,10 @@ namespace Spooky.Content.Projectiles.SpookyHell
 
             if (player.dead)
 			{
-				player.GetModPlayer<SpookyPlayer>().GoreArmorMouth = false;
+				player.GetModPlayer<GoreArmorPlayer>().GoreArmorMouth = false;
 			}
 
-			if (player.GetModPlayer<SpookyPlayer>().GoreArmorMouth)
+			if (player.GetModPlayer<GoreArmorPlayer>().GoreArmorMouth)
 			{
 				Projectile.timeLeft = 2;
 			}
@@ -295,10 +296,10 @@ namespace Spooky.Content.Projectiles.SpookyHell
 
             if (player.dead)
 			{
-				player.GetModPlayer<SpookyPlayer>().GoreArmorEye = false;
+				player.GetModPlayer<GoreArmorPlayer>().GoreArmorEye = false;
 			}
 
-			if (player.GetModPlayer<SpookyPlayer>().GoreArmorEye)
+			if (player.GetModPlayer<GoreArmorPlayer>().GoreArmorEye)
 			{
 				Projectile.timeLeft = 2;
 			}

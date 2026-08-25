@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 using Spooky.Core;
 using Spooky.Content.Buffs;
+using Spooky.Content.Items.Catacomb;
 
 namespace Spooky.Content.Projectiles.Catacomb
 {
@@ -129,7 +130,7 @@ namespace Spooky.Content.Projectiles.Catacomb
 				}
 				else
 				{
-					player.GetModPlayer<SpookyPlayer>().SkullFrenzyCharge++;
+					player.GetModPlayer<SkullAmuletPlayer>().SkullFrenzyCharge++;
 				}
 
                 Projectile.Kill();

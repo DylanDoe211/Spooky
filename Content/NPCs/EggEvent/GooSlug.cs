@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.DataStructures;
 using Terraria.Audio;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
@@ -66,7 +67,7 @@ namespace Spooky.Content.NPCs.EggEvent
             SpawnModBiomes = new int[2] { ModContent.GetInstance<Biomes.SpookyHellBiome>().Type, ModContent.GetInstance<Biomes.SpookyHellEventBiome>().Type };
         }
 
-        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
 			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
             {
@@ -149,7 +150,7 @@ namespace Spooky.Content.NPCs.EggEvent
                 NPC.alpha = 0;
             }
 
-            if (NPC.Hitbox.Intersects(player.Hitbox) && !player.GetModPlayer<SpookyPlayer>().EatenByGooSlug && player.GetModPlayer<SpookyPlayer>().GooSlugEatCooldown <= 0)
+            if (NPC.Hitbox.Intersects(player.Hitbox) && !player.GetModPlayer<GooSlugPlayer>().EatenByGooSlug && player.GetModPlayer<GooSlugPlayer>().GooSlugEatCooldown <= 0)
             {
 				if (NPC.localAI[0] == 0 && NPC.velocity.Y <= 0)
 				{
@@ -178,8 +179,8 @@ namespace Spooky.Content.NPCs.EggEvent
 				player.position = NPC.Center - new Vector2(player.width / 2 + (NPC.spriteDirection == 1 ? -25 : 25), 0);
 
 				//set player to eaten so that it hides them
-                player.GetModPlayer<SpookyPlayer>().EatenByGooSlug = true;
-                player.GetModPlayer<SpookyPlayer>().GooSlugEatCooldown = 180;
+                player.GetModPlayer<GooSlugPlayer>().EatenByGooSlug = true;
+                player.GetModPlayer<GooSlugPlayer>().GooSlugEatCooldown = 180;
 
 				//set frame to eating animation
 				if (NPC.localAI[1] == 0)
@@ -250,6 +251,38 @@ namespace Spooky.Content.NPCs.EggEvent
                 {
                     Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/GooSlugBoneGore").Type);
                 }
+            }
+        }
+    }
+
+    public class GooSlugPlayer : ModPlayer
+    {
+        public bool EatenByGooSlug = false;
+        public int GooSlugEatCooldown = 0;
+
+        public override void ResetEffects()
+        {
+            EatenByGooSlug = false;
+        }
+
+        public override void HideDrawLayers(PlayerDrawSet drawInfo)
+        {
+			if (EatenByGooSlug)
+			{
+				drawInfo.drawPlayer.frozen = true;
+
+				foreach (var layer in PlayerDrawLayerLoader.Layers)
+				{
+					layer.Hide();
+				}
+			}
+        }
+
+        public override void PreUpdate()
+        {
+            if (GooSlugEatCooldown > 0)
+            {
+                GooSlugEatCooldown--;
             }
         }
     }

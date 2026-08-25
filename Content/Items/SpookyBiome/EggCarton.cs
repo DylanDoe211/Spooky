@@ -19,7 +19,17 @@ namespace Spooky.Content.Items.SpookyBiome
 
 		public override void UpdateEquip(Player player) 
 		{
-            player.GetModPlayer<SpookyPlayer>().EggCarton = true;
+            player.GetModPlayer<EggCartonPlayer>().EggCarton = true;
+		}
+	}
+
+    public class EggCartonPlayer : ModPlayer
+    {
+		public bool EggCarton = false;
+
+		public override void ResetEffects()
+        {
+			EggCarton = false;
 		}
 	}
 }

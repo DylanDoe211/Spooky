@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Spooky.Core;
 using Spooky.Content.Items.SpookyHell.Misc;
+using Spooky.Content.Projectiles.SpookyHell;
 using Spooky.Content.Tiles.SpookyHell;
 
 namespace Spooky.Content.Items.SpookyHell.Armor
@@ -47,7 +48,7 @@ namespace Spooky.Content.Items.SpookyHell.Armor
 		public override void UpdateArmorSet(Player player) 
 		{
 			player.setBonus = Language.GetTextValue("Mods.Spooky.ArmorSetBonus.EyeArmor");
-			player.GetModPlayer<SpookyPlayer>().EyeArmorSet = true;
+			player.GetModPlayer<EyeArmorPlayer>().EyeArmorSet = true;
 			player.whipRangeMultiplier += 0.15f;
 		}
 
@@ -65,5 +66,35 @@ namespace Spooky.Content.Items.SpookyHell.Armor
             .AddTile(TileID.Anvils)
             .Register();
         }
+	}
+
+	public class EyeArmorPlayer : ModPlayer
+    {
+        public bool EyeArmorSet = false;
+
+		public override void ResetEffects()
+        {
+            EyeArmorSet = false;
+		}
+
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (EyeArmorSet && hit.DamageType == DamageClass.SummonMeleeSpeed && Main.rand.NextBool(5) &&
+			target.active && target.CanBeChasedBy(this) && !target.friendly && !target.dontTakeDamage && !NPCID.Sets.CountsAsCritter[target.type])
+            {
+				Vector2 SpawnPosition = target.Center + new Vector2(0, 85).RotatedByRandom(360);
+
+				for (int numDusts = 0; numDusts < 10; numDusts++)
+				{                                                                                  
+					int dust = Dust.NewDust(SpawnPosition, 20, 20, DustID.Blood, 0f, -2f, 0, default, 1.5f);
+					Main.dust[dust].noGravity = true;
+					Main.dust[dust].position.X += Main.rand.Next(-50, 51) * .05f - 1.5f;
+					Main.dust[dust].position.Y += Main.rand.Next(-50, 51) * .05f - 1.5f;
+				}
+
+				Projectile.NewProjectile(target.GetSource_OnHit(target), SpawnPosition, Vector2.Zero, 
+				ModContent.ProjectileType<LivingFleshEye>(), damageDone / 2, hit.Knockback, Player.whoAmI, 0, target.whoAmI);
+			}
+		}
 	}
 }

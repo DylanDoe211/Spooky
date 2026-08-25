@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Spooky.Core;
+using Spooky.Content.Items.Minibiomes.Christmas;
 
 namespace Spooky.Content.UserInterfaces
 {
@@ -22,7 +23,7 @@ namespace Spooky.Content.UserInterfaces
         {
 			Player player = Main.LocalPlayer;
 
-			if (player.GetModPlayer<SpookyPlayer>().KrampusResolutionTimer > 0)
+			if (player.GetModPlayer<KrampusResolutionPlayer>().KrampusResolutionTimer > 0)
 			{
 				spriteBatch.End();
 				spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
@@ -49,7 +50,7 @@ namespace Spooky.Content.UserInterfaces
 				//draw the main UI box
 				spriteBatch.Draw(Texture.Value, player.Center - new Vector2(0f, 65f) - Main.screenPosition, null, Color.White, Rotation, Texture.Size() / 2, 1f, SpriteEffects.None, 0f);
 
-				DisplayTimeText(spriteBatch, player.Center - new Vector2(5f, 65f) - Main.screenPosition, Main.LocalPlayer.GetModPlayer<SpookyPlayer>().KrampusResolutionTimer);
+				DisplayTimeText(spriteBatch, player.Center - new Vector2(5f, 65f) - Main.screenPosition, Main.LocalPlayer.GetModPlayer<KrampusResolutionPlayer>().KrampusResolutionTimer);
 
 				spriteBatch.End();
 				spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);

@@ -5,6 +5,7 @@ using Terraria.Audio;
 using Microsoft.Xna.Framework;
 
 using Spooky.Core;
+using Spooky.Content.Items.Cemetery.Contraband;
 
 namespace Spooky.Content.Projectiles.Cemetery
 {
@@ -37,10 +38,10 @@ namespace Spooky.Content.Projectiles.Cemetery
 
             if (player.dead)
             {
-                player.GetModPlayer<SpookyPlayer>().Local58Telescope = false;
+                player.GetModPlayer<Local58TelescopePlayer>().Local58Telescope = false;
             }
 
-            if (player.GetModPlayer<SpookyPlayer>().Local58Telescope)
+            if (player.GetModPlayer<Local58TelescopePlayer>().Local58Telescope)
             {
                 Projectile.timeLeft = 2;
             }
@@ -75,7 +76,7 @@ namespace Spooky.Content.Projectiles.Cemetery
             if (Main.dayTime && ParryDelay <= 0)
             {
                 //no damage cap if you have the analog horror tape
-                int damageToActivateParry = player.GetModPlayer<SpookyPlayer>().AnalogHorrorTape ? int.MaxValue : (Main.masterMode ? 120 : Main.expertMode ? 90 : 50);
+                int damageToActivateParry = player.GetModPlayer<AnalogHorrorTapePlayer>().AnalogHorrorTape ? int.MaxValue : (Main.masterMode ? 120 : Main.expertMode ? 90 : 50);
 
                 foreach (var Proj in Main.ActiveProjectiles)
 				{

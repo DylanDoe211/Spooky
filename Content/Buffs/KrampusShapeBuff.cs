@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Spooky.Core;
+using Spooky.Content.Items.Minibiomes.Christmas;
 
 namespace Spooky.Content.Buffs
 {
@@ -19,27 +20,27 @@ namespace Spooky.Content.Buffs
         {
 			Player player = Main.LocalPlayer;
 
-			if (player.GetModPlayer<SpookyPlayer>().KrampusShapeBuffStacks >= 1)
+			if (player.GetModPlayer<KrampusShapeBoxPlayer>().KrampusShapeBuffStacks >= 1)
 			{
 				spriteBatch.Draw(ModContent.Request<Texture2D>("Spooky/Content/Buffs/KrampusShapeBuff1").Value, 
 				drawParams.Position, null, drawParams.DrawColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 			}
-			if (player.GetModPlayer<SpookyPlayer>().KrampusShapeBuffStacks >= 2)
+			if (player.GetModPlayer<KrampusShapeBoxPlayer>().KrampusShapeBuffStacks >= 2)
 			{
 				spriteBatch.Draw(ModContent.Request<Texture2D>("Spooky/Content/Buffs/KrampusShapeBuff2").Value, 
 				drawParams.Position, null, drawParams.DrawColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 			}
-			if (player.GetModPlayer<SpookyPlayer>().KrampusShapeBuffStacks >= 3)
+			if (player.GetModPlayer<KrampusShapeBoxPlayer>().KrampusShapeBuffStacks >= 3)
 			{
 				spriteBatch.Draw(ModContent.Request<Texture2D>("Spooky/Content/Buffs/KrampusShapeBuff3").Value, 
 				drawParams.Position, null, drawParams.DrawColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 			}
-			if (player.GetModPlayer<SpookyPlayer>().KrampusShapeBuffStacks >= 4)
+			if (player.GetModPlayer<KrampusShapeBoxPlayer>().KrampusShapeBuffStacks >= 4)
 			{	
 				spriteBatch.Draw(ModContent.Request<Texture2D>("Spooky/Content/Buffs/KrampusShapeBuff4").Value, 
 				drawParams.Position, null, drawParams.DrawColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 			}
-			if (player.GetModPlayer<SpookyPlayer>().KrampusShapeBuffStacks >= 5)
+			if (player.GetModPlayer<KrampusShapeBoxPlayer>().KrampusShapeBuffStacks >= 5)
 			{
 				spriteBatch.Draw(ModContent.Request<Texture2D>("Spooky/Content/Buffs/KrampusShapeBuff5").Value, 
 				drawParams.Position, null, drawParams.DrawColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
@@ -48,49 +49,15 @@ namespace Spooky.Content.Buffs
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-			int StatDefense = 0;
-			float StatDamage = 0f;
-			float StatAttackSpeed = 0f;
+			int numStacks = player.GetModPlayer<KrampusShapeBoxPlayer>().KrampusShapeBuffStacks;
 
-			if (player.GetModPlayer<SpookyPlayer>().KrampusShapeBuffStacks == 1)
-			{
-				StatDefense = 2;
-				StatDamage = 0.03f;
-				StatAttackSpeed = 0.07f;
-			}
-		 	if (player.GetModPlayer<SpookyPlayer>().KrampusShapeBuffStacks == 2)
-			{
-				StatDefense = 4;
-				StatDamage = 0.06f;
-				StatAttackSpeed = 0.14f;
-			}
-			if (player.GetModPlayer<SpookyPlayer>().KrampusShapeBuffStacks == 3)
-			{
-				StatDefense = 6;
-				StatDamage = 0.09f;
-				StatAttackSpeed = 0.21f;
-			}
-			if (player.GetModPlayer<SpookyPlayer>().KrampusShapeBuffStacks == 4)
-			{
-				StatDefense = 8;
-				StatDamage = 0.12f;
-				StatAttackSpeed = 0.28f;
-			}
-			if (player.GetModPlayer<SpookyPlayer>().KrampusShapeBuffStacks == 5)
-			{
-				StatDefense = 10;
-				StatDamage = 0.15f;
-				StatAttackSpeed = 0.35f;
-			}
+			int StatDefense = 2 * numStacks;
+			float StatDamage = 0.03f * numStacks;
+			float StatAttackSpeed = 0.07f * numStacks;
 
 			player.statDefense += StatDefense;
-
 			player.GetDamage(DamageClass.Generic) += StatDamage;
-
-			player.GetAttackSpeed(DamageClass.Melee) += StatAttackSpeed;
-			player.GetAttackSpeed(DamageClass.Ranged) += StatAttackSpeed;
-			player.GetAttackSpeed(DamageClass.Magic) += StatAttackSpeed;
-			player.GetAttackSpeed(DamageClass.SummonMeleeSpeed) += StatAttackSpeed;
+			player.GetAttackSpeed(DamageClass.Generic) += StatAttackSpeed;
 		}
 	}
 }

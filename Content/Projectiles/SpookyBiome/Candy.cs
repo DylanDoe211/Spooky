@@ -24,7 +24,7 @@ namespace Spooky.Content.Projectiles.SpookyBiome
         {
 			Projectile.width = 26;
             Projectile.height = 26;
-            Projectile.DamageType = DamageClass.Summon;
+            Projectile.DamageType = DamageClass.Generic;
 			Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = true;

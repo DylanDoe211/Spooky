@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 using Spooky.Core;
+using Spooky.Content.Buffs.Debuff;
 
 namespace Spooky.Content.Items.SpookyHell.EggEvent
 {
@@ -24,7 +25,25 @@ namespace Spooky.Content.Items.SpookyHell.EggEvent
        
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-			player.GetModPlayer<SpookyPlayer>().PeptoStomach = true;
+			player.GetModPlayer<PeptoStomachPlayer>().PeptoStomach = true;
 		}
+    }
+
+    public class PeptoStomachPlayer : ModPlayer
+    {
+		public bool PeptoStomach = false;
+
+        public override void ResetEffects()
+        {
+			PeptoStomach = false;
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (PeptoStomach && !target.boss && !target.IsTechnicallyBoss() && Main.rand.NextBool(20) && !target.friendly && !target.dontTakeDamage && !NPCID.Sets.CountsAsCritter[target.type])
+            {
+                target.AddBuff(ModContent.BuffType<PeptoDebuff>(), int.MaxValue);
+            }
+        }
     }
 }

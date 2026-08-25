@@ -6,14 +6,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Spooky.Core;
+using Spooky.Content.Items.Cemetery.Contraband;
 
 namespace Spooky.Content.Projectiles.Cemetery
 {
     public class SmilingDog : ModProjectile
     {
         bool isAttacking = false;
-
-        private static Asset<Texture2D> GlowTexture;
 
         public override void SetStaticDefaults()
         {
@@ -47,106 +46,60 @@ namespace Spooky.Content.Projectiles.Cemetery
 			return false;
 		}
 
-        public override void PostDraw(Color lightColor)
-        {
-            if (Projectile.ai[1] >= 10800)
-            {
-                GlowTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Projectiles/Cemetery/SmilingDogGlow");
-
-                Vector2 drawOrigin = new(GlowTexture.Width() * 0.5f, Projectile.height * 0.5f);
-
-                var spriteEffects = Projectile.spriteDirection == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-
-                for (int oldPos = 0; oldPos < Projectile.oldPos.Length; oldPos++)
-                {
-                    float scale = Projectile.scale * (Projectile.oldPos.Length - oldPos) / Projectile.oldPos.Length * 1f;
-                    Vector2 drawPos = Projectile.oldPos[oldPos] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                    Color color = Projectile.GetAlpha(Color.Red) * ((Projectile.oldPos.Length - oldPos) / (float)Projectile.oldPos.Length);
-                    Rectangle rectangle = new(0, (GlowTexture.Height() / Main.projFrames[Projectile.type]) * Projectile.frame, GlowTexture.Width(), GlowTexture.Height() / Main.projFrames[Projectile.type]);
-                    Main.EntitySpriteDraw(GlowTexture.Value, drawPos, rectangle, color, Projectile.rotation, drawOrigin, scale, spriteEffects, 0);
-                }
-            }
-        }
-
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
 
 			if (player.dead)
             {
-                player.GetModPlayer<SpookyPlayer>().SmileDogPicture = false;
+                player.GetModPlayer<SmileDogPicturePlayer>().SmileDogPicture = false;
             }
 
-            if (player.GetModPlayer<SpookyPlayer>().SmileDogPicture)
+            if (player.GetModPlayer<SmileDogPicturePlayer>().SmileDogPicture)
             {
                 Projectile.timeLeft = 2;
             }
 
-            //timer for when it should start attacking you
-            //dont increase at all if the player is wearing the full combined accessory
-            if (!player.GetModPlayer<SpookyPlayer>().CreepyPasta)
+            //target an enemy
+            for (int i = 0; i < 200; i++)
             {
-                Projectile.ai[1]++;
-            }
-
-            if (Projectile.ai[1] < 10800)
-            {
-                Projectile.friendly = true;
-                Projectile.hostile = false;
-
-                //target an enemy
-                for (int i = 0; i < 200; i++)
+                //first, if the player gets too far away while an enemy is being targetted then have the minion stop attacking and return to the player
+                if (Vector2.Distance(player.Center, Projectile.Center) >= 550f)
                 {
-                    //first, if the player gets too far away while an enemy is being targetted then have the minion stop attacking and return to the player
-                    if (Vector2.Distance(player.Center, Projectile.Center) >= 550f)
-                    {
-                        isAttacking = false;
-                        IdleAI(player);
-
-                        break;
-                    }
-
-                    NPC Target = Projectile.OwnerMinionAttackTargetNPC;
-                    if (Target != null && Target.CanBeChasedBy(this) && !NPCID.Sets.CountsAsCritter[Target.type] && Vector2.Distance(player.Center, Target.Center) <= 400f)
-                    {
-                        AttackingAI(Target);
-
-                        break;
-                    }
-                    else
-                    {
-                        isAttacking = false;
-                    }
-
-                    NPC NPC = Main.npc[i];
-                    if (NPC.active && NPC.CanBeChasedBy(this) && !NPC.friendly && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type] && Vector2.Distance(player.Center, NPC.Center) <= 400f)
-                    {
-                        AttackingAI(NPC);
-
-                        break;
-                    }
-                    else
-                    {
-                        isAttacking = false;
-                    }
-                }
-
-                if (!isAttacking)
-                {
+                    isAttacking = false;
                     IdleAI(player);
+
+                    break;
+                }
+
+                NPC Target = Projectile.OwnerMinionAttackTargetNPC;
+                if (Target != null && Target.CanBeChasedBy(this) && !NPCID.Sets.CountsAsCritter[Target.type] && Vector2.Distance(player.Center, Target.Center) <= 400f)
+                {
+                    AttackingAI(Target);
+
+                    break;
+                }
+                else
+                {
+                    isAttacking = false;
+                }
+
+                NPC NPC = Main.npc[i];
+                if (NPC.active && NPC.CanBeChasedBy(this) && !NPC.friendly && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type] && Vector2.Distance(player.Center, NPC.Center) <= 400f)
+                {
+                    AttackingAI(NPC);
+
+                    break;
+                }
+                else
+                {
+                    isAttacking = false;
                 }
             }
-            else
+
+            if (!isAttacking)
             {
-                Projectile.friendly = false;
-                Projectile.hostile = true;
-
-                AttackPlayerAI(player);
-
-                if (Projectile.ai[1] >= 11400)
-                {
-                    Projectile.ai[1] = 0;
-                }
+                IdleAI(player);
             }
         }
 
@@ -294,73 +247,6 @@ namespace Spooky.Content.Projectiles.Cemetery
             }
             //falling frame
             else if (Projectile.velocity.Y > 0.3f && Projectile.position.Y != Projectile.oldPosition.Y)
-            {
-                Projectile.frame = 2;
-            }
-            //moving animation
-            else if (Projectile.velocity.X != 0)
-            {
-                Projectile.frameCounter++;
-                if (Projectile.frameCounter > 2)
-                {
-                    Projectile.frame++;
-                    Projectile.frameCounter = 0;
-                }
-                if (Projectile.frame >= 5)
-                {
-                    Projectile.frame = 1;
-                }
-            }
-
-            if (Projectile.velocity.X > 0.8f)
-            {
-                Projectile.spriteDirection = -1;
-            }
-            else if (Projectile.velocity.X < -0.8f)
-            {
-                Projectile.spriteDirection = 1;
-            }
-        }
-
-        public void AttackPlayerAI(Player player)
-        {
-            isAttacking = true;
-
-            Vector2 center2 = Projectile.Center;
-            Vector2 vector48 = player.Center - center2;
-            float playerDistance = vector48.Length();
-
-            if (Projectile.velocity.Y == 0 && ((HoleBelow() && playerDistance > 5f) || (playerDistance > 5f && Projectile.position.X == Projectile.oldPosition.X)))
-            {
-                Projectile.velocity.Y = -10f;
-            }
-
-            Projectile.velocity.Y += 0.4f;
-
-            if (Projectile.velocity.Y > 15f)
-            {
-                Projectile.velocity.Y = 15f;
-            }
-
-            if (player.position.X - Projectile.position.X > 0f)
-            {
-                Projectile.velocity.X += 0.2f;
-                if (Projectile.velocity.X > 6f)
-                {
-                    Projectile.velocity.X = 6f;
-                }
-            }
-            else
-            {
-                Projectile.velocity.X -= 0.2f;
-                if (Projectile.velocity.X < -6f)
-                {
-                    Projectile.velocity.X = -6f;
-                }
-            }
-
-            //falling frame
-            if (Projectile.velocity.Y > 0.3f && Projectile.position.Y != Projectile.oldPosition.Y)
             {
                 Projectile.frame = 2;
             }

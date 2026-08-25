@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Spooky.Core;
+using Spooky.Content.Items.Cemetery.Contraband;
 
 namespace Spooky.Content.Projectiles.Cemetery
 {
@@ -65,7 +66,7 @@ namespace Spooky.Content.Projectiles.Cemetery
                 Projectile.position = new Vector2(Main.MouseWorld.X - (Projectile.width / 2), Main.MouseWorld.Y - (Projectile.height / 2));
             }
 
-            if (!player.GetModPlayer<SpookyPlayer>().PolybiusArcadeGame || Main.gamePaused)
+            if (!player.GetModPlayer<PolybiusArcadeGamePlayer>().PolybiusArcadeGame || Main.gamePaused)
             {
                 Projectile.Kill();
             }

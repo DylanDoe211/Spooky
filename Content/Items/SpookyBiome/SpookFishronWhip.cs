@@ -1,7 +1,9 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Microsoft.Xna.Framework;
 
+using Spooky.Content.Buffs.WhipDebuff;
 using Spooky.Content.Projectiles.SpookyBiome;
 
 namespace Spooky.Content.Items.SpookyBiome
@@ -32,4 +34,15 @@ namespace Spooky.Content.Items.SpookyBiome
 			return true;
 		}
     }
+
+	public class SpookFishronWhipEffectPlayer : ModPlayer
+	{
+		public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone)
+		{
+            if (target.HasBuff<SpookFishronWhipDebuff>() && !proj.npcProj && !proj.trap && (proj.minion || ProjectileID.Sets.MinionShot[proj.type]))
+            {
+				Projectile.NewProjectile(proj.GetSource_FromAI(), target.Center, new Vector2(0, Main.rand.Next(4, 9)).RotatedByRandom(360), ModContent.ProjectileType<SpookFishronWhipBubble>(), proj.damage, 0, Player.whoAmI);
+            }
+		}
+	}
 }

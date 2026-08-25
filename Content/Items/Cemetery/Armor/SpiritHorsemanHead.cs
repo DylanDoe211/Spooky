@@ -2,6 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Localization;
+using Terraria.DataStructures;
 
 using Spooky.Core;
 using Spooky.Content.Projectiles.Cemetery;
@@ -33,7 +34,7 @@ namespace Spooky.Content.Items.Cemetery.Armor
 		public override void UpdateArmorSet(Player player) 
 		{
 			player.setBonus = Language.GetTextValue("Mods.Spooky.ArmorSetBonus.SpiritHorsemanArmor");
-			player.GetModPlayer<SpookyPlayer>().HorsemanSet = true;
+			player.GetModPlayer<HorsemanArmorPlayer>().HorsemanSet = true;
 
 			bool NotSpawned = player.ownedProjectileCounts[ModContent.ProjectileType<PumpkinHead>()] <= 0;
 			if (NotSpawned)
@@ -47,6 +48,24 @@ namespace Spooky.Content.Items.Cemetery.Armor
 		public override void UpdateEquip(Player player) 
 		{
 			player.GetCritChance(DamageClass.Generic) += 12;
+		}
+	}
+
+	public class HorsemanArmorPlayer : ModPlayer
+    {
+		public bool HorsemanSet = false;
+
+		public override void ResetEffects()
+        {
+			HorsemanSet = false;
+		}
+
+		public override void HideDrawLayers(PlayerDrawSet drawInfo)
+        {
+            if (HorsemanSet)
+            {
+                PlayerDrawLayers.Head.Hide();
+            }
 		}
 	}
 }

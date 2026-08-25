@@ -14,8 +14,10 @@ using System.Linq;
 using Spooky.Content.Buffs;
 using Spooky.Content.Buffs.Debuff;
 using Spooky.Content.Buffs.WhipDebuff;
+using Spooky.Content.Items.Catacomb;
 using Spooky.Content.Items.Catacomb.Misc;
 using Spooky.Content.Items.Cemetery.Misc;
+using Spooky.Content.Items.Minibiomes.Armor;
 using Spooky.Content.Items.SpiderCave.Misc;
 using Spooky.Content.Items.SpookyBiome.Misc;
 using Spooky.Content.Items.SpookyHell.Misc;
@@ -332,7 +334,7 @@ namespace Spooky.Core
 			if (!projectile.npcProj && !projectile.trap && (projectile.minion || ProjectileID.Sets.MinionShot[projectile.type]))
 			{
 				//hazmat helmet gives minions 5% chance to critically hit
-				if (player.GetModPlayer<SpookyPlayer>().HazmatSet && Main.rand.NextBool(20))
+				if (player.GetModPlayer<HazmatArmorPlayer>().HazmatSet && Main.rand.NextBool(20))
 				{
 					modifiers.SetCrit();
 				}
@@ -489,7 +491,7 @@ namespace Spooky.Core
 			}
 
 			//spawn souls when you kill an enemy while wearing the skull amulet
-			if (player.GetModPlayer<SpookyPlayer>().SkullAmulet && !npc.friendly)
+			if (player.GetModPlayer<SkullAmuletPlayer>().SkullAmulet && !npc.friendly)
 			{
 				Projectile.NewProjectile(npc.GetSource_Death(), npc.Center, Vector2.Zero, ModContent.ProjectileType<SkullAmuletSoul>(), 0, 0, player.whoAmI);
 			}

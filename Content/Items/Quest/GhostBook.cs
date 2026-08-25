@@ -48,7 +48,7 @@ namespace Spooky.Content.Items.Quest
 			{
 				case 1:
 				{
-					player.GetModPlayer<SpookyPlayer>().GhostBookRed = true;
+					player.GetModPlayer<GhostBookPlayer>().GhostBookRed = true;
 
 					player.GetDamage(DamageClass.Melee) += 0.1f;
 					player.GetDamage(DamageClass.Ranged) += 0.1f;
@@ -67,7 +67,7 @@ namespace Spooky.Content.Items.Quest
 
 				case 2:
 				{
-					player.GetModPlayer<SpookyPlayer>().GhostBookGreen = true;
+					player.GetModPlayer<GhostBookPlayer>().GhostBookGreen = true;
 
 					player.GetDamage(DamageClass.Magic) += 0.1f;
 					player.GetDamage(DamageClass.Summon) += 0.1f;
@@ -87,7 +87,7 @@ namespace Spooky.Content.Items.Quest
 
 				case 3:
 				{
-					player.GetModPlayer<SpookyPlayer>().GhostBookBlue = true;
+					player.GetModPlayer<GhostBookPlayer>().GhostBookBlue = true;
 
 					player.statDefense += 8;
 					player.lifeRegen += 2;
@@ -161,6 +161,20 @@ namespace Spooky.Content.Items.Quest
 			{
 				Main.spriteBatch.Draw(GlowTexture3.Value, Item.Center - Main.screenPosition, null, Color.White, rotation, drawOrigin, scale, SpriteEffects.None, 0f);
 			}
+		}
+	}
+
+	public class GhostBookPlayer : ModPlayer
+    {
+		public bool GhostBookBlue = false;
+		public bool GhostBookGreen = false;
+		public bool GhostBookRed = false;
+
+		public override void ResetEffects()
+        {
+			GhostBookBlue = false;
+			GhostBookGreen = false;
+			GhostBookRed = false;
 		}
 	}
 }

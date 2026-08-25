@@ -30,9 +30,9 @@ namespace Spooky.Content.Items.BossBags.Accessory
 
 		public override bool OnPickup(Player player)
 		{
-			if (player.GetModPlayer<SpookyPlayer>().MocoNose && player.GetModPlayer<SpookyPlayer>().MocoBoogerCharge < 15)
+			if (player.GetModPlayer<MocoNosePlayer>().MocoNose && player.GetModPlayer<MocoNosePlayer>().MocoBoogerCharge < 15)
 			{
-				player.GetModPlayer<SpookyPlayer>().MocoBoogerCharge++;
+				player.GetModPlayer<MocoNosePlayer>().MocoBoogerCharge++;
 			}
 
 			for (int numDusts = 0; numDusts < 10; numDusts++)

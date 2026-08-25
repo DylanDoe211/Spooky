@@ -23,13 +23,13 @@ namespace Spooky.Content.Items.Cemetery.Contraband
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<SpookyPlayer>().CreepyPasta = true;
-            player.GetModPlayer<SpookyPlayer>().PolybiusArcadeGame = true;
-            player.GetModPlayer<SpookyPlayer>().SmileDogPicture = true;
-            player.GetModPlayer<SpookyPlayer>().RedMistClarinet = true;
-            player.GetModPlayer<SpookyPlayer>().SlendermanPage = true;
-            player.GetModPlayer<SpookyPlayer>().RedGodzillaCartridge = true;
-            player.GetModPlayer<SpookyPlayer>().HerobrineAltar = true;
+            player.GetModPlayer<CreepyPastaPlayer>().CreepyPasta = true;
+            player.GetModPlayer<PolybiusArcadeGamePlayer>().PolybiusArcadeGame = true;
+            player.GetModPlayer<SmileDogPicturePlayer>().SmileDogPicture = true;
+            player.GetModPlayer<RedMistClarinetPlayer>().RedMistClarinet = true;
+            player.GetModPlayer<SlendermanPagePlayer>().SlendermanPage = true;
+            player.GetModPlayer<RedGodzillaCartridgePlayer>().RedGodzillaCartridge = true;
+            player.GetModPlayer<HerobrineAltarPlayer>().HerobrineAltar = true;
 
             //spawn polybius swirl
             bool SwirlNotSpawned = player.ownedProjectileCounts[ModContent.ProjectileType<PolybiusSwirl>()] <= 0;
@@ -81,6 +81,16 @@ namespace Spooky.Content.Items.Cemetery.Contraband
             .AddIngredient(ItemID.LunarBar, 5)
             .AddTile(TileID.TinkerersWorkbench)
             .Register();
+        }
+    }
+
+    public class CreepyPastaPlayer : ModPlayer
+    {
+        public bool CreepyPasta = false;
+
+        public override void ResetEffects()
+        {
+            CreepyPasta = false;
         }
     }
 }

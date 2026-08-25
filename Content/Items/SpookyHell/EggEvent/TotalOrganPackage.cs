@@ -21,12 +21,12 @@ namespace Spooky.Content.Items.SpookyHell.EggEvent
        
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-			player.GetModPlayer<SpookyPlayer>().GooChompers = true;
-			player.GetModPlayer<SpookyPlayer>().VeinChain = true;
-			player.GetModPlayer<SpookyPlayer>().PeptoStomach = true;
-			player.GetModPlayer<SpookyPlayer>().StonedKidney = true;
-			player.GetModPlayer<SpookyPlayer>().SmokerLung = true;
-			player.GetModPlayer<SpookyPlayer>().GiantEar = true;
+			player.GetModPlayer<GooChompersPlayer>().GooChompers = true;
+			player.GetModPlayer<VeinChainPlayer>().VeinChain = true;
+			player.GetModPlayer<PeptoStomachPlayer>().PeptoStomach = true;
+			player.GetModPlayer<StonedKidneyPlayer>().StonedKidney = true;
+			player.GetModPlayer<SmokerLungPlayer>().SmokerLung = true;
+			player.GetModPlayer<GiantEarPlayer>().GiantEar = true;
 
             //10% crit from goo chompers
             player.GetCritChance(DamageClass.Generic) += 10;

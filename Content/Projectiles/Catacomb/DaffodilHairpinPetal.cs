@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using System;
 
 using Spooky.Core;
+using Spooky.Content.Items.BossBags.Accessory;
 
 namespace Spooky.Content.Projectiles.Catacomb
 {
@@ -30,7 +31,7 @@ namespace Spooky.Content.Projectiles.Catacomb
         {
             Player player = Main.player[Projectile.owner];
 
-            if (player.dead || !player.active || !player.GetModPlayer<SpookyPlayer>().DaffodilHairpin)
+            if (player.dead || !player.active || !player.GetModPlayer<DaffodilHairpinPlayer>().DaffodilHairpin)
             {
 				Projectile.Kill();
             }

@@ -22,7 +22,7 @@ namespace Spooky.Content.Items.Cemetery.Contraband
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetModPlayer<SpookyPlayer>().SlendermanPage = true;
+            player.GetModPlayer<SlendermanPagePlayer>().SlendermanPage = true;
 
             if (player.ownedProjectileCounts[ModContent.ProjectileType<SlendermanTentacle>()] < 4 && Main.myPlayer == player.whoAmI)
             {
@@ -44,6 +44,25 @@ namespace Spooky.Content.Items.Cemetery.Contraband
                         Projectile.NewProjectile(null, player.Center, vel, ModContent.ProjectileType<SlendermanTentacle>(), 35, 0f, player.whoAmI, Main.rand.Next(120), i + 3);
                     }
                 }
+            }
+        }
+    }
+
+    public class SlendermanPagePlayer : ModPlayer
+    {
+        public bool SlendermanPage = false;
+        public int SlendermanPageDelay = 0;
+
+        public override void ResetEffects()
+        {
+            SlendermanPage = false;
+        }
+
+        public override void PreUpdate()
+        {
+            if (SlendermanPageDelay > 0)
+            {
+                SlendermanPageDelay--;
             }
         }
     }

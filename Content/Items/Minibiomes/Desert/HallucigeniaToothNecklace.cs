@@ -19,7 +19,7 @@ namespace Spooky.Content.Items.Minibiomes.Desert
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-			player.GetModPlayer<SpookyPlayer>().HallucigeniaSpine = true;
+			player.GetModPlayer<HallucigeniaSpinePlayer>().HallucigeniaSpine = true;
 			player.GetArmorPenetration(DamageClass.Generic) += 10;
 		}
 

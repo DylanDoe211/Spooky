@@ -2,10 +2,11 @@ using Terraria;
 using Terraria.ModLoader;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 
 using Spooky.Core;
-using Microsoft.Xna.Framework.Input;
+using Spooky.Content.Items.SpookyHell.EggEvent;
 
 namespace Spooky.Content.UserInterfaces
 {
@@ -20,7 +21,7 @@ namespace Spooky.Content.UserInterfaces
         {
 			Player player = Main.LocalPlayer;
 
-			if (player.GetModPlayer<SpookyPlayer>().StonedKidney)
+			if (player.GetModPlayer<StonedKidneyPlayer>().StonedKidney)
 			{
                 BarTexture ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/StonedKidneyBar", AssetRequestMode.ImmediateLoad);
                 BarFillTexture ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/StonedKidneyBarFill", AssetRequestMode.ImmediateLoad);
@@ -61,7 +62,7 @@ namespace Spooky.Content.UserInterfaces
 				//draw the main UI box
 				spriteBatch.Draw(BarTexture.Value, player.GetModPlayer<SpookyPlayer>().KidneyUIPos, null, Color.White, 0f, BarTexture.Size() / 2, UIBoxScale, SpriteEffects.None, 0f);
 
-				float completionRatio = player.GetModPlayer<SpookyPlayer>().StonedKidneyCharge / 10f;
+				float completionRatio = player.GetModPlayer<StonedKidneyPlayer>().StonedKidneyCharge / 10f;
 				Rectangle barRectangle = new Rectangle(0, 0, BarTexture.Width(), (int)(BarFillTexture.Width() * completionRatio));
 				spriteBatch.Draw(BarFillTexture.Value, player.GetModPlayer<SpookyPlayer>().KidneyUIPos, barRectangle, Color.White, 0f, BarTexture.Size() / 2, UIBoxScale, SpriteEffects.None, 0f);
 			}

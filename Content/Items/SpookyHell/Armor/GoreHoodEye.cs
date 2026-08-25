@@ -30,8 +30,7 @@ namespace Spooky.Content.Items.SpookyHell.Armor
 		public override void UpdateArmorSet(Player player) 
 		{
 			player.setBonus = Language.GetTextValue("Mods.Spooky.ArmorSetBonus.GoreArmorOrro");
-
-			player.GetModPlayer<SpookyPlayer>().GoreArmorEye = true;
+			player.GetModPlayer<GoreArmorPlayer>().GoreArmorEye = true;
 
 			if (player.ownedProjectileCounts[ModContent.ProjectileType<MiniOrroHead>()] <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<MiniBoroHead>()] <= 0)
 			{
@@ -62,5 +61,17 @@ namespace Spooky.Content.Items.SpookyHell.Armor
             .AddTile(TileID.MythrilAnvil)
             .Register();
         }
+	}
+
+	public class GoreArmorPlayer : ModPlayer
+    {
+        public bool GoreArmorEye = false;
+		public bool GoreArmorMouth = false;
+
+		public override void ResetEffects()
+        {
+            GoreArmorEye = false;
+			GoreArmorMouth = false;
+		}
 	}
 }

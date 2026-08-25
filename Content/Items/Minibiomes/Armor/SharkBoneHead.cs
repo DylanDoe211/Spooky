@@ -28,7 +28,7 @@ namespace Spooky.Content.Items.Minibiomes.Armor
 		public override void UpdateArmorSet(Player player) 
 		{
 			player.setBonus = Language.GetTextValue("Mods.Spooky.ArmorSetBonus.SharkBoneArmor");
-			player.GetModPlayer<SpookyPlayer>().SharkBoneSet = true;
+			player.GetModPlayer<SharkBoneArmorPlayer>().SharkBoneSet = true;
 
 			bool NotSpawned = player.ownedProjectileCounts[ModContent.ProjectileType<SharkArmorFriend>()] <= 0;
 			if (NotSpawned && player.whoAmI == Main.myPlayer)
@@ -50,5 +50,16 @@ namespace Spooky.Content.Items.Minibiomes.Armor
             .AddTile(TileID.Anvils)
             .Register();
         }
+	}
+
+	public class SharkBoneArmorPlayer : ModPlayer
+    {
+		//used to check if the sharkbone minion summoned by the setbonus should be active or not
+		public bool SharkBoneSet = false;
+
+		public override void ResetEffects()
+        {
+            SharkBoneSet = false;
+		}
 	}
 }

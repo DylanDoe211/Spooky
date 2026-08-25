@@ -1164,7 +1164,6 @@ SmileDogPicture: {
 	Tooltip:
 		'''
 		Summons a smiling puppy to follow you and maul nearby enemies
-		Every 3 minutes, the dog will attack you for 10 seconds before returning to normal
 		'That dog is messed up'
 		'''
 }
@@ -2892,7 +2891,7 @@ SpiderBody: {
 	Tooltip:
 		'''
 		3% increased critical strike chance
-		Taking a large amount of damage will give you a short speed boost
+		Taking damage will give you a short speed boost
 		'''
 }
 
@@ -3395,7 +3394,7 @@ CandyBag: {
 
 CreepyCandle: {
 	DisplayName: Creepy Candle
-	Tooltip: Magic projectiles will sometimes ignite enemies
+	Tooltip: Magic attacks will sometimes ignite enemies
 }
 
 EggCarton: {

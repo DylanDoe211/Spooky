@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 using Spooky.Core;
+using Spooky.Content.Items.Catacomb;
 
 namespace Spooky.Content.Projectiles.Catacomb
 {
@@ -52,7 +53,7 @@ namespace Spooky.Content.Projectiles.Catacomb
         {
             Player player = Main.player[Projectile.owner];
 
-            if (player.dead || !player.GetModPlayer<SpookyPlayer>().PandoraChalice)
+            if (player.dead || !player.GetModPlayer<PandoraChalicePlayer>().PandoraChalice)
             {
                 Projectile.Kill();
             }

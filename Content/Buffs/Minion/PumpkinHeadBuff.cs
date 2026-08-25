@@ -2,6 +2,7 @@ using Terraria;
 using Terraria.ModLoader;
 
 using Spooky.Core;
+using Spooky.Content.Items.Cemetery.Armor;
 
 namespace Spooky.Content.Buffs.Minion
 {
@@ -14,7 +15,7 @@ namespace Spooky.Content.Buffs.Minion
 
 		public override void Update(Player player, ref int buffIndex)
 		{
-			if (player.GetModPlayer<SpookyPlayer>().HorsemanSet)
+			if (player.GetModPlayer<HorsemanArmorPlayer>().HorsemanSet)
 			{
 				player.buffTime[buffIndex] = 2;
 			}

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
 using Spooky.Core;
+using Spooky.Content.Items.Cemetery.Contraband;
 
 namespace Spooky.Content.Projectiles.Cemetery
 {
@@ -86,8 +87,8 @@ namespace Spooky.Content.Projectiles.Cemetery
                 {
                     if (NPC.active && NPC.CanBeChasedBy(this) && !NPC.friendly && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type] && Main.npc[i].Hitbox.Intersects(Projectile.Hitbox))
                     {
-                        int damageDone = player.GetModPlayer<SpookyPlayer>().AnalogHorrorTape ? Main.rand.Next(100, 150) : Main.rand.Next(20, 29);
-                        int lifeStealDivider = player.GetModPlayer<SpookyPlayer>().AnalogHorrorTape ? 5 : 2;
+                        int damageDone = player.GetModPlayer<AnalogHorrorTapePlayer>().AnalogHorrorTape ? Main.rand.Next(100, 150) : Main.rand.Next(20, 29);
+                        int lifeStealDivider = player.GetModPlayer<AnalogHorrorTapePlayer>().AnalogHorrorTape ? 5 : 2;
 
                         player.ApplyDamageToNPC(Main.npc[i], damageDone, 0, 0, false, null, true);
                         player.statLife += damageDone / lifeStealDivider;
