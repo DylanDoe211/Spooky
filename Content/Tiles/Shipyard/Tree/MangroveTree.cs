@@ -272,7 +272,8 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
                 }
 
                 //spawn a seed from the tree
-                int NewItem = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2((i * 16) + Main.rand.Next(-50, 50), (j * 16) + Main.rand.Next(-100, -25)), ModContent.ItemType<MangroveSaplingItem>());
+                int NewItem = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2((i * 16) + Main.rand.Next(-50, 50), (j * 16) + Main.rand.Next(-100, -25)), 
+                ModContent.ItemType<MangroveSaplingItem>(), Main.rand.Next(1, 3));
                 if (Main.netMode == NetmodeID.MultiplayerClient && NewItem >= 0)
                 {
                     NetMessage.SendData(MessageID.SyncItem, -1, -1, null, NewItem, 1f);
@@ -321,13 +322,15 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
 
                 float WindRotation = ModContent.GetInstance<SpookyWorld>().GetTreeSway(i, j, ref pos) * 0.08f;
 
-                spriteBatch.Draw(TopTexture.Value, pos + new Vector2(TopsTexRealWidth / 2 - 31, 4), TopFrame, col, WindRotation, 
+                Vector2 TopOffset = new Vector2(TopsTexRealWidth / 2 - 31, 4);
+
+                spriteBatch.Draw(TopTexture.Value, pos + TopOffset, TopFrame, col, WindRotation, 
 				new Vector2(TopsTexRealWidth, TopTexture.Height()), 1f, SpriteEffects.None, 0f);
 
-                spriteBatch.Draw(TopGlowTexture.Value, pos + new Vector2(TopsTexRealWidth / 2 - 31, 4), TopFrame, TileGlobal.GetTileColorWithPaint(i, j, Color.White * 0.05f), WindRotation, 
+                spriteBatch.Draw(TopGlowTexture.Value, pos + TopOffset, TopFrame, TileGlobal.GetTileColorWithPaint(i, j, Color.White * 0.05f), WindRotation, 
 				new Vector2(TopsTexRealWidth, TopTexture.Height()), 1f, SpriteEffects.None, 0f);
 
-                spriteBatch.Draw(TopEyeGlowTexture.Value, pos + new Vector2(TopsTexRealWidth / 2 - 31, 4), TopFrame, TileGlobal.GetTileColorWithPaint(i, j, Color.White * 0.5f), WindRotation,
+                spriteBatch.Draw(TopEyeGlowTexture.Value, pos + TopOffset, TopFrame, TileGlobal.GetTileColorWithPaint(i, j, Color.White * 0.5f), WindRotation,
 				new Vector2(TopsTexRealWidth, TopTexture.Height()), 1f, SpriteEffects.None, 0f);
 			}
 		}

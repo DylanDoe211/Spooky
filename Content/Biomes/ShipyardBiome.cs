@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 using Spooky.Core;
 using Spooky.Content.Backgrounds.Shipyard;
-using Spooky.Content.Tiles.Cemetery.Furniture;
+using Spooky.Content.Tiles.Shipyard.Furniture;
 using Spooky.Content.Tiles.Water;
 
 namespace Spooky.Content.Biomes
@@ -63,7 +63,7 @@ namespace Spooky.Content.Biomes
         
         public override ModWaterStyle WaterStyle => ModContent.GetInstance<ShipyardWaterStyle>();
 
-        public override int BiomeTorchItemType => ModContent.ItemType<CemeteryBiomeTorchItem>();
+        public override int BiomeTorchItemType => ModContent.ItemType<ShipyardBiomeTorchItem>();
 
         //bestiary stuff
         public override string BestiaryIcon => "Spooky/Content/Biomes/CemeteryBiomeIcon";

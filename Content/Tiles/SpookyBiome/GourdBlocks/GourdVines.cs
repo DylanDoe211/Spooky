@@ -20,7 +20,7 @@ namespace Spooky.Content.Tiles.SpookyBiome.GourdBlocks
 			TileID.Sets.IsVine[Type] = true;
             TileID.Sets.VineThreads[Type] = true;
 			TileID.Sets.MultiTileSway[Type] = true;
-			AddMapEntry(new Color(0, 151, 64));
+			AddMapEntry(new Color(170, 132, 101));
 			DustType = 288;
 			HitSound = SoundID.Grass;
 			MineResist = 0.1f;
@@ -91,101 +91,21 @@ namespace Spooky.Content.Tiles.SpookyBiome.GourdBlocks
 
 	public class GourdVinesLime : GourdVinesGreen
 	{
-		public override void SetStaticDefaults()
-		{
-			Main.tileFrameImportant[Type] = false;
-			Main.tileLavaDeath[Type] = true;
-			Main.tileCut[Type] = true;
-			Main.tileSolid[Type] = false;
-			Main.tileBlockLight[Type] = false;
-			Main.tileLighted[Type] = false;
-			TileID.Sets.IsVine[Type] = true;
-            TileID.Sets.VineThreads[Type] = true;
-			TileID.Sets.MultiTileSway[Type] = true;
-			AddMapEntry(new Color(102, 172, 47));
-			DustType = 288;
-			HitSound = SoundID.Grass;
-			MineResist = 0.1f;
-		}
 	}
 
 	public class GourdVinesOrange : GourdVinesGreen
 	{
-		public override void SetStaticDefaults()
-		{
-			Main.tileFrameImportant[Type] = false;
-			Main.tileLavaDeath[Type] = true;
-			Main.tileCut[Type] = true;
-			Main.tileSolid[Type] = false;
-			Main.tileBlockLight[Type] = false;
-			Main.tileLighted[Type] = false;
-			TileID.Sets.IsVine[Type] = true;
-            TileID.Sets.VineThreads[Type] = true;
-			TileID.Sets.MultiTileSway[Type] = true;
-			AddMapEntry(new Color(192, 99, 40));
-			DustType = 288;
-			HitSound = SoundID.Grass;
-			MineResist = 0.1f;
-		}
 	}
 
 	public class GourdVinesRed : GourdVinesGreen
 	{
-		public override void SetStaticDefaults()
-		{
-			Main.tileFrameImportant[Type] = false;
-			Main.tileLavaDeath[Type] = true;
-			Main.tileCut[Type] = true;
-			Main.tileSolid[Type] = false;
-			Main.tileBlockLight[Type] = false;
-			Main.tileLighted[Type] = false;
-			TileID.Sets.IsVine[Type] = true;
-            TileID.Sets.VineThreads[Type] = true;
-			TileID.Sets.MultiTileSway[Type] = true;
-			AddMapEntry(new Color(171, 58, 55));
-			DustType = 288;
-			HitSound = SoundID.Grass;
-			MineResist = 0.1f;
-		}
 	}
 
 	public class GourdVinesWhite : GourdVinesGreen
 	{
-		public override void SetStaticDefaults()
-		{
-			Main.tileFrameImportant[Type] = false;
-			Main.tileLavaDeath[Type] = true;
-			Main.tileCut[Type] = true;
-			Main.tileSolid[Type] = false;
-			Main.tileBlockLight[Type] = false;
-			Main.tileLighted[Type] = false;
-			TileID.Sets.IsVine[Type] = true;
-            TileID.Sets.VineThreads[Type] = true;
-			TileID.Sets.MultiTileSway[Type] = true;
-			AddMapEntry(new Color(135, 143, 145));
-			DustType = 288;
-			HitSound = SoundID.Grass;
-			MineResist = 0.1f;
-		}
 	}
 
 	public class GourdVinesYellow : GourdVinesGreen
 	{
-		public override void SetStaticDefaults()
-		{
-			Main.tileFrameImportant[Type] = false;
-			Main.tileLavaDeath[Type] = true;
-			Main.tileCut[Type] = true;
-			Main.tileSolid[Type] = false;
-			Main.tileBlockLight[Type] = false;
-			Main.tileLighted[Type] = false;
-			TileID.Sets.IsVine[Type] = true;
-            TileID.Sets.VineThreads[Type] = true;
-			TileID.Sets.MultiTileSway[Type] = true;
-			AddMapEntry(new Color(170, 118, 47));
-			DustType = 288;
-			HitSound = SoundID.Grass;
-			MineResist = 0.1f;
-		}
 	}
 }

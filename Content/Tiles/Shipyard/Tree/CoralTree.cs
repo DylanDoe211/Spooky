@@ -36,7 +36,7 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
             Main.tileLighted[Type] = false;
             Main.tileBlockLight[Type] = false;
             LocalizedText name = CreateMapEntryName();
-            AddMapEntry(new Color(237, 244, 254), name);
+            AddMapEntry(new Color(220, 220, 220), name);
             DustType = DustID.Slush;
 			HitSound = SoundID.Dig;
         }

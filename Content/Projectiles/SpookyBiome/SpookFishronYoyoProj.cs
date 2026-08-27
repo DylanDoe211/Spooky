@@ -106,7 +106,7 @@ namespace Spooky.Content.Projectiles.SpookyBiome
         public override void AI()
         {
             Projectile.localAI[0]++;
-            if (Projectile.localAI[0] >= 90)
+            if (Projectile.localAI[0] >= 80)
             {
 				SoundEngine.PlaySound(SoundID.Item8, Projectile.Center);
 

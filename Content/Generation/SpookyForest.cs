@@ -840,7 +840,7 @@ namespace Spooky.Content.Generation
 			{
 				for (int Y = (int)Main.worldSurface + 15; Y <= Main.maxTilesY / 2 + 50; Y++)
 				{
-					if (WorldGen.genRand.NextBool(500) && WorldGen.InWorld(X, Y, 50) && Main.tile[X, Y].TileType == ModContent.TileType<SpookyStone>() && CanPlaceGiantGourd(X, Y))
+					if (WorldGen.genRand.NextBool(1000) && WorldGen.InWorld(X, Y, 50) && Main.tile[X, Y].TileType == ModContent.TileType<SpookyStone>() && CanPlaceGiantGourd(X, Y))
 					{
 						Point16 pos = new Point16(X, Y);
 						RottenGourd.Place(pos);

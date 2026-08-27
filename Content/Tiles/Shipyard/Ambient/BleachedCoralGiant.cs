@@ -27,7 +27,7 @@ namespace Spooky.Content.Tiles.Shipyard.Ambient
             TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
             TileObjectData.newTile.DrawYOffset = 2;
             TileObjectData.addTile(Type);
-            AddMapEntry(new Color(170, 162, 174));
+            AddMapEntry(new Color(220, 220, 220));
             DustType = DustID.Slush;
             HitSound = SoundID.Dig;
         }
