@@ -24,6 +24,7 @@ Changes:
 -Removed gourd o' lantern items, breaking a carved gourd with a candle in it now just drops the regular carved gourd and the candle
 -Eye blocks now grow various eye valley ambient objects on them naturally
 -Krampus job application sign tile now lights up with spelunker potions
+-Spooky mod chandeliers and lanterns finally sway in the wind
 -Updated daffodil on the spooky mod menu to her new design
 -Updated eye valley background sprites
 -Updated bag of magic beans sprite

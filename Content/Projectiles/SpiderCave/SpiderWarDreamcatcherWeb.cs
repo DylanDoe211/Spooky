@@ -91,7 +91,8 @@ namespace Spooky.Content.Projectiles.SpiderCave
                 {
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, new Vector2(0, Main.rand.Next(-4, -1)).RotatedBy(Projectile.rotation), ModContent.ProjectileType<OgreKingWebEffect>(), 0, 0f, Main.myPlayer);
+                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(0, Main.rand.Next(-4, -1)).RotatedBy(Projectile.rotation), 
+                        ModContent.ProjectileType<OgreKingWebEffect>(), 0, 0f, Projectile.owner);
                     }
                 }
             }

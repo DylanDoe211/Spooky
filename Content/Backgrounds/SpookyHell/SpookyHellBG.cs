@@ -164,7 +164,7 @@ namespace Spooky.Content.Backgrounds.SpookyHell
                             //draw egg incursion visual outlines
                             if (Layers < 4)
                             {
-                                Texture2D BGTextureOutline = ModContent.Request<Texture2D>("Spooky/Content/Backgrounds/SpookyHell/SpookyHellBG" + Layers).Value; //+ "_Outline").Value;
+                                Texture2D BGTextureOutline = ModContent.Request<Texture2D>("Spooky/Content/Backgrounds/SpookyHell/SpookyHellBG" + Layers).Value;
 
                                 for (int i = 0; i < 360; i += 60)
                                 {

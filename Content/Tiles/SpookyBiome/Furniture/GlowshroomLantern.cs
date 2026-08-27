@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Terraria.Localization;
 using Terraria.ObjectData;
 using Terraria.DataStructures;
+using Terraria.GameContent.Drawing;
 using Terraria.Enums;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
@@ -16,6 +17,7 @@ namespace Spooky.Content.Tiles.SpookyBiome.Furniture
     {
         public override void SetStaticDefaults()
 		{
+            TileID.Sets.MultiTileSway[Type] = true;
             Main.tileLighted[Type] = true;
             Main.tileFrameImportant[Type] = true;
             Main.tileLavaDeath[Type] = true;
@@ -39,12 +41,7 @@ namespace Spooky.Content.Tiles.SpookyBiome.Furniture
 
         public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY)
 		{
-			if ((Framing.GetTileSafely(i, j - 1).HasTile && TileID.Sets.Platforms[Framing.GetTileSafely(i, j - 1).TileType]) ||
-            (Framing.GetTileSafely(i, j - 2).HasTile && TileID.Sets.Platforms[Framing.GetTileSafely(i, j - 2).TileType]) ||
-            (Framing.GetTileSafely(i, j - 3).HasTile && TileID.Sets.Platforms[Framing.GetTileSafely(i, j - 3).TileType]))
-			{
-				offsetY -= 8;
-			}
+			offsetY += 2;
 		}
 
         public override void NumDust(int i, int j, bool fail, ref int num) 
@@ -92,12 +89,31 @@ namespace Spooky.Content.Tiles.SpookyBiome.Furniture
                 b = 250f / divide;
             }
         }
+
+        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+		{
+			Tile tile = Main.tile[i, j];
+
+			if (TileObjectData.IsTopLeft(tile))
+			{
+				Main.instance.TilesRenderer.AddSpecialPoint(i, j, TileDrawing.TileCounterType.MultiTileVine);
+			}
+
+			return false;
+		}
+
+		public override void AdjustMultiTileVineParameters(int i, int j, ref float? overrideWindCycle, ref float windPushPowerX, ref float windPushPowerY, ref bool dontRotateTopTiles, ref float totalWindMultiplier, ref Texture2D glowTexture, ref Color glowColor)
+		{
+			overrideWindCycle = 1f;
+			windPushPowerY = 0;
+		}
     }
 
     public class GlowshroomYellowLantern : GlowshroomLantern
     {
         public override void SetStaticDefaults()
 		{
+            TileID.Sets.MultiTileSway[Type] = true;
             Main.tileLighted[Type] = true;
             Main.tileFrameImportant[Type] = true;
             Main.tileLavaDeath[Type] = true;

@@ -145,8 +145,4 @@ TubeWormSapling.MapEntry: Tube Worm Polyp
 TarCactusChest.MapEntry: Tar Cactus Chest
 MangroveTree.MapEntry: Mangrove Tree
 MangroveSapling.MapEntry: Mangrove Sapling
-CoralTreeBlue.MapEntry: Giant Bleached Coral
-CoralTreeGreen.MapEntry: Giant Bleached Coral
-CoralTreePink.MapEntry: Giant Bleached Coral
-CoralTreePurple.MapEntry: Giant Bleached Coral
-CoralTreeTeal.MapEntry: Giant Bleached Coral
+CoralTree.MapEntry: Giant Coral

@@ -3,20 +3,12 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.DataStructures;
-using Terraria.GameInput;
-using Terraria.Localization;
-using Terraria.Audio;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 using Spooky.Content.Biomes;
-using Spooky.Content.Buffs;
 using Spooky.Content.Buffs.Debuff;
-using Spooky.Content.Buffs.WhipDebuff;
-using Spooky.Content.Dusts;
-using Spooky.Content.Items.BossBags.Accessory;
 using Spooky.Content.Items.Fishing;
 using Spooky.Content.Items.Fishing.Crate;
 using Spooky.Content.Items.Pets;
@@ -25,15 +17,9 @@ using Spooky.Content.Items.SpiderCave;
 using Spooky.Content.Items.SpookyHell.Sentient;
 using Spooky.Content.NPCs.Boss.SpookFishron;
 using Spooky.Content.NPCs.SpookyHell;
-using Spooky.Content.Projectiles.Catacomb;
-using Spooky.Content.Projectiles.Cemetery;
-using Spooky.Content.Projectiles.Minibiomes.Christmas;
-using Spooky.Content.Projectiles.Minibiomes.Desert;
 using Spooky.Content.Projectiles.Minibiomes.Ocean;
-using Spooky.Content.Projectiles.Minibiomes.Vegetable;
 using Spooky.Content.Projectiles.Sentient;
 using Spooky.Content.Projectiles.SpiderCave;
-using Spooky.Content.Projectiles.SpookyBiome;
 using Spooky.Content.Projectiles.SpookyHell;
 
 namespace Spooky.Core

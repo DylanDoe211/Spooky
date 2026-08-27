@@ -504,10 +504,7 @@ namespace Spooky.Content.Generation
 					(Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>() ||
 					Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>()))
 					{
-						int[] Types = new int[] { ModContent.TileType<CoralTreeBlue>(), ModContent.TileType<CoralTreeGreen>(), 
-						ModContent.TileType<CoralTreePink>(), ModContent.TileType<CoralTreePurple>(), ModContent.TileType<CoralTreeTeal>() };
-
-						CoralTreeBlue.Grow(X, Y - 1, 5, 8, WorldGen.genRand.Next(Types));
+						CoralTree.Grow(X, Y - 1, 5, 8, WorldGen.genRand.Next(0, 6));
 					}
 				}
 			}
@@ -886,8 +883,7 @@ namespace Spooky.Content.Generation
             {
                 for (int j = Y - 4; j < Y + 4; j++)
                 {
-                    if (Main.tile[i, j].HasTile && (Main.tile[i, j].TileType == ModContent.TileType<CoralTreeBlue>() || Main.tile[i, j].TileType == ModContent.TileType<CoralTreeGreen>() ||
-					Main.tile[i, j].TileType == ModContent.TileType<CoralTreePink>() || Main.tile[i, j].TileType == ModContent.TileType<CoralTreePurple>() || Main.tile[i, j].TileType == ModContent.TileType<CoralTreeTeal>()))
+                    if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<CoralTree>())
                     {
                         return false;
                     }

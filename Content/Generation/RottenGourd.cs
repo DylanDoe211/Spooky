@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 
+using Spooky.Core;
 using Spooky.Content.Tiles.SpookyBiome.GourdBlocks;
 
 namespace Spooky.Content.Generation;
@@ -67,6 +68,18 @@ internal class RottenGourd
 			_ => ModContent.WallType<GourdBlockYellowGreenWall>(),
 		};
 
+		int vineType = id switch
+		{
+			0 => ModContent.TileType<GourdVinesGreen>(),
+			1 => ModContent.TileType<GourdVinesLime>(),
+			2 => ModContent.TileType<GourdVinesWhite>(),
+			3 => ModContent.TileType<GourdVinesOrange>(), //lime and orange
+			4 => ModContent.TileType<GourdVinesOrange>(),
+			5 => ModContent.TileType<GourdVinesRed>(),
+			6 => ModContent.TileType<GourdVinesYellow>(),
+			_ => ModContent.TileType<GourdVinesYellow>(), //yellow and green
+		};
+
 		ShapeData shapes = new();
 
 		Point gourdPos = point.ToPoint();
@@ -107,6 +120,54 @@ internal class RottenGourd
 		{
 			WorldUtils.Gen(gourdPos, new Shapes.Circle((int)(baseWidth * WorldGen.genRand.NextFloat(0.4f, 0.55f)), (int)(baseHeight * WorldGen.genRand.NextFloat(0.4f, 0.55f)) + 1),
 			Actions.Chain(new Modifiers.Offset(off.X, off.Y - baseHeight - 3), new Actions.ClearTile(), new Modifiers.Blotches(2, 0.4f), new Actions.PlaceTile(TileID.LivingWood)));
+		}
+
+		for (int i = gourdPos.X - 20; i <= gourdPos.X + 20; i++)
+		{
+			for (int j = gourdPos.Y - 10; j <= gourdPos.Y + 30; j++)
+			{
+				if (WorldGen.InWorld(i, j, 50))
+				{
+					Tile tile = Main.tile[i, j];
+					Tile tileBelow = Main.tile[i, j + 1];
+
+					if (tile.WallType == wallType && !tile.HasTile && tileBelow.TileType == tileType)
+					{
+						int gutsTileVariant = id switch
+						{
+							0 => WorldGen.genRand.Next(0, 3),
+							1 => WorldGen.genRand.Next(3, 6),
+							2 => WorldGen.genRand.Next(12, 15),
+							3 => WorldGen.genRand.Next(6, 9), //lime and orange
+							4 => WorldGen.genRand.Next(6, 9),
+							5 => WorldGen.genRand.Next(9, 12),
+							6 => WorldGen.genRand.Next(15, 18),
+							_ => WorldGen.genRand.Next(15, 18), //yellow and green
+						};
+						TileGlobal.PlaceObject(i, j, ModContent.TileType<GourdGuts>(), true, gutsTileVariant);
+					}
+				}
+			}
+
+			for (int j = gourdPos.Y - 30; j <= gourdPos.Y + 5; j++)
+			{
+				if (WorldGen.InWorld(i, j, 50))
+				{
+					Tile tile = Main.tile[i, j];
+					Tile tileAbove = Main.tile[i, j - 1];
+
+					if (tile.WallType == wallType && !tile.HasTile && tileAbove.TileType == tileType)
+					{
+						for (int vineY = 0; vineY <= 10; vineY++)
+						{
+							if (!Main.tile[i, j + vineY].HasTile)
+							{
+								WorldGen.PlaceTile(i, j + vineY, vineType);
+							}
+						}
+					}
+				}
+			}
 		}
 
 		// Notes:	"positions" contains every point in the overall shape, including placed tiles, which should be all you need

@@ -12,13 +12,15 @@ using Spooky.Core;
 
 namespace Spooky.Content.Tiles.Shipyard.Tree
 {
-    public class CoralTreeBlue : ModTile
+    public class CoralTree : ModTile
     {
         //reminder:
         //X frame 0 = normal tree segment
         //X frame 18 = branch draw segment
         //X frame 36 = top draw segment
         //X frame 54 = stubby top segment
+
+        static int ColorVariant = 0;
 
         private static Asset<Texture2D> TopTexture;
         private static Asset<Texture2D> StemTexture;
@@ -56,8 +58,10 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
             return Framing.GetTileSafely(i, j).HasTile && (Main.tileSolidTop[Framing.GetTileSafely(i, j).TileType] || Main.tileSolid[Framing.GetTileSafely(i, j).TileType]);
         }
 
-        public static bool Grow(int i, int j, int minSize, int maxSize, int Type, bool saplingExists = false)
+        public static bool Grow(int i, int j, int minSize, int maxSize, int ColorType, bool saplingExists = false)
         {
+            ColorVariant = ColorType;
+
             if (saplingExists)
             {
                 WorldGen.KillTile(i, j, false, false, true);
@@ -86,7 +90,7 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
             //make sure the block is valid for the tree to place on
             if ((SolidTopTile(i, j + 1) || SolidTile(i, j + 1)) && !Framing.GetTileSafely(i, j).HasTile)
             {
-                WorldGen.PlaceTile(i, j, Type, true);
+                WorldGen.PlaceTile(i, j, ModContent.TileType<CoralTree>(), true);
 				Framing.GetTileSafely(i, j).TileFrameX = 0;
 				Framing.GetTileSafely(i, j).TileFrameY = (short)(WorldGen.genRand.Next(6) * 18);
 
@@ -103,7 +107,7 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
 
             for (int numSegments = 1; numSegments < height; numSegments++)
             {
-                WorldGen.PlaceTile(i, j - numSegments, Type, true);
+                WorldGen.PlaceTile(i, j - numSegments, ModContent.TileType<CoralTree>(), true);
                 Framing.GetTileSafely(i, j - numSegments).TileFrameX = 0;
                 Framing.GetTileSafely(i, j - numSegments).TileFrameY = (short)(WorldGen.genRand.Next(6) * 18);
 
@@ -199,8 +203,39 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
             float xOff = (float)Math.Sin((j * 25) * 0.04f) * 1.2f;
 			Vector2 WavyOffset = new Vector2((xOff), -2);
 
+            Color realColor = Color.White;
+            switch (ColorVariant)
+            {
+                case 0:
+                {
+                    realColor = Color.Blue;
+                    break;
+                }
+                case 1:
+                {
+                    realColor = Color.Green;
+                    break;
+                }
+                case 2:
+                {
+                    realColor = Color.Pink;
+                    break;
+                }
+                case 3:
+                {
+                    realColor = Color.Purple;
+                    break;
+                }
+                case 4:
+                {
+                    realColor = Color.Teal;
+                    break;
+                }
+            }
+
 			Tile tile = Framing.GetTileSafely(i, j);
-			Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
+            Color tilePaintCol = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
+			Color col = tilePaintCol; //realColor.MultiplyRGBA(tilePaintCol);
 			Vector2 pos = TileGlobal.TileCustomPosition(i, j, TileGlobal.TileOffset);
 
             //divide top and branch texture width by 6 since there are 6 horizontal frames, then divide it by 2 to get half the width for the individual frame
@@ -256,268 +291,4 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
 			return false;
         }
 	}
-
-    public class CoralTreeGreen : CoralTreeBlue
-    {
-        private static Asset<Texture2D> TopTexture;
-        private static Asset<Texture2D> StemTexture;
-        private static Asset<Texture2D> BranchTexture;
-
-        public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
-		{
-            TopTexture ??= ModContent.Request<Texture2D>(Texture + "Tops");
-			BranchTexture ??= ModContent.Request<Texture2D>(Texture + "Branches");
-			StemTexture ??= ModContent.Request<Texture2D>(Texture);
-            
-            float xOff = (float)Math.Sin((j * 25) * 0.04f) * 1.2f;
-			Vector2 WavyOffset = new Vector2((xOff), -2);
-
-			Tile tile = Framing.GetTileSafely(i, j);
-			Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
-			Vector2 pos = TileGlobal.TileCustomPosition(i, j, TileGlobal.TileOffset);
-
-            //divide top and branch texture width by 6 since there are 6 horizontal frames, then divide it by 2 to get half the width for the individual frame
-			int TopsTexRealWidth = (TopTexture.Width() / 6) / 2;
-            int BranchesTexRealWidth = (BranchTexture.Width() / 6) / 2;
-            
-            int frame = tile.TileFrameY / 18;
-
-			//draw extra tile below so it looks attached to the ground
-			if (Main.tile[i, j + 1].TileType != Type)
-			{
-				spriteBatch.Draw(StemTexture.Value, pos + WavyOffset, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), col, 0f, new Vector2(0, -6), 1f, SpriteEffects.None, 0f);
-			}
-
-			//draw the actual tree
-			spriteBatch.Draw(StemTexture.Value, pos + WavyOffset, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-
-			//draw tops
-			if (Framing.GetTileSafely(i, j).TileFrameX == 36)
-			{
-                int TextureWidth = (TopTexture.Width() / 6);
-                int TextureHeight = TopTexture.Height();
-
-                spriteBatch.Draw(TopTexture.Value, pos + new Vector2(TopsTexRealWidth / 2 - 6, 0) + WavyOffset, new Rectangle(TextureWidth * frame, 0, TextureWidth, TextureHeight), col, 0f, 
-				new Vector2(TopsTexRealWidth, TextureHeight), 1f, SpriteEffects.None, 0f);
-			}
-
-            //draw branches infront of the tree
-            if (Framing.GetTileSafely(i, j).TileFrameX == 18)
-            {
-                int TextureWidth = (BranchTexture.Width() / 6);
-                int TextureHeight = BranchTexture.Height();
-
-                //left branches
-                if (Framing.GetTileSafely(i, j).TileFrameY <= 36)
-                {
-                    spriteBatch.Draw(BranchTexture.Value, pos + new Vector2(BranchesTexRealWidth / 2 - 5, 14) + WavyOffset, new Rectangle(TextureWidth * frame, 0, TextureWidth, TextureHeight), col, 0f, 
-                    new Vector2(BranchesTexRealWidth, TextureHeight), 1f, SpriteEffects.None, 0f);
-                }
-                //right branches
-                else
-                {
-                    spriteBatch.Draw(BranchTexture.Value, pos + new Vector2(BranchesTexRealWidth / 2 + 2, 14) + WavyOffset, new Rectangle(TextureWidth * frame, 0, TextureWidth, TextureHeight), col, 0f, 
-                    new Vector2(BranchesTexRealWidth, TextureHeight), 1f, SpriteEffects.None, 0f);
-                }
-            }
-        }
-    }
-
-    public class CoralTreePink : CoralTreeBlue
-    {
-        private static Asset<Texture2D> TopTexture;
-        private static Asset<Texture2D> StemTexture;
-        private static Asset<Texture2D> BranchTexture;
-
-        public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
-		{
-            TopTexture ??= ModContent.Request<Texture2D>(Texture + "Tops");
-			BranchTexture ??= ModContent.Request<Texture2D>(Texture + "Branches");
-			StemTexture ??= ModContent.Request<Texture2D>(Texture);
-            
-            float xOff = (float)Math.Sin((j * 25) * 0.04f) * 1.2f;
-			Vector2 WavyOffset = new Vector2((xOff), -2);
-
-			Tile tile = Framing.GetTileSafely(i, j);
-			Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
-			Vector2 pos = TileGlobal.TileCustomPosition(i, j, TileGlobal.TileOffset);
-
-            //divide top and branch texture width by 6 since there are 6 horizontal frames, then divide it by 2 to get half the width for the individual frame
-			int TopsTexRealWidth = (TopTexture.Width() / 6) / 2;
-            int BranchesTexRealWidth = (BranchTexture.Width() / 6) / 2;
-            
-            int frame = tile.TileFrameY / 18;
-
-			//draw extra tile below so it looks attached to the ground
-			if (Main.tile[i, j + 1].TileType != Type)
-			{
-				spriteBatch.Draw(StemTexture.Value, pos + WavyOffset, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), col, 0f, new Vector2(0, -6), 1f, SpriteEffects.None, 0f);
-			}
-
-			//draw the actual tree
-			spriteBatch.Draw(StemTexture.Value, pos + WavyOffset, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-
-			//draw tops
-			if (Framing.GetTileSafely(i, j).TileFrameX == 36)
-			{
-                int TextureWidth = (TopTexture.Width() / 6);
-                int TextureHeight = TopTexture.Height();
-
-                spriteBatch.Draw(TopTexture.Value, pos + new Vector2(TopsTexRealWidth / 2 - 6, 0) + WavyOffset, new Rectangle(TextureWidth * frame, 0, TextureWidth, TextureHeight), col, 0f, 
-				new Vector2(TopsTexRealWidth, TextureHeight), 1f, SpriteEffects.None, 0f);
-			}
-
-            //draw branches infront of the tree
-            if (Framing.GetTileSafely(i, j).TileFrameX == 18)
-            {
-                int TextureWidth = (BranchTexture.Width() / 6);
-                int TextureHeight = BranchTexture.Height();
-
-                //left branches
-                if (Framing.GetTileSafely(i, j).TileFrameY <= 36)
-                {
-                    spriteBatch.Draw(BranchTexture.Value, pos + new Vector2(BranchesTexRealWidth / 2 - 5, 14) + WavyOffset, new Rectangle(TextureWidth * frame, 0, TextureWidth, TextureHeight), col, 0f, 
-                    new Vector2(BranchesTexRealWidth, TextureHeight), 1f, SpriteEffects.None, 0f);
-                }
-                //right branches
-                else
-                {
-                    spriteBatch.Draw(BranchTexture.Value, pos + new Vector2(BranchesTexRealWidth / 2 + 2, 14) + WavyOffset, new Rectangle(TextureWidth * frame, 0, TextureWidth, TextureHeight), col, 0f, 
-                    new Vector2(BranchesTexRealWidth, TextureHeight), 1f, SpriteEffects.None, 0f);
-                }
-            }
-        }
-    }
-
-    public class CoralTreePurple : CoralTreeBlue
-    {
-        private static Asset<Texture2D> TopTexture;
-        private static Asset<Texture2D> StemTexture;
-        private static Asset<Texture2D> BranchTexture;
-
-        public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
-		{
-            TopTexture ??= ModContent.Request<Texture2D>(Texture + "Tops");
-			BranchTexture ??= ModContent.Request<Texture2D>(Texture + "Branches");
-			StemTexture ??= ModContent.Request<Texture2D>(Texture);
-            
-            float xOff = (float)Math.Sin((j * 25) * 0.04f) * 1.2f;
-			Vector2 WavyOffset = new Vector2((xOff), -2);
-
-			Tile tile = Framing.GetTileSafely(i, j);
-			Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
-			Vector2 pos = TileGlobal.TileCustomPosition(i, j, TileGlobal.TileOffset);
-
-            //divide top and branch texture width by 6 since there are 6 horizontal frames, then divide it by 2 to get half the width for the individual frame
-			int TopsTexRealWidth = (TopTexture.Width() / 6) / 2;
-            int BranchesTexRealWidth = (BranchTexture.Width() / 6) / 2;
-            
-            int frame = tile.TileFrameY / 18;
-
-			//draw extra tile below so it looks attached to the ground
-			if (Main.tile[i, j + 1].TileType != Type)
-			{
-				spriteBatch.Draw(StemTexture.Value, pos + WavyOffset, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), col, 0f, new Vector2(0, -6), 1f, SpriteEffects.None, 0f);
-			}
-
-			//draw the actual tree
-			spriteBatch.Draw(StemTexture.Value, pos + WavyOffset, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-
-			//draw tops
-			if (Framing.GetTileSafely(i, j).TileFrameX == 36)
-			{
-                int TextureWidth = (TopTexture.Width() / 6);
-                int TextureHeight = TopTexture.Height();
-
-                spriteBatch.Draw(TopTexture.Value, pos + new Vector2(TopsTexRealWidth / 2 - 6, 0) + WavyOffset, new Rectangle(TextureWidth * frame, 0, TextureWidth, TextureHeight), col, 0f, 
-				new Vector2(TopsTexRealWidth, TextureHeight), 1f, SpriteEffects.None, 0f);
-			}
-
-            //draw branches infront of the tree
-            if (Framing.GetTileSafely(i, j).TileFrameX == 18)
-            {
-                int TextureWidth = (BranchTexture.Width() / 6);
-                int TextureHeight = BranchTexture.Height();
-
-                //left branches
-                if (Framing.GetTileSafely(i, j).TileFrameY <= 36)
-                {
-                    spriteBatch.Draw(BranchTexture.Value, pos + new Vector2(BranchesTexRealWidth / 2 - 5, 14) + WavyOffset, new Rectangle(TextureWidth * frame, 0, TextureWidth, TextureHeight), col, 0f, 
-                    new Vector2(BranchesTexRealWidth, TextureHeight), 1f, SpriteEffects.None, 0f);
-                }
-                //right branches
-                else
-                {
-                    spriteBatch.Draw(BranchTexture.Value, pos + new Vector2(BranchesTexRealWidth / 2 + 2, 14) + WavyOffset, new Rectangle(TextureWidth * frame, 0, TextureWidth, TextureHeight), col, 0f, 
-                    new Vector2(BranchesTexRealWidth, TextureHeight), 1f, SpriteEffects.None, 0f);
-                }
-            }
-        }
-    }
-
-    public class CoralTreeTeal : CoralTreeBlue
-    {
-        private static Asset<Texture2D> TopTexture;
-        private static Asset<Texture2D> StemTexture;
-        private static Asset<Texture2D> BranchTexture;
-
-        public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
-		{
-            TopTexture ??= ModContent.Request<Texture2D>(Texture + "Tops");
-			BranchTexture ??= ModContent.Request<Texture2D>(Texture + "Branches");
-			StemTexture ??= ModContent.Request<Texture2D>(Texture);
-            
-            float xOff = (float)Math.Sin((j * 25) * 0.04f) * 1.2f;
-			Vector2 WavyOffset = new Vector2((xOff), -2);
-
-			Tile tile = Framing.GetTileSafely(i, j);
-			Color col = TileGlobal.GetTileColorWithPaint(i, j, Lighting.GetColor(i, j));
-			Vector2 pos = TileGlobal.TileCustomPosition(i, j, TileGlobal.TileOffset);
-
-            //divide top and branch texture width by 6 since there are 6 horizontal frames, then divide it by 2 to get half the width for the individual frame
-			int TopsTexRealWidth = (TopTexture.Width() / 6) / 2;
-            int BranchesTexRealWidth = (BranchTexture.Width() / 6) / 2;
-            
-            int frame = tile.TileFrameY / 18;
-
-			//draw extra tile below so it looks attached to the ground
-			if (Main.tile[i, j + 1].TileType != Type)
-			{
-				spriteBatch.Draw(StemTexture.Value, pos + WavyOffset, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), col, 0f, new Vector2(0, -6), 1f, SpriteEffects.None, 0f);
-			}
-
-			//draw the actual tree
-			spriteBatch.Draw(StemTexture.Value, pos + WavyOffset, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), col, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-
-			//draw tops
-			if (Framing.GetTileSafely(i, j).TileFrameX == 36)
-			{
-                int TextureWidth = (TopTexture.Width() / 6);
-                int TextureHeight = TopTexture.Height();
-
-                spriteBatch.Draw(TopTexture.Value, pos + new Vector2(TopsTexRealWidth / 2 - 6, 0) + WavyOffset, new Rectangle(TextureWidth * frame, 0, TextureWidth, TextureHeight), col, 0f, 
-				new Vector2(TopsTexRealWidth, TextureHeight), 1f, SpriteEffects.None, 0f);
-			}
-
-            //draw branches infront of the tree
-            if (Framing.GetTileSafely(i, j).TileFrameX == 18)
-            {
-                int TextureWidth = (BranchTexture.Width() / 6);
-                int TextureHeight = BranchTexture.Height();
-
-                //left branches
-                if (Framing.GetTileSafely(i, j).TileFrameY <= 36)
-                {
-                    spriteBatch.Draw(BranchTexture.Value, pos + new Vector2(BranchesTexRealWidth / 2 - 5, 14) + WavyOffset, new Rectangle(TextureWidth * frame, 0, TextureWidth, TextureHeight), col, 0f, 
-                    new Vector2(BranchesTexRealWidth, TextureHeight), 1f, SpriteEffects.None, 0f);
-                }
-                //right branches
-                else
-                {
-                    spriteBatch.Draw(BranchTexture.Value, pos + new Vector2(BranchesTexRealWidth / 2 + 2, 14) + WavyOffset, new Rectangle(TextureWidth * frame, 0, TextureWidth, TextureHeight), col, 0f, 
-                    new Vector2(BranchesTexRealWidth, TextureHeight), 1f, SpriteEffects.None, 0f);
-                }
-            }
-        }
-    }
 }

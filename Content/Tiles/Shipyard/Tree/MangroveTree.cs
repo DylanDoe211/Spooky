@@ -272,15 +272,10 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
                 }
 
                 //spawn a seed from the tree
-                if (Main.rand.NextBool(3))
+                int NewItem = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2((i * 16) + Main.rand.Next(-50, 50), (j * 16) + Main.rand.Next(-100, -25)), ModContent.ItemType<MangroveSaplingItem>());
+                if (Main.netMode == NetmodeID.MultiplayerClient && NewItem >= 0)
                 {
-                    int NewItem = Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2((i * 16) + Main.rand.Next(-50, 50), (j * 16) + Main.rand.Next(-100, -25)), 
-                    ModContent.ItemType<MangroveSaplingItem>(), Main.rand.Next(1, 4));
-
-                    if (Main.netMode == NetmodeID.MultiplayerClient && NewItem >= 0)
-					{
-						NetMessage.SendData(MessageID.SyncItem, -1, -1, null, NewItem, 1f);
-					}
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, NewItem, 1f);
                 }
             }
 

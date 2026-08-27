@@ -3593,7 +3593,11 @@ SpookFishronWings: {
 
 SpookFishronYoyo: {
 	DisplayName: Spit Roast
-	Tooltip: Creates and flings small sharkrons at nearby enemies
+	Tooltip:
+		'''
+		Leaves behind a damaging trail of fire
+		Creates and flings small sharkrons at nearby enemies
+		'''
 }
 
 ToiletPaper: {

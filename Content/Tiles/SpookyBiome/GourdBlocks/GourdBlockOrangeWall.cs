@@ -10,7 +10,7 @@ namespace Spooky.Content.Tiles.SpookyBiome.GourdBlocks
         public override void SetStaticDefaults()
         {
             Main.wallHouse[Type] = true;
-            AddMapEntry(new Color(97, 48, 14));
+            AddMapEntry(new Color(168, 71, 25));
             DustType = 288;
         }
     }

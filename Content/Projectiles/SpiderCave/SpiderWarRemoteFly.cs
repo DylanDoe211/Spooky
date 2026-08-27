@@ -91,7 +91,6 @@ namespace Spooky.Content.Projectiles.SpiderCave
 				Projectile.timeLeft = 2;
 			}
 
-            //fix rotation
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 			Projectile.rotation += 0f * (float)Projectile.direction;
 

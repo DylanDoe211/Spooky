@@ -34,8 +34,8 @@ namespace Spooky.Content.Items.SpookyBiome
             Item.rare = ItemRarityID.Yellow;
             Item.value = Item.buyPrice(gold: 25);
             Item.UseSound = SoundID.Item1;
-            //Item.shoot = ModContent.ProjectileType<SpookFishronYoyoProj>();
-            //Item.shootSpeed = 8f;
+            Item.shoot = ModContent.ProjectileType<SpookFishronYoyoProj>();
+            Item.shootSpeed = 8f;
         }
     }
 }

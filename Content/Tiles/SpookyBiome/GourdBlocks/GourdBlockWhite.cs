@@ -15,7 +15,7 @@ namespace Spooky.Content.Tiles.SpookyBiome.GourdBlocks
             Main.tileBlendAll[Type] = true;
 			Main.tileSolid[Type] = true;
 			Main.tileBlockLight[Type] = true;
-			AddMapEntry(new Color(165, 173, 177));
+			AddMapEntry(new Color(185, 190, 199));
 			DustType = 288;
             HitSound = SoundID.Dig;
 		}

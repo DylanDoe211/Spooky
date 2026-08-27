@@ -89,7 +89,7 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron
 			//draw aura
 			if (!NPC.IsABestiaryIconDummy)
 			{
-				for (int i = 0; i < 360; i += 60)
+				for (int i = 0; i < 360; i += 90)
 				{
 					Color color1 = Color.OrangeRed;
 					Color color2 = Color.Orange;

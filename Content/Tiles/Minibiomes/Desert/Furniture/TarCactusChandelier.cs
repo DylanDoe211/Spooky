@@ -5,6 +5,7 @@ using Terraria.Localization;
 using Terraria.Enums;
 using Terraria.ObjectData;
 using Terraria.DataStructures;
+using Terraria.GameContent.Drawing;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,6 +19,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Desert.Furniture
 
         public override void SetStaticDefaults()
         {
+			TileID.Sets.MultiTileSway[Type] = true;
             Main.tileLighted[Type] = true;
             Main.tileFrameImportant[Type] = true;
             Main.tileLavaDeath[Type] = true;
@@ -41,12 +43,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Desert.Furniture
 
 		public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY)
 		{
-			if ((Framing.GetTileSafely(i, j - 1).HasTile && TileID.Sets.Platforms[Framing.GetTileSafely(i, j - 1).TileType]) ||
-            (Framing.GetTileSafely(i, j - 2).HasTile && TileID.Sets.Platforms[Framing.GetTileSafely(i, j - 2).TileType]) ||
-            (Framing.GetTileSafely(i, j - 3).HasTile && TileID.Sets.Platforms[Framing.GetTileSafely(i, j - 3).TileType]))
-			{
-				offsetY -= 8;
-			}
+			offsetY += 2;
 		}
 
 		public override IEnumerable<Item> GetItemDrops(int i, int j)
@@ -109,28 +106,29 @@ namespace Spooky.Content.Tiles.Minibiomes.Desert.Furniture
             }
         }
 
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
+        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+		{
+			Tile tile = Main.tile[i, j];
 
-            Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
-
-			if (Main.drawToScreen) 
+			if (TileObjectData.IsTopLeft(tile))
 			{
-				zero = Vector2.Zero;
+				Main.instance.TilesRenderer.AddSpecialPoint(i, j, TileDrawing.TileCounterType.MultiTileVine);
 			}
 
-			Tile tile = Main.tile[i, j];
-			int width = 16;
-			int offsetY = 0;
-			int height = 16;
-			short frameX = tile.TileFrameX;
-			short frameY = tile.TileFrameY;
+			return false;
+		}
 
-			TileLoader.SetDrawPositions(i, j, ref width, ref offsetY, ref height, ref frameX, ref frameY);
+		public override void AdjustMultiTileVineParameters(int i, int j, ref float? overrideWindCycle, ref float windPushPowerX, ref float windPushPowerY, ref bool dontRotateTopTiles, ref float totalWindMultiplier, ref Texture2D glowTexture, ref Color glowColor)
+		{
+			if (!Main.dedServ)
+			{
+				GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
+			}
 
-            spriteBatch.Draw(GlowTexture.Value, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f, j * 16 - (int)Main.screenPosition.Y + offsetY) + zero, 
-            new Rectangle(frameX, frameY, width, height), Color.White, 0f, default, 1f, SpriteEffects.None, 0f);
-        }
+			glowTexture = GlowTexture.Value;
+			glowColor = Color.White;
+			overrideWindCycle = 1f;
+			windPushPowerY = 0;
+		}
     }
 }

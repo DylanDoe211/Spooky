@@ -471,11 +471,6 @@ namespace Spooky.Content.Generation
 					Tile tileLeft = Main.tile[X - 1, Y];
 					Tile tileRight = Main.tile[X + 1, Y];
 
-					if (GourdBlockTypes.Contains(tile.TileType))
-					{
-						Tile.SmoothSlope(X, Y);
-					}
-
 					if (tile.WallType == ModContent.WallType<SpookyDirtWall>() && (!tileAbove.HasTile || !tileBelow.HasTile || !tileLeft.HasTile || !tileRight.HasTile))
 					{
 						tile.WallType = (ushort)ModContent.WallType<SpookyGrassWall>();

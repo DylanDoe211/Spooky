@@ -28,7 +28,7 @@ namespace Spooky.Content.Projectiles.SpookyBiome
         {
             ProjTexture ??= ModContent.Request<Texture2D>(Texture);
 
-            Color color = new Color(125, 125, 125, 0).MultiplyRGBA(Color.Blue);
+            Color color = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(Color.Blue);
 
             Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
 
