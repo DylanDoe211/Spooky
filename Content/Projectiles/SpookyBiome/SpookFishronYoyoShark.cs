@@ -44,7 +44,8 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 
             Color color = new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0).MultiplyRGBA(Color.Orange);
 
-            Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
+            Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, 27);
+            Vector2 drawOriginTrail = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
 
             Rectangle rectangle = new(0, (ProjTexture.Height() / Main.projFrames[Projectile.type]) * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
 
@@ -61,8 +62,8 @@ namespace Spooky.Content.Projectiles.SpookyBiome
                         Vector2 circular = new Vector2(Main.rand.NextFloat(1f, 5f), Main.rand.NextFloat(1f, 5f)).RotatedBy(MathHelper.ToRadians(circle));
 
                         float scale = Projectile.scale * (Projectile.oldPos.Length - oldPos) / Projectile.oldPos.Length * 1f;
-                        Vector2 drawPos = Projectile.oldPos[oldPos] - Main.screenPosition + (drawOrigin * scale) + new Vector2(0f, Projectile.gfxOffY);
-                        Main.EntitySpriteDraw(ProjTexture.Value, drawPos + circular, rectangle, color * 0.75f, Projectile.rotation, drawOrigin, scale, spriteEffects, 0);
+                        Vector2 drawPos = Projectile.oldPos[oldPos] - Main.screenPosition + (drawOriginTrail * scale) + new Vector2(0f, Projectile.gfxOffY);
+                        Main.EntitySpriteDraw(ProjTexture.Value, drawPos + circular, rectangle, color * 0.75f, Projectile.rotation, drawOriginTrail, scale, spriteEffects, 0);
                     }
                 }
             }
@@ -161,6 +162,7 @@ namespace Spooky.Content.Projectiles.SpookyBiome
                             Projectile.velocity = ChargeDirection;
 
                             HasFoundTarget = true;
+                            break;
                         }
                     }
 

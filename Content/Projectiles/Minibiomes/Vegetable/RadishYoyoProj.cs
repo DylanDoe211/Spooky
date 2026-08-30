@@ -45,5 +45,11 @@ namespace Spooky.Content.Projectiles.Minibiomes.Vegetable
 
 			return false;
 		}
+
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+		{
+			Rectangle bigHitbox = new Rectangle((int)Projectile.Center.X - 32, (int)Projectile.Center.Y - 32, 64, 64);
+			return targetHitbox.Intersects(bigHitbox);
+		}
     }
 }

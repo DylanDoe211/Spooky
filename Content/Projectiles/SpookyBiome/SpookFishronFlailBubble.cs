@@ -48,7 +48,7 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 
             for (int i = 0; i < 360; i += 60)
             {
-                Vector2 circular = new Vector2(Main.rand.NextFloat(1f, 3f), Main.rand.NextFloat(1f, 3f)).RotatedBy(MathHelper.ToRadians(i));
+                Vector2 circular = new Vector2(Main.rand.NextFloat(1f, 2f), Main.rand.NextFloat(1f, 2f)).RotatedBy(MathHelper.ToRadians(i));
 
                 Main.EntitySpriteDraw(GlowTexture.Value, vector + circular, rectangle, color, GlowRotation, drawOrigin, Scale, spriteEffects, 0);
             }

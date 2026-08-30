@@ -13,16 +13,19 @@ namespace Spooky.Content.Projectiles.SpookyBiome
     public class SpookFishronYoyoProj : ModProjectile
     {
         bool runOnce = true;
-		Vector2[] trailLength = new Vector2[15];
-        Rectangle[] trailHitboxes = new Rectangle[15];
+		Vector2[] trailLength = new Vector2[12];
 
+		float auraRotation = 0f;
+		float auraScale = 0f;
+
+		private static Asset<Texture2D> AuraTexture;
 		private static Asset<Texture2D> TrailTexture;
 
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.YoyosLifeTimeMultiplier[Projectile.type] = 50000f;
-            ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 420f;
-            ProjectileID.Sets.YoyosTopSpeed[Projectile.type] = 18f;
+            ProjectileID.Sets.YoyosLifeTimeMultiplier[Type] = -1f;
+            ProjectileID.Sets.YoyosMaximumRange[Projectile.type] = 320f;
+            ProjectileID.Sets.YoyosTopSpeed[Projectile.type] = 20f;
         }
 
         public override void SetDefaults()
@@ -41,6 +44,21 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 
         public override void PostDraw(Color lightColor)
         {
+			AuraTexture ??= ModContent.Request<Texture2D>("Spooky/Content/NPCs/Boss/SpookFishron/Projectiles/SpookyTornadoSpawner");
+
+			Vector2 auraOrigin = new(AuraTexture.Width() * 0.5f, AuraTexture.Height() * 0.5f);
+            Vector2 vector = new Vector2(Projectile.Center.X, Projectile.Center.Y) - Main.screenPosition + auraOrigin + new Vector2(-31, Projectile.gfxOffY - 31);
+
+			for (int i = 0; i < 360; i += 90)
+            {
+                Color color = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(Color.Orange);
+
+				Vector2 circular = new Vector2(Main.rand.NextFloat(1f, 5f), Main.rand.NextFloat(1f, 5f)).RotatedBy(MathHelper.ToRadians(i));
+
+            	Main.EntitySpriteDraw(AuraTexture.Value, vector + circular, null, color * 0.55f, auraRotation, auraOrigin, Projectile.scale * auraScale, SpriteEffects.None, 0);
+				Main.EntitySpriteDraw(AuraTexture.Value, vector + circular, null, color * 0.25f, -auraRotation, auraOrigin, (Projectile.scale * 2f) * auraScale, SpriteEffects.FlipHorizontally, 0);
+			}
+
 			if (runOnce)
 			{
 				return;
@@ -82,40 +100,43 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
 		{
-			bool CollidingWithTrail = false;
-
-			if (!runOnce)
-			{
-				for (int i = 0; i < trailHitboxes.Length; i++)
-				{
-					if (trailHitboxes[i] != Rectangle.Empty && targetHitbox.Intersects(trailHitboxes[i]))
-					{
-						CollidingWithTrail = true;
-						break;
-					}
-					else
-					{
-						CollidingWithTrail = false;
-					}
-				}
-			}
-
-			return targetHitbox.Intersects(projHitbox) || CollidingWithTrail;
+			Rectangle bigHitbox = new Rectangle((int)Projectile.Center.X - 40, (int)Projectile.Center.Y - 40, 80, 80);
+			return targetHitbox.Intersects(bigHitbox);
 		}
 
         public override void AI()
         {
-            Projectile.localAI[0]++;
-            if (Projectile.localAI[0] >= 80)
-            {
-				SoundEngine.PlaySound(SoundID.Item8, Projectile.Center);
+			auraRotation += 0.12f;
 
-				int randDist = Main.rand.Next(1, 360);
-				
-                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(0, 12).RotatedByRandom(360), 
-				ModContent.ProjectileType<SpookFishronYoyoShark>(), Projectile.damage, 0f, Projectile.owner, 
-				ai0: randDist, ai1: Main.rand.NextBool() ? -1 : 1, ai2: Projectile.whoAmI);
-                Projectile.localAI[0] = 0;
+			if (auraScale < 1f)
+			{
+				auraScale += 0.025f;
+			}
+
+            Projectile.localAI[0]++;
+            if (Projectile.localAI[0] >= 60)
+            {
+				bool HasFoundTarget = false;
+                foreach (var NPC in Main.ActiveNPCs)
+				{
+					if (NPC.active && NPC.CanBeChasedBy(this) && !NPC.friendly && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type] && Vector2.Distance(Projectile.Center, NPC.Center) <= 650f)
+					{
+						HasFoundTarget = true;
+						break;
+					}
+				}
+
+				if (HasFoundTarget)
+				{
+					SoundEngine.PlaySound(SoundID.Item8, Projectile.Center);
+
+					int randDist = Main.rand.Next(1, 360);
+					
+					Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(0, 12).RotatedByRandom(360), 
+					ModContent.ProjectileType<SpookFishronYoyoShark>(), Projectile.damage, 0f, Projectile.owner, 
+					ai0: randDist, ai1: Main.rand.NextBool() ? -1 : 1, ai2: Projectile.whoAmI);
+					Projectile.localAI[0] = 0;
+				}
             }
 
             if (runOnce)
@@ -123,7 +144,6 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 				for (int i = 0; i < trailLength.Length; i++)
 				{
 					trailLength[i] = Vector2.Zero;
-                    trailHitboxes[i] = Rectangle.Empty;
 				}
 				runOnce = false;
 			}
@@ -134,8 +154,6 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 				Vector2 previousPosition = trailLength[i];
 				trailLength[i] = current;
 				current = previousPosition;
-
-                trailHitboxes[i] = new Rectangle((int)current.X - 5, (int)current.Y - 5, 10, 10);
 			}
         }
     }

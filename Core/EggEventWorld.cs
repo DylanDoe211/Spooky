@@ -144,14 +144,8 @@ namespace Spooky.Core
 		}
 
 		//spawn an enemy based on the type inputted
-		public static void SpawnEnemy(int BiomassType, int Type, Player player)
+		public static void SpawnEnemy(int BiomassType, int Type)
 		{
-			//if the player is null (which is done on multiplayer clients) then dont do anything at all
-			if (player == null)
-			{
-				return;
-			}
-
 			switch (BiomassType)
 			{
 				case 0:
@@ -163,6 +157,8 @@ namespace Spooky.Core
 					//3 = Biojetter
 					if (Main.netMode != NetmodeID.MultiplayerClient)
 					{
+						Player player = Main.player[GetRandomPlayerInEvent()];
+
 						int Biomass = NPC.NewNPC(null, (int)(player.Center.X + Main.rand.Next(-600, 600)), 
 						(int)(Flags.EggPosition.Y + Main.rand.Next(100, 150)), ModContent.NPCType<GiantBiomassPurple>(), ai2: Type);
 						Main.npc[Biomass].netUpdate = true;
@@ -186,6 +182,8 @@ namespace Spooky.Core
 					//4 = HoverBrain
 					if (Main.netMode != NetmodeID.MultiplayerClient)
 					{
+						Player player = Main.player[GetRandomPlayerInEvent()];
+
 						int Biomass = NPC.NewNPC(null, (int)(player.Center.X + Main.rand.Next(-600, 600)), 
 						(int)(Flags.EggPosition.Y + Main.rand.Next(100, 150)), ModContent.NPCType<GiantBiomassRed>(), ai2: Type);
 						Main.npc[Biomass].netUpdate = true;
@@ -204,6 +202,8 @@ namespace Spooky.Core
 					//spawn stomach enemy
 					if (Main.netMode != NetmodeID.MultiplayerClient)
 					{
+						Player player = Main.player[GetRandomPlayerInEvent()];
+
 						int Biomass = NPC.NewNPC(null, (int)(player.Center.X + Main.rand.Next(-600, 600)), 
 						(int)(Flags.EggPosition.Y + Main.rand.Next(100, 150)), ModContent.NPCType<GiantBiomassOrange>());
 						Main.npc[Biomass].netUpdate = true;
@@ -245,8 +245,6 @@ namespace Spooky.Core
 
 				if (EventTimeLeft < 21600)
 				{
-					Player player = Main.netMode == NetmodeID.MultiplayerClient ? null : Main.player[GetRandomPlayerInEvent()];
-
 					//increment both timers
 					//the timer for the UI gets decreased so that the actual time displayed on the UI bar is counting down and not up
 					EventTimeLeft++;
@@ -269,13 +267,13 @@ namespace Spooky.Core
 
 					if (EventTimeLeft == 3600 || EventTimeLeft == 7200 || EventTimeLeft == 10800 || EventTimeLeft == 14400 || EventTimeLeft == 18000)
 					{
-						SpawnEnemy(2, 0, player);
+						SpawnEnemy(2, 0);
 					}
 
 					//spawn a biojetter a little before 3 minutes and a little after 4 minutes
 					if (!HasSpawnedBiojetter1 && timeLeft >= 150)
 					{
-						SpawnEnemy(0, 3, player);
+						SpawnEnemy(0, 3);
 
 						HasSpawnedBiojetter1 = true;
 
@@ -286,7 +284,7 @@ namespace Spooky.Core
 					}
 					if (!HasSpawnedBiojetter2 && timeLeft >= 280)
 					{
-						SpawnEnemy(0, 3, player);
+						SpawnEnemy(0, 3);
 
 						HasSpawnedBiojetter2 = true;
 
@@ -299,7 +297,7 @@ namespace Spooky.Core
 					//spawn bolsters at 3 minutes, 4 minutes, and 5 minutes in
 					if (!HasSpawnedBolster1 && timeLeft >= 180)
 					{
-						SpawnEnemy(1, 5, player);
+						SpawnEnemy(1, 5);
 
 						HasSpawnedBolster1 = true;
 
@@ -310,7 +308,7 @@ namespace Spooky.Core
 					}
 					if (!HasSpawnedBolster2 && timeLeft >= 240)
 					{
-						SpawnEnemy(1, 5, player);
+						SpawnEnemy(1, 5);
 
 						HasSpawnedBolster2 = true;
 
@@ -321,7 +319,7 @@ namespace Spooky.Core
 					}
 					if (!HasSpawnedBolster3 && timeLeft >= 300)
 					{
-						SpawnEnemy(1, 5, player);
+						SpawnEnemy(1, 5);
 
 						HasSpawnedBolster3 = true;
 
@@ -342,17 +340,17 @@ namespace Spooky.Core
 								if (timeLeft < 60)
 								{
 									int BiomassType = Main.rand.Next(0, 2);
-									SpawnEnemy(BiomassType, BiomassType == 0 ? 0 : Main.rand.Next(0, 2), player);
+									SpawnEnemy(BiomassType, BiomassType == 0 ? 0 : Main.rand.Next(0, 2));
 								}
 								if (timeLeft >= 60 && timeLeft < 180)
 								{
 									int BiomassType = Main.rand.Next(0, 2);
-									SpawnEnemy(BiomassType, BiomassType == 0 ? Main.rand.Next(0, 2) : Main.rand.Next(0, 3), player);
+									SpawnEnemy(BiomassType, BiomassType == 0 ? Main.rand.Next(0, 2) : Main.rand.Next(0, 3));
 								}
 								if (timeLeft >= 180)
 								{
 									int BiomassType = Main.rand.Next(0, 2);
-									SpawnEnemy(BiomassType, BiomassType == 0 ? Main.rand.Next(0, 3) : Main.rand.Next(0, 5), player);
+									SpawnEnemy(BiomassType, BiomassType == 0 ? Main.rand.Next(0, 3) : Main.rand.Next(0, 5));
 								}
 							}
 
@@ -366,17 +364,17 @@ namespace Spooky.Core
 						if (timeLeft < 60)
 						{
 							int BiomassType = Main.rand.Next(0, 2);
-							SpawnEnemy(BiomassType, BiomassType == 0 ? 0 : Main.rand.Next(0, 2), player);
+							SpawnEnemy(BiomassType, BiomassType == 0 ? 0 : Main.rand.Next(0, 2));
 						}
 						if (timeLeft >= 60 && timeLeft < 180)
 						{
 							int BiomassType = Main.rand.Next(0, 2);
-							SpawnEnemy(BiomassType, BiomassType == 0 ? Main.rand.Next(0, 2) : Main.rand.Next(0, 3), player);
+							SpawnEnemy(BiomassType, BiomassType == 0 ? Main.rand.Next(0, 2) : Main.rand.Next(0, 3));
 						}
 						if (timeLeft >= 180)
 						{
 							int BiomassType = Main.rand.Next(0, 2);
-							SpawnEnemy(BiomassType, BiomassType == 0 ? Main.rand.Next(0, 3) : Main.rand.Next(0, 5), player);
+							SpawnEnemy(BiomassType, BiomassType == 0 ? Main.rand.Next(0, 3) : Main.rand.Next(0, 5));
 						}
 					}
 				}

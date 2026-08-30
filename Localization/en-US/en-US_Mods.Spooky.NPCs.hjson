@@ -539,6 +539,9 @@ TeddyBearGiant.DisplayName: Cornelius
 TeddyBearSnow.DisplayName: Snow Bear
 ToyRobot.DisplayName: Toy Robot
 ToyRobotTank.DisplayName: Toy Tankbot
+//shipyard
+SeaBunny.DisplayName: Sea Bunny
+SeaSheep.DisplayName: Sea Sheep
 
 //tameable
 Turkey: {

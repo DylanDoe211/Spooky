@@ -28,6 +28,7 @@ using Spooky.Content.NPCs.Minibiomes.Desert;
 using Spooky.Content.NPCs.Minibiomes.Ocean;
 using Spooky.Content.NPCs.Minibiomes.Vegetable;
 using Spooky.Content.NPCs.Quest;
+using Spooky.Content.NPCs.Shipyard;
 using Spooky.Content.NPCs.SpiderCave;
 using Spooky.Content.NPCs.SpiderCave.SpiderWar;
 using Spooky.Content.NPCs.SpiderCave.SporeEvent;
@@ -1020,6 +1021,9 @@ namespace Spooky.Core
 			if (spawnInfo.Player.InModBiome(ModContent.GetInstance<ShipyardBiome>()))
 			{
 				pool.Clear();
+
+				pool.Add(ModContent.NPCType<SeaBunny>(), 1);
+				pool.Add(ModContent.NPCType<SeaSheep>(), 1);
 			}
 
 			//dumb zomboid can spawn anywhere super rarely

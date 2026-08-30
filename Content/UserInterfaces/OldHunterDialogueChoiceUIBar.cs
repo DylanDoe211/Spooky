@@ -382,11 +382,25 @@ namespace Spooky.Content.UserInterfaces
 
 			if (Flags.downedOldHunter)
 			{
-				DrawTextDescription(spriteBatch, UITopLeft1 + new Vector2(-52f, -10f), Choice1, textColor1);
+				DrawTextDescription(spriteBatch, UITopLeft1 + new Vector2(-52f, -10f) * Main.UIScale, Choice1, textColor1);
 			}
 			
-			DrawTextDescription(spriteBatch, RematchBarPosition + new Vector2(-52f, -10f), Choice2, textColor2);
+			DrawTextDescription(spriteBatch, RematchBarPosition + new Vector2(-52f, -10f) * Main.UIScale, Choice2, textColor2);
         }
+
+		public static void DrawTextDescription(SpriteBatch spriteBatch, Vector2 TextTopLeft, string Text, Color color)
+		{
+			Vector2 scale = new Vector2(0.9f, 0.925f) * MathHelper.Clamp(Main.screenHeight / 1440f, 0.825f, 1f) * Main.UIScale;
+
+			foreach (string TextLine in Utils.WordwrapString(Text, FontAssets.MouseText.Value, 700, 16, out _))
+			{
+				if (string.IsNullOrEmpty(TextLine))
+					continue;
+
+				ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, TextLine, TextTopLeft, color, 0f, Vector2.Zero, scale);
+				TextTopLeft.Y += Main.UIScale * 16f;
+			}
+		}
 
         public static bool InRangeOfNPC()
         {
@@ -398,22 +412,6 @@ namespace Spooky.Content.UserInterfaces
             Rectangle validTalkArea = Utils.CenteredRectangle(Main.LocalPlayer.Center, new Vector2(Player.tileRangeX * 3f, Player.tileRangeY * 2f) * 16f);
             
             return validTalkArea.Intersects(Main.npc[OldHunter].Hitbox);
-        }
-
-		public static void DrawTextDescription(SpriteBatch spriteBatch, Vector2 TextTopLeft, string Text, Color color)
-		{
-			Vector2 scale = new Vector2(0.9f, 0.925f) * MathHelper.Clamp(Main.screenHeight / 1440f, 0.825f, 1f) * Main.UIScale;
-
-			foreach (string TextLine in Utils.WordwrapString(Text, FontAssets.MouseText.Value, 700, 16, out _))
-			{
-				if (string.IsNullOrEmpty(TextLine))
-				{
-					continue;
-				}
-
-				ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, TextLine, TextTopLeft, color, 0f, Vector2.Zero, scale);
-				TextTopLeft.Y += Main.UIScale * 16f;
-			}
         }
 
         //check if the mouse is hovering over a specific button

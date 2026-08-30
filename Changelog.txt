@@ -44,3 +44,4 @@ Fixes:
 -Grass walls in the catacombs not being considered valid for spawning enemies, causing unintentionally low spawnrates in both catacomb layers
 -Bag o' treats candies hitting enemies causing the bag to spawn more candies
 -Peacock oni mask effect inflicting its debuff onto town npcs, friendly critters, and invincible/immortal npcs
+-Razor radish not having extra hitbox range

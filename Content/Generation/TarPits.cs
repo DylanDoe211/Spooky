@@ -138,8 +138,8 @@ namespace Spooky.Content.Generation
 				for (int j = PositionY - SizeY - (SizeY / 2); j < PositionY + SizeY + (SizeY / 2); j++)
 				{
 					float horizontalOffsetNoise = SpookyWorldMethods.PerlinNoise2D(i / 350f, j / 2000f, 5, unchecked(Seed + 1)) * 0.01f;
-					float cavePerlinValue = SpookyWorldMethods.PerlinNoise2D(i / 350f, j / 2000f, 5, Seed) + 0.5f + horizontalOffsetNoise;
-					float cavePerlinValue2 = SpookyWorldMethods.PerlinNoise2D(i / 350f, j / 2000f, 5, unchecked(Seed - 1)) + 0.5f;
+					float cavePerlinValue = SpookyWorldMethods.PerlinNoise2D(i / 600f, j / 2000f, 5, Seed) + 0.5f + horizontalOffsetNoise;
+					float cavePerlinValue2 = SpookyWorldMethods.PerlinNoise2D(i / 600f, j / 2000f, 5, unchecked(Seed - 1)) + 0.5f;
 					float caveNoiseMap = (cavePerlinValue + cavePerlinValue2) * 0.5f;
 					float caveCreationThreshold = horizontalOffsetNoise * 3.5f + 0.235f;
 
