@@ -1,0 +1,109 @@
+SpookyBiome: {
+	DisplayName: Жуткий лес
+	TownNPCDialogueName: Жуткий лес
+}
+
+SpookyBiomeUg: {
+	DisplayName: Жуткое подземелье
+	TownNPCDialogueName: Жуткое подземелье
+}
+
+CemeteryBiome: {
+	DisplayName: Болотистый могильник
+	TownNPCDialogueName: Болотистый могильник
+}
+
+RaveyardBiome: {
+	DisplayName: Клуббище
+	TownNPCDialogueName: Клуббище
+}
+
+CatacombBiome: {
+	DisplayName: Кошмарные катакомбы
+	TownNPCDialogueName: Кошмарные катакомбы
+}
+
+CatacombBiome2: {
+	DisplayName: Нижние катакомбы
+	TownNPCDialogueName: Нижние катакомбы
+}
+
+NoseTempleBiome: {
+	DisplayName: Храм Шмыга
+	TownNPCDialogueName: Храм Шмыга
+}
+
+PandoraBoxBiome: {
+	DisplayName: Ящик Пандора
+	TownNPCDialogueName: Ящик Пандора
+}
+
+SpookyHellBiome: {
+	DisplayName: Долина глаз
+	TownNPCDialogueName: Долина глаз
+}
+
+SpookyHellEventBiome: {
+	DisplayName: Яичное вторжение
+	TownNPCDialogueName: Яичное вторжение
+}
+
+SpookyHellLake: {
+	DisplayName: Кровавое озеро
+	TownNPCDialogueName: Кровавое озеро
+}
+
+SpiderCaveBiome: {
+	DisplayName: Паучий грот
+	TownNPCDialogueName: Паучий грот
+}
+
+HallucinationZone: {
+	DisplayName: Галлюциногенная встреча
+	TownNPCDialogueName: Галлюциногенная встреча
+}
+
+VegetableBiome: {
+	DisplayName: Смрадные сады
+	TownNPCDialogueName: Смрадные сады
+}
+
+ChristmasDungeonBiome: {
+	DisplayName: Мастерская Крампуса
+	TownNPCDialogueName: Мастерская Крампуса
+}
+
+TarPitsBiome: {
+	DisplayName: Битумные ямы
+	TownNPCDialogueName: Битумные ямы
+}
+
+ZombieOceanBiome: {
+	DisplayName: Прогнившие пучины
+	TownNPCDialogueName: Прогнившие пучины
+}
+
+SpookyBiomeUgGlowshroom: {
+	DisplayName: Пещеры сверкающих грибов
+	TownNPCDialogueName: Пещеры сверкающих грибов
+}
+
+SporeEventBiome: {
+	DisplayName: Споровой смерч
+	TownNPCDialogueName: Споровой смерч
+}
+
+SpiderWarBiome: {
+	DisplayName: Паучье побоище
+	TownNPCDialogueName: Паучье побоище
+}
+
+RaveyardVisualBiome: {
+	// TownNPCDialogueName: Raveyard Visual Biome
+	// DisplayName: Raveyard Visual Biome
+}
+
+ShipyardBiome: {
+	// DisplayName: Bleached Shipyard
+	// TownNPCDialogueName: Bleached Shipyard
+}

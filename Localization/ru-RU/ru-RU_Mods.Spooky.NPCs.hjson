@@ -1,0 +1,562 @@
+RotGourd: {
+	DisplayName: Гнилой тыквардеец
+
+	BossChecklistIntegration: {
+		SpawnInfo: Используйте [i:Spooky/RottenSeed] в Жутком лесу. Оно выпадает при разрушении больших заплесневелых тыкв, растущих в этом биоме.
+		DespawnMessage: Гнилая-лихая тыква раздавила всех игроков
+	}
+}
+
+SpookySpirit: {
+	DisplayName: Жуткий дух
+
+	BossChecklistIntegration: {
+		SpawnInfo: Используйте [i:Spooky/EMFReader] вблизи Проклятой Статуи на Болотистом могильнике ночью.
+		DespawnMessage: Манкий морок запугал до смерти всех игроков
+	}
+}
+
+Moco: {
+	DisplayName: Шмыг
+
+	BossChecklistIntegration: {
+		SpawnInfo: Нажмите ПКМ по Носвятилищу в Долине глаз, имея в инвентаре [i:Spooky/CottonSwab].
+		DespawnMessage: Этой мелкой козявке начхать на вас
+	}
+}
+
+DaffodilEye: {
+	DisplayName: Нарцисс
+
+	BossChecklistIntegration: {
+		SpawnInfo: Бросьте в него [i:Spooky/Brick], чтобы разбудить.
+		DespawnMessage: Нарцисс затмил всех игроков своим нарциссизмом
+	}
+}
+
+OldHunterBoss: {
+	DisplayName: Старый охотник
+
+	BossChecklistIntegration: {
+		SpawnInfo: Оживите его труп, поднеся к нему [i:Spooky/OldHunterSoul].
+		DespawnMessage: Старый охотник закончил свою охоту
+	}
+}
+
+OrroHead: {
+	DisplayName: Орро
+
+	BossChecklistIntegration: {
+		EntryName: Орро и Боро
+		SpawnInfo: Вылейте [i:Spooky/Concoction] на гигантское яйцо в Долине глаз после завершения события «Яичное вторжение».
+		DespawnMessage: Орро и Боро поделили туши всех игроков пополам
+	}
+}
+
+BigBone: {
+	DisplayName: Костяра
+
+	BossChecklistIntegration: {
+		SpawnInfo: Используйте [i:Spooky/Fertilizer], стоя рядом с гигантским цветочным горшком в катакомбах.
+		DespawnMessage: Все игроки окостенели от страха пред Костярой
+	}
+}
+
+SpookFishron: {
+	DisplayName: Жуткий Рыброн
+
+	BossChecklistIntegration: {
+		SpawnInfo: Рыбачьте в океане ночью во время Тыквенной луны, используя [i:Spooky/SinisterSnailItem] в качестве наживки. Зловещие улитки появляются в Жутком подземелье в хардмоде.
+		DespawnMessage: Жуткий Рыброн довёл всех игроков до обморока своей оригинальностью
+	}
+}
+
+//boss stuff
+BigFlowerPot.DisplayName: ""
+CatacombGuardian.DisplayName: Страж катакомб
+BigBoneArenaBG.DisplayName: ""
+DaffodilBody.DisplayName: ""
+DaffodilHandLeft.DisplayName: Нарцисс
+DaffodilHandRight.DisplayName: Нарцисс
+DaffodilArenaBG.DisplayName: ""
+MoclingMinion.DisplayName: Шмыглёныш
+MocoIntro.DisplayName: Шмыглёныш
+MocoOutro.DisplayName: Шмыглёныш
+MocoSpawner.DisplayName: ""
+BoroBody.DisplayName: Боро
+BoroBodyConnect.DisplayName: Боро
+BoroBodyWings.DisplayName: Боро
+BoroHead.DisplayName: Боро
+BoroTail.DisplayName: Боро
+OrroBody.DisplayName: Орро
+OrroBodyWings.DisplayName: Орро
+OrroHeadP1.DisplayName: Орро
+OrroTail.DisplayName: Орро
+BoroTongue.DisplayName: Язык Боро
+GrappleTongue.DisplayName: ""
+PhantomSkull.DisplayName: Фантомный череп
+OrbitingBooger.DisplayName: Козявком
+SpookSharkron.DisplayName: Жуткий акулон
+//hallucinations
+TheMan.DisplayName: Некто
+//catacombs layer 1
+Skeletoid1.DisplayName: Скелестяк
+Skeletoid2.DisplayName: Скелестяк
+Skeletoid3.DisplayName: Скелестяк
+Skeletoid4.DisplayName: Скелестяк
+SkeletoidBig.DisplayName: Здоровяк Джон
+// BoneWorm1.DisplayName: Long Skeletoid
+// BoneWorm2.DisplayName: Long Skeletoid
+BoneStackerBase.DisplayName: Плита катакомб
+BoneStacker1.DisplayName: Костяная плита
+BoneStacker2.DisplayName: Костяная плита
+BoneStacker3.DisplayName: Костяная плита
+BoneStackerMoving1.DisplayName: Костяная плита
+BoneStackerMoving2.DisplayName: Костяная плита
+BoneStackerMoving3.DisplayName: Костяная плита
+GiantPutty.DisplayName: Клейкий куб
+RollingSkull1.DisplayName: Катящийся череп
+RollingSkull2.DisplayName: Катящийся череп
+RollingSkull3.DisplayName: Катящийся череп
+RollingSkull4.DisplayName: Позолоченный череп
+ZomboidGlyphomancer.DisplayName: Зомбак-глифомант
+ZomboidNecromancer.DisplayName: Зомбак-некромант
+ZomboidNecromancerSoul.DisplayName: Неупокоенная душа
+PhantomRollingSkull.DisplayName: Фантом
+PhantomSkeletoid.DisplayName: Фантом
+ZomboidPyromancer.DisplayName: Зомбак-пиромант
+ZomboidSuspiciomancer.DisplayName: Зомбак-мнитомант
+//catacombs layer 2
+CatacombCrusherSpawner.DisplayName: ""
+CatacombCrusher1.DisplayName: Древняя давильня
+CatacombCrusher2.DisplayName: Древняя давильня
+CatacombCrusher3.DisplayName: Древняя давильня
+CatacombCrusher4.DisplayName: Позолоченная давильня
+CelebrationSkeletoid1.DisplayName: Муэрто Скелестяк
+CelebrationSkeletoid2.DisplayName: Муэрто Скелестяк
+CelebrationSkeletoid3.DisplayName: Муэрто Скелестяк
+CelebrationSkeletoid4.DisplayName: Муэрто Скелестяк
+CelebrationSkeletoid5.DisplayName: Муэрто Скелестяк
+Dahlia.DisplayName: Дива Георгина
+DahliaEye.DisplayName: Дива Георгина
+FlushBush1.DisplayName: Куст-хруст
+FlushBush2.DisplayName: Куст-хруст
+FlushBush3.DisplayName: Куст-хруст
+FlushBush4.DisplayName: Куст-хруст
+JumpingSeed1.DisplayName: Скоксем
+JumpingSeed2.DisplayName: Скоксем
+JumpingSeed3.DisplayName: Скоксем
+LilySlime1Big.DisplayName: Кувшинка
+LilySlime1Small.DisplayName: Кувшинка
+LilySlime2Big.DisplayName: Кувшинка
+LilySlime2Small.DisplayName: Кувшинка
+OrchidPinkBig.DisplayName: Наблюдающая орхидея
+OrchidPinkSmall.DisplayName: Наблюдающая орхидея
+OrchidPurpleBig.DisplayName: Наблюдающая орхидея
+OrchidPurpleSmall.DisplayName: Наблюдающая орхидея
+OrchidStem.DisplayName: ""
+PitcherPlant1.DisplayName: Непентес-плевала
+PitcherPlant2.DisplayName: Непентес-плевала
+PitcherPlant3.DisplayName: Непентес-плевала
+PitcherPlant4.DisplayName: Непентес-плевала
+PlantTrap1.DisplayName: Капканец
+PlantTrap2.DisplayName: Капканец
+PlantTrap3.DisplayName: Капканец
+PlantTrap4.DisplayName: Капканец
+PlantTrap5.DisplayName: Капканец
+PlantTrap6.DisplayName: Капканец
+PollinatorBeeDamage.DisplayName: Опчелительница
+PollinatorBeeHealing.DisplayName: Опчелительница
+SkeletoidBandit.DisplayName: Скелестяк-бандит
+Smelly.DisplayName: Вонючка
+Sunflower1.DisplayName: Подсолнуход
+Sunflower3.DisplayName: Подсолнуход
+Sunflower2.DisplayName: Подсолнуход
+//pandora's box
+PandoraBox.DisplayName: Ящик Пандоры
+Bobbert.DisplayName: Боберт
+Chester.DisplayName: Честер
+ChesterClub.DisplayName: Честер
+ChesterShield.DisplayName: Честер
+Sheldon.DisplayName: Шелдон
+SheldonShield.DisplayName: Шелдон
+Stitch.DisplayName: Стич
+StitchWand.DisplayName: Стич
+//cemetery
+BloatGhostBig.DisplayName: Раздувающийся призрак
+BloatGhostSmall.DisplayName: Раздувающийся призрак
+Crow.DisplayName: Ворон
+FeralRat1.DisplayName: Одичавшая крыса
+FeralRat2.DisplayName: Одичавшая крыса
+HungryGhost.DisplayName: Голодный призрак
+MistGhost.DisplayName: Мглистый призрак
+MistGhostFaces.DisplayName: Мглистый призрак
+MistGhostSwirl.DisplayName: Мглистый призрак
+MistGhostWiggle.DisplayName: Мглистый призрак
+Possessor.DisplayName: Коварный призрак
+PossessorEvil.DisplayName: Коварный призрак
+SadGhostBig.DisplayName: Грустный призрак
+SadGhostSmall.DisplayName: Грустный призрак
+SmileGhost.DisplayName: Счастливый призрак
+SmileGhostSmall1.DisplayName: Счастливый призрак
+SmileGhostSmall2.DisplayName: Счастливый призрак
+SmileGhostSmall3.DisplayName: Счастливый призрак
+TinyRat1.DisplayName: Крыска
+TinyRat2.DisplayName: Крыска
+ZomboidCasket.DisplayName: Зомбагроб
+ZomboidGremlin.DisplayName: Зомбёнок
+MistGhostSpawn.DisplayName: ""
+//egg event
+BileStomach.DisplayName: Пузоболик
+Biojetter.DisplayName: Биоструй
+BiojetterEye.DisplayName: Биоструй
+CoughLungs.DisplayName: Кашлюющие лёгкие
+CruxBat.DisplayName: Мозголётка
+EarWorm.DisplayName: Ухочервь
+EarWormBase.DisplayName: ""
+EarWormFallingBody.DisplayName: Ухочервь
+EarWormFalling.DisplayName: Ухочервь
+ExplodingAppendix.DisplayName: Взрывной аппендикс
+FleshBolster.DisplayName: Плотогнездо
+GooSlug.DisplayName: Жижеслиз
+HoppingHeart.DisplayName: Скок-сердце
+HoverBrain.DisplayName: Парящий мозг
+TongueBiter.DisplayName: Языкус
+OrroboroEgg.DisplayName: ""
+GiantBiomassPurple.DisplayName: ""
+GiantBiomassRed.DisplayName: ""
+GiantBiomassOrange.DisplayName: ""
+//friendly
+DumbZomboid.DisplayName: Тупой зомбак
+GiantWebAnimationBase.DisplayName: ""
+GiantWebAnimationPiece.DisplayName: ""
+Krampus.DisplayName: Крампус
+LittleBone.DisplayName: Костик
+LittleBonePotTransform.DisplayName: Костик
+LittleBoneSleeping.DisplayName: Спящее растение
+LittleEye.DisplayName: Глазик
+LittleEyeSleeping.DisplayName: Спящий глаз
+MushGnome1.DisplayName: Грибогном
+MushGnome2.DisplayName: Грибогном
+MushGnome3.DisplayName: Грибогном
+MushGnome4.DisplayName: Грибогном
+Musicman.DisplayName: Музыкант
+OldHunter.DisplayName: Старый охотник
+OldHunterDead.DisplayName: Старый труп
+PartySkeleton1.DisplayName: Скелет-тусовщик
+PartySkeleton2.DisplayName: Скелет-тусовщик
+PartySkeleton3.DisplayName: Скелет-тусовщик
+PartySkeleton4.DisplayName: Скелет-тусовщик
+PartySkeleton5.DisplayName: Скелет-тусовщик
+PartySkeleton6.DisplayName: Скелет-тусовщик
+PartySkeleton7.DisplayName: Скелет-тусовщик
+PartySkeleton8.DisplayName: Скелет-тусовщик
+PartySkeleton.Names: Костя, Тони, Джефф, МакРебро, Клемменс, Ганс Жиротряс, Карльций, Рёберт, Найджел, Мортон, Джереми, Густаво, Notorious B.O.N.E., Патрис, Патрикий, Ванда, Сеньор Эрнандес, Джон-младший, Фартишка, Quandale, Просто костя, Музыкостяк, Онго, Питер Гриффин, Тарио, Ключицын
+SkeletonBouncer.DisplayName: Костолом-вышибала
+SuspiciousSkeleton.DisplayName: Подозрительный скелет
+LabComputerDummy.DisplayName: ""
+//spooky biome
+BuffBungus.DisplayName: Грибыш-дурень
+Bungus.DisplayName: Грибыш
+CandleMonster.DisplayName: Свечевик
+Chungus.DisplayName: Расплющенный гриб
+FluffBatBig1.DisplayName: Гигантская пухокрылка
+FluffBatBig2.DisplayName: Гигантская пухокрылка
+FluffBatSmall1.DisplayName: Пухокрылка
+FluffBatSmall2.DisplayName: Пухокрылка
+FlyBig.DisplayName: Большая муха
+FlySmall.DisplayName: Муха
+HoppingCandyBasket.DisplayName: Скачущая корзинка сладостей
+LittleSpider.DisplayName: Паучок
+MonsterEye1.DisplayName: Зыркун
+MonsterEye2.DisplayName: Зыркун
+MonsterEye4.DisplayName: Зыркун
+MonsterEye3.DisplayName: Зыркун
+PuttyPumpkin.DisplayName: Тыквенный клейкун
+PuttyPumpkinling.DisplayName: Тыквенный клейкунчик
+PuttySlime1.DisplayName: Клейкий слизень
+PuttySlime2.DisplayName: Клейкий слизень
+PuttySlime3.DisplayName: Клейкий слизень
+ScarecrowShotgunner.DisplayName: Одержимое пугало
+ShroomHopper.DisplayName: Грибоскок
+SinisterSnail.DisplayName: Зловещая улитка
+SpookyDance.DisplayName: Танцор Скид
+TinyGhost1.DisplayName: Крошка призрак
+TinyGhost2.DisplayName: Крошка призрак
+TinyGhostBoof.DisplayName: Крошка призрак
+TinyGhostRare.DisplayName: Жуткий призрак
+TinyMushroom.DisplayName: Гриборовичок
+TomatoPutty1.DisplayName: Томатный клейкун
+TomatoPutty2.DisplayName: Томатный клейкун
+TomatoPutty3.DisplayName: Томатный клейкун
+TomatoPutty4.DisplayName: Томатный клейкун
+TomatoPuttyFlying.DisplayName: Сальсовый клейкун
+TomatoPuttyFlyingSmall.DisplayName: Сальсовый клейкунчик
+TomatoRoman.DisplayName: Томат Роман
+TomatoWormTail.DisplayName: Томатный супозмей
+TomatoWormHead.DisplayName: Томатный супозмей
+TomatoWormBody2.DisplayName: Томатный супозмей
+TomatoWormBody1.DisplayName: Томатный супозмей
+Witch.DisplayName: Злая ведьма
+ZomboidArmored.DisplayName: Бронированный зомбак
+ZomboidBrute.DisplayName: Зомбак-громила
+ZomboidBruteTomato.DisplayName: Зомбак-громила
+ZomboidClarinet.DisplayName: Зомбак
+ZomboidFungus.DisplayName: Зомбак
+ZomboidPumpkin.DisplayName: Корнезомб
+ZomboidPumpkinFire.DisplayName: Пылающий корнезомб
+ZomboidRain.DisplayName: Протекающий зомбак
+ZomboidThorn.DisplayName: Зомбак
+ZomboidTomatoMold.DisplayName: Томатный зомбак
+ZomboidTomato.DisplayName: Томатный зомбак
+ZomboidWarlock.DisplayName: Зомбак-чернокнижник
+WarlockSkull.DisplayName: Череп чернокнижника
+ZomboidWind.DisplayName: Зомбак
+//valley of eyes
+EyeBat.DisplayName: Сглазник
+EyeBatFleshy.DisplayName: Сглазник
+ManHole.DisplayName: Плотодыр
+ManHoleFleshy.DisplayName: Плотодыр
+ManHoleEye.DisplayName: Глаз
+ManHoleBig.DisplayName: Большой плотодыр
+MrHandy.DisplayName: Мистер Рукастик
+MrHandyFleshy.DisplayName: Мистер Рукастик
+Tortumor.DisplayName: Черепухоль
+TortumorFleshy.DisplayName: Черепухоль
+TortumorGiant.DisplayName: Гигантская черепухоль
+TortumorGiantFleshy.DisplayName: Гигантская черепухоль
+Mocling.DisplayName: Шмыглёныш
+MoclingSwarm.DisplayName: ""
+ValleyFish.DisplayName: Подглядунья
+ValleyNautilus.DisplayName: Бордовый головоног
+ValleyNautilusBiomass.DisplayName: ""
+ValleySquid.DisplayName: Тромбовый кальмар
+ValleySquidClone.DisplayName: Тромбовый кальмар
+ValleyEelBody.DisplayName: Аортальный угорь
+ValleyEelHead.DisplayName: Аортальный угорь
+ValleyEelTail.DisplayName: Аортальный угорь
+ValleyShark.DisplayName: Гемостазовый зверь
+ValleySharkMouth.DisplayName: Гемостазовый зверь
+ValleyMerman.DisplayName: Плотский мерфолк
+//spider cave
+Ant1.DisplayName: Муравей
+Ant2.DisplayName: Муравей
+AntSpider1.DisplayName: Паук-муравьед
+AntSpider2.DisplayName: Паук-муравьед
+BallSpider.DisplayName: Паукомок
+BallSpiderWeb.DisplayName: Паутина паукомка
+Cockroach.DisplayName: Таракан
+CrabSpider1.DisplayName: Краб-паук
+CrabSpider2.DisplayName: Краб-паук
+DaddyLongLegs.DisplayName: Папочка Долгоног
+FishingSpider.DisplayName: Доломедес
+Harvestmen.DisplayName: Сенокосец
+Inchworm1.DisplayName: Мерная гусеница
+Inchworm2.DisplayName: Мерная гусеница
+Inchworm3.DisplayName: Мерная гусеница
+JumpingSpider1.DisplayName: Паук-скакун
+JumpingSpider2.DisplayName: Паук-скакун
+LeafSpiderSleeping.DisplayName: Лист
+LeafSpider.DisplayName: Паук-листовёрт
+LeafSpiderWeb.DisplayName: Паутина паука-листовёрта
+Mosquito1.DisplayName: Комар
+Mosquito2.DisplayName: Комар
+Mosquito3.DisplayName: Комар
+Moth1.DisplayName: Моль
+Moth2.DisplayName: Моль
+OrbWeaver1.DisplayName: Кругопряд
+OrbWeaver2.DisplayName: Кругопряд
+OrbWeaver3.DisplayName: Кругопряд
+OrbWeaverGiant.DisplayName: Гигантский кругопряд
+PeacockSpider1.DisplayName: Павлиний паук
+PeacockSpider2.DisplayName: Павлиний паук
+PeacockSpider3.DisplayName: Павлиний паук
+PelicanSpider1.DisplayName: Паук-пеликан
+PelicanSpider2.DisplayName: Паук-пеликан
+SmileSpider.DisplayName: Паук-улыбака
+SpiderAnt1.DisplayName: Паук-муравей
+SpiderAnt2.DisplayName: Паук-муравей
+TarantulaHawk1.DisplayName: Тарантуловый ястреб
+TarantulaHawk2.DisplayName: Тарантуловый ястреб
+TarantulaHawk3.DisplayName: Тарантуловый ястреб
+TinySpider1.DisplayName: Паучок
+TinySpider2.DisplayName: Паучок
+TinySpider3.DisplayName: Паучок
+TinySpider4.DisplayName: Паучок
+TinySpider5.DisplayName: Паучок
+TrapdoorSpider1.DisplayName: Паук-ловушечник
+TrapdoorSpider2.DisplayName: Паук-ловушечник
+TrapdoorSpiderIdle1.DisplayName: Паук-ловушечник
+TrapdoorSpiderIdle2.DisplayName: Паук-ловушечник
+WhipSpider.DisplayName: Фрин
+WhipSpiderStinger.DisplayName: Фрин
+WolfSpider.DisplayName: Паук-волк
+WolfSpiderBaby.DisplayName: Детёныш паука-волка
+//spider war
+ArchdukeSpider.DisplayName: Эрцгерцог Тригонотарб
+CamelColonel.DisplayName: Полковник Сольпуг
+CamelColonelTail.DisplayName: ""
+CamelColonelTailSniper.DisplayName: Полковник Сольпуг
+CorklidQueen.DisplayName: Пробкоролева
+EmperorMortar.DisplayName: Император Мортира
+EmperorMortarSegment.DisplayName: Император Мортира
+EmpressJoro.DisplayName: Императрица Джоро
+JoroFly.DisplayName: Муха Джоро
+JoroBaby.DisplayName: Взрывная Джоро
+OgreKing.DisplayName: Король Большебрюх
+TrumpetSpider.DisplayName: Паук-трубач
+SpotlightFirefly.DisplayName: ""
+SpotlightSpiderFloor.DisplayName: ""
+//mushroom spore event
+BeetleMite1.DisplayName: Панцирный клещ
+BeetleMite2.DisplayName: Панцирный клещ
+BerryMite1.DisplayName: Ягодный клещ
+BerryMite2.DisplayName: Ягодный клещ
+BerryMite3.DisplayName: Ягодный клещ
+DeerMite.DisplayName: Клещ-олень
+DustMite1.DisplayName: Пылевой клещ
+DustMite2.DisplayName: Пылевой клещ
+EyelashMiteBlueBody1.DisplayName: Железница
+EyelashMiteBlueBody2.DisplayName: Железница
+EyelashMiteBlueHead.DisplayName: Железница
+EyelashMiteBlueTail.DisplayName: Железница
+EyelashMitePurpleBody1.DisplayName: Железница
+EyelashMitePurpleBody2.DisplayName: Железница
+EyelashMitePurpleHead.DisplayName: Железница
+EyelashMitePurpleTail.DisplayName: Железница
+PeacockMite.DisplayName: Клещ-павлин
+RustMite.DisplayName: Ржавчик
+//nose cult
+MocoIdol1.DisplayName: ""
+MocoIdol2.DisplayName: ""
+MocoIdol3.DisplayName: ""
+MocoIdol4.DisplayName: ""
+MocoIdol5.DisplayName: ""
+MocoIdol6.DisplayName: ""
+NoseBallPurple.DisplayName: Безножка
+NoseBallRed.DisplayName: Безножка
+NoseCultistBruteIdle.DisplayName: ""
+NoseCultistBrute.DisplayName: Культист-вышибала
+NoseCultistGruntIdle.DisplayName: ""
+NoseCultistGrunt.DisplayName: Культист-сопун
+NoseCultistGunnerIdle.DisplayName: ""
+NoseCultistGunner.DisplayName: Культист-соплеплюй
+NoseCultistMageIdle.DisplayName: ""
+NoseCultistMage.DisplayName: Культист-носомант
+NoseCultistWingedIdle.DisplayName: ""
+NoseCultistWinged.DisplayName: Культист-носолёт
+NoseCultistLeaderIdle.DisplayName: ""
+NoseCultistLeader.DisplayName: Носферату
+SnotMonster.DisplayName: Сопляк
+SnotSlime.DisplayName: Соплизень
+//quest enemies
+BanditBook.DisplayName: Некрономикон духов
+BanditBruiser.DisplayName: Рык
+BanditWizard.DisplayName: Зеленчар
+BanditPriest.DisplayName: Синфорд
+EyeWizard.DisplayName: Глазан
+EyeWizardBook.DisplayName: Гримуар глаза
+FrankenGoblin.DisplayName: Гоблин Франк
+FrankenGoblinHandFront.DisplayName: Голова Франка
+FrankenGoblinHandBack.DisplayName: Рука Франка
+FrankenGoblinEye.DisplayName: Зыркун
+StitchSpider.DisplayName: Сшитень
+PotatoGator.DisplayName: Картошкодил
+EvilMite.DisplayName: Сытый клещ
+EvilMiteDeath.DisplayName: Сытый клещ
+Harold.DisplayName: Призрачный Гарольд
+HaroldHandRight.DisplayName: ""
+HaroldHandLeft.DisplayName: ""
+TripletsBody.DisplayName: Тройняшки
+TripletsEyeGreen.DisplayName: Роговиц
+TripletsEyeRed.DisplayName: Бельмон
+TripletsEyePurple.DisplayName: Стекляш
+PuttyAmalgam.DisplayName: Клейкая амальгама
+ChristmasTreeMimic.DisplayName: Мимик ёлки
+TarPig.DisplayName: Опаловый хряк
+Chudshroom.DisplayName: Поганкец
+//tar pits
+Hydroraptor.DisplayName: Гидрораптор
+Tarblimp.DisplayName: Битумный толстяк
+TarBlobSmall.DisplayName: Битумный слизень
+TarBlobSmallClub.DisplayName: Хвост спазмозавра
+TarBlobSmallMouth.DisplayName: Челюсти Регины
+Tarrar.DisplayName: Битумник
+TarSlime1.DisplayName: Битумный слизень
+TarSlime2.DisplayName: Битумный слизень
+OpalHandDino.DisplayName: Терранозавр
+OpalHandDinoClaw.DisplayName: Коготь Терранозавра
+OpalTarDino.DisplayName: Террадактиль
+OpalTarDinoSpawner.DisplayName: ""
+OpalTarCrawlerBall.DisplayName: Террамальгама
+OpalTarCrawler.DisplayName: Террамальгама
+OpalTarSnail.DisplayName: Терраммонит
+TarSlimeSpiked.DisplayName: Шипастый битумный слизень
+//vegetable garden
+CornMage1.DisplayName: Попкорнер
+CornMage2.DisplayName: Попкорнер
+EggplantSpawner.DisplayName: ""
+Eggplant.DisplayName: Длиннющий баклажан
+EggplantBase.DisplayName: Длиннющий баклажан
+GhostPepper.DisplayName: Призрачный перчик
+HoppingPotato1.DisplayName: Скачущий картофель
+HoppingPotato2.DisplayName: Скачущий картофель
+HoppingPotato3.DisplayName: Скачущий картофель
+HoppingPotato4.DisplayName: Скачущий картофель
+OozeGarlic.DisplayName: Чеснослиз
+RollingPepper.DisplayName: Жгучий халапеньо
+RottenCarrot.DisplayName: Гнилая морковь
+//rotten depths
+Dunkleosteus.DisplayName: Большой Дунк
+SkeletonFish.DisplayName: Скелестяк-рыба
+SkeletonPiranha.DisplayName: Скелестяк-пиранья
+SkeletonGar.DisplayName: Скелестяк-гар
+SkeletonSunfish.DisplayName: Скелестяк-солнечник
+SkeletonSpearfish.DisplayName: Скелестяк-копьерыба
+SkeletonBoomerang.DisplayName: Скелестяк-бумеранг
+SkeletonPufferfish.DisplayName: Скелестяк-иглобрюх
+SeaMine.DisplayName: Морская мина
+SeaMineBase.DisplayName: ""
+//krampus workshop
+BasketBall.DisplayName: Скачущий баскетбольный мяч
+BeachBall.DisplayName: Скачущий пляжный мяч
+BuilderBot.DisplayName: Строй-бот
+BuilderBotHand.DisplayName: Строй-бот
+BuilderBotHandBack.DisplayName: Строй-бот
+ChefRobot.DisplayName: Шеф-бот 9000
+JackInTheBox.DisplayName: Джек в коробке
+Marble.DisplayName: Мраморная глыба
+PresentTrapBlue.DisplayName: Подарок-ловушка
+PresentTrapGreen.DisplayName: Подарок-ловушка
+PresentTrapRed.DisplayName: Подарок-ловушка
+SockManGreen.DisplayName: Помощник Крампуса
+SockManOrange.DisplayName: Помощник Крампуса
+SockManRed.DisplayName: Помощник Крампуса
+TeddyBear1.DisplayName: Плюшевый медвежонок
+TeddyBear2.DisplayName: Плюшевый медвежонок
+TeddyBear3.DisplayName: Плюшевый медвежонок
+TeddyBearGiant.DisplayName: Корнелиус
+TeddyBearSnow.DisplayName: Снежный медведь
+ToyRobot.DisplayName: Игрушечный робот
+ToyRobotTank.DisplayName: Игрушечный танк-бот
+//shipyard
+// SeaBunny.DisplayName: Sea Bunny
+// SeaSheep.DisplayName: Sea Sheep
+// SeaDragon1.DisplayName: Sea Dragon
+// SeaDragon2.DisplayName: Sea Dragon
+// SeaDragon3.DisplayName: Sea Dragon
+// SeaDragon4.DisplayName: Sea Dragon
+// GhostJelly1.DisplayName: Ghost Jelly
+// GhostJelly2.DisplayName: Ghost Jelly
+// GhostJelly3.DisplayName: Ghost Jelly
+// GhostJelly4.DisplayName: Ghost Jelly
+// Frogfish1.DisplayName: Frogfish
+// Frogfish2.DisplayName: Frogfish
+
+//tameable
+Turkey: {
+	DisplayName: Индюк
+	State1: Бродящий индюк
+	State2: Следующий индюк
+	State3: Стоячий индюк
+}

@@ -38,7 +38,7 @@ namespace Spooky.Content.Biomes
 					//play normal music
 					else
 					{
-						music = MusicID.Graveyard;
+						music = MusicID.OceanNight;
 					}
 				}
 				//blood moon theme takes priority over everything

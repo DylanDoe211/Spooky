@@ -15,7 +15,7 @@ namespace Spooky.Content.Projectiles.Sentient
             Projectile.friendly = true;                               			  		
             Projectile.tileCollide = false;
             Projectile.ignoreWater = false;                					
-            Projectile.timeLeft = 2;
+            Projectile.timeLeft = 5;
             Projectile.alpha = 255;
 		}
 
@@ -26,13 +26,16 @@ namespace Spooky.Content.Projectiles.Sentient
 
         public override void AI()
         {
-            if (Projectile.timeLeft <= 1)
+            if (Projectile.ai[0] == 0)
             {
                 Vector2 ProjectilePosition = Projectile.Center + new Vector2(65, 0).RotatedByRandom(360);
                 Vector2 Velocity = Projectile.Center - ProjectilePosition;
                 Velocity.Normalize();
                 Velocity *= 45f;
                 Projectile.NewProjectile(Projectile.GetSource_Death(), ProjectilePosition, Velocity, ModContent.ProjectileType<SentientKatanaSlash>(), Projectile.damage, 0, 0);
+
+                Projectile.ai[0]++;
+                Projectile.netUpdate = true;
             }
         }
     }

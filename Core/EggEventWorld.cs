@@ -101,14 +101,12 @@ namespace Spooky.Core
 		{
 			int NpcCount = 0;
 
-			for (int i = 0; i < Main.maxNPCs; i++)
+			foreach (NPC Enemy in Main.ActiveNPCs)
 			{
-				NPC Enemy = Main.npc[i];
-
 				int[] EventNPCs = new int[] { ModContent.NPCType<Biojetter>(), ModContent.NPCType<CoughLungs>(), ModContent.NPCType<CruxBat>(), ModContent.NPCType<EarWorm>(), ModContent.NPCType<EarWormFalling>(),
 				ModContent.NPCType<ExplodingAppendix>(), ModContent.NPCType<GooSlug>(), ModContent.NPCType<HoppingHeart>(), ModContent.NPCType<HoverBrain>(), ModContent.NPCType<TongueBiter>() };
 
-				if (Enemy.active && EventNPCs.Contains(Enemy.type))
+				if (EventNPCs.Contains(Enemy.type))
 				{
 					NpcCount++;
 				}

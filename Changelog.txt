@@ -25,10 +25,25 @@ Changes:
 -Eye blocks now grow various eye valley ambient objects on them naturally
 -Krampus job application sign tile now lights up with spelunker potions
 -Spooky mod chandeliers and lanterns finally sway in the wind
+-Reduced the size of the tar pits biome
+-Tarrars now play a sound when a player gets close to them
 -Updated daffodil on the spooky mod menu to her new design
 -Updated eye valley background sprites
 -Updated bag of magic beans sprite
 -Polished sprites for spooky mod ambient grasses
+
+Localization Changes:
+-Charm of the flies tooltip to remove mention of the removed cooldown
+-Spi-ops chestplate tooltip to remove mention of having take a certain amount of damage for the speed boost
+-Renamed thorn stem shirt -> flower stem shirt to be consistent with the other two armor pieces
+-Flower armor setbonus tooltip to mention reduced cooldown change (30 second cooldown -> 15 second cooldown)
+-Removed creepy dog photo tooltip line about the dog becoming aggressive
+-Due to removal of gourd 'o lantern items, localization entries for those have been removed
+-Added the following new entries to the WorldgenTasks localization:
+Shipyard: Creating shipwrecks
+SpookyForestPolish: Polishing the spooky forest
+EyeValleyPolish: Polishing the eye valley
+SpiderCavePolish: Polishing the spider grotto
 
 Fixes:
 -Config option for teleporting all players into nose temple combat rooms not working

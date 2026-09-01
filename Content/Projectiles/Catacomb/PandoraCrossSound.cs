@@ -50,6 +50,7 @@ namespace Spooky.Content.Projectiles.Catacomb
 			{
 				return true;
 			}
+            
 			return false;
 		}
 

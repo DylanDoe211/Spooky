@@ -26,11 +26,8 @@ namespace Spooky.Content.Projectiles.Minibiomes.Vegetable
             Projectile.height = 16;
             Projectile.friendly = true;
             Projectile.netImportant = true;
-            Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 20;
-            Projectile.penetrate = -1;
-            Projectile.MaxUpdates = 1;
             Projectile.aiStyle = ProjAIStyleID.Yoyo;
+            Projectile.penetrate = -1;
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -46,10 +43,19 @@ namespace Spooky.Content.Projectiles.Minibiomes.Vegetable
 			return false;
 		}
 
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-		{
-			Rectangle bigHitbox = new Rectangle((int)Projectile.Center.X - 32, (int)Projectile.Center.Y - 32, 64, 64);
-			return targetHitbox.Intersects(bigHitbox);
-		}
+        public override void AI()
+        {
+            Player player = Main.player[Projectile.owner];
+
+            foreach (NPC NPC in Main.ActiveNPCs)
+            {
+                if (NPC.Distance(Projectile.Center) <= 90f && !NPC.dontTakeDamage && NPC.immune[Projectile.owner] == 0)
+                {
+                    int direction = NPC.Center.X < player.Center.X ? -1 : 1;
+                    player.ApplyDamageToNPC(NPC, Projectile.damage, Projectile.knockBack, direction, false, null, true);
+                    NPC.immune[Projectile.owner] = 10;
+                }
+            }
+        }
     }
 }

@@ -1,0 +1,148 @@
+CemeteryBiomeChest: {
+	MapEntry0: Сундук болотистого могильника
+	MapEntry1: Запертый сундук болотистого могильника
+}
+
+SpiderCaveChest: {
+	MapEntry0: Сундук паучьего грота
+	MapEntry1: Запертый сундук паучьего грота
+}
+
+SpookyBiomeChest: {
+	MapEntry0: Сундук жуткого леса
+	MapEntry1: Запертый сундук жуткого леса
+}
+
+SpookyHellChest: {
+	MapEntry0: Сундук долины глаз
+	MapEntry1: Запертый сундук долины глаз
+}
+
+EyeDresser: {
+	ContainerName: Комод из живой плоти
+	MapEntry: Комод
+}
+
+CultistDresser: {
+	ContainerName: Оккультный комод
+	MapEntry: Комод
+}
+
+ChristmasDresser: {
+	ContainerName: Комод из святочной древесины
+	MapEntry: Комод
+}
+
+GlowshroomDresser: {
+	ContainerName: Комод из сверкающего гриба
+	MapEntry: Комод
+}
+
+GlowshroomYellowDresser: {
+	ContainerName: Комод из жёлтого сверкающего гриба
+	MapEntry: Комод
+}
+
+UpperCatacombDresser: {
+	ContainerName: Комод катакомб
+	MapEntry: Комод
+}
+
+LowerCatacombDresser: {
+	ContainerName: Заросший комод
+	MapEntry: Комод
+}
+
+BirchDresser: {
+	ContainerName: Старый берёзовый комод
+	MapEntry: Комод
+}
+
+TarCactusDresser: {
+	ContainerName: Комод из битумного кактуса
+	MapEntry: Комод
+}
+
+OldWoodDresser: {
+	ContainerName: Старый деревянный комод
+	MapEntry: Комод
+}
+
+UpperCatacombChest: {
+	MapEntry0: Сундук катакомб
+	MapEntry1: Запертый сундук катакомб
+}
+
+LowerCatacombChest: {
+	MapEntry0: Сундук нижних катакомб
+	MapEntry1: Запертый сундук нижних катакомб
+}
+
+//blooms
+CemeteryBloomPlant.MapEntry: Увядшее цветение
+DandelionBloomPlant.MapEntry: Цветение одуванчика
+DragonfruitBloomPlant.MapEntry: Цветение дивы
+FallBloomPlant.MapEntry: Тыквенное цветение
+FossilBloomPlant.MapEntry: Ископаемое цветение
+SeaBloomPlant.MapEntry: Цветение глубин
+SpringBloomPlant.MapEntry: Цветение пыльцы
+SummerBloomPlant.MapEntry: Солнечное цветение
+VegetableBloomPlant.MapEntry: Генетически модифицированное цветение
+WinterBloomPlant.MapEntry: Цветение ягодного куста
+FungusBloomPlant.MapEntry: Грибное цветение
+TomatoBloomPlant.MapEntry: Томатное цветение
+//other tiles
+SpiritAltar.MapEntry: Алтарь духа
+CemeterySapling.MapEntry: Саженец
+CemeteryPylon.MapEntry: Пилон болотистого могильника
+SpiderCavePylon.MapEntry: Пилон паучьего грота
+SpookyBiomePylon.MapEntry: Пилон жуткого леса
+SpookyHellPylon.MapEntry: Пилон Долины глаз
+KrampusPylon.MapEntry: Самодельный пилон Крампуса
+FlyBigJar.MapEntry: Банка с большой мухой
+FlySmallJar.MapEntry: Банка с мухой
+OldWoodChest.MapEntry: Сундук из старой древесины
+GiantShroom.MapEntry: Огромный сверкающий гриб
+SpookySapling.MapEntry: Саженец
+SpookySaplingGreen.MapEntry: Саженец
+Cauldron.MapEntry: Кошмарный котёл
+EyeChest.MapEntry: Сундук монстра
+EyeSapling.MapEntry: Саженец стебля
+EyeTree.MapEntry: Глазной стебель
+BigFlower.MapEntry: Большой цветок
+MysteriousTombstone.MapEntry: Таинственное надгробие
+GiantRoot.MapEntry: Огромный корень
+GraveShovelTile.MapEntry: Могильная лопата
+TallMushroom.MapEntry: Высокий гриб
+TinyGhostJar.MapEntry: Банка с крошкой призраком
+TinyMushroomCage.MapEntry: Террарий с гриборовичком
+CultistChest.MapEntry: Оккультный сундук
+TempleTrapdoor.MapEntry: Люк храма
+CatacombTrapdoor1.MapEntry: Запертый люк
+CatacombTrapdoor2.MapEntry: Запертый люк
+CatacombTrapdoor3.MapEntry: Запертый люк
+Broccoli.MapEntry: Огромная брокколи
+GiantShroomYellow.MapEntry: Огромный жёлтый сверкающий гриб
+TarPitCactus.MapEntry: Кактус
+ChristmasChest.MapEntry: Святочный сундук
+GlowshroomChest.MapEntry: Сундук из сверкающего гриба
+GlowshroomYellowChest.MapEntry: Сундук из жёлтого сверкающего гриба
+SinisterSnailCage.MapEntry: Террарий со зловещей улиткой
+BoneFishTree.MapEntry: Рыбий хребет
+BoneFishTreeHanging.MapEntry: Рыбий хребет
+TubeWorm.MapEntry: Трубчатый червь
+LabSafe.MapEntry: Ржавый сейф
+EyeTreeShort.MapEntry: Глазной стебель
+LittleSpiderJar.MapEntry: Банка с паучком
+GrottoTree1.MapEntry: Дерево грота
+GrottoTree2.MapEntry: Дерево грота
+GrottoTree3.MapEntry: Дерево грота
+GrottoTreeSapling.MapEntry: Саженец
+SporeShroomTreeSapling.MapEntry: Саженец
+BirchChest.MapEntry: Старый берёзовый сундук
+BroccoliSapling.MapEntry: Саженец брокколи
+TubeWormSapling.MapEntry: Полип трубчатого червя
+TarCactusChest.MapEntry: Сундук из битумного кактуса
+// MangroveTree.MapEntry: Mangrove Tree
+// MangroveSapling.MapEntry: Mangrove Sapling
+// CoralTree.MapEntry: Giant Coral

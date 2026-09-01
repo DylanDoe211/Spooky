@@ -542,6 +542,16 @@ ToyRobotTank.DisplayName: Toy Tankbot
 //shipyard
 SeaBunny.DisplayName: Sea Bunny
 SeaSheep.DisplayName: Sea Sheep
+SeaDragon1.DisplayName: Sea Dragon
+SeaDragon2.DisplayName: Sea Dragon
+SeaDragon3.DisplayName: Sea Dragon
+SeaDragon4.DisplayName: Sea Dragon
+GhostJelly1.DisplayName: Ghost Jelly
+GhostJelly2.DisplayName: Ghost Jelly
+GhostJelly3.DisplayName: Ghost Jelly
+GhostJelly4.DisplayName: Ghost Jelly
+Frogfish1.DisplayName: Frogfish
+Frogfish2.DisplayName: Frogfish
 
 //tameable
 Turkey: {

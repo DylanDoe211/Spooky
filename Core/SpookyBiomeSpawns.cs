@@ -1022,8 +1022,19 @@ namespace Spooky.Core
 			{
 				pool.Clear();
 
-				pool.Add(ModContent.NPCType<SeaBunny>(), 1);
-				pool.Add(ModContent.NPCType<SeaSheep>(), 1);
+				pool.Add(ModContent.NPCType<SeaBunny>(), 2);
+				pool.Add(ModContent.NPCType<SeaSheep>(), 2);
+				pool.Add(ModContent.NPCType<GhostJelly1>(), 1);
+
+				if (spawnInfo.Water)
+				{
+					pool.Add(ModContent.NPCType<Frogfish1>(), 4);
+					pool.Add(ModContent.NPCType<Frogfish2>(), 4);
+					pool.Add(ModContent.NPCType<SeaDragon1>(), 4);
+					pool.Add(ModContent.NPCType<SeaDragon2>(), 4);
+					pool.Add(ModContent.NPCType<SeaDragon3>(), 4);
+					pool.Add(ModContent.NPCType<SeaDragon4>(), 4);
+				}
 			}
 
 			//dumb zomboid can spawn anywhere super rarely

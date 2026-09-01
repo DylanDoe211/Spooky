@@ -6,9 +6,6 @@ using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
-
-using Spooky.Core;
 
 namespace Spooky.Content.Projectiles.SpookyBiome
 {
@@ -109,7 +106,7 @@ namespace Spooky.Content.Projectiles.SpookyBiome
             
             if (Projectile.localAI[0] == 0)
             {
-                if (!Parent.active || Parent.type != ModContent.ProjectileType<SpookFishronYoyoProj>())
+                if (!Parent.active || Parent.type != ModContent.ProjectileType<SpookFishronYoyoProj>() || !player.channel)
                 {
                     Projectile.Kill();
                 }
@@ -152,7 +149,7 @@ namespace Spooky.Content.Projectiles.SpookyBiome
                     SoundEngine.PlaySound(SoundID.DD2_BetsyFireballShot, Projectile.Center);
 
                     bool HasFoundTarget = false;
-                    foreach (var NPC in Main.ActiveNPCs)
+                    foreach (NPC NPC in Main.ActiveNPCs)
                     {
                         if (NPC.active && NPC.CanBeChasedBy(this) && !NPC.friendly && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type] && Vector2.Distance(Projectile.Center, NPC.Center) <= 650f)
                         {

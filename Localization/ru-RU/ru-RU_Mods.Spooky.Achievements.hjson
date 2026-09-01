@@ -1,0 +1,154 @@
+BossAchievementRotGourd: {
+	FriendlyName: Паршивый запашок
+	Description: Одолеть Гнилого тыквардейца — гигантскую заплесневелую тыкву, смердящую на весь Жуткий лес.
+}
+
+BossAchievementSpookySpirit: {
+	FriendlyName: Я килька?
+	Description: Одолеть Жуткого духа — полтергейста злого, что гонит гостей от порога.
+}
+
+BossAchievementMoco: {
+	FriendlyName: Нужда в сопливчике
+	Description: Одолеть Шмыга — могучего шмыглёныша, получившего силу из-за ритуала Культа Носа.
+}
+
+BossAchievementDaffodil: {
+	FriendlyName: Под корень
+	Description: Одолеть Нарцисса — ленивого цветочного стража глубин катакомб.
+}
+
+BossAchievementOldHunter: {
+	FriendlyName: Самая безопасная игра
+	Description: Одолеть Старого охотника — нежить, которая в совершенстве овладела рогатками.
+}
+
+BossAchievementOrroboro: {
+	FriendlyName: Один за всех и никто за одного
+	Description: Одолеть Орро и Боро — голодную пару змей, вылупившихся из гигантского яйца.
+}
+
+BossAchievementSpookFishron: {
+	FriendlyName: Как рыба в тыквенном глинтвейне
+	Description: Одолеть Жуткого Рыброна — тирана, ставшего ещё ужаснее под покровом тыквенной луны.
+}
+
+BossAchievementSpookFishronIce: {
+	FriendlyName: Как рыба во льду
+	Description: Одолеть Жуткого Рыброна под покровом неподходящей праздничной луны. Потрогайте траву.
+}
+
+BossAchievementBigBone: {
+	FriendlyName: Головняк
+	Description: Одолеть Костяру — ботанического бугая, запертого в глубочайших глубинах Катакомб.
+}
+
+EventAchievementEggEvent: {
+	FriendlyName: Скорлупулёзная яйцерубка
+	Description: Пережить яичный натиск мясистых тварей.
+}
+
+EventAchievementPandoraBox: {
+	FriendlyName: Ты тугодум...
+	Description: Открыть Ящик Пандоры и одолеть всех зловредных духов, заточённых внутри.
+}
+
+MiscAchievementTurkeyTamed: {
+	FriendlyName: Первый День Благодарения
+	Description: Приручить дикого индюка с помощью прогнивших семян из Жуткого леса. Дружба это чудо!
+}
+
+MiscAchievementGourdCarve: {
+	FriendlyName: Тухлый свет
+	Description: Вырезать мерзкую заплесневелую тыкву, растущую в Жутком лесу. Запашок неприятный, свет тусклый, но дух хэллоуина всё ещё невероятный!
+}
+
+MiscAchievementKrampusHired: {
+	FriendlyName: Вы приняты!
+	Description: Встретить Крампуса и получить работу по доставке его подарков горожанам.
+}
+
+MiscAchievementSentientItem: {
+	FriendlyName: Оно живое!
+	Description: Объединить оружие с разумным сердцем в кошмарном котле, который расположен в хижине Глазика, чтобы даровать ему жизнь.
+}
+
+MiscAchievementNoseCultist: {
+	FriendlyName: Он был предателем
+	Description: Слиться с фанатиками в Храме Шмыга, надев робу культиста.
+}
+
+MiscAchievementBigDunkEat: {
+	FriendlyName: Смерть смертью, а обед по расписанию
+	Description: Поздороваться с рыбой-нежитью в пучинах и глянуть на её реакцию!
+}
+
+MiscAchievementBigDunk: {
+	FriendlyName: Колики в животике
+	Description: Скормить Большому Дунку морскую мину — пусть он снова вымрет.
+}
+
+MiscAchievementLittleEyeQuest: {
+	FriendlyName: Бельмо на глазу
+	Description: Завершить задание Глазика и получить глазунью.
+}
+
+EventAchievementSpore: {
+	FriendlyName: Удушающие пары
+	Description: Посетить Паучий грот во время Спорового смерча, когда грибы испускают галлюциногенные споры, а клещи выходят на охоту.
+}
+
+MiscAchievementBloomHarvest: {
+	FriendlyName: Богатый урожай
+	Description: Собрать полностью выросшее цветение.
+}
+
+EventAchievementSpiderWar: {
+	FriendlyName: Пурпурное сердце
+	Description: Выдержать натиск сильнейших бойцов паучьей армии.
+}
+
+EventAchievementSpiderWarEnd: {
+	FriendlyName: Переламывающий Прилив Повелитель
+	Description: Заставить арахнидскую армию сдаться, убив 20 врагов в финальной волне.
+}
+
+EventAchievementRaveyard: {
+	FriendlyName: Пляши, падай, подыхай
+	Description: Посетить один из многочисленных рейвов, которые могут проходить на Болотистом могильнике ночью.
+}
+
+MiscAchievementBloomSeeds: {
+	FriendlyName: Агроном
+	Description: Стать истинным фермером, посадив по одному семени каждого вида цветения.
+}
+
+MiscAchievementContrabandAcc: {
+	FriendlyName: Сверхреалистичное достижение
+	Description: Объединить набор контрабанды подозрительного скелета в мощный объект.
+}
+
+MiscAchievementDumbZomboid: {
+	FriendlyName: Заблудился?
+	Description: Встретить потерянного зомбака, бродящего по миру.
+}
+
+MiscAchievementOldHunterQuest: {
+	FriendlyName: Просветить тварей
+	Description: Завершить все охотничьи заказы Старого охотника на редких, странных существ.
+}
+
+MiscAchievementKrampusQuest: {
+	FriendlyName: G.O.A.T
+	Description: Помочь Крампусу найти способ спасти Рождество.
+}
+
+MiscAchievementDahlia: {
+	FriendlyName: В полном расцвете!
+	Description: Встретить и убить Диву Георгину в Нижних катакомбах.
+}
+
+MiscAchievementSpookyBestiary: {
+	// FriendlyName: The Complete Spookbumps Series
+	// Description: Collect every single spooky mod creature in the bestiary.
+}

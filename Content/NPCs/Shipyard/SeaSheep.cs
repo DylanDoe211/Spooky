@@ -11,7 +11,6 @@ namespace Spooky.Content.NPCs.Shipyard
 		public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 5;
-            Main.npcCatchable[NPC.type] = true;
             NPCID.Sets.CountsAsCritter[NPC.type] = true;
 
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
@@ -22,13 +21,14 @@ namespace Spooky.Content.NPCs.Shipyard
 
 		public override void SetDefaults()
 		{
-            NPC.lifeMax = 20;
+            NPC.lifeMax = 30;
             NPC.damage = 0;
 			NPC.defense = 0;
-			NPC.width = 18;
-			NPC.height = 12;
+			NPC.width = 25;
+			NPC.height = 22;
             NPC.npcSlots = 0.5f;
             NPC.noGravity = false;
+            NPC.chaseable = false;
 			NPC.HitSound = SoundID.NPCHit1;
 			NPC.DeathSound = SoundID.NPCDeath1;
 			NPC.aiStyle = 66;

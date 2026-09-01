@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.Audio;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -268,7 +269,11 @@ namespace Spooky.Content.NPCs.Minibiomes.Desert
 
 			if (DetectionBox.Intersects(player.Hitbox) && HasLineOfSight)
 			{
-				NPC.ai[0] = 1;
+				if (NPC.ai[0] != 1)
+				{
+					SoundEngine.PlaySound(SoundID.Zombie7 with { Pitch = -1, Volume = 0.5f }, NPC.Center);	
+					NPC.ai[0] = 1;
+				}
 			}
 			else
 			{

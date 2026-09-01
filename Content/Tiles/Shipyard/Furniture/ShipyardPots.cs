@@ -107,7 +107,7 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
 
 				for (int numGores = 1; numGores <= 3; numGores++)
 				{
-					Gore.NewGore(WorldGen.GetItemSource_FromTileBreak(x, y), gorePos, goreVelocity, ModContent.Find<ModGore>("Spooky/ShipyardPotGore" + numGores).Type);
+					Gore.NewGore(WorldGen.GetItemSource_FromTileBreak(x, y), gorePos, goreVelocity, ModContent.Find<ModGore>("Spooky/ShipyardPotGore").Type);
 				}
 			}
 		}

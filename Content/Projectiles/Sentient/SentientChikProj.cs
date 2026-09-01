@@ -17,15 +17,12 @@ namespace Spooky.Content.Projectiles.Sentient
         public override void SetDefaults()
         {
             Projectile.DamageType = DamageClass.MeleeNoSpeed;
-            Projectile.width = 20;
-            Projectile.height = 20;
+            Projectile.width = 16;
+            Projectile.height = 16;
             Projectile.friendly = true;
             Projectile.netImportant = true;
-            Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 20;
-            Projectile.penetrate = -1;
-            Projectile.MaxUpdates = 1;
             Projectile.aiStyle = ProjAIStyleID.Yoyo;
+            Projectile.penetrate = -1;
         }
 
         public override void AI()

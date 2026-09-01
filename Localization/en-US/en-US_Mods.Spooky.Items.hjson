@@ -678,7 +678,7 @@ StrangeCyst: {
 }
 
 FlowerBody: {
-	DisplayName: Thorn Stem Shirt
+	DisplayName: Flower Stem Shirt
 	Tooltip:
 		'''
 		15% increased damage and critical strike chance
@@ -1514,6 +1514,11 @@ DumboOctopoid: {
 OrroEel: {
 	DisplayName: Orro Eel
 	Tooltip: "'Caught in Valley of Eyes'"
+}
+
+PinkSeaBunny: {
+	DisplayName: Shiny Sea Bunny
+	Tooltip: "'Caught in Bleached Shipyard'"
 }
 
 PumpkinBobber: {

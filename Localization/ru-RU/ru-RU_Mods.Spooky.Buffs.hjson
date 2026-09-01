@@ -1,0 +1,756 @@
+BustlingGlowshroomHeal: {
+	DisplayName: Регенерация сверкающего гриба
+	Description: Регенерация здоровья значительно увеличена
+}
+
+EmbryoRevival: {
+	DisplayName: Эмбриональное возрождение
+	Description:
+		'''
+		Эмбрион спас вас от смерти
+		Защита и регенерация здоровья значительно увеличены
+		'''
+}
+
+FlyBuff: {
+	DisplayName: Рой мух
+	Description: Вас защищает рой мух
+}
+
+SkullFrenzyBuff: {
+	DisplayName: Некромантическое безумие
+	Description: Скорость атаки значительно увеличена
+}
+
+BouncerDeathmark: {
+	DisplayName: Метка скелета-законника
+	Description: Стой! Ты нарушил закон!
+}
+
+CatacombDebuff: {
+	DisplayName: Проклятие катакомб
+	Description: Зрение значительно ухудшено проклятием!
+}
+
+CrossCooldown: {
+	DisplayName: Перезарядка креста-защитника
+	Description: Защита креста перезаряжается
+}
+
+EmbryoCooldown: {
+	DisplayName: Раскол эмбриона
+	Description:
+		'''
+		Возрождение эмбриона должно перезарядиться
+		Урон и шанс критического удара увеличены
+		'''
+}
+
+EnsnaredCooldown: {
+	DisplayName: Перезарядка опутывания
+	Description: ""
+}
+
+EnsnaredDebuff: {
+	DisplayName: Опутан
+	Description: ""
+}
+
+HallucinationDebuff1: {
+	DisplayName: Некто
+	Description: Выхода нет
+}
+
+FleshWhipCooldown: {
+	DisplayName: Перезарядка глазохлёста
+	Description: ""
+}
+
+FleshWhipDefense: {
+	DisplayName: Защита глазохлёста
+	Description: ""
+}
+
+FleshWhipDefense2: {
+	DisplayName: Защита глазохлёста
+	Description: ""
+}
+
+FlowerArmorCooldown: {
+	DisplayName: Перезарядка пыльцы
+	Description: Пыльца не может появиться
+}
+
+FlyCooldown: {
+	DisplayName: Перезарядка талисмана мух
+	Description: Защитные мухи не могут возродиться
+}
+
+GourdDecay: {
+	DisplayName: Прогнивший
+	Description: ""
+}
+
+PandoraCrossCooldown: {
+	DisplayName: Перезарядка креста-баса
+	Description: Нельзя использовать способность звука креста
+}
+
+PandoraHandCooldown: {
+	DisplayName: Перезарядка руки-розария
+	Description: Руки-розарии не могут появиться
+}
+
+Possessed: {
+	DisplayName: Одержимый
+	Description: Вас контролирует злой призрак!
+}
+
+SadDebuff: {
+	DisplayName: Грустный
+	Description: Урон уменьшен на 10%, скорость передвижения снижена
+}
+
+ThornMark: {
+	DisplayName: Метка шипов
+	Description: ""
+}
+
+BrainyBuff: {
+	DisplayName: Мозговик
+	Description: Мозговик напряжно следует за вами
+}
+
+DaffodilHandBuff: {
+	DisplayName: Растительная рука
+	Description: Растительная рука даёт оплеухи вашим врагам!
+}
+
+EntityMinionBuff: {
+	DisplayName: Маленькая сущность
+	Description: Крошечная сущность сражается за вас
+}
+
+EyeArmorMinionBuff: {
+	DisplayName: Маленький глаз
+	Description: Крошечный глаз поможет защитить вас!
+}
+
+GrugBuff: {
+	DisplayName: Гаргулья
+	Description: Гаргулья защищает вас!
+}
+
+NoseMinionBuff: {
+	DisplayName: Летающий нос
+	Description: Вокруг вас жужжит нос
+}
+
+OldHunterBuff: {
+	DisplayName: Душа старого охотника
+	Description: Душа старого охотника защищает вас
+}
+
+PumpkinHeadBuff: {
+	DisplayName: Тыквоголовый
+	Description: Теперь ваша голова сражается вместе с вами!
+}
+
+RotGourdMinionBuff: {
+	DisplayName: Тыкводум
+	Description: Маленькая тыква топчет ваших врагов
+}
+
+SkullWispBuff: {
+	DisplayName: Черепной дух
+	Description: Черепной дух сражается за вас
+}
+
+SoulSkullBuff: {
+	DisplayName: Черепной дух
+	Description: Черепной дух сражается за вас
+}
+
+SkullTotemBuff: {
+	DisplayName: Прибавки черепного идола
+	Description: Урон призывателя и дальность хлыста увеличены. +2 миньона
+}
+
+TortumorMinionBuff: {
+	DisplayName: Дружелюбная черепохуль
+	Description: Черепухоль сражается за вас
+}
+
+BigBonePetBuff: {
+	DisplayName: Костян
+	Description: Возможно, оно высасывает ваши питательные вещества
+}
+
+CatBuff: {
+	DisplayName: Чёрный котёнок
+	Description: Злой маленький котёнок следует за вами
+}
+
+ColumboBuff: {
+	DisplayName: Кортох
+	Description: Существо органики
+}
+
+FlyPetBuff: {
+	DisplayName: Муха Корнелиус
+	Description: Он угражающе парит вокруг вас
+}
+
+FuzzBatPetBuff: {
+	DisplayName: Пухокрылка
+	Description: Без понятия почему, но она следует за вами
+}
+
+GhostPetBuff: {
+	DisplayName: Маленький призрак
+	Description: Жуткий маленький призрак освещает вам путь
+}
+
+MocoPetBuff: {
+	DisplayName: Шмыглёныш
+	Description: Сопливый... апчхуу!
+}
+
+PandoraBeanBuff: {
+	DisplayName: Фон Ангустон VI
+	Description: Королевская древность следует за вами
+}
+
+PetscopBuff: {
+	DisplayName: Гвардиан
+	Description: Ньюмейкер
+}
+
+PetscopMarvinBuff: {
+	DisplayName: Марвин
+	Description: Марвин поднимает инструмент
+}
+
+PetscopTiaraBuff: {
+	DisplayName: Тайра
+	Description: Тайра играет плохую музыку
+}
+
+RotGourdPetBuff: {
+	DisplayName: Маленький гнилой тыквардеец
+	Description: Вонючий, но милый
+}
+
+ShroomHopperBuff: {
+	DisplayName: Грибоскок
+	Description: Ему нравится спорить с вами
+}
+
+SkullEmojiBuff: {
+	DisplayName: Летающий череп
+	Description: Круть-верть
+}
+
+SkullGoopBuff: {
+	DisplayName: Слизь с черепом
+	Description: Таинственная слизь ползёт за вами
+}
+
+SpookySpiritPetBuff: {
+	DisplayName: Мини-дух
+	Description: Мини-дух витает вокруг вас
+}
+
+StickyEyeBuff: {
+	DisplayName: Светящийся в темноте липкий глаз
+	Description: Может содержать токсичные вещества
+}
+
+ValleyNautilusBuff: {
+	DisplayName: Крошечный головоног
+	Description: Дружелюбный маленький головоног следует за вами
+}
+
+AlternateCooldown: {
+	DisplayName: Перезарядка альтернатива
+	Description: Альтернатива не может появиться
+}
+
+BackroomsDecay: {
+	DisplayName: Угасание закулисья
+	Description: ""
+}
+
+MonumentMythosCooldown: {
+	DisplayName: Перезарядка удержания свободы
+	Description: Стеклянная пирамида регенерируется
+}
+
+MonumentMythosShatter: {
+	DisplayName: Раскол удержания свободы
+	Description: Вы получаете в 2 раза больше урона от всех атак
+}
+
+InchwormBuff: {
+	DisplayName: Ухочервь
+	Description: Его манит ваше яблоко
+}
+
+SlendermanPageBuff: {
+	DisplayName: Страница Слендермена
+	Description: Щупальца Слендермена усилены
+}
+
+HerobrineAltarCooldown: {
+	DisplayName: Перезарядка блочного алтаря
+	Description: Нельзя призвать молнию
+}
+
+SpiderArmorStealth: {
+	DisplayName: Скрытность паука-опера
+	Description:
+		'''
+		Враги не будут нацеливаться на вас
+		Получаемый урон снижен на 12%
+		'''
+}
+
+SpiderStealthCooldown: {
+	DisplayName: Перезарядка скрытности паука-опера
+	Description: Нельзя войти в скрытность паука
+}
+
+WhipSpiderAggression: {
+	DisplayName: Паучьи феромоны
+	Description: Существа из паучьего грота агрессивнее
+}
+
+PheromoneWhipDebuff: {
+	DisplayName: Дебафф феромонного хлыста
+	Description: ""
+}
+
+TrapdoorSpiderMountBuff: {
+	DisplayName: Ездовой паук-ловушечник
+	Description: Арахнофобам лучше отвернуться!
+}
+
+SpiderBabyBuff: {
+	DisplayName: Крошечный паучок
+	Description: Они приняли вас за родителя
+}
+
+HunterScarfMark: {
+	DisplayName: Метка шарфа охотника
+	Description: ""
+}
+
+BeeDamageBuff: {
+	DisplayName: Урон опыления
+	Description: ""
+}
+
+BeeHealingBuff: {
+	DisplayName: Лечение опылением
+	Description: ""
+}
+
+BeePollinationProcessBuff: {
+	DisplayName: Процесс опыления пчёлами
+	Description: ""
+}
+
+BlueberryFrost: {
+	DisplayName: Черничный мороз
+	Description: ""
+}
+
+StrawberryBoostBuff: {
+	DisplayName: Клубничное усиление
+	Description: Урон, шанс критического удара и отбрасывание увеличены
+}
+
+LeechBuff: {
+	DisplayName: Пиявка
+	Description: Пиявка сражается за вас
+}
+
+SentientKeybrandDebuff: {
+	DisplayName: Дебафф разумного ключе-клейма
+	Description: ""
+}
+
+WingedBiomassBuff: {
+	DisplayName: Крылатая биомасса
+	Description: Крылатая биомасса следит за вашей безопасностью
+}
+
+BillyBuff: {
+	DisplayName: Пташка-Костяшка
+	Description: Пташка-Костяшка защищает вас!
+}
+
+GooseberryBoostBuff: {
+	DisplayName: Крыжовниковое усиление
+	Description: Регенерация здоровья и скорость передвижения увеличены
+}
+
+PeptoDebuff: {
+	DisplayName: Дебафф Пепто
+	Description: ""
+}
+
+SmokerLungCooldown: {
+	DisplayName: Перезарядка лёгких курильщика
+	Description: Нельзя использовать способность кашля
+}
+
+SmokerCoughDebuff: {
+	DisplayName: Дебафф кашля курильщика
+	Description: ""
+}
+
+NoseBlessingDebuff: {
+	DisplayName: Дебафф благословения носа
+	Description: ""
+}
+
+NoseBlessingDebuffCooldown: {
+	DisplayName: Перезарядка дебаффа благословения носа
+	Description: ""
+}
+
+NoseBlessingBuff: {
+	DisplayName: Благословение Носферату
+	Description: Атакующие враги получают урон от козявок
+}
+
+GhostBanditDefense: {
+	DisplayName: Святой щит Блуфорда
+	Description: Защита увеличена на 15
+}
+
+GlassEyeDebuff: {
+	DisplayName: Дебафф стеклянного глаза
+	Description: ""
+}
+
+StitchedCloakCooldown: {
+	DisplayName: Перезарядка сшитого плаща
+	Description: Нельзя использовать рывок сшитого плаща
+}
+
+OrroboroPetBuff: {
+	DisplayName: Кольцо Орроборо
+	Description: Черви медленно поедают друг друга
+}
+
+EggEventEnemyBuff: {
+	DisplayName: Усиление плоти
+	Description: ""
+}
+
+ZombieCultistPetBuff: {
+	DisplayName: Зомби-культист носа
+	Description: Похоже, он хочет свой мозг обратно
+}
+
+BeePetBuff: {
+	DisplayName: Опчелительница
+	Description: Её манят ваши соты
+}
+
+RatPetBuff: {
+	DisplayName: Крыса-альбинос
+	Description: Милая и, вероятно, заразная!
+}
+
+PuttyPetBuff: {
+	DisplayName: Отряд клейких слизней
+	Description: Клейкуны прыгают за вами
+}
+
+PiercedBleedDebuff: {
+	DisplayName: Кровоиспускание
+	Description: ""
+}
+
+PiercedDebuff: {
+	DisplayName: Пронзён
+	Description: ""
+}
+
+SinisterSnailBuff: {
+	DisplayName: Зловещая улитка
+	Description: Всё по взрослому!
+}
+
+SpookFishronMinionBuff: {
+	DisplayName: Жуткий свинрон
+	Description: Жуткий свинрон защищает вас
+}
+
+PepperMinionBuff: {
+	DisplayName: Маленький халапеньо
+	Description: Халапеньо роится вокруг ваших врагов
+}
+
+EggplantWhipDebuff: {
+	DisplayName: Дебафф баклажанного хлыста
+	Description: ""
+}
+
+ShroomWhipDebuff: {
+	DisplayName: Дебафф грибного хлыста
+	Description: ""
+}
+
+LeechWhipDebuff: {
+	DisplayName: Дебафф хлыста-пиявки
+	Description: ""
+}
+
+SentientLeatherWhipDebuff: {
+	DisplayName: Дебафф разумного кожаного хлыста
+	Description: ""
+}
+
+PepperSpice: {
+	DisplayName: Перечная приправа
+	Description: ""
+}
+
+SeaSpongeBuff: {
+	DisplayName: Губчатое поглощение
+	Description: Получаемый урон снижен на 15%
+}
+
+CemeteryLilyBuff: {
+	DisplayName: Возрождение Лили
+	Description: Урон, шанс критического удара и получаемый урон увеличены на 10%
+}
+
+CucumberStomachDebuff: {
+	DisplayName: Дебафф огуречного желудка
+	Description: ""
+}
+
+ColumboneBuff: {
+	DisplayName: Костяш
+	Description: Существо костей
+}
+
+ColumbooBuff: {
+	DisplayName: Кобу
+	Description: Существо призраков
+}
+
+ColumborangeBuff: {
+	DisplayName: Коранж
+	Description: Существо круглого
+}
+
+ColumboPetCombinedBuff: {
+	DisplayName: Семья Ко
+	Description: Древняя могущественная семья следует за вами
+}
+
+GhostPepperMinionBuff: {
+	DisplayName: Призрачный перчик
+	Description: Призрачный перчик защищает вас
+}
+
+NerveWhipDebuff: {
+	DisplayName: Дебафф хлыста нерва
+	Description: ""
+}
+
+SteroidBuff: {
+	DisplayName: Стероидная сила
+	Description: Вы чувствуете силу, урон увеличен на 20%
+}
+
+SteroidWeakness: {
+	DisplayName: Стероидная ломка
+	Description: У вас ломка, урон снижен на 15%
+}
+
+SpearfishBleed: {
+	DisplayName: Кровотечение от копьерогой рыбы
+	Description: ""
+}
+
+CavefishStunned: {
+	DisplayName: Оглушён пещерной рыбой
+	Description: ""
+}
+
+HazmatMinionToxic: {
+	DisplayName: Токсичный миньон в костюме химзащиты
+	Description: ""
+}
+
+TurkeyMountBuff: {
+	DisplayName: Верхом на индюке
+	Description: Гул-гул!
+}
+
+Tarred: {
+	DisplayName: Покрыт битумом
+	Description: ""
+}
+
+LongisquamaPetBuff: {
+	DisplayName: Лонгвисквама
+	Description: Лонгвисквама следует за вами
+}
+
+ChalupoBuff: {
+	DisplayName: Чалупо и Чалупа
+	Description: Острые перчики парят вокруг вас
+}
+
+KrampusBricksCooldown: {
+	DisplayName: Перезарядка Коли-Кири
+	Description: У вас закончились Коли-Кири
+}
+
+CursedDollDebuff: {
+	DisplayName: Дебафф проклятой куклы
+	Description: ""
+}
+
+StockingMinionBuff: {
+	DisplayName: Помощник Крампуса
+	Description: Маленький помощник Крампуса защищает вас!
+}
+
+YuletideArmorCooldown: {
+	DisplayName: Перезарядка рождественского возгорания
+	Description: Нельзя поджечь себя
+}
+
+KrampusShapeBuff: {
+	DisplayName: Усиление деревянной формы
+	Description: Защита, урон и скорость атаки увеличены
+}
+
+NineTailsDebuff: {
+	DisplayName: Дебафф девятихвостого
+	Description: ""
+}
+
+TitanoboaWhipDebuff: {
+	DisplayName: Дебафф хлыста титанобоа
+	Description: ""
+}
+
+EelTagDebuff: {
+	DisplayName: Метка угря
+	Description: ""
+}
+
+ThornRoseBleed: {
+	DisplayName: Кровотечение от усеянной шипами розы
+	Description: ""
+}
+
+MushroomFriendPetBuff: {
+	DisplayName: Грибной друг
+	Description: Прекрасный грибной друг!
+}
+
+SpiderWarRemoteFlyBuff: {
+	DisplayName: Муха Джоро
+	Description: Муха Джоро защищает вас
+}
+
+SpiderWarRemoteNukeBuff: {
+	DisplayName: Взрывная Джоро
+	Description: Взрывная Джоро защищает вас
+}
+
+BluegillSparkleDebuff: {
+	DisplayName: Дебафф сияния синежаберной рыбы
+	Description: ""
+}
+
+DevilToothDebuff: {
+	DisplayName: Дебафф дьявольского зуба
+	Description: ""
+}
+
+InkyCapDebuff: {
+	DisplayName: Дебафф чернильного гриба
+	Description: ""
+}
+
+SamsonCuffDebuff: {
+	DisplayName: Дебафф браслета Самсона
+	Description: ""
+}
+
+SentientChainKnifeBleed: {
+	DisplayName: Кровотечение от разумного цепного ножа
+	Description: ""
+}
+
+SentientHarpoonSlow: {
+	DisplayName: Замедление от разумного гарпуна
+	Description: ""
+}
+
+SludgePetBuff: {
+	DisplayName: Жижка
+	Description: Жижка плетётся за вами
+}
+
+TarFlingerSlow: {
+	DisplayName: Замедление битумомёта
+	Description: ""
+}
+
+SentientOpticStaffBuff: {
+	DisplayName: Глазокус
+	Description: Глазокус защищает вас
+}
+
+PossessedCrownBuff: {
+	DisplayName: Одержимая корона
+	Description: Короны наделяют ваш хлыст силой
+}
+
+GoblinoidBuff: {
+	DisplayName: Гоблиноиды
+	Description: Безумные гоблиноиды помогают вам в бою
+}
+
+WolfSpiderMinionBuff: {
+	DisplayName: Паук-волк
+	Description: Паук-волк и его дети сражаются за вас
+}
+
+PeacockSpiderMaskDebuff: {
+	DisplayName: Дебафф маски паука-павлина
+	Description: ""
+}
+
+SpiderWarWebSlowDebuff: {
+	DisplayName: Замедление паутиной паучьего побоища
+	Description: ""
+}
+
+FireflyPetBuff: {
+	// DisplayName: Firefly
+	// Description: The firefly lights your way
+}
+
+CrabPetBuff: {
+	// DisplayName: Vampire Crab
+	// Description: It scuttles behind you
+}
+
+SpookFishronWhipDebuff: {
+	// DisplayName: Spook Fishron Whip Debuff
+	// Description: Mods.Spooky.Buffs.SpookFishronWhipDebuff.Description
+}
