@@ -18,8 +18,6 @@ namespace Spooky.Content.NPCs.SpookyBiome
 {
 	public class TomatoRoman : ModNPC
 	{
-        private static Asset<Texture2D> NPCTexture;
-
         public static readonly SoundStyle SplatSound = new("Spooky/Content/Sounds/Splat", SoundType.Sound) { Pitch = -0.65f };
 
         public override void SetStaticDefaults()

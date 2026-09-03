@@ -87,7 +87,6 @@ namespace Spooky.Content.Items.SpiderCave
 				int EffectRate = 2;
 
 				int frameRate = player.wingTime > 0 ? 2 : 4;
-				int maxFrames = 7;
 
 				if (player.wingTime > 0)
 				{

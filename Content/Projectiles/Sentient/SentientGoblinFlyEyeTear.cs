@@ -10,8 +10,6 @@ namespace Spooky.Content.Projectiles.Sentient
 {
     public class SentientGoblinFlyEyeTear : ModProjectile
     {
-        private static Asset<Texture2D> ProjTexture;
-
         public override void SetDefaults()
         {
             Projectile.width = 10;

@@ -10,8 +10,6 @@ namespace Spooky.Content.NPCs.Quest.Projectiles
 {
     public class BanditPriestCross : ModProjectile
     {
-		int target;
-
         bool runOnce = true;
 		Vector2[] trailLength = new Vector2[12];
 

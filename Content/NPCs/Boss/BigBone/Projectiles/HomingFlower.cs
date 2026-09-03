@@ -11,8 +11,6 @@ namespace Spooky.Content.NPCs.Boss.BigBone.Projectiles
 {
     public class HomingFlower : ModProjectile
     {
-		int homingTarget;
-		
 		private static Asset<Texture2D> ProjTexture;
 		private static Asset<Texture2D> TrailTexture;
 

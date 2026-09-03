@@ -13,8 +13,6 @@ namespace Spooky.Content.Projectiles.SpookyHell
 {
     public class PeptoBubble : ModProjectile
     {
-        private static Asset<Texture2D> ProjTexture;
-
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 2;

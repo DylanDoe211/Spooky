@@ -34,12 +34,11 @@ namespace Spooky.Content.NPCs.Shipyard
 			NPC.width = 60;
 			NPC.height = 36;
             NPC.npcSlots = 0.5f;
-            NPC.noGravity = true;
+            NPC.noGravity = false;
             NPC.chaseable = false;
 			NPC.HitSound = SoundID.NPCHit1;
 			NPC.DeathSound = SoundID.NPCDeath1;
-			NPC.aiStyle = 16;
-			AIType = NPCID.Pupfish;
+			NPC.aiStyle = 0;
 			SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.ShipyardBiome>().Type };
 		}
 
@@ -103,8 +102,7 @@ namespace Spooky.Content.NPCs.Shipyard
                     if (NPC.aiStyle == 16)
                     {
                         NPC.noGravity = false;
-                        NPC.aiStyle = 7;
-                        AIType = NPCID.Bunny;
+                        NPC.aiStyle = 0;
                     }
                     else
                     {

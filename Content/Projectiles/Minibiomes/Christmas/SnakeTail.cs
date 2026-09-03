@@ -12,8 +12,6 @@ namespace Spooky.Content.Projectiles.Minibiomes.Christmas
 {
     public class SnakeTail : ModProjectile
     {
-        bool SpawnedSegment = false;
-
         public override void SetDefaults()
         {
             Projectile.width = 10;

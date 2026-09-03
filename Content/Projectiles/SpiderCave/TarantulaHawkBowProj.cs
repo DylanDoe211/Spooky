@@ -11,9 +11,6 @@ namespace Spooky.Content.Projectiles.SpiderCave
 {
 	public class TarantulaHawkBowProj : ModProjectile
 	{
-        int ExtraUseTime = 0;
-        int playerCenterOffset = 1;
-
         public override void SetStaticDefaults()
 		{
             Main.projFrames[Projectile.type] = 4;

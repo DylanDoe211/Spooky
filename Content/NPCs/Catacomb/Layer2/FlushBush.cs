@@ -17,8 +17,6 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
 {
     public class FlushBush1 : ModNPC  
     {
-        private static Asset<Texture2D> LipsTexture;
-
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 4;

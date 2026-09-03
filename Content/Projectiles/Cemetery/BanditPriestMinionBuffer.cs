@@ -14,8 +14,6 @@ namespace Spooky.Content.Projectiles.Cemetery
     {
         public override string Texture => "Spooky/Content/Projectiles/TrailSquare";
 
-		int target;
-
         bool runOnce = true;
 		Vector2[] trailLength = new Vector2[12];
 

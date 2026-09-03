@@ -14,8 +14,6 @@ namespace Spooky.Content.NPCs.Minibiomes.Desert
 {
     public class Tarblimp : ModNPC  
     {
-		bool HasJumped = false;
-
 		public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 12;

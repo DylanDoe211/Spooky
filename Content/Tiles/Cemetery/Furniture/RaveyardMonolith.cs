@@ -5,7 +5,6 @@ using Terraria.ObjectData;
 using Terraria.GameContent.Drawing;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.DataStructures;
-using Terraria.GameContent.Drawing;
 using Terraria.Audio;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;

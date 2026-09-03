@@ -18,7 +18,6 @@ namespace Spooky.Content.Projectiles.Sentient
         bool isAttacking = false;
 
         private static Asset<Texture2D> ProjTexture;
-        private static Asset<Texture2D> GlowTexture;
 
         public static readonly SoundStyle EyePopSound = new("Spooky/Content/Sounds/Moco/MocoEyePop", SoundType.Sound) { PitchVariance = 0.75f };
 

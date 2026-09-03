@@ -17,7 +17,6 @@ namespace Spooky.Content.Projectiles.Sentient
 		Vector2 CursorSavePosition;
 
         private static Asset<Texture2D> ProjTexture;
-        private static Asset<Texture2D> EyeTexture;
 
 		public override void SetDefaults()
 		{

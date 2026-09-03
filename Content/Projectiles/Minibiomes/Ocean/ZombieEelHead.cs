@@ -16,7 +16,6 @@ namespace Spooky.Content.Projectiles.Minibiomes.Ocean
     public class ZombieEelHead : ModProjectile
     {
         bool segmentsSpawned = false;
-        bool isAttacking = false;
 
         private static Asset<Texture2D> ProjTexture;
 

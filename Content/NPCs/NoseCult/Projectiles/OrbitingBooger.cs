@@ -13,8 +13,6 @@ namespace Spooky.Content.NPCs.NoseCult.Projectiles
     {   
         public override string Texture => "Spooky/Content/NPCs/NoseCult/Projectiles/NoseCultistMageSnot";
 
-        private static Asset<Texture2D> NPCTexture;
-
         public override void SetStaticDefaults()
         {
             NPCID.Sets.TrailCacheLength[NPC.type] = 6;

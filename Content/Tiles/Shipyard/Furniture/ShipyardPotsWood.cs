@@ -74,11 +74,11 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
 					yield return new Item(Main.rand.Next(Ammos), Main.rand.Next(10, 21));
 					break;
 				}
+			}
 
-				if (Main.rand.NextBool(3))
-				{
-					yield return new Item(ItemID.SilverCoin, Main.rand.Next(1, 11));
-				}
+			if (Main.rand.NextBool(3))
+			{
+				yield return new Item(ItemID.SilverCoin, Main.rand.Next(1, 11));
 			}
 		}
 
@@ -105,12 +105,6 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
 
 				Vector2 gorePos = new Vector2(spawnX, spawnY);
 				SoundEngine.PlaySound(BreakSound, gorePos);
-				Vector2 goreVelocity = default(Vector2);
-
-				for (int numGores = 1; numGores <= 3; numGores++)
-				{
-					//Gore.NewGore(WorldGen.GetItemSource_FromTileBreak(x, y), gorePos, goreVelocity, ModContent.Find<ModGore>("Spooky/ShipyardPotGore" + numGores).Type);
-				}
 			}
 		}
 	}

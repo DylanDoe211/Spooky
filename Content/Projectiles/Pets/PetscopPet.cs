@@ -169,7 +169,7 @@ namespace Spooky.Content.Projectiles.Pets
             }
             else if (playerFlying)
             {
-                float num16 = 0.5f;
+                float Speed = 0.5f;
                 Projectile.tileCollide = false;
                 Vector2 vector3 = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
                 float horiPos = player.position.X + (float)(player.width / 2) - vector3.X;
@@ -191,7 +191,7 @@ namespace Spooky.Content.Projectiles.Pets
 
                 if (playerDistance < 100f)
                 {
-                    num16 = 0.5f;
+                    Speed = 0.5f;
                     if (player.velocity.Y == 0f)
                     {
                         playerStill++;
@@ -214,17 +214,17 @@ namespace Spooky.Content.Projectiles.Pets
                     {
                         Projectile.velocity *= 0.90f;
                     }
-                    num16 = 0.02f;
+                    Speed = 0.02f;
                 }
                 else
                 {
                     if (playerDistance < 100f)
                     {
-                        num16 = 0.35f;
+                        Speed = 0.35f;
                     }
                     if (playerDistance > 300f)
                     {
-                        num16 = 1f;
+                        Speed = 1f;
                     }
                     
                     playerDistance = num21 / playerDistance;
@@ -234,37 +234,37 @@ namespace Spooky.Content.Projectiles.Pets
 
                 if (Projectile.velocity.X <= horiPos)
                 {
-                    Projectile.velocity.X = Projectile.velocity.X + num16;
-                    if (num16 > 0.05f && Projectile.velocity.X < 0f)
+                    Projectile.velocity.X = Projectile.velocity.X + Speed;
+                    if (Speed > 0.05f && Projectile.velocity.X < 0f)
                     {
-                        Projectile.velocity.X = Projectile.velocity.X + num16;
+                        Projectile.velocity.X = Projectile.velocity.X + Speed;
                     }
                 }
 
                 if (Projectile.velocity.X > horiPos)
                 {
-                    Projectile.velocity.X = Projectile.velocity.X - num16;
-                    if (num16 > 0.05f && Projectile.velocity.X > 0f)
+                    Projectile.velocity.X = Projectile.velocity.X - Speed;
+                    if (Speed > 0.05f && Projectile.velocity.X > 0f)
                     {
-                        Projectile.velocity.X = Projectile.velocity.X - num16;
+                        Projectile.velocity.X = Projectile.velocity.X - Speed;
                     }
                 }
 
                 if (Projectile.velocity.Y <= vertiPos)
                 {
-                    Projectile.velocity.Y = Projectile.velocity.Y + num16;
-                    if (num16 > 0.05f && Projectile.velocity.Y < 0f)
+                    Projectile.velocity.Y = Projectile.velocity.Y + Speed;
+                    if (Speed > 0.05f && Projectile.velocity.Y < 0f)
                     {
-                        Projectile.velocity.Y = Projectile.velocity.Y + num16 * 2f;
+                        Projectile.velocity.Y = Projectile.velocity.Y + Speed * 2f;
                     }
                 }
 
                 if (Projectile.velocity.Y > vertiPos)
                 {
-                    Projectile.velocity.Y = Projectile.velocity.Y - num16;
-                    if (num16 > 0.05f && Projectile.velocity.Y > 0f)
+                    Projectile.velocity.Y = Projectile.velocity.Y - Speed;
+                    if (Speed > 0.05f && Projectile.velocity.Y > 0f)
                     {
-                        Projectile.velocity.Y = Projectile.velocity.Y - num16 * 2f;
+                        Projectile.velocity.Y = Projectile.velocity.Y - Speed * 2f;
                     }
                 }
 

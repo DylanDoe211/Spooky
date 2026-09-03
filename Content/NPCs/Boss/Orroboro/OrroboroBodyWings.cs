@@ -307,8 +307,6 @@ namespace Spooky.Content.NPCs.Boss.Orroboro
 		public override string Texture => "Spooky/Content/NPCs/Boss/Orroboro/OrroboroBodyWings";
         
 		private static Asset<Texture2D> NPCTexture;
-		private static Asset<Texture2D> Wing1Texture;
-		private static Asset<Texture2D> Wing2Texture;
 
 		public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{

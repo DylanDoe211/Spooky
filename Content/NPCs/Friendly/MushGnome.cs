@@ -252,16 +252,13 @@ namespace Spooky.Content.NPCs.Friendly
 
     public class MushGnome2 : MushGnome1  
     {
-        Vector2 SavePosition;
     }
 
     public class MushGnome3 : MushGnome1  
     {
-        Vector2 SavePosition;
     }
 
     public class MushGnome4 : MushGnome1  
     {
-        Vector2 SavePosition;
     }
 }

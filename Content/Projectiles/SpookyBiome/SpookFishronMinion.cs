@@ -18,8 +18,6 @@ namespace Spooky.Content.Projectiles.SpookyBiome
         bool Charging = false;
         bool isAttacking = false;
 
-        Vector2 SaveTargetPos;
-
         private static Asset<Texture2D> ProjTexture;
 
         public override void SetStaticDefaults()

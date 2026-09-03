@@ -91,12 +91,6 @@ namespace Spooky.Content.NPCs.Quest
                     ChainTexture = ModContent.Request<Texture2D>("Spooky/Content/NPCs/Quest/TripletsChainRed").Value;
                 }
 
-				bool flip = false;
-				if (Parent.direction == -1)
-				{
-					flip = true;
-				}
-
 				Vector2 drawOrigin = new Vector2(0, 7);
 				Vector2 myCenter = NPC.Center - new Vector2(2, 10).RotatedBy(NPC.rotation);
 				Vector2 p0 = Parent.Center;
@@ -124,12 +118,6 @@ namespace Spooky.Content.NPCs.Quest
 
 			if (SpawnGore)
 			{
-				bool flip = false;
-				if (Parent.direction == -1)
-				{
-					flip = true;
-				}
-
 				Vector2 myCenter = NPC.Center - new Vector2(2, 10).RotatedBy(NPC.rotation);
 				Vector2 p0 = Parent.Center;
 				Vector2 p1 = Parent.Center;

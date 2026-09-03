@@ -15,10 +15,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 {
     public class SpiderWarRemoteNuke : ModProjectile
     {
-        int PreviousTarget = 0;
-
         float FlashOpacity = 0f;
-
         bool isAttacking = false;
 
         private static Asset<Texture2D> ProjTexture;

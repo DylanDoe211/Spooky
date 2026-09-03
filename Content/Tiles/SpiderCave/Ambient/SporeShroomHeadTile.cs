@@ -17,8 +17,6 @@ namespace Spooky.Content.Tiles.SpiderCave.Ambient
 {
     public class SporeShroomHeadTile : ModTile
     {
-        private Asset<Texture2D> GlowTexture;
-
         public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = false;
@@ -36,18 +34,6 @@ namespace Spooky.Content.Tiles.SpiderCave.Ambient
             DustType = 288;
             HitSound = SoundID.Dig;
         }
-
-        /*
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            GlowTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/SpiderCave/Ambient/MushroomBrownGlow");
-
-            Tile tile = Framing.GetTileSafely(i, j);
-            Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange);
-            int yOffset = TileObjectData.GetTileData(tile).DrawYOffset;
-            spriteBatch.Draw(GlowTexture.Value, new Vector2(i * 16, j * 16 + yOffset) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Color.White * 0.1f);
-        }
-        */
 
 		public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
 		{

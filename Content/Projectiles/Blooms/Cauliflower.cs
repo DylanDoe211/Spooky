@@ -11,8 +11,6 @@ namespace Spooky.Content.Projectiles.Blooms
 {
     public class Cauliflower : ModProjectile
     {
-        Vector2 SavePosition;
-
         public override void SetStaticDefaults()
 		{
 			Main.projFrames[Projectile.type] = 3;

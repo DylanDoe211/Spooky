@@ -13,8 +13,6 @@ namespace Spooky.Content.NPCs.SpiderCave.SpiderWar
     {
         float Opacity = 0f;
 
-        Vector2 GoToPosition;
-
         private static Asset<Texture2D> NPCTexture;
         private static Asset<Texture2D> GlowTexture;
 		private static Asset<Texture2D> SpotlightTexture;

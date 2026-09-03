@@ -14,12 +14,8 @@ namespace Spooky.Content.NPCs.Cemetery
 {
 	public class Crow : ModNPC
 	{
-		int numSeedsEaten = 0;
-
         bool Flying = false;
-		bool isAttacking = false;
 
-		Player PlayerToFollow = null;
 		Vector2 PositionToFlyAround = Vector2.Zero;
 
 		public static readonly SoundStyle SquawkSound = new("Spooky/Content/Sounds/CrowSquawk", SoundType.Sound) { PitchVariance = 0.5f };
@@ -40,12 +36,8 @@ namespace Spooky.Content.NPCs.Cemetery
 
 		public override void SendExtraAI(BinaryWriter writer)
 		{
-			//ints
-			writer.Write(numSeedsEaten);
-
 			//bools
 			writer.Write(Flying);
-			writer.Write(isAttacking);
 
 			//floats
 			writer.Write(NPC.localAI[0]);
@@ -55,12 +47,8 @@ namespace Spooky.Content.NPCs.Cemetery
 
 		public override void ReceiveExtraAI(BinaryReader reader)
 		{
-			//ints
-			numSeedsEaten = reader.ReadInt32();
-
 			//bools
 			Flying = reader.ReadBoolean();
-			isAttacking = reader.ReadBoolean();
 
 			//floats
 			NPC.localAI[0] = reader.ReadSingle();

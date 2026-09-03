@@ -19,8 +19,6 @@ namespace Spooky.Content.NPCs.Boss.Orroboro
     {
         public override string Texture => "Spooky/Content/NPCs/Boss/Orroboro/OrroHead";
 
-		int Tongue = 0;
-
 		public float SaveRotation = 0;
 
 		private bool segmentsSpawned;

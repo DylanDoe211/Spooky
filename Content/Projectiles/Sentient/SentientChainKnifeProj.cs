@@ -53,12 +53,6 @@ namespace Spooky.Content.Projectiles.Sentient
             ChainTexture1 ??= ModContent.Request<Texture2D>("Spooky/Content/Projectiles/Sentient/SentientChainKnifeSegment1");
 			ChainTexture2 ??= ModContent.Request<Texture2D>("Spooky/Content/Projectiles/Sentient/SentientChainKnifeSegment2");
 
-            bool flip = false;
-			if (player.direction == 1)
-			{
-				flip = true;
-			}
-
 			Vector2 chainDrawOrigin = new Vector2(0, ChainTexture1.Height() / 2);
 			Vector2 myCenter = Projectile.Center - new Vector2(0, 16).RotatedBy(Projectile.rotation);
 			Vector2 p0 = player.MountedCenter;

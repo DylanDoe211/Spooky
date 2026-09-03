@@ -12,8 +12,6 @@ namespace Spooky.Content.Projectiles.Slingshots
 {
     public class EyeWormTail : ModProjectile
     {
-        bool SpawnedSegment = false;
-
         public override void SetDefaults()
         {
             Projectile.width = 10;

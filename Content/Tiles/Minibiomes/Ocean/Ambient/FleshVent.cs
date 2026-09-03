@@ -16,8 +16,6 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean.Ambient
 {
     public class FleshVent : ModTile
     {
-        private Asset<Texture2D> GlowTexture;
-
         public override void SetStaticDefaults()
         {
             Main.tileFrameImportant[Type] = true;

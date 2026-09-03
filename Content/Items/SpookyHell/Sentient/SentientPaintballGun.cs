@@ -11,8 +11,6 @@ namespace Spooky.Content.Items.SpookyHell.Sentient
 {
     public class SentientPaintballGun : ModItem, ICauldronOutput
     {
-        int useTimer = 0;
-
         public override void SetDefaults()
         {
             Item.damage = 20;

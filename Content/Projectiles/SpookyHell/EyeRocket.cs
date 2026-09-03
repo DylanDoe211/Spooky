@@ -13,8 +13,6 @@ namespace Spooky.Content.Projectiles.SpookyHell
 {
     public class EyeRocket : ModProjectile
     {
-        int WhoAmI = -1;
-
         private static Asset<Texture2D> ProjTexture;
 
         public override void SetStaticDefaults()

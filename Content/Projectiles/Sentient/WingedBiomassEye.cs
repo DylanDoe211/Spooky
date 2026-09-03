@@ -11,12 +11,6 @@ namespace Spooky.Content.Projectiles.Sentient
 {
     public class WingedBiomassEye : ModProjectile
     {
-        int Bounces = 0;
-
-        bool IsStickingToTarget = false;
-
-		private static Asset<Texture2D> ProjTexture;
-
         public override void SetStaticDefaults()
 		{
 			ProjectileID.Sets.MinionShot[Projectile.type] = true;

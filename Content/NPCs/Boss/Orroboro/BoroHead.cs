@@ -28,14 +28,10 @@ namespace Spooky.Content.NPCs.Boss.Orroboro
     [AutoloadBossHead]
     public class BoroHead : ModNPC
     {
-		int Tongue = 0;
-
         private bool segmentsSpawned;
         public bool DefaultRotation = true;
 
 		public float SaveRotation = 0;
-
-        int timer = 0;
 
         Vector2 SaveNPCPosition;
         Vector2 SavePlayerPosition;

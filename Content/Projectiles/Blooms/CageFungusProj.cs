@@ -44,12 +44,6 @@ namespace Spooky.Content.Projectiles.Blooms
             ChainTexture2 ??= ModContent.Request<Texture2D>("Spooky/Content/Projectiles/Blooms/CageFungusChain2");
             ChainTexture3 ??= ModContent.Request<Texture2D>("Spooky/Content/Projectiles/Blooms/CageFungusChain3");
             ChainTexture4 ??= ModContent.Request<Texture2D>("Spooky/Content/Projectiles/Blooms/CageFungusChain4");
-            
-            bool flip = false;
-            if (Parent.direction == -1)
-            {
-                flip = true;
-            }
 
             Vector2 drawOrigin = new Vector2(0, ChainTexture1.Height() / 2);
             Vector2 myCenter = Projectile.Center;

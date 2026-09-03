@@ -15,8 +15,6 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
 
 		Vector2 RotatePosition;
 
-        private static Asset<Texture2D> ProjTexture;
-
         public override void SetDefaults()
         {
 			Projectile.width = 36;

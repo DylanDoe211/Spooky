@@ -18,7 +18,6 @@ namespace Spooky.Content.Projectiles.Slingshots
 		bool runOnce = true;
 		Vector2[] trailLength = new Vector2[5];
 
-		private static Asset<Texture2D> ProjTexture;
 		private static Asset<Texture2D> TrailTexture;
 
 		public override void SetDefaults()

@@ -61,6 +61,12 @@ namespace Spooky.Core
         public bool SludgePet = false;
         public bool FireflyPet = false;
         public bool CrabPet = false;
+        public bool GourdPetGreen = false;
+        public bool GourdPetLime = false;
+        public bool GourdPetOrange = false;
+        public bool GourdPetRed = false;
+        public bool GourdPetWhite = false;
+        public bool GourdPetYellow = false;
 
         //misc bools
         public bool RaveyardGuardsHostile = false;
@@ -158,6 +164,12 @@ namespace Spooky.Core
             SludgePet = false;
             FireflyPet = false;
             CrabPet = false;
+            GourdPetGreen = false;
+            GourdPetLime = false;
+            GourdPetOrange = false;
+            GourdPetRed = false;
+            GourdPetWhite = false;
+            GourdPetYellow = false;
 
             //misc bools
             SpiderGrottoCompass = false;

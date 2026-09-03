@@ -14,8 +14,6 @@ namespace Spooky.Content.NPCs.Quest
 {
 	public class Chudshroom : ModNPC
 	{
-        int SoundDelay = 0;
-
         public static readonly SoundStyle GruntSound = new("Spooky/Content/Sounds/ChudGrunt", SoundType.Sound) { PitchVariance = 0.5f };
 
 		public override void SetStaticDefaults()

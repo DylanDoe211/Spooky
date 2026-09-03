@@ -10,8 +10,6 @@ namespace Spooky.Content.Projectiles.Catacomb
 {
 	public class BoneBowProj : ModProjectile
 	{
-        int playerCenterOffset = 1;
-
 		public override void SetStaticDefaults()
 		{
             Main.projFrames[Projectile.type] = 4;

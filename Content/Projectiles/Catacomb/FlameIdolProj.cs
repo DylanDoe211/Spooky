@@ -30,7 +30,7 @@ namespace Spooky.Content.Projectiles.Catacomb
 
         public override void PostDraw(Color lightColor)
         {
-            GlowTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Projectiles/Catacomb/FlameIdolProjGlow");
+            GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
 
             Vector2 drawOrigin = new(GlowTexture.Width() * 0.5f, Projectile.height * 0.5f);
 

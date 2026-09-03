@@ -10,8 +10,6 @@ namespace Spooky.Content.NPCs.SpookyBiome
 {
     public class TomatoWormBody1 : ModNPC
     {
-        private static Asset<Texture2D> NPCTexture;
-
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 4;

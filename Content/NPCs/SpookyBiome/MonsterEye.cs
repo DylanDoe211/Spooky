@@ -194,8 +194,6 @@ namespace Spooky.Content.NPCs.SpookyBiome
 
     public class MonsterEye2 : MonsterEye1
 	{
-        private static Asset<Texture2D> NPCTexture;
-
         public override void SetStaticDefaults()
         {
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
@@ -234,8 +232,6 @@ namespace Spooky.Content.NPCs.SpookyBiome
 
     public class MonsterEye3 : MonsterEye1
 	{
-        private static Asset<Texture2D> NPCTexture;
-
         public override void SetStaticDefaults()
         {
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
@@ -274,8 +270,6 @@ namespace Spooky.Content.NPCs.SpookyBiome
 
     public class MonsterEye4 : MonsterEye1
 	{
-        private static Asset<Texture2D> NPCTexture;
-
         public override void SetStaticDefaults()
         {
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()

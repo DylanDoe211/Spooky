@@ -17,8 +17,6 @@ namespace Spooky.Content.Projectiles.Sentient
         bool runOnce = true;
 		Vector2[] trailLength = new Vector2[8];
 
-		Vector2 SavePosition;
-
 		private static Asset<Texture2D> ProjTexture;
 		
         public override void SetDefaults()

@@ -12,9 +12,6 @@ namespace Spooky.Content.Tiles.Shipyard.Ambient
 {
 	public class MossyAnchor1 : ModTile
 	{
-		private Asset<Texture2D> GlowTexture1;
-		private Asset<Texture2D> GlowTexture2;
-
 		public override void SetStaticDefaults()
 		{
 			Main.tileSolid[Type] = false;

@@ -2355,6 +2355,36 @@ GhostPetItem: {
 	Tooltip: Призывает маленького призрака, дающего свет
 }
 
+GourdPetSeedGreen: {
+	// DisplayName: Green Sprouting Seed
+	// Tooltip: Summons Oscar
+}
+
+GourdPetSeedLime: {
+	// DisplayName: Lime Sprouting Seed
+	// Tooltip: Summons Stevenson
+}
+
+GourdPetSeedOrange: {
+	// DisplayName: Orange Sprouting Seed
+	// Tooltip: Summons Ben & Gerald
+}
+
+GourdPetSeedRed: {
+	// DisplayName: Red Sprouting Seed
+	// Tooltip: Summons Pedro
+}
+
+GourdPetSeedWhite: {
+	// DisplayName: White Sprouting Seed
+	// Tooltip: Summons Pickle
+}
+
+GourdPetSeedYellow: {
+	// DisplayName: Yellow Sprouting Seed
+	// Tooltip: Summons Augustus
+}
+
 Honeycomb: {
 	DisplayName: Кусок сот
 	Tooltip: Призывает маленькую опчелительницу

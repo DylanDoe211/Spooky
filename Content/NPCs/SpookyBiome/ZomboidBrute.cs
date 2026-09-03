@@ -163,7 +163,6 @@ namespace Spooky.Content.NPCs.SpookyBiome
 					{
 						Vector2 center = new Vector2(NPC.Center.X, NPC.Center.Y);
 						center.X += 45 * i; //45 is the distance between each one
-						int numtries = 0;
 						int x = (int)(center.X / 16);
 						int y = (int)(center.Y / 16);
 						while (y < NPC.Center.Y + 20 && Main.tile[x, y] != null && !WorldGen.SolidTile2(x, y) && 

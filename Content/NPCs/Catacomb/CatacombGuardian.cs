@@ -18,12 +18,6 @@ namespace Spooky.Content.NPCs.Catacomb
 {
     public class CatacombGuardian : ModNPC
     {
-        Vector2 SavePlayerPosition;
-
-        public int attackPattern = 0;
-        public int SaveDirection;
-        public float SaveRotation;
-
         private static Asset<Texture2D> EyeGlowTexture;
         private static Asset<Texture2D> EyeTrailTexture;
 
@@ -92,7 +86,7 @@ namespace Spooky.Content.NPCs.Catacomb
 
             Vector2 drawOrigin = new(EyeTrailTexture.Width() * 0.5f, NPC.height * 0.5f);
 
-            var effects = attackPattern == 2 && NPC.localAI[0] >= 360 ? (SaveDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally) : (NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
+            var effects = NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
             for (int oldPos = 0; oldPos < NPC.oldPos.Length; oldPos++)
             {

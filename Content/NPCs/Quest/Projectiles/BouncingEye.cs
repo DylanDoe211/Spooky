@@ -17,8 +17,6 @@ namespace Spooky.Content.NPCs.Quest.Projectiles
 		Vector2[] trailLength = new Vector2[35];
 		Rectangle[] trailHitboxes = new Rectangle[35];
 
-		float SaveRotation;
-
 		private static Asset<Texture2D> ProjTexture;
 		private static Asset<Texture2D> TrailTexture;
 

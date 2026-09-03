@@ -19,9 +19,6 @@ namespace Spooky.Content.NPCs.Minibiomes.Christmas.Projectiles
 		Vector2[] trailLength = new Vector2[22];
 		Rectangle[] trailHitboxes = new Rectangle[22];
 
-		float SaveRotation;
-
-		private static Asset<Texture2D> ProjTexture;
 		private static Asset<Texture2D> TrailTexture;
 
 		public override void SendExtraAI(BinaryWriter writer)

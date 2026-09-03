@@ -19,8 +19,6 @@ namespace Spooky.Content.NPCs.Boss.Moco
     {
         public bool Shake = false;
 
-        private static Asset<Texture2D> NPCTexture;
-
         public static readonly SoundStyle ShatterSound = new("Spooky/Content/Sounds/Moco/MocoIdolShatter", SoundType.Sound);
 
         public override void SetStaticDefaults()

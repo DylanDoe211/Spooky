@@ -15,8 +15,6 @@ namespace Spooky.Content.NPCs.NoseCult
 	{
         bool HasJumped = false;
 
-        private static Asset<Texture2D> NPCTexture;
-
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 3;

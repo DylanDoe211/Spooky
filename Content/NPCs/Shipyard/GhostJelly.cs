@@ -80,6 +80,8 @@ namespace Spooky.Content.NPCs.Shipyard
 
         public override void AI()
         {
+            NPC.spriteDirection = NPC.direction = NPC.velocity.X < 0 ? -1 : 1;
+
             NPC.rotation = NPC.velocity.X * 0.07f;
 
             Lighting.AddLight(NPC.Center, new Color(116, 244, 212).ToVector3() * 0.5f);

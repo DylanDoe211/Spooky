@@ -1509,8 +1509,6 @@ namespace Spooky.Content.NPCs.Boss.BigBone
                                 {
                                     Vector2 center = new Vector2(Parent.Center.X + numRubble, Parent.Center.Y - 500);
                                     center.X += Main.rand.Next(-20, 21); //add some randomness so it isnt always the same even spread
-
-                                    int numtries = 0;
                                     int x = (int)(center.X / 16);
                                     int y = (int)(center.Y / 16);
                                     while (Main.tile[x, y] == null || !Main.tile[x, y].HasTile || Main.tile[x, y].IsActuated ||
@@ -1680,8 +1678,6 @@ namespace Spooky.Content.NPCs.Boss.BigBone
                                 {
                                     Vector2 center = new Vector2(Parent.Center.X + numRubble, Parent.Center.Y - 500);
                                     center.X += Main.rand.Next(-20, 21); //add some randomness so it isnt always the same even spread
-
-                                    int numtries = 0;
                                     int x = (int)(center.X / 16);
                                     int y = (int)(center.Y / 16);
                                     while (Main.tile[x, y] == null || !Main.tile[x, y].HasTile || Main.tile[x, y].IsActuated ||

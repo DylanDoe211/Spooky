@@ -14,7 +14,6 @@ namespace Spooky.Content.NPCs.Quest.Projectiles
         bool runOnce = true;
 		Vector2[] trailLength = new Vector2[12];
 
-		private static Asset<Texture2D> ProjTexture;
         private static Asset<Texture2D> TrailTexture;
 
         public override void SetDefaults()

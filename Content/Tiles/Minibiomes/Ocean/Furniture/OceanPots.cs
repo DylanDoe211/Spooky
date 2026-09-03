@@ -109,6 +109,12 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean.Furniture
 
 				Vector2 gorePos = new Vector2(spawnX, spawnY);
 				SoundEngine.PlaySound(SoundID.DD2_SkeletonHurt, gorePos);
+				Vector2 goreVelocity = default(Vector2);
+
+				for (int numGores = 1; numGores <= 3; numGores++)
+				{
+					Gore.NewGore(WorldGen.GetItemSource_FromTileBreak(x, y), gorePos, goreVelocity, ModContent.Find<ModGore>("Spooky/OceanPotGore").Type);
+				}
 			}
 		}
 	}

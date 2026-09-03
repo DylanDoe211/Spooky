@@ -143,7 +143,6 @@ namespace Spooky.Content.Projectiles.Minibiomes.Ocean
 			float maxForcedRetractSpeed = 20f;
 			float unusedRetractAcceleration = 1f;
 			float unusedMaxRetractSpeed = 14f;
-			int unusedChainLength = 60;
 			int defaultHitCooldown = 10;
 			int spinHitCooldown = 20;
 			int movingHitCooldown = 20;
@@ -323,7 +322,6 @@ namespace Spooky.Content.Projectiles.Minibiomes.Ocean
 					{
 						Vector2 center = new Vector2(Projectile.Center.X, Projectile.Center.Y);
 						center.X += 45 * i; //45 is the distance between each one
-						int numtries = 0;
 						int x = (int)(center.X / 16);
 						int y = (int)(center.Y / 16);
 						while (y < Projectile.Center.Y + 20 && Main.tile[x, y] != null && !WorldGen.SolidTile2(x, y) && 

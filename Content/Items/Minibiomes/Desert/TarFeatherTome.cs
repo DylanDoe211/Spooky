@@ -10,8 +10,6 @@ namespace Spooky.Content.Items.Minibiomes.Desert
 {
     public class TarFeatherTome : ModItem
     {
-        int numUses = 0;
-
 		public override void SetDefaults()
         {
             Item.damage = 12;

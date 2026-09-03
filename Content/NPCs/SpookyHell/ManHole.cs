@@ -18,8 +18,6 @@ namespace Spooky.Content.NPCs.SpookyHell
 {
     public class ManHole : ModNPC  
     {
-        private bool spawned;
-
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 7;

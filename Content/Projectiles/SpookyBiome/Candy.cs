@@ -10,8 +10,6 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 {
     public class Candy : ModProjectile
     {
-		private static Asset<Texture2D> ProjTexture;
-
 		public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 12;

@@ -43,12 +43,6 @@ namespace Spooky.Content.Projectiles.Slingshots
             NPC Parent = Main.npc[(int)Projectile.ai[0]];
 
             ChainTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Projectiles/Pets/BigBonePetStem1");
-            
-            bool flip = false;
-            if (Parent.direction == -1)
-            {
-                flip = true;
-            }
 
             Vector2 drawOrigin = new Vector2(0, ChainTexture.Height() / 2);
             Vector2 myCenter = Projectile.Center;

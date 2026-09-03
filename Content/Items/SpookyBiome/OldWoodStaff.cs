@@ -5,6 +5,7 @@ using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using System;
 
+using Spooky.Content.Items.SpookyBiome.Misc;
 using Spooky.Content.Projectiles.SpookyBiome;
 using Spooky.Content.Tiles.SpookyBiome;
 
@@ -71,7 +72,7 @@ namespace Spooky.Content.Items.SpookyBiome
         {
             CreateRecipe()
             .AddIngredient(ModContent.ItemType<SpookyWoodItem>(), 25)
-            .AddIngredient(ItemID.Amethyst, 5)
+            .AddIngredient(ModContent.ItemType<SpookyGlowshroom>(), 10)
             .AddTile(TileID.WorkBenches)
             .Register();
         }

@@ -22,7 +22,6 @@ namespace Spooky.Content.NPCs.SpiderCave
 
 		Vector2 SavePosition = Vector2.Zero;
 
-		private static Asset<Texture2D> GlowTexture;
 		private static Asset<Texture2D> NPCTexture;
 
 		public override void SetStaticDefaults()

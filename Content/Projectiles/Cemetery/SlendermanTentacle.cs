@@ -40,12 +40,6 @@ namespace Spooky.Content.Projectiles.Cemetery
 
 			if (!player.dead)
 			{
-                bool flip = false;
-                if (player.direction == -1 || Projectile.Center.Y < player.Center.Y)
-                {
-                    flip = true;
-                }
-
                 Vector2 drawProjOrigin = new Vector2(0, ProjTexture.Height() / 2);
                 Vector2 drawOrigin = new Vector2(0, ChainTexture.Height() / 2);
 				Vector2 myCenter = Projectile.Center;

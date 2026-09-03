@@ -71,7 +71,8 @@ namespace Spooky.Content.Projectiles.Sentient
             int frameHeight = height * Projectile.frame;
             Rectangle rectangle = new Rectangle(0, frameHeight, ProjTexture.Width(), height);
 
-            Main.EntitySpriteDraw(ProjTexture.Value, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), rectangle, Projectile.GetAlpha(lightColor), Projectile.rotation, new Vector2(ProjTexture.Width() / 2f, height / 2f), scaleStretch, SpriteEffects.None, 0);
+            Main.EntitySpriteDraw(ProjTexture.Value, Projectile.Center - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY), rectangle, 
+            Projectile.GetAlpha(lightColor), Projectile.rotation, new Vector2(ProjTexture.Width() / 2f, height / 2f), scaleStretch, SpriteEffects.None, 0);
 
 			return false;
 		}

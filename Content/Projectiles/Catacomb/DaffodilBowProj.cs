@@ -10,8 +10,6 @@ namespace Spooky.Content.Projectiles.Catacomb
 {
 	public class DaffodilBowProj : ModProjectile
 	{
-        float SaveRotation;
-
         public static readonly SoundStyle FlySound = new("Spooky/Content/Sounds/FlyBuzzing", SoundType.Sound);
 
 		public override void SetStaticDefaults()

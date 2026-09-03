@@ -752,5 +752,35 @@ CrabPetBuff: {
 
 SpookFishronWhipDebuff: {
 	// DisplayName: Spook Fishron Whip Debuff
-	// Description: Mods.Spooky.Buffs.SpookFishronWhipDebuff.Description
+	// Description: ""
+}
+
+GourdPetGreenBuff: {
+	// DisplayName: Oscar
+	// Description: The gourd lights your way!
+}
+
+GourdPetLimeBuff: {
+	// DisplayName: Stevenson
+	// Description: The gourd lights your way!
+}
+
+GourdPetOrangeBuff: {
+	// DisplayName: Ben & Gerald
+	// Description: The gourds light your way!
+}
+
+GourdPetRedBuff: {
+	// DisplayName: Pedro
+	// Description: The gourd lights your way!
+}
+
+GourdPetWhiteBuff: {
+	// DisplayName: Pickle
+	// Description: The gourd lights your way!
+}
+
+GourdPetYellowBuff: {
+	// DisplayName: Augustus
+	// Description: The gourd lights your way!
 }

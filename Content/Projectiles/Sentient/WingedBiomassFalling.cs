@@ -14,8 +14,6 @@ namespace Spooky.Content.Projectiles.Sentient
 {
     public class WingedBiomassFalling : ModProjectile
     {
-        private static Asset<Texture2D> ProjTexture;
-
         public static readonly SoundStyle SplatSound = new("Spooky/Content/Sounds/Splat", SoundType.Sound) { Volume = 0.5f, Pitch = 0.75f };
 
         public override void SetStaticDefaults()

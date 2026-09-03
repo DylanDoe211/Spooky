@@ -14,8 +14,6 @@ namespace Spooky.Content.Projectiles.Blooms
 {
     public class CucumberStomach : ModProjectile
     {
-		bool StuckOnNPC = false;
-
 		private static Asset<Texture2D> ProjTexture;
         private static Asset<Texture2D> ChainTexture;
 

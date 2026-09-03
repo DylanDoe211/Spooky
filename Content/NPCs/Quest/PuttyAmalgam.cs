@@ -22,8 +22,6 @@ namespace Spooky.Content.NPCs.Quest
 		public ushort destinationX = 0;
 		public ushort destinationY = 0;
 
-        private static Asset<Texture2D> NPCTexture;
-
         public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 7;

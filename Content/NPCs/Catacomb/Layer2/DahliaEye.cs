@@ -14,8 +14,6 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
 {
     public class DahliaEye : ModNPC
     {
-        float distance = 0f;
-
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 6;

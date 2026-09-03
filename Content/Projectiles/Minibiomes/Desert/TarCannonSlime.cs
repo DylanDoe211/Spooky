@@ -12,8 +12,6 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
 {
     public class TarCannonSlime : ModProjectile
     {
-        int playerStill = 0;
-        bool playerFlying = false;
         bool isAttacking = false;
 
         NPC CurrentTarget = null;
@@ -104,8 +102,6 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
         public void AttackingAI(NPC target)
 		{
             isAttacking = true;
-
-            playerFlying = false;
 
             Projectile.tileCollide = true;
 

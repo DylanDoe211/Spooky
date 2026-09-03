@@ -14,8 +14,6 @@ namespace Spooky.Content.NPCs.Minibiomes.Desert
 {
     public class TarSlime1 : ModNPC  
     {
-		bool HasJumped = false;
-
 		public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 3;

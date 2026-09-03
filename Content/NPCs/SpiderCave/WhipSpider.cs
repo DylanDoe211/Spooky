@@ -17,7 +17,6 @@ namespace Spooky.Content.NPCs.SpiderCave
 {
     public class WhipSpider : ModNPC  
     {
-        int SaveDirection;
         bool SpawnedStinger = false;
 
         public override void SetStaticDefaults()

@@ -21,8 +21,6 @@ namespace Spooky.Content.NPCs.Friendly
     {
         Vector2 modifier = new(-200, -75);
 
-        Player PlayerTalkingTo = null;
-
         public static Mod Mod = Spooky.mod;
 
         private static Asset<Texture2D> UITexture;
@@ -209,7 +207,6 @@ namespace Spooky.Content.NPCs.Friendly
                 Flags.OldHunterDefeatDialogue = true;
             }
 
-			PlayerTalkingTo = null;
 			DialogueUI.Visible = false;
 		}
     }

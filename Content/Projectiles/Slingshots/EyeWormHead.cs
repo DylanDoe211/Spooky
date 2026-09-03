@@ -15,8 +15,6 @@ namespace Spooky.Content.Projectiles.Slingshots
     {
         bool SpawnedSegment = false;
 
-        Vector2 RotatePosition;
-
         public override void SetStaticDefaults()
         {
             ProjectileGlobal.IsSlingshotAmmoProj[Projectile.type] = true;
@@ -103,8 +101,6 @@ namespace Spooky.Content.Projectiles.Slingshots
     public class EyeWormHead2 : EyeWormHead1
     {
         bool SpawnedSegment = false;
-
-        Vector2 RotatePosition;
 
         public override void AI()
         {

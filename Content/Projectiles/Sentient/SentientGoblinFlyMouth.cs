@@ -20,9 +20,6 @@ namespace Spooky.Content.Projectiles.Sentient
 
         Vector2 GoToOffset;
 
-        private static Asset<Texture2D> GlowTexture;
-        private static Asset<Texture2D> ProjTexture;
-
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 4;

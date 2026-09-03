@@ -11,8 +11,6 @@ namespace Spooky.Content.NPCs.Quest.Projectiles
 {
     public class HaroldBolt : ModProjectile
     {
-		int target;
-
         bool runOnce = true;
 		Vector2[] trailLength = new Vector2[6];
 

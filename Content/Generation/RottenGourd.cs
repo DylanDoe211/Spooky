@@ -48,36 +48,30 @@ internal class RottenGourd
 		{
 			0 => ModContent.TileType<GourdBlockGreen>(),
 			1 => ModContent.TileType<GourdBlockLime>(),
-			2 => ModContent.TileType<GourdBlockWhite>(),
-			//3 => ModContent.TileType<GourdBlockLimeOrange>(),
-			3 => ModContent.TileType<GourdBlockOrange>(),
-			4 => ModContent.TileType<GourdBlockRed>(),
-			5 => ModContent.TileType<GourdBlockYellow>(),
-			//_ => ModContent.TileType<GourdBlockYellowGreen>(),
+			2 => ModContent.TileType<GourdBlockOrange>(),
+			3 => ModContent.TileType<GourdBlockRed>(),
+			4 => ModContent.TileType<GourdBlockWhite>(),
+			_ => ModContent.TileType<GourdBlockYellow>()
 		};
 
 		int wallType = id switch
 		{
 			0 => ModContent.WallType<GourdBlockGreenWall>(),
 			1 => ModContent.WallType<GourdBlockLimeWall>(),
-			2 => ModContent.WallType<GourdBlockWhiteWall>(),
-			//3 => ModContent.WallType<GourdBlockLimeOrangeWall>(),
-			3 => ModContent.WallType<GourdBlockOrangeWall>(),
-			4 => ModContent.WallType<GourdBlockRedWall>(),
-			5 => ModContent.WallType<GourdBlockYellowWall>(),
-			//_ => ModContent.WallType<GourdBlockYellowGreenWall>(),
+			2 => ModContent.WallType<GourdBlockOrangeWall>(),
+			3 => ModContent.WallType<GourdBlockRedWall>(),
+			4 => ModContent.WallType<GourdBlockWhiteWall>(),
+			_ => ModContent.WallType<GourdBlockYellowWall>()
 		};
 
 		int vineType = id switch
 		{
 			0 => ModContent.TileType<GourdVinesGreen>(),
 			1 => ModContent.TileType<GourdVinesLime>(),
-			2 => ModContent.TileType<GourdVinesWhite>(),
-			//3 => ModContent.TileType<GourdVinesOrange>(), //lime and orange
-			3 => ModContent.TileType<GourdVinesOrange>(),
-			4 => ModContent.TileType<GourdVinesRed>(),
-			5 => ModContent.TileType<GourdVinesYellow>(),
-			//_ => ModContent.TileType<GourdVinesYellow>(), //yellow and green
+			2 => ModContent.TileType<GourdVinesOrange>(),
+			3 => ModContent.TileType<GourdVinesRed>(),
+			4 => ModContent.TileType<GourdVinesWhite>(),
+			_ => ModContent.TileType<GourdVinesYellow>()
 		};
 
 		ShapeData shapes = new();
@@ -116,6 +110,31 @@ internal class RottenGourd
 		WorldUtils.Gen(gourdPos, new Shapes.Circle((int)(baseWidth * WorldGen.genRand.NextFloat(0.4f, 0.55f)), (int)(baseHeight * WorldGen.genRand.NextFloat(0.4f, 0.55f)) + 1),
 		Actions.Chain(new Modifiers.Offset(off.X, off.Y - baseHeight - 3), new Actions.ClearTile(), new Modifiers.Blotches(2, 0.4f), new Actions.PlaceTile(TileID.LivingWood)));
 	
+		//place the pet inside of the gourd first
+		bool HasPlacedSeed = false;
+		for (int i = gourdPos.X - 0; i <= gourdPos.X + 1; i++)
+		{
+			for (int j = gourdPos.Y - 10; j <= gourdPos.Y + 30; j++)
+			{
+				if (WorldGen.InWorld(i, j, 50))
+				{
+					Tile tile = Main.tile[i, j];
+					Tile tileBelow = Main.tile[i, j + 1];
+
+					if (!HasPlacedSeed && tile.WallType == wallType && !tile.HasTile && tileBelow.TileType == tileType)
+					{
+						WorldGen.KillTile(i - 1, j);
+						WorldGen.KillTile(i, j);
+						WorldGen.PlaceTile(i - 1, j + 1, tileType);
+						WorldGen.PlaceTile(i, j + 1, tileType);
+						TileGlobal.PlaceObject(i, j, ModContent.TileType<GourdPetSeedTile>(), true, id);
+						HasPlacedSeed = true;
+					}
+				}
+			}
+		}
+
+		//place little gourd seeds on the ground and vines on the roof
 		for (int i = gourdPos.X - 20; i <= gourdPos.X + 20; i++)
 		{
 			for (int j = gourdPos.Y - 10; j <= gourdPos.Y + 30; j++)
@@ -131,11 +150,12 @@ internal class RottenGourd
 						{
 							0 => WorldGen.genRand.Next(0, 3),
 							1 => WorldGen.genRand.Next(3, 6),
-							2 => WorldGen.genRand.Next(12, 15),
-							3 => WorldGen.genRand.Next(6, 9),
-							4 => WorldGen.genRand.Next(9, 12),
-							5 => WorldGen.genRand.Next(15, 18),
+							2 => WorldGen.genRand.Next(6, 9),
+							3 => WorldGen.genRand.Next(9, 12),
+							4 => WorldGen.genRand.Next(12, 15),
+							_ => WorldGen.genRand.Next(15, 18),
 						};
+						
 						TileGlobal.PlaceObject(i, j, ModContent.TileType<GourdGuts>(), true, gutsTileVariant);
 					}
 				}

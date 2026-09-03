@@ -14,8 +14,6 @@ namespace Spooky.Content.NPCs.Minibiomes.Christmas
 {
     public class Marble : ModNPC  
     {
-        bool hasCollidedWithWall = false;
-
         public override void SetStaticDefaults()
         {
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;

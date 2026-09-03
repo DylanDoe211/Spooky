@@ -9,8 +9,6 @@ namespace Spooky.Content.Projectiles.SpiderCave
 {
     public class MiteClawSlash : ModProjectile
     {
-        private static Asset<Texture2D> ProjTexture;
-
         public override void SetStaticDefaults()
 		{
             Main.projFrames[Projectile.type] = 4;

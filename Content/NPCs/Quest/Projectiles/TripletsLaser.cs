@@ -13,12 +13,11 @@ namespace Spooky.Content.NPCs.Quest.Projectiles
 {
     public class TripletsLaser : ModProjectile
     {
-        private static Asset<Texture2D> ProjTexture;
-
         public override void SetStaticDefaults() 
 		{
 			ProjectileID.Sets.DrawScreenCheckFluff[Type] = 2400;
 		}
+		
 		public override void SetDefaults() 
 		{
 			Projectile.width = 8;
@@ -68,18 +67,12 @@ namespace Spooky.Content.NPCs.Quest.Projectiles
 					return true;
 				}
 			}
+			
 			return false;
 		}
-
-        float Counter = 0;
 		
 		public override bool PreDraw(ref Color lightColor)
 		{
-			bool dust = false;
-			if(Projectile.alpha < 5)
-			{
-				dust = true;
-			}
 			Player player  = Main.player[Projectile.owner];
 			Vector2 endPoint = new Vector2(Projectile.ai[0], Projectile.ai[1]);
 			Vector2 unit = endPoint - Projectile.Center;

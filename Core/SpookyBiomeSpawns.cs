@@ -1025,6 +1025,7 @@ namespace Spooky.Core
 				pool.Add(ModContent.NPCType<SeaBunny>(), 2);
 				pool.Add(ModContent.NPCType<SeaSheep>(), 2);
 				pool.Add(ModContent.NPCType<GhostJelly1>(), 1);
+				pool.Add(ModContent.NPCType<BarreleyeFish>(), 1);
 
 				if (spawnInfo.Water)
 				{

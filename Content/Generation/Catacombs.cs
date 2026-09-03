@@ -37,9 +37,6 @@ namespace Spooky.Content.Generation
 {
     public class Catacombs : ModSystem
     {
-        int chosenRoom = 0;
-        int switchRoom = 0;
-
         public static int TotalRoomVariants1 = 24;
         public static int TotalRoomVariants2 = 20;
         public static int EntranceY = 0;

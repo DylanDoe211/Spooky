@@ -12,8 +12,6 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron.Projectiles
 {
     public class SpookySwordPumpkin : ModProjectile
     {
-		int target;
-
 		bool runOnce = true;
 
 		Vector2[] trailLength = new Vector2[10];

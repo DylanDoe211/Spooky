@@ -77,11 +77,11 @@ namespace Spooky.Content.Tiles.Minibiomes.Vegetable.Furniture
 					yield return new Item(Main.rand.Next(Ammos), Main.rand.Next(10, 21));
 					break;
 				}
+			}
 
-				if (Main.rand.NextBool(3))
-				{
-					yield return new Item(ItemID.SilverCoin, Main.rand.Next(1, 11));
-				}
+			if (Main.rand.NextBool(3))
+			{
+				yield return new Item(ItemID.SilverCoin, Main.rand.Next(1, 11));
 			}
 		}
 

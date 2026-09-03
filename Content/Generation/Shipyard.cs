@@ -55,19 +55,16 @@ namespace Spooky.Content.Generation
 			int attemptsLeft = 0;
 
 			//get the two surface points, with one being at the ocean and the other just an edge of the cemetery
-			//normally spirit reforged ectotone API would handle this automatially
-			//however, due to the way the ocean edge variable is decided in vanilla, we have to manually grab the exact edge of the beach where the sand starts
-			//this is because the vanilla variable for where beach biome starts is a set spot that is seperate from the actual beach generation, and as such isnt reliable for getting the exact physical edge of it
 			while (!foundSurfaceLeft && attemptsLeft++ < 100000)
 			{
 				//when the ocean is on the left side of the world, use the left bound and keep going left until a sand tile on the ground is found
 				if (OceanOnLeft)
 				{
-					if (WorldGen.SolidTile(leftBound, LeftY) && Cemetery.NoFloatingIsland(leftBound, LeftY) && Main.tile[leftBound, LeftY].TileType != TileID.Sand)
+					if (leftBound != WorldGen.beachDistance - 35)
 					{
-						LeftY = (int)heightLimit;
-						leftBound -= 5;
+						leftBound = WorldGen.beachDistance - 35;
 					}
+
 					if ((!WorldGen.SolidTile(leftBound, LeftY) || !Cemetery.NoFloatingIsland(leftBound, LeftY)) && LeftY <= Main.worldSurface)
 					{
 						LeftY++;
@@ -93,11 +90,11 @@ namespace Spooky.Content.Generation
 				//when the ocean is on the right side of the world, use the right bound and keep going right until a sand tile on the ground is found
 				if (!OceanOnLeft)
 				{
-					if (WorldGen.SolidTile(rightBound, RightY) && Cemetery.NoFloatingIsland(rightBound, RightY) && Main.tile[rightBound, RightY].TileType != TileID.Sand)
+					if (rightBound != Main.maxTilesX - (WorldGen.beachDistance - 35))
 					{
-						RightY = (int)heightLimit;
-						rightBound += 5;
+						rightBound = Main.maxTilesX - (WorldGen.beachDistance - 35);
 					}
+
 					if ((!WorldGen.SolidTile(rightBound, RightY) || !Cemetery.NoFloatingIsland(rightBound, RightY)) && RightY <= Main.worldSurface)
 					{
 						RightY++;
@@ -445,7 +442,7 @@ namespace Spooky.Content.Generation
 						}
 					}
 
-					if (CanPlaceShipwreck((int)Position.X, StructureY))
+					if (CanPlaceShipwreck((int)Position.X, StructureY, 5, 20))
 					{
 						Mod SpookyMod = Spooky.mod;
 						//3.4.1.335248717
@@ -842,22 +839,33 @@ namespace Spooky.Content.Generation
             return true;
         }
 		
-		//dont allow wrecks to naturally grow too close to each other
-		public static bool CanPlaceShipwreck(int X, int Y)
-        {
-            for (int i = X - 20; i < X + 20; i++)
-            {
-                for (int j = Y - 8; j < Y + 8; j++)
-                {
-                    if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<RotWood>())
-                    {
-                        return false;
-                    }
-                }
-            }
+		public static bool CanPlaceShipwreck(int PositionX, int PositionY, int Width, int TileCheckDistance)
+		{
+			for (int x = PositionX - TileCheckDistance; x <= PositionX + TileCheckDistance; x++)
+			{
+				for (int y = PositionY - TileCheckDistance; y <= PositionY + TileCheckDistance; y++)
+				{
+					if (Main.tile[x, y].TileType == ModContent.TileType<RotWood>())
+					{
+						return false;
+					}
+				}
+			}
 
-            return true;
-        }
+			for (int x = PositionX - Width; x <= PositionX + Width; x++)
+			{
+				if (Main.tile[x, PositionY].HasTile && !Main.tile[x, PositionY - 1].HasTile && !Main.tile[x, PositionY - 2].HasTile && !Main.tile[x, PositionY - 3].HasTile && !Main.tile[x, PositionY - 4].HasTile)
+				{
+					continue;
+				}
+				else
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
 
 		//dont allow wooden crate pots to place too far from shipwrecks
 		public static bool CanPlaceShipwreckPot(int X, int Y)

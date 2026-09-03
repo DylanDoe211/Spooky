@@ -1,22 +1,23 @@
 New Stuff:
--Daffodil resprite, along with small tweaks to the fight to fit the new sprite
 -Added krampus helper outfit leggings
--Added new giant living gourds that spawn in the underground spooky forest that have loot chests in them, as a replacement for the old generic wooden rooms
+-Added new giant living gourds that spawn in the underground spooky forest, each one has a silly new light pet inside!
 -Added sac of flesh as a replacement for just fishing up single blocks in the eye valley, it is a right-clickable consumable item that gives you a bunch of eye valley blocks
 -Added a bunch of new unique pots that generate in all the different spooky mod biomes (Except for the cemetery and eye valley)
 -Added a new firefly light pet that drops from spider war minibosses, and a new crab pet gotten from fishing in the spooky forest
--Added alternate spook fishron drops for electric eel and kraken (I know these are not in tml currently, but we have implemented them now so we dont have to do it later)
+-Added alternate spook fishron drops for the electric eel whip and kraken yoyo (I know these are not in tmodloader currently, but we have implemented them now so we dont have to worry about them later)
 -Added long skeletoids and zomboid glyphomancers to the upper catacombs
 -Added a new achievement for completing the entire spooky mod bestiary
 -Added new game tip to tell players about spooky mods config options
--Added modcalls for various things in spooky mod like boss defeated, event defeated, and more variables
+-Added modcalls for various things in spooky mod like boss defeated, event defeated, and other variables
+
 
 Changes:
 -Charm of the flies no longer has a cooldown that prevents flies from spawning after you get hit
 -Spi-ops chestplate now gives speed boost when hit regardless of how much damage you took
 -Halved cooldown time for the flower armor pollen ability set bonus
--Creepy dog photo puppy no longer attacks you, it now always just attacks enemies
--Backpack chimney projectile damage buffed from 32 -> 40, and it now charges up much faster
+-Creepy dog photo puppy now no longer attacks you ever, it always just attacks enemies
+-Backpack chimney projectile damage buffed from 32 -> 40, and it now charges up faster
+-Old wood staff no longer has amethyst in its recipe, and that has been replaced with 10 glowshrooms instead
 -Krampus quest reward presents now need 5 to research for journey mode
 -Krampus quest reward presents now have a separate drop chance for each piece of the krampus helper vanity
 -Made some spooky mod world generation tasks fill up the progress bar better to track how far along each biome is done generating
@@ -26,24 +27,27 @@ Changes:
 -Krampus job application sign tile now lights up with spelunker potions
 -Spooky mod chandeliers and lanterns finally sway in the wind
 -Reduced the size of the tar pits biome
--Tarrars now play a sound when a player gets close to them
+-Tarrars now play a growling sound when a player gets close to them
+-Daffodil has a massively improved sprite, along with small tweaks to her fight to fit the new sprites
 -Updated daffodil on the spooky mod menu to her new design
 -Updated eye valley background sprites
 -Updated bag of magic beans sprite
--Polished sprites for spooky mod ambient grasses
+-Polished sprites for various spooky mod ambient grasses
 
 Localization Changes:
--Charm of the flies tooltip to remove mention of the removed cooldown
--Spi-ops chestplate tooltip to remove mention of having take a certain amount of damage for the speed boost
--Renamed thorn stem shirt -> flower stem shirt to be consistent with the other two armor pieces
--Flower armor setbonus tooltip to mention reduced cooldown change (30 second cooldown -> 15 second cooldown)
--Removed creepy dog photo tooltip line about the dog becoming aggressive
--Due to removal of gourd 'o lantern items, localization entries for those have been removed
--Added the following new entries to the WorldgenTasks localization:
+-Charm of the flies tooltip modified to remove mention of the now removed cooldown
+-Spi-ops chestplate tooltip modified to remove mention of having take a certain amount of damage for the speed boost to activate
+-Creepy dog photo tooltip modified to remove the part about the dog becoming aggressive as this is removed now
+-Flower armor set bonus tooltip modified to be accurate for the reduced cooldown change (30 seconds -> 15 seconds)
+-Renamed thorn stem shirt -> flower stem shirt to be consistent with the other two armor pieces having "Flower" in their names (The internal name for this entry is FlowerBody)
+-Due to removal of gourd o' lantern items, localization entries for those have been removed
+
+Added the following new entries to the WorldgenTasks localization:
 Shipyard: Creating shipwrecks
 SpookyForestPolish: Polishing the spooky forest
 EyeValleyPolish: Polishing the eye valley
 SpiderCavePolish: Polishing the spider grotto
+
 
 Fixes:
 -Config option for teleporting all players into nose temple combat rooms not working
@@ -51,7 +55,7 @@ Fixes:
 -Many spooky mod ambient objects not being destroyable when you build blocks and other stuff on them
 -Spooky mod ambient objects destroying other ambient objects when growing
 -Haunting harold ghost projectiles not doing damage
--Temple of moco ambush room idols giving off way too much light on retro/trippy lighting modes
+-Temple of moco combat room idols giving off way too much light on retro/trippy lighting modes
 -Spooky mod custom trees breaking one by one when destroyed instead of being fully destroyed immediately
 -Multiple spooky mod custom trees/tiles with special effects being blurry, and some of them having completely incorrect offsets in retro/trippy lighting and snapshot mode
 -Orange spooky grass not drawing special merge texture with green grass when sloped
@@ -60,3 +64,4 @@ Fixes:
 -Bag o' treats candies hitting enemies causing the bag to spawn more candies
 -Peacock oni mask effect inflicting its debuff onto town npcs, friendly critters, and invincible/immortal npcs
 -Razor radish not having extra hitbox range
+-Old wood hammer not having autoswing

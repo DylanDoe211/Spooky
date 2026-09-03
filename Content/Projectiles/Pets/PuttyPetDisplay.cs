@@ -13,9 +13,6 @@ namespace Spooky.Content.Projectiles.Pets
 {
     public class PuttyPetDisplay : ModProjectile
     {
-        int playerStill = 0;
-        bool playerFlying = false;
-
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 2;

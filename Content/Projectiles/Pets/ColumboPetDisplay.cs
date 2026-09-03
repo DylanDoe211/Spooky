@@ -13,9 +13,6 @@ namespace Spooky.Content.Projectiles.Pets
 {
     public class ColumboPetDisplay : ModProjectile
     {
-        int playerStill = 0;
-        bool playerFlying = false;
-
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] = ProjectileID.Sets.SimpleLoop(0, 1, 1)
