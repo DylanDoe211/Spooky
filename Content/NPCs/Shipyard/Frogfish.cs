@@ -29,7 +29,7 @@ namespace Spooky.Content.NPCs.Shipyard
 		public override void SetDefaults()
 		{
             NPC.lifeMax = 50;
-            NPC.damage = 0;
+            NPC.damage = 20;
 			NPC.defense = 0;
 			NPC.width = 60;
 			NPC.height = 36;
@@ -92,27 +92,40 @@ namespace Spooky.Content.NPCs.Shipyard
 
                 NPC.noGravity = true;
                 NPC.aiStyle = 16;
-                AIType = NPCID.Pupfish;
+                AIType = NPCID.Piranha;
             }
             else
             {
-                AISwitchTimer++;
-                if (AISwitchTimer >= 600)
+                Player player = Main.player[NPC.target];
+                bool HasLineOfSight = Collision.CanHitLine(player.position, player.width, player.height, NPC.position, NPC.width, NPC.height);
+                if (!player.wet || !HasLineOfSight)
                 {
-                    if (NPC.aiStyle == 16)
-                    {
-                        NPC.noGravity = false;
-                        NPC.aiStyle = 0;
-                    }
-                    else
-                    {
-                        NPC.noGravity = true;
-                        NPC.aiStyle = 16;
-                        AIType = NPCID.Pupfish;
-                    }
+                    AISwitchTimer++;
 
-                    AISwitchTimer = 0;
-                    NPC.netUpdate = true;
+                    if (AISwitchTimer >= 600)
+                    {
+                        if (NPC.aiStyle == 16)
+                        {
+                            NPC.noGravity = false;
+                            NPC.rotation = 0;
+                            NPC.aiStyle = 0;
+                        }
+                        else
+                        {
+                            NPC.noGravity = true;
+                            NPC.aiStyle = 16;
+                            AIType = NPCID.Piranha;
+                        }
+
+                        AISwitchTimer = 0;
+                        NPC.netUpdate = true;
+                    }
+                }
+                else
+                {
+                    NPC.noGravity = true;
+                    NPC.aiStyle = 16;
+                    AIType = NPCID.Piranha;
                 }
             }
         }

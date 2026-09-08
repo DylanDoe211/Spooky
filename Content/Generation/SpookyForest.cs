@@ -836,11 +836,21 @@ namespace Spooky.Content.Generation
 
 		public void GenerateLargeGourds(GenerationProgress progress, GameConfiguration configuration)
         {
-			for (int X = PositionX - Main.maxTilesX / 42; X <= PositionX + Main.maxTilesX / 42; X++)
+			for (int Y = (int)Main.worldSurface + 15; Y <= Main.maxTilesY / 2 + 50; Y++)
 			{
-				for (int Y = (int)Main.worldSurface + 15; Y <= Main.maxTilesY / 2 + 50; Y++)
+				for (int X = PositionX - Main.maxTilesX / 42; X <= PositionX; X++)
 				{
-					if (WorldGen.genRand.NextBool(1500) && WorldGen.InWorld(X, Y, 50) && Main.tile[X, Y].TileType == ModContent.TileType<SpookyStone>() && CanPlaceGiantGourd(X, Y))
+					int Chance = Main.maxTilesX / 3;
+					if (WorldGen.genRand.NextBool(Chance) && WorldGen.InWorld(X, Y, 50) && Main.tile[X, Y].TileType == ModContent.TileType<SpookyStone>() && CanPlaceGiantGourd(X, Y))
+					{
+						Point16 pos = new Point16(X, Y);
+						RottenGourd.Place(pos);
+					}
+				}
+				for (int X = PositionX; X <= PositionX + Main.maxTilesX / 42; X++)
+				{
+					int Chance = Main.maxTilesX / 3;
+					if (WorldGen.genRand.NextBool(Chance) && WorldGen.InWorld(X, Y, 50) && Main.tile[X, Y].TileType == ModContent.TileType<SpookyStone>() && CanPlaceGiantGourd(X, Y))
 					{
 						Point16 pos = new Point16(X, Y);
 						RottenGourd.Place(pos);

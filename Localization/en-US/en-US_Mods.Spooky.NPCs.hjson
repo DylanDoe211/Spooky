@@ -553,6 +553,8 @@ GhostJelly4.DisplayName: Ghost Jelly
 Frogfish1.DisplayName: Frogfish
 Frogfish2.DisplayName: Frogfish
 BarreleyeFish.DisplayName: Barreleye Fish
+QueenConchSpawn.DisplayName: ""
+QueenConch.DisplayName: Queen Conch
 
 //tameable
 Turkey: {

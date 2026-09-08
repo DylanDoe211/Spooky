@@ -78,12 +78,11 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
 			}
 
             int height = WorldGen.genRand.Next(minSize, maxSize);
-            for (int k = 1; k < height; ++k)
+            for (int k = 1; k < height; k++)
             {
-                if (SolidTile(i, j - k))
+                if (SolidTile(i, j - k) || SolidTile(i, j - k - 1) || SolidTile(i, j - k - 2) || SolidTile(i, j - k - 3) || SolidTile(i, j - k - 4))
                 {
-                    height = k - 2;
-                    break;
+                    return false;
                 }
             }
 

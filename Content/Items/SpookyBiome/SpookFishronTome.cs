@@ -32,7 +32,7 @@ namespace Spooky.Content.Items.SpookyBiome
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-			Projectile.NewProjectileDirect(source, new Vector2(position.X, position.Y + 50), velocity, type, damage, knockback, Main.myPlayer, 8f, 7f);
+			Projectile.NewProjectileDirect(source, new Vector2(position.X, position.Y + 50), velocity, type, damage, knockback, player.whoAmI, 8f, 7f);
 
 			return false;
 		}

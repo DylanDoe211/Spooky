@@ -142,7 +142,7 @@ namespace Spooky.Content.Projectiles.Pets
                     Projectile.velocity.X *= 0.8f;
                 }
 
-                if (Projectile.velocity.Y == 0.35f && Projectile.Distance(player.Center) >= 75f)
+                if (Projectile.velocity.Y == 0.35f && Projectile.Distance(player.Center) >= 90f)
                 {
                     JumpTo(player);
                 }
@@ -171,19 +171,15 @@ namespace Spooky.Content.Projectiles.Pets
             }
             else
             {
-                Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.01f * (float)Projectile.direction;
-
                 Projectile.tileCollide = false;
 
                 Projectile.ai[0] = 0;
 
+                Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.01f * (float)Projectile.direction;
+
                 float Speed = 0.5f;
                 float horiPos = player.Center.X - Projectile.Center.X;
                 float vertiPos = player.Center.Y - Projectile.Center.Y;
-                vertiPos += (float)Main.rand.Next(-10, 15);
-                horiPos += (float)Main.rand.Next(-10, 15);
-                horiPos += (float)(60 * -(float)player.direction);
-                vertiPos -= 60f;
 
                 float playerDistance = (float)Math.Sqrt((double)(horiPos * horiPos + vertiPos * vertiPos));
 
@@ -287,17 +283,17 @@ namespace Spooky.Content.Projectiles.Pets
 
         public void JumpTo(Player player)
         {
+            bool JumpFaster = Projectile.Distance(player.Center) >= 120f;
+
             Vector2 JumpTo = new Vector2(player.Center.X, player.Center.Y - 80);
 
             Vector2 velocity = JumpTo - Projectile.Center;
 
-            bool Faster = Projectile.Distance(player.Center) >= 70f;
-
             float speed = MathHelper.Clamp(velocity.Length() / 36, 5, 15);
             velocity.Normalize();
             velocity.Y -= 0.12f;
-            velocity.X *= (Faster ? 1f : 0.5f);
-            Projectile.velocity = velocity * speed * 1.1f;
+            velocity.X *= 0.65f;
+            Projectile.velocity = velocity * speed * (JumpFaster ? 1.7f : 1.1f);
         }
     }
 }

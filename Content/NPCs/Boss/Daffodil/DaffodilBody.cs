@@ -66,8 +66,7 @@ namespace Spooky.Content.NPCs.Boss.Daffodil
 
         public override void AI()
         {
-            Flags.DaffodilSpawnX = (int)NPC.Center.X;
-            Flags.DaffodilSpawnY = (int)NPC.Center.Y + 30;
+            Flags.DaffodilSpawn = new Vector2(NPC.Center.X, NPC.Center.Y + 30);
             Flags.DaffodilParent = NPC.whoAmI;
 
             //sleepy particles

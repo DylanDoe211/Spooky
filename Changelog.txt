@@ -23,6 +23,7 @@ Changes:
 -Made some spooky mod world generation tasks fill up the progress bar better to track how far along each biome is done generating
 -Removing the lily of rebirth bloom buff off of yourself no longer resets the number of revives you have if you don't have any revives left
 -Removed gourd o' lantern items, breaking a carved gourd with a candle in it now just drops the regular carved gourd and the candle
+-Gourd blocks now have cool additional "discolored" clusters (These can be observed more clearly on the new giant gourds in the underground spooky forest)
 -Eye blocks now grow various eye valley ambient objects on them naturally
 -Krampus job application sign tile now lights up with spelunker potions
 -Spooky mod chandeliers and lanterns finally sway in the wind
@@ -41,12 +42,12 @@ Localization Changes:
 -Flower armor set bonus tooltip modified to be accurate for the reduced cooldown change (30 seconds -> 15 seconds)
 -Renamed thorn stem shirt -> flower stem shirt to be consistent with the other two armor pieces having "Flower" in their names (The internal name for this entry is FlowerBody)
 -Due to removal of gourd o' lantern items, localization entries for those have been removed
-
 Added the following new entries to the WorldgenTasks localization:
 Shipyard: Creating shipwrecks
 SpookyForestPolish: Polishing the spooky forest
 EyeValleyPolish: Polishing the eye valley
 SpiderCavePolish: Polishing the spider grotto
+-As for new content, localization entries for those should be automatically added, if there is anything I have forgotten please let me know!
 
 
 Fixes:
@@ -65,3 +66,4 @@ Fixes:
 -Peacock oni mask effect inflicting its debuff onto town npcs, friendly critters, and invincible/immortal npcs
 -Razor radish not having extra hitbox range
 -Old wood hammer not having autoswing
+-Frogpoon incorrectly dealing melee and not ranged damage

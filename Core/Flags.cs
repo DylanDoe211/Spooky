@@ -33,6 +33,22 @@ namespace Spooky.Core
 		//list of rotten depths biome positions for big dunk to travel between
 		public static List<Vector2> ZombieBiomePositions = new List<Vector2>();
 
+		//bools and misc stuff that doesnt need to be saved/loaded in a world
+		public static int DaffodilParent;
+		public static bool SpawnDaffodil = false;
+		public static bool SpawnBigBone = false;
+		public static bool SpawnOldHunter = false;
+		public static bool SpawnOrroboro = false;
+		public static bool SpawnGhostAmbush = false;
+		public static bool SpawnQueenConch = false;
+		public static Vector2 MocoSpawn;
+        public static Vector2 DaffodilSpawn;
+        public static Vector2 OrroboroSpawn;
+		public static Vector2 TurkeySpawn;
+        public static Vector2 MushGnomeSpawn;
+        public static Vector2 GhostAmbushSpawn;
+		public static Vector2 QueenConchSpawn;
+
 		//bosses
 		public static bool downedRotGourd = false;
         public static bool downedSpookySpirit = false;
@@ -107,26 +123,6 @@ namespace Spooky.Core
         public static bool CatacombKey3 = false;
 		public static bool OldHunterRevived = false;
         public static bool encounteredMan = false;
-
-		//bools and misc stuff that doesnt need to be saved/loaded in a world
-		public static bool SpawnDaffodil = false;
-		public static bool SpawnBigBone = false;
-		public static bool SpawnOldHunter = false;
-		public static bool SpawnOrroboro = false;
-		public static bool SpawnGhostAmbush = false;
-		public static int MocoSpawnX;
-        public static int MocoSpawnY;
-        public static int DaffodilSpawnX;
-        public static int DaffodilSpawnY;
-        public static int DaffodilParent;
-        public static int OrroboroSpawnX;
-        public static int OrroboroSpawnY;
-		public static int TurkeySpawnX;
-		public static int TurkeySpawnY;
-        public static int MushGnomeSpawnX;
-		public static int MushGnomeSpawnY;
-        public static int GhostAmbushSpawnX;
-		public static int GhostAmbushSpawnY;
 
         public override void ClearWorld()
         {

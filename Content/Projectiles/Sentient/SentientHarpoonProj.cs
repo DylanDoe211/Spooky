@@ -19,7 +19,7 @@ namespace Spooky.Content.Projectiles.Sentient
         {
             Projectile.width = 19;
             Projectile.height = 16;
-            Projectile.DamageType = DamageClass.MeleeNoSpeed;
+            Projectile.DamageType = DamageClass.Ranged;
             Projectile.friendly = true;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;

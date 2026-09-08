@@ -30,8 +30,7 @@ namespace Spooky.Content.NPCs.Boss.Moco.Projectiles
 
         public override void AI()
         {
-            Flags.MocoSpawnX = (int)Projectile.Center.X;
-            Flags.MocoSpawnY = (int)Projectile.Center.Y;
+            Flags.MocoSpawn = Projectile.Center;
 
             if (Projectile.timeLeft == 2)
             {

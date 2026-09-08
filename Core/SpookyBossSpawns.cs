@@ -10,6 +10,7 @@ using System;
 using Spooky.Content.Biomes;
 using Spooky.Content.NPCs.Boss.BigBone;
 using Spooky.Content.NPCs.Boss.Daffodil;
+using Spooky.Content.NPCs.Boss.Moco;
 using Spooky.Content.NPCs.Boss.OldHunter;
 using Spooky.Content.NPCs.Boss.Orroboro;
 using Spooky.Content.NPCs.Cemetery.Projectiles;
@@ -18,11 +19,13 @@ using Spooky.Content.NPCs.Friendly;
 using Spooky.Content.NPCs.Minibiomes.Ocean;
 using Spooky.Content.NPCs.NoseCult;
 using Spooky.Content.NPCs.PandoraBox;
+using Spooky.Content.NPCs.Shipyard.Projectiles;
 
 namespace Spooky.Core
 {
     public class SpookyBossSpawns : ModSystem
     {
+        //spawn bosses and various enemies with already existing npcs in the world (for multiplayer purposes)
         public override void PostUpdateEverything()
         {
             if (Main.gameMenu)
@@ -30,7 +33,6 @@ namespace Spooky.Core
                 return;
             }
 
-            //spawn bosses with already existing npcs in the world (for multiplayer purposes)
             //spawn daffodil eye on her body
             if (Flags.SpawnDaffodil)
             {
@@ -218,7 +220,7 @@ namespace Spooky.Core
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    int GhostSpawner = NPC.NewNPC(null,  Flags.GhostAmbushSpawnX, Flags.GhostAmbushSpawnY, ModContent.NPCType<MistGhostSpawn>(), ai2: Flags.RaveyardHappening ? 1 : 0);
+                    int GhostSpawner = NPC.NewNPC(null,  (int)Flags.GhostAmbushSpawn.X, (int)Flags.GhostAmbushSpawn.Y, ModContent.NPCType<MistGhostSpawn>(), ai2: Flags.RaveyardHappening ? 1 : 0);
 
                     if (Main.netMode == NetmodeID.Server)
                     {
@@ -227,7 +229,26 @@ namespace Spooky.Core
                 }
 
                 Flags.SpawnGhostAmbush = false;
+				if (Main.netMode == NetmodeID.Server)
+				{
+					NetMessage.SendData(MessageID.WorldData);
+				}
+            }
 
+            //queen conch
+            if (Flags.SpawnQueenConch)
+            {
+                if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    int ConchSpawner = NPC.NewNPC(null, (int)Flags.QueenConchSpawn.X, (int)Flags.QueenConchSpawn.Y, ModContent.NPCType<QueenConchSpawn>());
+
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        NetMessage.SendData(MessageID.SyncNPC, number: ConchSpawner);
+                    }
+                }
+
+                Flags.SpawnQueenConch = false;
 				if (Main.netMode == NetmodeID.Server)
 				{
 					NetMessage.SendData(MessageID.WorldData);

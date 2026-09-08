@@ -357,19 +357,13 @@ namespace Spooky.Content.Generation
                         //place shovels
                         if (WorldGen.genRand.NextBool(15) && !tileAbove.HasTile && !tile.LeftSlope && !tile.RightSlope && !tile.IsHalfBlock)
                         {
-                            WorldGen.PlaceObject(X, Y - 1, ModContent.TileType<GraveShovelTile>());
+                            TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<GraveShovelTile>());
                         }
 
                         //grow cemetery weeds
                         if (WorldGen.genRand.NextBool() && !tileAbove.HasTile && !tile.LeftSlope && !tile.RightSlope && !tile.IsHalfBlock)
                         {
-                            WorldGen.PlaceTile(X, Y - 1, (ushort)ModContent.TileType<CemeteryWeeds>());
-                            tileAbove.TileFrameX = (short)(WorldGen.genRand.Next(18) * 18);
-                            WorldGen.SquareTileFrame(X, Y + 1, true);
-                            if (Main.netMode == NetmodeID.Server)
-                            {
-                                NetMessage.SendTileSquare(-1, X, Y - 1, 1, TileChangeType.None);
-                            }
+                            TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<CemeteryWeeds>(), true, WorldGen.genRand.Next(0, 18));
                         }
                     }
                 }
@@ -394,15 +388,15 @@ namespace Spooky.Content.Generation
                                 {
                                     if (WorldGen.genRand.NextBool(12))
                                     {
-                                        WorldGen.PlaceObject(TombstoneX, Y - 1, ModContent.TileType<MysteriousTombstone>(), true, WorldGen.genRand.Next(0, 3));
+                                        TileGlobal.PlaceObject(TombstoneX, Y - 1, ModContent.TileType<MysteriousTombstone>(), true, WorldGen.genRand.Next(0, 3));
                                     }
                                     else if (WorldGen.genRand.NextBool(6))
                                     {
-                                        WorldGen.PlaceObject(TombstoneX, Y - 1, ModContent.TileType<TombstoneCracked>(), true, WorldGen.genRand.Next(0, 3));
+                                        TileGlobal.PlaceObject(TombstoneX, Y - 1, ModContent.TileType<TombstoneCracked>(), true, WorldGen.genRand.Next(0, 3));
                                     }
                                     else if (WorldGen.genRand.NextBool(3))
                                     {
-                                        WorldGen.PlaceObject(TombstoneX, Y - 1, ModContent.TileType<Tombstone>(), true, WorldGen.genRand.Next(0, 3));
+                                        TileGlobal.PlaceObject(TombstoneX, Y - 1, ModContent.TileType<Tombstone>(), true, WorldGen.genRand.Next(0, 3));
                                     }
                                 }
                             }

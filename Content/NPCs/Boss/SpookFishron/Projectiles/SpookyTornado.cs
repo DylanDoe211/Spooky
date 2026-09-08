@@ -110,8 +110,7 @@ namespace Spooky.Content.NPCs.Boss.SpookFishron.Projectiles
 			if (Projectile.timeLeft < 60)
 			{
 				Projectile.alpha += 5;
-
-				if (Projectile.alpha >= 255)
+				if (Projectile.alpha >= 125)
 				{
 					Projectile.Kill();
 				}

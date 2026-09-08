@@ -103,8 +103,7 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 			if (Projectile.timeLeft < 60)
 			{
 				Projectile.alpha += 5;
-
-				if (Projectile.alpha >= 255)
+				if (Projectile.alpha >= 125)
 				{
 					Projectile.Kill();
 				}

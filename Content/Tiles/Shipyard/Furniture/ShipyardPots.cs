@@ -33,7 +33,7 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
             TileObjectData.newTile.DrawYOffset = 2;
 			TileObjectData.addTile(Type);
             AddMapEntry(new Color(149, 80, 81), Language.GetText("MapObject.Pot"));
-            DustType = DustID.Slush;
+            DustType = DustID.Ash;
 		}
 
 		public override IEnumerable<Item> GetItemDrops(int i, int j)

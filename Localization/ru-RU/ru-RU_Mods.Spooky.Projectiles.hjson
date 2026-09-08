@@ -314,7 +314,7 @@ BlueberryExplosion.DisplayName: Frost Explosion
 SnotBulletProj.DisplayName: Mucus Bullet
 BrainBeam.DisplayName: Confusion Beam
 BiojetterDeath.DisplayName: Biojetter
-MocoSpawnerProj.DisplayName: Moco Spawner
+// MocoSpawnerProj.DisplayName: Moco Spawner
 HeartGlob1.DisplayName: Heart Glob1
 HeartGlob2.DisplayName: Heart Glob2
 AppendixLingerCloud.DisplayName: Ichor Cloud
@@ -762,3 +762,4 @@ DutchmanPipeHitProj.DisplayName: ""
 // GourdPetRed.DisplayName: Pedro
 // GourdPetWhite.DisplayName: Pickle
 // GourdPetYellow.DisplayName: Augustus
+// BleachedTunaBubble.DisplayName: Bubble

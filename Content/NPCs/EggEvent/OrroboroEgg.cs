@@ -161,8 +161,7 @@ namespace Spooky.Content.NPCs.EggEvent
         {
             Player player = Main.LocalPlayer;
 
-            Flags.OrroboroSpawnX = (int)NPC.Center.X;
-            Flags.OrroboroSpawnY = (int)NPC.Center.Y;
+            Flags.OrroboroSpawn = NPC.Center;
 
             if (EggEventWorld.EggEventActive || !Flags.downedEggEvent) 
             {

@@ -552,6 +552,9 @@ ToyRobotTank.DisplayName: Игрушечный танк-бот
 // GhostJelly4.DisplayName: Ghost Jelly
 // Frogfish1.DisplayName: Frogfish
 // Frogfish2.DisplayName: Frogfish
+// BarreleyeFish.DisplayName: Barreleye Fish
+// QueenConchSpawn.DisplayName: ""
+// QueenConch.DisplayName: Queen Conch
 
 //tameable
 Turkey: {
@@ -560,5 +563,3 @@ Turkey: {
 	State2: Следующий индюк
 	State3: Стоячий индюк
 }
-
-// BarreleyeFish.DisplayName: Barreleye Fish

@@ -13,6 +13,7 @@ using Spooky.Content.NPCs.Cemetery;
 using Spooky.Content.NPCs.Cemetery.Projectiles;
 using Spooky.Content.NPCs.PandoraBox;
 using Spooky.Content.Tiles.Cemetery.Furniture;
+using Spooky.Content.Tiles.Shipyard.Furniture;
 
 namespace Spooky.Content.Items.BossSummon
 {
@@ -57,8 +58,8 @@ namespace Spooky.Content.Items.BossSummon
 			Vector2 playerTileCenter = new Vector2(player.Center.X / 16, player.Center.Y / 16);
 
 			//used so spooky spirit altar has priority over gravestones
-			bool CanSpawnMistGhost = true;
-			bool FoundValidGrave = false;
+			bool CanSpawnNonBossEnemies = true;
+			bool FoundValidInteractionTile = false;
 			bool FoundValidAltar = false;
 
 			if (NPC.AnyNPCs(ModContent.NPCType<SpookySpirit>()) || PandoraBoxWorld.PandoraEventActive)
@@ -94,7 +95,7 @@ namespace Spooky.Content.Items.BossSummon
 					if (Main.tile[i, j].TileType == ModContent.TileType<SpiritAltar>())
 					{
 						FoundValidAltar = true;
-						CanSpawnMistGhost = false;
+						CanSpawnNonBossEnemies = false;
 
 						Tile tile = Framing.GetTileSafely(i, j);
 
@@ -132,11 +133,11 @@ namespace Spooky.Content.Items.BossSummon
 				}
 			}
 
-			if (CanSpawnMistGhost)
+			if (CanSpawnNonBossEnemies)
 			{
 				for (int i = (int)playerTileCenter.X - 8; i <= (int)playerTileCenter.X + 8; i++)
 				{
-					if (i == (int)playerTileCenter.X + 8 && !FoundValidGrave)
+					if (i == (int)playerTileCenter.X + 8 && !FoundValidInteractionTile)
 					{
 						SoundEngine.PlaySound(BeepSound1, player.Center);
 						CustomPopupText.SpawnText(player.Top, Language.GetTextValue("Mods.Spooky.EventsAndBosses.EMFReaderNoGhost"), Color.Lime, new Vector2(0, -2), 60);
@@ -146,7 +147,7 @@ namespace Spooky.Content.Items.BossSummon
 					{
 						if (Main.tile[i, j].TileType == ModContent.TileType<MysteriousTombstone>())
 						{
-							FoundValidGrave = true;
+							FoundValidInteractionTile = true;
 
 							Tile tile = Framing.GetTileSafely(i, j);
 
@@ -186,8 +187,7 @@ namespace Spooky.Content.Items.BossSummon
 								int SpawnX = (left * 16) + 16;
 								int SpawnY = (top * 16) + 20;
 
-								Flags.GhostAmbushSpawnX = SpawnX;
-								Flags.GhostAmbushSpawnY = SpawnY;
+								Flags.GhostAmbushSpawn = new Vector2(SpawnX, SpawnY);
 
 								if (Main.netMode != NetmodeID.SinglePlayer)
                     			{
@@ -198,6 +198,40 @@ namespace Spooky.Content.Items.BossSummon
 								else
 								{
 									Flags.SpawnGhostAmbush = true;
+								}
+								
+								return;
+							}
+						}
+						else if (Main.tile[i, j].TileType == ModContent.TileType<QueenShell>())
+						{
+							FoundValidInteractionTile = true;
+
+							Tile tile = Framing.GetTileSafely(i, j);
+
+							int left = i - tile.TileFrameX / 18 % 4;
+							int top = j - tile.TileFrameY / 18 % 3;
+
+							if (!NPC.AnyNPCs(ModContent.NPCType<MistGhost>()))
+							{
+								SoundEngine.PlaySound(BeepSound2, player.Center);
+
+								CustomPopupText.SpawnText(player.Top, Language.GetTextValue("Mods.Spooky.EventsAndBosses.EMFReaderGhost"), Color.Cyan, new Vector2(0, -2), 60);
+
+								int SpawnX = (left * 16) + 35;
+								int SpawnY = (top * 16) + 45;
+
+								Flags.QueenConchSpawn = new Vector2(SpawnX, SpawnY);
+
+								if (Main.netMode != NetmodeID.SinglePlayer)
+                    			{
+									ModPacket packet = Mod.GetPacket();
+									packet.Write((byte)SpookyMessageType.SpawnQueenConch);
+									packet.Send();
+								}
+								else
+								{
+									Flags.SpawnQueenConch = true;
 								}
 								
 								return;

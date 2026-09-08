@@ -98,7 +98,7 @@ namespace Spooky.Content.Projectiles.Pets
                 //prevents the pet from getting stuck on sloped tiled
                 Collision.StepUp(ref Projectile.position, ref Projectile.velocity, Projectile.width, Projectile.height, ref Projectile.stepSpeed, ref Projectile.gfxOffY);
                 
-                float MaxDist = IsSecondVariant ? 90f : 70f;
+                float MaxDist = IsSecondVariant ? 90f : 60f;
 
                 if (Projectile.velocity.Y == 0 && ((HoleBelow() && playerDistance > (MaxDist + 30)) || (playerDistance > (MaxDist + 30) && Projectile.position.X == Projectile.oldPosition.X)))
                 {
@@ -117,17 +117,17 @@ namespace Spooky.Content.Projectiles.Pets
                     if (player.position.X - Projectile.position.X > 0f)
                     {
                         Projectile.velocity.X += 0.12f;
-                        if (Projectile.velocity.X > 7f)
+                        if (Projectile.velocity.X > 6f)
                         {
-                            Projectile.velocity.X = 7f;
+                            Projectile.velocity.X = 6f;
                         }
                     }
                     else
                     {
                         Projectile.velocity.X -= 0.12f;
-                        if (Projectile.velocity.X < -7f)
+                        if (Projectile.velocity.X < -6f)
                         {
-                            Projectile.velocity.X = -7f;
+                            Projectile.velocity.X = -6f;
                         }
                     }
                 }
@@ -172,25 +172,13 @@ namespace Spooky.Content.Projectiles.Pets
             {
                 Projectile.ai[0] = 0;
 
-                float Speed = 0.5f;
-                Projectile.tileCollide = false;
-                Vector2 vector3 = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);
-                float horiPos = Main.player[Projectile.owner].position.X + (float)(Main.player[Projectile.owner].width / 2) - vector3.X;
-                float vertiPos = Main.player[Projectile.owner].position.Y + (float)(Main.player[Projectile.owner].height / 2) - vector3.Y;
-                vertiPos += (float)Main.rand.Next(-10, 21);
-                horiPos += (float)Main.rand.Next(-10, 21);
-                horiPos += (float)(60 * -(float)player.direction);
-                vertiPos -= 60f;
-                float playerDistance = (float)Math.Sqrt((double)(horiPos * horiPos + vertiPos * vertiPos));
-                float num21 = 18f;
-                float num27 = (float)Math.Sqrt((double)(horiPos * horiPos + vertiPos * vertiPos));
+                Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.01f * (float)Projectile.direction;
 
-                if (playerDistance > 1200f)
-                {
-                    Projectile.position.X = player.Center.X - (float)(Projectile.width / 2);
-                    Projectile.position.Y = player.Center.Y - (float)(Projectile.height / 2);
-                    Projectile.netUpdate = true;
-                }
+                float Speed = 0.5f;
+                float horiPos = player.Center.X - Projectile.Center.X;
+                float vertiPos = player.Center.Y - Projectile.Center.Y;
+
+                float playerDistance = (float)Math.Sqrt((double)(horiPos * horiPos + vertiPos * vertiPos));
 
                 if (playerDistance < 100f)
                 {
@@ -211,26 +199,34 @@ namespace Spooky.Content.Projectiles.Pets
                     }
                 }
 
+                if (playerDistance > 1200f)
+                {
+                    Projectile.position.X = player.Center.X - (float)(Projectile.width / 2);
+                    Projectile.position.Y = player.Center.Y - (float)(Projectile.height / 2);
+                    Projectile.netUpdate = true;
+                }
+
                 if (playerDistance < 50f)
                 {
                     if (Math.Abs(Projectile.velocity.X) > 2f || Math.Abs(Projectile.velocity.Y) > 2f)
                     {
                         Projectile.velocity *= 0.90f;
                     }
+
                     Speed = 0.02f;
                 }
                 else
                 {
-                    if (playerDistance < 100f)
+                    if (playerDistance < 150f)
                     {
-                        Speed = 0.35f;
+                        Speed = 0.1f;
                     }
-                    if (playerDistance > 300f)
+                    if (playerDistance > 400f)
                     {
-                        Speed = 1f;
+                        Speed = 0.25f;
                     }
                     
-                    playerDistance = num21 / playerDistance;
+                    playerDistance = 18f / playerDistance;
                     horiPos *= playerDistance;
                     vertiPos *= playerDistance;
                 }
@@ -270,8 +266,6 @@ namespace Spooky.Content.Projectiles.Pets
                         Projectile.velocity.Y = Projectile.velocity.Y - Speed * 2f;
                     }
                 }
-
-                Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.025f * (float)Projectile.direction;
             }
         }
 

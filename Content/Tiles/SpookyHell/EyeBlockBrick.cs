@@ -26,20 +26,18 @@ namespace Spooky.Content.Tiles.SpookyHell
 		}
 
         public override void PostTileFrame(int i, int j, int up, int down, int left, int right, int upLeft, int upRight, int downLeft, int downRight)
-        {
-            const int HorizontalFrames = 3; //number of horizontal frames in each row of custom textures
-			Tile tile = Main.tile[i, j];
+		{
+			var tile = Main.tile[i, j];
 
-            //Rng variants (done in a checkered pattern so that reframes don't cause a chain reaction)
-            if (WorldGen.genRand.NextBool(3) && (i + j) % 2 == 0 && tile.TileFrameY == 18 && tile.TileFrameX >= 18 && tile.TileFrameX < 72)
-            {
-                Point16 CustomFrameStart = new(18 * 7, 18 * 12); //the frame for where our custom tile textures begin
-				int RandomFrame = Main.rand.Next(3); //how many textures there are to choose from total
+			if (Main.rand.NextBool(10) && tile.TileFrameX is 18 or 36 or 54 && tile.TileFrameY is 18) //Plain center frames
+			{
+				Point16 result = new(18 * 7, 18 * 12);
+				int random = Main.rand.Next(3);
 
-				tile.TileFrameX = (short)(CustomFrameStart.X + 18 * (RandomFrame % HorizontalFrames));
-				tile.TileFrameY = (short)(CustomFrameStart.Y + 18 * (RandomFrame / HorizontalFrames));
-            }
-        }
+				tile.TileFrameX = (short)(result.X + 18 * random);
+				tile.TileFrameY = result.Y;
+			}
+		}
 
         public override bool HasWalkDust()
         {

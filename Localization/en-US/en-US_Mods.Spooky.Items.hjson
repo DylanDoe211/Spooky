@@ -2734,6 +2734,11 @@ SummonItem4: {
 		'''
 }
 
+BleachedTuna: {
+	DisplayName: Bleached Tuna
+	Tooltip: Rapidly belches out short range bubbles
+}
+
 BottomlessPebbleBag: {
 	Tooltip: ""
 	DisplayName: Bottomless Pebble Bag
@@ -7377,5 +7382,14 @@ PetCommander: {
 		'''
 		Click on any nearby tamed turkey while holding this to give it commands
 		Allows the turkey to roam freely, follow you, or stay put
+		'''
+}
+
+PirateChest: {
+	DisplayName: Pirate's Chest
+	Tooltip:
+		'''
+		Contains some pirate treasure and dabloons!
+		"{$CommonItemTooltip.RightClickToOpen}"
 		'''
 }

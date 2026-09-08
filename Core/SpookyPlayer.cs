@@ -12,8 +12,9 @@ using Spooky.Content.Buffs.Debuff;
 using Spooky.Content.Items.Fishing;
 using Spooky.Content.Items.Fishing.Crate;
 using Spooky.Content.Items.Pets;
-using Spooky.Content.Items.SpookyBiome.Misc;
+using Spooky.Content.Items.Shipyard;
 using Spooky.Content.Items.SpiderCave;
+using Spooky.Content.Items.SpookyBiome.Misc;
 using Spooky.Content.Items.SpookyHell.Sentient;
 using Spooky.Content.NPCs.Boss.SpookFishron;
 using Spooky.Content.NPCs.SpookyHell;
@@ -498,6 +499,18 @@ namespace Spooky.Core
 					if (attempt.rare && attempt.crate)
 					{
 						itemDrop = Main.hardMode ? ModContent.ItemType<ShipyardCrate2>() : ModContent.ItemType<ShipyardCrate>();
+                    }
+
+                    //pirate treasure chests
+                    if (attempt.uncommon && Main.rand.NextBool(3))
+					{
+						itemDrop = ModContent.ItemType<PirateChest>();
+                    }
+
+                    //bleached tuna
+                    if (attempt.rare && Main.rand.NextBool())
+					{
+						itemDrop = ModContent.ItemType<BleachedTuna>();
                     }
 				}
 
