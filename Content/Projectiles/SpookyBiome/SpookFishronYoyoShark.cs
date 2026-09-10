@@ -54,14 +54,9 @@ namespace Spooky.Content.Projectiles.SpookyBiome
                 {
                     Color glowColor = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(Color.OrangeRed);
 
-                    for (int circle = 0; circle < 360; circle += 90)
-                    {
-                        Vector2 circular = new Vector2(Main.rand.NextFloat(1f, 5f), Main.rand.NextFloat(1f, 5f)).RotatedBy(MathHelper.ToRadians(circle));
-
-                        float scale = Projectile.scale * (Projectile.oldPos.Length - oldPos) / Projectile.oldPos.Length * 1f;
-                        Vector2 drawPos = Projectile.oldPos[oldPos] - Main.screenPosition + (drawOriginTrail * scale) + new Vector2(0f, Projectile.gfxOffY);
-                        Main.EntitySpriteDraw(ProjTexture.Value, drawPos + circular, rectangle, color * 0.75f, Projectile.rotation, drawOriginTrail, scale, spriteEffects, 0);
-                    }
+                    float scale = Projectile.scale * (Projectile.oldPos.Length - oldPos) / Projectile.oldPos.Length * 1f;
+                    Vector2 drawPos = Projectile.oldPos[oldPos] - Main.screenPosition + (drawOriginTrail * scale) + new Vector2(0f, Projectile.gfxOffY);
+                    Main.EntitySpriteDraw(ProjTexture.Value, drawPos, rectangle, color * 0.75f, Projectile.rotation, drawOriginTrail, scale, spriteEffects, 0);
                 }
             }
 

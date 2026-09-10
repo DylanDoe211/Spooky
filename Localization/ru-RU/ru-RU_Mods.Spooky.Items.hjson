@@ -2745,6 +2745,11 @@ BleachedTuna: {
 	// Tooltip: Rapidly belches out short range bubbles
 }
 
+PiratePotion: {
+	// DisplayName: Scallywag Potion
+	// Tooltip: Causes enemies to rarely drop gold on hit
+}
+
 BottomlessPebbleBag: {
 	Tooltip: ""
 	DisplayName: Бездонный мешок камешков

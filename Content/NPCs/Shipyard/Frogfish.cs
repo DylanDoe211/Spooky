@@ -18,12 +18,11 @@ namespace Spooky.Content.NPCs.Shipyard
 		public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 6;
-            NPCID.Sets.CountsAsCritter[NPC.type] = true;
 
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
-				Velocity = 1f
-			};
+                CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/FrogfishBestiary"
+            };
 		}
 
 		public override void SetDefaults()
@@ -31,9 +30,10 @@ namespace Spooky.Content.NPCs.Shipyard
             NPC.lifeMax = 50;
             NPC.damage = 20;
 			NPC.defense = 0;
-			NPC.width = 60;
-			NPC.height = 36;
+			NPC.width = 70;
+			NPC.height = 45;
             NPC.npcSlots = 0.5f;
+            NPC.value = Item.buyPrice(0, 0, 0, 50);
             NPC.noGravity = false;
             NPC.chaseable = false;
 			NPC.HitSound = SoundID.NPCHit1;
@@ -133,5 +133,10 @@ namespace Spooky.Content.NPCs.Shipyard
 
     public class Frogfish2 : Frogfish1
 	{
+        public override void SetStaticDefaults()
+		{
+			Main.npcFrameCount[NPC.type] = 6;
+            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
+		}
     }
 }

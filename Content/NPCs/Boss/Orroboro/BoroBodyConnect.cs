@@ -29,11 +29,13 @@ namespace Spooky.Content.NPCs.Boss.Orroboro
             NPC.defense = 30;
             NPC.width = 42;
             NPC.height = 42;
+            NPC.npcSlots = 0f;
             NPC.knockBackResist = 0f;
             NPC.lavaImmune = true;
             NPC.noTileCollide = true;
             NPC.netAlways = true;
             NPC.noGravity = true;
+            NPC.dontCountMe = true;
             NPC.HitSound = SoundID.NPCHit13;
             NPC.aiStyle = -1;
         }

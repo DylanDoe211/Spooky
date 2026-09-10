@@ -11,7 +11,7 @@ namespace Spooky.Content.Tiles.SpookyBiome.GourdBlocks
         {
             Main.wallHouse[Type] = true;
             AddMapEntry(new Color(0, 122, 48));
-            DustType = DustID.WoodFurniture;
+            DustType = 288;
         }
     }
 }

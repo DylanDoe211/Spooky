@@ -68,14 +68,14 @@ namespace Spooky.Content.NPCs.Shipyard
 
         public override void SetDefaults()
         {
-            NPC.lifeMax = 1200;
+            NPC.lifeMax = 1000;
             NPC.damage = 35;
             NPC.defense = 15;
             NPC.width = 45;
 			NPC.height = 45;
             NPC.npcSlots = 1f;
 			NPC.knockBackResist = 0f;
-            NPC.value = Item.buyPrice(0, 1, 0, 0);
+            NPC.value = Item.buyPrice(0, 0, 50, 0);
             NPC.noGravity = true;
             NPC.noTileCollide = true;
             NPC.HitSound = SoundID.NPCHit48 with { Pitch = -0.5f };

@@ -35,6 +35,7 @@ namespace Spooky.Content.NPCs.Shipyard
 			NPC.defense = 0;
 			NPC.width = 30;
 			NPC.height = 66;
+            NPC.value = Item.buyPrice(0, 0, 0, 50);
             NPC.noGravity = true;
             NPC.noTileCollide = true;
 			NPC.HitSound = SoundID.NPCHit25;

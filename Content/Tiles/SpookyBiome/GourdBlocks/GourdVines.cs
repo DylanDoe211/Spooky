@@ -38,8 +38,8 @@ namespace Spooky.Content.Tiles.SpookyBiome.GourdBlocks
 
 		public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
         {
-			int[] ValidTiles = { Type, ModContent.TileType<GourdBlockGreen>(), ModContent.TileType<GourdBlockLime>(), ModContent.TileType<GourdBlockLimeOrange>(),
-			ModContent.TileType<GourdBlockOrange>(), ModContent.TileType<GourdBlockRed>(), ModContent.TileType<GourdBlockWhite>(), ModContent.TileType<GourdBlockYellow>(), ModContent.TileType<GourdBlockYellowGreen>() };
+			int[] ValidTiles = { Type, ModContent.TileType<GourdBlockGreen>(), ModContent.TileType<GourdBlockLime>(), ModContent.TileType<GourdBlockLimeOrange>(), ModContent.TileType<GourdBlockOrange>(), 
+				ModContent.TileType<GourdBlockRed>(), ModContent.TileType<GourdBlockWhite>(), ModContent.TileType<GourdBlockYellow>(), ModContent.TileType<GourdBlockYellowGreen>() };
 
 			if (!ValidTiles.Contains(Main.tile[i, j - 1].TileType))
 			{
@@ -66,7 +66,7 @@ namespace Spooky.Content.Tiles.SpookyBiome.GourdBlocks
                     {
 						break;
 					}
-					else if (!testTile.HasTile || ValidTiles.Contains(testTile.TileType)) 
+					else if (!testTile.HasTile || !ValidTiles.Contains(testTile.TileType)) 
                     {
 						Test--;
 						continue;

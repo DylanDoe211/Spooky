@@ -158,7 +158,7 @@ namespace Spooky.Content.Generation
 				int EndValue = origin.X + biomeSize + 2;
 				progress.Set((X - StartValue) / (EndValue - StartValue));
 
-				for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= HunterHousePositionY + (HunterHouseOffsetY / 2); Y += YIncrement)
+                for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= (int)(origin.Y + verticalRadius * 0.4f) - 30; Y += YIncrement)
 				{
 					if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
 					{
@@ -170,7 +170,7 @@ namespace Spooky.Content.Generation
 							int NewX = X + WorldGen.genRand.Next(-20, 21);
 							int NewY = Y + WorldGen.genRand.Next(-20, 21);
 
-							CavePatch(NewX, NewY);
+                            CavePatch(NewX, NewY);
 						}
 					}
 				}
@@ -451,6 +451,19 @@ namespace Spooky.Content.Generation
 
             //place old hunter arena
             Vector2 ArenaOrigin = new Vector2(startPosX - 50, (HunterHousePositionY + (HunterHouseOffsetY / 2)) - 25);
+
+            //place soil blocks so the old hunters house isnt floating
+            for (int X = (int)startPosX - 55; X <= (int)startPosX + 55; X++)
+            {
+				for (int Y = (HunterHousePositionY + (HunterHouseOffsetY / 2)) + 8; Y <= origin.Y + verticalRadius + 3; Y++)
+                {
+					if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
+					{
+                        WorldGen.KillTile(X, Y);
+                        WorldGen.PlaceTile(X, Y, ModContent.TileType<DampSoil>());
+                    }
+                }
+            }
 
             SpookyWorldMethods.PlaceCircle((int)ArenaOrigin.X + 50, (int)ArenaOrigin.Y, -1, 0, 20, true, false);
 
@@ -826,7 +839,7 @@ namespace Spooky.Content.Generation
 		{
 			double SizeX = WorldGen.genRand.Next(75, 125);
 			double SizeY = WorldGen.genRand.Next(20, 50);
-			double WorldSizeScale = 1.5; //(double)Main.maxTilesX / 4200;
+			double WorldSizeScale = 1.5;
 
 			SizeX *= WorldSizeScale;
 			SizeY *= WorldSizeScale;

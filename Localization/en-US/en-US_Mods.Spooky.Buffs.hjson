@@ -784,3 +784,8 @@ GourdPetYellowBuff: {
 	DisplayName: Augustus
 	Description: The gourd lights your way!
 }
+
+PiratePotionBuff: {
+	DisplayName: Scallywag
+	Description: Yaarg!
+}

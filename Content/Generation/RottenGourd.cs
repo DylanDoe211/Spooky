@@ -117,8 +117,8 @@ namespace Spooky.Content.Generation
 				shapes = tileData;
 			}
 
-			WorldUtils.Gen(gourdPos, new Shapes.Circle((int)(baseWidth * WorldGen.genRand.NextFloat(0.4f, 0.55f)), (int)(baseHeight * WorldGen.genRand.NextFloat(0.4f, 0.55f)) + 1),
-			Actions.Chain(new Modifiers.Offset(off.X, off.Y - baseHeight - 3), new Actions.ClearTile(), new Modifiers.Blotches(2, 0.4f), new Actions.PlaceTile(TileID.LivingWood)));
+			WorldUtils.Gen(gourdPos, new Shapes.Circle((int)(baseWidth * 0.55f), (int)(baseHeight * 0.55f) + 1), Actions.Chain(new Modifiers.Offset(off.X, off.Y - baseHeight - 3), 
+			new Actions.ClearTile(), new Modifiers.Blotches(2, 0.4f), new Actions.PlaceTile(TileID.LivingWood)));
 		
 			//place the pet inside of the gourd first
 			bool HasPlacedSeed = false;

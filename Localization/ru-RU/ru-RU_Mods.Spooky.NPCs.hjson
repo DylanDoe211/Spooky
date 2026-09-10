@@ -555,6 +555,9 @@ ToyRobotTank.DisplayName: Игрушечный танк-бот
 // BarreleyeFish.DisplayName: Barreleye Fish
 // QueenConchSpawn.DisplayName: ""
 // QueenConch.DisplayName: Queen Conch
+// SeaSlugBody.DisplayName: Sea Slug
+// SeaSlugHead.DisplayName: Sea Slug
+// SeaSlugTail.DisplayName: Sea Slug
 
 //tameable
 Turkey: {

@@ -840,7 +840,7 @@ namespace Spooky.Content.Generation
 			{
 				for (int X = PositionX - Main.maxTilesX / 42; X <= PositionX; X++)
 				{
-					int Chance = Main.maxTilesX / 3;
+					int Chance = Main.maxTilesX / 4;
 					if (WorldGen.genRand.NextBool(Chance) && WorldGen.InWorld(X, Y, 50) && Main.tile[X, Y].TileType == ModContent.TileType<SpookyStone>() && CanPlaceGiantGourd(X, Y))
 					{
 						Point16 pos = new Point16(X, Y);
@@ -849,7 +849,7 @@ namespace Spooky.Content.Generation
 				}
 				for (int X = PositionX; X <= PositionX + Main.maxTilesX / 42; X++)
 				{
-					int Chance = Main.maxTilesX / 3;
+					int Chance = Main.maxTilesX / 4;
 					if (WorldGen.genRand.NextBool(Chance) && WorldGen.InWorld(X, Y, 50) && Main.tile[X, Y].TileType == ModContent.TileType<SpookyStone>() && CanPlaceGiantGourd(X, Y))
 					{
 						Point16 pos = new Point16(X, Y);
@@ -862,7 +862,7 @@ namespace Spooky.Content.Generation
 		public bool CanPlaceGiantGourd(int PositionX, int PositionY)
 		{
 			//change the distance between gourds based on worldsize so each worldsize has a generally equal amount of gourds
-			int Distance = Main.maxTilesX / 75;
+			int Distance = Main.maxTilesX / 68;
 
 			//dont allow gourds to place too close to each other
 			for (int i = PositionX - Distance; i < PositionX + Distance; i++)

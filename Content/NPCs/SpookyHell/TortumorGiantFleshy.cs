@@ -209,9 +209,9 @@ namespace Spooky.Content.NPCs.SpookyHell
 			if (NPC.life <= 0) 
             {
                 //spawn gores
-                for (int numGores = 1; numGores <= 15; numGores++)
+                if (Main.netMode != NetmodeID.Server) 
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 15; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, new Vector2(Main.rand.Next(-18, 19), Main.rand.Next(-18, 19)), ModContent.Find<ModGore>("Spooky/TortumorFleshyGore" + Main.rand.Next(1, 4)).Type, Main.rand.NextFloat(1.2f, 1.5f));
                     }

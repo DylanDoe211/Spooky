@@ -7,7 +7,7 @@ New Stuff:
 -Added alternate spook fishron drops for the electric eel whip and kraken yoyo (I know these are not in tmodloader currently, but we have implemented them now so we dont have to worry about them later)
 -Added long skeletoids and zomboid glyphomancers to the upper catacombs
 -Added a new achievement for completing the entire spooky mod bestiary
--Added new game tip to tell players about spooky mods config options
+-Added a new game tip to tell players about spooky mods config options
 -Added modcalls for various things in spooky mod like boss defeated, event defeated, and other variables
 
 
@@ -24,16 +24,19 @@ Changes:
 -Removing the lily of rebirth bloom buff off of yourself no longer resets the number of revives you have if you don't have any revives left
 -Removed gourd o' lantern items, breaking a carved gourd with a candle in it now just drops the regular carved gourd and the candle
 -Gourd blocks now have cool additional "discolored" clusters (These can be observed more clearly on the new giant gourds in the underground spooky forest)
+-Additionally updated all colored gourd wall sprites to look better as walls
 -Eye blocks now grow various eye valley ambient objects on them naturally
 -Krampus job application sign tile now lights up with spelunker potions
 -Spooky mod chandeliers and lanterns finally sway in the wind
 -Reduced the size of the tar pits biome
 -Tarrars now play a growling sound when a player gets close to them
+-Nerfed crusty gunfish damage from 42 -> 35
 -Daffodil has a massively improved sprite, along with small tweaks to her fight to fit the new sprites
 -Updated daffodil on the spooky mod menu to her new design
 -Updated eye valley background sprites
 -Updated bag of magic beans sprite
 -Polished sprites for various spooky mod ambient grasses
+
 
 Localization Changes:
 -Charm of the flies tooltip modified to remove mention of the now removed cooldown
@@ -58,7 +61,7 @@ Fixes:
 -Haunting harold ghost projectiles not doing damage
 -Temple of moco combat room idols giving off way too much light on retro/trippy lighting modes
 -Spooky mod custom trees breaking one by one when destroyed instead of being fully destroyed immediately
--Multiple spooky mod custom trees/tiles with special effects being blurry, and some of them having completely incorrect offsets in retro/trippy lighting and snapshot mode
+-Multiple spooky mod custom trees/tiles with special effects being blurry, and some of them still having completely incorrect offsets in retro/trippy lighting and snapshot mode
 -Orange spooky grass not drawing special merge texture with green grass when sloped
 -Mortar jetpack drawing incorrectly offset while the player is on certain mounts
 -Grass walls in the catacombs not being considered valid for spawning enemies, causing unintentionally low spawnrates in both catacomb layers
@@ -67,3 +70,7 @@ Fixes:
 -Razor radish not having extra hitbox range
 -Old wood hammer not having autoswing
 -Frogpoon incorrectly dealing melee and not ranged damage
+-Rot gourd not properly falling through blocks/platforms to get the targetted players level
+-Green gourd walls producing wood dust instead of pumpkin gut dust when broken
+-Crusty gunfish improperly consuming multiple ammo on each use
+-The cross accessory sound waves not having a correctly sized hitbox

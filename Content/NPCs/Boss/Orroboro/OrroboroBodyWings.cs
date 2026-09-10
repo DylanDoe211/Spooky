@@ -38,11 +38,13 @@ namespace Spooky.Content.NPCs.Boss.Orroboro
             NPC.defense = 30;
             NPC.width = 30;
             NPC.height = 30;
+			NPC.npcSlots = 0f;
             NPC.knockBackResist = 0f;
             NPC.lavaImmune = true;
             NPC.noTileCollide = true;
             NPC.netAlways = true;
             NPC.noGravity = true;
+			NPC.dontCountMe = true;
             NPC.HitSound = SoundID.NPCHit13;
             NPC.aiStyle = -1;
         }
@@ -316,15 +318,5 @@ namespace Spooky.Content.NPCs.Boss.Orroboro
 
 			return false;
 		}
-
-        public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
-        {
-            return false;
-        }
-
-        public override bool CheckActive()
-        {
-            return false;
-        }
     }
 }

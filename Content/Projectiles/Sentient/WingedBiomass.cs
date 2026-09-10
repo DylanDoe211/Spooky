@@ -202,7 +202,6 @@ namespace Spooky.Content.Projectiles.Sentient
 
             //while the same target is being chased, start the death countdown
             Projectile.ai[2]++;
-
             if (Projectile.ai[2] == 600)
             {
                 Vector2 ChargeSpeed = target.Center - Projectile.Center;

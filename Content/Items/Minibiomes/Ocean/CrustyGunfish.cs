@@ -14,7 +14,7 @@ namespace Spooky.Content.Items.Minibiomes.Ocean
 
 		public override void SetDefaults()
         {
-			Item.damage = 42;
+			Item.damage = 35;
 			Item.DamageType = DamageClass.Ranged;
 			Item.noMelee = true;
 			Item.autoReuse = true;
@@ -70,10 +70,7 @@ namespace Spooky.Content.Items.Minibiomes.Ocean
 
 					Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(16));
 
-					int TypeToShoot = -1;
-					player.PickAmmo(Item, out TypeToShoot, out _, out _, out _, out _);
-
-					Projectile.NewProjectile(source, position.X, position.Y, newVelocity.X, newVelocity.Y, TypeToShoot, damage, knockback, player.whoAmI);
+					Projectile.NewProjectile(source, position.X, position.Y, newVelocity.X, newVelocity.Y, type, damage, knockback, player.whoAmI);
 
 					position -= muzzleOffset;
 				}

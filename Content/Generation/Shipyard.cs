@@ -518,11 +518,8 @@ namespace Spooky.Content.Generation
 						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>() ||
 						Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>())
 						{
-							//conch shells
-							if (WorldGen.genRand.NextBool())
-							{
-								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<QueenShell>(), true, WorldGen.genRand.Next(0, 2));
-							}
+							//conch shells, placed with no chance check due to how big they are
+							TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<QueenShell>(), true, WorldGen.genRand.Next(0, 2));
 
 							//giant mossy anchors
 							if (WorldGen.genRand.NextBool())

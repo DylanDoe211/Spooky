@@ -144,7 +144,6 @@ namespace Spooky.Content.NPCs.SpookyHell
 				for (int numEnemies = 1; numEnemies <= 4; numEnemies++)
 				{
 					int NewEnemy = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<ValleySquidClone>());
-
 					if (Main.netMode == NetmodeID.Server)
 					{
 						NetMessage.SendData(MessageID.SyncNPC, number: NewEnemy);

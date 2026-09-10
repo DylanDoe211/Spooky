@@ -906,7 +906,7 @@ PandoraAmalgam: {
 		'''
 		Grants the effects of every pandora's box accessory
 		Spawns blobs of ectoplasm when you restore mana that deal more damage the more you restore
-		Press the Accessory hotkey to release sound that damages you and enemies
+		Press the Accessory hotkey to release sound that damages enemies and pushes them away
 		You will spawn hands every few seconds that will home in on you and heal you when hit
 		Occasionally fire out a cuff at a nearby enemy, enemies attatched to it will take 25% more damage
 		'''
@@ -2737,6 +2737,11 @@ SummonItem4: {
 BleachedTuna: {
 	DisplayName: Bleached Tuna
 	Tooltip: Rapidly belches out short range bubbles
+}
+
+PiratePotion: {
+	DisplayName: Scallywag Potion
+	Tooltip: Causes enemies to rarely drop gold on hit
 }
 
 BottomlessPebbleBag: {

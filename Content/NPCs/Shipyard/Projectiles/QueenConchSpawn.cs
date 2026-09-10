@@ -55,10 +55,9 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
 
 			if (NPC.ai[0] >= 120)
 			{
-				/*
 				if (Main.netMode != NetmodeID.MultiplayerClient)
 				{
-					int NewNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X + Main.rand.Next(-35, 36), (int)NPC.Center.Y + 40, ModContent.NPCType<QueenConch>());
+					int NewNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<QueenConch>());
 					Main.npc[NewNPC].velocity.Y = Main.rand.Next(-5, -2);
 					Main.npc[NewNPC].alpha = 255;
 
@@ -67,7 +66,6 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
 						NetMessage.SendData(MessageID.SyncNPC, number: NewNPC);
 					}
 				}
-				*/
 
 				WorldGen.KillTile((int)NPC.Center.X / 16, (int)NPC.Center.Y / 16, fail: false);
 

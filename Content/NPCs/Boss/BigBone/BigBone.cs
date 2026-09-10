@@ -1627,7 +1627,6 @@ namespace Spooky.Content.NPCs.Boss.BigBone
 
                             Vector2 Recoil = SavePlayerPosition - NPC.Center;
                             Recoil.Normalize();
-                                    
                             Recoil *= -5; 
                             NPC.velocity = Recoil;
 

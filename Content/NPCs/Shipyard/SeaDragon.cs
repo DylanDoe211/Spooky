@@ -17,8 +17,8 @@ namespace Spooky.Content.NPCs.Shipyard
 
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
-				Velocity = 1f
-			};
+                CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/SeaDragonBestiary"
+            };
 		}
 
 		public override void SetDefaults()

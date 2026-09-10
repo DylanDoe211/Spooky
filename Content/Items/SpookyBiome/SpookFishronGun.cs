@@ -43,9 +43,7 @@ namespace Spooky.Content.Items.SpookyBiome
                 position += muzzleOffset;
             }
 
-			Vector2 newVelocity = velocity.RotatedByRandom(MathHelper.ToRadians(5));
-
-			Projectile.NewProjectile(source, position.X, position.Y, newVelocity.X, newVelocity.Y, type, damage, knockback, player.whoAmI);
+			Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI);
 			
 			return false;
 		}

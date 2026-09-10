@@ -256,17 +256,17 @@ namespace Spooky.Content.NPCs.SpookyHell
                 BestiaryParent.SetDefaults(ModContent.NPCType<ValleySquid>());
                 Main.BestiaryTracker.Kills.RegisterKill(BestiaryParent);
 
-                for (int numGores = 1; numGores <= 2; numGores++)
+                if (Main.netMode != NetmodeID.Server) 
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 2; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/ValleySquidCloneGore" + numGores).Type);
                     }
                 }
 
-                for (int numGores = 3; numGores <= 5; numGores++)
+                if (Main.netMode != NetmodeID.Server) 
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 3; numGores <= 5; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/ValleySquidGore" + numGores).Type);
                     }

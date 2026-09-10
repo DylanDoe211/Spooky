@@ -186,11 +186,11 @@ namespace Spooky.Content.NPCs.SpookyHell
         {
             if (NPC.life <= 0) 
             {
-                for (int Repeats = 1; Repeats <= 2; Repeats++)
+                if (Main.netMode != NetmodeID.Server) 
                 {
-                    for (int numGores = 1; numGores <= 3; numGores++)
+                    for (int Repeats = 1; Repeats <= 2; Repeats++)
                     {
-                        if (Main.netMode != NetmodeID.Server) 
+                        for (int numGores = 1; numGores <= 3; numGores++)
                         {
                             Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/ManHoleFleshyGore" + numGores).Type);
                         }

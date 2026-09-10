@@ -199,7 +199,7 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 
 			NPC.rotation = NPC.velocity.X * 0.02f;
 
-			bool CollidingWithGround = NPCGlobalHelper.IsCollidingWithFloor(NPC, true);
+			bool CollidingWithGround = !NPC.noTileCollide && NPCGlobalHelper.IsCollidingWithFloor(NPC, true);
 
 			//despawn if the player dies
             if (player.dead)
@@ -376,7 +376,7 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 					break;
 				}
 
-				//Jump 3 times towards the player
+				//jump 3 times towards the player
 				case 0:
 				{
 					NPC.localAI[0]++;
@@ -583,7 +583,7 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
 					//set tile collide to true once it gets to the players level to prevent cheesing
 					if (NPC.localAI[0] >= 75)
 					{
-						if (NPC.position.Y >= player.Center.Y - 150)
+						if (NPC.position.Y >= player.Center.Y - 200)
 						{
 							NPC.noTileCollide = false;
 						}
