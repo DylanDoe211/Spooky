@@ -26,9 +26,9 @@ namespace Spooky.Content.NPCs.Shipyard
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/SeaSlugBestiary",
-                Position = new Vector2(70f, 0f),
-                PortraitPositionXOverride = 55f,
-                PortraitPositionYOverride = -3f
+                Position = new Vector2(0f, 35f),
+                PortraitPositionXOverride = 0f,
+                PortraitPositionYOverride = 0f
             };
 
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
@@ -80,7 +80,7 @@ namespace Spooky.Content.NPCs.Shipyard
             var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
             Vector2 origin = new Vector2(NPCTexture.Width() * 0.5f, NPCTexture.Height() / Main.npcFrameCount[NPC.type] * 0.5f);
-            Main.spriteBatch.Draw(NPCTexture.Value, NPC.Center - Main.screenPosition, NPC.frame, Color.White * 0.65f, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - Main.screenPosition, NPC.frame, Color.White * 0.65f, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
 
             return false;
         }
@@ -108,6 +108,8 @@ namespace Spooky.Content.NPCs.Shipyard
                         Main.npc[latestNPC].realLife = NPC.whoAmI;
                         Main.npc[latestNPC].ai[2] = numSegments / 2;
                         Main.npc[latestNPC].ai[3] = NPC.whoAmI;
+                        if (numSegments == 0) Main.npc[latestNPC].ai[0] = 1;
+                        if (numSegments == 3) Main.npc[latestNPC].ai[0] = 2;
                         NetMessage.SendData(MessageID.SyncNPC, number: latestNPC);
                     }
                     
@@ -139,6 +141,8 @@ namespace Spooky.Content.NPCs.Shipyard
     public class SeaSlugBody : ModNPC
     {
         private static Asset<Texture2D> NPCTexture;
+        private static Asset<Texture2D> Fin1Texture;
+        private static Asset<Texture2D> Fin2Texture;
 
         public override void SetStaticDefaults()
 		{
@@ -168,11 +172,36 @@ namespace Spooky.Content.NPCs.Shipyard
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             NPCTexture ??= ModContent.Request<Texture2D>(Texture);
+            Fin1Texture ??= ModContent.Request<Texture2D>(Texture + "FinBig");
+            Fin2Texture ??= ModContent.Request<Texture2D>(Texture + "FinSmall");
 
             var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
             Vector2 origin = new Vector2(NPCTexture.Width() * 0.5f, NPCTexture.Height() * 0.5f);
-            Main.spriteBatch.Draw(NPCTexture.Value, NPC.Center - Main.screenPosition, NPC.frame, Color.White * 0.65f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - Main.screenPosition, NPC.frame, Color.White * 0.65f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
+
+            if (NPC.ai[0] == 1)
+            {
+                Vector2 FinVector1 = Utils.RotatedBy(new Vector2(6f, 0f), NPC.rotation, default);
+                Vector2 FinVector2 = Utils.RotatedBy(new Vector2(-6f, 0f), NPC.rotation, default);
+
+                Main.EntitySpriteDraw(Fin1Texture.Value, NPC.Center - Main.screenPosition + FinVector1, null, Color.White * 0.65f,
+			    NPC.rotation, new Vector2(0f, Fin1Texture.Height() / 2), 1f, SpriteEffects.None, 0f);
+
+			    Main.EntitySpriteDraw(Fin1Texture.Value, NPC.Center - Main.screenPosition + FinVector2, null, Color.White * 0.65f,
+			    NPC.rotation, new Vector2(Fin1Texture.Width(), Fin1Texture.Height() / 2), 1f, SpriteEffects.FlipHorizontally, 0f);
+            }
+            if (NPC.ai[0] == 2)
+            {
+                Vector2 FinVector1 = Utils.RotatedBy(new Vector2(4f, 0f), NPC.rotation, default);
+                Vector2 FinVector2 = Utils.RotatedBy(new Vector2(-4f, 0f), NPC.rotation, default);
+
+                Main.EntitySpriteDraw(Fin2Texture.Value, NPC.Center - Main.screenPosition + FinVector1, null, Color.White * 0.65f,
+			    NPC.rotation, new Vector2(0f, Fin2Texture.Height() / 2), 1f, SpriteEffects.None, 0f);
+
+			    Main.EntitySpriteDraw(Fin2Texture.Value, NPC.Center - Main.screenPosition + FinVector2, null, Color.White * 0.65f,
+			    NPC.rotation, new Vector2(Fin2Texture.Width(), Fin2Texture.Height() / 2), 1f, SpriteEffects.FlipHorizontally, 0f);
+            }
 
             return false;
         }
@@ -253,7 +282,7 @@ namespace Spooky.Content.NPCs.Shipyard
             var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
             Vector2 origin = new Vector2(NPCTexture.Width() * 0.5f, NPCTexture.Height() * 0.5f);
-            Main.spriteBatch.Draw(NPCTexture.Value, NPC.Center - Main.screenPosition, NPC.frame, Color.White * 0.65f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - Main.screenPosition, NPC.frame, Color.White * 0.65f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
 
             return false;
         }
