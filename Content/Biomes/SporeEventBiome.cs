@@ -42,7 +42,7 @@ namespace Spooky.Content.Biomes
 		{
 			orig(self);
 
-			if (true || (Flags.SporeEventHappening && Main.LocalPlayer.InModBiome(ModContent.GetInstance<SpiderCaveBiome>())) || 
+			if ((Flags.SporeEventHappening && Main.LocalPlayer.InModBiome(ModContent.GetInstance<SpiderCaveBiome>())) || 
 			ModContent.GetInstance<TileCount>().sporeMonolith >= 4 || Main.LocalPlayer.GetModPlayer<SpookyPlayer>().SporeMonolithEquipped)
 			{
 				if (FogAlpha < 1f)
@@ -212,7 +212,6 @@ namespace Spooky.Content.Biomes
 
         public override bool IsBiomeActive(Player player)
         {
-            return true;
             return Flags.SporeEventHappening && player.InModBiome(ModContent.GetInstance<SpiderCaveBiome>());
         }
     }
