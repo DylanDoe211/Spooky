@@ -60,15 +60,7 @@ namespace Spooky.Content.Biomes
 
 			if (FogAlpha > 0f)
 			{
-				Effect sporeEffect = SporeMist.Value;
-
-				Main.spriteBatch.End();
-				Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.LinearWrap, DepthStencilState.Default, RasterizerState.CullNone, (Effect)sporeEffect, Main.GameViewMatrix.TransformationMatrix);
-
-				Main.graphics.GraphicsDevice.Textures[1] = SwirlyNoise.Value;
-				Main.graphics.GraphicsDevice.Textures[2] = SwirlyNoiseInv.Value;
-				Main.graphics.GraphicsDevice.Textures[3] = StarNoise.Value;
-
+                Effect sporeEffect = SporeMist.Value;
 				if (!InitializedColors)
 				{
 					//fog colors
@@ -138,6 +130,7 @@ namespace Spooky.Content.Biomes
 
 				float IntensityToUse = (ModContent.GetInstance<TileCount>().sporeMonolith >= 4 || Main.LocalPlayer.GetModPlayer<SpookyPlayer>().SporeMonolithEquipped) ? 1f : Flags.SporeFogIntensity;
 
+                ResetState();
 				//draw the top layer of fog
 				sporeEffect.Parameters["uOpacityTotal"].SetValue(1.5f * (0.8f * IntensityToUse) * FogAlpha);
 				sporeEffect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly / 60);
@@ -150,6 +143,7 @@ namespace Spooky.Content.Biomes
 					DrawFog(SwirlyNoise.Value, new Vector2(Main.screenWidth * 3f, Main.screenHeight * 3f) * 0.125f * i, true);
 				}
 
+                ResetState();
 				//draw second layer of slower moving fog
 				sporeEffect.Parameters["uTime"].SetValue(-Main.GlobalTimeWrappedHourly / 90);
 				sporeEffect.Parameters["uColor"].SetValue(color1.ToVector4());
@@ -160,6 +154,7 @@ namespace Spooky.Content.Biomes
 					DrawFog(SwirlyNoiseInv.Value, new Vector2(Main.screenWidth, Main.screenHeight * 1.5f) * 0.125f * i);
 				}
 
+                ResetState();
 				//draw star texture to look like spores are in the air
 				sporeEffect.Parameters["uOpacityTotal"].SetValue(2 * (1.5f * IntensityToUse) * FogAlpha);
 				sporeEffect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly / 120);
@@ -181,6 +176,22 @@ namespace Spooky.Content.Biomes
 					SporeColorList.Clear();
 				}
 			}
+
+            return;
+
+            void ResetState()
+            {
+                Effect sporeEffect = SporeMist.Value;
+                Main.spriteBatch.End();
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, SamplerState.LinearWrap, DepthStencilState.Default, RasterizerState.CullNone, (Effect)sporeEffect, Main.GameViewMatrix.TransformationMatrix);
+                
+                for (int i = 0; i < 4; i++)
+                    Main.graphics.GraphicsDevice.SamplerStates[i] = SamplerState.LinearWrap;
+                
+                Main.graphics.GraphicsDevice.Textures[1] = SwirlyNoise.Value;
+                Main.graphics.GraphicsDevice.Textures[2] = SwirlyNoiseInv.Value;
+                Main.graphics.GraphicsDevice.Textures[3] = StarNoise.Value;
+            }
         }
 
         //bestiary stuff
