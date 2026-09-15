@@ -164,7 +164,7 @@ namespace Spooky.Content.Generation
 					}
 				}
 
-				//glowshroom special cave generation
+				//glowshroom larger cave generation
 				for (int Y = GlowshroomPosY - 5; Y < Main.maxTilesY - 200; Y++)
 				{
 					if (Main.tile[X, Y].TileType == ModContent.TileType<SpookyStone>())
@@ -190,9 +190,9 @@ namespace Spooky.Content.Generation
 					if (Main.tile[X, Y].WallType == ModContent.WallType<SpookyStoneWall>())
 					{
 						//generate perlin noise caves
-						float horizontalOffsetNoise = SpookyWorldMethods.PerlinNoise2D(X / 200f, Y / 1000f, 5, unchecked(Seed + 1)) * 0.01f;
-						float cavePerlinValue = SpookyWorldMethods.PerlinNoise2D(X / 200f, Y / 1000f, 5, Seed) + 0.5f + horizontalOffsetNoise;
-						float cavePerlinValue2 = SpookyWorldMethods.PerlinNoise2D(X / 200f, Y / 1000f, 5, unchecked(Seed - 1)) + 0.5f;
+						float horizontalOffsetNoise = SpookyWorldMethods.PerlinNoise2D(X / 300f, Y / 1000f, 5, unchecked(Seed + 1)) * 0.01f;
+						float cavePerlinValue = SpookyWorldMethods.PerlinNoise2D(X / 300f, Y / 1000f, 5, Seed) + 0.5f + horizontalOffsetNoise;
+						float cavePerlinValue2 = SpookyWorldMethods.PerlinNoise2D(X / 300f, Y / 1000f, 5, unchecked(Seed - 1)) + 0.5f;
 						float caveNoiseMap = (cavePerlinValue + cavePerlinValue2) * 0.5f;
 						float caveCreationThreshold = horizontalOffsetNoise * 3.5f + 0.235f;
 

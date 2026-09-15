@@ -12,9 +12,9 @@ namespace Spooky.Content.Projectiles.SpiderCave
 	public class MagicBeanstalk : ModProjectile
 	{
 		bool runOnce = true;
-		Vector2[] trailLength = new Vector2[50];
-		Rectangle[] trailHitboxes = new Rectangle[50];
-		float[] rotations = new float[50];
+		Vector2[] trailLength = new Vector2[32];
+		Rectangle[] trailHitboxes = new Rectangle[32];
+		float[] rotations = new float[32];
 
 		float SaveRotation;
 

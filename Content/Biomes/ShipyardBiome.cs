@@ -66,15 +66,13 @@ namespace Spooky.Content.Biomes
         public override int BiomeTorchItemType => ModContent.ItemType<ShipyardBiomeTorchItem>();
 
         //bestiary stuff
-        public override string BestiaryIcon => "Spooky/Content/Biomes/CemeteryBiomeIcon";
+        public override string BestiaryIcon => "Spooky/Content/Biomes/ShipyardBiomeIcon";
         public override string MapBackground => BackgroundPath;
 		public override string BackgroundPath => base.BackgroundPath;
 		public override Color? BackgroundColor => base.BackgroundColor;
 
         public override void SpecialVisuals(Player player, bool isActive)
         {
-            isActive = player.InModBiome<ShipyardBiome>() && !player.InModBiome(ModContent.GetInstance<RaveyardBiome>()) &&
-            !player.InModBiome(ModContent.GetInstance<CatacombBiome>()) && !player.InModBiome(ModContent.GetInstance<CatacombBiome2>());
             player.ManageSpecialBiomeVisuals("Spooky:ShipyardSky", isActive, player.Center);
         }
 

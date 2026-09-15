@@ -61,7 +61,7 @@ namespace Spooky.Content.Projectiles.Sentient
             {
                 SoundEngine.PlaySound(SplatSound, Projectile.Center);
 
-                Projectile.velocity.X *= 0;
+                Projectile.velocity.X = 0;
 
                 Projectile.ai[0]++;
             }
@@ -69,16 +69,19 @@ namespace Spooky.Content.Projectiles.Sentient
             return false;
         }
 
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+		{
+			if (Projectile.ai[0] > 0)
+			{
+				modifiers.FinalDamage *= 2;
+			}
+		}
+
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) 
 		{
             SoundEngine.PlaySound(SoundID.DD2_ExplosiveTrapExplode, Projectile.Center);
 
-			hit.Damage = 0;
-
-            //explosion
-            int Multiplier = Projectile.ai[0] == 0 ? 1 : 2;
-
-            Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<EyeMineExplosion>(), Projectile.damage * Multiplier, 0f, Projectile.owner);
+            Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<EyeMineExplosion>(), Projectile.damage, 0f, Projectile.owner);
 
             //spawn blood splatter
             for (int i = 0; i < 3; i++)

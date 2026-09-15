@@ -13,6 +13,11 @@ namespace Spooky.Content.Items.SpiderCave
 {
 	public class SpiderWarSniper : ModItem
 	{
+		public override void SetStaticDefaults()
+        {
+			ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
+		}
+
 		public override void SetDefaults()
 		{
 			Item.damage = 265;

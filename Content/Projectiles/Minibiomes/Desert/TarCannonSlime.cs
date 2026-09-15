@@ -14,8 +14,6 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
     {
         bool isAttacking = false;
 
-        NPC CurrentTarget = null;
-
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 2;
@@ -62,13 +60,9 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
             for (int i = 0; i < Main.maxNPCs; i++)
             {
                 NPC NPC = Main.npc[i];
-
-                bool HasLineOfSight = Collision.CanHitLine(NPC.position, NPC.width, NPC.height, Projectile.position, Projectile.width, Projectile.height);
-                if (NPC.active && NPC.CanBeChasedBy(this) && !NPC.friendly && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type] && HasLineOfSight)
+                if (NPC.active && NPC.CanBeChasedBy(this) && !NPC.friendly && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type] && Vector2.Distance(Projectile.Center, NPC.Center) <= 500f)
                 {
                     AttackingAI(NPC);
-                    CurrentTarget = NPC;
-
                     break;
                 }
                 else
@@ -81,8 +75,6 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
             {
                 Projectile.velocity.X *= 0.95f;
                 Projectile.velocity.Y += 0.35f;
-
-                CurrentTarget = null;
             }
 		}
 
@@ -105,17 +97,13 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
 
             Projectile.tileCollide = true;
 
-            Projectile.rotation = 0;
-
             Projectile.velocity.Y += 0.35f;
-
             if (Projectile.velocity.Y == 0.35f)
             {
                 Projectile.velocity.X = 0;
             }
 
             Projectile.ai[0]++;
-
             if (Projectile.ai[0] >= 0)
             {
                 if (Projectile.velocity.Y == 0.35f)
@@ -126,7 +114,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
                 //slam down while above the current target
                 if (Projectile.ai[1] == 0 && Projectile.position.X <= target.Center.X + 8 && Projectile.Center.X >= target.Center.X - 8)
                 {
-                    Projectile.velocity.X *= 0;
+                    Projectile.velocity.X = 0;
                     Projectile.velocity.Y = 16;
 
                     Projectile.ai[1] = 1;

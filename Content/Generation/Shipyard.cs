@@ -41,11 +41,10 @@ namespace Spooky.Content.Generation
 		{
 			progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.Shipyard").Value;
 
+			int seed = WorldGen.genRand.Next();
+
 			int leftBound = bounds.Item1 - 6;
 			int rightBound = bounds.Item2 + 6;
-
-			leftBound = Math.Max(leftBound, Main.offLimitBorderTiles + 12);
-			rightBound = Math.Min(rightBound, Main.maxTilesX - Main.offLimitBorderTiles + 12);
 
 			bool OceanOnLeft = ((leftBound + rightBound) / 2) < (Main.maxTilesY / 2);
 
@@ -60,12 +59,12 @@ namespace Spooky.Content.Generation
 				//when the ocean is on the left side of the world, use the left bound and keep going left until a sand tile on the ground is found
 				if (OceanOnLeft)
 				{
-					if (leftBound != WorldGen.beachDistance - 35)
+					if (leftBound != WorldGen.beachDistance - 40)
 					{
-						leftBound = WorldGen.beachDistance - 35;
+						leftBound = WorldGen.beachDistance - 40;
 					}
 
-					if ((!WorldGen.SolidTile(leftBound, LeftY) || !Cemetery.NoFloatingIsland(leftBound, LeftY)) && LeftY <= Main.worldSurface)
+					if ((!WorldGen.SolidOrSlopedTile(leftBound, LeftY) || !Cemetery.NoFloatingIsland(leftBound, LeftY)) && LeftY <= Main.worldSurface)
 					{
 						LeftY++;
 					}
@@ -90,12 +89,12 @@ namespace Spooky.Content.Generation
 				//when the ocean is on the right side of the world, use the right bound and keep going right until a sand tile on the ground is found
 				if (!OceanOnLeft)
 				{
-					if (rightBound != Main.maxTilesX - (WorldGen.beachDistance - 35))
+					if (rightBound != Main.maxTilesX - (WorldGen.beachDistance - 40))
 					{
-						rightBound = Main.maxTilesX - (WorldGen.beachDistance - 35);
+						rightBound = Main.maxTilesX - (WorldGen.beachDistance - 40);
 					}
 
-					if ((!WorldGen.SolidTile(rightBound, RightY) || !Cemetery.NoFloatingIsland(rightBound, RightY)) && RightY <= Main.worldSurface)
+					if ((!WorldGen.SolidOrSlopedTile(rightBound, RightY) || !Cemetery.NoFloatingIsland(rightBound, RightY)) && RightY <= Main.worldSurface)
 					{
 						RightY++;
 					}
@@ -149,7 +148,7 @@ namespace Spooky.Content.Generation
 				//place tiles below the line to create surface, and use noise to place clusters of black sandstone in the sand
 				for (int Y = (int)Position.Y; Y <= (int)BottomPos.Y; Y++)
 				{
-					if (Main.tile[(int)Position.X, Y].TileType != TileID.Sand && !IsEvilBiomeWall(Main.tile[(int)Position.X, Y].WallType))
+					if (!IsEvilBiomeWall(Main.tile[(int)Position.X, Y].WallType))
 					{
 						Main.tile[(int)Position.X, Y].ClearEverything();
 						WorldGen.PlaceTile((int)Position.X, Y, ModContent.TileType<BlackSand>());
@@ -267,8 +266,6 @@ namespace Spooky.Content.Generation
 					}
 				}
 			}
-
-			int seed = WorldGen.genRand.Next();
 
 			//generate black sandstone with noise
 			for (int X = leftBound - 10; X <= rightBound + 10; X++)
@@ -445,7 +442,6 @@ namespace Spooky.Content.Generation
 					if (CanPlaceShipwreck((int)Position.X, StructureY, 5, 20))
 					{
 						Mod SpookyMod = Spooky.mod;
-						//3.4.1.335248717
 						switch (WorldGen.genRand.Next(4))
 						{
 							case 0:

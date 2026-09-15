@@ -82,9 +82,8 @@ namespace Spooky.Content.Backgrounds.SpookyHell
             {
                 Vector2 vector = Main.screenPosition + new Vector2((Main.screenWidth >> 1), (Main.screenHeight >> 1));
                 float num = 1f * 0.5f * 200f;
-                int bg0Height = ModContent.Request<Texture2D>("Spooky/Content/Backgrounds/SpookyHell/SpookyHellBG" + "0").Height();
-                bg0Height += bg0Height >> 1;
                 float Scale = 1.4f;
+
                 for (int Layers = 4; Layers >= 0; Layers--)
                 {
                     //get each background texture

@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace Spooky.Content.NPCs.Shipyard
 {
-    public class SeaSlugHead : ModNPC
+    public class TrumpetfishHead : ModNPC
     {
         Vector2 SavePosition;
 
@@ -23,11 +23,12 @@ namespace Spooky.Content.NPCs.Shipyard
 
         public override void SetStaticDefaults()
         {
+            Main.npcFrameCount[NPC.type] = 2;
             NPCID.Sets.CantTakeLunchMoney[Type] = true;
 
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
-                CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/SeaSlugBestiary",
+                //CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/TrumpetfishBestiary",
                 Position = new Vector2(0f, 35f),
                 PortraitPositionXOverride = 0f,
                 PortraitPositionYOverride = 0f
@@ -38,9 +39,6 @@ namespace Spooky.Content.NPCs.Shipyard
 
         public override void SendExtraAI(BinaryWriter writer)
         {
-            //vector2
-            writer.WriteVector2(SavePosition);
-
             //bools
             writer.Write(segmentsSpawned);
 
@@ -51,9 +49,6 @@ namespace Spooky.Content.NPCs.Shipyard
 
         public override void ReceiveExtraAI(BinaryReader reader)
         {
-            //vector2
-			SavePosition = reader.ReadVector2();
-
             //bools
             segmentsSpawned = reader.ReadBoolean();
 
@@ -64,9 +59,9 @@ namespace Spooky.Content.NPCs.Shipyard
 
         public override void SetDefaults()
         {
-            NPC.lifeMax = 200;
-            NPC.damage = 0;
-            NPC.defense = 0;
+            NPC.lifeMax = 350;
+            NPC.damage = 20;
+            NPC.defense = 10;
             NPC.width = 26;
             NPC.height = 26;
             NPC.npcSlots = 1f;
@@ -74,6 +69,7 @@ namespace Spooky.Content.NPCs.Shipyard
             NPC.value = Item.buyPrice(0, 0, 0, 50);
             NPC.noGravity = true;
             NPC.noTileCollide = true;
+            NPC.behindTiles = true;
             NPC.HitSound = SoundID.NPCHit25;
 			NPC.DeathSound = SoundID.NPCDeath28;
             NPC.aiStyle = -1;
@@ -84,7 +80,7 @@ namespace Spooky.Content.NPCs.Shipyard
         {
 			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
             {
-				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.SeaSlug"),
+				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.Trumpetfish"),
 				new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.ShipyardBiome>().ModBiomeBestiaryInfoElement)
 			});
 		}
@@ -96,41 +92,71 @@ namespace Spooky.Content.NPCs.Shipyard
             var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
             Vector2 origin = new Vector2(NPCTexture.Width() * 0.5f, NPCTexture.Height() / Main.npcFrameCount[NPC.type] * 0.5f);
-            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - Main.screenPosition, NPC.frame, Color.White * 0.65f, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
 
             return false;
         }
+
+        public override void FindFrame(int frameHeight)
+		{
+			NPC.frame.Y = (int)NPC.ai[3] * frameHeight;
+		}
+
+        public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
+		{
+			if (NPC.ai[2] == 0)
+            {
+                NPC.ai[2] = 180;
+            }
+		}
+
+		public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
+		{
+			if (NPC.ai[2] == 0)
+            {
+                NPC.ai[2] = 180;
+            }
+		}
         
         public override void AI()
         {
+            NPC.TargetClosest(true);
+            Player player = Main.player[NPC.target];
+
+            NPC.spriteDirection = NPC.velocity.X > 0 ? -1 : 1;
+
             NPC.rotation = (float)Math.Atan2(NPC.velocity.Y, NPC.velocity.X) + 1.57f;
 
-            //Create the worm itself
+            //create the worm itself
             if (Main.netMode != NetmodeID.MultiplayerClient)
             {
                 if (!segmentsSpawned)
                 {
+                    NPC.ai[3] = Main.rand.Next(0, 2);
+
+                    NPC.spriteDirection = Main.rand.NextBool() ? -1 : 1;
+
                     NPC.realLife = NPC.whoAmI;
                     int latestNPC = NPC.whoAmI;
 
-                    for (int numSegments = 0; numSegments < 9; numSegments++)
+                    int maxSegments = Main.rand.Next(4, 11);
+                    for (int numSegments = 0; numSegments < maxSegments; numSegments++)
                     {
                         latestNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X + (NPC.width / 2), (int)NPC.Center.Y + (NPC.height / 2), 
-                        ModContent.NPCType<SeaSlugBody>(), NPC.whoAmI, 0, latestNPC);
+                        ModContent.NPCType<TrumpetfishBody>(), NPC.whoAmI, 0, latestNPC);
                         Main.npc[latestNPC].lifeMax = NPC.lifeMax;
                         Main.npc[latestNPC].realLife = NPC.whoAmI;
-                        Main.npc[latestNPC].ai[2] = numSegments / 3;
                         Main.npc[latestNPC].ai[3] = NPC.whoAmI;
-                        if (numSegments == 1) Main.npc[latestNPC].ai[0] = 1;
-                        if (numSegments == 5) Main.npc[latestNPC].ai[0] = 2;
+                        Main.npc[latestNPC].ai[2] = NPC.ai[3];
                         NetMessage.SendData(MessageID.SyncNPC, number: latestNPC);
                     }
                     
                     latestNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X + (NPC.width / 2), (int)NPC.Center.Y + (NPC.height / 2), 
-                    ModContent.NPCType<SeaSlugTail>(), NPC.whoAmI, 0, latestNPC);                   
+                    ModContent.NPCType<TrumpetfishTail>(), NPC.whoAmI, 0, latestNPC);                   
                     Main.npc[latestNPC].lifeMax = NPC.lifeMax;
                     Main.npc[latestNPC].realLife = NPC.whoAmI;
                     Main.npc[latestNPC].ai[3] = NPC.whoAmI;
+                    Main.npc[latestNPC].ai[2] = NPC.ai[3];
                     NetMessage.SendData(MessageID.SyncNPC, number: latestNPC);
 
                     segmentsSpawned = true;
@@ -138,106 +164,87 @@ namespace Spooky.Content.NPCs.Shipyard
                 }
             }
 
-            //movement
-            NPC.localAI[0]++;
-            if (NPC.localAI[0] <= 580)
+            if (NPC.ai[2] == 0)
             {
                 if (NPC.ai[0] == 0)
                 {
-                    NPC.velocity.X = Main.rand.NextBool() ? -0.5f : 0.5f;
+                    bool HasLineOfSight = NPC.Distance(player.Center) <= 350f && Collision.CanHitLine(player.position, player.width, player.height, NPC.position, NPC.width, NPC.height);
 
-                    NPC.ai[0]++;
-                    NPC.netUpdate = true;
-                }
-
-                float MaxVelocityX = 2f;
-                if (NPC.velocity.X < 0)
-                {
-                    NPC.velocity.X -= 0.1f;
-                }
-                if (NPC.velocity.X > 0)
-                {
-                    NPC.velocity.X += 0.1f;
-                }
-
-                if (NPC.velocity.X < -MaxVelocityX)
-                {
-                    NPC.velocity.X = -MaxVelocityX;
-                }
-                if (NPC.velocity.X > MaxVelocityX)
-                {
-                    NPC.velocity.X = MaxVelocityX;
-                }
-
-                bool GoUp = false;
-                int PosX = (int)(NPC.Center.X / 16f);
-                int PosY = (int)((NPC.position.Y + (float)NPC.height) / 16f);
-                for (int TilePosY = PosY; TilePosY < PosY + 6; TilePosY++)
-                {
-                    if (!WorldGen.InWorld(PosX, TilePosY, 10))
+                    if (HasLineOfSight && NPC.Distance(player.Center) <= 150f)
                     {
-                        continue;
-                    }
-                    if (WorldGen.SolidOrSlopedTile(PosX, TilePosY) || Main.tile[PosX, TilePosY].LiquidAmount > 0)
-                    {
-                        GoUp = true; 
+                        SoundEngine.PlaySound(SoundID.Zombie56 with { Volume = 3f, Pitch = 1.5f }, NPC.Center);
+
+                        NPC.ai[0]++;
                         NPC.netUpdate = true;
-                        break;
                     }
-                }
-                
-                if (!GoUp)
-                {
-                    NPC.velocity.Y += 0.018f;
+
+                    Vector2 GoTo = HasLineOfSight ? player.Center : (NPC.Center + new Vector2(50 * -NPC.spriteDirection, 0));
+                    
+                    Vector2 desiredVelocity = NPC.DirectionTo(GoTo) * 1.5f;
+                    NPC.velocity.X = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20).X;
                 }
                 else
                 {
-                    NPC.velocity.Y -= 0.018f;
-                }
+                    NPC.ai[1]++;
+                    if (NPC.ai[1] < 200)
+                    {
+                        if (NPC.Distance(player.Center) >= 50f)
+                        {
+                            Vector2 desiredVelocity = NPC.DirectionTo(player.Center) * 10f;
+                            NPC.velocity.X = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20).X;
+                        }
+                    }
 
-                //limit npc y-velocity
-                if (NPC.velocity.Y > 1f)
-                {
-                    NPC.velocity.Y = 1f;
+                    if (NPC.ai[1] >= 200)
+                    {
+                        NPC.ai[2] = 180;
+                        NPC.netUpdate = true;
+                    }
                 }
-                if (NPC.velocity.Y < -1f)
+            }
+            else
+            {
+                NPC.ai[2]--;
+
+                Vector2 desiredVelocity = NPC.DirectionTo(player.Center) * -5f;
+                NPC.velocity.X = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20).X;
+
+                if (NPC.ai[2] <= 0)
                 {
-                    NPC.velocity.Y = -1f;
+                    NPC.ai[0] = 0;
+                    NPC.ai[1] = 0;
+                    NPC.ai[2] = 0;
+                    NPC.netUpdate = true;
                 }
             }
 
-            if (NPC.localAI[0] > 590 && NPC.localAI[0] <= 600)
+            bool GoUp = false;
+            int PosX = (int)(NPC.Center.X / 16f);
+            int PosY = (int)(NPC.Center.Y / 16f);
+            for (int TilePosY = PosY; TilePosY < PosY + 4; TilePosY++)
             {
-                SavePosition = NPC.Center - new Vector2(0, 20);
-                NPC.velocity.Y = 0;
+                if (!WorldGen.InWorld(PosX, TilePosY, 10))
+                {
+                    continue;
+                }
+                if (WorldGen.SolidOrSlopedTile(PosX, TilePosY))
+                {
+                    NPC.velocity.Y *= 0.98f;
+                    GoUp = true; 
+                    NPC.netUpdate = true;
+                    break;
+                }
             }
 
-            if (NPC.localAI[0] > 600 && NPC.localAI[0] <= 645)
+            bool FasterY = NPC.ai[0] > 0 || NPC.ai[2] > 0;
+            
+            if (!GoUp)
             {
-                double angle = NPC.DirectionTo(SavePosition).ToRotation() - NPC.velocity.ToRotation();
-                while (angle > Math.PI)
-                {
-                    angle -= 2.0 * Math.PI;
-                }
-                while (angle < -Math.PI)
-                {
-                    angle += 2.0 * Math.PI;
-                }
-
-                if (Math.Abs(angle) > Math.PI / 2)
-                {
-                    NPC.localAI[1] = Math.Sign(angle);
-                    NPC.velocity = Vector2.Normalize(NPC.velocity) * 2f;
-                }
-
-                NPC.velocity = NPC.velocity.RotatedBy(MathHelper.ToRadians(4f) * NPC.localAI[1]);
+                NPC.velocity.Y += FasterY ? 0.3f : 0.035f;
             }
-
-            if (NPC.localAI[0] >= 660)
+            else
             {
-                NPC.localAI[0] = 0;
-                NPC.localAI[1] = 0;
-                NPC.netUpdate = true;
+                NPC.velocity.Y -= FasterY ? 0.3f : 0.035f;
             }
         }
         
@@ -248,15 +255,13 @@ namespace Spooky.Content.NPCs.Shipyard
         }
     }
 
-    public class SeaSlugBody : ModNPC
+    public class TrumpetfishBody : ModNPC
     {
         private static Asset<Texture2D> NPCTexture;
-        private static Asset<Texture2D> Fin1Texture;
-        private static Asset<Texture2D> Fin2Texture;
 
         public override void SetStaticDefaults()
 		{
-			Main.npcFrameCount[NPC.type] = 3;
+            Main.npcFrameCount[NPC.type] = 2;
             NPCID.Sets.CantTakeLunchMoney[Type] = true;
 
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
@@ -275,6 +280,7 @@ namespace Spooky.Content.NPCs.Shipyard
             NPC.knockBackResist = 0f;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
+            NPC.behindTiles = true;
             NPC.dontCountMe = true;
             NPC.HitSound = SoundID.NPCHit25;
         }
@@ -282,36 +288,11 @@ namespace Spooky.Content.NPCs.Shipyard
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             NPCTexture ??= ModContent.Request<Texture2D>(Texture);
-            Fin1Texture ??= ModContent.Request<Texture2D>(Texture + "FinBig");
-            Fin2Texture ??= ModContent.Request<Texture2D>(Texture + "FinSmall");
 
             var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-            Vector2 origin = new Vector2(NPCTexture.Width() * 0.5f, NPCTexture.Height() * 0.5f);
-            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - Main.screenPosition, NPC.frame, Color.White * 0.65f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
-
-            if (NPC.ai[0] == 1)
-            {
-                Vector2 FinVector1 = Utils.RotatedBy(new Vector2(6f, 0f), NPC.rotation, default);
-                Vector2 FinVector2 = Utils.RotatedBy(new Vector2(-6f, 0f), NPC.rotation, default);
-
-                Main.EntitySpriteDraw(Fin1Texture.Value, NPC.Center - Main.screenPosition + FinVector1, null, Color.White * 0.65f,
-			    NPC.rotation, new Vector2(0f, Fin1Texture.Height() / 2), 1f, SpriteEffects.None, 0f);
-
-			    Main.EntitySpriteDraw(Fin1Texture.Value, NPC.Center - Main.screenPosition + FinVector2, null, Color.White * 0.65f,
-			    NPC.rotation, new Vector2(Fin1Texture.Width(), Fin1Texture.Height() / 2), 1f, SpriteEffects.FlipHorizontally, 0f);
-            }
-            if (NPC.ai[0] == 2)
-            {
-                Vector2 FinVector1 = Utils.RotatedBy(new Vector2(4f, 0f), NPC.rotation, default);
-                Vector2 FinVector2 = Utils.RotatedBy(new Vector2(-4f, 0f), NPC.rotation, default);
-
-                Main.EntitySpriteDraw(Fin2Texture.Value, NPC.Center - Main.screenPosition + FinVector1, null, Color.White * 0.65f,
-			    NPC.rotation, new Vector2(0f, Fin2Texture.Height() / 2), 1f, SpriteEffects.None, 0f);
-
-			    Main.EntitySpriteDraw(Fin2Texture.Value, NPC.Center - Main.screenPosition + FinVector2, null, Color.White * 0.65f,
-			    NPC.rotation, new Vector2(Fin2Texture.Width(), Fin2Texture.Height() / 2), 1f, SpriteEffects.FlipHorizontally, 0f);
-            }
+            Vector2 origin = new Vector2(NPCTexture.Width() * 0.5f, NPCTexture.Height() / Main.npcFrameCount[NPC.type] * 0.5f);
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
 
             return false;
         }
@@ -328,7 +309,7 @@ namespace Spooky.Content.NPCs.Shipyard
             NPC.spriteDirection = Parent.spriteDirection;
 
             //kill segment if the head doesnt exist
-			if (!Parent.active || Parent.type != ModContent.NPCType<SeaSlugHead>())
+			if (!Parent.active || Parent.type != ModContent.NPCType<TrumpetfishHead>())
             {
                 NPC.active = false;
             }
@@ -340,7 +321,7 @@ namespace Spooky.Content.NPCs.Shipyard
 			if (SegmentParent.rotation != NPC.rotation)
 			{
 				float angle = MathHelper.WrapAngle(SegmentParent.rotation - NPC.rotation);
-				SegmentCenter = SegmentCenter.RotatedBy(angle * 0.25f);
+				SegmentCenter = SegmentCenter.RotatedBy(angle * 0.12f);
 			}
 
 			NPC.rotation = SegmentCenter.ToRotation() + 1.57f;
@@ -348,7 +329,7 @@ namespace Spooky.Content.NPCs.Shipyard
 			//how far each segment should be from each other
 			if (SegmentCenter != Vector2.Zero)
 			{
-                float Dist = SegmentParent.type == ModContent.NPCType<SeaSlugHead>() ? 21f : 14f;
+                float Dist = SegmentParent.type == ModContent.NPCType<TrumpetfishHead>() ? 22f : 14f;
 				NPC.Center = SegmentParent.Center - SegmentCenter.SafeNormalize(Vector2.Zero) * Dist;
 			}
 
@@ -366,13 +347,13 @@ namespace Spooky.Content.NPCs.Shipyard
         }
     }
 
-    public class SeaSlugTail : SeaSlugBody
+    public class TrumpetfishTail : TrumpetfishBody
     {
         private static Asset<Texture2D> NPCTexture;
 
         public override void SetStaticDefaults()
 		{
-			Main.npcFrameCount[NPC.type] = 1;
+			Main.npcFrameCount[NPC.type] = 2;
             NPCID.Sets.CantTakeLunchMoney[Type] = true;
 
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
@@ -380,21 +361,50 @@ namespace Spooky.Content.NPCs.Shipyard
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
         }
 
-        public override void FindFrame(int frameHeight)
-		{
-			NPC.frame.Y = 0;
-		}
-
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             NPCTexture ??= ModContent.Request<Texture2D>(Texture);
 
             var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-            Vector2 origin = new Vector2(NPCTexture.Width() * 0.5f, NPCTexture.Height() * 0.5f);
-            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - Main.screenPosition, NPC.frame, Color.White * 0.65f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
+            Vector2 origin = new Vector2(NPCTexture.Width() * 0.5f, NPCTexture.Height() / Main.npcFrameCount[NPC.type] * 0.5f);
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
 
             return false;
+        }
+
+        public override bool PreAI()
+        {
+            NPC Parent = Main.npc[(int)NPC.ai[3]];
+
+            NPC.spriteDirection = Parent.spriteDirection;
+
+            //kill segment if the head doesnt exist
+			if (!Parent.active || Parent.type != ModContent.NPCType<TrumpetfishHead>())
+            {
+                NPC.active = false;
+            }
+
+			NPC SegmentParent = Main.npc[(int)NPC.ai[1]];
+
+			Vector2 SegmentCenter = SegmentParent.Center + SegmentParent.velocity - NPC.Center;
+
+			if (SegmentParent.rotation != NPC.rotation)
+			{
+				float angle = MathHelper.WrapAngle(SegmentParent.rotation - NPC.rotation);
+				SegmentCenter = SegmentCenter.RotatedBy(angle * 0.12f);
+			}
+
+			NPC.rotation = SegmentCenter.ToRotation() + 1.57f;
+
+			//how far each segment should be from each other
+			if (SegmentCenter != Vector2.Zero)
+			{
+                float Dist = 26f;
+				NPC.Center = SegmentParent.Center - SegmentCenter.SafeNormalize(Vector2.Zero) * Dist;
+			}
+
+			return false;
         }
     }
 }

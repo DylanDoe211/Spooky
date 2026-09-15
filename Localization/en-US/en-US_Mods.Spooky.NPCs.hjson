@@ -473,7 +473,7 @@ TripletsEyeRed.DisplayName: Macule
 TripletsEyePurple.DisplayName: Vitreous Bobby
 PuttyAmalgam.DisplayName: Putty Amalgam
 ChristmasTreeMimic.DisplayName: Christmas Tree Mimic
-TarPig.DisplayName: Opalised Hog
+TarPig.DisplayName: Opalized Hog
 Chudshroom.DisplayName: Chudshroom
 //tar pits
 Hydroraptor.DisplayName: Hydroraptor
@@ -558,6 +558,9 @@ QueenConch.DisplayName: Queen Conch
 SeaSlugBody.DisplayName: Sea Slug
 SeaSlugHead.DisplayName: Sea Slug
 SeaSlugTail.DisplayName: Sea Slug
+TrumpetfishBody.DisplayName: Trumpetfish
+TrumpetfishHead.DisplayName: Trumpetfish
+TrumpetfishTail.DisplayName: Trumpetfish
 
 //tameable
 Turkey: {

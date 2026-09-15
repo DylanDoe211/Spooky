@@ -25,8 +25,8 @@ namespace Spooky.Content.NPCs.Boss.BigBone.Projectiles
 
         public override void SetDefaults()
         {
-            Projectile.width = 46;
-            Projectile.height = 52;
+            Projectile.width = 66;
+            Projectile.height = 68;
 			Projectile.friendly = false;
 			Projectile.hostile = true;
 			Projectile.tileCollide = true;
@@ -98,7 +98,7 @@ namespace Spooky.Content.NPCs.Boss.BigBone.Projectiles
 			if (Projectile.ai[0] == 0)
 			{
 				double Velocity = Math.Atan2(target.position.Y - Projectile.position.Y, target.position.X - Projectile.position.X);
-				Projectile.velocity = new Vector2((float)Math.Cos(Velocity), (float)Math.Sin(Velocity)) * 14;
+				Projectile.velocity = new Vector2((float)Math.Cos(Velocity), (float)Math.Sin(Velocity)) * 12;
 
 				Projectile.ai[0] = 1;
 

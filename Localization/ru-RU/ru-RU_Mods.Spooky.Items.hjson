@@ -2745,6 +2745,15 @@ BleachedTuna: {
 	// Tooltip: Rapidly belches out short range bubbles
 }
 
+PirateChest: {
+	// DisplayName: Pirate's Chest
+	/* Tooltip:
+		'''
+		Contains some pirate treasure and dabloons!
+		"{$CommonItemTooltip.RightClickToOpen}"
+		''' */
+}
+
 PiratePotion: {
 	// DisplayName: Scallywag Potion
 	// Tooltip: Causes enemies to rarely drop gold on hit
@@ -6159,6 +6168,11 @@ BlackSandstoneSlabItem: {
 	// Tooltip: ""
 }
 
+BlackSandstoneSlabWallItem: {
+	// DisplayName: Black Sandstone Slab Wall
+	// Tooltip: ""
+}
+
 BlackSandstoneWallItem: {
 	// DisplayName: Black Sandstone Wall
 	// Tooltip: ""
@@ -7400,13 +7414,4 @@ PetCommander: {
 		Нажмите на любого прирученного индюка поблизости, держа этот предмет, чтобы отдавать ему команды
 		Позволяет индюку свободно бродить, следовать за вами или оставаться на месте
 		'''
-}
-
-PirateChest: {
-	// DisplayName: Pirate's Chest
-	/* Tooltip:
-		'''
-		Contains some pirate treasure and dabloons!
-		"{$CommonItemTooltip.RightClickToOpen}"
-		''' */
 }

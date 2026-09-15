@@ -22,7 +22,10 @@ namespace Spooky.Content.NPCs.Shipyard
 
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
-                CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/BarreleyeFishBestiary"
+                CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/BarreleyeFishBestiary",
+                Position = new Vector2(25f, 0f),
+                PortraitPositionXOverride = 0f,
+                PortraitPositionYOverride = 0f
             };
 		}
 

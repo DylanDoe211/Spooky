@@ -2739,6 +2739,15 @@ BleachedTuna: {
 	Tooltip: Rapidly belches out short range bubbles
 }
 
+PirateChest: {
+	DisplayName: Pirate's Chest
+	Tooltip:
+		'''
+		Contains some pirate treasure and dabloons!
+		"{$CommonItemTooltip.RightClickToOpen}"
+		'''
+}
+
 PiratePotion: {
 	DisplayName: Scallywag Potion
 	Tooltip: Causes enemies to rarely drop gold on hit
@@ -4081,7 +4090,7 @@ SentientPaladinsHammer: {
 	Tooltip:
 		'''
 		Throw a two-faced hammer that will chase a nearby enemy
-		Upon reaching the targeted enemy, it will strike it 3 times before returning to you
+		Upon reaching the targetted enemy, it will strike it 3 times before returning to you
 		'They won't stop yapping'
 		'''
 }
@@ -6147,6 +6156,11 @@ BlackSandstoneSlabItem: {
 	Tooltip: ""
 }
 
+BlackSandstoneSlabWallItem: {
+	DisplayName: Black Sandstone Slab Wall
+	Tooltip: ""
+}
+
 BlackSandstoneWallItem: {
 	DisplayName: Black Sandstone Wall
 	Tooltip: ""
@@ -7387,14 +7401,5 @@ PetCommander: {
 		'''
 		Click on any nearby tamed turkey while holding this to give it commands
 		Allows the turkey to roam freely, follow you, or stay put
-		'''
-}
-
-PirateChest: {
-	DisplayName: Pirate's Chest
-	Tooltip:
-		'''
-		Contains some pirate treasure and dabloons!
-		"{$CommonItemTooltip.RightClickToOpen}"
 		'''
 }

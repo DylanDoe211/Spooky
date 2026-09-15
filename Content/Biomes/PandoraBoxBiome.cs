@@ -3,7 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
-using Spooky.Content.NPCs.PandoraBox;
+using Spooky.Core;
 
 namespace Spooky.Content.Biomes
 {

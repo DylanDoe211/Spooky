@@ -43,13 +43,6 @@ namespace Spooky.Content.NPCs.Shipyard
             Main.npcFrameCount[NPC.type] = 13;
             NPCID.Sets.CantTakeLunchMoney[Type] = true;
             NPCGlobal.IsSpookyModMiniboss[Type] = true;
-
-            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
-            {
-                Position = new Vector2(0f, 30f),
-                PortraitPositionXOverride = 0f,
-                PortraitPositionYOverride = 10f
-            };
         }
 
         public override void SendExtraAI(BinaryWriter writer)

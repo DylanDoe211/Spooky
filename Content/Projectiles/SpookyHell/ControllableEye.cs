@@ -58,7 +58,15 @@ namespace Spooky.Content.Projectiles.SpookyHell
             return Projectile.ai[0] > 0;
         }
 
-        public override void AI()
+		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+		{
+			if (Projectile.ai[0] > 0)
+			{
+				modifiers.FinalDamage *= 2;
+			}
+		}
+
+		public override void AI()
         {
             Player player = Main.player[Projectile.owner];
 
@@ -81,13 +89,7 @@ namespace Spooky.Content.Projectiles.SpookyHell
             }
             else
             {
-                Projectile.ai[0]++;
-
-                if (Projectile.ai[0] == 1)
-                {
-                    Projectile.damage *= 2;
-                }
-
+				Projectile.ai[0]++;
                 if (Projectile.ai[0] >= 25)
                 {
                     Projectile.velocity.X = Projectile.velocity.X * 0.97f;

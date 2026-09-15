@@ -66,7 +66,7 @@ namespace Spooky.Content.Backgrounds.SpiderCave
             if (Transparency > 0f && Main.BackgroundEnabled)
             {
                 Vector2 vector = Main.screenPosition + new Vector2((Main.screenWidth >> 1), (Main.screenHeight >> 1));
-                float num = (Main.GameViewMatrix.Zoom.Y - 1f) * 0.5f * 200f;
+                float num = 1f * 0.5f * 200f;
                 float Scale = 1.5f;
 
                 for (int Layers = 4; Layers >= 0; Layers--)

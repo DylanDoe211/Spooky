@@ -268,7 +268,7 @@ namespace Spooky.Core
 
 			List<string> PandoraBoxIcon = new List<string>()
 			{
-				"Spooky/Content/NPCs/NPCDisplayTextures/PandoraBoxIcon"
+				"Spooky/Content/UserInterfaces/PandoraBoxIcon"
 			};
 
 			bossChecklistMod.Call(
@@ -339,7 +339,7 @@ namespace Spooky.Core
 
 			List<string> EggEventIcon = new List<string>()
 			{
-				"Spooky/Content/Items/BossSummon/StrangeCyst"
+				"Spooky/Content/UserInterfaces/EggEventIcon"
 			};
 
 			List<int> EggEventItems = new List<int>()

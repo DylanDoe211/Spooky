@@ -73,14 +73,10 @@ namespace Spooky.Content.Projectiles.Sentient
             for (int numDusts = 0; numDusts < 10; numDusts++)
 			{                                                                   
 				int newDust = Dust.NewDust(target.position, target.width, target.height, ModContent.DustType<CartoonStar>(), 0f, -2f, 0, default, 1f);
-				Main.dust[newDust].position.X += Main.rand.Next(-50, 51) * 0.05f - 1.5f;
-				Main.dust[newDust].position.Y += Main.rand.Next(-50, 51) * 0.05f - 1.5f;
+                Main.dust[newDust].velocity.X = Main.rand.NextFloat(-1.5f, 1.5f);
+                Main.dust[newDust].velocity.Y = Main.rand.NextFloat(-1.5f, -0.2f);
+                Main.dust[newDust].alpha = Main.rand.Next(0, 2);
                 Main.dust[newDust].noGravity = true;
-                
-				if (Main.dust[newDust].position != target.Center)
-				{
-					Main.dust[newDust].velocity = target.DirectionTo(Main.dust[newDust].position) * 1.2f;
-				}
 			}
 
             hasHitEnemy = true;

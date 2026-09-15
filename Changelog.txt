@@ -36,21 +36,24 @@ Changes:
 -Updated eye valley background sprites
 -Updated bag of magic beans sprite
 -Polished sprites for various spooky mod ambient grasses
+-Gourd blocks now have cool additional "discolored" clusters (These can be observed more clearly on the new giant gourds in the underground spooky forest)
+-Updated all colored gourd wall sprites to look better
 
 
 Localization Changes:
+-For all new content, localization entries for those are be automatically added, if there is anything I have forgotten please let me know!
 -Charm of the flies tooltip modified to remove mention of the now removed cooldown
 -Spi-ops chestplate tooltip modified to remove mention of having take a certain amount of damage for the speed boost to activate
 -Creepy dog photo tooltip modified to remove the part about the dog becoming aggressive as this is removed now
 -Flower armor set bonus tooltip modified to be accurate for the reduced cooldown change (30 seconds -> 15 seconds)
 -Renamed thorn stem shirt -> flower stem shirt to be consistent with the other two armor pieces having "Flower" in their names (The internal name for this entry is FlowerBody)
+-Fixed mispelling of targeted -> targetted in dave & mikes tooltip
 -Due to removal of gourd o' lantern items, localization entries for those have been removed
 Added the following new entries to the WorldgenTasks localization:
 Shipyard: Creating shipwrecks
 SpookyForestPolish: Polishing the spooky forest
 EyeValleyPolish: Polishing the eye valley
 SpiderCavePolish: Polishing the spider grotto
--As for new content, localization entries for those should be automatically added, if there is anything I have forgotten please let me know!
 
 
 Fixes:
@@ -74,3 +77,6 @@ Fixes:
 -Green gourd walls producing wood dust instead of pumpkin gut dust when broken
 -Crusty gunfish improperly consuming multiple ammo on each use
 -The cross accessory sound waves not having a correctly sized hitbox
+-Scorpion deathblow right click not having autofire
+-Eye belcher mines not dealing double damage while on the ground correctly
+-Opalised cannon slimes lagging the game

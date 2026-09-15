@@ -74,8 +74,8 @@ namespace Spooky.Content.NPCs.Boss.BigBone.Projectiles
 
 		public override void SetDefaults()
 		{
-			Projectile.width = 46;
-            Projectile.height = 52;
+			Projectile.width = 66;
+            Projectile.height = 68;
 			Projectile.friendly = false;
 			Projectile.hostile = true;
 			Projectile.tileCollide = true;

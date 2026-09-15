@@ -70,7 +70,7 @@ namespace Spooky.Content.Biomes
 				i => i.MatchLdcI4(320), 
 				i => i.MatchSub(), 
 				i => i.MatchCgt());
-			//Finds the Flag7 Bool that controles the heat Y level
+			//Finds the Flag7 Bool that controls the heat Y level
 			c.EmitDelegate<Func<bool, bool>>(currentBool => currentBool && !Main.LocalPlayer.InModBiome(ModContent.GetInstance<SpookyHellBiome>())); //Adds ontop of the bool with our own
 		}
 

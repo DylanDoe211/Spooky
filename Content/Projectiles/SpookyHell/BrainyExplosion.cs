@@ -15,8 +15,8 @@ namespace Spooky.Content.Projectiles.SpookyHell
 
         public override void SetDefaults()
         {
-            Projectile.width = 300;
-            Projectile.height = 300;
+            Projectile.width = 96;
+            Projectile.height = 96;
             Projectile.DamageType = DamageClass.Summon;
             Projectile.friendly = true;
             Projectile.tileCollide = false;
@@ -44,6 +44,17 @@ namespace Spooky.Content.Projectiles.SpookyHell
 
             return false;
         }
+
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) 
+		{
+			Rectangle bigHitbox = new Rectangle((int)Projectile.Center.X - 350, (int)Projectile.Center.Y - 350, 700, 700);
+			if (targetHitbox.Intersects(bigHitbox))
+			{
+				return true;
+			}
+            
+			return false;
+		}
 
         public override bool? CanCutTiles()
         {

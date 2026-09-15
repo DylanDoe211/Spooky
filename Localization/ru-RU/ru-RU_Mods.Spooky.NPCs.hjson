@@ -558,6 +558,9 @@ ToyRobotTank.DisplayName: Игрушечный танк-бот
 // SeaSlugBody.DisplayName: Sea Slug
 // SeaSlugHead.DisplayName: Sea Slug
 // SeaSlugTail.DisplayName: Sea Slug
+// TrumpetfishBody.DisplayName: Trumpetfish
+// TrumpetfishHead.DisplayName: Trumpetfish
+// TrumpetfishTail.DisplayName: Trumpetfish
 
 //tameable
 Turkey: {

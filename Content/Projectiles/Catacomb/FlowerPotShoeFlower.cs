@@ -13,22 +13,20 @@ namespace Spooky.Content.Projectiles.Catacomb
 	{
         public override string Texture => "Spooky/Content/NPCs/Boss/BigBone/Projectiles/BouncingFlower";
 
-        bool runOnce = true;
-		Vector2[] trailLength = new Vector2[8];
-
-        private static Asset<Texture2D> TrailTexture;
+        private static Asset<Texture2D> ProjTexture;
+		private static Asset<Texture2D> TrailTexture;
 
         public override void SetStaticDefaults()
-        {
-            Main.projFrames[Projectile.type] = 4;
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 15;
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-        }
+		{
+			Main.projFrames[Projectile.type] = 4;
+			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+		}
 
         public override void SetDefaults()
 		{
-			Projectile.width = 46;
-            Projectile.height = 52;
+			Projectile.width = 66;
+            Projectile.height = 68;
 			Projectile.friendly = true;
 			Projectile.tileCollide = true;
 			Projectile.timeLeft = 240;
@@ -37,68 +35,57 @@ namespace Spooky.Content.Projectiles.Catacomb
 		}
 
         public override bool PreDraw(ref Color lightColor)
-        {
-            TrailTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Projectiles/TrailSquare");
+		{
+			ProjTexture ??= ModContent.Request<Texture2D>(Texture);
+			TrailTexture ??= ModContent.Request<Texture2D>(Texture + "Trail");
 
-            Color RealColor = Color.White;
+			Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
+			Vector2 vector = Projectile.Center - Main.screenPosition + new Vector2(0, Projectile.gfxOffY);
+			Rectangle rectangle = new(0, ProjTexture.Height() / Main.projFrames[Projectile.type] * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
 
-            switch ((int)Projectile.frame)
-            {
-                case 0:
-                {
-                    RealColor = Color.Lime;
-                    break;
-                }
-                case 1:
-                {
-                    RealColor = Color.MediumPurple;
-                    break;
-                }
-                case 2:
-                {
-                    RealColor = Color.Red;
-                    break;
-                }
-                case 3:
-                {
-                    RealColor = Color.Gold;
-                    break;
-                }
-            }
+			Color color1 = Color.White;
+			Color color2 = Color.White;
 
-            Color color = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(RealColor);
+			switch (Projectile.frame)
+			{
+				case 0:
+				{
+					color1 = new Color(120, 205, 65);
+			 		color2 = color1 * 0.5f;
+					break;
+				}
+				case 1:
+				{
+					color1 = new Color(142, 92, 208);
+			 		color2 = color1 * 0.5f;
+					break;
+				}
+				case 2:
+				{
+					color1 = new Color(251, 46, 51);
+			 		color2 = color1 * 0.5f;
+					break;
+				}
+				case 3:
+				{
+					color1 = new Color(250, 177, 70);
+			 		color2 = color1 * 0.5f;
+					break;
+				}
+			}
 
-            Vector2 drawOriginTrail = new(TrailTexture.Width() * 0.5f, TrailTexture.Height() * 0.5f);
-            Vector2 previousPosition = Projectile.Center;
+			for (int oldPos = 0; oldPos < Projectile.oldPos.Length; oldPos++)
+			{
+				float scale = Projectile.scale * (Projectile.oldPos.Length - oldPos) / Projectile.oldPos.Length * 1.1f;
+				Vector2 drawPos = Projectile.oldPos[oldPos] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+				Color color = Color.Lerp(color1, color2, oldPos / (float)Projectile.oldPos.Length) * ((Projectile.oldPos.Length - oldPos) / (float)Projectile.oldPos.Length);
+				Main.EntitySpriteDraw(TrailTexture.Value, drawPos, rectangle, Projectile.GetAlpha(color), Projectile.oldRot[oldPos], drawOrigin, scale, SpriteEffects.None, 0);
+			}
 
-            for (int k = 0; k < trailLength.Length; k++)
-            {
-                float scale = Projectile.scale * (trailLength.Length - k) / (float)trailLength.Length;
-                scale *= 2f;
+			Main.EntitySpriteDraw(ProjTexture.Value, vector, rectangle, Projectile.GetAlpha(lightColor), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
 
-                if (trailLength[k] == Vector2.Zero)
-                {
-                    break;
-                }
-
-                Vector2 drawPos = trailLength[k] - Main.screenPosition;
-                Vector2 currentPos = trailLength[k];
-                Vector2 betweenPositions = previousPosition - currentPos;
-
-                float max = betweenPositions.Length();
-
-                for (int i = 0; i < max; i++)
-                {
-                    drawPos = previousPosition + -betweenPositions * (i / max) - Main.screenPosition;
-
-                    Main.spriteBatch.Draw(TrailTexture.Value, drawPos, null, color * 0.5f, Projectile.rotation, drawOriginTrail, scale, SpriteEffects.None, 0f);
-                }
-
-                previousPosition = currentPos;
-            }
-
-            return true;
-        }
+			return false;
+		}
 
 		public override void AI()
 		{
@@ -126,24 +113,6 @@ namespace Spooky.Content.Projectiles.Catacomb
             {
                 Projectile.tileCollide = true;
             }
-
-            if (runOnce)
-			{
-				for (int i = 0; i < trailLength.Length; i++)
-				{
-					trailLength[i] = Vector2.Zero;
-				}
-
-				runOnce = false;
-			}
-
-			Vector2 current = Projectile.Center;
-			for (int i = 0; i < trailLength.Length; i++)
-			{
-				Vector2 previousPosition = trailLength[i];
-				trailLength[i] = current;
-				current = previousPosition;
-			}
 		}
 
         private int HomeOnTarget()
