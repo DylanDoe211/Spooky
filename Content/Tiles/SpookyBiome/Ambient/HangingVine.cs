@@ -18,6 +18,7 @@ namespace Spooky.Content.Tiles.SpookyBiome.Ambient
 			Main.tileNoAttach[Type] = true;
 			Main.tileLavaDeath[Type] = true;
 			Main.tileLighted[Type] = true;
+			Main.tileSolid[Type] = false;
 			TileID.Sets.MultiTileSway[Type] = true;
 			TileID.Sets.BreakableWhenPlacing[Type] = true;
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style1xX);

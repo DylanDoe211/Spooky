@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
+using Spooky.Core;
 using Spooky.Content.Tiles.Catacomb;
 using Spooky.Content.Tiles.Minibiomes.Desert;
 using Spooky.Content.Tiles.Minibiomes.Desert.Ambient;
@@ -34,7 +35,7 @@ namespace Spooky.Content.Generation
 
 		List<Vector2> StructurePoints = new List<Vector2>();
 
-		private void PlaceTarPits(GenerationProgress progress, GameConfiguration configuration)
+		private void PlaceTarLakes(GenerationProgress progress, GameConfiguration configuration)
 		{
 			progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.TarPits").Value;
 
@@ -75,20 +76,18 @@ namespace Spooky.Content.Generation
 				int EndValue = PositionX + SizeX - (SizeX / 2);
 				progress.Set((float)(i - StartValue) / (EndValue - StartValue));
 
+				//generate noise caves
+				float caveScaleX = 90;
+				float caveScaleY = 32;
+
+				float caveThreshold = 0.2f;
+
 				for (int j = PositionY - SizeY - (SizeY / 2); j < PositionY + SizeY + (SizeY / 2); j++)
 				{
-					//generate caves by using noise
 					if (Main.tile[i, j].TileType == ModContent.TileType<DesertSandstone>() || Main.tile[i, j].TileType == ModContent.TileType<DesertSand>())
 					{
-						float horizontalOffsetNoise = SpookyWorldMethods.PerlinNoise2D(i / 80f, j / 80f, 5, unchecked(Seed + 1)) * 0.01f;
-						float cavePerlinValue = SpookyWorldMethods.PerlinNoise2D(i / 1000f, j / 350f, 5, Seed) + 0.5f + horizontalOffsetNoise;
-						float cavePerlinValue2 = SpookyWorldMethods.PerlinNoise2D(i / 1000f, j / 350f, 5, unchecked(Seed - 1)) + 0.5f;
-						float caveNoiseMap = (cavePerlinValue + cavePerlinValue2) * 0.5f;
-						float caveCreationThreshold = horizontalOffsetNoise * 3.5f + 0.235f;
-
-						//remove tiles based on the noise variables to create caves
-						//place the caves 15 blocks up so that the bottom of the biome has a bowl shape so that water can be placed there later
-						if (caveNoiseMap * caveNoiseMap > caveCreationThreshold)
+						float noiseVal = SimplexNoise.Noise(Seed, i / caveScaleX, j / caveScaleY);
+						if (noiseVal * noiseVal > caveThreshold)
 						{
 							if (CanDigCaveOnBlock(i, j - 10))
 							{
@@ -99,17 +98,27 @@ namespace Spooky.Content.Generation
 				}
 			}
 
-			//place actual tar pits
+			//place actual tar lakes
 			for (int i = PositionX - SizeX + (SizeX / 2); i < PositionX + SizeX - (SizeX / 2); i++)
 			{
 				for (int j = PositionY - SizeY - (SizeY / 2); j < PositionY + SizeY + (SizeY / 2); j++)
 				{
-					if (BlockTypes.Contains(Main.tile[i, j].TileType) && !Main.tile[i, j - 1].HasTile && CanPlaceTarPit(i, j))
+					if (BlockTypes.Contains(Main.tile[i, j].TileType) && !Main.tile[i, j - 1].HasTile && CanPlaceTarLake(i, j))
 					{
-						PlaceTarPit(i, j + 9, 15, 26, 0.5f);
+						PlaceTarLake(i, j + 9, 15, 26, 0.5f);
 					}
 				}
 			}
+
+			//generate clusters of sandstone with noise
+			float sandstoneScaleX = 20;
+			float sandstoneScaleY = 13;
+
+			float wallScaleX = 40;
+			float wallScaleY = 130;
+
+			float sandstoneThreshold = 0.25f;
+			float wallThreshold = 0.2f;
 
 			for (int i = PositionX - SizeX + (SizeX / 2); i < PositionX + SizeX - (SizeX / 2); i++)
 			{
@@ -118,13 +127,8 @@ namespace Spooky.Content.Generation
 					//replace sandstone with sand using noise
 					if (Main.tile[i, j].TileType == ModContent.TileType<DesertSandstone>() || Main.tile[i, j].WallType == ModContent.WallType<DesertSandstoneWall>())
 					{
-						float horizontalOffsetNoise = SpookyWorldMethods.PerlinNoise2D(i / 80f, j / 80f, 5, unchecked(Seed + 1)) * 0.01f;
-						float cavePerlinValue = SpookyWorldMethods.PerlinNoise2D(i / 200f, j / 100f, 5, Seed) + 0.5f + horizontalOffsetNoise;
-						float cavePerlinValue2 = SpookyWorldMethods.PerlinNoise2D(i / 200f, j / 100f, 5, unchecked(Seed - 1)) + 0.5f;
-						float caveNoiseMap = (cavePerlinValue + cavePerlinValue2) * 0.5f;
-						float caveCreationThreshold = horizontalOffsetNoise * 3.5f + 0.235f;
-
-						if (caveNoiseMap * caveNoiseMap > caveCreationThreshold)
+						float noiseVal = SimplexNoise.Noise(Seed, i / sandstoneScaleX, j / sandstoneScaleY);
+						if (noiseVal * noiseVal < sandstoneThreshold)
 						{
 							Main.tile[i, j].TileType = (ushort)ModContent.TileType<DesertSand>();
 							Main.tile[i, j].WallType = (ushort)ModContent.WallType<DesertSandWall>();
@@ -133,17 +137,14 @@ namespace Spooky.Content.Generation
 				}
 			}
 
+			//3.4.2.271003627
+
 			for (int i = PositionX - SizeX + (SizeX / 2); i < PositionX + SizeX - (SizeX / 2); i++)
 			{
 				for (int j = PositionY - SizeY - (SizeY / 2); j < PositionY + SizeY + (SizeY / 2); j++)
 				{
-					float horizontalOffsetNoise = SpookyWorldMethods.PerlinNoise2D(i / 80f, j / 80f, 5, unchecked(Seed + 1)) * 0.01f;
-					float cavePerlinValue = SpookyWorldMethods.PerlinNoise2D(i / 450f, j / 2000f, 5, Seed) + 0.5f + horizontalOffsetNoise;
-					float cavePerlinValue2 = SpookyWorldMethods.PerlinNoise2D(i / 450f, j / 2000f, 5, unchecked(Seed - 1)) + 0.5f;
-					float caveNoiseMap = (cavePerlinValue + cavePerlinValue2) * 0.5f;
-					float caveCreationThreshold = horizontalOffsetNoise * 3.5f + 0.235f;
-
-					if (caveNoiseMap * caveNoiseMap > caveCreationThreshold)
+					float noiseVal = SimplexNoise.Noise(Seed, i / wallScaleX, j / wallScaleY);
+					if (noiseVal * noiseVal > wallThreshold)
 					{
 						if (Main.tile[i, j].WallType == ModContent.WallType<DesertSandWall>() || Main.tile[i, j].WallType == ModContent.WallType<DesertSandstoneWall>())
 						{
@@ -512,7 +513,7 @@ namespace Spooky.Content.Generation
 		}
 
 		//generate a semi-oval with a pool of water in the middle
-		public void PlaceTarPit(int X, int Y, int radius, int radiusY, float thickMult)
+		public void PlaceTarLake(int X, int Y, int radius, int radiusY, float thickMult)
 		{
 			float scale = radiusY / (float)radius;
 			float invertScale = (float)radius / radiusY;
@@ -580,7 +581,7 @@ namespace Spooky.Content.Generation
 		}
 
 		//dont allow tar pits to place outside of the biome or near another tar pit
-		public bool CanPlaceTarPit(int PositionX, int PositionY)
+		public bool CanPlaceTarLake(int PositionX, int PositionY)
 		{
 			for (int i = PositionX - 40; i <= PositionX + 40; i++)
 			{
@@ -695,7 +696,7 @@ namespace Spooky.Content.Generation
 				return;
 			}
 
-			tasks.Insert(GenIndex1 + 1, new PassLegacy("Tar Pits", PlaceTarPits));
+			tasks.Insert(GenIndex1 + 1, new PassLegacy("Tar Pits", PlaceTarLakes));
 		}
 	}
 }

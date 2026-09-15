@@ -38,6 +38,8 @@ namespace Spooky.Content.Generation
         {
             progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.EyeValley").Value;
 
+            int Seed = WorldGen.genRand.Next();
+
 			//random worldside (default option)
 			if (ModContent.GetInstance<SpookyWorldgenConfig>().EyeValleyWorldSide == EyeValleyPosEnum.Random)
 			{
@@ -267,24 +269,20 @@ namespace Spooky.Content.Generation
                 }
             }
 
-			int seed = WorldGen.genRand.Next();
+            //place clumps of eye blocks throughout the biome after everything else is done
+			float eyeScaleX = 40;
+			float eyeScaleY = 40;
 
-			//place clumps of eye blocks throughout the biome after everything else is done
+			float eyeThreshold = 0.05f;
+
 			for (int X = StartPosition - 75; X <= BiomeEdge + 75; X++)
             {
 				for (int Y = Main.maxTilesY - 250; Y <= Main.maxTilesY - 6; Y++)
                 {
 					if (WorldGen.InWorld(X, Y, 5))
 					{
-						//generate perlin noise caves
-						float horizontalOffsetNoise = SpookyWorldMethods.PerlinNoise2D(X / 80f, Y / 80f, 5, unchecked(seed + 1)) * 0.01f;
-						float cavePerlinValue = SpookyWorldMethods.PerlinNoise2D(X / 600f, Y / 600f, 5, seed) + 0.5f + horizontalOffsetNoise;
-						float cavePerlinValue2 = SpookyWorldMethods.PerlinNoise2D(X / 600f, Y / 600f, 5, unchecked(seed - 1)) + 0.5f;
-						float noiseMap = (cavePerlinValue + cavePerlinValue2) * 0.5f;
-						float fleshThreshold = horizontalOffsetNoise * 3.5f + 0.235f;
-
-						//kill or place tiles depending on the noise map
-						if (noiseMap * noiseMap <= fleshThreshold)
+						float noiseVal = SimplexNoise.FractalNoise(Seed, X / eyeScaleX, Y / eyeScaleY);
+						if (noiseVal * noiseVal < eyeThreshold)
 						{
                             if (Main.tile[X, Y].TileType == ModContent.TileType<SpookyMush>())
                             {

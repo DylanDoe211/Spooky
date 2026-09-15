@@ -148,7 +148,7 @@ namespace Spooky.Content.Generation
                 }
             }
 
-            int XIncrement = 6400  / 98;
+            int XIncrement = 6400 / 98;
             int YIncrement = 1800 / 36;
 
 			//dig out caves
@@ -259,7 +259,7 @@ namespace Spooky.Content.Generation
                 }
             }
 
-            //place leaf walls around dirt blocks and dirt walls around stone blocks
+            //place grass walls around dirt blocks and dirt walls around stone blocks
             for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
             {
 				for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
@@ -288,19 +288,19 @@ namespace Spooky.Content.Generation
             }
 
             //noise spider web walls
+            float wallScaleX = 40;
+			float wallScaleY = 40;
+
+            float wallThreshold = 0.12f;
+
             for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
             {
 				for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
                 {
                     if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
                     {
-                        float horizontalOffsetNoise = SpookyWorldMethods.PerlinNoise2D(X / 550f, Y / 550f, 5, Seed) * 0.5f;
-                        float cavePerlinValue = SpookyWorldMethods.PerlinNoise2D(X / 550f, Y / 550f, 5, Seed) + 0.5f + horizontalOffsetNoise;
-                        float cavePerlinValue2 = SpookyWorldMethods.PerlinNoise2D(X / 550f, Y / 550f, 5, Seed) + 0.5f;
-                        float caveNoiseMap = (cavePerlinValue + cavePerlinValue2) * 0.5f;
-						float caveCreationThreshold = horizontalOffsetNoise * 3.5f + 0.235f;
-
-                        if (caveNoiseMap * caveNoiseMap < caveCreationThreshold)
+                        float noiseVal = SimplexNoise.Noise(Seed, X / wallScaleX, Y / wallScaleY);
+						if (noiseVal * noiseVal < wallThreshold)
 						{
                             WorldGen.PlaceWall(X, Y, ModContent.WallType<WebBlockWall>());
                             Main.tile[X, Y].WallType = (ushort)ModContent.WallType<WebBlockWall>();
@@ -366,9 +366,8 @@ namespace Spooky.Content.Generation
 
             progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.SpiderCavePolish").Value;
 
-            //clean out small floating chunks of blocks and walls
-            CleanOutSmallClumps(true, progress);
-            CleanOutSmallClumps(false, progress);
+            //clean out small floating chunks of blocks
+            CleanOutSmallClumps(progress);
 
             //put dithering around the edge of the biome after all tile chunk removal is done
             for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
@@ -953,7 +952,7 @@ namespace Spooky.Content.Generation
 		}
 
         //method to clean up small clumps of tiles
-        public static void CleanOutSmallClumps(bool Tiles, GenerationProgress progress)
+        public static void CleanOutSmallClumps(GenerationProgress progress)
         {
             int cutoffLimit = 200;
             
@@ -979,36 +978,6 @@ namespace Spooky.Content.Generation
                 getAttachedPoints(x, y + 1, points);
                 getAttachedPoints(x, y - 1, points);
             }
-
-            List<ushort> WallTypes = new()
-            {
-                (ushort)ModContent.WallType<DampSoilWall>(),
-                (ushort)ModContent.WallType<DampGrassWall>(),
-                (ushort)ModContent.WallType<WebBlockWall>(),
-            };
-
-            void getAttachedWallPoints(int x, int y, List<Point> points)
-			{
-                if (!WorldGen.InWorld(x, y, 10))
-                {
-                    return;
-                }
-
-                Tile tile = Main.tile[x, y];
-                Point point = new(x, y);
-
-                if (!WallTypes.Contains(tile.WallType) || points.Count > cutoffLimit || points.Contains(point))
-                {
-                    return;
-                }
-
-                points.Add(point);
-
-                getAttachedWallPoints(x + 1, y, points);
-                getAttachedWallPoints(x - 1, y, points);
-                getAttachedWallPoints(x, y + 1, points);
-                getAttachedWallPoints(x, y - 1, points);
-			}
 
             Point origin = new Point(startPosX, startPosY);
             Vector2 center = origin.ToVector2() * 16f + new Vector2(8f);
@@ -1038,38 +1007,18 @@ namespace Spooky.Content.Generation
                 {
                     if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
                     {
-                        if (Tiles)
-                        {
-                            //clean up tiles
-                            List<Point> chunkPoints = new();
-                            getAttachedPoints(X, Y, chunkPoints);
+                        //clean up tiles
+                        List<Point> chunkPoints = new();
+                        getAttachedPoints(X, Y, chunkPoints);
 
-                            if (WorldGen.InWorld(X, Y, 10) && chunkPoints.Count >= 1 && chunkPoints.Count < cutoffLimit)
-                            {
-                                foreach (Point p in chunkPoints)
-                                {
-                                    WorldUtils.Gen(p, new Shapes.Rectangle(1, 1), Actions.Chain(new GenAction[]
-                                    {
-                                        new Actions.ClearTile(true)
-                                    }));
-                                }
-                            }
-                        }
-                        else
+                        if (WorldGen.InWorld(X, Y, 10) && chunkPoints.Count >= 1 && chunkPoints.Count < cutoffLimit)
                         {
-                            //clean up walls
-                            List<Point> WallPoints = new();
-                            getAttachedWallPoints(X, Y, WallPoints);
-
-                            if (WorldGen.InWorld(X, Y, 10) && WallPoints.Count >= 1 && WallPoints.Count <= cutoffLimit)
+                            foreach (Point p in chunkPoints)
                             {
-                                foreach (Point p in WallPoints)
+                                WorldUtils.Gen(p, new Shapes.Rectangle(1, 1), Actions.Chain(new GenAction[]
                                 {
-                                    WorldUtils.Gen(p, new Shapes.Rectangle(1, 1), Actions.Chain(new GenAction[]
-                                    {
-                                        new Actions.ClearWall(true)
-                                    }));
-                                }
+                                    new Actions.ClearTile(true)
+                                }));
                             }
                         }
                     }

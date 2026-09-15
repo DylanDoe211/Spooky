@@ -256,13 +256,13 @@ namespace Spooky.Content.Generation
 									{
 										WorldGen.KillWall(PositionX, PositionY);
 
-										float horizontalOffsetNoise = SpookyWorldMethods.PerlinNoise2D(PositionX / 80f, PositionY / 80f, 5, unchecked(Seed + 1)) * 0.01f;
-										float cavePerlinValue = SpookyWorldMethods.PerlinNoise2D(PositionX / 300f, PositionY / 1000f, 5, Seed) + 0.5f + horizontalOffsetNoise;
-										float cavePerlinValue2 = SpookyWorldMethods.PerlinNoise2D(PositionX / 300f, PositionY / 1000f, 5, unchecked(Seed - 1)) + 0.5f;
-										float caveNoiseMap = (cavePerlinValue + cavePerlinValue2) * 0.5f;
-										float caveCreationThreshold = horizontalOffsetNoise * 3.5f + 0.235f;
+										float wallScaleX = 40;
+										float wallScaleY = 130;
 
-										if (caveNoiseMap * caveNoiseMap > caveCreationThreshold)
+										float wallThreshold = 0.2f;
+
+										float noiseVal = SimplexNoise.Noise(Seed, PositionX / wallScaleX, PositionY / wallScaleY);
+										if (noiseVal * noiseVal > wallThreshold)
 										{
 											tile.WallType = (ushort)wallType;
 											WorldGen.PlaceWall(PositionX, PositionY, (ushort)wallType);

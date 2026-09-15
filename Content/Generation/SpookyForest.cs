@@ -55,6 +55,8 @@ namespace Spooky.Content.Generation
 		{
 			progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.SpookyForest").Value;
 
+			int Seed = WorldGen.genRand.Next();
+
 			//decide whether or not to use the alt background
 			Flags.SpookyBackgroundAlt = WorldGen.genRand.NextBool();
 
@@ -140,7 +142,18 @@ namespace Spooky.Content.Generation
 			}
 
 			//dig out noise caves in the biome
-			int Seed = WorldGen.genRand.Next();
+			float forestScaleX = 65;
+			float forestScaleY = 30;
+
+			float mushScaleX = 300;
+			float mushScaleY = 75;
+
+			float wallScaleX = 40;
+			float wallScaleY = 130;
+
+			float forestThreshold = 0.1f;
+			float mushThreshold = 0.085f;
+			float wallThreshold = 0.2f;
 
 			for (int X = PositionX - Main.maxTilesX / 12; X <= PositionX + Main.maxTilesX / 12; X++)
 			{
@@ -149,57 +162,60 @@ namespace Spooky.Content.Generation
 				{
 					if (Main.tile[X, Y].TileType == ModContent.TileType<SpookyStone>() || Main.tile[X, Y].TileType == ModContent.TileType<SpookyDirt2>())
 					{
-						//generate perlin noise caves
-						float horizontalOffsetNoise = SpookyWorldMethods.PerlinNoise2D(X / 400f, Y / 250f, 5, Seed + 1) * 0.01f;
-						float cavePerlinValue = SpookyWorldMethods.PerlinNoise2D(X / 400f, Y / 250f, 5, Seed) + 0.5f + horizontalOffsetNoise;
-						float cavePerlinValue2 = SpookyWorldMethods.PerlinNoise2D(X / 400f, Y / 250f, 5, Seed - 1) + 0.5f;
-						float caveNoiseMap = (cavePerlinValue + cavePerlinValue2) * 0.5f;
-						float caveCreationThreshold = horizontalOffsetNoise * 3.5f + 0.235f;
-
-						//kill or place tiles depending on the noise map
-						if (caveNoiseMap * caveNoiseMap < caveCreationThreshold)
+						float noiseVal = SimplexNoise.FractalNoise(Seed, X / forestScaleX, Y / forestScaleY);
+						if (noiseVal * noiseVal > forestThreshold)
 						{
 							WorldGen.KillTile(X, Y);
 						}
 					}
 				}
 
-				//glowshroom larger cave generation
+				//glowshroom cave generation, much longer than regular spooky forest caves
 				for (int Y = GlowshroomPosY - 5; Y < Main.maxTilesY - 200; Y++)
 				{
 					if (Main.tile[X, Y].TileType == ModContent.TileType<SpookyStone>())
 					{
-						//generate perlin noise caves
-						float horizontalOffsetNoise = SpookyWorldMethods.PerlinNoise2D(X / 2000f, Y / 350f, 5, Seed + 1) * 0.5f;
-                        float cavePerlinValue = SpookyWorldMethods.PerlinNoise2D(X / 2000f, Y / 350f, 5, Seed) + 0.5f + horizontalOffsetNoise;
-                        float cavePerlinValue2 = SpookyWorldMethods.PerlinNoise2D(X / 2000f, Y / 350f, 5, Seed - 1) + 0.5f;
-                        float caveNoiseMap = (cavePerlinValue + cavePerlinValue2) * 0.5f;
-						float caveCreationThreshold = horizontalOffsetNoise * 3.5f + 0.235f;
-
-						//kill or place tiles depending on the noise map
-						if (caveNoiseMap * caveNoiseMap > caveCreationThreshold)
+						float noiseVal = SimplexNoise.FractalNoise(Seed, X / mushScaleX, Y / mushScaleY);
+						if (noiseVal * noiseVal > mushThreshold)
 						{
 							WorldGen.KillTile(X, Y);
 						}
 					}
 				}
 
-				//generate special wall noise in the entire biome
+				//destroy walls with noise to create unique wall patterns underground
 				for (int Y = (int)Main.worldSurface + 10; Y < Main.maxTilesY - 200; Y++)
 				{
 					if (Main.tile[X, Y].WallType == ModContent.WallType<SpookyStoneWall>())
 					{
-						//generate perlin noise caves
-						float horizontalOffsetNoise = SpookyWorldMethods.PerlinNoise2D(X / 300f, Y / 1000f, 5, unchecked(Seed + 1)) * 0.01f;
-						float cavePerlinValue = SpookyWorldMethods.PerlinNoise2D(X / 300f, Y / 1000f, 5, Seed) + 0.5f + horizontalOffsetNoise;
-						float cavePerlinValue2 = SpookyWorldMethods.PerlinNoise2D(X / 300f, Y / 1000f, 5, unchecked(Seed - 1)) + 0.5f;
-						float caveNoiseMap = (cavePerlinValue + cavePerlinValue2) * 0.5f;
-						float caveCreationThreshold = horizontalOffsetNoise * 3.5f + 0.235f;
-
-						//kill or place tiles depending on the noise map
-						if (caveNoiseMap * caveNoiseMap > caveCreationThreshold)
+						float noiseVal = SimplexNoise.Noise(Seed, X / wallScaleX, Y / wallScaleY);
+						if (noiseVal * noiseVal > wallThreshold)
 						{
 							WorldGen.KillWall(X, Y);
+						}
+					}
+				}
+			}
+
+			//basic cave smoothing
+			for (int l = 0; l < 6; l++)
+			{
+				for (int X = PositionX - Main.maxTilesX / 12; X <= PositionX + Main.maxTilesX / 12; X++)
+				{
+					for (int Y = (int)Main.worldSurface; Y < Main.maxTilesY - 200; Y++)
+					{
+						int tileType = SpookyWorldMethods.GetNeighboringTileType(X, Y);
+						if (tileType == ModContent.TileType<SpookyStone>() || tileType == ModContent.TileType<SpookyDirt2>())
+						{
+							int neighborCount = SpookyWorldMethods.GetNeighboringTileCount(X, Y);
+							if (neighborCount > 4)
+							{
+								WorldGen.PlaceTile(X, Y, tileType);
+							}
+							else if (neighborCount < 4)
+							{
+								WorldGen.KillTile(X, Y);
+							}
 						}
 					}
 				}

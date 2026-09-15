@@ -29,14 +29,12 @@ namespace Spooky.Content.Projectiles.SpookyHell
         {
             Projectile.width = 48;
             Projectile.height = 52;
-            Projectile.minion = true;
             Projectile.friendly = true;
             Projectile.ignoreWater = true;
             Projectile.tileCollide = false;
             Projectile.netImportant = true;
             Projectile.timeLeft = 2;
             Projectile.penetrate = -1;
-            Projectile.minionSlots = 0;
             Projectile.aiStyle = -1;
         }
 

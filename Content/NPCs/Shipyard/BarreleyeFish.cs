@@ -9,6 +9,8 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
+using Spooky.Core;
+
 namespace Spooky.Content.NPCs.Shipyard
 {
 	public class BarreleyeFish : ModNPC
@@ -50,7 +52,8 @@ namespace Spooky.Content.NPCs.Shipyard
 			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
             {
 				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.BarreleyeFish"),
-                new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.ShipyardBiome>().ModBiomeBestiaryInfoElement)
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.NightTime,
+				new BestiaryBackgroundOverlay("Spooky/Content/Biomes/ShipyardBiomeNight_Background", Color.White)
 			});
 		}
 

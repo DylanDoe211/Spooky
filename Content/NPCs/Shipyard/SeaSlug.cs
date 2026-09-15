@@ -11,6 +11,8 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
+using Spooky.Core;
+
 namespace Spooky.Content.NPCs.Shipyard
 {
     public class SeaSlugHead : ModNPC
@@ -85,7 +87,8 @@ namespace Spooky.Content.NPCs.Shipyard
 			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
             {
 				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.SeaSlug"),
-				new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.ShipyardBiome>().ModBiomeBestiaryInfoElement)
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.NightTime,
+				new BestiaryBackgroundOverlay("Spooky/Content/Biomes/ShipyardBiomeNight_Background", Color.White)
 			});
 		}
 

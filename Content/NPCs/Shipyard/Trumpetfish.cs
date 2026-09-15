@@ -28,10 +28,10 @@ namespace Spooky.Content.NPCs.Shipyard
 
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
-                //CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/TrumpetfishBestiary",
-                Position = new Vector2(0f, 35f),
+                CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/TrumpetfishBestiary",
+                Position = new Vector2(-20f, 35f),
                 PortraitPositionXOverride = 0f,
-                PortraitPositionYOverride = 0f
+                PortraitPositionYOverride = 20f
             };
 
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
@@ -81,6 +81,7 @@ namespace Spooky.Content.NPCs.Shipyard
 			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
             {
 				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.Trumpetfish"),
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
 				new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.ShipyardBiome>().ModBiomeBestiaryInfoElement)
 			});
 		}
@@ -300,6 +301,24 @@ namespace Spooky.Content.NPCs.Shipyard
         public override void FindFrame(int frameHeight)
 		{
 			NPC.frame.Y = (int)NPC.ai[2] * frameHeight;
+		}
+
+        public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
+		{
+            NPC Parent = Main.npc[(int)NPC.ai[3]];
+			if (Parent.ai[2] == 0)
+            {
+                Parent.ai[2] = 180;
+            }
+		}
+
+		public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
+		{
+            NPC Parent = Main.npc[(int)NPC.ai[3]];
+			if (Parent.ai[2] == 0)
+            {
+                Parent.ai[2] = 180;
+            }
 		}
 
         public override bool PreAI()

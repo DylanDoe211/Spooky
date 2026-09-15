@@ -41,7 +41,7 @@ namespace Spooky.Content.Generation
 		{
 			progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.Shipyard").Value;
 
-			int seed = WorldGen.genRand.Next();
+			int Seed = WorldGen.genRand.Next();
 
 			int leftBound = bounds.Item1 - 6;
 			int rightBound = bounds.Item2 + 6;
@@ -64,7 +64,7 @@ namespace Spooky.Content.Generation
 						leftBound = WorldGen.beachDistance - 40;
 					}
 
-					if ((!WorldGen.SolidOrSlopedTile(leftBound, LeftY) || !Cemetery.NoFloatingIsland(leftBound, LeftY)) && LeftY <= Main.worldSurface)
+					if ((!WorldGen.SolidTile(leftBound, LeftY) || !Cemetery.NoFloatingIsland(leftBound, LeftY)) && LeftY <= Main.worldSurface)
 					{
 						LeftY++;
 					}
@@ -94,7 +94,7 @@ namespace Spooky.Content.Generation
 						rightBound = Main.maxTilesX - (WorldGen.beachDistance - 40);
 					}
 
-					if ((!WorldGen.SolidOrSlopedTile(rightBound, RightY) || !Cemetery.NoFloatingIsland(rightBound, RightY)) && RightY <= Main.worldSurface)
+					if ((!WorldGen.SolidTile(rightBound, RightY) || !Cemetery.NoFloatingIsland(rightBound, RightY)) && RightY <= Main.worldSurface)
 					{
 						RightY++;
 					}
@@ -268,21 +268,20 @@ namespace Spooky.Content.Generation
 			}
 
 			//generate black sandstone with noise
+			float sandScaleX = 110;
+			float sandScaleY = 60;
+
+			float sandThreshold = 0.1f;
+			float caveThreshold = 0.01f;
+
 			for (int X = leftBound - 10; X <= rightBound + 10; X++)
 			{
 				for (int Y = 10; Y <= Main.worldSurface; Y++)
 				{
 					if (WorldGen.InWorld(X, Y, 5))
 					{
-						//generate perlin noise caves
-						float horizontalOffsetNoise = SpookyWorldMethods.PerlinNoise2D(X / 80f, Y / 80f, 5, unchecked(seed + 1)) * 0.01f;
-						float cavePerlinValue = SpookyWorldMethods.PerlinNoise2D(X / 1500f, Y / 320f, 5, seed) + 0.5f + horizontalOffsetNoise;
-						float cavePerlinValue2 = SpookyWorldMethods.PerlinNoise2D(X / 1500f, Y / 320f, 5, unchecked(seed - 1)) + 0.5f;
-						float noiseMap = (cavePerlinValue + cavePerlinValue2) * 0.5f;
-						float StoneThreshold = horizontalOffsetNoise * 4f + 0.3f;
-
-						//replace tiles/walls with black sandstone
-						if (noiseMap * noiseMap < StoneThreshold)
+						float noiseVal = SimplexNoise.FractalNoise(Seed, X / sandScaleX, Y / sandScaleY);
+						if (noiseVal * noiseVal < sandThreshold)
 						{
 							if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>())
 							{
@@ -304,16 +303,34 @@ namespace Spooky.Content.Generation
 				{
 					if (WorldGen.InWorld(X, Y, 5) && Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>())
 					{
-						//generate perlin noise caves
-						float horizontalOffsetNoise = SpookyWorldMethods.PerlinNoise2D(X / 80f, Y / 80f, 5, unchecked(seed + 1)) * 0.01f;
-						float cavePerlinValue = SpookyWorldMethods.PerlinNoise2D(X / 1500f, Y / 320f, 5, seed) + 0.5f + horizontalOffsetNoise;
-						float cavePerlinValue2 = SpookyWorldMethods.PerlinNoise2D(X / 1500f, Y / 320f, 5, unchecked(seed - 1)) + 0.5f;
-						float noiseMap = (cavePerlinValue + cavePerlinValue2) * 0.5f;
-						float CaveThreshold = horizontalOffsetNoise * 2f + 0.1f;
-
-						if (noiseMap * noiseMap <= CaveThreshold)
+						float noiseVal = SimplexNoise.FractalNoise(Seed, X / sandScaleX, Y / sandScaleY);
+						if (noiseVal * noiseVal <= caveThreshold)
 						{
 							WorldGen.KillTile(X, Y);
+						}
+					}
+				}
+			}
+
+			//cave cleanup
+			for (int l = 0; l < 6; l++)
+			{
+				for (int X = leftBound - 10; X <= rightBound + 10; X++)
+				{
+					for (int Y = 10; Y <= Main.worldSurface; Y++)
+					{
+						int tileType = SpookyWorldMethods.GetNeighboringTileType(X, Y);
+						if (tileType == ModContent.TileType<BlackSand>() || tileType == ModContent.TileType<BlackSandstone>())
+						{
+							int neighborCount = SpookyWorldMethods.GetNeighboringTileCount(X, Y);
+							if (neighborCount > 4)
+							{
+								WorldGen.PlaceTile(X, Y, tileType);
+							}
+							else if (neighborCount < 4)
+							{
+								WorldGen.KillTile(X, Y);
+							}
 						}
 					}
 				}

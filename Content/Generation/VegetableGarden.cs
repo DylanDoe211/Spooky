@@ -9,12 +9,12 @@ using Microsoft.Xna.Framework;
 using System.Linq;
 using System.Collections.Generic;
 
+using Spooky.Core;
 using Spooky.Content.Tiles.Catacomb;
 using Spooky.Content.Tiles.Minibiomes.Vegetable;
 using Spooky.Content.Tiles.Minibiomes.Vegetable.Ambient;
 using Spooky.Content.Tiles.Minibiomes.Vegetable.Furniture;
 using Spooky.Content.Tiles.Minibiomes.Vegetable.Tree;
-
 using StructureHelper;
 
 namespace Spooky.Content.Generation
@@ -100,42 +100,46 @@ namespace Spooky.Content.Generation
 		//dig out caverns inside of the area of ovals
 		public void DigOutCaves(int PositionX, int PositionY, int SizeX, int SizeY, int Seed)
 		{
+			//generate noise caves
+			float caveScaleX = 160;
+			float caveScaleY = 34;
+
+			float caveThreshold = 0.08f;
+
 			for (int i = PositionX - SizeX * 2; i < PositionX + SizeX * 2; i++)
 			{
 				for (int j = PositionY - SizeY * 2; j < PositionY + SizeY * 2; j++)
 				{
-					//generate caves by using noise
 					if (Main.tile[i, j].TileType == ModContent.TileType<JungleSoil>())
 					{
-						//generate perlin noise caves
-						//uses extremely high values for the X and low values for the Y to create horizontally long but vertically short caves
-						float horizontalOffsetNoise = SpookyWorldMethods.PerlinNoise2D(i / 80f, j / 80f, 5, unchecked(Seed + 1)) * 0.01f;
-						float cavePerlinValue = SpookyWorldMethods.PerlinNoise2D(i / 1500f, j / 320f, 5, Seed) + 0.5f + horizontalOffsetNoise;
-						float cavePerlinValue2 = SpookyWorldMethods.PerlinNoise2D(i / 1500f, j / 320f, 5, unchecked(Seed - 1)) + 0.5f;
-						float caveNoiseMap = (cavePerlinValue + cavePerlinValue2) * 0.5f;
-						float caveCreationThreshold = horizontalOffsetNoise * 3.5f + 0.235f;
-
-						//remove tiles based on the noise variables to create caves
 						//also remove the caves higher up by 5 tiles so that the bottom of the biome has a floor
-						if (caveNoiseMap * caveNoiseMap > caveCreationThreshold)
+						float noiseVal = SimplexNoise.FractalNoise(Seed, i / caveScaleX, j / caveScaleY);
+						if (noiseVal * noiseVal <= caveThreshold)
 						{
 							WorldGen.KillTile(i, j - 5);
 						}
 					}
+				}
+			}
 
-					if (Main.tile[i, j].WallType == ModContent.WallType<JungleSoilWall>())
+			for (int l = 0; l < 6; l++)
+			{
+				for (int i = PositionX - SizeX * 2; i < PositionX + SizeX * 2; i++)
+				{
+					for (int j = PositionY - SizeY * 2; j < PositionY + SizeY * 2; j++)
 					{
-						//generate perlin noise caves
-						float horizontalOffsetNoise = SpookyWorldMethods.PerlinNoise2D(i / 120f, j / 550f, 5, unchecked(Seed + 1)) * 0.01f;
-						float cavePerlinValue = SpookyWorldMethods.PerlinNoise2D(i / 120f, j / 550f, 5, Seed) + 0.5f + horizontalOffsetNoise;
-						float cavePerlinValue2 = SpookyWorldMethods.PerlinNoise2D(i / 120f, j / 550f, 5, unchecked(Seed - 1)) + 0.5f;
-						float caveNoiseMap = (cavePerlinValue + cavePerlinValue2) * 0.5f;
-						float caveCreationThreshold = horizontalOffsetNoise * 3.5f + 0.235f;
-
-						//dig out walls to create unique holes where the background shows through
-						if (caveNoiseMap * caveNoiseMap > caveCreationThreshold)
+						int tileType = SpookyWorldMethods.GetNeighboringTileType(i, j);
+						if (tileType == ModContent.TileType<JungleSoil>())
 						{
-							WorldGen.KillWall(i, j);
+							int neighborCount = SpookyWorldMethods.GetNeighboringTileCount(i, j);
+							if (neighborCount > 4)
+							{
+								WorldGen.PlaceTile(i, j, tileType);
+							}
+							else if (neighborCount < 4)
+							{
+								WorldGen.KillTile(i, j);
+							}
 						}
 					}
 				}

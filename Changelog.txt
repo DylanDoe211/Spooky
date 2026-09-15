@@ -10,8 +10,9 @@ New Stuff:
 -Added a new game tip to tell players about spooky mods config options
 -Added modcalls for various things in spooky mod like boss defeated, event defeated, and other variables
 
-
 Changes:
+-Made some spooky mod world generation tasks fill up the progress bar better to track how far along each biome is done generating
+-Fetid farms no longer has random giant holes in the mud walls, now the entire biome just has mud walls in it
 -Charm of the flies no longer has a cooldown that prevents flies from spawning after you get hit
 -Spi-ops chestplate now gives speed boost when hit regardless of how much damage you took
 -Halved cooldown time for the flower armor pollen ability set bonus
@@ -20,7 +21,6 @@ Changes:
 -Old wood staff no longer has amethyst in its recipe, and that has been replaced with 10 glowshrooms instead
 -Krampus quest reward presents now need 5 to research for journey mode
 -Krampus quest reward presents now have a separate drop chance for each piece of the krampus helper vanity
--Made some spooky mod world generation tasks fill up the progress bar better to track how far along each biome is done generating
 -Removing the lily of rebirth bloom buff off of yourself no longer resets the number of revives you have if you don't have any revives left
 -Removed gourd o' lantern items, breaking a carved gourd with a candle in it now just drops the regular carved gourd and the candle
 -Gourd blocks now have cool additional "discolored" clusters (These can be observed more clearly on the new giant gourds in the underground spooky forest)
@@ -39,6 +39,12 @@ Changes:
 -Gourd blocks now have cool additional "discolored" clusters (These can be observed more clearly on the new giant gourds in the underground spooky forest)
 -Updated all colored gourd wall sprites to look better
 
+Biome Noise Generation Changes:
+-Spooky mod world generation things that utilize noise have been improved in varying ways
+-Spooky forest caves have been changed to be more natural and slighlty less frequent, glowshroom caves are now more vertically open but also a bit less frequent
+-Tar pits caves generally the same with changes to make them a tiny bit bigger, along with the sandstone clusters and walls generation being improved 
+-Fetid farms caves are generally the same but look a bit more natural, there is also no longer random holes in the mud walls in it
+-Eye valley flesh block clusters changed to be more natural looking veins, with organic mush still being the dominant block in the biome
 
 Localization Changes:
 -For all new content, localization entries for those are be automatically added, if there is anything I have forgotten please let me know!
@@ -78,5 +84,6 @@ Fixes:
 -Crusty gunfish improperly consuming multiple ammo on each use
 -The cross accessory sound waves not having a correctly sized hitbox
 -Scorpion deathblow right click not having autofire
--Eye belcher mines not dealing double damage while on the ground correctly
+-Eye belcher mines not properly dealing double damage while on the ground
 -Opalised cannon slimes lagging the game
+-Brainy minion vanishing when spawning some minions

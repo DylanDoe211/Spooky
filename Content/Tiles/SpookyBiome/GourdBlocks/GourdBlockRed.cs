@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 
-using Spooky.Content.Generation;
+using Spooky.Core;
 
 namespace Spooky.Content.Tiles.SpookyBiome.GourdBlocks
 {
@@ -24,6 +24,10 @@ namespace Spooky.Content.Tiles.SpookyBiome.GourdBlocks
 		}
 
 		int Seed = 0;
+		float ScaleX = 20;
+		float ScaleY = 20;
+		float ScaleThreshold = 0.15f;
+
 		public override void PostTileFrame(int i, int j, int up, int down, int left, int right, int upLeft, int upRight, int downLeft, int downRight)
 		{
 			var tile = Main.tile[i, j];
@@ -35,14 +39,8 @@ namespace Spooky.Content.Tiles.SpookyBiome.GourdBlocks
 
 			if (tile.TileFrameX is 18 or 36 or 54 && tile.TileFrameY is 18) //Plain center frames
 			{
-				float horizontalOffsetNoise = SpookyWorldMethods.PerlinNoise2D(i / 150f, j / 150f, 5, unchecked(Seed + 1)) * 0.01f;
-				float Value1 = SpookyWorldMethods.PerlinNoise2D(i / 150f, j / 150f, 5, Seed) + 0.5f;
-				float Value2 = SpookyWorldMethods.PerlinNoise2D(i / 150f, j / 150f, 5, unchecked(Seed - 1)) + 0.5f;
-				float SpecialVariantMap = (Value1 + Value2) * 0.35f;
-				float SpecialVariantThreshold = horizontalOffsetNoise * 2f + 0.1f;
-
-				//kill or place tiles depending on the noise map
-				if (SpecialVariantMap * SpecialVariantMap <= SpecialVariantThreshold)
+				float noiseVal = SimplexNoise.FractalNoise(Seed, i / ScaleX, j / ScaleY);
+				if (noiseVal * noiseVal >= ScaleThreshold)
 				{
 					Point16 result = new(18 * 7, 18 * 12);
 					int random = Main.rand.Next(3);
