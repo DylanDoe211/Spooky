@@ -71,7 +71,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Ocean
 
             if (!segmentsSpawned)
             {
-                int latestSegment = Projectile.whoAmI;
+                int latestSegment = Projectile.identity;
 
                 for (int numSegment = 0; numSegment < 8; numSegment++)
                 {
@@ -79,13 +79,13 @@ namespace Spooky.Content.Projectiles.Minibiomes.Ocean
                     {
                         latestSegment = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, 
                         ModContent.ProjectileType<ZombieEelBody>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 
-                        ai0: Projectile.whoAmI, ai1: latestSegment, ai2: numSegment);
+                        ai0: Projectile.identity, ai1: latestSegment, ai2: numSegment);
                     }
                     else
                     {
                         latestSegment = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, 
                         ModContent.ProjectileType<ZombieEelTail>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 
-                        ai0: Projectile.whoAmI, ai1: latestSegment);
+                        ai0: Projectile.identity, ai1: latestSegment);
                     }
                 }
 

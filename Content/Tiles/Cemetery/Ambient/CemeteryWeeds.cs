@@ -30,7 +30,7 @@ namespace Spooky.Content.Tiles.Cemetery.Ambient
 
         public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY)
         {
-            offsetY = -14;
+            offsetY = -16;
             height = 32;
         }
 

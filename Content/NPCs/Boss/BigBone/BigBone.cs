@@ -288,23 +288,17 @@ namespace Spooky.Content.NPCs.Boss.BigBone
 					float t = i / (float)segments;
 					Vector2 drawPos2 = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
 
-                    if (i % 3 == 0)
+                    if (Main.netMode != NetmodeID.Server)
                     {
-                        if (Main.netMode != NetmodeID.Server)
+                        if (i % 3 == 0)
                         {
                             Gore.NewGore(NPC.GetSource_Death(), drawPos2, NPC.velocity, ModContent.Find<ModGore>("Spooky/BigBoneNeckGore1").Type);
                         }
-                    }
-                    else if (i % 3 == 1)
-                    {
-                        if (Main.netMode != NetmodeID.Server)
+                        else if (i % 3 == 1)
                         {
                             Gore.NewGore(NPC.GetSource_Death(), drawPos2, NPC.velocity, ModContent.Find<ModGore>("Spooky/BigBoneNeckGore2").Type);
                         }
-                    }
-                    else
-                    {
-                        if (Main.netMode != NetmodeID.Server)
+                        else
                         {
                             Gore.NewGore(NPC.GetSource_Death(), drawPos2, NPC.velocity, ModContent.Find<ModGore>("Spooky/BigBoneNeckGore3").Type);
                         }

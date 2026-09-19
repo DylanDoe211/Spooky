@@ -10,6 +10,7 @@ New Stuff:
 -Added a new game tip to tell players about spooky mods config options
 -Added modcalls for various things in spooky mod like boss defeated, event defeated, and other variables
 
+
 Changes:
 -Made some spooky mod world generation tasks fill up the progress bar better to track how far along each biome is done generating
 -Fetid farms no longer has random giant holes in the mud walls, now the entire biome just has mud walls in it
@@ -38,6 +39,8 @@ Changes:
 -Polished sprites for various spooky mod ambient grasses
 -Gourd blocks now have cool additional "discolored" clusters (These can be observed more clearly on the new giant gourds in the underground spooky forest)
 -Updated all colored gourd wall sprites to look better
+-Updated the colors on spooky forest, cemetery, and spider grotto dirt to look a bit nicer
+
 
 Biome Noise Generation Changes:
 -Spooky mod world generation things that utilize noise have been improved in varying ways
@@ -45,6 +48,7 @@ Biome Noise Generation Changes:
 -Tar pits caves generally the same with changes to make them a tiny bit bigger, along with the sandstone clusters and walls generation being improved 
 -Fetid farms caves are generally the same but look a bit more natural, there is also no longer random holes in the mud walls in it
 -Eye valley flesh block clusters changed to be more natural looking veins, with organic mush still being the dominant block in the biome
+
 
 Localization Changes:
 -For all new content, localization entries for those are be automatically added, if there is anything I have forgotten please let me know!
@@ -54,6 +58,7 @@ Localization Changes:
 -Flower armor set bonus tooltip modified to be accurate for the reduced cooldown change (30 seconds -> 15 seconds)
 -Renamed thorn stem shirt -> flower stem shirt to be consistent with the other two armor pieces having "Flower" in their names (The internal name for this entry is FlowerBody)
 -Fixed mispelling of targeted -> targetted in dave & mikes tooltip
+-Instances of armor set bonuses requiring double tapping to activate now have the name of the key you need to double tap replaced with {0} in the localization to properly format it based on the vanilla config
 -Due to removal of gourd o' lantern items, localization entries for those have been removed
 Added the following new entries to the WorldgenTasks localization:
 Shipyard: Creating shipwrecks
@@ -78,12 +83,13 @@ Fixes:
 -Peacock oni mask effect inflicting its debuff onto town npcs, friendly critters, and invincible/immortal npcs
 -Razor radish not having extra hitbox range
 -Old wood hammer not having autoswing
--Frogpoon incorrectly dealing melee and not ranged damage
+-Frogpoon incorrectly dealing melee damage and not ranged damage
 -Rot gourd not properly falling through blocks/platforms to get the targetted players level
 -Green gourd walls producing wood dust instead of pumpkin gut dust when broken
--Crusty gunfish improperly consuming multiple ammo on each use
+-Crusty gunfish unintentionally consuming multiple ammo on each use
 -The cross accessory sound waves not having a correctly sized hitbox
 -Scorpion deathblow right click not having autofire
 -Eye belcher mines not properly dealing double damage while on the ground
 -Opalised cannon slimes lagging the game
 -Brainy minion vanishing when spawning some minions
+-Swampy cemetery ghost enemies having their glowing aura unintentionally drawn in the bestiary

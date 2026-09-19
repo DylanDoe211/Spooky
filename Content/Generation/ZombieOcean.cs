@@ -274,7 +274,7 @@ namespace Spooky.Content.Generation
 								{
 									if (ReplaceOnly)
 									{
-										if (tile.HasTile)
+										if (tile.HasTile && WorldGen.SolidOrSlopedTile(PositionX, PositionY))
 										{
 											WorldGen.KillTile(PositionX, PositionY);
 											tile.TileType = (ushort)tileType;

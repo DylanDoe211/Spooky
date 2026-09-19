@@ -852,7 +852,7 @@ namespace Spooky.Content.Generation
 
 		public void GenerateLargeGourds(GenerationProgress progress, GameConfiguration configuration)
         {
-			for (int Y = (int)Main.worldSurface + 15; Y <= Main.maxTilesY / 2 + 50; Y++)
+			for (int Y = (int)Main.worldSurface + 40; Y <= GlowshroomPosY; Y++)
 			{
 				for (int X = PositionX - Main.maxTilesX / 42; X <= PositionX; X++)
 				{

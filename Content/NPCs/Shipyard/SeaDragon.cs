@@ -93,6 +93,20 @@ namespace Spooky.Content.NPCs.Shipyard
                 NPC.netUpdate = true;
             }
         }
+
+        public override void HitEffect(NPC.HitInfo hit) 
+        {
+            if (NPC.life <= 0) 
+            {
+                for (int numGores = 1; numGores <= 2; numGores++)
+                {
+                    if (Main.netMode != NetmodeID.Server) 
+                    {
+                        Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/SeaDragonBlueGore" + numGores).Type);
+                    }
+                }
+            }
+        }
 	}
 
     public class SeaDragon2 : SeaDragon1
@@ -111,6 +125,14 @@ namespace Spooky.Content.NPCs.Shipyard
                 NPC BestiaryParent = new();
                 BestiaryParent.SetDefaults(ModContent.NPCType<SeaDragon1>());
                 Main.BestiaryTracker.Kills.RegisterKill(BestiaryParent);
+            
+                for (int numGores = 1; numGores <= 2; numGores++)
+                {
+                    if (Main.netMode != NetmodeID.Server) 
+                    {
+                        Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/SeaDragonPinkGore" + numGores).Type);
+                    }
+                }
             }
         }
     }
@@ -131,6 +153,14 @@ namespace Spooky.Content.NPCs.Shipyard
                 NPC BestiaryParent = new();
                 BestiaryParent.SetDefaults(ModContent.NPCType<SeaDragon1>());
                 Main.BestiaryTracker.Kills.RegisterKill(BestiaryParent);
+    
+                for (int numGores = 1; numGores <= 2; numGores++)
+                {
+                    if (Main.netMode != NetmodeID.Server) 
+                    {
+                        Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/SeaDragonPurpleGore" + numGores).Type);
+                    }
+                }
             }
         }
     }
@@ -151,6 +181,14 @@ namespace Spooky.Content.NPCs.Shipyard
                 NPC BestiaryParent = new();
                 BestiaryParent.SetDefaults(ModContent.NPCType<SeaDragon1>());
                 Main.BestiaryTracker.Kills.RegisterKill(BestiaryParent);
+        
+                for (int numGores = 1; numGores <= 2; numGores++)
+                {
+                    if (Main.netMode != NetmodeID.Server) 
+                    {
+                        Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/SeaDragonGreenGore" + numGores).Type);
+                    }
+                }
             }
         }
     }

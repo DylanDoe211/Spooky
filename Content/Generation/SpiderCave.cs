@@ -452,13 +452,12 @@ namespace Spooky.Content.Generation
             Vector2 ArenaOrigin = new Vector2(startPosX - 50, (HunterHousePositionY + (HunterHouseOffsetY / 2)) - 25);
 
             //place soil blocks so the old hunters house isnt floating
-            for (int X = (int)startPosX - 55; X <= (int)startPosX + 55; X++)
-            {
+            for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
+			{
 				for (int Y = (HunterHousePositionY + (HunterHouseOffsetY / 2)) + 8; Y <= origin.Y + verticalRadius + 3; Y++)
                 {
 					if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
 					{
-                        WorldGen.KillTile(X, Y);
                         WorldGen.PlaceTile(X, Y, ModContent.TileType<DampSoil>());
                     }
                 }

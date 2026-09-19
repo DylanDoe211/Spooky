@@ -21,7 +21,9 @@ namespace Spooky.Content.NPCs.Shipyard
 
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
-                CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/FrogfishBestiary"
+                Position = new Vector2(20f, 0f),
+                PortraitPositionXOverride = 6f,
+                PortraitPositionYOverride = 0f
             };
 		}
 
@@ -32,7 +34,7 @@ namespace Spooky.Content.NPCs.Shipyard
 			NPC.defense = 0;
 			NPC.width = 70;
 			NPC.height = 45;
-            NPC.npcSlots = 0.5f;
+            NPC.npcSlots = 1f;
             NPC.value = Item.buyPrice(0, 0, 0, 50);
             NPC.noGravity = false;
             NPC.chaseable = false;
@@ -46,7 +48,7 @@ namespace Spooky.Content.NPCs.Shipyard
         {
 			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
             {
-				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.Frogfish"),
+				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.Frogfish1"),
                 new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.ShipyardBiome>().ModBiomeBestiaryInfoElement)
 			});
 		}
@@ -81,6 +83,11 @@ namespace Spooky.Content.NPCs.Shipyard
                 NPC.frame.Y = 0 * frameHeight;
             }
 		}
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
+        {
+            target.AddBuff(BuffID.Poisoned, 300);
+        }
 
         public override void AI()
         {
@@ -129,14 +136,45 @@ namespace Spooky.Content.NPCs.Shipyard
                 }
             }
         }
+
+        public override void HitEffect(NPC.HitInfo hit) 
+        {
+            if (NPC.life <= 0) 
+            {
+                for (int numGores = 1; numGores <= 5; numGores++)
+                {
+                    if (Main.netMode != NetmodeID.Server) 
+                    {
+                        Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/FrogfishOrangeGore" + numGores).Type);
+                    }
+                }
+            }
+        }
 	}
 
     public class Frogfish2 : Frogfish1
 	{
-        public override void SetStaticDefaults()
-		{
-			Main.npcFrameCount[NPC.type] = 6;
-            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
+        {
+			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
+            {
+				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.Frogfish2"),
+                new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.ShipyardBiome>().ModBiomeBestiaryInfoElement)
+			});
 		}
+
+        public override void HitEffect(NPC.HitInfo hit) 
+        {
+            if (NPC.life <= 0) 
+            {
+                for (int numGores = 1; numGores <= 5; numGores++)
+                {
+                    if (Main.netMode != NetmodeID.Server)
+                    {
+                        Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/FrogfishYellowGore" + numGores).Type);
+                    }
+                }
+            }
+        }
     }
 }

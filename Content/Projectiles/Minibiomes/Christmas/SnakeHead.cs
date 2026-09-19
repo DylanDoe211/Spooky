@@ -37,9 +37,10 @@ namespace Spooky.Content.Projectiles.Minibiomes.Christmas
             if (!SpawnedSegment && Projectile.ai[0] >= 2)
             {
                 Projectile.NewProjectile(Projectile.GetSource_FromAI(), new Vector2((int)Projectile.Center.X + (Projectile.width / 2), (int)Projectile.Center.Y + (Projectile.height / 2)), 
-                Vector2.Zero, ModContent.ProjectileType<SnakeBody>(), Projectile.damage, Projectile.knockBack, Projectile.owner, ai0: Projectile.whoAmI, ai1: 1);
+                Vector2.Zero, ModContent.ProjectileType<SnakeBody>(), Projectile.damage, Projectile.knockBack, Projectile.owner, ai0: Projectile.identity, ai1: 1);
 
                 SpawnedSegment = true;
+                Projectile.netUpdate = true;
             }
 
             if (Projectile.timeLeft <= 60)

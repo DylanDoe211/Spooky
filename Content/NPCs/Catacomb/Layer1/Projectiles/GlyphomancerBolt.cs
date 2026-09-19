@@ -39,7 +39,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1.Projectiles
 				{
 					int distance = 360 / 3;
 					Projectile.NewProjectile(null, Projectile.Center, Vector2.Zero, ModContent.ProjectileType<GlyphomancerHand>(), Projectile.damage, Projectile.knockBack, Main.myPlayer,
-					ai0: numHands * distance, ai1: Projectile.whoAmI, ai2: Projectile.ai[2]);
+					ai0: numHands * distance, ai1: Projectile.identity, ai2: Projectile.ai[2]);
 				}
 
 				Projectile.ai[0]++;

@@ -247,6 +247,34 @@ namespace Spooky.Content.NPCs.Shipyard
             {
                 NPC.velocity.Y -= FasterY ? 0.3f : 0.035f;
             }
+
+            //limit npc y-velocity
+            float MaxVelocityY = FasterY ? 3f : 1.8f;
+            if (NPC.velocity.Y > MaxVelocityY)
+            {
+                NPC.velocity.Y = MaxVelocityY;
+            }
+            if (NPC.velocity.Y < -MaxVelocityY)
+            {
+                NPC.velocity.Y = -MaxVelocityY;
+            }
+        }
+
+        public override bool CheckDead()
+        {
+            if (Main.netMode != NetmodeID.Server)
+            {
+                if (NPC.ai[3] == 0)
+                {
+                    Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity / 2, ModContent.Find<ModGore>("Spooky/TrumpetfishWhiteHeadGore").Type);
+                }
+                else
+                {
+                    Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity / 2, ModContent.Find<ModGore>("Spooky/TrumpetfishGrayHeadGore").Type);
+                }
+            }
+
+            return true;
         }
         
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
@@ -330,6 +358,7 @@ namespace Spooky.Content.NPCs.Shipyard
             //kill segment if the head doesnt exist
 			if (!Parent.active || Parent.type != ModContent.NPCType<TrumpetfishHead>())
             {
+                SpawnGores();
                 NPC.active = false;
             }
 
@@ -353,6 +382,29 @@ namespace Spooky.Content.NPCs.Shipyard
 			}
 
 			return false;
+        }
+
+        public override void HitEffect(NPC.HitInfo hit)
+        {
+            if (NPC.life <= 0) 
+            {
+                SpawnGores();
+            }
+        }
+
+        public void SpawnGores()
+        {
+            if (Main.netMode != NetmodeID.Server)
+            {
+                if (NPC.ai[2] == 0)
+                {
+                    Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity / 2, ModContent.Find<ModGore>("Spooky/TrumpetfishWhiteBodyGore").Type);
+                }
+                else
+                {
+                    Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity / 2, ModContent.Find<ModGore>("Spooky/TrumpetfishGrayBodyGore").Type);
+                }
+            }
         }
 
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
@@ -401,6 +453,7 @@ namespace Spooky.Content.NPCs.Shipyard
             //kill segment if the head doesnt exist
 			if (!Parent.active || Parent.type != ModContent.NPCType<TrumpetfishHead>())
             {
+                SpawnGores();
                 NPC.active = false;
             }
 
@@ -424,6 +477,21 @@ namespace Spooky.Content.NPCs.Shipyard
 			}
 
 			return false;
+        }
+
+        public void SpawnGores()
+        {
+            if (Main.netMode != NetmodeID.Server)
+            {
+                if (NPC.ai[2] == 0)
+                {
+                    Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity / 2, ModContent.Find<ModGore>("Spooky/TrumpetfishWhiteTailGore").Type);
+                }
+                else
+                {
+                    Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity / 2, ModContent.Find<ModGore>("Spooky/TrumpetfishGrayTailGore").Type);
+                }
+            }
         }
     }
 }

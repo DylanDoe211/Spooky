@@ -10,6 +10,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Spooky.Core;
+using Spooky.Content.Dusts;
 
 namespace Spooky.Content.NPCs.Shipyard
 {
@@ -37,6 +38,7 @@ namespace Spooky.Content.NPCs.Shipyard
 			NPC.defense = 0;
 			NPC.width = 30;
 			NPC.height = 66;
+            NPC.npcSlots = 1f;
             NPC.value = Item.buyPrice(0, 0, 0, 50);
             NPC.noGravity = true;
             NPC.noTileCollide = true;
@@ -171,6 +173,21 @@ namespace Spooky.Content.NPCs.Shipyard
                 NPC.velocity.Y = -4f;
             }
         }
+
+        public override void HitEffect(NPC.HitInfo hit) 
+        {
+            if (NPC.life <= 0) 
+            {
+                for (int numDusts = 0; numDusts < 15; numDusts++)
+                {
+                    int dustGore = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<GlowyDust>(), 0f, -2f, 0, default, 0.1f);
+                    Main.dust[dustGore].color = Color.Cyan;
+                    Main.dust[dustGore].velocity.X *= Main.rand.NextFloat(-2f, 2f);
+                    Main.dust[dustGore].velocity.Y *= Main.rand.NextFloat(-2f, 2f);
+                    Main.dust[dustGore].noGravity = true;
+                }
+            }
+        }
 	}
 
     public class GhostJelly2 : GhostJelly1
@@ -200,6 +217,15 @@ namespace Spooky.Content.NPCs.Shipyard
                 NPC BestiaryParent = new();
                 BestiaryParent.SetDefaults(ModContent.NPCType<GhostJelly1>());
                 Main.BestiaryTracker.Kills.RegisterKill(BestiaryParent);
+
+                for (int numDusts = 0; numDusts < 15; numDusts++)
+                {
+                    int dustGore = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<GlowyDust>(), 0f, -2f, 0, default, 0.1f);
+                    Main.dust[dustGore].color = Color.Cyan;
+                    Main.dust[dustGore].velocity.X *= Main.rand.NextFloat(-2f, 2f);
+                    Main.dust[dustGore].velocity.Y *= Main.rand.NextFloat(-2f, 2f);
+                    Main.dust[dustGore].noGravity = true;
+                }
             }
         }
     }
@@ -231,6 +257,15 @@ namespace Spooky.Content.NPCs.Shipyard
                 NPC BestiaryParent = new();
                 BestiaryParent.SetDefaults(ModContent.NPCType<GhostJelly1>());
                 Main.BestiaryTracker.Kills.RegisterKill(BestiaryParent);
+
+                for (int numDusts = 0; numDusts < 15; numDusts++)
+                {
+                    int dustGore = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<GlowyDust>(), 0f, -2f, 0, default, 0.1f);
+                    Main.dust[dustGore].color = Color.Cyan;
+                    Main.dust[dustGore].velocity.X *= Main.rand.NextFloat(-2f, 2f);
+                    Main.dust[dustGore].velocity.Y *= Main.rand.NextFloat(-2f, 2f);
+                    Main.dust[dustGore].noGravity = true;
+                }
             }
         }
     }
@@ -262,6 +297,15 @@ namespace Spooky.Content.NPCs.Shipyard
                 NPC BestiaryParent = new();
                 BestiaryParent.SetDefaults(ModContent.NPCType<GhostJelly1>());
                 Main.BestiaryTracker.Kills.RegisterKill(BestiaryParent);
+
+                for (int numDusts = 0; numDusts < 15; numDusts++)
+                {
+                    int dustGore = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<GlowyDust>(), 0f, -2f, 0, default, 0.1f);
+                    Main.dust[dustGore].color = Color.Cyan;
+                    Main.dust[dustGore].velocity.X *= Main.rand.NextFloat(-2f, 2f);
+                    Main.dust[dustGore].velocity.Y *= Main.rand.NextFloat(-2f, 2f);
+                    Main.dust[dustGore].noGravity = true;
+                }
             }
         }
     }

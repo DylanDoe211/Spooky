@@ -71,5 +71,19 @@ namespace Spooky.Content.NPCs.Shipyard
         {
             NPC.spriteDirection = NPC.direction;
         }
+
+        public override void HitEffect(NPC.HitInfo hit) 
+        {
+            if (NPC.life <= 0) 
+            {
+                for (int numGores = 1; numGores <= 2; numGores++)
+                {
+                    if (Main.netMode != NetmodeID.Server)
+                    {
+                        Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/SeaSheepGore" + numGores).Type);
+                    }
+                }
+            }
+        }
 	}
 }

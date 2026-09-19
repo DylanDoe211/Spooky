@@ -118,7 +118,7 @@ namespace Spooky.Content.Generation
 								tile.TileType = (ushort)ModContent.TileType<CemeteryDirt>();
 							}
 
-							//reaplce walls with cemetery grass walls
+							//replace walls with cemetery grass walls
 							if (tile.WallType > 0)
 							{
 								tile.WallType = (ushort)ModContent.WallType<CemeteryDirtWall>();
@@ -128,7 +128,7 @@ namespace Spooky.Content.Generation
 						}
 					}
 
-                    for (int Y = (int)Main.worldSurface - 60; Y <= Main.worldSurface; Y++)
+                    for (int Y = (int)Main.worldSurface - 25; Y <= Main.worldSurface; Y++)
 					{
                         Tile tile = Main.tile[X, Y];
 
@@ -216,7 +216,7 @@ namespace Spooky.Content.Generation
 				}
                 else
 				{
-                    foundSurfaceLeft = true;
+                    foundSurfaceRight = true;
                 }
 			}
 

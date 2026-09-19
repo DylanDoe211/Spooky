@@ -161,9 +161,8 @@ namespace Spooky.Content.Projectiles.SpookyHell
 
             Projectile.spriteDirection = player.direction;
 
-            Projectile.ai[2]++;
             Vector2 velocityOffset = -player.velocity * 7;
-            Vector2 destination = new Vector2(player.Center.X + velocityOffset.X, player.Center.Y + velocityOffset.Y - 85 + (float)Math.Sin(Projectile.ai[2] / 30) * 30);
+            Vector2 destination = new Vector2(player.Center.X + velocityOffset.X, player.Center.Y + velocityOffset.Y - 85);
             
             if (Projectile.Distance(destination) >= 15)
             {

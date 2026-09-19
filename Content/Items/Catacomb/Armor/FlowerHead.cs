@@ -12,6 +12,7 @@ using Spooky.Core;
 using Spooky.Content.Buffs.Debuff;
 using Spooky.Content.Items.Catacomb.Misc;
 using Spooky.Content.Projectiles.Catacomb;
+using Humanizer;
 
 namespace Spooky.Content.Items.Catacomb.Armor
 {
@@ -63,7 +64,8 @@ namespace Spooky.Content.Items.Catacomb.Armor
 
         public override void UpdateArmorSet(Player player) 
 		{
-			player.setBonus = Language.GetTextValue("Mods.Spooky.ArmorSetBonus.FlowerArmor");
+			string TapKey = Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.UP" : "Key.DOWN");
+			player.setBonus = Language.GetTextValue("Mods.Spooky.ArmorSetBonus.FlowerArmor", TapKey);
             player.GetModPlayer<FlowerArmorPlayer>().FlowerArmorSet = true;
             player.lifeRegen += 5;
 		}

@@ -33,7 +33,8 @@ namespace Spooky.Content.Items.Minibiomes.Armor
 		
 		public override void UpdateArmorSet(Player player) 
 		{
-			player.setBonus = Language.GetTextValue("Mods.Spooky.ArmorSetBonus.YuletideArmor");
+			string TapKey = Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.UP" : "Key.DOWN");
+			player.setBonus = Language.GetTextValue("Mods.Spooky.ArmorSetBonus.YuletideArmor", TapKey);
 			player.GetModPlayer<YuletideArmorPlayer>().YuletideSet = true;
 		}
 

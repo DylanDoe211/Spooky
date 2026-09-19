@@ -52,7 +52,8 @@ namespace Spooky.Content.Items.SpiderCave.Armor
 		
 		public override void UpdateArmorSet(Player player) 
 		{
-			player.setBonus = Language.GetTextValue("Mods.Spooky.ArmorSetBonus.SpiderArmor");
+			string TapKey = Language.GetTextValue(Main.ReversedUpDownArmorSetBonuses ? "Key.UP" : "Key.DOWN");
+			player.setBonus = Language.GetTextValue("Mods.Spooky.ArmorSetBonus.SpiderArmor", TapKey);
 			player.GetModPlayer<SpiderArmorPlayer>().SpiderSet = true;
 		}
 

@@ -159,8 +159,10 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 						
 						Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(0, 12).RotatedByRandom(360), 
 						ModContent.ProjectileType<SpookFishronYoyoShark>(), Projectile.damage, 0f, Projectile.owner, 
-						ai0: randDist, ai1: Main.rand.NextBool() ? -1 : 1, ai2: Projectile.whoAmI);
+						ai0: randDist, ai1: Main.rand.NextBool() ? -1 : 1, ai2: Projectile.identity);
 						SharkronShootTimer = 0;
+
+						Projectile.netUpdate = true;
 					}
 				}
 

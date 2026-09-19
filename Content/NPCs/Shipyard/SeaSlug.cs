@@ -12,6 +12,7 @@ using System.IO;
 using System.Collections.Generic;
 
 using Spooky.Core;
+using Spooky.Content.Dusts;
 
 namespace Spooky.Content.NPCs.Shipyard
 {
@@ -25,7 +26,7 @@ namespace Spooky.Content.NPCs.Shipyard
 
         public override void SetStaticDefaults()
         {
-            NPCID.Sets.CantTakeLunchMoney[Type] = true;
+            NPCID.Sets.CountsAsCritter[NPC.type] = true;
 
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
@@ -73,9 +74,9 @@ namespace Spooky.Content.NPCs.Shipyard
             NPC.height = 26;
             NPC.npcSlots = 1f;
             NPC.knockBackResist = 0f;
-            NPC.value = Item.buyPrice(0, 0, 0, 50);
             NPC.noGravity = true;
             NPC.noTileCollide = true;
+            NPC.chaseable = false;
             NPC.HitSound = SoundID.NPCHit25;
 			NPC.DeathSound = SoundID.NPCDeath28;
             NPC.aiStyle = -1;
@@ -243,6 +244,20 @@ namespace Spooky.Content.NPCs.Shipyard
                 NPC.netUpdate = true;
             }
         }
+
+        public override bool CheckDead()
+        {
+            for (int numDusts = 0; numDusts < 3; numDusts++)
+            {
+                int dustGore = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<GlowyDust>(), 0f, -2f, 0, default, 0.1f);
+                Main.dust[dustGore].color = Color.Cyan;
+                Main.dust[dustGore].velocity.X *= Main.rand.NextFloat(-2f, 2f);
+                Main.dust[dustGore].velocity.Y *= Main.rand.NextFloat(-2f, 2f);
+                Main.dust[dustGore].noGravity = true;
+            }
+
+            return true;
+        }
         
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
         {
@@ -260,7 +275,7 @@ namespace Spooky.Content.NPCs.Shipyard
         public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 3;
-            NPCID.Sets.CantTakeLunchMoney[Type] = true;
+            NPCID.Sets.CountsAsCritter[NPC.type] = true;
 
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
 
@@ -278,6 +293,7 @@ namespace Spooky.Content.NPCs.Shipyard
             NPC.knockBackResist = 0f;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
+            NPC.chaseable = false;
             NPC.dontCountMe = true;
             NPC.HitSound = SoundID.NPCHit25;
         }
@@ -333,6 +349,7 @@ namespace Spooky.Content.NPCs.Shipyard
             //kill segment if the head doesnt exist
 			if (!Parent.active || Parent.type != ModContent.NPCType<SeaSlugHead>())
             {
+                SpawnGores();
                 NPC.active = false;
             }
 
@@ -358,6 +375,26 @@ namespace Spooky.Content.NPCs.Shipyard
 			return false;
         }
 
+        public override void HitEffect(NPC.HitInfo hit)
+        {
+            if (NPC.life <= 0) 
+            {
+                SpawnGores();
+            }
+        }
+
+        public void SpawnGores()
+        {
+            for (int numDusts = 0; numDusts < 3; numDusts++)
+            {
+                int dustGore = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<GlowyDust>(), 0f, -2f, 0, default, 0.1f);
+                Main.dust[dustGore].color = Color.Cyan;
+                Main.dust[dustGore].velocity.X *= Main.rand.NextFloat(-2f, 2f);
+                Main.dust[dustGore].velocity.Y *= Main.rand.NextFloat(-2f, 2f);
+                Main.dust[dustGore].noGravity = true;
+            }
+        }
+
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
         {
             return false;
@@ -376,7 +413,7 @@ namespace Spooky.Content.NPCs.Shipyard
         public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 1;
-            NPCID.Sets.CantTakeLunchMoney[Type] = true;
+            NPCID.Sets.CountsAsCritter[NPC.type] = true;
 
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
 

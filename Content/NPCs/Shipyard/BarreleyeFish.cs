@@ -38,6 +38,7 @@ namespace Spooky.Content.NPCs.Shipyard
 			NPC.defense = 0;
 			NPC.width = 102;
 			NPC.height = 46;
+            NPC.npcSlots = 0.5f;
             NPC.noGravity = true;
             NPC.chaseable = false;
             NPC.noTileCollide = true;
@@ -146,6 +147,20 @@ namespace Spooky.Content.NPCs.Shipyard
             if (NPC.velocity.Y < -1f)
             {
                 NPC.velocity.Y = -1f;
+            }
+        }
+
+        public override void HitEffect(NPC.HitInfo hit) 
+        {
+            if (NPC.life <= 0) 
+            {
+                for (int numGores = 1; numGores <= 5; numGores++)
+                {
+                    if (Main.netMode != NetmodeID.Server) 
+                    {
+                        Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/BarreleyeFishGore" + numGores).Type);
+                    }
+                }
             }
         }
 	}

@@ -72,7 +72,7 @@ namespace Spooky.Content.Projectiles.Blooms
 
             if (!segmentsSpawned)
             {
-                int latestSegment = Projectile.whoAmI;
+                int latestSegment = Projectile.identity;
 
                 for (int numSegment = 0; numSegment < 6; numSegment++)
                 {

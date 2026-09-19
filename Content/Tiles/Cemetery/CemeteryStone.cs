@@ -3,8 +3,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
-using Spooky.Content.Dusts;
-
 namespace Spooky.Content.Tiles.Cemetery
 {
 	[LegacyName("CemeteryBrick")]

@@ -73,7 +73,7 @@ namespace Spooky.Content.Projectiles.SpookyHell
 
             if (!segmentsSpawned)
             {
-                int latestSegment = Projectile.whoAmI;
+                int latestSegment = Projectile.identity;
 
                 for (int numSegment = 0; numSegment < 6; numSegment++)
                 {
@@ -83,13 +83,13 @@ namespace Spooky.Content.Projectiles.SpookyHell
                     {
                         latestSegment = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Center, Vector2.Zero, 
                         ModContent.ProjectileType<MiniBoroBody>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 
-                        ai0: Projectile.whoAmI, ai1: latestSegment);
+                        ai0: Projectile.identity, ai1: latestSegment);
                     }
                     else
                     {
                         latestSegment = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Center, Vector2.Zero, 
                         ModContent.ProjectileType<MiniBoroTail>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 
-                        ai0: Projectile.whoAmI, ai1: latestSegment);
+                        ai0: Projectile.identity, ai1: latestSegment);
                     }
                 }
 
@@ -306,7 +306,7 @@ namespace Spooky.Content.Projectiles.SpookyHell
 
             if (!segmentsSpawned)
             {
-                int latestSegment = Projectile.whoAmI;
+                int latestSegment = Projectile.identity;
 
                 for (int numSegment = 0; numSegment < 6; numSegment++)
                 {
@@ -316,13 +316,13 @@ namespace Spooky.Content.Projectiles.SpookyHell
                     {
                         latestSegment = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Center, Vector2.Zero, 
                         ModContent.ProjectileType<MiniOrroBody>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 
-                        ai0: Projectile.whoAmI, ai1: latestSegment);
+                        ai0: Projectile.identity, ai1: latestSegment);
                     }
                     else
                     {
                         latestSegment = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Center, Vector2.Zero, 
                         ModContent.ProjectileType<MiniOrroTail>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 
-                        ai0: Projectile.whoAmI, ai1: latestSegment);
+                        ai0: Projectile.identity, ai1: latestSegment);
                     }
                 }
 
