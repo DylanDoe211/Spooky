@@ -86,14 +86,8 @@ namespace Spooky.Content.Tiles.Shipyard
                     TileGlobal.PlaceObject(i, j - 1, ModContent.TileType<BleachedCoral>(), true, Main.rand.Next(0, 8));
 				}
 
-				//ghost flowers 
+				//giant bleached coral 
                 int InWaterChance2 = Above.LiquidAmount <= 0 ? 25 : 15;
-                if (Main.rand.NextBool(InWaterChance2))
-                {
-                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<GhostFlower>(), true);
-                }
-
-                //giant bleached coral 
                 if (Main.rand.NextBool(InWaterChance2))
                 {
                     ushort[] GiantCorals = new ushort[] { (ushort)ModContent.TileType<BleachedCoralGiant1>(), (ushort)ModContent.TileType<BleachedCoralGiant2>(), (ushort)ModContent.TileType<BleachedCoralGiant3>(),

@@ -364,7 +364,7 @@ namespace Spooky.Content.NPCs.Shipyard
                         {
                             NPC.localAI[0] = 0;
                             NPC.localAI[1] = 0;
-                            NPC.ai[0] = 0;
+                            NPC.ai[0]++;
                             NPC.netUpdate = true;
                         }
                     }
@@ -381,66 +381,36 @@ namespace Spooky.Content.NPCs.Shipyard
                     {
                         if (NPC.localAI[0] == 10)
                         {
-                            CurrentFrameX = 2;
-                            CurrentAnimation = AnimationState.Wiggle;
-                            ResetFrameToZero = true;
+                            CurrentFrameX = 0;
+                            CurrentAnimation = AnimationState.HideInShell;
                         }
 
                         if (NPC.localAI[0] == 30)
                         {
-                            int JumpHeight = 500;
+                            CurrentFrameX = 4;
+                            CurrentAnimation = AnimationState.Spin;
+                            ResetFrameToZero = true;
+
+                            int JumpHeight = 1000;
                             float VelocityIncreaseX = (NPC.Distance(player.Center) / 200);
 
                             NPC.velocity = ArcVelocityHelper.GetArcVelocity(NPC, player.Center, 0.35f, JumpHeight, JumpHeight + 1, maxXvel: 12 + VelocityIncreaseX);
                         }
                         
-                        if (NPC.localAI[0] >= 30 && NPC.localAI[0] < 70)
-                        {
-                            NPC.velocity.Y += 0.3f;
-                            if (NPC.velocity.Y > 2f)
-                            {
-                                NPC.velocity.Y += 0.6f;
-                            }
-
-                            NPC.rotation += (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) * 0.01f * (float)NPC.direction;
-                        }
-
                         if (NPC.localAI[0] == 70)
                         {
-                            SaveVelocity = NPC.velocity;
-                            NPC.velocity = Vector2.Zero;
-
-                            Main.NewText("Charge");
+                            Vector2 ChargeDirection = player.Center - NPC.Center;
+                            ChargeDirection.Normalize();
+                            ChargeDirection *= 12;
+                            NPC.velocity.X = ChargeDirection.X;
+                            NPC.velocity.Y = 10;
                         }
 
-                        if (NPC.localAI[0] == 80)
+                        if (NPC.localAI[0] > 70)
                         {
-                            CurrentAnimation = AnimationState.WiggleStop;
-                        }
+                            NPC.rotation = NPC.velocity.Y * (0.04f * NPC.direction);
 
-                        if (NPC.localAI[0] == 120)
-                        {
-                            NPC.velocity = SaveVelocity;
-
-                            CurrentFrameX = 4;
-                            CurrentAnimation = AnimationState.Spin;
-                            ResetFrameToZero = true;
-                        }
-
-                        if (NPC.localAI[0] > 120)
-                        {
                             if (!NPCGlobalHelper.IsCollidingWithFloor(NPC, false))
-                            {
-                                NPC.rotation = NPC.velocity.Y * (NPC.spriteDirection == -1 ? 0.05f : -0.05f);
-                                NPC.spriteDirection = NPC.velocity.X > 0 ? -1 : 1;
-
-                                NPC.velocity.Y += 0.3f;
-                                if (NPC.velocity.Y > 2f)
-                                {
-                                    NPC.velocity.Y += 0.6f;
-                                }
-                            }
-                            else
                             {
                                 CurrentFrameX = 1;
                                 CurrentAnimation = AnimationState.Idle;

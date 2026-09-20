@@ -27,6 +27,7 @@ namespace Spooky.Core
         //compass/biome positions
         public static Vector2 SpiderGrottoCenter = Vector2.Zero;
         public static Vector2 EyeValleyCenter = Vector2.Zero;
+		public static Vector2 SpookyBiomeCenter = Vector2.Zero;
 		public static Vector2 ZombieOceanTopLeft = Vector2.Zero;
 		public static Vector2 ZombieOceanBottomRight = Vector2.Zero;
 
@@ -222,6 +223,7 @@ namespace Spooky.Core
 			//biome positions for compasses
             tag[nameof(SpiderGrottoCenter)] = SpiderGrottoCenter;
             tag[nameof(EyeValleyCenter)] = EyeValleyCenter;
+			tag[nameof(SpookyBiomeCenter)] = SpookyBiomeCenter;
 			tag[nameof(ZombieOceanTopLeft)] = ZombieOceanTopLeft;
 			tag[nameof(ZombieOceanBottomRight)] = ZombieOceanBottomRight;
 
@@ -324,6 +326,7 @@ namespace Spooky.Core
 			//world positions for compasses
 			SpiderGrottoCenter = tag.Get<Vector2>(nameof(SpiderGrottoCenter));
 			EyeValleyCenter = tag.Get<Vector2>(nameof(EyeValleyCenter));
+			SpookyBiomeCenter = tag.Get<Vector2>(nameof(SpookyBiomeCenter));
 			ZombieOceanTopLeft = tag.Get<Vector2>(nameof(ZombieOceanTopLeft));
 			ZombieOceanBottomRight = tag.Get<Vector2>(nameof(ZombieOceanBottomRight));
 
@@ -426,6 +429,7 @@ namespace Spooky.Core
 			writer.WriteVector2(LittleEyePosition);
             writer.WriteVector2(SpiderGrottoCenter);
             writer.WriteVector2(EyeValleyCenter);
+			writer.WriteVector2(SpookyBiomeCenter);
 			writer.WriteVector2(ZombieOceanTopLeft);
 			writer.WriteVector2(ZombieOceanBottomRight);
 
@@ -474,6 +478,7 @@ namespace Spooky.Core
 			LittleEyePosition = reader.ReadVector2();
             SpiderGrottoCenter = reader.ReadVector2();
             EyeValleyCenter = reader.ReadVector2();
+			SpookyBiomeCenter = reader.ReadVector2();
 			ZombieOceanTopLeft = reader.ReadVector2();
 			ZombieOceanBottomRight = reader.ReadVector2();
 

@@ -92,6 +92,8 @@ namespace Spooky.Content.Generation
 			//set y position again so it is always correct before placing
 			PositionY = (int)Main.worldSurface - (Main.maxTilesY / 8);
 
+			Flags.SpookyBiomeCenter = new Vector2(PositionX, PositionY);
+
 			//place the initial ellipse
 			int SizeX = Main.maxTilesX / 5;
 			int SizeY = Main.maxTilesY / 3;

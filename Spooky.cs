@@ -103,6 +103,7 @@ namespace Spooky
 					{
 						nameof(Flags.SpiderGrottoCenter) => Flags.SpiderGrottoCenter,
 						nameof(Flags.EyeValleyCenter) => Flags.EyeValleyCenter,
+						nameof(Flags.SpookyBiomeCenter) => Flags.SpookyBiomeCenter,
 						nameof(Flags.ZombieOceanTopLeft) => Flags.ZombieOceanTopLeft,
 						nameof(Flags.ZombieOceanBottomRight) => Flags.ZombieOceanBottomRight,
 						_ => throw new ArgumentException(text + " Is not a valid biome position variable name"),

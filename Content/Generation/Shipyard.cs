@@ -388,8 +388,7 @@ namespace Spooky.Content.Generation
 			{
 				for (int Y = 10; Y <= Main.worldSurface; Y++)
 				{
-					if (WorldGen.genRand.NextBool() && WorldGen.InWorld(X, Y, 5) && 
-					Main.tile[X, Y].WallType == ModContent.WallType<BlackSandstoneWall>() && CanPlaceNearCemetery(X, Y, 4, false))
+					if (WorldGen.genRand.NextBool() && WorldGen.InWorld(X, Y, 5) && Main.tile[X, Y].WallType == ModContent.WallType<BlackSandstoneWall>())
 					{
 						WorldGen.PlaceLiquid(X, Y, 0, byte.MaxValue);
 					}
@@ -529,20 +528,40 @@ namespace Spooky.Content.Generation
 
 					if (Main.tile[X, Y].HasTile && !tileAbove.HasTile && WorldGen.InWorld(X, Y, 10))
 					{
+						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>() ||
+						Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>())
+						{
+							//conch shells
+							if (WorldGen.genRand.NextBool(6))
+							{
+								if (Main.tile[X, Y - 1].WallType <= 0)
+								{
+									TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<QueenShell>(), true, WorldGen.genRand.Next(0, 2));
+								}
+							}
+							else
+							{
+								//giant mossy anchors
+								ushort[] Anchors = new ushort[] { (ushort)ModContent.TileType<MossyAnchor1>(), (ushort)ModContent.TileType<MossyAnchor2>(), (ushort)ModContent.TileType<MossyAnchor3>() };
+								TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Anchors), true);
+							}
+						}
+					}
+				}
+			}
+
+			for (int X = leftBound - 10; X <= rightBound + 10; X++)
+			{
+				for (int Y = 10; Y <= Main.worldSurface; Y++)
+				{
+					Tile tileAbove = Main.tile[X, Y - 1];
+
+					if (Main.tile[X, Y].HasTile && !tileAbove.HasTile && WorldGen.InWorld(X, Y, 10))
+					{
 						//grow bleached corals on all blocks
 						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>() ||
 						Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>())
 						{
-							//conch shells, placed with no chance check due to how big they are
-							TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<QueenShell>(), true, WorldGen.genRand.Next(0, 2));
-
-							//giant mossy anchors
-							if (WorldGen.genRand.NextBool())
-							{
-								ushort[] Anchors = new ushort[] { (ushort)ModContent.TileType<MossyAnchor1>(), (ushort)ModContent.TileType<MossyAnchor2>(), (ushort)ModContent.TileType<MossyAnchor3>() };
-								TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Anchors), true);
-							}
-
 							//giant bleached coral 
 							int InWaterChance1 = tileAbove.LiquidAmount <= 0 ? 20 : 8;
 							if (WorldGen.genRand.NextBool(InWaterChance1))
@@ -575,16 +594,6 @@ namespace Spooky.Content.Generation
 							{
 								ushort[] SandPiles = new ushort[] { (ushort)ModContent.TileType<BlackSandPile1>(), (ushort)ModContent.TileType<BlackSandPile2>(), (ushort)ModContent.TileType<BlackSandPile3>() };
 								TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(SandPiles), true);
-							}
-						}
-
-						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>())
-						{
-							//ghost flowers 
-							int InWaterChance = tileAbove.LiquidAmount <= 0 ? 8 : 5;
-							if (WorldGen.genRand.NextBool(InWaterChance))
-							{
-								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<GhostFlower>(), true);
 							}
 						}
 
