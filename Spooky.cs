@@ -134,7 +134,7 @@ namespace Spooky
 		{
 			EcotoneEdgeDefinitions.AddEdgeDefinition<SpookyGrass, SpookyDirt, SpookyStone, SpookyBiome>(mod, "SpookyForest", null, Color.OrangeRed, true);
 			EcotoneEdgeDefinitions.AddEdgeDefinition<CemeteryDirt, CemeteryGrass, CemeteryStone, CemeteryBiome>(mod, "Cemetery", null, Color.Teal, true);
-			EcotoneEdgeDefinitions.AddEdgeDefinition<BlackSand, BlackSandstone, BlackSandstoneMoss, ShipyardBiome>(mod, "Shipyard", null, Color.Gray, true);
+			EcotoneEdgeDefinitions.AddEdgeDefinition<BlackSand, BlackSandGrass, BlackSandstone, ShipyardBiome>(mod, "Shipyard", null, Color.Gray, true);
 		}
 
 		public override void Load()
@@ -152,8 +152,8 @@ namespace Spooky
 				Filters.Scene["Spooky:CemeterySky"] = new Filter(new SpookyScreenShader("FilterMiniTower").UseColor(0f, 135f, 35f).UseOpacity(0.001f), EffectPriority.VeryHigh);
 				SkyManager.Instance["Spooky:CemeterySky"] = new CemeterySky();
 
-					Filters.Scene["Spooky:ShipyardSky"] = new Filter(new SpookyScreenShader("FilterMiniTower").UseColor(149f, 131f, 217f).UseOpacity(0.0005f), EffectPriority.VeryHigh);
-					SkyManager.Instance["Spooky:ShipyardSky"] = new ShipyardSky();
+				Filters.Scene["Spooky:ShipyardSky"] = new Filter(new SpookyScreenShader("FilterMiniTower").UseColor(131f, 217f, 166f).UseOpacity(0.0005f), EffectPriority.VeryHigh);
+				SkyManager.Instance["Spooky:ShipyardSky"] = new ShipyardSky();
 
 				Filters.Scene["Spooky:RaveyardSky"] = new Filter(new SpookyScreenShader("FilterMiniTower").UseColor(0f, 0f, 0f).UseOpacity(0f), EffectPriority.VeryHigh);
 				SkyManager.Instance["Spooky:RaveyardSky"] = new RaveyardSky();

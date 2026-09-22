@@ -46,8 +46,8 @@ namespace Spooky.Content.Backgrounds.Shipyard
 
 			sunRiseSetFactor = Main.dayTime ? EaseFunction.EaseQuadOut.Ease(sunRiseSetFactor) : EaseFunction.EaseCircularIn.Ease(sunRiseSetFactor);
 
-			var midDayColor = new Color(0, 99, 120, 201) * 0.5f;
-			var sunRiseSetColor = new Color(113, 96, 237);
+			var midDayColor = new Color(56, 97, 34) * 0.9f;
+			var sunRiseSetColor = new Color(56, 97, 34) * 0.6f;
 
 			var finalColor = Color.Lerp(sunRiseSetColor, midDayColor, EaseFunction.EaseQuadOut.Ease(midDayFactor));
 

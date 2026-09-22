@@ -113,6 +113,7 @@ namespace Spooky.Core
 			if (!Main.gamePaused && Main.instance.IsActive && closer)
 			{
 				Tile tile = Framing.GetTileSafely(i, j);
+				Tile tileAbove = Framing.GetTileSafely(i, j - 1);
 
 				//spawn autumn leaves from spider grotto trees
 				if (Main.rand.NextBool(50))

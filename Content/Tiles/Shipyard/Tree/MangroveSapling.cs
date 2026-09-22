@@ -27,7 +27,7 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
 			TileObjectData.newTile.CoordinateHeights = new[] { 16, 16 };
 			TileObjectData.newTile.CoordinateWidth = 16;
 			TileObjectData.newTile.CoordinatePadding = 2;
-			TileObjectData.newTile.AnchorValidTiles = new[] { ModContent.TileType<BlackSand>() };
+			TileObjectData.newTile.AnchorValidTiles = new[] { ModContent.TileType<BlackSand>(), ModContent.TileType<BlackSandGrass>() };
 			TileObjectData.newTile.StyleHorizontal = true;
 			TileObjectData.newTile.DrawFlipHorizontal = true;
 			TileObjectData.newTile.WaterPlacement = LiquidPlacement.NotAllowed;
@@ -65,11 +65,26 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
 
 		public override void RandomUpdate(int i, int j) 
 		{
-            if (Main.tile[i, j + 1].TileType != ModContent.TileType<BlackSand>())
+            if (Main.tile[i, j + 1].TileType != ModContent.TileType<BlackSandGrass>())
             {
 				if (WorldGen.genRand.NextBool(20))
 				{
-					MangroveTree.Grow(i, j + 1, 5, 13, true, Main.tile[i, j].TileFrameX);
+					int FrameToUse = 0;
+
+					if (Main.tile[i, j].TileFrameX == 0)
+					{
+						FrameToUse = 0;
+					}
+					else if (Main.tile[i, j].TileFrameX == 18)
+					{
+						FrameToUse = 1;
+					}
+					else if (Main.tile[i, j].TileFrameX == 36)
+					{
+						FrameToUse = 2;
+					}
+
+					MangroveTree.Grow(i, j + 1, 5, 13, true, FrameToUse);
 				}
             }
 		}

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 using Spooky.Core;
 using Spooky.Content.Backgrounds.Shipyard;
-using Spooky.Content.Tiles.Shipyard.Furniture;
+using Spooky.Content.Tiles.Cemetery.Furniture;
 using Spooky.Content.Tiles.Water;
 
 namespace Spooky.Content.Biomes
@@ -16,54 +16,61 @@ namespace Spooky.Content.Biomes
 
 		//set the music to be consistent with vanilla's music priorities
 		public override int Music
-		{
-			get
-			{
-				int music = Main.curMusic;
+        {
+            get
+            {
+                int music = Main.curMusic;
 
-				if (!Main.bloodMoon && !Main.eclipse)
-				{
-					//play town music if enough town npcs exist
-					if (Main.LocalPlayer.townNPCs > 2f)
-					{
-						if (Main.dayTime)
-						{
-							music = MusicLoader.GetMusicSlot(Mod, "Content/Sounds/Music/SpookyTownDay");
-						}
-						else
-						{
-							music = MusicLoader.GetMusicSlot(Mod, "Content/Sounds/Music/SpookyTownNight");
-						}
-					}
-					//play normal music
-					else
-					{
-						music = MusicID.OceanNight;
-					}
-				}
-				//blood moon theme takes priority over everything
-				else
-				{
-					if (Main.bloodMoon)
-					{
-						music = MusicLoader.GetMusicSlot(Mod, "Content/Sounds/Music/SpookyBloodmoon");
-					}
+                if (!Main.bloodMoon && !Main.eclipse)
+                {
+                    //play town music if enough town npcs exist
+                    if (Main.LocalPlayer.townNPCs > 2f)
+                    {
+                        if (Main.dayTime)
+                        {
+                            music = MusicLoader.GetMusicSlot(Mod, "Content/Sounds/Music/SpookyTownDay");
+                        }
+                        else
+                        {
+                            music = MusicLoader.GetMusicSlot(Mod, "Content/Sounds/Music/SpookyTownNight");
+                        }
+                    }
+                    //play normal music
+                    else
+                    {
+                        if (Main.dayTime)
+                        {
+                            music = MusicLoader.GetMusicSlot(Mod, "Content/Sounds/Music/Cemetery");
+                        }
+                        else
+                        {
+                            music = MusicLoader.GetMusicSlot(Mod, "Content/Sounds/Music/CemeteryNight");
+                        }
+                    }
+                }
+                //blood moon theme takes priority over everything
+                else
+                {
+                    if (Main.bloodMoon)
+                    {
+                        music = MusicLoader.GetMusicSlot(Mod, "Content/Sounds/Music/SpookyBloodmoon");
+                    }
 
-					if (Main.eclipse)
-					{
-						music = MusicID.Eclipse;
-					}
-				}
+                    if (Main.eclipse)
+                    {
+                        music = MusicID.Eclipse;
+                    }
+                }
 
-				return music;
-			}
-		}
+                return music;
+            }
+        }
 
 		public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
         
         public override ModWaterStyle WaterStyle => ModContent.GetInstance<ShipyardWaterStyle>();
 
-        public override int BiomeTorchItemType => ModContent.ItemType<ShipyardBiomeTorchItem>();
+        public override int BiomeTorchItemType => ModContent.ItemType<CemeteryBiomeTorchItem>();
 
         //bestiary stuff
         public override string BestiaryIcon => "Spooky/Content/Biomes/ShipyardBiomeIcon";
@@ -82,7 +89,7 @@ namespace Spooky.Content.Biomes
             if (!player.InModBiome(ModContent.GetInstance<CatacombBiome>()) && !player.InModBiome(ModContent.GetInstance<CatacombBiome2>()))
             {
                 player.ZoneGraveyard = true;
-                Main.GraveyardVisualIntensity = 0.1f;
+                Main.GraveyardVisualIntensity = 0.05f;
             }
         }
 

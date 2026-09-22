@@ -22,11 +22,11 @@ namespace Spooky.Content.Tiles.Water
 
 		public override void LightColorMultiplier(ref float r, ref float g, ref float b)
 		{
-			r = 0.96f;
+			r = 0.935f;
 			g = 0.99f;
-			b = 0.99f;
+			b = 0.95f;
 		}
 
-		public override Color BiomeHairColor() => Color.SkyBlue;
+		public override Color BiomeHairColor() => Color.Teal;
 	}
 }

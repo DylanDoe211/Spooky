@@ -64,7 +64,7 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
             Main.tileSolid[Framing.GetTileSafely(i, j).TileType]);
         }
 
-        public static bool Grow(int i, int j, int minSize, int maxSize, bool saplingExists = false, int TopFrame = -1)
+        public static bool Grow(int i, int j, int minSize, int maxSize, bool saplingExists = false, int TopFrameColor = -1)
         {
             if (saplingExists)
             {
@@ -142,9 +142,22 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
                 if (numSegments == height - 1)
                 {
                     Framing.GetTileSafely(i, j - numSegments).TileFrameX = 36;
-                    if (TopFrame != -1)
+
+                    if (TopFrameColor == 0)
                     {
-                        Framing.GetTileSafely(i, j - numSegments).TileFrameY = (short)TopFrame;
+                        Framing.GetTileSafely(i, j - numSegments).TileFrameY = (short)(WorldGen.genRand.Next(0, 3) * 18);
+                    }
+                    else if (TopFrameColor == 1)
+                    {
+                        Framing.GetTileSafely(i, j - numSegments).TileFrameY = (short)(WorldGen.genRand.Next(3, 6) * 18);
+                    }
+                    else if (TopFrameColor == 2)
+                    {
+                        Framing.GetTileSafely(i, j - numSegments).TileFrameY = (short)(WorldGen.genRand.Next(6, 9) * 18);
+                    }
+                    else
+                    {
+                        Framing.GetTileSafely(i, j - numSegments).TileFrameY = (short)(WorldGen.genRand.Next(9) * 18);
                     }
                 }
 
@@ -186,7 +199,7 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
                     {
                         int[] Leaves = new int[] { ModContent.GoreType<LeafMangroveOrange>(), ModContent.GoreType<LeafMangroveBlue>(), ModContent.GoreType<LeafMangroveYellow>() };
 
-                        Gore.NewGore(null, new Vector2((i * 16) + Main.rand.Next(-50, 50), (j * 16) + Main.rand.Next(-100, -25)), Vector2.Zero, Leaves[frame], 1f);
+                        Gore.NewGore(null, new Vector2((i * 16) + Main.rand.Next(-50, 50), (j * 16) + Main.rand.Next(-100, -25)), Vector2.Zero, Leaves[frame / 3], 1f);
                     }
                 }
             }
@@ -267,7 +280,7 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
                 {
                     int[] Leaves = new int[] { ModContent.GoreType<LeafMangroveOrange>(), ModContent.GoreType<LeafMangroveBlue>(), ModContent.GoreType<LeafMangroveYellow>() };
 
-                    Gore.NewGore(null, new Vector2((i * 16) + Main.rand.Next(-50, 50), (j * 16) + Main.rand.Next(-100, -25)), Vector2.Zero, Leaves[frame], 1f);
+                    Gore.NewGore(null, new Vector2((i * 16) + Main.rand.Next(-50, 50), (j * 16) + Main.rand.Next(-100, -25)), Vector2.Zero, Leaves[frame / 3], 1f);
                 }
 
                 //spawn a seed from the tree
@@ -299,7 +312,7 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
 			Vector2 pos = TileGlobal.TileCustomPosition(i, j, TileGlobal.TileOffset);
 
             //divide tops texture width by 3 since there are 3 horizontal frames, then divide it by 2 to get half the width for the individual frame
-			int TopsTexRealWidth = (TopTexture.Width() / 3) / 2;
+			int TopsTexRealWidth = (TopTexture.Width() / 9) / 2;
             int RootsTexRealWidth = RootTexture.Width() / 2;
 
             int frame = tile.TileFrameY / 18;
@@ -317,11 +330,11 @@ namespace Spooky.Content.Tiles.Shipyard.Tree
 			//draw the tree tops
 			if (Framing.GetTileSafely(i, j).TileFrameX == 36)
 			{
-                Rectangle TopFrame = new Rectangle(164 * frame, 0, 162, 136);
+                Rectangle TopFrame = new Rectangle(186 * frame, 0, 184, 142);
 
                 float WindRotation = ModContent.GetInstance<SpookyWorld>().GetTreeSway(i, j, ref pos) * 0.08f;
 
-                Vector2 TopOffset = new Vector2(TopsTexRealWidth / 2 - 31, 4);
+                Vector2 TopOffset = new Vector2(TopsTexRealWidth / 2 - 37, 4);
 
                 spriteBatch.Draw(TopTexture.Value, pos + TopOffset, TopFrame, col, WindRotation, 
 				new Vector2(TopsTexRealWidth, TopTexture.Height()), 1f, SpriteEffects.None, 0f);

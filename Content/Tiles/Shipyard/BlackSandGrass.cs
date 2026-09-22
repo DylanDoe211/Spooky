@@ -10,7 +10,7 @@ using Spooky.Content.Tiles.Shipyard.Ambient;
 
 namespace Spooky.Content.Tiles.Shipyard
 {
-	public class BlackSandstoneMoss : ModTile
+	public class BlackSandGrass : ModTile
 	{
 		public override void SetStaticDefaults()
 		{
@@ -22,10 +22,20 @@ namespace Spooky.Content.Tiles.Shipyard
             Main.tileBlendAll[Type] = true;
 			Main.tileSolid[Type] = true;
 			Main.tileBlockLight[Type] = true;
-            AddMapEntry(new Color(32, 82, 26));
-           	DustType = ModContent.DustType<CemeteryGrassDust>();
-			HitSound = SoundID.Tink;
+			Main.tileLighted[Type] = true;
+            AddMapEntry(new Color(52, 102, 46));
+            DustType = ModContent.DustType<CemeteryGrassDust>();
+			HitSound = SoundID.Dig;
 		}
+
+		public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
+		{
+			float divide = 2000f;
+
+			r = 63f / divide;
+			g = 102f / divide;
+			b = 50f / divide;
+        }
 
 		public override bool CanExplode(int i, int j)
 		{
@@ -38,13 +48,13 @@ namespace Spooky.Content.Tiles.Shipyard
 			if (!fail && !WorldGen.gen)
 			{
 				fail = true;
-				Framing.GetTileSafely(i, j).TileType = (ushort)ModContent.TileType<BlackSandstone>();
+				Framing.GetTileSafely(i, j).TileType = (ushort)ModContent.TileType<BlackSand>();
 			}
 		}
 
         public override bool CanReplace(int i, int j, int tileTypeBeingPlaced)
 		{
-			return tileTypeBeingPlaced != ModContent.TileType<BlackSandstone>();
+			return tileTypeBeingPlaced != ModContent.TileType<BlackSand>();
 		}
 
 		public override void RandomUpdate(int i, int j)
@@ -53,22 +63,12 @@ namespace Spooky.Content.Tiles.Shipyard
 			Tile Below = Framing.GetTileSafely(i, j + 1);
             Tile Above = Framing.GetTileSafely(i, j - 1);
 
-			if (!Below.HasTile && !Tile.BottomSlope)
-            {
-                //grow vines
-                if (Main.rand.NextBool(15)) 
-                {
-                    WorldGen.PlaceTile(i, j + 1, (ushort)ModContent.TileType<BlackSandstoneMossVines>(), true);
-					NetMessage.SendTileSquare(-1, i, j + 1, 1, TileChangeType.None);
-                }
-            }
-
             if (!Above.HasTile && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock) 
             {
 				//grow small weeds
-                if (Main.rand.NextBool(10))
+                if (Main.rand.NextBool(10) && Above.LiquidAmount <= 0)
                 {
-					//TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<BlackSandstoneMossWeeds>(), true, Main.rand.Next(0, 6));
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<PaleSeaOats>(), true, Main.rand.Next(0, 14));
 				}
 
 				//grow bleached corals
@@ -89,14 +89,14 @@ namespace Spooky.Content.Tiles.Shipyard
 			}
 
 			//spread grass
-            List<Point> adjacents = TileGlobal.OpenAdjacents(i, j, ModContent.TileType<BlackSandstone>());
+            List<Point> adjacents = TileGlobal.OpenAdjacents(i, j, ModContent.TileType<BlackSand>());
 
             if (adjacents.Count > 0)
             {
                 Point tilePoint = adjacents[Main.rand.Next(adjacents.Count)];
                 if (TileGlobal.HasOpening(tilePoint.X, tilePoint.Y))
                 {
-                    Framing.GetTileSafely(tilePoint.X, tilePoint.Y).TileType = (ushort)ModContent.TileType<BlackSandstoneMoss>();
+                    Framing.GetTileSafely(tilePoint.X, tilePoint.Y).TileType = (ushort)ModContent.TileType<BlackSandGrass>();
 
                     if (Main.netMode == NetmodeID.Server)
                     {

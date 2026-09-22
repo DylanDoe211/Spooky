@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
+using Spooky.Content.Dusts;
+
 namespace Spooky.Content.Tiles.Shipyard.Ambient
 {
     public class PaleSeaOats : ModTile
@@ -20,10 +22,10 @@ namespace Spooky.Content.Tiles.Shipyard.Ambient
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.WaterDeath = true;
-            TileObjectData.newTile.AnchorValidTiles = new[] { ModContent.TileType<BlackSand>(), ModContent.TileType<BlackSandstone>(), ModContent.TileType<BlackSandstoneMoss>() };
+            TileObjectData.newTile.AnchorValidTiles = new[] { ModContent.TileType<BlackSand>(), ModContent.TileType<BlackSandGrass>(), ModContent.TileType<BlackSandstone>() };
             TileObjectData.addTile(Type);
             AddMapEntry(new Color(84, 102, 85));
-            //DustType = ModContent.DustType<SpookyGrassDustGreen>();
+            DustType = ModContent.DustType<CemeteryGrassDust>();
             HitSound = SoundID.Grass;
         }
 

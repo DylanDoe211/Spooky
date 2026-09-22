@@ -17,26 +17,15 @@ namespace Spooky.Content.Tiles.Shipyard.Ambient
             Main.tileFrameImportant[Type] = true;
             Main.tileCut[Type] = true;
             Main.tileSolid[Type] = false;
-            Main.tileLighted[Type] = true;
             TileID.Sets.SwaysInWindBasic[Type] = true;
             TileID.Sets.IgnoredByGrowingSaplings[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.AnchorValidTiles = new[] { ModContent.TileType<BlackSandstoneMoss>() };
-            TileObjectData.newTile.DrawYOffset = 2;
             TileObjectData.addTile(Type);
-            AddMapEntry(new Color(64, 90, 133));
-            DustType = ModContent.DustType<ShipyardMossGrassDust>();
+            AddMapEntry(new Color(84, 102, 85));
+            DustType = ModContent.DustType<CemeteryGrassDust>();
             HitSound = SoundID.Grass;
-        }
-
-        public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
-		{
-			float divide = 900f;
-
-			r = 97f / divide;
-			g = 130f / divide;
-			b = 169f / divide;
         }
 
         public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY)

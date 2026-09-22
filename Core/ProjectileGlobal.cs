@@ -228,7 +228,21 @@ namespace Spooky.Core
 
 							if (tile.TileType == ModContent.TileType<MangroveSapling>())
 							{
-								MangroveTree.Grow(i, j + 1, 5, 13, true, Main.tile[i, j].TileFrameX);
+								int FrameToUse = 0;
+								if (tile.TileFrameX == 0)
+								{
+									FrameToUse = 0;
+								}
+								else if (tile.TileFrameX == 18)
+								{
+									FrameToUse = 1;
+								}
+								else if (tile.TileFrameX == 36)
+								{
+									FrameToUse = 2;
+								}
+
+								MangroveTree.Grow(i, j + 1, 5, 13, true, FrameToUse);
 							}
 
 							if (tile.TileType == ModContent.TileType<SpookySapling>() || tile.TileType == ModContent.TileType<SpookySaplingGreen>() ||

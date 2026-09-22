@@ -33,14 +33,14 @@ namespace Spooky.Core
 		public override void TileCountsAvailable(ReadOnlySpan<int> tileCounts)
 		{
 			cemeteryTiles = tileCounts[ModContent.TileType<CemeteryDirt>()] + tileCounts[ModContent.TileType<CemeteryGrass>()] + tileCounts[ModContent.TileType<CemeteryStone>()];
-			spookyTiles = tileCounts[ModContent.TileType<SpookyDirt>()] + tileCounts[ModContent.TileType<SpookyDirt2>()] + tileCounts[ModContent.TileType<SpookyGrass>()] + tileCounts[ModContent.TileType<SpookyGrassGreen>()] + tileCounts[ModContent.TileType<SpookyStone>()];
+			spookyTiles = tileCounts[ModContent.TileType<SpookyDirt>()] + tileCounts[ModContent.TileType<SpookyGrass>()] + tileCounts[ModContent.TileType<SpookyGrassGreen>()] + tileCounts[ModContent.TileType<SpookyStone>()];
 			spookyHellTiles = tileCounts[ModContent.TileType<SpookyMush>()] + tileCounts[ModContent.TileType<SpookyMushGrass>()] + tileCounts[ModContent.TileType<EyeBlock>()];
 			glowshroomTiles = tileCounts[ModContent.TileType<MushroomMoss>()];
 			spiderCaveTiles = tileCounts[ModContent.TileType<DampGrass>()] + tileCounts[ModContent.TileType<DampSoil>()] + tileCounts[ModContent.TileType<DampStone>()];
 			vegetableTiles = tileCounts[ModContent.TileType<JungleMoss>()] + tileCounts[ModContent.TileType<JungleSoilGrass>()];
 			tarPitsTiles = tileCounts[ModContent.TileType<DesertSand>()] + tileCounts[ModContent.TileType<DesertSandstone>()];
 			zombieOceanTiles = tileCounts[ModContent.TileType<OceanSand>()] + tileCounts[ModContent.TileType<OceanBiomass>()] + tileCounts[ModContent.TileType<OceanRock>()];
-			shipyardTiles = tileCounts[ModContent.TileType<BlackSand>()] + tileCounts[ModContent.TileType<BlackSandstone>()] + tileCounts[ModContent.TileType<BlackSandstoneMoss>()];
+			shipyardTiles = tileCounts[ModContent.TileType<BlackSand>()] + tileCounts[ModContent.TileType<BlackSandGrass>()] + tileCounts[ModContent.TileType<BlackSandstone>()] + tileCounts[ModContent.TileType<BlackSandstoneMoss>()];
 			sporeMonolith = tileCounts[ModContent.TileType<SporeMonolithOn>()];
 			raveyardMonolith = tileCounts[ModContent.TileType<RaveyardMonolithOn>()];
 		}

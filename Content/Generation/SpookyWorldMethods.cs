@@ -208,11 +208,9 @@ namespace Spooky.Content.Generation
 					break;
 				}
 
-				if (PlaceVine)
+				if (PlaceVine && !Main.tile[X, Y + 1].HasTile)
 				{
 					WorldGen.PlaceTile(X, Y + 1, vineType);
-					tileBelow.TileType = (ushort)vineType;
-					tileBelow.HasTile = true;
 					WorldGen.SquareTileFrame(X, Y + 1, true);
 				}
 			}
