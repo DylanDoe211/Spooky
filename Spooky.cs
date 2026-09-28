@@ -101,17 +101,17 @@ namespace Spooky
 					string text = args[1] as string;
 					return text switch
 					{
-						nameof(Flags.SpiderGrottoCenter) => Flags.SpiderGrottoCenter,
-						nameof(Flags.EyeValleyCenter) => Flags.EyeValleyCenter,
-						nameof(Flags.SpookyBiomeCenter) => Flags.SpookyBiomeCenter,
-						nameof(Flags.ZombieOceanTopLeft) => Flags.ZombieOceanTopLeft,
-						nameof(Flags.ZombieOceanBottomRight) => Flags.ZombieOceanBottomRight,
-						nameof(Flags.CatacombUpperTopLeft) => Flags.CatacombUpperTopLeft,
-						nameof(Flags.CatacombUpperBottomRight) => Flags.CatacombUpperBottomRight,
-						nameof(Flags.CatacombLowerTopLeft) => Flags.CatacombLowerTopLeft,
-						nameof(Flags.CatacombLowerBottomRight) => Flags.CatacombLowerBottomRight,
-						nameof(Flags.NoseTempleLeftmostPosition) => Flags.NoseTempleLeftmostPosition,
-						nameof(Flags.NoseTempleRightmostPosition) => Flags.NoseTempleRightmostPosition,
+						nameof(Flags.SpiderGrottoCenter) => Flags.SpiderGrottoCenter.ToPoint16(),
+						nameof(Flags.EyeValleyCenter) => Flags.EyeValleyCenter.ToPoint16(),
+						nameof(Flags.SpookyBiomeCenter) => Flags.SpookyBiomeCenter.ToPoint16(),
+						nameof(Flags.ZombieOceanTopLeft) => Flags.ZombieOceanTopLeft.ToPoint16(),
+						nameof(Flags.ZombieOceanBottomRight) => Flags.ZombieOceanBottomRight.ToPoint16(),
+						nameof(Flags.CatacombUpperTopLeft) => Flags.CatacombUpperTopLeft.ToPoint16(),
+						nameof(Flags.CatacombUpperBottomRight) => Flags.CatacombUpperBottomRight.ToPoint16(),
+						nameof(Flags.CatacombLowerTopLeft) => Flags.CatacombLowerTopLeft.ToPoint16(),
+						nameof(Flags.CatacombLowerBottomRight) => Flags.CatacombLowerBottomRight.ToPoint16(),
+						nameof(Flags.NoseTempleLeftmostPosition) => Flags.NoseTempleLeftmostPosition.ToPoint16(),
+						nameof(Flags.NoseTempleRightmostPosition) => Flags.NoseTempleRightmostPosition.ToPoint16(),
 						_ => throw new ArgumentException(text + " Is not a valid biome position variable name"),
 					};
 				}
