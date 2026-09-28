@@ -84,7 +84,7 @@ namespace Spooky.Content.Generation
             Point origin = new Point(startPosX, startPosY);
             Vector2 center = origin.ToVector2() * 16f + new Vector2(8f);
 
-            Flags.SpiderGrottoCenter = new Vector2(origin.X * 16, origin.Y * 16);
+            Flags.SpiderGrottoCenter = new Vector2(origin.X, origin.Y);
 
             float angle = MathHelper.Pi * 0.15f;
             float otherAngle = MathHelper.PiOver2 - angle;

@@ -800,7 +800,7 @@ namespace Spooky.Content.Generation
 
                 if (StructureFile == "OrroboroNest")
                 {
-                    Flags.EyeValleyCenter =  new Vector2(startX * 16, startY * 16);
+                    Flags.EyeValleyCenter =  new Vector2(startX, startY);
 
                     Flags.EggPosition = new Vector2(startX * 16, startY * 16);
                     

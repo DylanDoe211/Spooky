@@ -295,8 +295,8 @@ namespace Spooky.Core
             if (drawInfo.drawPlayer.GetModPlayer<SpookyPlayer>().SpiderGrottoCompass)
             {
                 Vector2 vector = new Vector2(roundedPos.X, roundedPos.Y);
-                float RotateX = Flags.SpiderGrottoCenter.X - vector.X;
-                float RotateY = Flags.SpiderGrottoCenter.Y - vector.Y;
+                float RotateX = (Flags.SpiderGrottoCenter.X * 16) - vector.X;
+                float RotateY = (Flags.SpiderGrottoCenter.Y * 16) - vector.Y;
                 float rotation = (float)Math.Atan2((double)RotateY, (double)RotateX) + 4.71f;
 
                 drawInfo.DrawDataCache.Add(new DrawData(GrottoCompassTex, roundedPos - Main.screenPosition, null, Color.White, 0f, GrottoCompassTex.Size() / 2, 1f, SpriteEffects.None, 0));
@@ -305,8 +305,8 @@ namespace Spooky.Core
             if (drawInfo.drawPlayer.GetModPlayer<SpookyPlayer>().EyeValleyCompass)
             {
                 Vector2 vector = new Vector2(roundedPos.X, roundedPos.Y);
-                float RotateX = Flags.EyeValleyCenter.X - vector.X;
-                float RotateY = Flags.EyeValleyCenter.Y - vector.Y;
+                float RotateX = (Flags.EyeValleyCenter.X * 16) - vector.X;
+                float RotateY = (Flags.EyeValleyCenter.Y * 16) - vector.Y;
                 float rotation = (float)Math.Atan2((double)RotateY, (double)RotateX) + 4.71f;
 
                 drawInfo.DrawDataCache.Add(new DrawData(EyeValleyCompassTex, roundedPos - Main.screenPosition, null, Color.White, 0f, EyeValleyCompassTex.Size() / 2, 1f, SpriteEffects.None, 0));
