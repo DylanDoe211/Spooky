@@ -118,13 +118,13 @@ namespace Spooky.Content.Tiles.Catacomb.Furniture
 			}
 
 			tileFlameData.flameCount = 5;
-			tileFlameData.flameColor = Color.White * 0.5f;
-			tileFlameData.flameRangeXMin = -10;
-			tileFlameData.flameRangeXMax = 11;
-			tileFlameData.flameRangeYMin = -10;
-			tileFlameData.flameRangeYMax = 1;
+			tileFlameData.flameColor = new Color(100, 100, 100, 0);
+			tileFlameData.flameRangeXMin = -5;
+			tileFlameData.flameRangeXMax = 6;
+			tileFlameData.flameRangeYMin = -5;
+			tileFlameData.flameRangeYMax = 6;
 			tileFlameData.flameRangeMultX = 0.15f;
-			tileFlameData.flameRangeMultY = 0.35f;
+			tileFlameData.flameRangeMultY = 0.15f;
 			ulong flameSeed = Main.TileFrameSeed ^ (ulong)((long)i << 32 | (uint)j);
 			tileFlameData.flameTexture = GlowTexture.Value;
 			tileFlameData.flameSeed = flameSeed;

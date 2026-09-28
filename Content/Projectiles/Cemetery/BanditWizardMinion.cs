@@ -77,14 +77,20 @@ namespace Spooky.Content.Projectiles.Cemetery
 
             var effects = Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-            for (int i = 0; i < 360; i += 30)
-            {
-                Color color = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(Color.Lerp(Color.Lime, Color.Green, i / 30));
+            //draw aura
+            for (int i = 0; i < 4; i++)
+			{
+				Vector2 offset = i switch
+				{
+					1 => new(0, -2),
+					2 => new(2, 0),
+					3 => new(0, 2),
+					_ => new(-2, 0)
+				};
 
-                Vector2 circular = new Vector2(Main.rand.NextFloat(1f, 2.5f), 0).RotatedBy(MathHelper.ToRadians(i));
-
-                Main.EntitySpriteDraw(ProjTexture.Value, Projectile.Center + circular - Main.screenPosition, rectangle, color, Projectile.rotation, drawOrigin, scaleStretch * 1.1f, effects, 0);
-            }
+				Main.EntitySpriteDraw(DrawUtils.ColorSolid(ProjTexture.Value, Color.White), Projectile.Center + offset - Main.screenPosition, rectangle, 
+				Projectile.GetAlpha(Color.Lerp(Color.Lime, Color.Green, i) * 0.6f), Projectile.rotation, drawOrigin, scaleStretch, effects, 0f);
+			}
 
             Main.EntitySpriteDraw(ProjTexture.Value, Projectile.Center - Main.screenPosition, rectangle, lightColor, Projectile.rotation, drawOrigin, scaleStretch, effects, 0);
 

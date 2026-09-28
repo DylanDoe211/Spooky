@@ -3,8 +3,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
-using Spooky.Content.Tiles.Shipyard.Ambient;
-
 namespace Spooky.Content.Tiles.Shipyard
 {
 	public class TintedGlass : ModTile
@@ -12,6 +10,7 @@ namespace Spooky.Content.Tiles.Shipyard
 		public override void SetStaticDefaults()
 		{
 			TileID.Sets.BlockMergesWithMergeAllBlock[Type] = true;
+			TileID.Sets.DrawsWalls[Type] = true;
 			Main.tileMergeDirt[Type] = true;
             Main.tileBlendAll[Type] = true;
 			Main.tileSolid[Type] = true;

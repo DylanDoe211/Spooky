@@ -198,7 +198,7 @@ namespace Spooky.Content.NPCs.SpookyBiome
 
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            GlowTexture ??= ModContent.Request<Texture2D>("Spooky/Content/NPCs/SpookyBiome/ZomboidPumpkinFireGlow");
+            GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
 
             var effects = NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
@@ -208,7 +208,7 @@ namespace Spooky.Content.NPCs.SpookyBiome
                 int YOffset = Main.rand.Next(-1, 2);
                 
                 Main.EntitySpriteDraw(GlowTexture.Value, NPC.Center - Main.screenPosition + new Vector2(XOffset, NPC.gfxOffY + 4 + YOffset), 
-                NPC.frame, Color.White * 0.5f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
+                NPC.frame, new Color(100, 100, 100, 0), NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
             }
 		}
 

@@ -24,11 +24,17 @@ namespace Spooky.Content.NPCs.Shipyard
             ModContent.NPCType<GhostJelly4>()
 		};
 
+        private static Asset<Texture2D> NPCTexture;
         private static Asset<Texture2D> GlowTexture;
 
 		public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 5;
+
+            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/GhostJellyBestiary"
+            };
 		}
 
 		public override void SetDefaults()
@@ -44,7 +50,6 @@ namespace Spooky.Content.NPCs.Shipyard
             NPC.noTileCollide = true;
 			NPC.HitSound = SoundID.NPCHit25;
 			NPC.DeathSound = SoundID.NPCDeath28;
-            NPC.alpha = 80;
 			NPC.aiStyle = -1;
 			SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.ShipyardBiome>().Type };
 		}
@@ -59,14 +64,36 @@ namespace Spooky.Content.NPCs.Shipyard
 			});
 		}
 
-        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            NPCTexture ??= ModContent.Request<Texture2D>(Texture);
             GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Cap");
 
-            var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            //draw aura
+            if (!NPC.IsABestiaryIconDummy)
+			{
+                for (int i = 0; i < 4; i++)
+                {
+                    Vector2 offset = i switch
+                    {
+                        1 => new(0, -2),
+                        2 => new(2, 0),
+                        3 => new(0, 2),
+                        _ => new(-2, 0)
+                    };
+
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(GlowTexture.Value, Color.White), NPC.Center + offset - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, 
+                    NPC.GetAlpha(Color.Cyan * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, SpriteEffects.None, 0f);
+                }
+            }
+
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 4), 
+            NPC.frame, drawColor * 0.7f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
 
             Main.EntitySpriteDraw(GlowTexture.Value, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 4), 
-            NPC.frame, Color.White * 0.5f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
+            NPC.frame, drawColor * 0.65f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
+
+            return false;
         }
         
         public override void FindFrame(int frameHeight)
@@ -178,13 +205,24 @@ namespace Spooky.Content.NPCs.Shipyard
         {
             if (NPC.life <= 0) 
             {
-                for (int numDusts = 0; numDusts < 15; numDusts++)
+                float maxAmount = 20;
+                int currentAmount = 0;
+                while (currentAmount <= maxAmount)
                 {
-                    int dustGore = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<GlowyDust>(), 0f, -2f, 0, default, 0.1f);
-                    Main.dust[dustGore].color = Color.Cyan;
-                    Main.dust[dustGore].velocity.X *= Main.rand.NextFloat(-2f, 2f);
-                    Main.dust[dustGore].velocity.Y *= Main.rand.NextFloat(-2f, 2f);
-                    Main.dust[dustGore].noGravity = true;
+                    Vector2 velocity = new Vector2(Main.rand.NextFloat(1f, 3f), Main.rand.NextFloat(1f, 3f));
+                    Vector2 Bounds = new Vector2(Main.rand.NextFloat(1f, 3f), Main.rand.NextFloat(1f, 3f));
+                    float intensity = Main.rand.NextFloat(1f, 3f);
+
+                    Vector2 vector12 = Vector2.UnitX * 0f;
+                    vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
+                    vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
+
+                    int newDust = Dust.NewDust(NPC.Center, 1, 1, ModContent.DustType<GlowyDust>(), 0f, 0f, 0, Color.Cyan, 0.2f);
+                    Main.dust[newDust].noGravity = true;
+                    Main.dust[newDust].position = NPC.Center + vector12;
+                    Main.dust[newDust].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
+
+                    currentAmount++;
                 }
             }
         }
@@ -192,6 +230,7 @@ namespace Spooky.Content.NPCs.Shipyard
 
     public class GhostJelly2 : GhostJelly1
 	{
+        private static Asset<Texture2D> NPCTexture;
         private static Asset<Texture2D> GlowTexture;
 
         public override void SetStaticDefaults()
@@ -200,14 +239,36 @@ namespace Spooky.Content.NPCs.Shipyard
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            NPCTexture ??= ModContent.Request<Texture2D>(Texture);
             GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Cap");
 
-            var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            //draw aura
+            if (!NPC.IsABestiaryIconDummy)
+			{
+                for (int i = 0; i < 4; i++)
+                {
+                    Vector2 offset = i switch
+                    {
+                        1 => new(0, -2),
+                        2 => new(2, 0),
+                        3 => new(0, 2),
+                        _ => new(-2, 0)
+                    };
 
-            Main.EntitySpriteDraw(GlowTexture.Value, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 5), 
-            NPC.frame, Color.White * 0.5f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(GlowTexture.Value, Color.White), NPC.Center + offset - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, 
+                    NPC.GetAlpha(Color.Cyan * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, SpriteEffects.None, 0f);
+                }
+            }
+
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 4), 
+            NPC.frame, drawColor * 0.7f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
+
+            Main.EntitySpriteDraw(GlowTexture.Value, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 4), 
+            NPC.frame, drawColor * 0.65f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
+
+            return false;
         }
 
         public override void HitEffect(NPC.HitInfo hit)
@@ -218,13 +279,24 @@ namespace Spooky.Content.NPCs.Shipyard
                 BestiaryParent.SetDefaults(ModContent.NPCType<GhostJelly1>());
                 Main.BestiaryTracker.Kills.RegisterKill(BestiaryParent);
 
-                for (int numDusts = 0; numDusts < 15; numDusts++)
+                float maxAmount = 20;
+                int currentAmount = 0;
+                while (currentAmount <= maxAmount)
                 {
-                    int dustGore = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<GlowyDust>(), 0f, -2f, 0, default, 0.1f);
-                    Main.dust[dustGore].color = Color.Cyan;
-                    Main.dust[dustGore].velocity.X *= Main.rand.NextFloat(-2f, 2f);
-                    Main.dust[dustGore].velocity.Y *= Main.rand.NextFloat(-2f, 2f);
-                    Main.dust[dustGore].noGravity = true;
+                    Vector2 velocity = new Vector2(Main.rand.NextFloat(1f, 3f), Main.rand.NextFloat(1f, 3f));
+                    Vector2 Bounds = new Vector2(Main.rand.NextFloat(1f, 3f), Main.rand.NextFloat(1f, 3f));
+                    float intensity = Main.rand.NextFloat(1f, 3f);
+
+                    Vector2 vector12 = Vector2.UnitX * 0f;
+                    vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
+                    vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
+
+                    int newDust = Dust.NewDust(NPC.Center, 1, 1, ModContent.DustType<GlowyDust>(), 0f, 0f, 0, Color.Cyan, 0.2f);
+                    Main.dust[newDust].noGravity = true;
+                    Main.dust[newDust].position = NPC.Center + vector12;
+                    Main.dust[newDust].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
+
+                    currentAmount++;
                 }
             }
         }
@@ -232,6 +304,7 @@ namespace Spooky.Content.NPCs.Shipyard
 
     public class GhostJelly3 : GhostJelly1
 	{
+        private static Asset<Texture2D> NPCTexture;
         private static Asset<Texture2D> GlowTexture;
 
         public override void SetStaticDefaults()
@@ -240,14 +313,36 @@ namespace Spooky.Content.NPCs.Shipyard
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            NPCTexture ??= ModContent.Request<Texture2D>(Texture);
             GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Cap");
 
-            var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            //draw aura
+            if (!NPC.IsABestiaryIconDummy)
+			{
+                for (int i = 0; i < 4; i++)
+                {
+                    Vector2 offset = i switch
+                    {
+                        1 => new(0, -2),
+                        2 => new(2, 0),
+                        3 => new(0, 2),
+                        _ => new(-2, 0)
+                    };
+
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(GlowTexture.Value, Color.White), NPC.Center + offset - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, 
+                    NPC.GetAlpha(Color.Turquoise * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, SpriteEffects.None, 0f);
+                }
+            }
+
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 4), 
+            NPC.frame, drawColor * 0.7f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
 
             Main.EntitySpriteDraw(GlowTexture.Value, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 4), 
-            NPC.frame, Color.White * 0.5f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
+            NPC.frame, drawColor * 0.65f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
+
+            return false;
         }
 
         public override void HitEffect(NPC.HitInfo hit)
@@ -258,13 +353,24 @@ namespace Spooky.Content.NPCs.Shipyard
                 BestiaryParent.SetDefaults(ModContent.NPCType<GhostJelly1>());
                 Main.BestiaryTracker.Kills.RegisterKill(BestiaryParent);
 
-                for (int numDusts = 0; numDusts < 15; numDusts++)
+                float maxAmount = 20;
+                int currentAmount = 0;
+                while (currentAmount <= maxAmount)
                 {
-                    int dustGore = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<GlowyDust>(), 0f, -2f, 0, default, 0.1f);
-                    Main.dust[dustGore].color = Color.Cyan;
-                    Main.dust[dustGore].velocity.X *= Main.rand.NextFloat(-2f, 2f);
-                    Main.dust[dustGore].velocity.Y *= Main.rand.NextFloat(-2f, 2f);
-                    Main.dust[dustGore].noGravity = true;
+                    Vector2 velocity = new Vector2(Main.rand.NextFloat(1f, 3f), Main.rand.NextFloat(1f, 3f));
+                    Vector2 Bounds = new Vector2(Main.rand.NextFloat(1f, 3f), Main.rand.NextFloat(1f, 3f));
+                    float intensity = Main.rand.NextFloat(1f, 3f);
+
+                    Vector2 vector12 = Vector2.UnitX * 0f;
+                    vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
+                    vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
+
+                    int newDust = Dust.NewDust(NPC.Center, 1, 1, ModContent.DustType<GlowyDust>(), 0f, 0f, 0, Color.Turquoise, 0.2f);
+                    Main.dust[newDust].noGravity = true;
+                    Main.dust[newDust].position = NPC.Center + vector12;
+                    Main.dust[newDust].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
+
+                    currentAmount++;
                 }
             }
         }
@@ -272,6 +378,7 @@ namespace Spooky.Content.NPCs.Shipyard
 
     public class GhostJelly4 : GhostJelly1
 	{
+        private static Asset<Texture2D> NPCTexture;
         private static Asset<Texture2D> GlowTexture;
 
         public override void SetStaticDefaults()
@@ -280,14 +387,36 @@ namespace Spooky.Content.NPCs.Shipyard
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
         }
 
-        public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            NPCTexture ??= ModContent.Request<Texture2D>(Texture);
             GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Cap");
 
-            var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            //draw aura
+            if (!NPC.IsABestiaryIconDummy)
+			{
+                for (int i = 0; i < 4; i++)
+                {
+                    Vector2 offset = i switch
+                    {
+                        1 => new(0, -2),
+                        2 => new(2, 0),
+                        3 => new(0, 2),
+                        _ => new(-2, 0)
+                    };
 
-            Main.EntitySpriteDraw(GlowTexture.Value, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 5), 
-            NPC.frame, Color.White * 0.5f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(GlowTexture.Value, Color.White), NPC.Center + offset - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, 
+                    NPC.GetAlpha(Color.Turquoise * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, SpriteEffects.None, 0f);
+                }
+            }
+
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 4), 
+            NPC.frame, drawColor * 0.7f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
+
+            Main.EntitySpriteDraw(GlowTexture.Value, NPC.Center - Main.screenPosition + new Vector2(0, NPC.gfxOffY + 4), 
+            NPC.frame, drawColor * 0.65f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
+
+            return false;
         }
 
         public override void HitEffect(NPC.HitInfo hit)
@@ -298,13 +427,24 @@ namespace Spooky.Content.NPCs.Shipyard
                 BestiaryParent.SetDefaults(ModContent.NPCType<GhostJelly1>());
                 Main.BestiaryTracker.Kills.RegisterKill(BestiaryParent);
 
-                for (int numDusts = 0; numDusts < 15; numDusts++)
+                float maxAmount = 20;
+                int currentAmount = 0;
+                while (currentAmount <= maxAmount)
                 {
-                    int dustGore = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<GlowyDust>(), 0f, -2f, 0, default, 0.1f);
-                    Main.dust[dustGore].color = Color.Cyan;
-                    Main.dust[dustGore].velocity.X *= Main.rand.NextFloat(-2f, 2f);
-                    Main.dust[dustGore].velocity.Y *= Main.rand.NextFloat(-2f, 2f);
-                    Main.dust[dustGore].noGravity = true;
+                    Vector2 velocity = new Vector2(Main.rand.NextFloat(1f, 3f), Main.rand.NextFloat(1f, 3f));
+                    Vector2 Bounds = new Vector2(Main.rand.NextFloat(1f, 3f), Main.rand.NextFloat(1f, 3f));
+                    float intensity = Main.rand.NextFloat(1f, 3f);
+
+                    Vector2 vector12 = Vector2.UnitX * 0f;
+                    vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
+                    vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
+
+                    int newDust = Dust.NewDust(NPC.Center, 1, 1, ModContent.DustType<GlowyDust>(), 0f, 0f, 0, Color.Turquoise, 0.2f);
+                    Main.dust[newDust].noGravity = true;
+                    Main.dust[newDust].position = NPC.Center + vector12;
+                    Main.dust[newDust].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
+
+                    currentAmount++;
                 }
             }
         }

@@ -11,6 +11,9 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
+using Spooky.Core;
+using Spooky.Content.Dusts;
+
 namespace Spooky.Content.NPCs.Shipyard
 {
     public class TrumpetfishHead : ModNPC
@@ -59,9 +62,9 @@ namespace Spooky.Content.NPCs.Shipyard
 
         public override void SetDefaults()
         {
-            NPC.lifeMax = 350;
+            NPC.lifeMax = 200;
             NPC.damage = 20;
-            NPC.defense = 10;
+            NPC.defense = 5;
             NPC.width = 26;
             NPC.height = 26;
             NPC.npcSlots = 1f;
@@ -71,7 +74,7 @@ namespace Spooky.Content.NPCs.Shipyard
             NPC.noTileCollide = true;
             NPC.behindTiles = true;
             NPC.HitSound = SoundID.NPCHit25;
-			NPC.DeathSound = SoundID.NPCDeath28;
+			NPC.DeathSound = SoundID.NPCDeath6;
             NPC.aiStyle = -1;
 			SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.ShipyardBiome>().Type };
         }
@@ -92,8 +95,27 @@ namespace Spooky.Content.NPCs.Shipyard
 
             var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-            Vector2 origin = new Vector2(NPCTexture.Width() * 0.5f, NPCTexture.Height() / Main.npcFrameCount[NPC.type] * 0.5f);
-            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+            //draw aura
+            if (!NPC.IsABestiaryIconDummy)
+			{
+                Color AuraColor = NPC.ai[3] == 0 ? Color.White : Color.DarkGray;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    Vector2 offset = i switch
+                    {
+                        1 => new(2, 0),
+                        2 => new(0, -2),
+                        _ => new(-2, 0)
+                    };
+
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCTexture.Value, Color.White), NPC.Center + offset.RotatedBy(NPC.rotation) - screenPos, NPC.frame, 
+                    NPC.GetAlpha(AuraColor * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+                }
+            }
+
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - screenPos, 
+            NPC.frame, drawColor * 0.9f, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
 
             return false;
         }
@@ -165,12 +187,14 @@ namespace Spooky.Content.NPCs.Shipyard
                 }
             }
 
+            //passive behavior
             if (NPC.ai[2] == 0)
             {
+                //when not aggressive, float towards the player if they are close enough or just move in a set direction
                 if (NPC.ai[0] == 0)
                 {
+                    //if the player is too close and has line of sight, become hostile
                     bool HasLineOfSight = NPC.Distance(player.Center) <= 350f && Collision.CanHitLine(player.position, player.width, player.height, NPC.position, NPC.width, NPC.height);
-
                     if (HasLineOfSight && NPC.Distance(player.Center) <= 150f)
                     {
                         SoundEngine.PlaySound(SoundID.Zombie56 with { Volume = 3f, Pitch = 1.5f }, NPC.Center);
@@ -184,6 +208,7 @@ namespace Spooky.Content.NPCs.Shipyard
                     Vector2 desiredVelocity = NPC.DirectionTo(GoTo) * 1.5f;
                     NPC.velocity.X = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20).X;
                 }
+                //while aggressive quickly move towards the player
                 else
                 {
                     NPC.ai[1]++;
@@ -203,6 +228,7 @@ namespace Spooky.Content.NPCs.Shipyard
                     }
                 }
             }
+            //fleeing behavior
             else
             {
                 NPC.ai[2]--;
@@ -262,16 +288,13 @@ namespace Spooky.Content.NPCs.Shipyard
 
         public override bool CheckDead()
         {
-            if (Main.netMode != NetmodeID.Server)
+            for (int numDusts = 0; numDusts < 3; numDusts++)
             {
-                if (NPC.ai[3] == 0)
-                {
-                    Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity / 2, ModContent.Find<ModGore>("Spooky/TrumpetfishWhiteHeadGore").Type);
-                }
-                else
-                {
-                    Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity / 2, ModContent.Find<ModGore>("Spooky/TrumpetfishGrayHeadGore").Type);
-                }
+                int dustGore = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<GlowyDust>(), 0f, -2f, 0, default, 0.2f);
+                Main.dust[dustGore].color = NPC.ai[2] == 0 ? Color.White : Color.DarkGray;
+                Main.dust[dustGore].velocity.X *= Main.rand.NextFloat(-2f, 2f);
+                Main.dust[dustGore].velocity.Y *= Main.rand.NextFloat(-2f, 2f);
+                Main.dust[dustGore].noGravity = true;
             }
 
             return true;
@@ -320,8 +343,26 @@ namespace Spooky.Content.NPCs.Shipyard
 
             var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-            Vector2 origin = new Vector2(NPCTexture.Width() * 0.5f, NPCTexture.Height() / Main.npcFrameCount[NPC.type] * 0.5f);
-            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+            //draw aura
+            if (!NPC.IsABestiaryIconDummy)
+			{
+                Color AuraColor = NPC.ai[2] == 0 ? Color.White : Color.DarkGray;
+
+                for (int i = 0; i < 2; i++)
+                {
+                    Vector2 offset = i switch
+                    {
+                        1 => new(2, 0),
+                        _ => new(-2, 0)
+                    };
+
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCTexture.Value, Color.White), NPC.Center + offset.RotatedBy(NPC.rotation) - screenPos, NPC.frame, 
+                    NPC.GetAlpha(AuraColor * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+                }
+            }
+
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - screenPos, 
+            NPC.frame, drawColor * 0.9f, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
 
             return false;
         }
@@ -358,7 +399,7 @@ namespace Spooky.Content.NPCs.Shipyard
             //kill segment if the head doesnt exist
 			if (!Parent.active || Parent.type != ModContent.NPCType<TrumpetfishHead>())
             {
-                SpawnGores();
+                SpawnGores(NPC);
                 NPC.active = false;
             }
 
@@ -369,7 +410,7 @@ namespace Spooky.Content.NPCs.Shipyard
 			if (SegmentParent.rotation != NPC.rotation)
 			{
 				float angle = MathHelper.WrapAngle(SegmentParent.rotation - NPC.rotation);
-				SegmentCenter = SegmentCenter.RotatedBy(angle * 0.12f);
+				SegmentCenter = SegmentCenter.RotatedBy(angle * 0.2f);
 			}
 
 			NPC.rotation = SegmentCenter.ToRotation() + 1.57f;
@@ -388,22 +429,19 @@ namespace Spooky.Content.NPCs.Shipyard
         {
             if (NPC.life <= 0) 
             {
-                SpawnGores();
+                SpawnGores(NPC);
             }
         }
 
-        public void SpawnGores()
+        public void SpawnGores(NPC NPC)
         {
-            if (Main.netMode != NetmodeID.Server)
+            for (int numDusts = 0; numDusts < 3; numDusts++)
             {
-                if (NPC.ai[2] == 0)
-                {
-                    Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity / 2, ModContent.Find<ModGore>("Spooky/TrumpetfishWhiteBodyGore").Type);
-                }
-                else
-                {
-                    Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity / 2, ModContent.Find<ModGore>("Spooky/TrumpetfishGrayBodyGore").Type);
-                }
+                int dustGore = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<GlowyDust>(), 0f, -2f, 0, default, 0.2f);
+                Main.dust[dustGore].color = NPC.ai[2] == 0 ? Color.White : Color.DarkGray;
+                Main.dust[dustGore].velocity.X *= Main.rand.NextFloat(-2f, 2f);
+                Main.dust[dustGore].velocity.Y *= Main.rand.NextFloat(-2f, 2f);
+                Main.dust[dustGore].noGravity = true;
             }
         }
 
@@ -438,8 +476,27 @@ namespace Spooky.Content.NPCs.Shipyard
 
             var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-            Vector2 origin = new Vector2(NPCTexture.Width() * 0.5f, NPCTexture.Height() / Main.npcFrameCount[NPC.type] * 0.5f);
-            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - Main.screenPosition, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+            //draw aura
+            if (!NPC.IsABestiaryIconDummy)
+			{
+                Color AuraColor = NPC.ai[2] == 0 ? Color.White : Color.DarkGray;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    Vector2 offset = i switch
+                    {
+                        1 => new(2, 0),
+                        2 => new(0, 2),
+                        _ => new(-2, 0)
+                    };
+
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCTexture.Value, Color.White), NPC.Center + offset.RotatedBy(NPC.rotation) - screenPos, NPC.frame, 
+                    NPC.GetAlpha(AuraColor * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+                }
+            }
+
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - screenPos, 
+            NPC.frame, drawColor * 0.9f, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
 
             return false;
         }
@@ -453,7 +510,7 @@ namespace Spooky.Content.NPCs.Shipyard
             //kill segment if the head doesnt exist
 			if (!Parent.active || Parent.type != ModContent.NPCType<TrumpetfishHead>())
             {
-                SpawnGores();
+                SpawnGores(NPC);
                 NPC.active = false;
             }
 
@@ -464,7 +521,7 @@ namespace Spooky.Content.NPCs.Shipyard
 			if (SegmentParent.rotation != NPC.rotation)
 			{
 				float angle = MathHelper.WrapAngle(SegmentParent.rotation - NPC.rotation);
-				SegmentCenter = SegmentCenter.RotatedBy(angle * 0.12f);
+				SegmentCenter = SegmentCenter.RotatedBy(angle * 0.2f);
 			}
 
 			NPC.rotation = SegmentCenter.ToRotation() + 1.57f;
@@ -477,21 +534,6 @@ namespace Spooky.Content.NPCs.Shipyard
 			}
 
 			return false;
-        }
-
-        public void SpawnGores()
-        {
-            if (Main.netMode != NetmodeID.Server)
-            {
-                if (NPC.ai[2] == 0)
-                {
-                    Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity / 2, ModContent.Find<ModGore>("Spooky/TrumpetfishWhiteTailGore").Type);
-                }
-                else
-                {
-                    Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity / 2, ModContent.Find<ModGore>("Spooky/TrumpetfishGrayTailGore").Type);
-                }
-            }
         }
     }
 }

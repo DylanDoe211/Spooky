@@ -9,6 +9,7 @@ New Stuff:
 -Added a new achievement for completing the entire spooky mod bestiary
 -Added a new game tip to tell players about spooky mods config options
 -Added modcalls for various things in spooky mod like boss defeated, event defeated, and other variables
+-Added clentaminator biome spread for blocks and walls that unintentionally didnt have it (Such as spooky mod dirt walls and other newer grass blocks that previously didnt get converted)
 
 
 Changes:
@@ -32,6 +33,10 @@ Changes:
 -Reduced the size of the tar pits biome
 -Tarrars now play a growling sound when a player gets close to them
 -Nerfed crusty gunfish damage from 42 -> 35
+-Changed outline visuals and dust particles on some "ghostly" enemies (Such as cemetery enemies, pandoras box enemies, ect) to look nicer and stylistically like terraria
+
+
+Sprite Updates:
 -Daffodil has a massively improved sprite, along with small tweaks to her fight to fit the new sprites
 -Updated daffodil on the spooky mod menu to her new design
 -Updated eye valley background sprites
@@ -40,6 +45,7 @@ Changes:
 -Gourd blocks now have cool additional "discolored" clusters (These can be observed more clearly on the new giant gourds in the underground spooky forest)
 -Updated all colored gourd wall sprites to look better
 -Updated the colors on spooky forest, cemetery, and spider grotto dirt to look a bit nicer
+-Updated sprites for big bones flower attack projectiles
 
 
 Biome Noise Generation Changes:
@@ -59,6 +65,7 @@ Localization Changes:
 -Renamed thorn stem shirt -> flower stem shirt to be consistent with the other two armor pieces having "Flower" in their names (The internal name for this entry is FlowerBody)
 -Fixed mispelling of targeted -> targetted in dave & mikes tooltip
 -Instances of armor set bonuses requiring double tapping to activate now have the name of the key you need to double tap replaced with {0} in the localization to properly format it based on the vanilla config
+-Reworded a bunch of spooky mod configs to be more concise and understandable
 -Due to removal of gourd o' lantern items, localization entries for those have been removed
 Added the following new entries to the WorldgenTasks localization:
 Shipyard: Creating shipwrecks
@@ -71,7 +78,7 @@ Fixes:
 -Config option for teleporting all players into nose temple combat rooms not working
 -Tar cactus platforms not being craftable back into tar cactus blocks
 -Many spooky mod ambient objects not being destroyable when you build blocks and other stuff on them
--Spooky mod ambient objects destroying other ambient objects when growing
+-Spooky mod ambient objects destroying other existing ambient objects when growing
 -Haunting harold ghost projectiles not doing damage
 -Temple of moco combat room idols giving off way too much light on retro/trippy lighting modes
 -Spooky mod custom trees breaking one by one when destroyed instead of being fully destroyed immediately
@@ -91,5 +98,6 @@ Fixes:
 -Scorpion deathblow right click not having autofire
 -Eye belcher mines not properly dealing double damage while on the ground
 -Opalised cannon slimes lagging the game
--Brainy minion vanishing when spawning some minions
+-Brainy minion vanishing when spawning other minions
 -Swampy cemetery ghost enemies having their glowing aura unintentionally drawn in the bestiary
+-Spooky glowshroom caves sometimes having random single or double tiles that would be cleared out underneath ores

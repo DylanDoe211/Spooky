@@ -1392,6 +1392,21 @@ DandyHead: {
 	Tooltip: «Отлично подходит для имитации внешнего вида разработчиков Spooky Mod!»'
 }
 
+PirateBody: {
+	// DisplayName: Old Pirate's Coat
+	// Tooltip: ""
+}
+
+PirateHead: {
+	// DisplayName: Old Pirate's Hat
+	// Tooltip: ""
+}
+
+PirateLegs: {
+	// DisplayName: Old Pirate's Pants
+	// Tooltip: ""
+}
+
 RotGourdMask: {
 	DisplayName: Маска Гнилого тыквардейца
 	Tooltip: ""
@@ -1425,6 +1440,11 @@ ThreeDimensionalGlasses: {
 TortillaHead: {
 	DisplayName: Маска Tortilla
 	Tooltip: «Отлично подходит для имитации внешнего вида разработчиков Spooky Mod!»'
+}
+
+UrchinHead: {
+	// DisplayName: Sea Urchin Mask
+	// Tooltip: ""
 }
 
 WaasephiHead: {
@@ -1524,7 +1544,7 @@ OrroEel: {
 
 PinkSeaBunny: {
 	// DisplayName: Shiny Sea Bunny
-	// Tooltip: "'Caught in Bleached Shipyard'"
+	// Tooltip: "'Caught in Boggy Shipyard'"
 }
 
 PumpkinBobber: {

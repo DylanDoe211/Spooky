@@ -442,7 +442,7 @@ namespace Spooky.Content.Generation
 						}
 					}
 
-					if (CanPlaceShipwreck((int)Position.X, StructureY, 1, 20) && 
+					if (CanPlaceShipwreck((int)Position.X, StructureY, 20) && IsFlatSurface((int)Position.X, StructureY, 1) &&
 					(Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSand>() || Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSandGrass>() || 
 					Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSandstone>()|| Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSandstoneMoss>()))
 					{
@@ -500,7 +500,7 @@ namespace Spooky.Content.Generation
 			{
 				for (int Y = 10; Y <= Main.worldSurface; Y++)
 				{
-					if (WorldGen.genRand.NextBool(55))
+					if (WorldGen.genRand.NextBool(55) && IsFlatSurface(X, Y, 2))
                     {
                         for (int TombstoneX = X - 10; TombstoneX <= X + 10; TombstoneX++)
                         {
@@ -522,7 +522,7 @@ namespace Spooky.Content.Generation
 			}
 
 			//ambient tiles
-			//first, grow trees
+			//first, grow trees and giant corals
 			for (int X = leftBound - 10; X <= rightBound + 10; X++)
 			{
 				for (int Y = 10; Y <= Main.worldSurface; Y++)
@@ -843,20 +843,9 @@ namespace Spooky.Content.Generation
 
             return true;
         }
-		
-		public static bool CanPlaceShipwreck(int PositionX, int PositionY, int Width, int TileCheckDistance)
-		{
-			for (int x = PositionX - TileCheckDistance; x <= PositionX + TileCheckDistance; x++)
-			{
-				for (int y = PositionY - TileCheckDistance; y <= PositionY + TileCheckDistance; y++)
-				{
-					if (Main.tile[x, y].TileType == ModContent.TileType<RotWood>())
-					{
-						return false;
-					}
-				}
-			}
 
+		public static bool IsFlatSurface(int PositionX, int PositionY, int Width)
+		{
 			for (int x = PositionX - Width; x <= PositionX + Width; x++)
 			{
 				if (Main.tile[x, PositionY].HasTile && !Main.tile[x, PositionY - 1].HasTile && !Main.tile[x, PositionY - 2].HasTile && !Main.tile[x, PositionY - 3].HasTile && !Main.tile[x, PositionY - 4].HasTile)
@@ -866,6 +855,22 @@ namespace Spooky.Content.Generation
 				else
 				{
 					return false;
+				}
+			}
+
+			return true;
+		}
+		
+		public static bool CanPlaceShipwreck(int PositionX, int PositionY, int TileCheckDistance)
+		{
+			for (int x = PositionX - TileCheckDistance; x <= PositionX + TileCheckDistance; x++)
+			{
+				for (int y = PositionY - TileCheckDistance; y <= PositionY + TileCheckDistance; y++)
+				{
+					if (Main.tile[x, y].TileType == ModContent.TileType<RotWood>())
+					{
+						return false;
+					}
 				}
 			}
 

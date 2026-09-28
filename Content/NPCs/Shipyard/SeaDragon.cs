@@ -2,7 +2,14 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.Bestiary;
+using ReLogic.Content;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System.Linq;
 using System.Collections.Generic;
+
+using Spooky.Core;
+using Spooky.Content.Dusts;
 
 namespace Spooky.Content.NPCs.Shipyard
 {
@@ -10,15 +17,12 @@ namespace Spooky.Content.NPCs.Shipyard
 	{
         int SaveDirection;
 
+        private static Asset<Texture2D> NPCTexture;
+
 		public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 4;
             NPCID.Sets.CountsAsCritter[NPC.type] = true;
-
-            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
-            {
-                CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/SeaDragonBestiary"
-            };
 		}
 
 		public override void SetDefaults()
@@ -26,26 +30,59 @@ namespace Spooky.Content.NPCs.Shipyard
             NPC.lifeMax = 20;
             NPC.damage = 0;
 			NPC.defense = 0;
-			NPC.width = 36;
+			NPC.width = 56;
 			NPC.height = 36;
             NPC.npcSlots = 0.5f;
+            NPC.knockBackResist = 0f;
             NPC.noGravity = true;
             NPC.chaseable = false;
+            NPC.noTileCollide = true;
 			NPC.HitSound = SoundID.NPCHit1;
-			NPC.DeathSound = SoundID.NPCDeath1;
-			NPC.aiStyle = 16;
-			AIType = NPCID.Pupfish;
+			NPC.DeathSound = SoundID.NPCDeath6;
+			NPC.aiStyle = -1;
 			SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.ShipyardBiome>().Type };
 		}
 
-		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) 
+		public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
         {
-			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
+			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement>
             {
 				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.SeaDragon"),
-                new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.ShipyardBiome>().ModBiomeBestiaryInfoElement)
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.NightTime,
+				new BestiaryBackgroundOverlay("Spooky/Content/Biomes/ShipyardBiomeNight_Background", Color.White)
 			});
 		}
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            //draw aura
+            NPCTexture ??= ModContent.Request<Texture2D>(Texture);
+
+            var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+
+            //draw aura
+            if (!NPC.IsABestiaryIconDummy)
+			{
+                for (int i = 0; i < 4; i++)
+                {
+                    Vector2 offset = i switch
+                    {
+                        1 => new(0, -2),
+                        2 => new(2, 0),
+                        3 => new(0, 2),
+                        _ => new(-2, 0)
+                    };
+
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCTexture.Value, Color.White), NPC.Center + offset - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, 
+                    NPC.GetAlpha(Color.LightSkyBlue * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+                }
+            }
+
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - screenPos + new Vector2(0, NPC.gfxOffY + 4), 
+            NPC.frame, drawColor * 0.9f, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+
+            return false;
+        }
         
         public override void FindFrame(int frameHeight)
 		{
@@ -63,132 +100,275 @@ namespace Spooky.Content.NPCs.Shipyard
 
         public override void AI()
         {
-            NPC.spriteDirection = NPC.direction;
+            NPC.spriteDirection = NPC.direction = NPC.velocity.X < 0 ? -1 : 1;
 
-            if (NPC.localAI[1] == 0)
+            if (NPC.ai[1] == 0)
             {
-                NPC.localAI[1] = Main.rand.Next(300, 541);
+                NPC.ai[2] = Main.rand.Next(300, 600);
+                NPC.ai[3] = Main.rand.Next(5, 13);
+                NPC.ai[1]++;
                 NPC.netUpdate = true;
             }
-
-            NPC.localAI[0]++;
-            if (NPC.localAI[0] < NPC.localAI[1])
+            else
             {
-                NPC.spriteDirection = NPC.direction;
+                NPC.ai[1]++;
+                if (NPC.ai[1] >= NPC.ai[2])
+                {
+                    NPC.velocity *= 0.975f;
+                }
+                if (NPC.ai[1] >= NPC.ai[2] + 180)
+                {
+                    NPC.ai[1] = 1;
+                    NPC.netUpdate = true;
+                }
 
-                SaveDirection = NPC.direction;
-            }
-            if (NPC.localAI[0] >= NPC.localAI[1])
-            {
-                NPC.spriteDirection = SaveDirection;
+                if (NPC.ai[0] == 0)
+                {
+                    NPC.velocity.X = Main.rand.NextBool() ? -0.5f : 0.5f;
 
-                NPC.aiStyle = 0;
-                NPC.velocity *= 0.985f;
-            }
-            if (NPC.localAI[0] >= NPC.localAI[1] + 140)
-            {
-                NPC.aiStyle = 16;
-                NPC.localAI[1] = Main.rand.Next(300, 541);
-                NPC.localAI[0] = 0;
-                NPC.netUpdate = true;
+                    NPC.ai[0]++;
+                    NPC.netUpdate = true;
+                }
+
+                if (NPC.ai[1] < NPC.ai[2])
+                {
+                    float MaxVelocityX = 0.75f;
+                    if (NPC.direction == -1 && NPC.velocity.X > -MaxVelocityX)
+                    {
+                        NPC.velocity.X -= 0.1f;
+                    }
+                    else if (NPC.direction == 1 && NPC.velocity.X < MaxVelocityX)
+                    {
+                        NPC.velocity.X += 0.1f;
+                    }
+
+                    if (NPC.velocity.X < -MaxVelocityX)
+                    {
+                        NPC.velocity.X = -MaxVelocityX;
+                    }
+                    if (NPC.velocity.X > MaxVelocityX)
+                    {
+                        NPC.velocity.X = MaxVelocityX;
+                    }
+
+                    bool GoUp = false;
+                    int PosX = (int)(NPC.Center.X / 16f);
+                    int PosY = (int)((NPC.position.Y + (float)NPC.height) / 16f);
+                    int MaxHeight = (int)NPC.ai[3];
+                    for (int TilePosY = PosY; TilePosY < PosY + MaxHeight; TilePosY++)
+                    {
+                        if (!WorldGen.InWorld(PosX, TilePosY, 10))
+                        {
+                            continue;
+                        }
+                        if (WorldGen.SolidOrSlopedTile(PosX, TilePosY) || Main.tile[PosX, TilePosY].LiquidAmount > 0)
+                        {
+                            GoUp = true; 
+                            NPC.netUpdate = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!GoUp)
+                    {
+                        NPC.velocity.Y += 0.035f;
+                    }
+                    else
+                    {
+                        NPC.velocity.Y -= 0.035f;
+                    }
+
+                    //limit npc y-velocity
+                    if (NPC.velocity.Y > 1.2f)
+                    {
+                        NPC.velocity.Y = 1.2f;
+                    }
+                    if (NPC.velocity.Y < -1.2f)
+                    {
+                        NPC.velocity.Y = -1.2f;
+                    }
+                }
             }
         }
 
-        public override void HitEffect(NPC.HitInfo hit) 
+        public void SpawnDust(NPC NPC, Color color)
+        {
+            float maxAmount = 20;
+            int currentAmount = 0;
+            while (currentAmount <= maxAmount)
+            {
+                Vector2 velocity = new Vector2(Main.rand.NextFloat(1f, 3f), Main.rand.NextFloat(1f, 3f));
+                Vector2 Bounds = new Vector2(Main.rand.NextFloat(1f, 3f), Main.rand.NextFloat(1f, 3f));
+                float intensity = Main.rand.NextFloat(1f, 3f);
+
+                Vector2 vector12 = Vector2.UnitX * 0f;
+                vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
+                vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
+
+                int newDust = Dust.NewDust(NPC.Center, 1, 1, ModContent.DustType<GlowyDust>(), 0f, 0f, 0, color, 0.2f);
+                Main.dust[newDust].noGravity = true;
+                Main.dust[newDust].position = NPC.Center + vector12;
+                Main.dust[newDust].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
+
+                currentAmount++;
+            }
+        }
+
+        public override void HitEffect(NPC.HitInfo hit)
         {
             if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 2; numGores++)
-                {
-                    if (Main.netMode != NetmodeID.Server) 
-                    {
-                        Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/SeaDragonBlueGore" + numGores).Type);
-                    }
-                }
+                SpawnDust(NPC, Color.LightSkyBlue);
             }
         }
 	}
 
     public class SeaDragon2 : SeaDragon1
 	{
+        private static Asset<Texture2D> NPCTexture;
+
         public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 4;
             NPCID.Sets.CountsAsCritter[NPC.type] = true;
-            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
 		}
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            //draw aura
+            NPCTexture ??= ModContent.Request<Texture2D>(Texture);
+
+            var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+
+            //draw aura
+            if (!NPC.IsABestiaryIconDummy)
+			{
+                for (int i = 0; i < 4; i++)
+                {
+                    Vector2 offset = i switch
+                    {
+                        1 => new(0, -2),
+                        2 => new(2, 0),
+                        3 => new(0, 2),
+                        _ => new(-2, 0)
+                    };
+
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCTexture.Value, Color.White), NPC.Center + offset - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, 
+                    NPC.GetAlpha(Color.HotPink * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+                }
+            }
+
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - screenPos + new Vector2(0, NPC.gfxOffY + 4), 
+            NPC.frame, drawColor * 0.9f, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+
+            return false;
+        }
 
         public override void HitEffect(NPC.HitInfo hit)
         {
             if (NPC.life <= 0) 
             {
-                NPC BestiaryParent = new();
-                BestiaryParent.SetDefaults(ModContent.NPCType<SeaDragon1>());
-                Main.BestiaryTracker.Kills.RegisterKill(BestiaryParent);
-            
-                for (int numGores = 1; numGores <= 2; numGores++)
-                {
-                    if (Main.netMode != NetmodeID.Server) 
-                    {
-                        Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/SeaDragonPinkGore" + numGores).Type);
-                    }
-                }
+                SpawnDust(NPC, Color.HotPink);
             }
         }
     }
 
     public class SeaDragon3 : SeaDragon1
 	{
+        private static Asset<Texture2D> NPCTexture;
+
         public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 4;
             NPCID.Sets.CountsAsCritter[NPC.type] = true;
-            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
 		}
 
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            //draw aura
+            NPCTexture ??= ModContent.Request<Texture2D>(Texture);
+
+            var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+
+            //draw aura
+            if (!NPC.IsABestiaryIconDummy)
+			{
+                for (int i = 0; i < 4; i++)
+                {
+                    Vector2 offset = i switch
+                    {
+                        1 => new(0, -2),
+                        2 => new(2, 0),
+                        3 => new(0, 2),
+                        _ => new(-2, 0)
+                    };
+
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCTexture.Value, Color.White), NPC.Center + offset - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, 
+                    NPC.GetAlpha(Color.Violet * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+                }
+            }
+
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - screenPos + new Vector2(0, NPC.gfxOffY + 4), 
+            NPC.frame, drawColor * 0.9f, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+
+            return false;
+        }
+        
         public override void HitEffect(NPC.HitInfo hit)
         {
             if (NPC.life <= 0) 
             {
-                NPC BestiaryParent = new();
-                BestiaryParent.SetDefaults(ModContent.NPCType<SeaDragon1>());
-                Main.BestiaryTracker.Kills.RegisterKill(BestiaryParent);
-    
-                for (int numGores = 1; numGores <= 2; numGores++)
-                {
-                    if (Main.netMode != NetmodeID.Server) 
-                    {
-                        Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/SeaDragonPurpleGore" + numGores).Type);
-                    }
-                }
+                SpawnDust(NPC, Color.Violet);
             }
         }
     }
 
     public class SeaDragon4 : SeaDragon1
 	{
+        private static Asset<Texture2D> NPCTexture;
+
         public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 4;
             NPCID.Sets.CountsAsCritter[NPC.type] = true;
-            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
 		}
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            //draw aura
+            NPCTexture ??= ModContent.Request<Texture2D>(Texture);
+
+            var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+
+            //draw aura
+            if (!NPC.IsABestiaryIconDummy)
+			{
+                for (int i = 0; i < 4; i++)
+                {
+                    Vector2 offset = i switch
+                    {
+                        1 => new(0, -2),
+                        2 => new(2, 0),
+                        3 => new(0, 2),
+                        _ => new(-2, 0)
+                    };
+
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCTexture.Value, Color.White), NPC.Center + offset - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, 
+                    NPC.GetAlpha(Color.PaleGreen * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+                }
+            }
+
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - screenPos + new Vector2(0, NPC.gfxOffY + 4), 
+            NPC.frame, drawColor * 0.9f, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+
+            return false;
+        }
 
         public override void HitEffect(NPC.HitInfo hit)
         {
             if (NPC.life <= 0) 
             {
-                NPC BestiaryParent = new();
-                BestiaryParent.SetDefaults(ModContent.NPCType<SeaDragon1>());
-                Main.BestiaryTracker.Kills.RegisterKill(BestiaryParent);
-        
-                for (int numGores = 1; numGores <= 2; numGores++)
-                {
-                    if (Main.netMode != NetmodeID.Server) 
-                    {
-                        Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/SeaDragonGreenGore" + numGores).Type);
-                    }
-                }
+                SpawnDust(NPC, Color.PaleGreen);
             }
         }
     }

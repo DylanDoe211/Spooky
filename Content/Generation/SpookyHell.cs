@@ -982,8 +982,12 @@ namespace Spooky.Content.Generation
                         {
                             bool PlacedCrucifix = false;
 
+                            //if the dungeon is on the right side
                             if (DungeonX > (Main.maxTilesX / 2))
                             {
+                                Flags.NoseTempleLeftmostPosition = new Vector2(DungeonX - 70, NoseTemplePositionY);
+                                Flags.NoseTempleRightmostPosition = new Vector2(Main.maxTilesX - 20, NoseTemplePositionY);
+
                                 GenerateNoseTempleStructure(DungeonX - 70, NoseTemplePositionY + 27, "FireExitLeft", 7, 10);
                                 GenerateNoseTempleStructure(DungeonX - 68, NoseTemplePositionY + 38, "FireExitTunnelLeft", 4, 8);
 
@@ -1003,8 +1007,12 @@ namespace Spooky.Content.Generation
                                     }
                                 }
                             }
+                            //if the dungeon is on the left side
                             else
                             {
+                                Flags.NoseTempleLeftmostPosition = new Vector2(20, NoseTemplePositionY);
+                                Flags.NoseTempleRightmostPosition = new Vector2(DungeonX + 70, NoseTemplePositionY);
+
                                 GenerateNoseTempleStructure(DungeonX + 70, NoseTemplePositionY + 27, "FireExitRight", 7, 10);
                                 GenerateNoseTempleStructure(DungeonX + 68, NoseTemplePositionY + 38, "FireExitTunnelRight", 4, 8);
 

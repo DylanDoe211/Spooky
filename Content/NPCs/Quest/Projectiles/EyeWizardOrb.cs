@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
+using Spooky.Core;
+
 namespace Spooky.Content.NPCs.Quest.Projectiles
 { 
     public class EyeWizardOrb : ModProjectile
@@ -31,14 +33,19 @@ namespace Spooky.Content.NPCs.Quest.Projectiles
             Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
             Rectangle rectangle = new(0, (ProjTexture.Height() / Main.projFrames[Projectile.type]) * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
 
-            Color color = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(Color.Crimson);
+            for (int i = 0; i < 4; i++)
+			{
+				Vector2 offset = i switch
+				{
+					1 => new(0, -2),
+					2 => new(2, 0),
+					3 => new(0, 2),
+					_ => new(-2, 0)
+				};
 
-            for (int i = 0; i < 360; i += 60)
-            {
-                Vector2 circular = new Vector2(Main.rand.NextFloat(1f, 6f), Main.rand.NextFloat(1f, 6f)).RotatedBy(MathHelper.ToRadians(i));
-
-                Main.EntitySpriteDraw(ProjTexture.Value, Projectile.Center + circular - Main.screenPosition, rectangle, color, Projectile.rotation, drawOrigin, 1.1f, SpriteEffects.None, 0);
-            }
+				Main.EntitySpriteDraw(DrawUtils.ColorSolid(ProjTexture.Value, Color.White), Projectile.Center + offset - Main.screenPosition, rectangle, 
+				Projectile.GetAlpha(Color.Crimson * 0.6f), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+			}
 
             return true;
         }

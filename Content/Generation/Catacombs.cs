@@ -95,6 +95,10 @@ namespace Spooky.Content.Generation
             //235 = large worlds (6 rooms deep), 190 = medium worlds (5 rooms deep), 145 = small worlds (4 rooms deep)
             int layer1Depth = Main.maxTilesY >= 2400 ? 235 : (Main.maxTilesY >= 1800 ? 190 : 145);
 
+            //define the top left and bottom right for modcall purposes
+            Flags.CatacombUpperTopLeft = new Vector2(XMiddle - layer1Width - 40, (int)Main.worldSurface - 32);
+            Flags.CatacombUpperBottomRight = new Vector2(XMiddle + layer1Width + 40, (int)Main.worldSurface + layer1Depth + 45);
+
             //first, place giant square where the catacombs will be
             for (int X = XMiddle - layer1Width - 40; X <= XMiddle + layer1Width + 40; X++)
             {
@@ -386,6 +390,10 @@ namespace Spooky.Content.Generation
             int layer2Depth = Main.maxTilesY >= 2400 ? 350 : (Main.maxTilesY >= 1800 ? 300 : 250);
 
             int layer2Start = (int)Main.worldSurface + layer1Depth + 118;
+
+            //define the top left and bottom right for modcall purposes
+            Flags.CatacombLowerTopLeft = new Vector2(XMiddle - layer2Width - 60, layer2Start - 45);
+            Flags.CatacombLowerBottomRight = new Vector2(XMiddle + layer2Width + 60, (int)Main.worldSurface + layer1Depth + layer2Depth + 30);
 
             //first, place giant square where the catacombs will be
             for (int X = XMiddle - layer2Width - 60; X <= XMiddle + layer2Width + 60; X++)

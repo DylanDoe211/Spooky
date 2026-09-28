@@ -24,12 +24,18 @@ namespace Spooky.Core
 		public static Vector2 OldHunterPosition = Vector2.Zero;
 		public static Vector2 LittleEyePosition = Vector2.Zero;
 
-        //compass/biome positions
+        //various biome positions
         public static Vector2 SpiderGrottoCenter = Vector2.Zero;
         public static Vector2 EyeValleyCenter = Vector2.Zero;
 		public static Vector2 SpookyBiomeCenter = Vector2.Zero;
 		public static Vector2 ZombieOceanTopLeft = Vector2.Zero;
 		public static Vector2 ZombieOceanBottomRight = Vector2.Zero;
+		public static Vector2 CatacombUpperTopLeft = Vector2.Zero;
+		public static Vector2 CatacombUpperBottomRight = Vector2.Zero;
+		public static Vector2 CatacombLowerTopLeft = Vector2.Zero;
+		public static Vector2 CatacombLowerBottomRight = Vector2.Zero;
+		public static Vector2 NoseTempleLeftmostPosition = Vector2.Zero;
+		public static Vector2 NoseTempleRightmostPosition = Vector2.Zero;
 
 		//list of rotten depths biome positions for big dunk to travel between
 		public static List<Vector2> ZombieBiomePositions = new List<Vector2>();
@@ -226,6 +232,12 @@ namespace Spooky.Core
 			tag[nameof(SpookyBiomeCenter)] = SpookyBiomeCenter;
 			tag[nameof(ZombieOceanTopLeft)] = ZombieOceanTopLeft;
 			tag[nameof(ZombieOceanBottomRight)] = ZombieOceanBottomRight;
+			tag[nameof(CatacombUpperTopLeft)] = CatacombUpperTopLeft;
+			tag[nameof(CatacombUpperBottomRight)] = CatacombUpperBottomRight;
+			tag[nameof(CatacombLowerTopLeft)] = CatacombLowerTopLeft;
+			tag[nameof(CatacombLowerBottomRight)] = CatacombLowerBottomRight;
+			tag[nameof(NoseTempleLeftmostPosition)] = NoseTempleLeftmostPosition;
+			tag[nameof(NoseTempleRightmostPosition)] = NoseTempleRightmostPosition;
 
 			//list of zombie biome positions
 			tag[nameof(ZombieBiomePositions)] = ZombieBiomePositions;
@@ -329,6 +341,12 @@ namespace Spooky.Core
 			SpookyBiomeCenter = tag.Get<Vector2>(nameof(SpookyBiomeCenter));
 			ZombieOceanTopLeft = tag.Get<Vector2>(nameof(ZombieOceanTopLeft));
 			ZombieOceanBottomRight = tag.Get<Vector2>(nameof(ZombieOceanBottomRight));
+			CatacombUpperTopLeft = tag.Get<Vector2>(nameof(CatacombUpperTopLeft));
+			CatacombUpperBottomRight = tag.Get<Vector2>(nameof(CatacombUpperBottomRight));
+			CatacombLowerTopLeft = tag.Get<Vector2>(nameof(CatacombLowerTopLeft));
+			CatacombLowerBottomRight = tag.Get<Vector2>(nameof(CatacombLowerBottomRight));
+			NoseTempleLeftmostPosition = tag.Get<Vector2>(nameof(NoseTempleLeftmostPosition));
+			NoseTempleRightmostPosition = tag.Get<Vector2>(nameof(NoseTempleRightmostPosition));
 
 			//list of zombie biome positions
 			if (tag.ContainsKey(nameof(ZombieBiomePositions)))
@@ -432,6 +450,12 @@ namespace Spooky.Core
 			writer.WriteVector2(SpookyBiomeCenter);
 			writer.WriteVector2(ZombieOceanTopLeft);
 			writer.WriteVector2(ZombieOceanBottomRight);
+			writer.WriteVector2(CatacombUpperTopLeft);
+			writer.WriteVector2(CatacombUpperBottomRight);
+			writer.WriteVector2(CatacombLowerTopLeft);
+			writer.WriteVector2(CatacombLowerBottomRight);
+			writer.WriteVector2(NoseTempleLeftmostPosition);
+			writer.WriteVector2(NoseTempleRightmostPosition);
 
 			//downed bosses
 			writer.WriteFlags(downedRotGourd, downedSpookySpirit, downedMoco, downedDaffodil, downedOldHunter, downedOrroboro, downedBigBone, downedSpookFishron);
@@ -481,6 +505,12 @@ namespace Spooky.Core
 			SpookyBiomeCenter = reader.ReadVector2();
 			ZombieOceanTopLeft = reader.ReadVector2();
 			ZombieOceanBottomRight = reader.ReadVector2();
+			CatacombUpperTopLeft = reader.ReadVector2();
+			CatacombUpperBottomRight = reader.ReadVector2();
+			CatacombLowerTopLeft = reader.ReadVector2();
+			CatacombLowerBottomRight = reader.ReadVector2();
+			NoseTempleLeftmostPosition = reader.ReadVector2();
+			NoseTempleRightmostPosition = reader.ReadVector2();
 
 			//downed bosses
 			reader.ReadFlags(out downedRotGourd, out downedSpookySpirit, out downedMoco, out downedDaffodil, out downedOldHunter, out downedOrroboro, out downedBigBone, out downedSpookFishron);

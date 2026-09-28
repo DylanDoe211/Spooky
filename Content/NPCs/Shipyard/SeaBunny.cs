@@ -2,12 +2,20 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.Bestiary;
+using ReLogic.Content;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+
+using Spooky.Core;
+using Spooky.Content.Dusts;
 
 namespace Spooky.Content.NPCs.Shipyard
 {
 	public class SeaBunny : ModNPC
 	{
+        private static Asset<Texture2D> NPCTexture;
+
 		public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 5;
@@ -21,16 +29,16 @@ namespace Spooky.Content.NPCs.Shipyard
 
 		public override void SetDefaults()
 		{
-            NPC.lifeMax = 30;
+            NPC.lifeMax = 20;
             NPC.damage = 0;
 			NPC.defense = 0;
 			NPC.width = 25;
-			NPC.height = 22;
+			NPC.height = 28;
             NPC.npcSlots = 0.5f;
             NPC.noGravity = false;
             NPC.chaseable = false;
 			NPC.HitSound = SoundID.NPCHit1;
-			NPC.DeathSound = SoundID.NPCDeath1;
+			NPC.DeathSound = SoundID.NPCDeath6;
 			NPC.aiStyle = 66;
 			AIType = NPCID.Buggy;
 			SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.ShipyardBiome>().Type };
@@ -45,6 +53,37 @@ namespace Spooky.Content.NPCs.Shipyard
                 new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.ShipyardBiome>().ModBiomeBestiaryInfoElement)
 			});
 		}
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            //draw aura
+            NPCTexture ??= ModContent.Request<Texture2D>(Texture);
+
+            var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+
+            //draw aura
+            if (!NPC.IsABestiaryIconDummy)
+			{
+                for (int i = 0; i < 4; i++)
+                {
+                    Vector2 offset = i switch
+                    {
+                        1 => new(0, -2),
+                        2 => new(2, 0),
+                        3 => new(0, 2),
+                        _ => new(-2, 0)
+                    };
+
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCTexture.Value, Color.White), NPC.Center + offset - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, 
+                    NPC.GetAlpha(Color.White * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+                }
+            }
+
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - screenPos + new Vector2(0, NPC.gfxOffY + 4), 
+            NPC.frame, drawColor * 0.9f, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+
+            return false;
+        }
         
         public override void FindFrame(int frameHeight)
 		{
@@ -76,12 +115,24 @@ namespace Spooky.Content.NPCs.Shipyard
         {
             if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 2; numGores++)
+                float maxAmount = 20;
+                int currentAmount = 0;
+                while (currentAmount <= maxAmount)
                 {
-                    if (Main.netMode != NetmodeID.Server)
-                    {
-                        Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/SeaBunnyGore" + numGores).Type);
-                    }
+                    Vector2 velocity = new Vector2(Main.rand.NextFloat(1f, 3f), Main.rand.NextFloat(1f, 3f));
+                    Vector2 Bounds = new Vector2(Main.rand.NextFloat(1f, 3f), Main.rand.NextFloat(1f, 3f));
+                    float intensity = Main.rand.NextFloat(1f, 3f);
+
+                    Vector2 vector12 = Vector2.UnitX * 0f;
+                    vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
+                    vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
+
+                    int newDust = Dust.NewDust(NPC.Center, 1, 1, ModContent.DustType<GlowyDust>(), 0f, 0f, 0, Color.White, 0.2f);
+                    Main.dust[newDust].noGravity = true;
+                    Main.dust[newDust].position = NPC.Center + vector12;
+                    Main.dust[newDust].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
+
+                    currentAmount++;
                 }
             }
         }

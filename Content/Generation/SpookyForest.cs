@@ -742,7 +742,7 @@ namespace Spooky.Content.Generation
                     ModContent.TileType<GiantShroomYellow1>(), ModContent.TileType<GiantShroomYellow2>(), ModContent.TileType<GiantShroomYellow3>(), 
                     ModContent.TileType<GiantShroomYellow4>() };
 
-                    if (Main.tile[X, Y].TileType == ModContent.TileType<MushroomMoss>() && !ClearWhitelist.Contains(Main.tile[X, Y - 1].TileType))
+                    if (Main.tile[X, Y].TileType == ModContent.TileType<MushroomMoss>() && !WorldGen.SolidTile(X, Y - 1)) //!ClearWhitelist.Contains(Main.tile[X, Y - 1].TileType))
                     {
                         WorldGen.KillTile(X, Y - 1);
                     }

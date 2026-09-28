@@ -13,7 +13,8 @@ namespace Spooky.Content.Dusts
 		public override void OnSpawn(Dust dust)
 		{
 			dust.noGravity = true;
-			dust.frame = new Rectangle(0, 0, 64, 64);
+			dust.frame = new Rectangle(0, 10 * Main.rand.Next(0, 2), 10, 10);
+			dust.rotation = Main.rand.NextFloat(0.001f, 0.01f);
 		}
         
 		public override Color? GetAlpha(Dust dust, Color lightColor)
@@ -25,10 +26,17 @@ namespace Spooky.Content.Dusts
 		{
 			DustTexture ??= ModContent.Request<Texture2D>(Texture);
 
-			Vector2 currentCenter = dust.position + Vector2.One.RotatedBy(dust.rotation) * 32 * dust.scale;
+			Vector2 currentCenter = dust.position + Vector2.One.RotatedBy(dust.rotation) * 5 * dust.scale;
 
-			Main.spriteBatch.Draw(DustTexture.Value, currentCenter - Main.screenPosition, null, dust.color.MultiplyRGBA(new Color(255, 255, 255, 0)), 
-			dust.rotation, DustTexture.Size() * 0.5f, dust.scale * 2f, SpriteEffects.None, 0);
+			for (int repeats = 0; repeats < 4; repeats++)
+            {
+				Color color = new Color(125 - dust.alpha, 125 - dust.alpha, 125 - dust.alpha, 0).MultiplyRGBA(dust.color);
+
+                Vector2 DrawPosition = currentCenter - dust.velocity * repeats;
+
+				Main.spriteBatch.Draw(DustTexture.Value, DrawPosition - Main.screenPosition, dust.frame, color, 
+				dust.rotation, dust.frame.Size() / 2, 0.8f + (dust.scale), SpriteEffects.None, 0);
+			}
 			
 			return false;
 		}
@@ -37,14 +45,14 @@ namespace Spooky.Content.Dusts
 		{
 			if (dust.customData is null)
 			{
-				dust.position -= Vector2.One * 32 * dust.scale;
+				dust.position -= Vector2.One * 5 * dust.scale;
 				dust.customData = true;
 			}
 
-			Vector2 currentCenter = dust.position + Vector2.One.RotatedBy(dust.rotation) * 32 * dust.scale;
+			Vector2 currentCenter = dust.position + Vector2.One.RotatedBy(dust.rotation) * 5 * dust.scale;
 
 			dust.scale = dust.scale * 0.98f;
-			Vector2 nextCenter = dust.position + Vector2.One.RotatedBy(dust.rotation + 0.06f) * 32 * dust.scale;
+			Vector2 nextCenter = dust.position + Vector2.One.RotatedBy(dust.rotation + 0.06f) * 5 * dust.scale;
 
 			dust.rotation += 0.06f;
 			dust.position += currentCenter - nextCenter;

@@ -9,6 +9,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
+using Spooky.Core;
 using Spooky.Content.Dusts;
 
 namespace Spooky.Content.NPCs.Cemetery
@@ -76,13 +77,18 @@ namespace Spooky.Content.NPCs.Cemetery
             //draw aura
             if (!NPC.IsABestiaryIconDummy)
 			{
-                for (int i = 0; i < 360; i += 90)
+                for (int i = 0; i < 4; i++)
                 {
-                    Color color = new Color(125 - NPC.alpha, 125 - NPC.alpha, 125 - NPC.alpha, 0).MultiplyRGBA(Color.Lerp(Color.White, Color.OrangeRed, i / 30));
+                    Vector2 offset = i switch
+                    {
+                        1 => new(0, -2),
+                        2 => new(2, 0),
+                        3 => new(0, 2),
+                        _ => new(-2, 0)
+                    };
 
-                    Vector2 circular = new Vector2(Main.rand.NextFloat(1f, 2f), 0).RotatedBy(MathHelper.ToRadians(i));
-
-                    spriteBatch.Draw(NPCTexture.Value, NPC.Center + circular - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, color, NPC.rotation, NPC.frame.Size() / 2, NPC.scale * 1.075f, effects, 0f);
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCTexture.Value, Color.White), NPC.Center + offset - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, 
+                    NPC.GetAlpha(Color.OrangeRed * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
                 }
             }
 

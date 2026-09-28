@@ -118,7 +118,7 @@ namespace Spooky.Content.Tiles.SpiderCave.Furniture
 			}
 
 			tileFlameData.flameCount = 3;
-			tileFlameData.flameColor = Color.White * 0.5f;
+			tileFlameData.flameColor = new Color(100, 100, 100, 0);
 			tileFlameData.flameRangeXMin = -5;
 			tileFlameData.flameRangeXMax = 6;
 			tileFlameData.flameRangeYMin = -5;

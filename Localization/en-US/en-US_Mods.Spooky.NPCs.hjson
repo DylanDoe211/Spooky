@@ -561,6 +561,16 @@ SeaSlugTail.DisplayName: Sea Slug
 TrumpetfishBody.DisplayName: Trumpetfish
 TrumpetfishHead.DisplayName: Trumpetfish
 TrumpetfishTail.DisplayName: Trumpetfish
+GiantAnglerfish.DisplayName: Giant Anglerfish
+GiantSnail.DisplayName: Giant Snail
+Nudibranch1.DisplayName: Nudibranch
+Nudibranch2.DisplayName: Nudibranch
+Nudibranch3.DisplayName: Nudibranch
+Isopod.DisplayName: Isopod
+Parrotfish.DisplayName: Parrotfish
+ParrotfishBaby.DisplayName: Baby Parrotfish
+YetiCrab.DisplayName: Yeti Crab
+Batfish.DisplayName: Batfish
 
 //tameable
 Turkey: {

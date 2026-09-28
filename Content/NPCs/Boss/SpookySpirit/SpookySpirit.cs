@@ -181,22 +181,31 @@ namespace Spooky.Content.NPCs.Boss.SpookySpirit
                 effects = SaveDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             }
 
-            //draw aura
-            for (int i = 0; i < 360; i += 90)
-            {
-                Color color = new Color(125 - NPC.alpha, 125 - NPC.alpha, 125 - NPC.alpha, 0).MultiplyRGBA(Color.Lerp(Color.White, (EyeSprite ? Color.OrangeRed : Color.BlueViolet), i / 30));
+            if (!NPC.IsABestiaryIconDummy)
+			{
+                Color color = EyeSprite ? Color.OrangeRed : Color.BlueViolet;
 
                 if (Flags.RaveyardHappening)
                 {
                     float fade = Main.GameUpdateCount % 60 / 60f;
                     int index = (int)(Main.GameUpdateCount / 60 % 3);
 
-                    color = new Color(125 - NPC.alpha, 125 - NPC.alpha, 125 - NPC.alpha, 0).MultiplyRGBA(Color.Lerp(PartyColors[index], PartyColors[(index + 1) % 3], fade));
+                    color = Color.Lerp(PartyColors[index], PartyColors[(index + 1) % 3], fade);
                 }
 
-                Vector2 circular = new Vector2(Main.rand.NextFloat(3.5f, 5), 0).RotatedBy(MathHelper.ToRadians(i));
+                for (int i = 0; i < 4; i++)
+                {
+                    Vector2 offset = i switch
+                    {
+                        1 => new(0, -2),
+                        2 => new(2, 0),
+                        3 => new(0, 2),
+                        _ => new(-2, 0)
+                    };
 
-                spriteBatch.Draw(NPCTexture.Value, NPC.Center + circular - screenPos, NPC.frame, color * 0.75f, NPC.rotation, NPC.frame.Size() / 2, NPC.scale * 1.15f, effects, 0);
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCTexture.Value, Color.White), NPC.Center + offset - screenPos, NPC.frame, 
+                    NPC.GetAlpha(color * 0.65f) * alpha, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+                }
             }
 
             //draw spooky spirit itself
@@ -205,11 +214,11 @@ namespace Spooky.Content.NPCs.Boss.SpookySpirit
             //eye glowmasks
             if (!EyeSprite)
             {
-				Main.EntitySpriteDraw(EyeTexture1.Value, NPC.Center - Main.screenPosition, NPC.frame, Color.White * alpha, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
+				Main.EntitySpriteDraw(EyeTexture1.Value, NPC.Center - screenPos, NPC.frame, Color.White * alpha, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
 			}
             if (EyeSprite)
             {
-				Main.EntitySpriteDraw(EyeTexture2.Value, NPC.Center - Main.screenPosition, NPC.frame, Color.White * alpha, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
+				Main.EntitySpriteDraw(EyeTexture2.Value, NPC.Center - screenPos, NPC.frame, Color.White * alpha, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0);
 			}
             
             return false;

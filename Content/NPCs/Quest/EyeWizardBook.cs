@@ -78,27 +78,34 @@ namespace Spooky.Content.NPCs.Quest
             var effects = NPC.spriteDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             Vector2 drawPosition = new Vector2(NPC.Center.X, NPC.Center.Y) - screenPos;
 
-			for (int i = 0; i < 360; i += 30)
-            {
-                Vector2 circular = new Vector2(Main.rand.NextFloat(1f, 2f), Main.rand.NextFloat(1f, 2f)).RotatedBy(MathHelper.ToRadians(i));
+			Color color = Color.White;
 
-				Color color = Color.White;
+			if (Parent.ai[0] == 2)
+			{
+				color = Color.Red;
+			}
+			if (Parent.ai[0] == 4)
+			{
+				color = Color.Lime;
+			}
+			if (Parent.ai[0] == 6)
+			{
+				color = Color.Blue;
+			}
 
-				if (Parent.ai[0] == 2)
+			for (int i = 0; i < 4; i++)
+			{
+				Vector2 offset = i switch
 				{
-					color = Color.Red;
-				}
-				if (Parent.ai[0] == 4)
-				{
-					color = Color.Lime;
-				}
-				if (Parent.ai[0] == 6)
-				{
-					color = Color.Blue;
-				}
+					1 => new(0, -2),
+					2 => new(2, 0),
+					3 => new(0, 2),
+					_ => new(-2, 0)
+				};
 
-                Main.EntitySpriteDraw(AuraTexture.Value, drawPosition + circular, NPC.frame, color * 0.15f, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale * 1.05f, effects, 0);
-            }
+				Main.EntitySpriteDraw(DrawUtils.ColorSolid(AuraTexture.Value, Color.White), NPC.Center + offset - screenPos, 
+				NPC.frame, NPC.GetAlpha(color * 0.5f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+			}
 
             Main.EntitySpriteDraw(NPCTexture.Value, drawPosition, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0f);
 			Main.EntitySpriteDraw(GlowTexture.Value, drawPosition, NPC.frame, Color.White, NPC.rotation, NPC.frame.Size() / 2f, NPC.scale, effects, 0f);

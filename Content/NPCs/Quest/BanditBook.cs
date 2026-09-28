@@ -13,6 +13,7 @@ using System.IO;
 using System.Collections.Generic;
 
 using Spooky.Core;
+using Spooky.Content.Dusts;
 using Spooky.Content.Items.Quest;
 using Spooky.Content.NPCs.Quest.Projectiles;
 using Spooky.Content.Tiles.Relic;
@@ -106,8 +107,9 @@ namespace Spooky.Content.NPCs.Quest
 			GlowTexture3 ??= ModContent.Request<Texture2D>("Spooky/Content/NPCs/Quest/BanditBookGlowBlue");
 
 			//draw aura
-			for (int i = 0; i < 360; i += 30)
+			for (int i = 0; i < 4; i++)
 			{
+				//draw aura
 				Color color = Color.White;
 
 				//change color based on which ghost is attacking
@@ -125,40 +127,48 @@ namespace Spooky.Content.NPCs.Quest
 				}
 				if (NPC.ai[0] == 2)
 				{
-					color = new Color(125 - NPC.alpha, 125 - NPC.alpha, 125 - NPC.alpha, 0).MultiplyRGBA(Color.Lerp(Color.Red, Color.OrangeRed, i / 30));
+					color = new Color(125 - NPC.alpha, 125 - NPC.alpha, 125 - NPC.alpha, 0).MultiplyRGBA(Color.Lerp(Color.Red, Color.OrangeRed, i));
 				}
 				if (NPC.ai[0] == 3)
 				{
-					color = new Color(125 - NPC.alpha, 125 - NPC.alpha, 125 - NPC.alpha, 0).MultiplyRGBA(Color.Lerp(Color.Lime, Color.Green, i / 30));
+					color = new Color(125 - NPC.alpha, 125 - NPC.alpha, 125 - NPC.alpha, 0).MultiplyRGBA(Color.Lerp(Color.Lime, Color.Green, i));
 				}
 				if (NPC.ai[0] == 4)
 				{
-					color = new Color(125 - NPC.alpha, 125 - NPC.alpha, 125 - NPC.alpha, 0).MultiplyRGBA(Color.Lerp(Color.Gold, Color.Cyan, i / 30));
+					color = new Color(125 - NPC.alpha, 125 - NPC.alpha, 125 - NPC.alpha, 0).MultiplyRGBA(Color.Lerp(Color.SkyBlue, Color.Cyan, i));
 				}
-				
-				Vector2 circular = new Vector2(Main.rand.NextFloat(3.5f, 5), 0).RotatedBy(MathHelper.ToRadians(i));
-				spriteBatch.Draw(NPCTexture.Value, NPC.Center + circular - screenPos, NPC.frame, color * 0.75f, NPC.rotation, NPC.frame.Size() / 2, NPC.scale * 1.1f, SpriteEffects.None, 0);
+
+				Vector2 offset = i switch
+				{
+					1 => new(0, -2),
+					2 => new(2, 0),
+					3 => new(0, 2),
+					_ => new(-2, 0)
+				};
+
+				Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCTexture.Value, Color.White), NPC.Center + offset - screenPos, NPC.frame, 
+				color, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, SpriteEffects.None, 0f);
 			}
 			
 			//draw the book itself
-			spriteBatch.Draw(NPCTexture.Value, NPC.Center - screenPos, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, SpriteEffects.None, 0);
+			Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - screenPos, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, SpriteEffects.None, 0);
 
 			//draw the glowmask based on which ghost is attacking
 			if (NPC.ai[0] == 0 || NPC.ai[0] == 1)
 			{
-				spriteBatch.Draw(GlowTexture.Value, NPC.Center - screenPos, NPC.frame, NPC.GetAlpha(Color.White), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, SpriteEffects.None, 0);
+				Main.EntitySpriteDraw(GlowTexture.Value, NPC.Center - screenPos, NPC.frame, NPC.GetAlpha(Color.White), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, SpriteEffects.None, 0);
 			}
 			if (NPC.ai[0] == 2)
 			{
-				spriteBatch.Draw(GlowTexture1.Value, NPC.Center - screenPos, NPC.frame, NPC.GetAlpha(Color.White), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, SpriteEffects.None, 0);
+				Main.EntitySpriteDraw(GlowTexture1.Value, NPC.Center - screenPos, NPC.frame, NPC.GetAlpha(Color.White), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, SpriteEffects.None, 0);
 			}
 			if (NPC.ai[0] == 3)
 			{
-				spriteBatch.Draw(GlowTexture2.Value, NPC.Center - screenPos, NPC.frame, NPC.GetAlpha(Color.White), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, SpriteEffects.None, 0);
+				Main.EntitySpriteDraw(GlowTexture2.Value, NPC.Center - screenPos, NPC.frame, NPC.GetAlpha(Color.White), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, SpriteEffects.None, 0);
 			}
 			if (NPC.ai[0] == 4)
 			{
-				spriteBatch.Draw(GlowTexture3.Value, NPC.Center - screenPos, NPC.frame, NPC.GetAlpha(Color.White), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, SpriteEffects.None, 0);
+				Main.EntitySpriteDraw(GlowTexture3.Value, NPC.Center - screenPos, NPC.frame, NPC.GetAlpha(Color.White), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, SpriteEffects.None, 0);
 			}
 
 			return false;
@@ -253,57 +263,15 @@ namespace Spooky.Content.NPCs.Quest
                 {
                     SoundEngine.PlaySound(SoundID.DD2_DarkMageSummonSkeleton with { Pitch = -1f }, NPC.Center);
 
-					float maxAmount = 30;
-					int currentAmount = 0;
+					Color[] DustColor = new Color[] { Color.Red, Color.Green, Color.Cyan };
 
-					int[] DustTypes = new int[] { DustID.GreenTorch, DustID.RedTorch, DustID.BlueTorch };
-
-					while (currentAmount <= maxAmount)
+					for (int numDusts = 0; numDusts < 35; numDusts++)
 					{
-						Vector2 velocity = new Vector2(5f, 5f);
-						Vector2 Bounds = new Vector2(3f, 3f);
-						float intensity = 5f;
-
-						Vector2 vector12 = Vector2.UnitX * 0f;
-						vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
-						vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
-						int num104 = Dust.NewDust(NPC.Center, 0, 0, Main.rand.Next(DustTypes), 0f, 0f, 100, default, 3f);
-						Main.dust[num104].noGravity = true;
-						Main.dust[num104].position = NPC.Center + vector12;
-						Main.dust[num104].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
-						currentAmount++;
-					}
-
-					while (currentAmount <= maxAmount)
-					{
-						Vector2 velocity = new Vector2(10f, 10f);
-						Vector2 Bounds = new Vector2(5f, 5f);
-						float intensity = 5f;
-
-						Vector2 vector12 = Vector2.UnitX * 0f;
-						vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
-						vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
-						int num104 = Dust.NewDust(NPC.Center, 0, 0, Main.rand.Next(DustTypes), 0f, 0f, 100, default, 3f);
-						Main.dust[num104].noGravity = true;
-						Main.dust[num104].position = NPC.Center + vector12;
-						Main.dust[num104].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
-						currentAmount++;
-					}
-
-					while (currentAmount <= maxAmount)
-					{
-						Vector2 velocity = new Vector2(15f, 15f);
-						Vector2 Bounds = new Vector2(7f, 7f);
-						float intensity = 5f;
-
-						Vector2 vector12 = Vector2.UnitX * 0f;
-						vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
-						vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
-						int num104 = Dust.NewDust(NPC.Center, 0, 0, Main.rand.Next(DustTypes), 0f, 0f, 100, default, 3f);
-						Main.dust[num104].noGravity = true;
-						Main.dust[num104].position = NPC.Center + vector12;
-						Main.dust[num104].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
-						currentAmount++;
+						int dustGore = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<GlowyDust>(), 0f, -2f, 0, default, 0.35f);
+						Main.dust[dustGore].color = Main.rand.Next(DustColor);
+						Main.dust[dustGore].velocity.X *= Main.rand.NextFloat(-5f, 5f);
+						Main.dust[dustGore].velocity.Y *= Main.rand.NextFloat(-3f, 3f);
+						Main.dust[dustGore].noGravity = true;
 					}
 
                     NPC.immortal = false;

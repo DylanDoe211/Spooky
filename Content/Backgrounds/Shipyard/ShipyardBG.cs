@@ -96,8 +96,8 @@ namespace Spooky.Content.Backgrounds.Shipyard
 
 				//offsets for each individual background layer
 				int CloseBGYOffset = -30;
-				int MiddleBGYOffset = -10;
-				int FarBGYOffset = 10;
+				int MiddleBGYOffset = 100;
+				int FarBGYOffset = 100;
 
 				//back layer mountain
 				var bgScale = 0.9f;

@@ -131,8 +131,8 @@ namespace Spooky.Content.Tiles.SpiderCave.Furniture
 				GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
 			}
 
-			tileFlameData.flameCount = 5;
-			tileFlameData.flameColor = Color.White * 0.5f;
+			tileFlameData.flameCount = 3;
+			tileFlameData.flameColor = new Color(100, 100, 100, 0);
 			tileFlameData.flameRangeXMin = -5;
 			tileFlameData.flameRangeXMax = 6;
 			tileFlameData.flameRangeYMin = -5;

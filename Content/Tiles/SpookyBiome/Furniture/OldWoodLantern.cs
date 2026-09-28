@@ -118,7 +118,7 @@ namespace Spooky.Content.Tiles.SpookyBiome.Furniture
 			}
 
 			tileFlameData.flameCount = 5;
-			tileFlameData.flameColor = Color.White * 0.5f;
+			tileFlameData.flameColor = new Color(100, 100, 100, 0);
 			tileFlameData.flameRangeXMin = -10;
 			tileFlameData.flameRangeXMax = 11;
 			tileFlameData.flameRangeYMin = -10;

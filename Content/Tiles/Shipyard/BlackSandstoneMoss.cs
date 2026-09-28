@@ -68,7 +68,7 @@ namespace Spooky.Content.Tiles.Shipyard
 				//grow small weeds
                 if (Main.rand.NextBool(10))
                 {
-					//TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<BlackSandstoneMossWeeds>(), true, Main.rand.Next(0, 6));
+					TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<BlackSandstoneMossWeeds>(), true, Main.rand.Next(0, 6));
 				}
 
 				//grow bleached corals
@@ -87,23 +87,6 @@ namespace Spooky.Content.Tiles.Shipyard
                     TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(GiantCorals), true);
                 }
 			}
-
-			//spread grass
-            List<Point> adjacents = TileGlobal.OpenAdjacents(i, j, ModContent.TileType<BlackSandstone>());
-
-            if (adjacents.Count > 0)
-            {
-                Point tilePoint = adjacents[Main.rand.Next(adjacents.Count)];
-                if (TileGlobal.HasOpening(tilePoint.X, tilePoint.Y))
-                {
-                    Framing.GetTileSafely(tilePoint.X, tilePoint.Y).TileType = (ushort)ModContent.TileType<BlackSandstoneMoss>();
-
-                    if (Main.netMode == NetmodeID.Server)
-                    {
-                        NetMessage.SendTileSquare(-1, tilePoint.X, tilePoint.Y, 1, TileChangeType.None);
-                    }
-                }
-            }
 		}
 	}
 }

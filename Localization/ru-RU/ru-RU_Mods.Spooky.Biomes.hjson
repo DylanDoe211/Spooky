@@ -104,6 +104,6 @@ RaveyardVisualBiome: {
 }
 
 ShipyardBiome: {
-	// DisplayName: Bleached Shipyard
-	// TownNPCDialogueName: Bleached Shipyard
+	// DisplayName: Boggy Shipyard
+	// TownNPCDialogueName: Boggy Shipyard
 }

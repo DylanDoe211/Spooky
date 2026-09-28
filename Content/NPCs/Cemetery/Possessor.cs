@@ -6,6 +6,7 @@ using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Spooky.Core;
 using Spooky.Content.Dusts;
 
 namespace Spooky.Content.NPCs.Cemetery
@@ -49,13 +50,18 @@ namespace Spooky.Content.NPCs.Cemetery
             var effects = NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
             //draw aura
-            for (int i = 0; i < 360; i += 90)
+            for (int i = 0; i < 4; i++)
             {
-                Color color = new Color(125 - NPC.alpha, 125 - NPC.alpha, 125 - NPC.alpha, 0).MultiplyRGBA(Color.Lerp(Color.White, Color.Purple, i / 30));
+                Vector2 offset = i switch
+                {
+                    1 => new(0, -2),
+                    2 => new(2, 0),
+                    3 => new(0, 2),
+                    _ => new(-2, 0)
+                };
 
-                Vector2 circular = new Vector2(Main.rand.NextFloat(1f, 2f), 0).RotatedBy(MathHelper.ToRadians(i));
-
-                spriteBatch.Draw(NPCTexture.Value, NPC.Center + circular - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, color, NPC.rotation, NPC.frame.Size() / 2, NPC.scale * 1.075f, effects, 0f);
+                Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCTexture.Value, Color.White), NPC.Center + offset - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, 
+                NPC.GetAlpha(Color.BlueViolet * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
             }
 
             return true;
@@ -89,13 +95,24 @@ namespace Spooky.Content.NPCs.Cemetery
 
                 NPC.Transform(ModContent.NPCType<PossessorEvil>());
 
-                for (int numDusts = 0; numDusts < 15; numDusts++)
+                float maxAmount = 15;
+                int currentAmount = 0;
+                while (currentAmount <= maxAmount)
                 {
-                    int dustGore = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<GlowyDust>(), 0f, -2f, 0, default, 0.1f);
-                    Main.dust[dustGore].color = Color.BlueViolet;
-                    Main.dust[dustGore].velocity.X *= Main.rand.NextFloat(-2f, 2f);
-                    Main.dust[dustGore].velocity.Y *= Main.rand.NextFloat(-2f, 2f);
-                    Main.dust[dustGore].noGravity = true;
+                    Vector2 velocity = new Vector2(Main.rand.NextFloat(1f, 3f), Main.rand.NextFloat(1f, 3f));
+                    Vector2 Bounds = new Vector2(Main.rand.NextFloat(1f, 3f), Main.rand.NextFloat(1f, 3f));
+                    float intensity = Main.rand.NextFloat(1f, 3f);
+
+                    Vector2 vector12 = Vector2.UnitX * 0f;
+                    vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
+                    vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
+
+                    int newDust = Dust.NewDust(NPC.Center, 1, 1, ModContent.DustType<GlowyDust>(), 0f, 0f, 0, Color.BlueViolet, 0.25f);
+                    Main.dust[newDust].noGravity = true;
+                    Main.dust[newDust].position = NPC.Center + vector12;
+                    Main.dust[newDust].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
+
+                    currentAmount++;
                 }
             }
         }

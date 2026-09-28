@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
+using Spooky.Core;
 using Spooky.Content.Items.Minibiomes.Ocean;
 
 namespace Spooky.Content.NPCs.Minibiomes.Ocean
@@ -62,16 +63,24 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
             var effects = NPC.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
             //draw aura
-            for (int i = 0; i < 360; i += 30)
-            {
-                Color color = new Color(125 - NPC.alpha, 125 - NPC.alpha, 125 - NPC.alpha, 0).MultiplyRGBA(Color.Lime);
+            if (!NPC.IsABestiaryIconDummy)
+			{
+				for (int i = 0; i < 4; i++)
+				{
+					Vector2 offset = i switch
+					{
+						1 => new(0, -2),
+						2 => new(2, 0),
+						3 => new(0, 2),
+						_ => new(-2, 0)
+					};
 
-                Vector2 circular = new Vector2(2.5f, 0).RotatedBy(MathHelper.ToRadians(i));
+					Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCTexture.Value, Color.White), NPC.Center + offset - screenPos, NPC.frame, 
+					NPC.GetAlpha(Color.Lime * 0.5f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+				}
+			}
 
-                spriteBatch.Draw(NPCTexture.Value, NPC.Center + circular - screenPos, NPC.frame, color, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
-            }
-
-            spriteBatch.Draw(NPCTexture.Value, NPC.Center - screenPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+            Main.EntitySpriteDraw(NPCTexture.Value, NPC.Center - screenPos, NPC.frame, drawColor, NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
 
             return false;
 		}

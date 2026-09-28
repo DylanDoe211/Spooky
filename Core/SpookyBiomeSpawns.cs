@@ -1018,14 +1018,18 @@ namespace Spooky.Core
 				}
 			}
 
-			if (spawnInfo.Player.InModBiome(ModContent.GetInstance<ShipyardBiome>()))
+			if (spawnInfo.Player.InModBiome(ModContent.GetInstance<ShipyardBiome>()) && NoEventsHappening)
 			{
 				pool.Clear();
 
 				if (Main.dayTime)
 				{
-					pool.Add(ModContent.NPCType<SeaBunny>(), 2);
-					pool.Add(ModContent.NPCType<SeaSheep>(), 2);
+					pool.Add(ModContent.NPCType<SeaBunny>(), 1);
+					pool.Add(ModContent.NPCType<SeaSheep>(), 1);
+					pool.Add(ModContent.NPCType<GiantSnail>(), 1);
+					pool.Add(ModContent.NPCType<Isopod>(), 1);
+					pool.Add(ModContent.NPCType<YetiCrab>(), 1);
+					pool.Add(ModContent.NPCType<Batfish>(), 1);
 
 					if (!spawnInfo.PlayerInTown || (spawnInfo.PlayerInTown && spawnInfo.Player.ZoneShadowCandle))
 					{
@@ -1034,27 +1038,32 @@ namespace Spooky.Core
 				}
 				else
 				{
+					pool.Add(ModContent.NPCType<SeaDragon1>(), 1);
+					pool.Add(ModContent.NPCType<SeaDragon2>(), 1);
+					pool.Add(ModContent.NPCType<SeaDragon3>(), 1);
+					pool.Add(ModContent.NPCType<SeaDragon4>(), 1);
+					pool.Add(ModContent.NPCType<Nudibranch1>(), 1);
+					pool.Add(ModContent.NPCType<Nudibranch2>(), 1);
+					pool.Add(ModContent.NPCType<Nudibranch3>(), 1);
 					pool.Add(ModContent.NPCType<BarreleyeFish>(), 2);
 					pool.Add(ModContent.NPCType<SeaSlugHead>(), 1);
 
 					if (!spawnInfo.PlayerInTown || (spawnInfo.PlayerInTown && spawnInfo.Player.ZoneShadowCandle))
 					{
-						pool.Add(ModContent.NPCType<GhostJelly1>(), 1);
+						pool.Add(ModContent.NPCType<GhostJelly1>(), 0.5f);
+						pool.Add(ModContent.NPCType<GhostJelly2>(), 0.5f);
+						pool.Add(ModContent.NPCType<GhostJelly3>(), 0.5f);
+						pool.Add(ModContent.NPCType<GhostJelly4>(), 0.5f);
+						pool.Add(ModContent.NPCType<Frogfish1>(), 1);
+						pool.Add(ModContent.NPCType<Frogfish2>(), 1);
+						pool.Add(ModContent.NPCType<GiantAnglerfish>(), 1);
 					}
 				}
 
-				if (spawnInfo.Water)
+				//parrotfish can spawn at any time rarely
+				if (!spawnInfo.PlayerInTown || (spawnInfo.PlayerInTown && spawnInfo.Player.ZoneShadowCandle))
 				{
-					pool.Add(ModContent.NPCType<SeaDragon1>(), 4);
-					pool.Add(ModContent.NPCType<SeaDragon2>(), 4);
-					pool.Add(ModContent.NPCType<SeaDragon3>(), 4);
-					pool.Add(ModContent.NPCType<SeaDragon4>(), 4);
-
-					if (!spawnInfo.PlayerInTown || (spawnInfo.PlayerInTown && spawnInfo.Player.ZoneShadowCandle))
-					{
-						pool.Add(ModContent.NPCType<Frogfish1>(), 4);
-						pool.Add(ModContent.NPCType<Frogfish2>(), 4);
-					}
+					pool.Add(ModContent.NPCType<Parrotfish>(), 0.3f);
 				}
 			}
 
