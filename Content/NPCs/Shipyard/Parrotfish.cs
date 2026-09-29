@@ -142,12 +142,23 @@ namespace Spooky.Content.NPCs.Shipyard
                 //slowly move around
                 case 0:
                 {
-                    NPC.spriteDirection = NPC.velocity.X < 0 ? -1 : 1;
+                    if (NPC.ai[1] == 0)
+                    {
+                        NPC.spriteDirection = Main.rand.NextBool() ? -1 : 1;
 
+                        NPC.ai[1]++;
+                        NPC.netUpdate = true;
+                    }
+                    else
+                    {
+                        NPC.spriteDirection = NPC.velocity.X < 0 ? -1 : 1;
+                    }
+
+                    //if the player gets too close become hostile
                     foreach (Player player in Main.ActivePlayers)
                     {
                         bool lineOfSight = Collision.CanHitLine(NPC.position, NPC.width, NPC.height, player.position, player.width, player.height);
-                        if ((!player.dead && lineOfSight && NPC.Distance(player.Center) <= 230f) || NPC.life < NPC.lifeMax)
+                        if (!player.dead && lineOfSight && NPC.Distance(player.Center) <= 220f)
                         {
                             SoundEngine.PlaySound(SoundID.Zombie56 with { Volume = 1.5f, Pitch = -0.5f }, NPC.Center);
                             
@@ -156,32 +167,18 @@ namespace Spooky.Content.NPCs.Shipyard
                         }
                     }
 
-                    if (NPC.ai[1] == 0)
-                    {
-                        NPC.velocity.X = Main.rand.NextBool() ? -0.5f : 0.5f;
-
-                        NPC.ai[1]++;
-                        NPC.netUpdate = true;
-                    }
-
-                    float MaxVelocityX = 1.2f;
-                    if (NPC.direction == -1 && NPC.velocity.X > -MaxVelocityX)
+                    float MaxVelocityX = 0.68f;
+                    float MaxVelocityY = 1.5f;
+                    if (NPC.spriteDirection == -1 && NPC.velocity.X > -MaxVelocityX)
                     {
                         NPC.velocity.X -= 0.1f;
                     }
-                    else if (NPC.direction == 1 && NPC.velocity.X < MaxVelocityX)
+                    else if (NPC.spriteDirection == 1 && NPC.velocity.X < MaxVelocityX)
                     {
                         NPC.velocity.X += 0.1f;
                     }
 
-                    if (NPC.velocity.X < -MaxVelocityX)
-                    {
-                        NPC.velocity.X = -MaxVelocityX;
-                    }
-                    if (NPC.velocity.X > MaxVelocityX)
-                    {
-                        NPC.velocity.X = MaxVelocityX;
-                    }
+                    NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -MaxVelocityX, MaxVelocityX);
 
                     bool GoUp = false;
                     int PosX = (int)(NPC.Center.X / 16f);
@@ -209,15 +206,7 @@ namespace Spooky.Content.NPCs.Shipyard
                         NPC.velocity.Y -= 0.045f;
                     }
 
-                    //limit npc y-velocity
-                    if (NPC.velocity.Y > 1.5f)
-                    {
-                        NPC.velocity.Y = 1.5f;
-                    }
-                    if (NPC.velocity.Y < -1.5f)
-                    {
-                        NPC.velocity.Y = -1.5f;
-                    }
+                    NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y, -MaxVelocityY, MaxVelocityY);
 
                     break;
                 }
@@ -229,6 +218,13 @@ namespace Spooky.Content.NPCs.Shipyard
                     Player player = Main.player[NPC.target];
 
                     NPC.spriteDirection = NPC.direction;
+
+                    if (!player.dead && NPC.Distance(player.Center) > 300)
+                    {
+                        NPC.ai[0]--;
+                        NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -1.2f, 1.2f);
+                        NPC.netUpdate = true;
+                    }
 
                     int MaxSpeed = 4;
 

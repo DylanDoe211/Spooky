@@ -146,6 +146,7 @@ namespace Spooky.Content.NPCs.Shipyard
             }
 
             float MaxVelocityX = 0.5f;
+            float MaxVelocityY = 1f;
             if (NPC.ai[1] == -1 && NPC.velocity.X > -MaxVelocityX)
             {
                 NPC.velocity.X -= 0.1f;
@@ -155,14 +156,7 @@ namespace Spooky.Content.NPCs.Shipyard
                 NPC.velocity.X += 0.1f;
             }
 
-            if (NPC.velocity.X < -MaxVelocityX)
-            {
-                NPC.velocity.X = -MaxVelocityX;
-            }
-            if (NPC.velocity.X > MaxVelocityX)
-            {
-                NPC.velocity.X = MaxVelocityX;
-            }
+            NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -MaxVelocityX, MaxVelocityX);
 
             int PosX = (int)(NPC.Center.X / 16f);
             int PosY = (int)((NPC.position.Y + (float)NPC.height) / 16f);
@@ -190,15 +184,7 @@ namespace Spooky.Content.NPCs.Shipyard
                 NPC.ai[0]--;
             }
 
-            //limit npc y-velocity
-            if (NPC.velocity.Y > 1f)
-            {
-                NPC.velocity.Y = 1f;
-            }
-            if (NPC.velocity.Y < -4f)
-            {
-                NPC.velocity.Y = -4f;
-            }
+            NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y, -MaxVelocityY, MaxVelocityY);
         }
 
         public override void HitEffect(NPC.HitInfo hit) 

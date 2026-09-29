@@ -49,7 +49,8 @@ namespace Spooky.Core
 		public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
 		{
 			//modify the spawn rates and max spawns in each spooky mod biome
-			if (player.InModBiome(ModContent.GetInstance<SpookyBiome>()) || player.InModBiome(ModContent.GetInstance<SpookyBiomeUg>()) || player.InModBiome(ModContent.GetInstance<CemeteryBiome>()))
+			if (player.InModBiome(ModContent.GetInstance<SpookyBiome>()) || player.InModBiome(ModContent.GetInstance<SpookyBiomeUg>()) || 
+			player.InModBiome(ModContent.GetInstance<CemeteryBiome>()) || player.InModBiome(ModContent.GetInstance<ShipyardBiome>()))
             {
 				spawnRate /= 2;
 			}

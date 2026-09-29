@@ -233,8 +233,7 @@ namespace Spooky.Content.NPCs.Shipyard
             {
                 NPC.ai[2]--;
 
-                Vector2 desiredVelocity = NPC.DirectionTo(player.Center) * -5f;
-                NPC.velocity.X = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20).X;
+                NPC.velocity.X = NPC.Center.X < player.Center.X ? -5 : 5;
 
                 if (NPC.ai[2] <= 0)
                 {

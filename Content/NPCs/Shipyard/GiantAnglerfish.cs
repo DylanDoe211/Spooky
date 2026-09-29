@@ -148,6 +148,8 @@ namespace Spooky.Content.NPCs.Shipyard
             NPC.TargetClosest(true);
             Player player = Main.player[NPC.target];
 
+            NPC.spriteDirection = NPC.velocity.X < 0 ? -1 : 1;
+
             NPC.rotation = NPC.velocity.Y * (NPC.spriteDirection == 1 ? 0.03f : -0.03f);
 
             switch ((int)NPC.ai[0])
@@ -155,8 +157,6 @@ namespace Spooky.Content.NPCs.Shipyard
                 //slowly move around
                 case 0:
                 {
-                    NPC.spriteDirection = NPC.velocity.X < 0 ? -1 : 1;
-
                     if (NPC.Distance(player.Center) <= 230f || NPC.life < NPC.lifeMax)
                     {
                         SoundEngine.PlaySound(SoundID.Zombie39 with { Volume = 0.2f, Pitch = -0.35f }, NPC.Center);
@@ -165,15 +165,8 @@ namespace Spooky.Content.NPCs.Shipyard
                         NPC.netUpdate = true;
                     }
 
-                    if (NPC.ai[1] == 0)
-                    {
-                        NPC.velocity.X = Main.rand.NextBool() ? -0.5f : 0.5f;
-
-                        NPC.ai[1]++;
-                        NPC.netUpdate = true;
-                    }
-
                     float MaxVelocityX = 0.5f;
+                    float MaxVelocityY = 1.5f;
                     if (NPC.direction == -1 && NPC.velocity.X > -MaxVelocityX)
                     {
                         NPC.velocity.X -= 0.1f;
@@ -183,14 +176,7 @@ namespace Spooky.Content.NPCs.Shipyard
                         NPC.velocity.X += 0.1f;
                     }
 
-                    if (NPC.velocity.X < -MaxVelocityX)
-                    {
-                        NPC.velocity.X = -MaxVelocityX;
-                    }
-                    if (NPC.velocity.X > MaxVelocityX)
-                    {
-                        NPC.velocity.X = MaxVelocityX;
-                    }
+                    NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -MaxVelocityX, MaxVelocityX);
 
                     bool GoUp = false;
                     int PosX = (int)(NPC.Center.X / 16f);
@@ -218,15 +204,7 @@ namespace Spooky.Content.NPCs.Shipyard
                         NPC.velocity.Y -= 0.045f;
                     }
 
-                    //limit npc y-velocity
-                    if (NPC.velocity.Y > 1.5f)
-                    {
-                        NPC.velocity.Y = 1.5f;
-                    }
-                    if (NPC.velocity.Y < -1.5f)
-                    {
-                        NPC.velocity.Y = -1.5f;
-                    }
+                    NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y, -MaxVelocityY, MaxVelocityY);
 
                     break;
                 }

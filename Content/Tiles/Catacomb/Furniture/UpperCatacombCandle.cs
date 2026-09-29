@@ -102,7 +102,7 @@ namespace Spooky.Content.Tiles.Catacomb.Furniture
 				float shakeX = Utils.RandomInt(ref randSeed, -5, 6) * 0.15f;
 				float shakeY = Utils.RandomInt(ref randSeed, -5, 6) * 0.15f;
 				spriteBatch.Draw(GlowTexture.Value, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + shakeX, j * 16 - (int)Main.screenPosition.Y + offsetY + shakeY) + zero, 
-				new Rectangle(frameX, frameY, width, height), new Color(100, 100, 100, 0), 0f, default, 1f, SpriteEffects.None, 0f);
+				new Rectangle(frameX, frameY, width, height), new Color(Color.Lime.R, Color.Lime.G, Color.Lime.B, 0), 0f, default, 1f, SpriteEffects.None, 0f);
 			}
 		}
     }

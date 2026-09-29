@@ -50,13 +50,12 @@ namespace Spooky.Content.NPCs.Shipyard
 
 		public override void SetDefaults()
 		{
-            NPC.lifeMax = 110;
-            NPC.damage = 30;
+            NPC.lifeMax = 60;
+            NPC.damage = 0;
 			NPC.defense = 0;
 			NPC.width = 56;
 			NPC.height = 38;
             NPC.npcSlots = 1f;
-            NPC.value = Item.buyPrice(0, 0, 1, 0);
             NPC.noGravity = true;
             NPC.noTileCollide = true;
 			NPC.HitSound = SoundID.NPCHit1;
@@ -118,93 +117,90 @@ namespace Spooky.Content.NPCs.Shipyard
             }
         }
 
+        public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
+		{
+			NPC Parent = Main.npc[(int)NPC.ai[1]];
+			if (Parent.ai[0] == 0)
+            {
+                Parent.ai[0]++;
+            }
+		}
+
+		public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
+		{
+			NPC Parent = Main.npc[(int)NPC.ai[1]];
+			if (Parent.ai[0] == 0)
+            {
+                Parent.ai[0]++;
+            }
+		}
+
         public override void AI()
         {
             NPC Parent = Main.npc[(int)NPC.ai[1]];
 
             NPC.rotation = NPC.velocity.Y * (NPC.spriteDirection == 1 ? 0.03f : -0.03f);
 
-            switch ((int)NPC.ai[0])
+            NPC.spriteDirection = NPC.velocity.X < 0 ? -1 : 1;
+
+            if (Parent.active && Parent.type == ModContent.NPCType<Parrotfish>())
             {
-                //slowly move around the parent
-                case 0:
+                NPC.localAI[0]++;
+
+                //randomly go to a position around the parent npc
+                if (NPC.localAI[0] == 1 || NPC.localAI[0] % 10 == 0)
                 {
-                    NPC.spriteDirection = NPC.velocity.X < 0 ? -1 : 1;
+                    GoToPosition = new Vector2(Main.rand.Next(-125, 126), Main.rand.Next(-80, 81));
+                    NPC.netUpdate = true;
+                }
 
-                    foreach (Player player in Main.ActivePlayers)
+                Vector2 GoTo = Parent.Center + GoToPosition;
+
+                Vector2 desiredVelocity = NPC.DirectionTo(GoTo) * 2;
+                NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
+            }
+            else
+            {
+                float MaxVelocityX = 1f;
+                float MaxVelocityY = 1.5f;
+                if (NPC.spriteDirection == -1 && NPC.velocity.X > -MaxVelocityX)
+                {
+                    NPC.velocity.X -= 0.1f;
+                }
+                else if (NPC.spriteDirection == 1 && NPC.velocity.X < MaxVelocityX)
+                {
+                    NPC.velocity.X += 0.1f;
+                }
+
+                NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -MaxVelocityX, MaxVelocityX);
+
+                bool GoUp = false;
+                int PosX = (int)(NPC.Center.X / 16f);
+                int PosY = (int)((NPC.position.Y + (float)NPC.height) / 16f);
+                for (int TilePosY = PosY; TilePosY < PosY + 5; TilePosY++)
+                {
+                    if (!WorldGen.InWorld(PosX, TilePosY, 10))
                     {
-                        bool lineOfSight = Collision.CanHitLine(NPC.position, NPC.width, NPC.height, player.position, player.width, player.height);
-                        if ((!player.dead && lineOfSight && NPC.Distance(player.Center) <= 230f) || NPC.life < NPC.lifeMax)
-                        {
-                            SoundEngine.PlaySound(SoundID.Zombie55 with { Volume = 1.5f, Pitch = -0.5f }, NPC.Center);
-                        
-                            NPC.ai[0]++;
-
-                            //also aggro parent if it is not already aggroed
-                            if (Parent.ai[0] == 0)
-                            {
-                                Parent.ai[0]++;
-                            }
-
-                            NPC.netUpdate = true;
-                        }
+                        continue;
                     }
-
-                    NPC.localAI[0]++;
-
-                    //randomly go to a position around the parent npc
-                    if (NPC.localAI[0] == 1 || NPC.localAI[0] % 10 == 0)
+                    if (WorldGen.SolidOrSlopedTile(PosX, TilePosY) || Main.tile[PosX, TilePosY].LiquidAmount > 0)
                     {
-                        GoToPosition = new Vector2(Main.rand.Next(-125, 126), Main.rand.Next(-80, 81));
+                        GoUp = true; 
                         NPC.netUpdate = true;
+                        break;
                     }
-
-                    Vector2 GoTo = Parent.Center + GoToPosition;
-
-                    Vector2 desiredVelocity = NPC.DirectionTo(GoTo) * 2;
-                    NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
-
-                    break;
                 }
-
-                //chase the player
-                case 1:     
+                
+                if (!GoUp)
                 {
-                    NPC.TargetClosest(true);
-                    Player player = Main.player[NPC.target];
-
-                    NPC.spriteDirection = NPC.direction;
-
-                    int MaxSpeed = 3;
-
-                    //flies to players X position
-                    if (NPC.Center.X >= player.Center.X && MoveSpeedX >= -MaxSpeed) 
-                    {
-                        MoveSpeedX--;
-                    }
-                    else if (NPC.Center.X <= player.Center.X && MoveSpeedX <= MaxSpeed)
-                    {
-                        MoveSpeedX++;
-                    }
-
-                    NPC.velocity.X += MoveSpeedX * 0.01f;
-                    NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -MaxSpeed, MaxSpeed);
-                    
-                    //flies to players Y position
-                    if (NPC.Center.Y >= player.Center.Y - 20 && MoveSpeedY >= -MaxSpeed * 0.5f)
-                    {
-                        MoveSpeedY--;
-                    }
-                    else if (NPC.Center.Y <= player.Center.Y - 20 && MoveSpeedY <= MaxSpeed * 0.5f)
-                    {
-                        MoveSpeedY++;
-                    }
-
-                    NPC.velocity.Y += MoveSpeedY * 0.1f;
-                    NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y, -MaxSpeed * 0.5f, MaxSpeed * 0.5f);
-
-                    break;
+                    NPC.velocity.Y += 0.045f;
                 }
+                else
+                {
+                    NPC.velocity.Y -= 0.045f;
+                }
+
+                NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y, -MaxVelocityY, MaxVelocityY);
             }
         }
 
