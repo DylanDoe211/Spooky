@@ -18,6 +18,8 @@ public class LittleEyeCrossmod : ModSystem
 {
 	internal readonly static Dictionary<string, List<CrossmodQuest>> QuestsByMod = [];
 
+	public static int CustomQuestCount { get; private set; }
+
 	private static string ErrorStart(int paramIndex) => $"Parameters {paramIndex} for EyeQuest ";
 
 	internal static bool Call(object[] objects)
@@ -68,6 +70,8 @@ public class LittleEyeCrossmod : ModSystem
 	{
 		QuestsByMod.TryAdd(quest.Mod.Name, []);
 		QuestsByMod[quest.Mod.Name].Add(quest);
+
+		CustomQuestCount++;
 	}
 
 	private static void AddQuest(Mod mod, string questName, Asset<Texture2D> icon, Func<bool> isActive, Action<bool> onActivate, Func<bool> completeCheck, 
@@ -77,6 +81,7 @@ public class LittleEyeCrossmod : ModSystem
 		QuestsByMod.TryAdd(mod.Name, []);
 		QuestsByMod[mod.Name].Add(quest);
 
+		CustomQuestCount++;
 		return;
 
 		// Delegate local methods; the triggers are simply to simplify the call signature, the chains are to construct chains without a reference

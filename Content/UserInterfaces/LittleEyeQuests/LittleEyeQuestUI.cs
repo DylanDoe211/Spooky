@@ -202,7 +202,7 @@ public class LittleEyeQuestUI : ModSystem
 
 			Main.spriteBatch.Draw(tex, pos, src, canClick ? Color.White : Color.Gray, 0f, origin, scale, SpriteEffects.FlipHorizontally, 0f);
 
-			canClick = _firstVisibleQuest < 1;
+			canClick = _firstVisibleQuest < LittleEyeCrossmod.CustomQuestCount;
 			pos = UICenter + new Vector2(backWidth + 4, yOff) * Main.UIScale;
 			hover = new Rectangle((int)pos.X - (int)(218 * Main.UIScale), (int)pos.Y, baseSize.X, baseSize.Y).Contains(Main.MouseScreen.ToPoint()) && canClick;
 			src = new Rectangle(hover ? 34 : 0, 0, 32, 90);
