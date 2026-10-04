@@ -31,11 +31,13 @@ namespace Spooky.Content.Projectiles.Shipyard
             Projectile.DamageType = DamageClass.Summon;
             Projectile.localNPCHitCooldown = 30;
             Projectile.usesLocalNPCImmunity = true;
+            Projectile.minion = true;
             Projectile.friendly = true;
             Projectile.tileCollide = false;
             Projectile.netImportant = true;
             Projectile.penetrate = -1;
             Projectile.timeLeft = 2;
+            Projectile.minionSlots = 1f;
             Projectile.aiStyle = -1;
         }
 

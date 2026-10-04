@@ -101,7 +101,9 @@ namespace Spooky.Content.Projectiles.Shipyard
                     {
                         Vector2 GoTo = Main.MouseWorld;
 
-                        Vector2 desiredVelocity = Projectile.DirectionTo(Main.MouseWorld) * 2;
+                        float Speed = 2 + (Projectile.frame);
+
+                        Vector2 desiredVelocity = Projectile.DirectionTo(Main.MouseWorld) * Speed;
                         Projectile.velocity = Vector2.Lerp(Projectile.velocity, desiredVelocity, 1f / 20);
                     }
                 }

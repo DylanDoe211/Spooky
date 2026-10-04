@@ -22,6 +22,7 @@ Changes:
 -Creepy dog photo puppy now no longer attacks you ever, it always just attacks enemies
 -Peptobyssmal debuff now causes enemies to spawn bubbles after 10 seconds instead of on death
 -Backpack chimney projectile damage buffed from 32 -> 40, and it now charges up faster
+-Nerfed crusty gunfish damage from 42 -> 35
 -Old wood staff no longer has amethyst in its recipe, and that has been replaced with 10 glowshrooms instead
 -Krampus quest reward presents now need 5 to research for journey mode
 -Krampus quest reward presents now have a separate drop chance for each piece of the krampus helper vanity
@@ -33,7 +34,7 @@ Changes:
 -Spooky mod chandeliers and lanterns finally sway in the wind
 -Reduced the size of the tar pits biome
 -Tarrars now play a growling sound when a player gets close to them
--Nerfed crusty gunfish damage from 42 -> 35
+-Rot gourd mold spores now home in on the player slower
 -Slightly changed outline visuals and dust particles on some enemies to look nicer
 
 
@@ -47,6 +48,7 @@ Sprite Updates:
 -Updated all colored gourd wall sprites to look better
 -Updated the colors on spooky forest, cemetery, and spider grotto dirt to look a bit nicer
 -Updated sprites for big bones flower attack projectiles
+-Updated rot gourd mold spore projectile
 
 
 Biome Noise Generation Changes:
