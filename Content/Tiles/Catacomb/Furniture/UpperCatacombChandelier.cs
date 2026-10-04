@@ -132,7 +132,7 @@ namespace Spooky.Content.Tiles.Catacomb.Furniture
 			}
 
 			tileFlameData.flameCount = 5;
-			tileFlameData.flameColor = new Color(100, 100, 100, 0);
+			tileFlameData.flameColor = new Color(Color.Lime.R, Color.Lime.G, Color.Lime.B, 0);
 			tileFlameData.flameRangeXMin = -5;
 			tileFlameData.flameRangeXMax = 6;
 			tileFlameData.flameRangeYMin = -5;

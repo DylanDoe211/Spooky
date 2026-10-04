@@ -109,34 +109,30 @@ namespace Spooky.Content.NPCs.Shipyard
 
         public override void AI()
         {
-            NPC.spriteDirection = NPC.direction = NPC.velocity.X < 0 ? -1 : 1;
-
-            if (NPC.ai[0] == 0)
+            if (NPC.ai[1] == 0)
             {
-                NPC.velocity.X = Main.rand.NextBool() ? -0.5f : 0.5f;
+                NPC.spriteDirection = Main.rand.NextBool() ? -1 : 1;
 
-                NPC.ai[0]++;
+                NPC.ai[1]++;
                 NPC.netUpdate = true;
+            }
+            else
+            {
+                NPC.spriteDirection = NPC.velocity.X < 0 ? -1 : 1;
             }
 
             float MaxVelocityX = 0.5f;
-            if (NPC.direction == -1 && NPC.velocity.X > -MaxVelocityX)
+            float MaxVelocityY = 1f;
+            if (NPC.spriteDirection == -1 && NPC.velocity.X > -MaxVelocityX)
             {
                 NPC.velocity.X -= 0.1f;
             }
-            else if (NPC.direction == 1 && NPC.velocity.X < MaxVelocityX)
+            else if (NPC.spriteDirection == 1 && NPC.velocity.X < MaxVelocityX)
             {
                 NPC.velocity.X += 0.1f;
             }
 
-            if (NPC.velocity.X < -MaxVelocityX)
-            {
-                NPC.velocity.X = -MaxVelocityX;
-            }
-            if (NPC.velocity.X > MaxVelocityX)
-            {
-                NPC.velocity.X = MaxVelocityX;
-            }
+            NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -MaxVelocityX, MaxVelocityX);
 
             bool GoUp = false;
             int PosX = (int)(NPC.Center.X / 16f);
@@ -164,15 +160,7 @@ namespace Spooky.Content.NPCs.Shipyard
                 NPC.velocity.Y -= 0.025f;
             }
 
-            //limit npc y-velocity
-            if (NPC.velocity.Y > 1f)
-            {
-                NPC.velocity.Y = 1f;
-            }
-            if (NPC.velocity.Y < -1f)
-            {
-                NPC.velocity.Y = -1f;
-            }
+            NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y, -MaxVelocityY, MaxVelocityY);
         }
 
         public override void HitEffect(NPC.HitInfo hit) 

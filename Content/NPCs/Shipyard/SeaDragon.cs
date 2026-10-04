@@ -33,7 +33,6 @@ namespace Spooky.Content.NPCs.Shipyard
 			NPC.width = 56;
 			NPC.height = 36;
             NPC.npcSlots = 0.5f;
-            NPC.knockBackResist = 0f;
             NPC.noGravity = true;
             NPC.chaseable = false;
             NPC.noTileCollide = true;
@@ -100,8 +99,6 @@ namespace Spooky.Content.NPCs.Shipyard
 
         public override void AI()
         {
-            NPC.spriteDirection = NPC.direction = NPC.velocity.X < 0 ? -1 : 1;
-
             if (NPC.ai[1] == 0)
             {
                 NPC.ai[2] = Main.rand.Next(300, 600);
@@ -122,34 +119,32 @@ namespace Spooky.Content.NPCs.Shipyard
                     NPC.netUpdate = true;
                 }
 
-                if (NPC.ai[0] == 0)
-                {
-                    NPC.velocity.X = Main.rand.NextBool() ? -0.5f : 0.5f;
-
-                    NPC.ai[0]++;
-                    NPC.netUpdate = true;
-                }
-
                 if (NPC.ai[1] < NPC.ai[2])
                 {
+                    if (NPC.ai[0] == 0)
+                    {
+                        NPC.spriteDirection = Main.rand.NextBool() ? -1 : 1;
+
+                        NPC.ai[0]++;
+                        NPC.netUpdate = true;
+                    }
+                    else
+                    {
+                        NPC.spriteDirection = NPC.velocity.X < 0 ? -1 : 1;
+                    }
+
                     float MaxVelocityX = 0.75f;
-                    if (NPC.direction == -1 && NPC.velocity.X > -MaxVelocityX)
+                    float MaxVelocityY = 1.2f;
+                    if (NPC.spriteDirection == -1 && NPC.velocity.X > -MaxVelocityX)
                     {
                         NPC.velocity.X -= 0.1f;
                     }
-                    else if (NPC.direction == 1 && NPC.velocity.X < MaxVelocityX)
+                    else if (NPC.spriteDirection == 1 && NPC.velocity.X < MaxVelocityX)
                     {
                         NPC.velocity.X += 0.1f;
                     }
 
-                    if (NPC.velocity.X < -MaxVelocityX)
-                    {
-                        NPC.velocity.X = -MaxVelocityX;
-                    }
-                    if (NPC.velocity.X > MaxVelocityX)
-                    {
-                        NPC.velocity.X = MaxVelocityX;
-                    }
+                    NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -MaxVelocityX, MaxVelocityX);
 
                     bool GoUp = false;
                     int PosX = (int)(NPC.Center.X / 16f);
@@ -178,15 +173,7 @@ namespace Spooky.Content.NPCs.Shipyard
                         NPC.velocity.Y -= 0.035f;
                     }
 
-                    //limit npc y-velocity
-                    if (NPC.velocity.Y > 1.2f)
-                    {
-                        NPC.velocity.Y = 1.2f;
-                    }
-                    if (NPC.velocity.Y < -1.2f)
-                    {
-                        NPC.velocity.Y = -1.2f;
-                    }
+                    NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y, -MaxVelocityY, MaxVelocityY);
                 }
             }
         }
