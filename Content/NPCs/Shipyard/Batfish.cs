@@ -24,6 +24,13 @@ namespace Spooky.Content.NPCs.Shipyard
 		{
 			Main.npcFrameCount[NPC.type] = 5;
             NPCID.Sets.CountsAsCritter[NPC.type] = true;
+
+            NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                Position = new Vector2(12f, 0f),
+                PortraitPositionXOverride = 0f,
+                PortraitPositionYOverride = 0f
+            };
         }
 
         public override void SendExtraAI(BinaryWriter writer)
@@ -143,7 +150,14 @@ namespace Spooky.Content.NPCs.Shipyard
 
             float speed = MathHelper.Clamp(velocity.Length() / 36, 10, JumpSpeed);
 
-            NPC.velocity.X *= NPC.velocity.Y <= 0 ? 0.98f : 0.95f;
+            if (NPCGlobalHelper.IsCollidingWithFloor(NPC))
+            {
+                NPC.velocity.X = 0;
+            }
+            else
+            {
+                NPC.velocity.X *= NPC.velocity.Y <= 0 ? 0.98f : 0.95f;
+            }
 
             //actual jumping
             if (NPC.ai[0] >= TimeBeforeNextJump)

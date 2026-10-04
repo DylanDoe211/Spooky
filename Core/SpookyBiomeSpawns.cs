@@ -1064,7 +1064,7 @@ namespace Spooky.Core
 				//parrotfish can spawn at any time rarely
 				if (!spawnInfo.PlayerInTown || (spawnInfo.PlayerInTown && spawnInfo.Player.ZoneShadowCandle))
 				{
-					pool.Add(ModContent.NPCType<Parrotfish>(), 0.3f);
+					pool.Add(ModContent.NPCType<Parrotfish>(), 0.2f);
 				}
 			}
 

@@ -521,6 +521,19 @@ namespace Spooky.Content.Generation
 				}
 			}
 
+			//place chests
+			for (int X = leftBound - 10; X <= rightBound + 10; X++)
+			{
+				for (int Y = 10; Y <= Main.worldSurface; Y++)
+				{
+					if (WorldGen.InWorld(X, Y, 10) && WorldGen.genRand.NextBool(20) && CanPlaceChest(X, Y) && 
+					(Main.tile[X, Y].WallType == ModContent.WallType<BlackSandWall>() || Main.tile[X, Y].WallType == ModContent.WallType<BlackSandstoneWall>()))
+					{
+						TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<GiantPirateChest>());
+					}
+				}
+			}
+
 			//ambient tiles
 			//first, grow trees and giant corals
 			for (int X = leftBound - 10; X <= rightBound + 10; X++)
@@ -902,6 +915,23 @@ namespace Spooky.Content.Generation
                 for (int j = Y - 4; j < Y + 4; j++)
                 {
                     if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<CoralTree>())
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+		//determine if theres no chests nearby another chest thats about to place
+        public static bool CanPlaceChest(int X, int Y)
+        {
+            for (int i = X - 20; i < X + 20; i++)
+            {
+                for (int j = Y - 25; j < Y + 25; j++)
+                {
+                    if (WorldGen.InWorld(i, j, 10) && Main.tile[i, j].TileType == ModContent.TileType<GiantPirateChest>())
                     {
                         return false;
                     }

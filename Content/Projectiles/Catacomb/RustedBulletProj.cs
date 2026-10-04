@@ -23,12 +23,12 @@ namespace Spooky.Content.Projectiles.Catacomb
 
         public override void SetDefaults()
         {
-            Projectile.width = 8;
-            Projectile.height = 18;
+            Projectile.width = 12;
+            Projectile.height = 12;
             Projectile.DamageType = DamageClass.Ranged;
             Projectile.friendly = true;
             Projectile.tileCollide = true;
-            Projectile.timeLeft = 1800;
+            Projectile.timeLeft = 240;
             Projectile.extraUpdates = 2;
 			Projectile.penetrate = 1;
 			Projectile.alpha = 255;
@@ -55,7 +55,7 @@ namespace Spooky.Content.Projectiles.Catacomb
 
 				if (trailLength[k] == Vector2.Zero)
 				{
-					return true;
+					return false;
 				}
 
 				Vector2 drawPos = trailLength[k] - Main.screenPosition;
@@ -74,7 +74,7 @@ namespace Spooky.Content.Projectiles.Catacomb
 				previousPosition = currentPos;
 			}
 
-			return true;
+			return false;
 		}
 
         public override void AI()       

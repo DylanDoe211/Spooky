@@ -275,167 +275,42 @@ namespace Spooky.Content.NPCs.Shipyard
                     break;
                 }
 
-                //jump and shoot slime
+                //move in an arc above player and shoot slime while doing spin out of shell animation
                 case 1:
                 {
                     NPC.localAI[0]++;
 
-                    if (NPC.localAI[1] == 0)
+                    if (NPC.localAI[0] >= 0)
                     {
-                        if (NPC.localAI[0] == 10)
+                        Vector2 RotateTowards = player.Center - NPC.Center;
+
+                        float RotateDirection = (float)Math.Atan2(RotateTowards.Y, RotateTowards.X) + 4.71f;
+                        float RotateSpeed = 0.05f;
+
+                        NPC.rotation = NPC.rotation.AngleTowards(RotateDirection - MathHelper.TwoPi, RotateSpeed);
+
+                        NPC.ai[1] += 0.005f;
+
+                        float theta = MathHelper.PiOver2 * MathF.Sin(NPC.ai[1] * 4) * 0.5f;
+                        Vector2 GoTo = player.Center + new Vector2(0, -280).RotatedBy(theta);
+
+                        if (NPC.Distance(GoTo) >= 10f)
                         {
-                            CurrentFrameX = 2;
-                            CurrentAnimation = AnimationState.Wiggle;
-                            ResetFrameToZero = true;
+                            Vector2 desiredVelocity = NPC.DirectionTo(GoTo) * 15;
+                            NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
                         }
-
-                        if (NPC.localAI[0] == 30)
+                        else
                         {
-                            int JumpHeight = 500;
-                            float VelocityIncreaseX = (NPC.Distance(player.Center) / 200);
-
-                            NPC.velocity = ArcVelocityHelper.GetArcVelocity(NPC, player.Center, 0.35f, JumpHeight, JumpHeight + 1, maxXvel: 12 + VelocityIncreaseX);
-                        }
-                        
-                        if (NPC.localAI[0] >= 30 && NPC.localAI[0] < 70)
-                        {
-                            NPC.velocity.Y += 0.3f;
-                            if (NPC.velocity.Y > 2f)
-                            {
-                                NPC.velocity.Y += 0.6f;
-                            }
-
-                            NPC.rotation += (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) * 0.01f * (float)NPC.direction;
-                        }
-
-                        if (NPC.localAI[0] == 70)
-                        {
-                            SaveVelocity = NPC.velocity;
-                            NPC.velocity = Vector2.Zero;
-
-                            Main.NewText("SlimeBall");
-                        }
-
-                        if (NPC.localAI[0] == 80)
-                        {
-                            CurrentAnimation = AnimationState.WiggleStop;
-                        }
-
-                        if (NPC.localAI[0] == 120)
-                        {
-                            NPC.velocity = SaveVelocity;
-
-                            CurrentFrameX = 4;
-                            CurrentAnimation = AnimationState.Spin;
-                            ResetFrameToZero = true;
-                        }
-
-                        if (NPC.localAI[0] > 120)
-                        {
-                            if (!NPCGlobalHelper.IsCollidingWithFloor(NPC, false))
-                            {
-                                NPC.rotation = NPC.velocity.Y * (NPC.spriteDirection == -1 ? 0.05f : -0.05f);
-                                NPC.spriteDirection = NPC.velocity.X > 0 ? -1 : 1;
-
-                                NPC.velocity.Y += 0.3f;
-                                if (NPC.velocity.Y > 2f)
-                                {
-                                    NPC.velocity.Y += 0.6f;
-                                }
-                            }
-                            else
-                            {
-                                CurrentFrameX = 1;
-                                CurrentAnimation = AnimationState.Idle;
-
-                                NPC.velocity = Vector2.Zero;
-
-                                ResetFrameToZero = true;
-
-                                NPC.localAI[1]++;
-                            }
-                        }
-                    }
-
-                    if (NPC.localAI[1] > 0)
-                    {
-                        NPC.localAI[1]++;
-                        if (NPC.localAI[1] >= 120)
-                        {
-                            NPC.localAI[0] = 0;
-                            NPC.localAI[1] = 0;
-                            NPC.ai[0]++;
-                            NPC.netUpdate = true;
+                            NPC.velocity *= 0.9f;
                         }
                     }
 
                     break;
                 }
 
-                //jump and then charge at player
+                //slam down attack where it spins and slams the ground, then spew out bubbles when emerging
                 case 2:
                 {
-                    NPC.localAI[0]++;
-
-                    if (NPC.localAI[1] == 0)
-                    {
-                        if (NPC.localAI[0] == 10)
-                        {
-                            CurrentFrameX = 0;
-                            CurrentAnimation = AnimationState.HideInShell;
-                        }
-
-                        if (NPC.localAI[0] == 30)
-                        {
-                            CurrentFrameX = 4;
-                            CurrentAnimation = AnimationState.Spin;
-                            ResetFrameToZero = true;
-
-                            int JumpHeight = 1000;
-                            float VelocityIncreaseX = (NPC.Distance(player.Center) / 200);
-
-                            NPC.velocity = ArcVelocityHelper.GetArcVelocity(NPC, player.Center, 0.35f, JumpHeight, JumpHeight + 1, maxXvel: 12 + VelocityIncreaseX);
-                        }
-                        
-                        if (NPC.localAI[0] == 70)
-                        {
-                            Vector2 ChargeDirection = player.Center - NPC.Center;
-                            ChargeDirection.Normalize();
-                            ChargeDirection *= 12;
-                            NPC.velocity.X = ChargeDirection.X;
-                            NPC.velocity.Y = 10;
-                        }
-
-                        if (NPC.localAI[0] > 70)
-                        {
-                            NPC.rotation = NPC.velocity.Y * (0.04f * NPC.direction);
-
-                            if (!NPCGlobalHelper.IsCollidingWithFloor(NPC, false))
-                            {
-                                CurrentFrameX = 1;
-                                CurrentAnimation = AnimationState.Idle;
-
-                                NPC.velocity = Vector2.Zero;
-
-                                ResetFrameToZero = true;
-
-                                NPC.localAI[1]++;
-                            }
-                        }
-                    }
-
-                    if (NPC.localAI[1] > 0)
-                    {
-                        NPC.localAI[1]++;
-                        if (NPC.localAI[1] >= 120)
-                        {
-                            NPC.localAI[0] = 0;
-                            NPC.localAI[1] = 0;
-                            NPC.ai[0] = 0;
-                            NPC.netUpdate = true;
-                        }
-                    }
-
                     break;
                 }
             }

@@ -7,6 +7,7 @@ using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Spooky.Content.Achievements;
 using Spooky.Content.Biomes;
 using Spooky.Content.Buffs.Debuff;
 using Spooky.Content.Items.Fishing;
@@ -18,6 +19,7 @@ using Spooky.Content.Items.SpookyBiome.Misc;
 using Spooky.Content.Items.SpookyHell.Sentient;
 using Spooky.Content.NPCs.Boss.SpookFishron;
 using Spooky.Content.NPCs.SpookyHell;
+using Spooky.Content.Tiles.Shipyard.Furniture;
 using Spooky.Content.Projectiles.Minibiomes.Ocean;
 using Spooky.Content.Projectiles.Sentient;
 using Spooky.Content.Projectiles.SpiderCave;
@@ -206,6 +208,19 @@ namespace Spooky.Core
 			}
 		}
 
+		public int SpookyDebuffCount(NPC NPC)
+		{
+			int SpookyDebuffCount = 0;
+			for (int i = 0; i < NPC.maxBuffs; i++)
+			{
+				if (NPC.buffTime[i] >= 1 && BuffGlobal.IsSpookyDebuffForAchievement[NPC.buffType[i]])
+				{
+					SpookyDebuffCount++;
+				}
+			}
+			return SpookyDebuffCount;
+		}
+
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (target.active && target.CanBeChasedBy(this) && !target.friendly && !target.dontTakeDamage && !NPCID.Sets.CountsAsCritter[target.type])
@@ -238,7 +253,15 @@ namespace Spooky.Core
                         ModContent.ProjectileType<PossessedDagger>(), damageDone / 3, hit.Knockback, Player.whoAmI, 0, target.whoAmI);
                     }
                 }
-            }
+
+				if (SpookyDebuffCount(target) >= 10)
+				{
+					if (Main.netMode != NetmodeID.Server)
+					{
+						ModContent.GetInstance<MiscAchievementDebuffs>().DebuffsCondition.Complete();
+					}
+				}
+			}
         }
 
 		public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
@@ -499,12 +522,6 @@ namespace Spooky.Core
 					if (attempt.rare && attempt.crate)
 					{
 						itemDrop = Main.hardMode ? ModContent.ItemType<ShipyardCrate2>() : ModContent.ItemType<ShipyardCrate>();
-                    }
-
-                    //pirate treasure chests
-                    if (attempt.uncommon && Main.rand.NextBool(3))
-					{
-						itemDrop = ModContent.ItemType<PirateChest>();
                     }
 
                     //bleached tuna

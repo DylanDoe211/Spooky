@@ -28,7 +28,12 @@ namespace Spooky.Content.Tiles.Catacomb
         {
             fail = !Flags.downedDaffodil;
         }
-    }
+
+		public override bool CanBeTeleportedTo(int i, int j, Player player, string context)
+		{
+			return Flags.CatacombKey1;
+		}
+	}
 
 	public class CatacombBrickWall1Safe : ModWall 
     {

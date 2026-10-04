@@ -2,6 +2,9 @@ using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
+using Spooky.Core;
+using Spooky.Content.Projectiles.SpookyHell;
+
 namespace Spooky.Content.Buffs.Debuff
 {
 	public class PeptoDebuff : ModBuff
@@ -14,6 +17,7 @@ namespace Spooky.Content.Buffs.Debuff
         public override void SetStaticDefaults()
         {
             Main.debuff[Type] = true;
+            BuffGlobal.IsSpookyDebuffForAchievement[Type] = true;
         }
 
         public override void Update(NPC npc, ref int buffIndex)
@@ -25,6 +29,15 @@ namespace Spooky.Content.Buffs.Debuff
                 storedColor = npc.color;
 
                 initializeStats = true;
+            }
+
+            if (npc.buffTime[buffIndex] == 5)
+            {
+                Player player = Main.LocalPlayer;
+                for (int numProjectiles = 0; numProjectiles <= 5; numProjectiles++)
+				{
+					Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, new Vector2(Main.rand.NextFloat(-12f, 12f), -3f), ModContent.ProjectileType<PeptoBubble>(), npc.damage, 0, player.whoAmI);
+				}
             }
 
             if (npc.buffTime[buffIndex] < 5)

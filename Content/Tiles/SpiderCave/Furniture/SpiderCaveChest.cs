@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
 using Spooky.Content.Dusts;
+using Spooky.Content.Achievements;
 using Spooky.Content.Items.SpiderCave.Misc;
 
 namespace Spooky.Content.Tiles.SpiderCave.Furniture
@@ -187,6 +188,10 @@ namespace Spooky.Content.Tiles.SpiderCave.Furniture
 					{
 						if (player.ConsumeItem(key) && Chest.Unlock(left, top))
 						{
+							if (Main.netMode != NetmodeID.Server)
+							{
+								ModContent.GetInstance<MiscAchievementBiomeChest>().BiomeChestCondition.Complete();
+							}
 							if (Main.netMode == NetmodeID.MultiplayerClient) 
 							{
 								NetMessage.SendData(MessageID.LockAndUnlock, -1, -1, null, player.whoAmI, 1f, left, top);

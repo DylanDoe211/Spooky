@@ -32,6 +32,11 @@ namespace Spooky.Content.Tiles.NoseTemple
             fail = true;
         }
 
+        public override bool CanBeTeleportedTo(int i, int j, Player player, string context)
+		{
+			return NPC.downedBoss3; //downed skeletron
+		}
+
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
             BackgroundTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Backgrounds/SpookyHell/NoseDungeonWallBGGreen");

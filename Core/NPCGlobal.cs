@@ -11,6 +11,7 @@ using System;
 using System.IO;
 using System.Linq;
 
+using Spooky.Content.Achievements;
 using Spooky.Content.Buffs;
 using Spooky.Content.Buffs.Debuff;
 using Spooky.Content.Buffs.WhipDebuff;
@@ -79,21 +80,21 @@ namespace Spooky.Core
 
 		public override void Load()
 		{
-			On_Main.DrawMiscMapIcons += DrawTamedMapIcons;
+			On_Main.DrawMiscMapIcons += DrawCustomMapIcons;
 		}
 
 		public override void Unload()
 		{
-			On_Main.DrawMiscMapIcons -= DrawTamedMapIcons;
+			On_Main.DrawMiscMapIcons -= DrawCustomMapIcons;
 		}
 
-		private static void DrawTamedMapIcons(On_Main.orig_DrawMiscMapIcons orig, Main self, SpriteBatch spriteBatch, Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale, float drawScale, ref string mouseTextString)
+		private static void DrawCustomMapIcons(On_Main.orig_DrawMiscMapIcons orig, Main self, SpriteBatch spriteBatch, Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale, float drawScale, ref string mouseTextString)
 		{
 			orig(self, spriteBatch, mapTopLeft, mapX2Y2AndOff, mapRect, mapScale, drawScale, ref mouseTextString);
-			DrawTamedMapIcon(self, spriteBatch, mapTopLeft, mapX2Y2AndOff, mapRect, mapScale, drawScale, ref mouseTextString);
+			DrawCustomMapIcon(self, spriteBatch, mapTopLeft, mapX2Y2AndOff, mapRect, mapScale, drawScale, ref mouseTextString);
 		}
 
-		private static void DrawTamedMapIcon(Main self, SpriteBatch spriteBatch, Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale, float drawScale, ref string mouseTextString)
+		private static void DrawCustomMapIcon(Main self, SpriteBatch spriteBatch, Vector2 mapTopLeft, Vector2 mapX2Y2AndOff, Rectangle? mapRect, float mapScale, float drawScale, ref string mouseTextString)
 		{
 			if (Main.gameMenu || Main.netMode == NetmodeID.Server)
 			{
@@ -228,7 +229,7 @@ namespace Spooky.Core
 		float PeacockRotation = 0f;
 		public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
 		{
-			if (npc.HasBuff(ModContent.BuffType<HunterScarfMark>()))
+			if (npc.HasBuff(ModContent.BuffType<HunterScarfMark>()) && !npc.IsChild(out _))
 			{
 				HunterScarfMarkTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Buffs/Debuff/HunterScarfMarkIcon");
 
@@ -255,7 +256,7 @@ namespace Spooky.Core
 				Main.EntitySpriteDraw(HunterScarfMarkTexture.Value, npc.Center - screenPos, Frame, Color.White * 0.5f, MarkRotation, drawOrigin, 1f, SpriteEffects.None, 0);
 			}
 
-			if (npc.HasBuff(ModContent.BuffType<PeacockSpiderMaskDebuff>()))
+			if (npc.HasBuff(ModContent.BuffType<PeacockSpiderMaskDebuff>()) && !npc.IsChild(out _))
 			{
 				PeacockIntimidatedTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Buffs/Debuff/PeacockSpiderMaskDebuffIcon");
 
@@ -305,6 +306,7 @@ namespace Spooky.Core
 				shop.Add<WaterFountainEyeValleyItem>();
 				shop.Add<WaterFountainTarItem>();
 				shop.Add<WaterFountainZombieItem>();
+				shop.Add<WaterFountainShipyardItem>();
 				shop.Add<WaterFountainSpookFishronItem>(SpookFishronDowned);
 			}
 
@@ -479,16 +481,6 @@ namespace Spooky.Core
 			}
 
 			Player player = Main.LocalPlayer;
-
-			//ememies with stomach ache explode into pepto bubbles
-			if (npc.HasBuff(ModContent.BuffType<PeptoDebuff>()))
-			{
-				for (int numProjectiles = 0; numProjectiles < Main.rand.Next(4, 8); numProjectiles++)
-				{
-					Projectile.NewProjectile(npc.GetSource_Death(), npc.Center.X, npc.Center.Y, Main.rand.NextFloat(-12f, 12f),
-					Main.rand.NextFloat(-2f, 0f), ModContent.ProjectileType<PeptoBubble>(), npc.damage, 0, player.whoAmI);
-				}
-			}
 
 			//spawn souls when you kill an enemy while wearing the skull amulet
 			if (player.GetModPlayer<SkullAmuletPlayer>().SkullAmulet && !npc.friendly)
@@ -744,6 +736,13 @@ namespace Spooky.Core
 			}
 
 			return false;
+		}
+
+		public static bool IsChild(this NPC npc, out NPC parent)
+		{
+			bool child = npc.realLife != npc.whoAmI && npc.realLife >= 0 && npc.realLife <= Main.maxNPCs;
+			parent = child ? Main.npc[npc.realLife] : null;
+			return child;
 		}
 
         //check for npcs that arent considered bosses internally or are segments/pieces of bosses

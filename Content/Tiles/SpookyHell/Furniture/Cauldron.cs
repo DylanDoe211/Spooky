@@ -79,8 +79,9 @@ namespace Spooky.Content.Tiles.SpookyHell.Furniture
 
 		Vector2 scaleVec;
 
-        private Asset<Texture2D> GlowTexture;
         private Asset<Texture2D> ProjTexture;
+		private Asset<Texture2D> GlowTexture;
+		private Asset<Texture2D> BubbleTexture;
 
         public override void SetStaticDefaults()
         {
@@ -107,16 +108,18 @@ namespace Spooky.Content.Tiles.SpookyHell.Furniture
 		public override bool PreDraw(ref Color lightColor)
         {
             ProjTexture ??= ModContent.Request<Texture2D>(Texture);
-			GlowTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/SpookyHell/Furniture/CauldronDummyGlow");
+			GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
+			BubbleTexture ??= ModContent.Request<Texture2D>(Texture + "Bubble");
 
 			int frameHeight = ProjTexture.Height() / Main.projFrames[Projectile.type];
 			Rectangle frameBox = new Rectangle(0, frameHeight * Projectile.frame, ProjTexture.Width(), frameHeight);
 
 			Main.spriteBatch.Draw(ProjTexture.Value, Projectile.Bottom - Main.screenPosition, frameBox, lightColor, Projectile.rotation, new Vector2(ProjTexture.Width() / 2, frameHeight), Projectile.scale * (Vector2.One + (0.1f * scaleVec)), SpriteEffects.None, 0f);
+			Main.spriteBatch.Draw(GlowTexture.Value, Projectile.Bottom - Main.screenPosition, frameBox, Color.White * 0.5f, Projectile.rotation, new Vector2(ProjTexture.Width() / 2, frameHeight), Projectile.scale * (Vector2.One + (0.1f * scaleVec)), SpriteEffects.None, 0f);
 
 			if (shakeTimer <= 0)
 			{
-				Main.spriteBatch.Draw(GlowTexture.Value, Projectile.Bottom - Main.screenPosition, frameBox, lightColor, Projectile.rotation, new Vector2(GlowTexture.Width() / 2, frameHeight), Projectile.scale * (Vector2.One + (0.1f * scaleVec)), SpriteEffects.None, 0f);
+				Main.spriteBatch.Draw(BubbleTexture.Value, Projectile.Bottom - Main.screenPosition, frameBox, Color.White * 0.5f, Projectile.rotation, new Vector2(ProjTexture.Width() / 2, frameHeight), Projectile.scale * (Vector2.One + (0.1f * scaleVec)), SpriteEffects.None, 0f);
 			}
 
             return false;

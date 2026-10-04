@@ -571,6 +571,7 @@ Parrotfish.DisplayName: Parrotfish
 ParrotfishBaby.DisplayName: Baby Parrotfish
 YetiCrab.DisplayName: Yeti Crab
 Batfish.DisplayName: Batfish
+PirateChestVisuals.DisplayName: ""
 
 //tameable
 Turkey: {

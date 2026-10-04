@@ -39,7 +39,6 @@ namespace Spooky.Content.Tiles.Minibiomes.Christmas
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             Tile tile = Main.tile[i, j];
-            Tile tileAbove = Main.tile[i, j - 1];
 
             GlowTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/Minibiomes/Christmas/ChristmasWindowGlow");
 
@@ -92,7 +91,6 @@ namespace Spooky.Content.Tiles.Minibiomes.Christmas
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             Tile tile = Main.tile[i, j];
-            Tile tileAbove = Main.tile[i, j - 1];
 
             GlowTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/Minibiomes/Christmas/ChristmasWindowGlow");
 

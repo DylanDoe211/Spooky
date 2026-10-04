@@ -39,7 +39,7 @@ namespace Spooky.Content.Projectiles.Blooms
             //after images
             for (int numEffect = 0; numEffect < 4; numEffect++)
             {
-                Vector2 afterImageVector = new Vector2(Projectile.Center.X, Projectile.Center.Y) + (numEffect / 4 * 6f + Projectile.rotation + 0f).ToRotationVector2() - Main.screenPosition + new Vector2(0, Projectile.gfxOffY) - Projectile.velocity * numEffect;
+                Vector2 afterImageVector = new Vector2(Projectile.Center.X - 1, Projectile.Center.Y) + (numEffect / 4 * 6f + Projectile.rotation + 0f).ToRotationVector2() - Main.screenPosition + new Vector2(0, Projectile.gfxOffY) - Projectile.velocity * numEffect;
                 Main.EntitySpriteDraw(ProjTexture.Value, afterImageVector, rectangle, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
             }
 			

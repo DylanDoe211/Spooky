@@ -2760,25 +2760,6 @@ SummonItem4: {
 		'''
 }
 
-BleachedTuna: {
-	// DisplayName: Bleached Tuna
-	// Tooltip: Rapidly belches out short range bubbles
-}
-
-PirateChest: {
-	// DisplayName: Pirate's Chest
-	/* Tooltip:
-		'''
-		Contains some pirate treasure and dabloons!
-		"{$CommonItemTooltip.RightClickToOpen}"
-		''' */
-}
-
-PiratePotion: {
-	// DisplayName: Scallywag Potion
-	// Tooltip: Causes enemies to rarely drop gold on hit
-}
-
 BottomlessPebbleBag: {
 	Tooltip: ""
 	DisplayName: Бездонный мешок камешков
@@ -7271,6 +7252,11 @@ WaterFountainRaveItem: {
 	Tooltip: ""
 }
 
+WaterFountainShipyardItem: {
+	// DisplayName: Shipyard Water Fountain
+	// Tooltip: ""
+}
+
 WaterFountainSpookFishronItem: {
 	DisplayName: Фонтан воды Жуткого Рыброна
 	Tooltip: ""
@@ -7429,4 +7415,52 @@ PetCommander: {
 		Нажмите на любого прирученного индюка поблизости, держа этот предмет, чтобы отдавать ему команды
 		Позволяет индюку свободно бродить, следовать за вами или оставаться на месте
 		'''
+}
+
+BleachedTuna: {
+	// DisplayName: Bleached Tuna
+	// Tooltip: Rapidly belches out short range bubbles
+}
+
+PirateBlunderbuss: {
+	// DisplayName: Ghost Busster
+	/* Tooltip:
+		'''
+		Fires out a massive spread of bullets with a short range
+		Converts all ammo into ghostly bolts that pierce enemies
+		''' */
+}
+
+PirateHook: {
+	// DisplayName: Garghantuan Hook
+	// Tooltip: Spawns short lived phantom hooks
+}
+
+PirateInkPen: {
+	// DisplayName: Dead Man's Pen
+	// Tooltip: Summons serpent illustrations to fight with you
+}
+
+PiratePotion: {
+	// DisplayName: Scallywag Potion
+	// Tooltip: Causes enemies to rarely drop gold coins on hit
+}
+
+PirateShipWheel: {
+	// DisplayName: Hellship's Helm
+	/* Tooltip:
+		'''
+		Channel a difficult to control whirlpool that can pull enemies towards it
+		Over time it will grow, increasing its enemy pulling strength and range
+		''' */
+}
+
+RotWoodHammer: {
+	// DisplayName: Rotted Wood Hammer
+	// Tooltip: ""
+}
+
+RotWoodSword: {
+	// DisplayName: Rotted Wood Sword
+	// Tooltip: ""
 }

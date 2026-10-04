@@ -25,11 +25,8 @@ namespace Spooky.Content.Tiles.SpiderCave.Ambient
             Main.tileNoAttach[Type] = true;
 			Main.tileLighted[Type] = true;
 			TileID.Sets.BreakableWhenPlacing[Type] = true;
-			TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);
-            TileObjectData.newTile.Width = 3;
-			TileObjectData.newTile.Height = 3;
+			TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
 			TileObjectData.newTile.Origin = new Point16(1, 2);
-			TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16, 16 };
 			TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
 			TileObjectData.newTile.CoordinateWidth = 16;
 			TileObjectData.newTile.CoordinatePadding = 2;
@@ -80,11 +77,8 @@ namespace Spooky.Content.Tiles.SpiderCave.Ambient
             Main.tileNoAttach[Type] = true;
 			Main.tileLighted[Type] = true;
 			TileID.Sets.BreakableWhenPlacing[Type] = true;
-			TileObjectData.newTile.CopyFrom(TileObjectData.Style3x4);
-            TileObjectData.newTile.Width = 3;
-			TileObjectData.newTile.Height = 3;
+			TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
 			TileObjectData.newTile.Origin = new Point16(1, 2);
-			TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16, 16 };
 			TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
 			TileObjectData.newTile.CoordinateWidth = 16;
 			TileObjectData.newTile.CoordinatePadding = 2;

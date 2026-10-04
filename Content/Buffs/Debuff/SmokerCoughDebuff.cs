@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using Microsoft.Xna.Framework;
 
+using Spooky.Core;
 using Spooky.Content.Projectiles.SpookyHell;
 
 namespace Spooky.Content.Buffs.Debuff
@@ -15,6 +16,7 @@ namespace Spooky.Content.Buffs.Debuff
         public override void SetStaticDefaults()
         {
             Main.debuff[Type] = true;
+            BuffGlobal.IsSpookyDebuffForAchievement[Type] = true;
         }
 
         public override void Update(NPC npc, ref int buffIndex)

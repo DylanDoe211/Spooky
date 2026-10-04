@@ -2,6 +2,8 @@ using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
+using Spooky.Core;
+
 namespace Spooky.Content.Buffs.Debuff
 {
 	public class HunterScarfMark : ModBuff
@@ -11,6 +13,7 @@ namespace Spooky.Content.Buffs.Debuff
         public override void SetStaticDefaults()
         {
             Main.debuff[Type] = true;
+            BuffGlobal.IsSpookyDebuffForAchievement[Type] = true;
         }
     }
 }

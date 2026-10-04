@@ -24,6 +24,11 @@ namespace Spooky.Content.Tiles.NoseTemple
         {
             fail = true;
         }
+
+        public override bool CanBeTeleportedTo(int i, int j, Player player, string context)
+		{
+			return NPC.downedBoss3; //downed skeletron
+		}
     }
 
     public class NoseTempleFancyWallGraySafe : ModWall 

@@ -6,10 +6,11 @@ New Stuff:
 -Added a new firefly light pet that drops from spider war minibosses, and a new crab pet gotten from fishing in the spooky forest
 -Added alternate spook fishron drops for the electric eel whip and kraken yoyo (I know these are not in tmodloader currently, but we have implemented them now so we dont have to worry about them later)
 -Added long skeletoids and zomboid glyphomancers to the upper catacombs
--Added a new achievement for completing the entire spooky mod bestiary
 -Added a new game tip to tell players about spooky mods config options
+-Added cooler glowmask to little eye's cauldron
 -Added modcalls for various things in spooky mod like boss defeated, event defeated, and other variables
 -Added clentaminator biome spread for blocks and walls that unintentionally didnt have it (Such as spooky mod dirt walls and other newer grass blocks that previously didnt get converted)
+-Added more new achievements
 
 
 Changes:
@@ -19,6 +20,7 @@ Changes:
 -Spi-ops chestplate now gives speed boost when hit regardless of how much damage you took
 -Halved cooldown time for the flower armor pollen ability set bonus
 -Creepy dog photo puppy now no longer attacks you ever, it always just attacks enemies
+-Peptobyssmal debuff now causes enemies to spawn bubbles after 10 seconds instead of on death
 -Backpack chimney projectile damage buffed from 32 -> 40, and it now charges up faster
 -Old wood staff no longer has amethyst in its recipe, and that has been replaced with 10 glowshrooms instead
 -Krampus quest reward presents now need 5 to research for journey mode
@@ -26,14 +28,13 @@ Changes:
 -Removing the lily of rebirth bloom buff off of yourself no longer resets the number of revives you have if you don't have any revives left
 -Removed gourd o' lantern items, breaking a carved gourd with a candle in it now just drops the regular carved gourd and the candle
 -Gourd blocks now have cool additional "discolored" clusters (These can be observed more clearly on the new giant gourds in the underground spooky forest)
--Additionally updated all colored gourd wall sprites to look better as walls
 -Eye blocks now grow various eye valley ambient objects on them naturally
 -Krampus job application sign tile now lights up with spelunker potions
 -Spooky mod chandeliers and lanterns finally sway in the wind
 -Reduced the size of the tar pits biome
 -Tarrars now play a growling sound when a player gets close to them
 -Nerfed crusty gunfish damage from 42 -> 35
--Changed outline visuals and dust particles on some "ghostly" enemies (Such as cemetery enemies, pandoras box enemies, ect) to look nicer and stylistically like terraria
+-Slightly changed outline visuals and dust particles on some enemies to look nicer
 
 
 Sprite Updates:
@@ -62,7 +63,9 @@ Localization Changes:
 -Spi-ops chestplate tooltip modified to remove mention of having take a certain amount of damage for the speed boost to activate
 -Creepy dog photo tooltip modified to remove the part about the dog becoming aggressive as this is removed now
 -Flower armor set bonus tooltip modified to be accurate for the reduced cooldown change (30 seconds -> 15 seconds)
+-Peptobyssmal tooltip modified to remove line about bubbles inflicting debuff since this happens by default, and to account for new change where the debuff spawns bubbles after 10 seconds instead of on kill
 -Renamed thorn stem shirt -> flower stem shirt to be consistent with the other two armor pieces having "Flower" in their names (The internal name for this entry is FlowerBody)
+-Pheremone stinger tooltip changed to just say it increases damage and crit chance with spider minions
 -Fixed mispelling of targeted -> targetted in dave & mikes tooltip
 -Instances of armor set bonuses requiring double tapping to activate now have the name of the key you need to double tap replaced with {0} in the localization to properly format it based on the vanilla config
 -Reworded a bunch of spooky mod configs to be more concise and understandable
@@ -94,10 +97,13 @@ Fixes:
 -Rot gourd not properly falling through blocks/platforms to get the targetted players level
 -Green gourd walls producing wood dust instead of pumpkin gut dust when broken
 -Crusty gunfish unintentionally consuming multiple ammo on each use
--The cross accessory sound waves not having a correctly sized hitbox
+-The cross accessory sound waves, brainy explosion, and soul sucker aura not having a correctly sized hitboxes
 -Scorpion deathblow right click not having autofire
 -Eye belcher mines not properly dealing double damage while on the ground
 -Opalised cannon slimes lagging the game
 -Brainy minion vanishing when spawning other minions
 -Swampy cemetery ghost enemies having their glowing aura unintentionally drawn in the bestiary
 -Spooky glowshroom caves sometimes having random single or double tiles that would be cleared out underneath ores
+-Players being able to teleport into both catacomb layers and the nose temple early using teleportation potions
+-Hunter scarf mark and peacock oni mask debuff icons drawing on worm segments or other npcs that are a "child" of another (The debuff is still applied to them in game)
+-Venomous spiderpoon pulling effect incorrectly pulling worm segments or other npcs that are a "child" of another

@@ -2,6 +2,8 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using Spooky.Core;
+
 namespace Spooky.Content.Buffs.Debuff
 {
 	public class SentientChainKnifeBleed : ModBuff
@@ -11,6 +13,7 @@ namespace Spooky.Content.Buffs.Debuff
         public override void SetStaticDefaults()
 		{
 			Main.debuff[Type] = true;
+			BuffGlobal.IsSpookyDebuffForAchievement[Type] = true;
 		}
 
 		public override void Update(NPC npc, ref int buffIndex)

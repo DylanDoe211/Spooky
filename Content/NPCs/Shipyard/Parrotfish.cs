@@ -24,6 +24,7 @@ namespace Spooky.Content.NPCs.Shipyard
 		public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 4;
+            NPCID.Sets.CountsAsCritter[NPC.type] = true;
 
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
@@ -117,6 +118,27 @@ namespace Spooky.Content.NPCs.Shipyard
             }
         }
 
+        public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
+		{
+			if (NPC.ai[0] == 0)
+            {
+                NPC.ai[0]++;
+            }
+		}
+
+		public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
+		{
+			if (NPC.ai[0] == 0)
+            {
+                NPC.ai[0]++;
+            }
+		}
+
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+		{
+			return NPC.ai[0] == 1;
+		}
+
         public override void AI()
         {
             NPC.rotation = NPC.velocity.Y * (NPC.spriteDirection == 1 ? 0.03f : -0.03f);
@@ -152,19 +174,6 @@ namespace Spooky.Content.NPCs.Shipyard
                     else
                     {
                         NPC.spriteDirection = NPC.velocity.X < 0 ? -1 : 1;
-                    }
-
-                    //if the player gets too close become hostile
-                    foreach (Player player in Main.ActivePlayers)
-                    {
-                        bool lineOfSight = Collision.CanHitLine(NPC.position, NPC.width, NPC.height, player.position, player.width, player.height);
-                        if (!player.dead && lineOfSight && NPC.Distance(player.Center) <= 220f)
-                        {
-                            SoundEngine.PlaySound(SoundID.Zombie56 with { Volume = 1.5f, Pitch = -0.5f }, NPC.Center);
-                            
-                            NPC.ai[0]++;
-                            NPC.netUpdate = true;
-                        }
                     }
 
                     float MaxVelocityX = 0.68f;
@@ -218,13 +227,6 @@ namespace Spooky.Content.NPCs.Shipyard
                     Player player = Main.player[NPC.target];
 
                     NPC.spriteDirection = NPC.direction;
-
-                    if (!player.dead && NPC.Distance(player.Center) > 300)
-                    {
-                        NPC.ai[0]--;
-                        NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -1.2f, 1.2f);
-                        NPC.netUpdate = true;
-                    }
 
                     int MaxSpeed = 4;
 

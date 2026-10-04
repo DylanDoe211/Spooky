@@ -96,17 +96,20 @@ namespace Spooky.Core
 
 					Screenshake.ShakeScreenWithIntensity(player.Center, 8f, 100f);
 
-					float mouseXDist = Main.mouseX + Main.screenPosition.X;
-					float mouseYDist = Main.mouseY + Main.screenPosition.Y;
+					if (player.whoAmI == Main.myPlayer)
+                    {
+						float mouseXDist = Main.mouseX + Main.screenPosition.X;
+						float mouseYDist = Main.mouseY + Main.screenPosition.Y;
 
-					Vector2 Velocity =  new Vector2(mouseXDist, mouseYDist) - player.Center;
-					Velocity.Normalize();
-					Velocity *= ItemDoesntShoot ? 12 : item.shootSpeed;
+						Vector2 Velocity =  new Vector2(mouseXDist, mouseYDist) - player.Center;
+						Velocity.Normalize();
+						Velocity *= ItemDoesntShoot ? 12 : item.shootSpeed;
 
-					for (int numProjectiles = 0; numProjectiles <= 12; numProjectiles++)
-					{
-						Projectile.NewProjectile(null, player.Center, Velocity + new Vector2(Main.rand.Next(-5, 6), Main.rand.Next(-5, 6)),
-						ModContent.ProjectileType<MocoNoseSnot>(), item.damage, item.knockBack, player.whoAmI);
+						for (int numProjectiles = 0; numProjectiles <= 12; numProjectiles++)
+						{
+							Projectile.NewProjectile(null, player.Center, Velocity + new Vector2(Main.rand.Next(-5, 6), Main.rand.Next(-5, 6)),
+							ModContent.ProjectileType<MocoNoseSnot>(), item.damage, item.knockBack, player.whoAmI);
+						}
 					}
 
 					player.GetModPlayer<MocoNosePlayer>().MocoBoogerCharge = 0;
@@ -119,16 +122,19 @@ namespace Spooky.Core
 					{
 						float DivideAmount = 1.5f;
 
-						for (int numProjectiles = 0; numProjectiles <= 2; numProjectiles++)
-						{
-							float mouseXDist = Main.mouseX + Main.screenPosition.X + Main.rand.Next(-30, 30);
-							float mouseYDist = Main.mouseY + Main.screenPosition.Y + Main.rand.Next(-30, 30);
+						if (player.whoAmI == Main.myPlayer)
+                    	{
+							for (int numProjectiles = 0; numProjectiles <= 2; numProjectiles++)
+							{
+								float mouseXDist = Main.mouseX + Main.screenPosition.X + Main.rand.Next(-30, 30);
+								float mouseYDist = Main.mouseY + Main.screenPosition.Y + Main.rand.Next(-30, 30);
 
-							Vector2 ShootSpeed = new Vector2(mouseXDist, mouseYDist) - player.Center;
-							ShootSpeed.Normalize();
-							ShootSpeed *= 10;
+								Vector2 ShootSpeed = new Vector2(mouseXDist, mouseYDist) - player.Center;
+								ShootSpeed.Normalize();
+								ShootSpeed *= 10;
 
-							Projectile.NewProjectile(null, player.Center, ShootSpeed, ModContent.ProjectileType<MonkeyOrchidShuriken>(), item.damage / (int)DivideAmount, item.knockBack, player.whoAmI);
+								Projectile.NewProjectile(null, player.Center, ShootSpeed, ModContent.ProjectileType<MonkeyOrchidShuriken>(), item.damage / (int)DivideAmount, item.knockBack, player.whoAmI);
+							}
 						}
 					}
 				}
@@ -138,17 +144,20 @@ namespace Spooky.Core
 				{
 					if (Main.rand.NextBool(7) || (player.GetModPlayer<BloomBuffsPlayer>().SummerLemonsShot > 0 && Main.rand.NextBool()))
 					{
-						float mouseXDist = Main.mouseX + Main.screenPosition.X;
-						float mouseYDist = Main.mouseY + Main.screenPosition.Y;
+						if (player.whoAmI == Main.myPlayer)
+                    	{
+							float mouseXDist = Main.mouseX + Main.screenPosition.X;
+							float mouseYDist = Main.mouseY + Main.screenPosition.Y;
 
-						for (int numProjectiles = 0; numProjectiles <= player.GetModPlayer<BloomBuffsPlayer>().SummerLemonsShot; numProjectiles++)
-						{
-							Vector2 ShootSpeed = new Vector2(mouseXDist, mouseYDist) - player.Center;
-							ShootSpeed.Normalize();
-							ShootSpeed.X *= 15 + Main.rand.NextFloat(-5f, 5f);
-							ShootSpeed.Y *= 15 + Main.rand.NextFloat(-5f, 5f);
+							for (int numProjectiles = 0; numProjectiles <= player.GetModPlayer<BloomBuffsPlayer>().SummerLemonsShot; numProjectiles++)
+							{
+								Vector2 ShootSpeed = new Vector2(mouseXDist, mouseYDist) - player.Center;
+								ShootSpeed.Normalize();
+								ShootSpeed.X *= 15 + Main.rand.NextFloat(-5f, 5f);
+								ShootSpeed.Y *= 15 + Main.rand.NextFloat(-5f, 5f);
 
-							Projectile.NewProjectile(null, player.Center, ShootSpeed, ModContent.ProjectileType<BouncyLemon>(), item.damage, item.knockBack, player.whoAmI);
+								Projectile.NewProjectile(null, player.Center, ShootSpeed, ModContent.ProjectileType<BouncyLemon>(), item.damage, item.knockBack, player.whoAmI);
+							}
 						}
 
 						player.GetModPlayer<BloomBuffsPlayer>().SummerLemonsShot++;
@@ -169,17 +178,20 @@ namespace Spooky.Core
 				//shoot out a kidney stone with the stoned kidney
 				if (player.GetModPlayer<StonedKidneyPlayer>().StonedKidney && player.GetModPlayer<StonedKidneyPlayer>().StonedKidneyCharge >= 7.5f)
 				{
-					float mouseXDist = Main.mouseX + Main.screenPosition.X;
-					float mouseYDist = Main.mouseY + Main.screenPosition.Y;
+					if (player.whoAmI == Main.myPlayer)
+                    {
+						float mouseXDist = Main.mouseX + Main.screenPosition.X;
+						float mouseYDist = Main.mouseY + Main.screenPosition.Y;
 
-					Vector2 Velocity = player.Center - new Vector2(mouseXDist, mouseYDist);
-					Velocity.Normalize();
-					Velocity *= -25;
+						Vector2 Velocity = player.Center - new Vector2(mouseXDist, mouseYDist);
+						Velocity.Normalize();
+						Velocity *= -25;
 
-					for (int numProjectiles = 0; numProjectiles <= 5; numProjectiles++)
-					{
-						Projectile.NewProjectile(null, player.Center, Velocity + new Vector2(Main.rand.Next(-5, 6), Main.rand.Next(-5, 6)),
-						ModContent.ProjectileType<KidneyRock>(), 100 + (item.damage / 2), item.knockBack, player.whoAmI);
+						for (int numProjectiles = 0; numProjectiles <= 5; numProjectiles++)
+						{
+							Projectile.NewProjectile(null, player.Center, Velocity + new Vector2(Main.rand.Next(-5, 6), Main.rand.Next(-5, 6)),
+							ModContent.ProjectileType<KidneyRock>(), 100 + (item.damage / 2), item.knockBack, player.whoAmI);
+						}
 					}
 
 					player.GetModPlayer<StonedKidneyPlayer>().StonedKidneyCharge = 0f;
@@ -190,14 +202,17 @@ namespace Spooky.Core
 				{
 					if (Main.rand.NextBool(8))
 					{
-						float mouseXDist = Main.mouseX + Main.screenPosition.X;
-						float mouseYDist = Main.mouseY + Main.screenPosition.Y;
+						if (player.whoAmI == Main.myPlayer)
+                    	{
+							float mouseXDist = Main.mouseX + Main.screenPosition.X;
+							float mouseYDist = Main.mouseY + Main.screenPosition.Y;
 
-						Vector2 Velocity = new Vector2(mouseXDist, mouseYDist) - player.Center;
-						Velocity.Normalize();
-						Velocity *= 22;
+							Vector2 Velocity = new Vector2(mouseXDist, mouseYDist) - player.Center;
+							Velocity.Normalize();
+							Velocity *= 22;
 
-						Projectile.NewProjectile(null, player.Center, Velocity, ModContent.ProjectileType<SewingNeedle>(), item.damage, item.knockBack, player.whoAmI);
+							Projectile.NewProjectile(null, player.Center, Velocity, ModContent.ProjectileType<SewingNeedle>(), item.damage, item.knockBack, player.whoAmI);
+						}
 					}
 				}
 
@@ -206,14 +221,17 @@ namespace Spooky.Core
 				{
 					if (Main.rand.NextBool(8))
 					{
-						float mouseXDist = Main.mouseX + Main.screenPosition.X;
-						float mouseYDist = Main.mouseY + Main.screenPosition.Y;
+						if (player.whoAmI == Main.myPlayer)
+                    	{
+							float mouseXDist = Main.mouseX + Main.screenPosition.X;
+							float mouseYDist = Main.mouseY + Main.screenPosition.Y;
 
-						Vector2 Velocity = new Vector2(mouseXDist, mouseYDist) - player.Center;
-						Velocity.Normalize();
-						Velocity *= 12;
+							Vector2 Velocity = new Vector2(mouseXDist, mouseYDist) - player.Center;
+							Velocity.Normalize();
+							Velocity *= 12;
 
-						Projectile.NewProjectile(null, player.Center, Velocity, ModContent.ProjectileType<AutumnLeafProj>(), item.damage, item.knockBack, player.whoAmI);
+							Projectile.NewProjectile(null, player.Center, Velocity, ModContent.ProjectileType<AutumnLeafProj>(), item.damage, item.knockBack, player.whoAmI);
+						}
 					}
 				}
 
@@ -223,14 +241,17 @@ namespace Spooky.Core
 					RangedEggUses++;
 					if (RangedEggUses >= 6)
 					{
-						float mouseXDist = Main.mouseX + Main.screenPosition.X;
-						float mouseYDist = Main.mouseY + Main.screenPosition.Y;
+						if (player.whoAmI == Main.myPlayer)
+                    	{
+							float mouseXDist = Main.mouseX + Main.screenPosition.X;
+							float mouseYDist = Main.mouseY + Main.screenPosition.Y;
 
-						Vector2 Velocity = new Vector2(mouseXDist, mouseYDist) - player.Center;
-						Velocity.Normalize();
-						Velocity *= item.shootSpeed * 2f;
+							Vector2 Velocity = new Vector2(mouseXDist, mouseYDist) - player.Center;
+							Velocity.Normalize();
+							Velocity *= item.shootSpeed * 2f;
 
-						Projectile.NewProjectile(null, player.Center, Velocity, ModContent.ProjectileType<RangedEgg>(), item.damage * 2, item.knockBack, player.whoAmI);
+							Projectile.NewProjectile(null, player.Center, Velocity, ModContent.ProjectileType<RangedEgg>(), item.damage * 2, item.knockBack, player.whoAmI);
+						}
 
 						RangedEggUses = 0;
 					}
