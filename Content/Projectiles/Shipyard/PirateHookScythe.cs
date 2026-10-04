@@ -18,7 +18,7 @@ namespace Spooky.Content.Projectiles.Shipyard
             Projectile.height = 12;
             Projectile.DamageType = DamageClass.Melee;
             Projectile.friendly = true;
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
             Projectile.timeLeft = 50;
 			Projectile.penetrate = 2;
         }

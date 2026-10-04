@@ -11,7 +11,7 @@ namespace Spooky.Content.Tiles.Shipyard
         {
             Main.wallHouse[Type] = false;
             AddMapEntry(new Color(23, 25, 32));
-            DustType = DustID.Ash;
+            DustType = DustID.Asphalt;
         }
     }
 
@@ -22,8 +22,8 @@ namespace Spooky.Content.Tiles.Shipyard
         public override void SetStaticDefaults()
         {
             Main.wallHouse[Type] = true;
-            AddMapEntry(new Color(23, 25, 32));
-            DustType = DustID.Ash;
+			AddMapEntry(new Color(23, 25, 32));
+            DustType = DustID.Asphalt;
         }
 	}
 }

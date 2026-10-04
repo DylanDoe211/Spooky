@@ -15,7 +15,7 @@ namespace Spooky.Content.Tiles.Shipyard
         {
             Main.wallHouse[Type] = true;
             AddMapEntry(new Color(23, 25, 32));
-            DustType = DustID.Ash;
+            DustType = DustID.Asphalt;
         }
 
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
