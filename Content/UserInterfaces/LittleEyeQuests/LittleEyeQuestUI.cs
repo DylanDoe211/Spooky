@@ -13,6 +13,7 @@ using Spooky.Content.Items.BossSummon;
 using Spooky.Content.Items.Quest;
 using System;
 using System.Collections.Generic;
+using Terraria.GameContent.ItemDropRules;
 
 namespace Spooky.Content.UserInterfaces.LittleEyeQuests;
 
@@ -315,16 +316,27 @@ public class LittleEyeQuestUI : ModSystem
 			DrawIcon(drawPosition, BountyIconSelectedOutline.Value);
 			bool inBounds = Main.instance.GraphicsDevice.ScissorRectangle.Contains(Main.MouseScreen.ToPoint());
 
-			// Post-complete refight
 			if (quest.CompleteCheck())
 			{
 				if (inBounds && Main.mouseLeftRelease && Main.mouseLeft && Delay > 20)
 				{
-					DialogueChain chain = quest.RecoverChain();
-					DialogueUI.Visible = true;
-					DialogueUI.Add(chain);
+					// If the quest is active, it has been completed - run the completion code
+					if (quest.IsActive())
+					{
+						DialogueChain chain = quest.CompleteChain();
+						DialogueUI.Visible = true;
+						DialogueUI.Add(chain);
 
-					UIOpen = false;
+						UIOpen = false;
+					}
+					else // Elsewise, it is being re-tried after completion, simply run recovery code
+					{
+						DialogueChain chain = quest.RecoverChain();
+						DialogueUI.Visible = true;
+						DialogueUI.Add(chain);
+
+						UIOpen = false;
+					}
 				}
 			}
 			else
