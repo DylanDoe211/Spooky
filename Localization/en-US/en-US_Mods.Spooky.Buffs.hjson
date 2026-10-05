@@ -789,3 +789,8 @@ PiratePotionBuff: {
 	DisplayName: Scallywag
 	Description: Yaarg!
 }
+
+InkFishBuff: {
+	DisplayName: Ink Serpent
+	Description: The serpent illustrations will fight for you
+}

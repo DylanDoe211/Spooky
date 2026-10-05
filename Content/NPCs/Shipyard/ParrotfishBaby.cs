@@ -26,6 +26,7 @@ namespace Spooky.Content.NPCs.Shipyard
 		public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 4;
+            NPCID.Sets.CountsAsCritter[NPC.type] = true;
 		}
 
         public override void SendExtraAI(BinaryWriter writer)

@@ -37,6 +37,11 @@ namespace Spooky.Content.Projectiles.SpookyHell
 			}
 		}
 
+        public override bool? CanDamage()
+		{
+			return Projectile.ai[0] > 25;
+		}
+
 		public override void AI()
         {   
             Projectile.frameCounter++;
@@ -49,6 +54,8 @@ namespace Spooky.Content.Projectiles.SpookyHell
                     Projectile.frame = 0;
                 }
             }
+
+            Projectile.ai[0]++;
 
             Projectile.rotation += 0.35f * (float)Projectile.direction;
 

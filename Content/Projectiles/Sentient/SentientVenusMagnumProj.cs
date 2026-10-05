@@ -142,7 +142,7 @@ namespace Spooky.Content.Projectiles.Sentient
                     Projectile.localAI[0] = 0;
                 }
 
-                //kill this holdout projectile if the player has no more arrows
+                //kill this holdout projectile if the player has no more ammo
                 if (!player.HasAmmo(ItemGlobal.ActiveItem(player)))
                 {
                     Projectile.Kill();

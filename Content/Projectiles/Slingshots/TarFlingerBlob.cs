@@ -73,7 +73,7 @@ namespace Spooky.Content.Projectiles.Slingshots
             {
                 if (target.Distance(Projectile.Center) <= 120f && target.CanBeChasedBy(this) && !target.friendly && !target.dontTakeDamage && !NPCID.Sets.CountsAsCritter[target.type])
 				{
-                    target.AddBuff(ModContent.BuffType<TarFlingerSlow>(), 180);
+                    target.AddBuff(ModContent.BuffType<Tarred>(), 180);
                 }
             }
 

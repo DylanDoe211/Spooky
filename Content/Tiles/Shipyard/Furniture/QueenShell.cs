@@ -37,7 +37,7 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
             TileObjectData.newTile.StyleHorizontal = true;
 			TileObjectData.addTile(Type);
 			LocalizedText name = CreateMapEntryName();
-			AddMapEntry(new Color(75, 158, 179), name);
+			AddMapEntry(Color.MediumSpringGreen, name);
             DustType = DustID.Ash;
             HitSound = SoundID.Tink;
         }

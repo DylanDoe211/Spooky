@@ -74,7 +74,7 @@ namespace Spooky.Content.NPCs.Cemetery
                     };
 
                     Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCTexture.Value, Color.White), NPC.Center + offset - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, 
-                    NPC.GetAlpha(Color.Blue * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+                    NPC.GetAlpha(Color.DodgerBlue * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
                 }
             }
 
@@ -122,7 +122,7 @@ namespace Spooky.Content.NPCs.Cemetery
                     vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
                     vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
 
-                    int newDust = Dust.NewDust(NPC.Center, 1, 1, ModContent.DustType<GlowyDust>(), 0f, 0f, 0, Color.Blue, 0.25f);
+                    int newDust = Dust.NewDust(NPC.Center, 1, 1, ModContent.DustType<GlowyDust>(), 0f, 0f, 0, Color.DodgerBlue, 0.25f);
                     Main.dust[newDust].noGravity = true;
                     Main.dust[newDust].position = NPC.Center + vector12;
                     Main.dust[newDust].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;

@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
 using Spooky.Content.Items.Catacomb;
+using Spooky.Content.Items.Catacomb.Misc;
 using Spooky.Content.Items.Slingshots.Ammo;
 using Spooky.Content.Items.SpookyBiome;
 
@@ -37,6 +38,11 @@ namespace Spooky.Content.Tiles.Catacomb.Furniture
 
 		public override IEnumerable<Item> GetItemDrops(int i, int j)
 		{
+			if (Main.rand.NextBool(35))
+			{
+				yield return new Item(ModContent.ItemType<CatacombChestKeyLower>());
+			}
+
 			switch (Main.rand.Next(4))
 			{
 				//torches

@@ -72,7 +72,6 @@ namespace Spooky.Content.NPCs.Shipyard
             NPC.value = Item.buyPrice(0, 0, 0, 50);
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.behindTiles = true;
             NPC.HitSound = SoundID.NPCHit25;
 			NPC.DeathSound = SoundID.NPCDeath6;
             NPC.aiStyle = -1;
@@ -331,7 +330,6 @@ namespace Spooky.Content.NPCs.Shipyard
             NPC.knockBackResist = 0f;
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.behindTiles = true;
             NPC.dontCountMe = true;
             NPC.HitSound = SoundID.NPCHit25;
         }

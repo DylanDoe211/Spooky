@@ -6,6 +6,8 @@ using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Spooky.Core;
+
 namespace Spooky.Content.Projectiles.SpiderCave
 {
     public class MiteProjectile : ModProjectile
@@ -126,11 +128,18 @@ namespace Spooky.Content.Projectiles.SpiderCave
             }
 
             //draw aura
-            for (int i = 0; i < 360; i += 90)
+            for (int i = 0; i < 4; i++)
             {
-                Vector2 circular = new Vector2(Main.rand.NextFloat(2f, 2f), Main.rand.NextFloat(2f, 2f)).RotatedBy(MathHelper.ToRadians(i));
+                Vector2 offset = i switch
+                {
+                    1 => new(0, -2),
+                    2 => new(2, 0),
+                    3 => new(0, 2),
+                    _ => new(-2, 0)
+                };
 
-                Main.EntitySpriteDraw(AuraTexture.Value, vector + circular, rectangle, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(DrawUtils.ColorSolid(ProjTexture.Value, Color.White), vector + offset, rectangle, 
+                Projectile.GetAlpha(color), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
             }
 			
 			Main.EntitySpriteDraw(ProjTexture.Value, vector, rectangle, Projectile.GetAlpha(lightColor), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);

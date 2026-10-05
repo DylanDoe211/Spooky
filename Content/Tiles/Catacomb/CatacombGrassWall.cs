@@ -37,6 +37,11 @@ namespace Spooky.Content.Tiles.Catacomb
             fail = !Flags.downedDaffodil;
         }
 
+		public override bool CanBeTeleportedTo(int i, int j, Player player, string context)
+		{
+			return Flags.CatacombKey1;
+		}
+
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             MergeTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/Catacomb/CatacombGrassWall1Merge");
@@ -98,7 +103,12 @@ namespace Spooky.Content.Tiles.Catacomb
             fail = !Flags.downedBigBone;
         }
 
-        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+		public override bool CanBeTeleportedTo(int i, int j, Player player, string context)
+		{
+			return Flags.CatacombKey2;
+		}
+
+		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
             MergeTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/Catacomb/CatacombGrassWall2Merge");
             LeafTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/Cemetery/CemeteryGrassWallLeaf");

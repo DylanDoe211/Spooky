@@ -110,7 +110,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
                 player.direction = -1;
             }
 
-			if (Projectile.frame <= 2 && Projectile.ai[2] == 0)
+			if (Projectile.frame <= 2)
             {
                 Projectile.timeLeft = 20;
 
@@ -158,7 +158,6 @@ namespace Spooky.Content.Projectiles.SpiderCave
                     else
                     {
                         Projectile.frame = 0;
-                        Projectile.ai[2] = 0;
                     }
                 }
 			}

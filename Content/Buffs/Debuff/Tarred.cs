@@ -1,6 +1,9 @@
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
+
+using Spooky.Core;
 
 namespace Spooky.Content.Buffs.Debuff
 {
@@ -14,10 +17,25 @@ namespace Spooky.Content.Buffs.Debuff
         public override void SetStaticDefaults()
         {
             Main.debuff[Type] = true;
+            BuffGlobal.IsSpookyDebuffForAchievement[Type] = true;
         }
 
         public override void Update(NPC npc, ref int buffIndex)
         {
+            if (Main.rand.NextBool(10))
+            {
+                Dust.NewDust(npc.position, npc.width, npc.height, DustID.Asphalt, npc.velocity.X * 0.5f, npc.velocity.Y * 0.5f, default, default, 1.5f);
+            }
+
+            if (!npc.friendly && !npc.boss && !npc.IsTechnicallyBoss())
+            {
+                npc.velocity.X *= 0.9f;
+                if (!npc.noGravity)
+                {
+                    npc.velocity.Y *= 0.9f;
+                }
+            }
+
             if (!initializeStats && npc.buffTime[buffIndex] >= 5)
             {
                 storedColor = npc.color;

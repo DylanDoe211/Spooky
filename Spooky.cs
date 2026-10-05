@@ -17,6 +17,7 @@ using Spooky.Content.Biomes;
 using Spooky.Content.NPCs.Boss.Moco;
 using Spooky.Content.NPCs.Friendly;
 using Spooky.Content.NPCs.Tameable;
+using Spooky.Content.Projectiles.Shipyard;
 using Spooky.Content.Tiles.Cemetery;
 using Spooky.Content.Tiles.Shipyard;
 using Spooky.Content.Tiles.SpookyBiome;
@@ -444,7 +445,11 @@ namespace Spooky
 					NetMessage.SendData(MessageID.WorldData);
 					break;
 				}
-				//should never occur I think?
+				case SpookyMessageType.OpenPirateChest:
+				{
+					NPC.NewNPC(null, (int)Flags.PirateChestSpawn.X, (int)Flags.PirateChestSpawn.Y, ModContent.NPCType<PirateChestVisuals>());
+					break;
+				}
 				default:
 				{
 					Logger.Warn("Spooky Mod: Unknown Message type: " + messageType);
@@ -497,4 +502,5 @@ enum SpookyMessageType : byte
 	OldHunterDefeatDialogue,
 	OldHunterQuestEnd,
 	StartSporeEvent,
+	OpenPirateChest,
 }

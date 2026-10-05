@@ -183,4 +183,26 @@ namespace Spooky.Content.Achievements
 			SpookyBestiaryCondition = AddCondition();
 		}
 	}
+
+    public class MiscAchievementDebuffs : ModAchievement
+	{
+		public CustomFlagCondition DebuffsCondition { get; private set; }
+
+		public override void SetStaticDefaults()
+		{
+			Achievement.SetCategory(AchievementCategory.Challenger);
+			DebuffsCondition = AddCondition();
+		}
+	}
+
+    public class MiscAchievementBiomeChest : ModAchievement
+	{
+		public CustomFlagCondition BiomeChestCondition { get; private set; }
+
+		public override void SetStaticDefaults()
+		{
+			Achievement.SetCategory(AchievementCategory.Explorer);
+			BiomeChestCondition = AddCondition();
+		}
+	}
 }

@@ -48,13 +48,14 @@ namespace Spooky.Core
 		public static bool SpawnOrroboro = false;
 		public static bool SpawnGhostAmbush = false;
 		public static bool SpawnQueenConch = false;
-		public static Vector2 MocoSpawn;
-        public static Vector2 DaffodilSpawn;
-        public static Vector2 OrroboroSpawn;
-		public static Vector2 TurkeySpawn;
-        public static Vector2 MushGnomeSpawn;
-        public static Vector2 GhostAmbushSpawn;
-		public static Vector2 QueenConchSpawn;
+		public static Vector2 MocoSpawn = Vector2.Zero;
+        public static Vector2 DaffodilSpawn = Vector2.Zero;
+        public static Vector2 OrroboroSpawn = Vector2.Zero;
+		public static Vector2 TurkeySpawn = Vector2.Zero;
+        public static Vector2 MushGnomeSpawn = Vector2.Zero;
+        public static Vector2 GhostAmbushSpawn = Vector2.Zero;
+		public static Vector2 QueenConchSpawn = Vector2.Zero;
+		public static Vector2 PirateChestSpawn = Vector2.Zero;
 
 		//bosses
 		public static bool downedRotGourd = false;

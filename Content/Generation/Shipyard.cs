@@ -46,6 +46,8 @@ namespace Spooky.Content.Generation
 		{
 			progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.Shipyard").Value;
 
+			Mod SpookyMod = Spooky.mod;
+
 			int Seed = WorldGen.genRand.Next();
 
 			int leftBound = bounds.Item1 - 6;
@@ -416,6 +418,32 @@ namespace Spooky.Content.Generation
 				}
 			}
 
+			Vector2 LighthousePos = Vector2.Zero;
+
+			if (!OceanOnLeft)
+			{
+				LighthousePos = new Vector2(rightBound - 10, RightY); 
+			}
+			else
+			{
+				LighthousePos = new Vector2(leftBound + 10, LeftY);
+			}
+
+			//generate lighthouse inbetween the shipyard and ocean
+			Vector2 BottomOrigin = new Vector2((int)LighthousePos.X - 9, (int)LighthousePos.Y - 14);
+			StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/LighthouseBottom.shstruct", BottomOrigin.ToPoint16(), SpookyMod);
+
+			int RandomHeight = WorldGen.genRand.Next(2, 5);
+			Vector2 SegmentOrigin = Vector2.Zero;
+			for (int i = 1; i <= RandomHeight + 1; i++)
+			{
+				SegmentOrigin = new Vector2((int)LighthousePos.X - 9, ((int)LighthousePos.Y - (10 * i)) - 14);
+				StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/LighthouseSegment" + WorldGen.genRand.Next(1, 6) + ".shstruct", SegmentOrigin.ToPoint16(), SpookyMod);
+			}
+
+			Vector2 TopOrigin = new Vector2((int)SegmentOrigin.X - 3, (int)SegmentOrigin.Y - 27);
+			StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/LighthouseTop.shstruct", TopOrigin.ToPoint16(), SpookyMod);
+
 			//generate structures across the surface
 			for (int i = 0; i < segments; i++)
 			{
@@ -446,7 +474,6 @@ namespace Spooky.Content.Generation
 					(Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSand>() || Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSandGrass>() || 
 					Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSandstone>()|| Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSandstoneMoss>()))
 					{
-						Mod SpookyMod = Spooky.mod;
 						switch (WorldGen.genRand.Next(4))
 						{
 							case 0:
@@ -518,6 +545,19 @@ namespace Spooky.Content.Generation
                             }
                         }
                     }
+				}
+			}
+
+			//place chests
+			for (int X = leftBound - 10; X <= rightBound + 10; X++)
+			{
+				for (int Y = 10; Y <= Main.worldSurface; Y++)
+				{
+					if (WorldGen.InWorld(X, Y, 10) && WorldGen.genRand.NextBool(20) && CanPlaceChest(X, Y) && 
+					(Main.tile[X, Y].WallType == ModContent.WallType<BlackSandWall>() || Main.tile[X, Y].WallType == ModContent.WallType<BlackSandstoneWall>()))
+					{
+						TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<GiantPirateChest>());
+					}
 				}
 			}
 
@@ -681,7 +721,8 @@ namespace Spooky.Content.Generation
 
 						//generate pots after everything else
 						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandGrass>() || 
-						Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>() || Main.tile[X, Y].TileType == ModContent.TileType<RotWood>())
+						Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneSlab>() || 
+						Main.tile[X, Y].TileType == ModContent.TileType<RotWood>())
 						{
 							if (WorldGen.genRand.NextBool() && !tileAbove.HasTile)
 							{
@@ -902,6 +943,23 @@ namespace Spooky.Content.Generation
                 for (int j = Y - 4; j < Y + 4; j++)
                 {
                     if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<CoralTree>())
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+		//determine if theres no chests nearby another chest thats about to place
+        public static bool CanPlaceChest(int X, int Y)
+        {
+            for (int i = X - 20; i < X + 20; i++)
+            {
+                for (int j = Y - 25; j < Y + 25; j++)
+                {
+                    if (WorldGen.InWorld(i, j, 10) && Main.tile[i, j].TileType == ModContent.TileType<GiantPirateChest>())
                     {
                         return false;
                     }

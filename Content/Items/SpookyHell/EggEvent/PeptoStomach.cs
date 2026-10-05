@@ -40,9 +40,9 @@ namespace Spooky.Content.Items.SpookyHell.EggEvent
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (PeptoStomach && !target.boss && !target.IsTechnicallyBoss() && Main.rand.NextBool(20) && !target.friendly && !target.dontTakeDamage && !NPCID.Sets.CountsAsCritter[target.type])
+            if (PeptoStomach && Main.rand.NextBool(10) && !target.HasBuff(ModContent.BuffType<PeptoDebuff>()) && !target.friendly && !target.dontTakeDamage && !NPCID.Sets.CountsAsCritter[target.type])
             {
-                target.AddBuff(ModContent.BuffType<PeptoDebuff>(), int.MaxValue);
+                target.AddBuff(ModContent.BuffType<PeptoDebuff>(), 600);
             }
         }
     }

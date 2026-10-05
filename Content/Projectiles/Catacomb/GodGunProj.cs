@@ -176,7 +176,7 @@ namespace Spooky.Content.Projectiles.Catacomb
 
                         float knockBack = ItemGlobal.ActiveItem(player).knockBack;
 
-                        player.PickAmmo(ItemGlobal.ActiveItem(player), out ProjType, out Speed, out Projectile.damage, out knockBack, out _);
+                        player.PickAmmo(ItemGlobal.ActiveItem(player), out ProjType, out _, out _, out _, out _);
                         
                         if (Projectile.owner == Main.myPlayer)
                         {
