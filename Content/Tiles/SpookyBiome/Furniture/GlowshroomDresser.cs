@@ -171,15 +171,17 @@ namespace Spooky.Content.Tiles.SpookyBiome.Furniture
 			}
 			else
 			{
+				string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY);
+
 				if (Main.chest[chestIndex].name != "")
 				{
 					player.cursorItemIconText = Main.chest[chestIndex].name;
 				}
 				else
 				{
-					player.cursorItemIconText = "Cultist Dresser";
+					player.cursorItemIconText = defaultName;
 				}
-				if (player.cursorItemIconText == "Cultist Dresser")
+				if (player.cursorItemIconText == defaultName)
 				{
 					player.cursorItemIconID = ModContent.ItemType<GlowshroomDresserItem>();
 					player.cursorItemIconText = "";
@@ -213,15 +215,17 @@ namespace Spooky.Content.Tiles.SpookyBiome.Furniture
 			}
 			else
 			{
+				string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY);
+
 				if (Main.chest[num138].name != "")
 				{
 					player.cursorItemIconText = Main.chest[num138].name;
 				}
 				else
 				{
-					player.cursorItemIconText = "Cultist Dresser";
+					player.cursorItemIconText = defaultName;
 				}
-				if (player.cursorItemIconText == "Cultist Dresser")
+				if (player.cursorItemIconText == defaultName)
 				{
 					player.cursorItemIconID = ModContent.ItemType<GlowshroomDresserItem>();
 					player.cursorItemIconText = "";
@@ -314,15 +318,17 @@ namespace Spooky.Content.Tiles.SpookyBiome.Furniture
 			}
 			else
 			{
+				string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY);
+
 				if (Main.chest[chestIndex].name != "")
 				{
 					player.cursorItemIconText = Main.chest[chestIndex].name;
 				}
 				else
 				{
-					player.cursorItemIconText = "Cultist Dresser";
+					player.cursorItemIconText = defaultName;
 				}
-				if (player.cursorItemIconText == "Cultist Dresser")
+				if (player.cursorItemIconText == defaultName)
 				{
 					player.cursorItemIconID = ModContent.ItemType<GlowshroomYellowDresserItem>();
 					player.cursorItemIconText = "";
@@ -356,15 +362,17 @@ namespace Spooky.Content.Tiles.SpookyBiome.Furniture
 			}
 			else
 			{
+				string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY);
+
 				if (Main.chest[num138].name != "")
 				{
 					player.cursorItemIconText = Main.chest[num138].name;
 				}
 				else
 				{
-					player.cursorItemIconText = "Cultist Dresser";
+					player.cursorItemIconText = defaultName;
 				}
-				if (player.cursorItemIconText == "Cultist Dresser")
+				if (player.cursorItemIconText == defaultName)
 				{
 					player.cursorItemIconID = ModContent.ItemType<GlowshroomYellowDresserItem>();
 					player.cursorItemIconText = "";

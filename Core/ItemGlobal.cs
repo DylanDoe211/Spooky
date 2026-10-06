@@ -263,15 +263,18 @@ namespace Spooky.Core
 				{
 					SoundEngine.PlaySound(SoundID.Grass, player.Center);
 
-					float mouseXDist = Main.mouseX + Main.screenPosition.X;
-					float mouseYDist = Main.mouseY + Main.screenPosition.Y;
+					if (player.whoAmI == Main.myPlayer)
+                    {
+						float mouseXDist = Main.mouseX + Main.screenPosition.X;
+						float mouseYDist = Main.mouseY + Main.screenPosition.Y;
 
-					Vector2 Velocity = new Vector2(mouseXDist, mouseYDist) - player.Center;
-					Velocity.Normalize();
-					Velocity *= 15;
+						Vector2 Velocity = new Vector2(mouseXDist, mouseYDist) - player.Center;
+						Velocity.Normalize();
+						Velocity *= 15;
 
-					Projectile.NewProjectile(null, player.Center, Velocity + new Vector2(Main.rand.Next(-5, 6), Main.rand.Next(-5, 6)),
-					ModContent.ProjectileType<Romanesco>(), item.damage, item.knockBack, player.whoAmI);
+						Projectile.NewProjectile(null, player.Center, Velocity + new Vector2(Main.rand.Next(-5, 6), Main.rand.Next(-5, 6)),
+						ModContent.ProjectileType<Romanesco>(), item.damage, item.knockBack, player.whoAmI);
+					}
 				}
 			}
 		}

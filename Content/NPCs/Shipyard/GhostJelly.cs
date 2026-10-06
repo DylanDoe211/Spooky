@@ -184,7 +184,7 @@ namespace Spooky.Content.NPCs.Shipyard
                 NPC.ai[0]--;
             }
 
-            NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y, -MaxVelocityY, MaxVelocityY);
+            NPC.velocity.Y = MathHelper.Clamp(NPC.velocity.Y, -MaxVelocityY * 3, MaxVelocityY);
         }
 
         public override void HitEffect(NPC.HitInfo hit) 

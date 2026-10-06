@@ -1,0 +1,133 @@
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.Localization;
+using Terraria.ObjectData;
+using Terraria.DataStructures;
+using Terraria.GameContent.Drawing;
+using Terraria.Enums;
+using ReLogic.Content;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+
+namespace Spooky.Content.Tiles.Shipyard.Furniture
+{
+	public class RotWoodLantern : ModTile
+    {
+        private Asset<Texture2D> GlowTexture;
+
+        public override void SetStaticDefaults()
+		{
+            TileID.Sets.MultiTileSway[Type] = true;
+            Main.tileLighted[Type] = true;
+            Main.tileFrameImportant[Type] = true;
+            Main.tileLavaDeath[Type] = true;
+            TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2Top);
+            TileObjectData.newTile.DrawYOffset = -2;
+            TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide | AnchorType.SolidBottom | AnchorType.PlanterBox, TileObjectData.newTile.Width, 0);
+            TileObjectData.newTile.AnchorBottom = AnchorData.Empty;
+            TileObjectData.newTile.StyleHorizontal = true;
+            TileObjectData.newTile.LavaDeath = false;
+			TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
+			TileObjectData.newAlternate.AnchorTop = new AnchorData(AnchorType.Platform, TileObjectData.newTile.Width, 0);
+            TileObjectData.newAlternate.DrawYOffset = -10;
+			TileObjectData.addAlternate(0);
+            TileObjectData.addTile(Type);
+            AddMapEntry(new Color(71, 68, 64), Language.GetText("MapObject.Lantern"));
+            RegisterItemDrop(ModContent.ItemType<RotWoodLanternItem>());
+            DustType = DustID.Ash;
+            AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
+            AdjTiles = new int[] { TileID.HangingLanterns };
+        }
+
+        public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY)
+		{
+			offsetY += 2;
+		}
+
+        public override void NumDust(int i, int j, bool fail, ref int num) 
+        {
+            num = fail ? 1 : 3;
+        }
+
+        public override void HitWire(int i, int j)
+        {
+            int left = i - Main.tile[i, j].TileFrameX / 18 % 1;
+            int top = j - Main.tile[i, j].TileFrameY / 18 % 2;
+            for (int x = left; x < left + 1; x++)
+            {
+                for (int y = top; y < top + 2; y++)
+                {
+                    if (Main.tile[x, y].TileFrameX >= 18)
+                    {
+                        Main.tile[x, y].TileFrameX -= 18;
+                    }
+                    else
+                    {
+                        Main.tile[x, y].TileFrameX += 18;
+                    }
+                }
+            }
+
+            if (Wiring.running)
+            {
+                Wiring.SkipWire(left, top);
+                Wiring.SkipWire(left, top + 1);
+            }
+
+            NetMessage.SendTileSquare(-1, left, top + 1, 2);
+        }
+
+        public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
+        {
+            Tile tile = Framing.GetTileSafely(i, j);
+            if (tile.TileFrameX < 18)
+            {
+                float divide = 300f;
+
+                r = 255f / divide;
+                g = 163f / divide;
+                b = 0f / divide;
+            }
+        }
+
+        public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
+		{
+			Tile tile = Main.tile[i, j];
+
+			if (TileObjectData.IsTopLeft(tile))
+			{
+				Main.instance.TilesRenderer.AddSpecialPoint(i, j, TileDrawing.TileCounterType.MultiTileVine);
+			}
+
+			return false;
+		}
+
+		public override void AdjustMultiTileVineParameters(int i, int j, ref float? overrideWindCycle, ref float windPushPowerX, ref float windPushPowerY, ref bool dontRotateTopTiles, ref float totalWindMultiplier, ref Texture2D glowTexture, ref Color glowColor)
+		{
+			overrideWindCycle = 1f;
+			windPushPowerY = 0;
+		}
+
+		public override void GetTileFlameData(int i, int j, ref TileDrawing.TileFlameData tileFlameData)
+		{
+			if (!Main.dedServ)
+			{
+				GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
+			}
+
+			tileFlameData.flameCount = 3;
+			tileFlameData.flameColor = new Color(100, 100, 100, 0);
+			tileFlameData.flameRangeXMin = -5;
+			tileFlameData.flameRangeXMax = 6;
+			tileFlameData.flameRangeYMin = -5;
+			tileFlameData.flameRangeYMax = 6;
+			tileFlameData.flameRangeMultX = 0.15f;
+			tileFlameData.flameRangeMultY = 0.15f;
+			ulong flameSeed = Main.TileFrameSeed ^ (ulong)((long)i << 32 | (uint)j);
+			tileFlameData.flameTexture = GlowTexture.Value;
+			tileFlameData.flameSeed = flameSeed;
+		}
+    }
+}

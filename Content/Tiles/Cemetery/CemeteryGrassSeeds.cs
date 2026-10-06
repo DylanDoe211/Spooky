@@ -6,6 +6,7 @@ using Terraria.Audio;
 
 using Spooky.Core;
 using Spooky.Content.Tiles.Catacomb;
+using Spooky.Content.Tiles.Shipyard;
 
 namespace Spooky.Content.Tiles.Cemetery
 {
@@ -65,6 +66,34 @@ namespace Spooky.Content.Tiles.Cemetery
 			if (tile.HasTile && tile.TileType == ModContent.TileType<CatacombBrick2Safe>() && player.IsInTileInteractionRange(Player.tileTargetX, Player.tileTargetY, TileReachCheckSettings.Simple))
             {
                 Main.tile[Player.tileTargetX, Player.tileTargetY].TileType = (ushort)ModContent.TileType<CatacombBrick2GrassSafe>();
+
+                SoundEngine.PlaySound(SoundID.Dig, player.Center);
+
+				player.inventory[player.selectedItem].stack--;
+
+				if (Main.netMode != NetmodeID.SinglePlayer)
+				{
+					NetMessage.SendTileSquare(player.whoAmI, Player.tileTargetX, Player.tileTargetY);
+				}
+            }
+
+			if (tile.HasTile && tile.TileType == ModContent.TileType<BlackSand>() && player.IsInTileInteractionRange(Player.tileTargetX, Player.tileTargetY, TileReachCheckSettings.Simple))
+            {
+                Main.tile[Player.tileTargetX, Player.tileTargetY].TileType = (ushort)ModContent.TileType<BlackSandGrass>();
+
+                SoundEngine.PlaySound(SoundID.Dig, player.Center);
+
+				player.inventory[player.selectedItem].stack--;
+
+				if (Main.netMode != NetmodeID.SinglePlayer)
+				{
+					NetMessage.SendTileSquare(player.whoAmI, Player.tileTargetX, Player.tileTargetY);
+				}
+            }
+
+			if (tile.HasTile && tile.TileType == ModContent.TileType<BlackSandstone>() && player.IsInTileInteractionRange(Player.tileTargetX, Player.tileTargetY, TileReachCheckSettings.Simple))
+            {
+                Main.tile[Player.tileTargetX, Player.tileTargetY].TileType = (ushort)ModContent.TileType<BlackSandstoneMoss>();
 
                 SoundEngine.PlaySound(SoundID.Dig, player.Center);
 

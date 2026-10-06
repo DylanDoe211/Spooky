@@ -157,7 +157,7 @@ namespace Spooky.Content.Generation
 					int BottomEndPos = ((int)BottomPos.Y + 50) >= (int)Main.worldSurface ? (int)Main.worldSurface : (int)BottomPos.Y + 50;
 					for (int Y = (int)BottomPos.Y; Y <= (int)Main.worldSurface; Y++)
 					{
-						if (!IsEvilBiomeWall(Main.tile[X, Y].WallType) && !IsEvilBiomeWall(Main.tile[X, Y].WallType) && WorldGen.SolidTile(X, Y - 1))
+						if (!IsEvilBiomeWall(Main.tile[X, Y].WallType) && WorldGen.SolidTile(X, Y - 1))
 						{
 							//destroy any non-solid tiles
 							if (!WorldGen.SolidTile(X, Y) && Main.tile[X, Y].TileType != ModContent.TileType<BlackSand>())
@@ -177,7 +177,7 @@ namespace Spooky.Content.Generation
 				//place tiles below the line to create surface, and use noise to place clusters of black sandstone in the sand
 				for (int Y = (int)Position.Y; Y <= (int)BottomPos.Y; Y++)
 				{
-					if (!IsEvilBiomeWall(Main.tile[(int)Position.X, Y].WallType) && !InOcean((int)Position.X))
+					if (/*!IsEvilBiomeWall(Main.tile[(int)Position.X, Y].WallType) && */!InOcean((int)Position.X))
 					{
 						Main.tile[(int)Position.X, Y].ClearEverything();
 						WorldGen.PlaceTile((int)Position.X, Y, ModContent.TileType<BlackSand>());
@@ -190,7 +190,7 @@ namespace Spooky.Content.Generation
 				{
 					for (int Y = (int)Position.Y; Y <= (int)BottomPos.Y + 10; Y++)
 					{
-						if (WorldGen.genRand.NextBool(10) && !IsEvilBiomeWall(Main.tile[X, Y].WallType) && !InOcean(X))
+						if (WorldGen.genRand.NextBool(10)/* && !IsEvilBiomeWall(Main.tile[X, Y].WallType)*/ && !InOcean(X))
 						{
 							if (WorldGen.SolidTile(X, Y) && Main.tile[X, Y].TileType != TileID.Sand && Main.tile[X, Y].TileType != ModContent.TileType<BlackSand>())
 							{
@@ -242,7 +242,7 @@ namespace Spooky.Content.Generation
 							Main.tile[(int)Position.X, Y].TileType = (ushort)ModContent.TileType<BlackSandstone>();
 						}
 
-						if (IsEvilBiomeWall(Main.tile[(int)Position.X, Y].WallType) && Main.tile[(int)Position.X, Y].TileType != TileID.Ebonstone && Main.tile[(int)Position.X, Y].TileType != TileID.Crimstone)
+						if (/*IsEvilBiomeWall(Main.tile[(int)Position.X, Y].WallType) && */Main.tile[(int)Position.X, Y].TileType != TileID.Ebonstone && Main.tile[(int)Position.X, Y].TileType != TileID.Crimstone)
 						{
 							Main.tile[(int)Position.X, Y].WallType = (ushort)ModContent.WallType<BlackSandstoneWall>();
 						}
@@ -422,18 +422,18 @@ namespace Spooky.Content.Generation
 
 			if (!OceanOnLeft)
 			{
-				LighthousePos = new Vector2(rightBound - 10, RightY); 
+				LighthousePos = new Vector2(rightBound - 20, RightY); 
 			}
 			else
 			{
-				LighthousePos = new Vector2(leftBound + 10, LeftY);
+				LighthousePos = new Vector2(leftBound + 20, LeftY);
 			}
 
 			//generate lighthouse inbetween the shipyard and ocean
 			Vector2 BottomOrigin = new Vector2((int)LighthousePos.X - 9, (int)LighthousePos.Y - 14);
 			StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/LighthouseBottom.shstruct", BottomOrigin.ToPoint16(), SpookyMod);
 
-			int RandomHeight = WorldGen.genRand.Next(2, 5);
+			int RandomHeight = WorldGen.genRand.Next(1, 4);
 			Vector2 SegmentOrigin = Vector2.Zero;
 			for (int i = 1; i <= RandomHeight + 1; i++)
 			{

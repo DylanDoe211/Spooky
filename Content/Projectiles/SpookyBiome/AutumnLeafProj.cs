@@ -6,6 +6,7 @@ using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.IO;
 
 using Spooky.Content.Buffs.Minion;
 
@@ -21,6 +22,18 @@ namespace Spooky.Content.Projectiles.SpookyBiome
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+        }
+
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+			//ints
+			writer.WriteVector2(SavePosition);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+			//ints
+			SavePosition = reader.ReadVector2();
         }
         
         public override void SetDefaults()

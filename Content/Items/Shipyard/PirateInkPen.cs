@@ -22,7 +22,7 @@ namespace Spooky.Content.Items.Shipyard
 			Item.height = 40;         
 			Item.useTime = 35;         
 			Item.useAnimation = 35;         
-			Item.useStyle = ItemUseStyleID.Swing;          
+			Item.useStyle = ItemUseStyleID.HoldUp;          
 			Item.knockBack = 1;
 			Item.rare = ItemRarityID.Blue;
             Item.value = Item.buyPrice(gold: 2);

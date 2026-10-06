@@ -68,6 +68,11 @@ OldWoodDresser: {
 	MapEntry: Dresser
 }
 
+RotWoodDresser: {
+	ContainerName: Rotted Wood Dresser
+	MapEntry: Dresser
+}
+
 UpperCatacombChest: {
 	MapEntry0: Catacomb Chest
 	MapEntry1: Locked Catacomb Chest
@@ -148,3 +153,4 @@ MangroveSapling.MapEntry: Mangrove Sapling
 CoralTree.MapEntry: Giant Coral
 QueenShell.MapEntry: Giant Conch Shell
 GiantPirateChest.MapEntry: Pirate's Treasure
+RotWoodChest.MapEntry: Rotted Wood Chest

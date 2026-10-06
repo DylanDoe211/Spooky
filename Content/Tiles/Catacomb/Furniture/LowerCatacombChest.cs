@@ -20,22 +20,20 @@ namespace Spooky.Content.Tiles.Catacomb.Furniture
 		{
 			Main.tileSpelunker[Type] = true;
 			Main.tileContainer[Type] = true;
-			Main.tileShine2[Type] = true;
-			Main.tileShine[Type] = 1200;
 			Main.tileFrameImportant[Type] = true;
 			Main.tileNoAttach[Type] = true;
 			Main.tileOreFinderPriority[Type] = 500;
 			TileID.Sets.HasOutlines[Type] = true;
 			TileID.Sets.BasicChest[Type] = true;
 			TileID.Sets.DisableSmartCursor[Type] = true;
-			AdjTiles = new int[] { TileID.Containers };
+			TileID.Sets.AvoidedByNPCs[Type] = true;
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
 			TileObjectData.newTile.Origin = new Point16(0, 1);
 			TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
 			TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(Chest.FindEmptyChest, -1, 0, true);
 			TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(Chest.AfterPlacement_Hook, -1, 0, false);
 			TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
-			TileObjectData.newTile.AnchorInvalidTiles = new int[] { TileID.MagicalIceBlock };
+			TileObjectData.newTile.AnchorInvalidTiles = [TileID.MagicalIceBlock, TileID.Boulder, TileID.BouncyBoulder, TileID.LifeCrystalBoulder, TileID.RollingCactus];
 			TileObjectData.newTile.StyleHorizontal = true;
 			TileObjectData.newTile.LavaDeath = false;
 			TileObjectData.addTile(Type);
@@ -43,6 +41,7 @@ namespace Spooky.Content.Tiles.Catacomb.Furniture
             AddMapEntry(new Color(86, 46, 29), this.GetLocalization("MapEntry1"), MapChestName);
             DustType = DustID.t_Lihzahrd;
 			HitSound = SoundID.Dig;
+			AdjTiles = new int[] { TileID.Containers };
 		}
 
         public override IEnumerable<Item> GetItemDrops(int i, int j)

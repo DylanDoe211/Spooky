@@ -6,6 +6,7 @@ using Terraria.GameContent.Creative;
 
 using Spooky.Core;
 using Spooky.Content.Items.Costume;
+using Spooky.Content.Items.Shipyard;
 using Spooky.Content.Tiles.Shipyard;
 using Spooky.Content.Tiles.Shipyard.Tree;
 
@@ -40,6 +41,17 @@ namespace Spooky.Content.Items.Fishing.Crate
 
 		public override void ModifyItemLoot(ItemLoot itemLoot)
 		{
+			//main items
+			int[] MainItems = new int[]
+			{
+				ModContent.ItemType<PirateHook>(),
+				ModContent.ItemType<PirateBlunderbuss>(),
+				ModContent.ItemType<PirateShipWheel>(),
+				ModContent.ItemType<PirateInkPen>()
+			};
+
+			itemLoot.Add(ItemDropRule.OneFromOptions(4, MainItems));
+
 			//drop vanilla ores
             IItemDropRule[] oreTypes = new IItemDropRule[] 
 			{

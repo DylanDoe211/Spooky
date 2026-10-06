@@ -294,15 +294,8 @@ namespace Spooky.Content.NPCs.Shipyard
                         float theta = MathHelper.PiOver2 * MathF.Sin(NPC.ai[1] * 4) * 0.5f;
                         Vector2 GoTo = player.Center + new Vector2(0, -280).RotatedBy(theta);
 
-                        if (NPC.Distance(GoTo) >= 10f)
-                        {
-                            Vector2 desiredVelocity = NPC.DirectionTo(GoTo) * 15;
-                            NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
-                        }
-                        else
-                        {
-                            NPC.velocity *= 0.9f;
-                        }
+                        Vector2 desiredVelocity = NPC.DirectionTo(GoTo) * 15;
+                        NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
                     }
 
                     break;

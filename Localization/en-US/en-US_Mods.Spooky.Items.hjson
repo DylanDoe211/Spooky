@@ -4870,8 +4870,8 @@ CemeteryGrassSeeds: {
 	DisplayName: Cemetery Grass Seeds
 	Tooltip:
 		'''
-		Plants grass on Swamp Soil
-		Plants moss on Catacomb Bricks
+		Plants grass on Swamp Soil and Catacomb Bricks
+		Plants moss on Black Sand and Black Sandstone
 		'''
 }
 
@@ -6127,6 +6127,101 @@ SpookySpiritRelicItem: {
 
 StitchSpiderRelicItem: {
 	DisplayName: Stitches Relic
+	Tooltip: ""
+}
+
+RotWoodBathtubItem: {
+	DisplayName: Rotted Wood Bathtub
+	Tooltip: ""
+}
+
+RotWoodBedItem: {
+	DisplayName: Rotted Wood Bed
+	Tooltip: ""
+}
+
+RotWoodBookcaseItem: {
+	DisplayName: Rotted Wood Bookcase
+	Tooltip: ""
+}
+
+RotWoodCandelabraItem: {
+	DisplayName: Rotted Wood Candelabra
+	Tooltip: ""
+}
+
+RotWoodCandleItem: {
+	DisplayName: Rotted Wood Candle
+	Tooltip: ""
+}
+
+RotWoodChairItem: {
+	DisplayName: Rotted Wood Chair
+	Tooltip: ""
+}
+
+RotWoodChandelierItem: {
+	DisplayName: Rotted Wood Chandelier
+	Tooltip: ""
+}
+
+RotWoodChestItem: {
+	DisplayName: Rotted Wood Chest
+	Tooltip: ""
+}
+
+RotWoodClockItem: {
+	DisplayName: Rotted Wood Clock
+	Tooltip: ""
+}
+
+RotWoodDoorItem: {
+	DisplayName: Rotted Wood Door
+	Tooltip: ""
+}
+
+RotWoodDresserItem: {
+	DisplayName: Rotted Wood Dresser
+	Tooltip: ""
+}
+
+RotWoodLampItem: {
+	DisplayName: Rotted Wood Lamp
+	Tooltip: ""
+}
+
+RotWoodLanternItem: {
+	DisplayName: Rotted Wood Lantern
+	Tooltip: ""
+}
+
+RotWoodPianoItem: {
+	DisplayName: Rotted Wood Piano
+	Tooltip: ""
+}
+
+RotWoodSinkItem: {
+	DisplayName: Rotted Wood Sink
+	Tooltip: ""
+}
+
+RotWoodSofaItem: {
+	DisplayName: Rotted Wood Sofa
+	Tooltip: ""
+}
+
+RotWoodTableItem: {
+	DisplayName: Rotted Wood Table
+	Tooltip: ""
+}
+
+RotWoodToiletItem: {
+	DisplayName: Rotted Wood Toilet
+	Tooltip: ""
+}
+
+RotWoodWorkBenchItem: {
+	DisplayName: Rotted Wood Work Bench
 	Tooltip: ""
 }
 
@@ -7436,8 +7531,8 @@ PirateShipWheel: {
 	DisplayName: Hellship's Helm
 	Tooltip:
 		'''
-		Channel a difficult to control whirlpool that can pull enemies towards it
-		Over time it will grow, increasing its enemy pulling strength and range
+		Channel a slow whirlpool that can pull enemies towards it
+		Over time it will grow, increasing its speed and enemy pulling strength and range
 		'''
 }
 
@@ -7448,5 +7543,20 @@ RotWoodHammer: {
 
 RotWoodSword: {
 	DisplayName: Rotted Wood Sword
+	Tooltip: ""
+}
+
+RotWoodBody: {
+	DisplayName: Rotted Wood Chestplate
+	Tooltip: ""
+}
+
+RotWoodHead: {
+	DisplayName: Rotted Wood Helmet
+	Tooltip: ""
+}
+
+RotWoodLegs: {
+	DisplayName: Rotted Wood Leggings
 	Tooltip: ""
 }
