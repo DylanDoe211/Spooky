@@ -140,8 +140,9 @@ namespace Spooky
 				SetupSpiritReforgedCrossmod();
 			}
 
-			spiritReforged.Call("ManualAddRecord", ModContent.TileType<ShipyardPots>(), new int[] { 0, 1, 2, 3, 4 }, "SpookyShipyardShellPots", 1, false, (Action<int, Point16, ILoot>)ShipyardPots.LootTable,
-			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardShellPotDescription"), Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardShellPotName"));
+			spiritReforged.Call("ManualAddRecord", ModContent.TileType<ShipyardPots>(), new int[] { 0, 1, 2, 3, 4 }, "SpookyShipyardShellPots", (byte)1, () => false, 
+				(Action<int, Point16, ILoot>)ShipyardPots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardShellPotDescription"), 
+				Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardShellPotName"));
 		}
 
 		[JITWhenModsEnabled("SpiritReforged")]
