@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
 using Terraria.Audio;
 using Microsoft.Xna.Framework;
@@ -78,6 +79,12 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
 			{
 				yield return new Item(ItemID.SilverCoin, Main.rand.Next(1, 11));
 			}
+		}
+
+		public static void LootTable(int type, Point16 position, ILoot loot)
+		{
+			//temporary for now, will add the other loot later
+			loot.Add(ItemDropRule.NotScalingWithLuck(ItemID.SilverCoin, 3, 1, 10));
 		}
 
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)

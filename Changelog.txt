@@ -49,6 +49,7 @@ Sprite Updates:
 -Updated the colors on spooky forest, cemetery, and spider grotto dirt to look a bit nicer
 -Updated sprites for big bones flower attack projectiles
 -Updated rot gourd mold spore projectile
+-Updated spooky mod menu to fix issue where orro-boro had some missing red outline pixels on one of its wings
 
 
 Biome Noise Generation Changes:

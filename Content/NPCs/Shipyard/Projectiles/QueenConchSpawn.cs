@@ -46,7 +46,7 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
 			if (Main.rand.NextBool(5))
 			{
 				Dust dust = Dust.NewDustPerfect(NPC.Center + new Vector2(Main.rand.Next(-60, 61), 10), ModContent.DustType<GlowyDust>(), Vector2.Zero);
-				dust.color = Color.Cyan;
+				dust.color = new Color(172, 103, 205);
 				dust.velocity.X = 0;
 				dust.velocity.Y = Main.rand.NextFloat(-5f, -2f);
 				dust.scale = 0.3f;
@@ -57,10 +57,7 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
 			{
 				if (Main.netMode != NetmodeID.MultiplayerClient)
 				{
-					int NewNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<QueenConch>());
-					Main.npc[NewNPC].velocity.Y = Main.rand.Next(-5, -2);
-					Main.npc[NewNPC].alpha = 255;
-
+					int NewNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y + 20, ModContent.NPCType<QueenConchIntro>());
 					if (Main.netMode == NetmodeID.Server)
 					{
 						NetMessage.SendData(MessageID.SyncNPC, number: NewNPC);

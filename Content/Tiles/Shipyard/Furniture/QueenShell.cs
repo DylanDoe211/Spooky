@@ -37,7 +37,7 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
             TileObjectData.newTile.StyleHorizontal = true;
 			TileObjectData.addTile(Type);
 			LocalizedText name = CreateMapEntryName();
-			AddMapEntry(Color.MediumSpringGreen, name);
+			AddMapEntry(new Color(93, 133, 132), name);
             DustType = DustID.Ash;
             HitSound = SoundID.Tink;
         }
@@ -68,7 +68,7 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
 			float glowspeed = Main.GameUpdateCount * 0.02f;
 			float glowbrightness = (float)MathF.Sin(j / 10f - glowspeed);
 
-			spriteBatch.Draw(GlowTexture.Value, new Vector2(i * 16, j * 16 + 6) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Color.MediumSpringGreen * glowbrightness);
+			spriteBatch.Draw(GlowTexture.Value, new Vector2(i * 16, j * 16 + 6) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(172, 103, 205) * glowbrightness);
 		}
     }
 }

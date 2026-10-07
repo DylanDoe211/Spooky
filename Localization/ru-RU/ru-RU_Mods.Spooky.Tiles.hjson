@@ -83,6 +83,11 @@ LowerCatacombChest: {
 	MapEntry1: Запертый сундук нижних катакомб
 }
 
+SpiritPotstiary: {
+	// ShipyardShellPotName: Shell Pot
+	// ShipyardShellPotDescription: Contains basic loot. Looks like it's been abandoned for a while.
+}
+
 //blooms
 CemeteryBloomPlant.MapEntry: Увядшее цветение
 DandelionBloomPlant.MapEntry: Цветение одуванчика

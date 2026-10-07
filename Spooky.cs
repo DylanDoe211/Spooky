@@ -2,12 +2,15 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Graphics.Effects;
+using Terraria.DataStructures;
+using Terraria.Localization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.IO;
 
 using Spooky.Core;
+using Spooky.Effects;
 using Spooky.Content.Backgrounds;
 using Spooky.Content.Backgrounds.Cemetery;
 using Spooky.Content.Backgrounds.Shipyard;
@@ -21,10 +24,11 @@ using Spooky.Content.Projectiles.Shipyard;
 using Spooky.Content.Tiles.Cemetery;
 using Spooky.Content.Tiles.Shipyard;
 using Spooky.Content.Tiles.SpookyBiome;
-using Spooky.Effects;
+using Spooky.Content.UserInterfaces.LittleEyeQuests;
 
 using SpiritReforged.Common.WorldGeneration.Ecotones;
-using Spooky.Content.UserInterfaces.LittleEyeQuests;
+
+using Spooky.Content.Tiles.Shipyard.Furniture;
 
 namespace Spooky
 {
@@ -35,6 +39,7 @@ namespace Spooky
 		internal Mod subworldLibrary = null;
 		internal Mod thoriumMod = null;
 		internal Mod calamityMod = null;
+		internal Mod spiritReforged = null;
 
 		public static Effect vignetteEffect;
 		public static Vignette vignetteShader;
@@ -132,12 +137,15 @@ namespace Spooky
 		{
 			if (ModLoader.HasMod("SpiritReforged"))
 			{
-				Setup();
+				SetupSpiritReforgedCrossmod();
 			}
+
+			spiritReforged.Call("ManualAddRecord", ModContent.TileType<ShipyardPots>(), new int[] { 0, 1, 2, 3, 4 }, "SpookyShipyardShellPots", 1, false, (Action<int, Point16, ILoot>)ShipyardPots.LootTable,
+			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardShellPotDescription"), Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardShellPotName"));
 		}
 
 		[JITWhenModsEnabled("SpiritReforged")]
-		public void Setup()
+		public void SetupSpiritReforgedCrossmod()
 		{
 			EcotoneEdgeDefinitions.AddEdgeDefinition<SpookyGrass, SpookyDirt, SpookyStone, SpookyBiome>(mod, "SpookyForest", null, Color.OrangeRed, true);
 			EcotoneEdgeDefinitions.AddEdgeDefinition<CemeteryDirt, CemeteryGrass, CemeteryStone, CemeteryBiome>(mod, "Cemetery", null, Color.Teal, true);
@@ -151,6 +159,7 @@ namespace Spooky
 			ModLoader.TryGetMod("SubworldLibrary", out subworldLibrary);
 			ModLoader.TryGetMod("ThoriumMod", out thoriumMod);
 			ModLoader.TryGetMod("CalamityMod", out calamityMod);
+			ModLoader.TryGetMod("SpiritReforged", out spiritReforged);
 
 			AccessoryHotkey = KeybindLoader.RegisterKeybind(this, "AccessoryHotkey", "E");
 

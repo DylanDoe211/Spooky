@@ -554,7 +554,6 @@ ToyRobotTank.DisplayName: Игрушечный танк-бот
 // Frogfish2.DisplayName: Frogfish
 // BarreleyeFish.DisplayName: Barreleye Fish
 // QueenConchSpawn.DisplayName: ""
-// QueenConch.DisplayName: Queen Conch
 // SeaSlugBody.DisplayName: Sea Slug
 // SeaSlugHead.DisplayName: Sea Slug
 // SeaSlugTail.DisplayName: Sea Slug
@@ -571,6 +570,8 @@ ToyRobotTank.DisplayName: Игрушечный танк-бот
 // ParrotfishBaby.DisplayName: Baby Parrotfish
 // YetiCrab.DisplayName: Yeti Crab
 // Batfish.DisplayName: Batfish
+// QueenConch.DisplayName: Queen Conch
+// QueenConchIntro.DisplayName: Queen Conch Intro
 // PirateChestVisuals.DisplayName: ""
 
 //tameable

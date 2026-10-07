@@ -23,12 +23,12 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
         public override void SetDefaults()
         {
             Projectile.width = 24;
-            Projectile.height = 16;
+            Projectile.height = 14;
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.ignoreWater = false;
             Projectile.tileCollide = true;
-			Projectile.extraUpdates = 5;
+			Projectile.extraUpdates = 1;
             Projectile.timeLeft = 1800;
 			Projectile.penetrate = -1;
         }
@@ -69,7 +69,7 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
 							float num134 = Projectile.velocity.Y / 3f * (float)num132;
 							int num135 = 6;
 							int num136 = Dust.NewDust(new Vector2(Projectile.position.X + (float)num135, Projectile.position.Y + (float)num135), 
-							Projectile.width - num135 * 2, Projectile.height - num135 * 2, 160, 0f, 0f, 100, default(Color), 1.2f);
+							Projectile.width - num135 * 2, Projectile.height - num135 * 2, 160, 0f, 0f, 100, default, 1.2f);
 
 							Main.dust[num136].noGravity = true;
 							Dust dust2 = Main.dust[num136];
@@ -83,7 +83,7 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
 						{
 							int num137 = 6;
 							int num138 = Dust.NewDust(new Vector2(Projectile.position.X + (float)num137, Projectile.position.Y + (float)num137), 
-							Projectile.width - num137 * 2, Projectile.height - num137 * 2, 160, 0f, 0f, 100, default(Color), 0.75f);
+							Projectile.width - num137 * 2, Projectile.height - num137 * 2, 160, 0f, 0f, 100, default, 0.75f);
 
 							Dust dust2 = Main.dust[num138];
 							dust2.velocity *= 0.5f;
@@ -103,9 +103,9 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
 
 				Projectile.rotation = 0;
 
-				if (Main.rand.NextBool(50))
+				if (Main.rand.NextBool(40))
 				{
-					int DustEffect = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<SmokeEffect>(), 0f, 0f, 100, Color.Teal * 0.5f, Main.rand.NextFloat(0.1f, 0.2f));
+					int DustEffect = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 160, 0f, 0f, 100, default, 2f);
 					Main.dust[DustEffect].position.Y += -10 * 0.05f - 1.5f;
                     Main.dust[DustEffect].velocity.X *= 0.1f;
 					Main.dust[DustEffect].velocity.Y = -1;
@@ -113,10 +113,5 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
 				}
 			}
         }
-
-		public override void OnKill(int timeLeft)
-		{
-			SoundEngine.PlaySound(SoundID.Item126, Projectile.Center);
-		}
     }
 }

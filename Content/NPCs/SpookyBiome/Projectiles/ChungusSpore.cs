@@ -4,6 +4,8 @@ using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Spooky.Core;
+
 namespace Spooky.Content.NPCs.SpookyBiome.Projectiles
 {
 	public class ChungusSpore : ModProjectile
@@ -25,15 +27,21 @@ namespace Spooky.Content.NPCs.SpookyBiome.Projectiles
         {
             ProjTexture ??= ModContent.Request<Texture2D>(Texture);
 
-            Color color = new Color(127 - Projectile.alpha, 127 - Projectile.alpha, 127 - Projectile.alpha, 0).MultiplyRGBA(Color.Blue);
-
             Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
+            Rectangle rectangle = new(0, ProjTexture.Height() / Main.projFrames[Projectile.type] * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
 
-            for (int numEffect = 0; numEffect < 2; numEffect++)
+            for (int i = 0; i < 4; i++)
             {
-                Vector2 vector = new Vector2(Projectile.Center.X - 1, Projectile.Center.Y) + (numEffect / 2 * 6f + Projectile.rotation + 0f).ToRotationVector2() - Main.screenPosition + new Vector2(-3, Projectile.gfxOffY) - Projectile.velocity * numEffect;
-                Rectangle rectangle = new(0, ProjTexture.Height() / Main.projFrames[Projectile.type] * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
-                Main.EntitySpriteDraw(ProjTexture.Value, vector, rectangle, color, Projectile.rotation, drawOrigin, Projectile.scale * 1.15f, SpriteEffects.None, 0);
+                Vector2 offset = i switch
+                {
+                    1 => new(0, -2),
+                    2 => new(2, 0),
+                    3 => new(0, 2),
+                    _ => new(-2, 0)
+                };
+
+                Main.EntitySpriteDraw(DrawUtils.ColorSolid(ProjTexture.Value, Color.White), Projectile.Center - Main.screenPosition, rectangle, 
+                Projectile.GetAlpha(Color.Blue * 0.65f), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
             }
 
             return true;

@@ -21,13 +21,14 @@ namespace Spooky.Content.NPCs.Shipyard
 	public class QueenConch : ModNPC
 	{
         int CurrentFrameX = 0; //0 = emerge from/go in shell  1 = idle animation  2 = wiggle animation, 3 = spin animation, 4 = spin animation but out of shell
+        int SpinFramerate = 5;
         bool ResetFrameToZero = false;
 
         Vector2 SaveVelocity = Vector2.Zero;
 
         public enum AnimationState
 		{
-			EmergeFromShell, HideInShell, Idle, Wiggle, WiggleStop, Spin
+			EmergeFromShell, HideInShell, Idle, Wiggle, WiggleStop, Spin, Nothing
 		}
 
 		private AnimationState CurrentAnimation
@@ -177,7 +178,7 @@ namespace Spooky.Content.NPCs.Shipyard
             }
             else if (CurrentAnimation == AnimationState.Spin)
 			{
-				if (NPC.frameCounter > 5)
+				if (NPC.frameCounter > SpinFramerate)
 				{
 					NPC.frame.Y = NPC.frame.Y + frameHeight;
 					NPC.frameCounter = 0;
@@ -213,74 +214,17 @@ namespace Spooky.Content.NPCs.Shipyard
 
             switch ((int)NPC.ai[0])
             {
-                //jump out of ground and land
+                //idle floating
                 case 0:
                 {
                     NPC.localAI[0]++;
-                    if (NPC.localAI[0] == 2)
+                    if (NPC.localAI[0] == 1)
                     {
-                        CurrentFrameX = 3;
-                        CurrentAnimation = AnimationState.Spin;
-
-                        NPC.velocity = new Vector2(Main.rand.NextBool() ? Main.rand.Next(-6, -3) : Main.rand.Next(2, 7), -10);
-
-                        NPC.netUpdate = true;
+                        CurrentFrameX = 1;
+                        CurrentAnimation = AnimationState.Idle;
                     }
 
-                    if (NPC.localAI[0] >= 2 && NPC.localAI[1] == 0)
-                    {
-                        NPC.rotation = NPC.velocity.Y * (NPC.spriteDirection == -1 ? 0.05f : -0.05f);
-                        NPC.spriteDirection = NPC.velocity.X > 0 ? -1 : 1;
-                    }
-                    
-                    if (NPC.localAI[0] >= 20 && NPC.localAI[1] == 0)
-                    {
-                        if (!NPCGlobalHelper.IsCollidingWithFloor(NPC, false))
-                        {
-                            NPC.velocity.Y += 0.45f;
-                            NPC.velocity.X *= 0.985f;
-                        }
-                        else
-                        {
-                            CurrentFrameX = 0;
-                            CurrentAnimation = AnimationState.EmergeFromShell;
-
-                            NPC.velocity = Vector2.Zero;
-
-                            ResetFrameToZero = true;
-
-                            NPC.localAI[1]++;
-                        }
-                    }
-
-                    if (NPC.localAI[1] > 0)
-                    {
-                        NPC.localAI[1]++;
-                        if (NPC.localAI[1] == 40)
-                        {
-                            CurrentFrameX = 1;
-                            CurrentAnimation = AnimationState.Idle;
-                            ResetFrameToZero = true;
-                        }
-
-                        if (NPC.localAI[1] >= 120)
-                        {
-                            NPC.localAI[0] = 0;
-                            NPC.localAI[1] = 0;
-                            NPC.ai[0]++;
-                            NPC.netUpdate = true;
-                        }
-                    }
-
-                    break;
-                }
-
-                //move in an arc above player and shoot slime while doing spin out of shell animation
-                case 1:
-                {
-                    NPC.localAI[0]++;
-
-                    if (NPC.localAI[0] >= 0)
+                    if (NPC.localAI[0] <= 300)
                     {
                         Vector2 RotateTowards = player.Center - NPC.Center;
 
@@ -291,19 +235,291 @@ namespace Spooky.Content.NPCs.Shipyard
 
                         NPC.ai[1] += 0.005f;
 
-                        float theta = MathHelper.PiOver2 * MathF.Sin(NPC.ai[1] * 4) * 0.5f;
+                        float theta = MathHelper.PiOver2 * MathF.Sin(NPC.ai[1] * 12) * 0.4f;
                         Vector2 GoTo = player.Center + new Vector2(0, -280).RotatedBy(theta);
 
-                        Vector2 desiredVelocity = NPC.DirectionTo(GoTo) * 15;
+                        Vector2 desiredVelocity = NPC.DirectionTo(GoTo) * 12;
                         NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
+                    }
+                    else
+                    {
+                        NPC.localAI[0] = 0;
+                        NPC.ai[0] = Main.rand.NextBool() ? 1 : 2;
+
+                        NPC.netUpdate = true;
+                    }
+
+                    break;
+                }
+
+                //move in an arc above player and shoot slime while doing spin out of shell animation
+                case 1:
+                {
+                    NPC.localAI[0]++;
+                    if (NPC.localAI[0] == 1)
+                    {
+                        CurrentFrameX = 2;
+                        CurrentAnimation = AnimationState.Wiggle;
+
+                        ResetFrameToZero = true;
+                    }
+
+                    if (NPC.localAI[0] <= 180)
+                    {
+                        Vector2 RotateTowards = player.Center - NPC.Center;
+
+                        float RotateDirection = (float)Math.Atan2(RotateTowards.Y, RotateTowards.X) + 4.71f;
+                        float RotateSpeed = 0.05f;
+
+                        NPC.rotation = NPC.rotation.AngleTowards(RotateDirection - MathHelper.TwoPi, RotateSpeed);
+
+                        NPC.ai[1] += 0.005f;
+
+                        float theta = MathHelper.PiOver2 * MathF.Sin(NPC.ai[1] * 6) * 0.5f;
+                        Vector2 GoTo = player.Center + new Vector2(0, -330).RotatedBy(theta);
+
+                        Vector2 desiredVelocity = NPC.DirectionTo(GoTo) * 12;
+                        NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
+
+                        //fire off ectoplasm down
+                        if (NPC.localAI[0] % 15 == 0)
+                        {
+                            Vector2 ShootSpeed = player.Center - NPC.Center;
+                            ShootSpeed.Normalize();
+                            ShootSpeed *= 5f;
+
+                            Vector2 position = NPC.Center;
+                            Vector2 Offset = Vector2.Normalize(new Vector2(ShootSpeed.X, ShootSpeed.Y)) * 15f;
+
+                            if (Collision.CanHit(position, 0, 0, position + Offset, 0, 0))
+                            {
+                                position += Offset;
+                            }
+
+                            NPCGlobalHelper.ShootHostileProjectile(NPC, position, new Vector2(ShootSpeed.X, 0), ModContent.ProjectileType<QueenConchSludge>(), NPC.damage, 4.5f);
+                        }
+                    }
+                    else
+                    {
+                        CurrentAnimation = AnimationState.WiggleStop;
+
+                        NPC.rotation -= (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) * 0.01f;
+                        NPC.velocity *= 0.96f;
+                    }
+
+                    if (NPC.localAI[0] >= 260)
+                    {
+                        CurrentFrameX = 1;
+                        CurrentAnimation = AnimationState.Idle;
+                    }
+
+                    if (NPC.localAI[0] >= 300)
+                    {
+                        NPC.localAI[0] = 0;
+                        NPC.ai[0] = 3;
+
+                        NPC.netUpdate = true;
+                    }
+
+                    break;
+                }
+
+                //move in an arc above player and shoot bubbles all over the place while spinning
+                case 2:
+                {
+                    NPC.localAI[0]++;
+                    if (NPC.localAI[0] == 1)
+                    {
+                        CurrentFrameX = 4;
+                        CurrentAnimation = AnimationState.Spin;
+
+                        ResetFrameToZero = true;
+                    }
+
+                    if (NPC.localAI[0] <= 180)
+                    {
+                        Vector2 RotateTowards = player.Center - NPC.Center;
+
+                        float RotateDirection = (float)Math.Atan2(RotateTowards.Y, RotateTowards.X) + 4.71f;
+                        float RotateSpeed = 0.05f;
+
+                        NPC.rotation = NPC.rotation.AngleTowards(RotateDirection - MathHelper.TwoPi, RotateSpeed);
+
+                        NPC.ai[1] += 0.005f;
+
+                        float theta = MathHelper.PiOver2 * MathF.Sin(NPC.ai[1] * 6) * 0.5f;
+                        Vector2 GoTo = player.Center + new Vector2(0, -330).RotatedBy(theta);
+
+                        Vector2 desiredVelocity = NPC.DirectionTo(GoTo) * 12;
+                        NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
+
+                        //fire off bubbles
+                        if (NPC.localAI[0] % 10 == 0)
+                        {
+                            SoundEngine.PlaySound(SoundID.Item111 with { Volume = 0.5f }, NPC.Center);
+
+                            Vector2 newVelocity = new Vector2(0, Main.rand.Next(8, 15)).RotatedByRandom(MathHelper.ToRadians(45));
+                            NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center, newVelocity, ModContent.ProjectileType<QueenConchBubble>(), NPC.damage, 4.5f);
+                        }
+                    }
+                    else
+                    {
+                        CurrentFrameX = 1;
+                        CurrentAnimation = AnimationState.Idle;
+
+                        NPC.rotation -= (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) * 0.01f;
+                        NPC.velocity *= 0.96f;
+                    }
+
+                    if (NPC.localAI[0] >= 240)
+                    {
+                        NPC.localAI[0] = 0;
+                        NPC.ai[0] = 3;
+
+                        NPC.netUpdate = true;
                     }
 
                     break;
                 }
 
                 //slam down attack where it spins and slams the ground, then spew out bubbles when emerging
-                case 2:
+                case 3:
                 {
+                    NPC.localAI[0]++;
+
+                    if (NPC.localAI[1] == 0)
+                    {
+                        //go inside shell animation
+                        if (NPC.localAI[0] == 1)
+                        {
+                            CurrentFrameX = 0;
+                            CurrentAnimation = AnimationState.HideInShell;
+                        }
+
+                        //spin animation
+                        if (NPC.localAI[0] == 50)
+                        {
+                            CurrentFrameX = 3;
+                            CurrentAnimation = AnimationState.Spin;
+
+                            ResetFrameToZero = true;
+                        }
+
+                        if (NPC.localAI[0] < 50)
+                        {
+                            NPC.rotation += (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) * 0.01f;
+                            NPC.velocity *= 0.96f;
+                        }
+
+                        //spin while hovering above the player, speed up animation
+                        if (NPC.localAI[0] >= 50 && NPC.localAI[0] < 180)
+                        {
+                            Vector2 RotateTowards = player.Center - NPC.Center;
+
+                            float RotateDirection = (float)Math.Atan2(RotateTowards.Y, RotateTowards.X) + 4.71f;
+                            float RotateSpeed = 0.05f;
+
+                            NPC.rotation = NPC.rotation.AngleTowards(RotateDirection - MathHelper.TwoPi, RotateSpeed);
+
+                            Vector2 desiredVelocity = NPC.DirectionTo(player.Center - new Vector2(0, 320)) * 10f;
+                            NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
+
+                            if (NPC.localAI[0] % 30 == 0 && SpinFramerate > 2)
+                            {
+                                SpinFramerate--;
+                            }
+                        }
+
+                        //rotate towards player it will be charging at briefly
+                        if (NPC.localAI[0] >= 180 && NPC.localAI[0] < 220)
+                        {
+                            float RotateSpeed = 0.5f;
+                            NPC.rotation = NPC.rotation.AngleTowards(NPC.velocity.ToRotation(), RotateSpeed);
+
+                            Vector2 desiredVelocity = NPC.DirectionTo(player.Center) * 1f;
+                            NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
+                        }
+
+                        //charge at player
+                        if (NPC.localAI[0] == 220)
+                        {
+                            Vector2 ChargeDirection = player.Center - NPC.Center;
+                            ChargeDirection.Normalize();
+                            ChargeDirection *= 25;
+                            NPC.velocity.X = ChargeDirection.X;
+                            NPC.velocity.Y = 25f;
+
+                            NPC.netUpdate = true;
+                        }
+                    
+                        //handle stuff when it collides with the ground
+                        if (NPC.localAI[0] > 220)
+                        {
+                            if (NPC.Center.Y >= player.Center.Y - 100 && NPCGlobalHelper.IsCollidingWithFloor(NPC, true))
+                            {
+                                CurrentAnimation = AnimationState.Nothing;
+                                ResetFrameToZero = true;
+
+                                NPC.velocity = Vector2.Zero;
+
+                                Screenshake.ShakeScreenWithIntensity(NPC.Center, 7f, 350f);
+
+                                SoundEngine.PlaySound(SoundID.Tink with { Pitch = -1f }, NPC.Center);
+                                SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact, NPC.Center);
+
+                                NPC.localAI[1]++;
+                                NPC.netUpdate = true;
+                            }
+                            else
+                            {
+                                float RotateSpeed = 0.15f;
+                                NPC.rotation = NPC.rotation.AngleTowards(NPC.velocity.ToRotation(), RotateSpeed);
+                            }
+                        }
+                    }
+                    //once the actual slam is completed, emerge from shell and shoot some bubbles
+                    else
+                    {
+                        NPC.localAI[1]++;
+                        if (NPC.localAI[1] == 60)
+                        {
+                            CurrentFrameX = 0;
+                            CurrentAnimation = AnimationState.EmergeFromShell;
+
+                            ResetFrameToZero = true;
+                        }
+
+                        if (NPC.localAI[1] == 75)
+                        {
+                            SoundEngine.PlaySound(SoundID.Item111 with { Volume = 0.5f }, NPC.Center);
+
+                            for (int numProjs = 0; numProjs < 12; numProjs++)
+							{
+								Vector2 newVelocity = new Vector2(0, Main.rand.Next(5, 15)).RotatedByRandom(MathHelper.ToRadians(45));
+                                NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center, newVelocity, ModContent.ProjectileType<QueenConchBubble>(), NPC.damage, 4.5f);
+                            }
+                        }
+
+                        if (NPC.localAI[1] == 85)
+                        {
+                            CurrentFrameX = 1;
+                            CurrentAnimation = AnimationState.Idle;
+
+                            ResetFrameToZero = true;
+                        }
+
+                        if (NPC.localAI[1] >= 150)
+                        {
+                            SpinFramerate = 5;
+                            
+                            NPC.localAI[0] = 0;
+                            NPC.localAI[1] = 0;
+                            NPC.ai[0] = 0;
+
+                            NPC.netUpdate = true;
+                        }
+                    }
+
                     break;
                 }
             }
