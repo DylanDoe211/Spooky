@@ -83,9 +83,25 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
 
 		public static void LootTable(int type, Point16 position, ILoot loot)
 		{
-			//temporary for now, will add the other loot later
+			loot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<CemeteryBiomeTorchItem>(), 4, 4, 12));
+
+			int[] RestorePotions = new int[] { ItemID.LesserHealingPotion, ItemID.LesserManaPotion };
+			if (Main.hardMode)
+			{
+				RestorePotions = new int[] { ItemID.HealingPotion, ItemID.ManaPotion };
+			}
+			loot.Add(ItemDropRule.OneFromOptions(4, RestorePotions));
+
+			int[] Potions = new int[] { ItemID.IronskinPotion, ItemID.ShinePotion, ItemID.GillsPotion, ItemID.SwiftnessPotion, ItemID.RecallPotion };
+			loot.Add(ItemDropRule.OneFromOptions(4, Potions));
+
+			int[] Ammos = new int[] { ModContent.ItemType<OldWoodArrow>(), ModContent.ItemType<RustedBullet>(),
+			(Main.hardMode ? ModContent.ItemType<MossyBoulder>() : ModContent.ItemType<MossyPebble>()) };
+			loot.Add(ItemDropRule.OneFromOptions(4, Ammos));
+
 			loot.Add(ItemDropRule.NotScalingWithLuck(ItemID.SilverCoin, 3, 1, 10));
 		}
+
 
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{

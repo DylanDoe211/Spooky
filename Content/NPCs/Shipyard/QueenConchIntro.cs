@@ -60,9 +60,9 @@ namespace Spooky.Content.NPCs.Shipyard
 
 			if (CurrentAnimation == AnimationState.Emerge)
 			{
-				if (NPC.frame.Y >= frameHeight * 6)
+				if (NPC.frame.Y >= frameHeight * 3)
 				{
-					NPC.frame.Y = 5 * frameHeight;
+					NPC.frame.Y = 2 * frameHeight;
 				}
 			}
             else if (CurrentAnimation == AnimationState.PrepareThrow)
@@ -85,28 +85,25 @@ namespace Spooky.Content.NPCs.Shipyard
         {
             NPCTexture ??= ModContent.Request<Texture2D>(Texture);
 
-            var effects = NPC.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-
             Vector2 drawOrigin = new Vector2(NPCTexture.Width() * 0.5f - 10, NPC.height * 0.5f);
-            spriteBatch.Draw(NPCTexture.Value, NPC.Center - screenPos, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, drawOrigin, NPC.scale, effects, 0);
+            spriteBatch.Draw(NPCTexture.Value, NPC.Center - screenPos, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, drawOrigin, NPC.scale, SpriteEffects.None, 0);
             
             return false;
         }
-
 		
         public override void AI()
 		{
-			int aiSpin = 50; //Move these outside of AI() after you've finished editing them
-			int aiThrow = 100;
-			int aiSwap = aiThrow + 75;
+			int StartSpinning = 50;
+			int BeginThrow = 132;
+			int SpawnQueenConch = BeginThrow + 25;
 
 			NPC.ai[0]++;
             if (NPC.ai[0] == 1)
-            {                
+            {
                 CurrentAnimation = AnimationState.Emerge;
             }
 
-            if (NPC.ai[0] == aiSpin)
+            if (NPC.ai[0] == StartSpinning)
             {
 				SoundEngine.PlaySound(SoundID.NPCDeath19, NPC.Center);
 
@@ -115,19 +112,22 @@ namespace Spooky.Content.NPCs.Shipyard
                 NPC.netUpdate = true;
             }
 
-            if (NPC.ai[0] >= aiSpin && NPC.ai[0] < aiThrow + 30)
+            if (NPC.ai[0] >= StartSpinning && NPC.ai[0] < BeginThrow + 30)
             {
-				NPC.rotation -= NPC.direction * (Math.Abs(NPC.velocity.Y)) * 0.02f;
+                NPC.rotation += (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) * 0.01f;
 				NPC.velocity.Y += 0.15f;
 			}
 
-			if (NPC.ai[0] == aiThrow - 30) CurrentAnimation = AnimationState.Throw;
-			if (NPC.ai[0] == aiThrow)
+			if (NPC.ai[0] == BeginThrow - 30) 
+            {
+                CurrentAnimation = AnimationState.Throw;
+            }
+            
+			if (NPC.ai[0] == BeginThrow)
 			{
 				SoundEngine.PlaySound(SoundID.DD2_GoblinBomberThrow with { Volume = 3f }, NPC.Center);
 
-				
-				Vector2 CrabLaunchPos = NPC.Center + new Vector2(40 * -NPC.direction, 70).RotatedBy(NPC.rotation);
+				Vector2 CrabLaunchPos = NPC.Center + new Vector2(70, 70).RotatedBy(NPC.rotation);
 
 				Vector2 ShootSpeed = CrabLaunchPos - NPC.Center;
 				ShootSpeed.Normalize();
@@ -144,14 +144,13 @@ namespace Spooky.Content.NPCs.Shipyard
 				}
 			}
 
-			if (NPC.ai[0] == aiSwap)
+			if (NPC.ai[0] == SpawnQueenConch)
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     int NewNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<QueenConch>());
                     Main.npc[NewNPC].velocity = NPC.velocity;
                     Main.npc[NewNPC].rotation = NPC.rotation;
-					Main.npc[NewNPC].spriteDirection = NPC.direction;
                     Main.npc[NewNPC].alpha = 255;
                     if (Main.netMode == NetmodeID.Server)
                     {

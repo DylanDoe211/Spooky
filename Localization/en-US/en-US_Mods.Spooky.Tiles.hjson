@@ -85,7 +85,13 @@ LowerCatacombChest: {
 
 SpiritPotstiary: {
 	ShipyardShellPotName: Shell Pot
-	ShipyardShellPotDescription: Contains basic loot. Looks like it's been abandoned for a while.
+	ShipyardShellPotDescription: An old shell, filled with goodies.
+	ShipyardCratePotName: Rotten Crate
+	ShipyardCratePotDescription: An old crate containing basic supplies.
+	CatacombPotUpperName: Upper Catacombs Pot
+	CatacombPotUpperDescription: A decorative pot, contains treasure.
+	CatacombPotLowerName: Lower Catacombs Pot
+	CatacombPotLowerDescription: A decorative pot, contains treasure.
 }
 
 //blooms

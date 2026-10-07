@@ -28,6 +28,7 @@ using Spooky.Content.UserInterfaces.LittleEyeQuests;
 
 using SpiritReforged.Common.WorldGeneration.Ecotones;
 
+using Spooky.Content.Tiles.Catacomb.Furniture;
 using Spooky.Content.Tiles.Shipyard.Furniture;
 
 namespace Spooky
@@ -141,8 +142,17 @@ namespace Spooky
 			}
 
 			spiritReforged.Call("ManualAddRecord", ModContent.TileType<ShipyardPots>(), new int[] { 0, 1, 2, 3, 4 }, "SpookyShipyardShellPots", (byte)1, () => false, 
-				(Action<int, Point16, ILoot>)ShipyardPots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardShellPotDescription"), 
-				Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardShellPotName"));
+			(Action<int, Point16, ILoot>)ShipyardPots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardShellPotDescription"), 
+			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardShellPotName"));
+			spiritReforged.Call("ManualAddRecord", ModContent.TileType<ShipyardPotsWood>(), new int[] { 0, 1, 2 }, "SpookyShipyardCratePots", (byte)1, () => false, 
+			(Action<int, Point16, ILoot>)ShipyardPots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardCratePotDescription"), 
+			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardCratePotName"));
+			spiritReforged.Call("ManualAddRecord", ModContent.TileType<UpperCatacombPots>(), new int[] { 0, 1, 2 }, "SpookyUpperCatacombsPot", (byte)1, () => false, 
+			(Action<int, Point16, ILoot>)UpperCatacombPots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.CatacombPotUpperDescription"), 
+			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.CatacombPotUpperName"));
+			spiritReforged.Call("ManualAddRecord", ModContent.TileType<LowerCatacombPots>(), new int[] { 0, 1, 2 }, "SpookyLowerCatacombsPot", (byte)1, () => false, 
+			(Action<int, Point16, ILoot>)LowerCatacombPots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.CatacombPotLowerDescription"), 
+			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.CatacombPotLowerName"));
 		}
 
 		[JITWhenModsEnabled("SpiritReforged")]

@@ -16,6 +16,7 @@ New Stuff:
 Changes:
 -Made some spooky mod world generation tasks fill up the progress bar better to track how far along each biome is done generating
 -Fetid farms no longer has random giant holes in the mud walls, now the entire biome just has mud walls in it
+-Little eye quests no longer become locked when you accept one, you can now just do them all at once if you want
 -Charm of the flies no longer has a cooldown that prevents flies from spawning after you get hit
 -Spi-ops chestplate now gives speed boost when hit regardless of how much damage you took
 -Halved cooldown time for the flower armor pollen ability set bonus
