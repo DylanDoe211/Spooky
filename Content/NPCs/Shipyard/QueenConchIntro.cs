@@ -26,7 +26,7 @@ namespace Spooky.Content.NPCs.Shipyard
 
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[NPC.type] = 10;
+            Main.npcFrameCount[NPC.type] = 18;
             NPCID.Sets.CantTakeLunchMoney[Type] = true;
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
         }
@@ -52,7 +52,7 @@ namespace Spooky.Content.NPCs.Shipyard
         public override void FindFrame(int frameHeight)
         {
 			NPC.frameCounter++;
-			if (NPC.frameCounter > 5)
+			if (NPC.frameCounter > 6)
 			{
 				NPC.frame.Y = NPC.frame.Y + frameHeight;
 				NPC.frameCounter = 0;
@@ -60,23 +60,23 @@ namespace Spooky.Content.NPCs.Shipyard
 
 			if (CurrentAnimation == AnimationState.Emerge)
 			{
-				if (NPC.frame.Y >= frameHeight * 3)
+				if (NPC.frame.Y >= frameHeight * 6)
 				{
-					NPC.frame.Y = 2 * frameHeight;
+					NPC.frame.Y = 5 * frameHeight;
 				}
 			}
             else if (CurrentAnimation == AnimationState.PrepareThrow)
 			{
-				if (NPC.frame.Y >= frameHeight * 7)
+				if (NPC.frame.Y >= frameHeight * 12)
 				{
-					NPC.frame.Y = 6 * frameHeight;
+					NPC.frame.Y = 11 * frameHeight;
 				}
 			}
             else if (CurrentAnimation == AnimationState.Throw)
 			{
-				if (NPC.frame.Y >= frameHeight * 10)
+				if (NPC.frame.Y >= frameHeight * 18)
 				{
-					NPC.frame.Y = 9 * frameHeight;
+					NPC.frame.Y = 17 * frameHeight;
 				}
 			}
         }
@@ -93,35 +93,41 @@ namespace Spooky.Content.NPCs.Shipyard
             return false;
         }
 
+		
         public override void AI()
 		{
-            NPC.ai[0]++;
+			int aiSpin = 50; //Move these outside of AI() after you've finished editing them
+			int aiThrow = 100;
+			int aiSwap = aiThrow + 75;
+
+			NPC.ai[0]++;
             if (NPC.ai[0] == 1)
-            {
-                NPC.direction = Main.rand.NextBool() ? -1 : 1;
+            {                
                 CurrentAnimation = AnimationState.Emerge;
             }
 
-            if (NPC.ai[0] == 60)
+            if (NPC.ai[0] == aiSpin)
             {
 				SoundEngine.PlaySound(SoundID.NPCDeath19, NPC.Center);
 
-				CurrentAnimation = AnimationState.Throw;
-				NPC.velocity = new Vector2(Main.rand.Next(-3, 4), Main.rand.Next(-12, -8));
+				CurrentAnimation = AnimationState.PrepareThrow;
+				NPC.velocity = new Vector2(Main.rand.Next(-3, 4), -11);
                 NPC.netUpdate = true;
             }
 
-            if (NPC.ai[0] >= 60 && NPC.ai[0] < 95)
+            if (NPC.ai[0] >= aiSpin && NPC.ai[0] < aiThrow + 30)
             {
-				NPC.rotation -= (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) * 0.01f;
+				NPC.rotation -= NPC.direction * (Math.Abs(NPC.velocity.Y)) * 0.02f;
 				NPC.velocity.Y += 0.15f;
 			}
 
-			if (NPC.ai[0] == 95)
+			if (NPC.ai[0] == aiThrow - 30) CurrentAnimation = AnimationState.Throw;
+			if (NPC.ai[0] == aiThrow)
 			{
 				SoundEngine.PlaySound(SoundID.DD2_GoblinBomberThrow with { Volume = 3f }, NPC.Center);
 
-				Vector2 CrabLaunchPos = NPC.Center + new Vector2(40 * NPC.direction, 0).RotatedBy(NPC.rotation);
+				
+				Vector2 CrabLaunchPos = NPC.Center + new Vector2(40 * -NPC.direction, 70).RotatedBy(NPC.rotation);
 
 				Vector2 ShootSpeed = CrabLaunchPos - NPC.Center;
 				ShootSpeed.Normalize();
@@ -129,7 +135,7 @@ namespace Spooky.Content.NPCs.Shipyard
 
 				if (Main.netMode != NetmodeID.MultiplayerClient)
 				{
-					int NewNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)CrabLaunchPos.X, (int)CrabLaunchPos.Y, NPCID.ZombieXmas);
+					int NewNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)CrabLaunchPos.X, (int)CrabLaunchPos.Y, NPCID.Crab);
 					Main.npc[NewNPC].velocity = ShootSpeed;
 					if (Main.netMode == NetmodeID.Server)
 					{
@@ -138,13 +144,14 @@ namespace Spooky.Content.NPCs.Shipyard
 				}
 			}
 
-			if (NPC.ai[0] == 110)
+			if (NPC.ai[0] == aiSwap)
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     int NewNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<QueenConch>());
                     Main.npc[NewNPC].velocity = NPC.velocity;
                     Main.npc[NewNPC].rotation = NPC.rotation;
+					Main.npc[NewNPC].spriteDirection = NPC.direction;
                     Main.npc[NewNPC].alpha = 255;
                     if (Main.netMode == NetmodeID.Server)
                     {
