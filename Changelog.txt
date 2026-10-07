@@ -1,4 +1,5 @@
 New Stuff:
+-Added a couple more achievements
 -Added krampus helper outfit leggings
 -Added new giant living gourds that spawn in the underground spooky forest, each one has a silly new light pet inside!
 -Added sac of flesh as a replacement for just fishing up single blocks in the eye valley, it is a right-clickable consumable item that gives you a bunch of eye valley blocks
@@ -8,19 +9,40 @@ New Stuff:
 -Added long skeletoids and zomboid glyphomancers to the upper catacombs
 -Added a new game tip to tell players about spooky mods config options
 -Added cooler glowmask to little eye's cauldron
--Added modcalls for various things in spooky mod like boss defeated, event defeated, and other variables
 -Added clentaminator biome spread for blocks and walls that unintentionally didnt have it (Such as spooky mod dirt walls and other newer grass blocks that previously didnt get converted)
--Added more new achievements
+-Added modcalls for various things in spooky mod, which includes: Boss defeated, Event defeated, World generation positions, and even the ability to add new custom little eye quests!
 
 
-Changes:
+Sprite Updates:
+-Daffodil has been entirely resprited
+-Daffodil sprite on the spooky mod menu to match her new in-game design
+-Fixed issue on the spooky mod menu where one of orro-boro's wings had some missing pixels where a red outline was supposed to be
+-Eye valley background sprites now look more accurate to the biome and its ambient tiles
+-Resprited bag of magic beans
+-Polished sprites for various spooky mod ambient grasses
+-Gourd blocks now have cool additional "discolored" clusters (These can be observed more clearly on the new giant gourds in the underground spooky forest)
+-Colored gourd wall sprites now has a bit less detail than the blocks to look better as walls
+-Changed the colors on spooky forest, cemetery, and spider grotto dirt to look a bit nicer
+-Resprited big bones flower attack projectiles for both phases
+-Changed rot gourd mold spore projectile to look like other "spore" projectiles the mod has
+
+
+Biome Noise Generation Changes:
+-Spooky mod world generation that utilizes noise have been improved in varying ways
+-Spooky forest caves have been changed to be more natural and slighlty less frequent, glowshroom caves are now more vertically open but also a bit less frequent
+-Tar pits caves generally the same with changes to make them a tiny bit bigger, along with the sandstone clusters and walls generation being improved 
+-Fetid farms caves are generally the same but look a bit more natural than before
+-Eye valley flesh block clusters changed to be more natural looking veins, with organic mush still being the dominant block in the biome
+
+
+General Changes:
 -Made some spooky mod world generation tasks fill up the progress bar better to track how far along each biome is done generating
 -Fetid farms no longer has random giant holes in the mud walls, now the entire biome just has mud walls in it
 -Little eye quests no longer become locked when you accept one, you can now just do them all at once if you want
 -Charm of the flies no longer has a cooldown that prevents flies from spawning after you get hit
--Spi-ops chestplate now gives speed boost when hit regardless of how much damage you took
--Halved cooldown time for the flower armor pollen ability set bonus
--Creepy dog photo puppy now no longer attacks you ever, it always just attacks enemies
+-Spi-ops chestplate now gives you a speed boost when you get hit regardless of how much damage you took
+-Halved cooldown time for the flower armor set bonus pollen ability
+-Creepy dog photo puppy no longer attacks you, it always just attacks enemies
 -Peptobyssmal debuff now causes enemies to spawn bubbles after 10 seconds instead of on death
 -Backpack chimney projectile damage buffed from 32 -> 40, and it now charges up faster
 -Nerfed crusty gunfish damage from 42 -> 35
@@ -29,36 +51,15 @@ Changes:
 -Krampus quest reward presents now have a separate drop chance for each piece of the krampus helper vanity
 -Removing the lily of rebirth bloom buff off of yourself no longer resets the number of revives you have if you don't have any revives left
 -Removed gourd o' lantern items, breaking a carved gourd with a candle in it now just drops the regular carved gourd and the candle
--Gourd blocks now have cool additional "discolored" clusters (These can be observed more clearly on the new giant gourds in the underground spooky forest)
 -Eye blocks now grow various eye valley ambient objects on them naturally
 -Krampus job application sign tile now lights up with spelunker potions
--Spooky mod chandeliers and lanterns finally sway in the wind
+-Spooky mod chandeliers and lanterns now properly sway in the wind
 -Reduced the size of the tar pits biome
 -Tarrars now play a growling sound when a player gets close to them
 -Rot gourd mold spores now home in on the player slower
+-Big bones flower projectiles now move slower due to their increased sprite size
+-Various small tweaks to daffodils fight to fit with her new sprites and size
 -Slightly changed outline visuals and dust particles on some enemies to look nicer
-
-
-Sprite Updates:
--Daffodil has a massively improved sprite, along with small tweaks to her fight to fit the new sprites
--Updated daffodil on the spooky mod menu to her new design
--Updated eye valley background sprites
--Updated bag of magic beans sprite
--Polished sprites for various spooky mod ambient grasses
--Gourd blocks now have cool additional "discolored" clusters (These can be observed more clearly on the new giant gourds in the underground spooky forest)
--Updated all colored gourd wall sprites to look better
--Updated the colors on spooky forest, cemetery, and spider grotto dirt to look a bit nicer
--Updated sprites for big bones flower attack projectiles
--Updated rot gourd mold spore projectile
--Updated spooky mod menu to fix issue where orro-boro had some missing red outline pixels on one of its wings
-
-
-Biome Noise Generation Changes:
--Spooky mod world generation things that utilize noise have been improved in varying ways
--Spooky forest caves have been changed to be more natural and slighlty less frequent, glowshroom caves are now more vertically open but also a bit less frequent
--Tar pits caves generally the same with changes to make them a tiny bit bigger, along with the sandstone clusters and walls generation being improved 
--Fetid farms caves are generally the same but look a bit more natural, there is also no longer random holes in the mud walls in it
--Eye valley flesh block clusters changed to be more natural looking veins, with organic mush still being the dominant block in the biome
 
 
 Localization Changes:
@@ -67,13 +68,14 @@ Localization Changes:
 -Spi-ops chestplate tooltip modified to remove mention of having take a certain amount of damage for the speed boost to activate
 -Creepy dog photo tooltip modified to remove the part about the dog becoming aggressive as this is removed now
 -Flower armor set bonus tooltip modified to be accurate for the reduced cooldown change (30 seconds -> 15 seconds)
--Peptobyssmal tooltip modified to remove line about bubbles inflicting debuff since this happens by default, and to account for new change where the debuff spawns bubbles after 10 seconds instead of on kill
 -Renamed thorn stem shirt -> flower stem shirt to be consistent with the other two armor pieces having "Flower" in their names (The internal name for this entry is FlowerBody)
+-Peptobyssmal tooltip modified to remove line about bubbles inflicting debuff since this happens by default, and to account for the new change where the debuff spawns bubbles after 10 seconds instead of on kill
 -Pheremone stinger tooltip changed to just say it increases damage and crit chance with spider minions
 -Fixed mispelling of targeted -> targetted in dave & mikes tooltip
 -Instances of armor set bonuses requiring double tapping to activate now have the name of the key you need to double tap replaced with {0} in the localization to properly format it based on the vanilla config
--Reworded a bunch of spooky mod configs to be more concise and understandable
+-Reworded a bunch of spooky mod configs to be more short and concise
 -Due to removal of gourd o' lantern items, localization entries for those have been removed
+-Added new entry in the tiles localization for spirit reforged potstiary compatibility with spooky mods new biome pots
 Added the following new entries to the WorldgenTasks localization:
 Shipyard: Creating shipwrecks
 SpookyForestPolish: Polishing the spooky forest
@@ -101,7 +103,7 @@ Fixes:
 -Rot gourd not properly falling through blocks/platforms to get the targetted players level
 -Green gourd walls producing wood dust instead of pumpkin gut dust when broken
 -Crusty gunfish unintentionally consuming multiple ammo on each use
--The cross accessory sound waves, brainy explosion, and soul sucker aura not having a correctly sized hitboxes
+-The cross accessory sound waves, brainy explosion, and soul sucker aura not having correctly sized hitboxes
 -Scorpion deathblow right click not having autofire
 -Eye belcher mines not properly dealing double damage while on the ground
 -Opalised cannon slimes lagging the game
@@ -109,5 +111,5 @@ Fixes:
 -Swampy cemetery ghost enemies having their glowing aura unintentionally drawn in the bestiary
 -Spooky glowshroom caves sometimes having random single or double tiles that would be cleared out underneath ores
 -Players being able to teleport into both catacomb layers and the nose temple early using teleportation potions
--Hunter scarf mark and peacock oni mask debuff icons drawing on worm segments or other npcs that are a "child" of another (The debuff is still applied to them in game)
+-Hunter scarf mark and peacock oni mask debuff icons drawing on worm segments or other npcs that are a "child" of another (The debuff is still applied to them in-game)
 -Venomous spiderpoon pulling effect incorrectly pulling worm segments or other npcs that are a "child" of another
