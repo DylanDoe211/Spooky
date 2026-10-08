@@ -315,7 +315,6 @@ namespace Spooky.Content.NPCs.Shipyard
                     if (NPC.localAI[0] >= 300)
                     {
                         NPC.localAI[0] = 0;
-                        NPC.ai[1] = 0;
                         NPC.ai[0] = 3;
 
                         NPC.netUpdate = true;
@@ -374,7 +373,6 @@ namespace Spooky.Content.NPCs.Shipyard
                     if (NPC.localAI[0] >= 240)
                     {
                         NPC.localAI[0] = 0;
-                        NPC.ai[1] = 0;
                         NPC.ai[0] = 3;
 
                         NPC.netUpdate = true;

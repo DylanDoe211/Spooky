@@ -74,7 +74,7 @@ namespace Spooky.Content.Items.SpookyBiome
 				}
 
 				int DustEffect = Dust.NewDust(player.position + new Vector2(-4, offsetY), player.width + 8, 4, ModContent.DustType<SmokeEffect>(), 
-				-player.velocity.X * 0.5f, player.velocity.Y * 0.5f, 100, color * 0.5f, Main.rand.NextFloat(0.2f, 0.5f));
+				-player.velocity.X * 0.5f, player.velocity.Y * 0.5f, 100, color * 0.75f, Main.rand.NextFloat(0.2f, 0.5f));
 				Main.dust[DustEffect].velocity = Main.dust[DustEffect].velocity * 0.5f - player.velocity * new Vector2(0.1f, 0.3f);
 				Main.dust[DustEffect].alpha = 100;
 			}

@@ -65,7 +65,7 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
 					yield return new Item(Main.rand.Next(Potions));
 					break;
 				}
-				//wooden arrows
+				//ammos
 				case 3:
 				{
 					int[] Ammos = new int[] { ModContent.ItemType<OldWoodArrow>(), ModContent.ItemType<RustedBullet>(), 
@@ -95,9 +95,13 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
 			int[] Potions = new int[] { ItemID.IronskinPotion, ItemID.ShinePotion, ItemID.GillsPotion, ItemID.SwiftnessPotion, ItemID.RecallPotion };
 			loot.Add(ItemDropRule.OneFromOptions(4, Potions));
 
-			int[] Ammos = new int[] { ModContent.ItemType<OldWoodArrow>(), ModContent.ItemType<RustedBullet>(),
-			(Main.hardMode ? ModContent.ItemType<MossyBoulder>() : ModContent.ItemType<MossyPebble>()) };
-			loot.Add(ItemDropRule.OneFromOptions(4, Ammos));
+			IItemDropRule[] Ammos = new IItemDropRule[] 
+			{
+				ItemDropRule.Common(ModContent.ItemType<OldWoodArrow>(), 1, 10, 20),
+				ItemDropRule.Common(ModContent.ItemType<RustedBullet>(), 1, 10, 20),
+				ItemDropRule.Common(Main.hardMode ? ModContent.ItemType<MossyBoulder>() : ModContent.ItemType<MossyPebble>(), 1, 10, 20)
+			};
+			loot.Add(new OneFromRulesRule(4, Ammos));
 
 			loot.Add(ItemDropRule.NotScalingWithLuck(ItemID.SilverCoin, 3, 1, 10));
 		}

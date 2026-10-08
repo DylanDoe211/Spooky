@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
 using Terraria.Audio;
 using Microsoft.Xna.Framework;
@@ -78,6 +79,31 @@ namespace Spooky.Content.Tiles.SpiderCave.Furniture
 			{
 				yield return new Item(ItemID.SilverCoin, Main.rand.Next(1, 11));
 			}
+		}
+
+		public static void LootTable(int type, Point16 position, ILoot loot)
+		{
+			loot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<SpiderBiomeTorchItem>(), 4, 4, 12));
+
+			int[] RestorePotions = new int[] { ItemID.LesserHealingPotion, ItemID.LesserManaPotion };
+			if (Main.hardMode)
+			{
+				RestorePotions = new int[] { ItemID.HealingPotion, ItemID.ManaPotion };
+			}
+			loot.Add(ItemDropRule.OneFromOptions(4, RestorePotions));
+
+			int[] Potions = new int[] { ItemID.RegenerationPotion, ItemID.IronskinPotion, ItemID.ThornsPotion, ItemID.SwiftnessPotion, ItemID.TrapsightPotion, ItemID.RecallPotion };
+			loot.Add(ItemDropRule.OneFromOptions(4, Potions));
+
+			IItemDropRule[] Ammos = new IItemDropRule[] 
+			{
+				ItemDropRule.Common(ModContent.ItemType<OldWoodArrow>(), 1, 10, 20),
+				ItemDropRule.Common(ModContent.ItemType<RustedBullet>(), 1, 10, 20),
+				ItemDropRule.Common(Main.hardMode ? ModContent.ItemType<MossyBoulder>() : ModContent.ItemType<MossyPebble>(), 1, 10, 20)
+			};
+			loot.Add(new OneFromRulesRule(4, Ammos));
+
+			loot.Add(ItemDropRule.NotScalingWithLuck(ItemID.SilverCoin, 3, 1, 10));
 		}
 
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)

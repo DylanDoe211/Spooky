@@ -29,7 +29,14 @@ using Spooky.Content.UserInterfaces.LittleEyeQuests;
 using SpiritReforged.Common.WorldGeneration.Ecotones;
 
 using Spooky.Content.Tiles.Catacomb.Furniture;
+using Spooky.Content.Tiles.Minibiomes.Christmas.Furniture;
+using Spooky.Content.Tiles.Minibiomes.Desert.Furniture;
+using Spooky.Content.Tiles.Minibiomes.Ocean.Furniture;
+using Spooky.Content.Tiles.Minibiomes.Vegetable.Furniture;
+using Spooky.Content.Tiles.NoseTemple.Furniture;
 using Spooky.Content.Tiles.Shipyard.Furniture;
+using Spooky.Content.Tiles.SpiderCave.Furniture;
+using Spooky.Content.Tiles.SpookyBiome.Furniture;
 
 namespace Spooky
 {
@@ -140,19 +147,6 @@ namespace Spooky
 			{
 				SetupSpiritReforgedCrossmod();
 			}
-
-			spiritReforged.Call("ManualAddRecord", ModContent.TileType<ShipyardPots>(), new int[] { 0, 1, 2, 3, 4 }, "SpookyShipyardShellPots", (byte)1, () => false, 
-			(Action<int, Point16, ILoot>)ShipyardPots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardShellPotDescription"), 
-			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardShellPotName"));
-			spiritReforged.Call("ManualAddRecord", ModContent.TileType<ShipyardPotsWood>(), new int[] { 0, 1, 2 }, "SpookyShipyardCratePots", (byte)1, () => false, 
-			(Action<int, Point16, ILoot>)ShipyardPots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardCratePotDescription"), 
-			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardCratePotName"));
-			spiritReforged.Call("ManualAddRecord", ModContent.TileType<UpperCatacombPots>(), new int[] { 0, 1, 2 }, "SpookyUpperCatacombsPot", (byte)1, () => false, 
-			(Action<int, Point16, ILoot>)UpperCatacombPots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.CatacombPotUpperDescription"), 
-			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.CatacombPotUpperName"));
-			spiritReforged.Call("ManualAddRecord", ModContent.TileType<LowerCatacombPots>(), new int[] { 0, 1, 2 }, "SpookyLowerCatacombsPot", (byte)1, () => false, 
-			(Action<int, Point16, ILoot>)LowerCatacombPots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.CatacombPotLowerDescription"), 
-			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.CatacombPotLowerName"));
 		}
 
 		[JITWhenModsEnabled("SpiritReforged")]
@@ -161,6 +155,52 @@ namespace Spooky
 			EcotoneEdgeDefinitions.AddEdgeDefinition<SpookyGrass, SpookyDirt, SpookyStone, SpookyBiome>(mod, "SpookyForest", null, Color.OrangeRed, true);
 			EcotoneEdgeDefinitions.AddEdgeDefinition<CemeteryDirt, CemeteryGrass, CemeteryStone, CemeteryBiome>(mod, "Cemetery", null, Color.Teal, true);
 			EcotoneEdgeDefinitions.AddEdgeDefinition<BlackSand, BlackSandGrass, BlackSandstone, ShipyardBiome>(mod, "Shipyard", null, Color.Gray, true);
+
+			//add all spooky mod pots to the spirit reforged potstiary
+			//shipyard shell
+			spiritReforged.Call("ManualAddRecord", ModContent.TileType<ShipyardPots>(), new int[] { 0, 1, 2, 3, 4 }, "SpookyShipyardPot", (byte)1, () => false, 
+			(Action<int, Point16, ILoot>)ShipyardPots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardShellPotDescription"), 
+			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardShellPotName"));
+			//shipyard crate
+			spiritReforged.Call("ManualAddRecord", ModContent.TileType<ShipyardPotsWood>(), new int[] { 0, 1, 2 }, "SpookyShipyardCratePot", (byte)1, () => false, 
+			(Action<int, Point16, ILoot>)ShipyardPots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardCratePotDescription"), 
+			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ShipyardCratePotName"));
+			//upper catacomb
+			spiritReforged.Call("ManualAddRecord", ModContent.TileType<UpperCatacombPots>(), new int[] { 0, 1, 2 }, "SpookyUpperCatacombsPot", (byte)1, () => false, 
+			(Action<int, Point16, ILoot>)UpperCatacombPots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.CatacombPotUpperDescription"), 
+			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.CatacombPotUpperName"));
+			//lower catacomb
+			spiritReforged.Call("ManualAddRecord", ModContent.TileType<LowerCatacombPots>(), new int[] { 0, 1, 2 }, "SpookyLowerCatacombsPot", (byte)1, () => false, 
+			(Action<int, Point16, ILoot>)LowerCatacombPots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.CatacombPotLowerDescription"), 
+			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.CatacombPotLowerName"));
+			//christmas presents
+			spiritReforged.Call("ManualAddRecord", ModContent.TileType<ChristmasPresentPots>(), new int[] { 0, 1, 2 }, "SpookyChristmasPots", (byte)1, () => false, 
+			(Action<int, Point16, ILoot>)ChristmasPresentPots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ChristmasPotDescription"), 
+			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.ChristmasPotName"));
+			//tar pits
+			spiritReforged.Call("ManualAddRecord", ModContent.TileType<TarPitsPots>(), new int[] { 0, 1, 2 }, "SpookyTarPitsPot", (byte)1, () => false, 
+			(Action<int, Point16, ILoot>)TarPitsPots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.TarPitsPotDescription"), 
+			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.TarPitsPotName"));
+			//rotten depths
+			spiritReforged.Call("ManualAddRecord", ModContent.TileType<OceanPots>(), new int[] { 0, 1, 2 }, "SpookyOceanPot", (byte)1, () => false, 
+			(Action<int, Point16, ILoot>)OceanPots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.OceanPotDescription"), 
+			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.OceanPotName"));
+			//fetid farms
+			spiritReforged.Call("ManualAddRecord", ModContent.TileType<FarmsPots>(), new int[] { 0, 1, 2 }, "SpookyFarmsPot", (byte)1, () => false, 
+			(Action<int, Point16, ILoot>)FarmsPots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.FarmsPotDescription"), 
+			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.FarmsPotName"));
+			//nose temple
+			spiritReforged.Call("ManualAddRecord", ModContent.TileType<NoseTemplePots>(), new int[] { 0, 1, 2 }, "SpookyNoseTemplePot", (byte)1, () => false, 
+			(Action<int, Point16, ILoot>)NoseTemplePots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.NoseTemplePotDescription"), 
+			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.NoseTemplePotName"));
+			//spider cave
+			spiritReforged.Call("ManualAddRecord", ModContent.TileType<SpiderCavePots>(), new int[] { 0, 1, 2 }, "SpookySpiderCavePot", (byte)1, () => false, 
+			(Action<int, Point16, ILoot>)SpiderCavePots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.SpiderCavePotDescription"), 
+			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.SpiderCavePotName"));
+			//spooky biome
+			spiritReforged.Call("ManualAddRecord", ModContent.TileType<SpookyBiomePots>(), new int[] { 0, 1, 2 }, "SpookyBiomePot", (byte)1, () => false, 
+			(Action<int, Point16, ILoot>)SpookyBiomePots.LootTable, Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.SpookyBiomePotDescription"), 
+			Language.GetText("Mods.Spooky.Tiles.SpiritPotstiary.SpookyBiomePotName"));
 		}
 
 		public override void Load()
@@ -206,6 +246,7 @@ namespace Spooky
 			subworldLibrary = null;
 			thoriumMod = null;
 			calamityMod = null;
+			spiritReforged = null;
 
 			AccessoryHotkey = null;
 			mod = null;
