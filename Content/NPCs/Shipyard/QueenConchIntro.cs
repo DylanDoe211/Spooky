@@ -127,9 +127,10 @@ namespace Spooky.Content.NPCs.Shipyard
 			{
 				SoundEngine.PlaySound(SoundID.DD2_GoblinBomberThrow with { Volume = 3f }, NPC.Center);
 
-				Vector2 CrabLaunchPos = NPC.Center + new Vector2(70, 70).RotatedBy(NPC.rotation);
+				Vector2 CrabLaunchPos = NPC.Center + new Vector2(60, 40).RotatedBy(NPC.rotation);
+                Vector2 CrabLaunchFromPos = NPC.Center + new Vector2(60, 100).RotatedBy(NPC.rotation);
 
-				Vector2 ShootSpeed = CrabLaunchPos - NPC.Center;
+				Vector2 ShootSpeed = CrabLaunchFromPos - NPC.Center;
 				ShootSpeed.Normalize();
 				ShootSpeed *= 12f;
 

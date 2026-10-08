@@ -48,7 +48,10 @@ namespace Spooky.Content.Generation
 			//find a valid position in the jungle away from other structures
 			for (int X = Start; JungleOnLeftSide ? X >= End : X <= End; X += Increment)
 			{
-				for (int Y = (int)Main.rockLayer; Y <= Main.maxTilesY - 300; Y += 20)
+				int StartY = numBiomes == 0 ? (int)Main.rockLayer : Main.maxTilesY / 2;
+				int EndY = numBiomes == 0 ? Main.maxTilesY / 2 : Main.maxTilesY - 300;
+				
+				for (int Y = StartY; Y <= EndY; Y += 20)
 				{
 					if (delayBeforeNext > 0)
 					{
@@ -59,18 +62,13 @@ namespace Spooky.Content.Generation
 					{
 						if (delayBeforeNext == 0)
 						{
-							PlaceOvalCluster(X, Y, Main.maxTilesX / WorldGen.genRand.Next(SizeXInt - 5, SizeXInt + 6), Main.maxTilesY / WorldGen.genRand.Next(SizeYInt - 5, SizeYInt + 6), Main.maxTilesX / 210, Main.maxTilesX / 175);
+							PlaceOvalCluster(progress, X, Y, Main.maxTilesX / WorldGen.genRand.Next(SizeXInt - 5, SizeXInt + 6), Main.maxTilesY / WorldGen.genRand.Next(SizeYInt - 5, SizeYInt + 6), Main.maxTilesX / 210, Main.maxTilesX / 175);
 							DigOutCaves(X, Y, SizeX, SizeY, CaveNoiseSeed);
-							for (double i = numBiomes * 0.5; i < (numBiomes == 1 ? 1 : 0.5); i += 0.00001)
-							{
-								progress.Set(i);
-							}
-
 							BiomePolish(X, Y, SizeX, SizeY);
 							PlaceAmbience(X, Y, SizeX, SizeY);
 
 							numBiomes++;
-							delayBeforeNext = 600;
+							delayBeforeNext = 1200;
 						}
 
 						if (numBiomes >= maxBiomes)
@@ -83,10 +81,14 @@ namespace Spooky.Content.Generation
 		}
 
 		//place a cluster of varied ovals that will serve as the shape of the biome
-		public void PlaceOvalCluster(int PositionX, int PositionY, int SizeX, int SizeY, int SizeForLoop, int SizeForRandom)
+		public void PlaceOvalCluster(GenerationProgress progress, int PositionX, int PositionY, int SizeX, int SizeY, int SizeForLoop, int SizeForRandom)
 		{
 			for (int i = PositionX - (SizeX / 2); i < PositionX + (SizeX / 2); i += SizeForLoop)
 			{
+				int StartValue = PositionX - (SizeX / 2);
+				int EndValue = PositionX + (SizeX / 2);
+				progress.Set((float)(i - StartValue) / (EndValue - StartValue));
+				
 				for (int j = PositionY - (SizeY / 2); j < PositionY + (SizeY / 2); j += SizeForLoop)
 				{
 					int randomPositionX = WorldGen.genRand.Next(-SizeForRandom, SizeForRandom);

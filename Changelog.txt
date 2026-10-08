@@ -81,6 +81,7 @@ Shipyard: Creating shipwrecks
 SpookyForestPolish: Polishing the spooky forest
 EyeValleyPolish: Polishing the eye valley
 SpiderCavePolish: Polishing the spider grotto
+ChrismtasDungeonPolish: Polishing krampus' workshop
 
 
 Fixes:

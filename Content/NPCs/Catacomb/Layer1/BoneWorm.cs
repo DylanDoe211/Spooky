@@ -50,21 +50,6 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
 			});
         }
 
-		/*
-		public override void HitEffect(HitInfo hit)
-		{
-			if (Main.netMode != 2 && NPC.life <= 0)
-			{
-				int type = ((ModType)this).Mod.Find<ModGore>("DetriteGore1").Type;
-				int type2 = ((ModType)this).Mod.Find<ModGore>("DetriteGore2").Type;
-				int type3 = ((ModType)this).Mod.Find<ModGore>("DetriteGore3").Type;
-				Gore.NewGore(NPC.GetSource_Death((string)null), NPC.Center, NPC.velocity, type, 1f);
-				Gore.NewGore(NPC.GetSource_Death((string)null), NPC.oldPos[0], NPC.velocity, type2, 1f);
-				Gore.NewGore(NPC.GetSource_Death((string)null), NPC.oldPos[1], NPC.velocity, type3, 1f);
-			}
-		}
-		*/
-
 		public override void FindFrame(int frameHeight)
         {
             //running animation
@@ -127,7 +112,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
 
 		public override void AI()
 		{
-			NPC.spriteDirection = NPC.direction;//NPC.velocity.X > 0 ? -1 : 1;
+			NPC.spriteDirection = NPC.direction;
 
 			float MaxDist = 24f;
 			float MaxDistDirection = NPC.Center.X - MaxDist * (float)NPC.spriteDirection;
@@ -141,6 +126,29 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
 				NPC.oldPos[0].Y = NPC.Center.Y + (float)(Math.Sign(NPC.oldPos[0].Y - NPC.Center.Y) * 10);
 			}
 		}
+
+		public override void HitEffect(NPC.HitInfo hit) 
+        {
+			if (NPC.life <= 0) 
+            {
+                if (Main.netMode != NetmodeID.Server)
+                {
+					Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/SkeletoidGore1").Type);
+
+					for (int repeats = 0; repeats < 2; repeats++)
+					{
+						for (int numGores = 1; numGores <= 3; numGores++)
+						{
+							Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/BoneWorm1Gore" + numGores).Type);
+						}
+						for (int numGores = 1; numGores <= 3; numGores++)
+						{
+							Gore.NewGore(NPC.GetSource_Death(), NPC.oldPos[0], NPC.velocity, ModContent.Find<ModGore>("Spooky/BoneWorm1Gore" + numGores).Type);
+						}
+					}
+                }
+            }
+        }
 	}
 
 	public class BoneWorm2 : BoneWorm1
@@ -195,5 +203,28 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
 
 			return false;
 		}
+
+		public override void HitEffect(NPC.HitInfo hit) 
+        {
+			if (NPC.life <= 0) 
+            {
+                if (Main.netMode != NetmodeID.Server)
+                {
+					Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/SkeletoidFlowerGore1").Type);
+
+					for (int repeats = 0; repeats < 2; repeats++)
+					{
+						for (int numGores = 1; numGores <= 3; numGores++)
+						{
+							Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/BoneWorm2Gore" + numGores).Type);
+						}
+						for (int numGores = 1; numGores <= 3; numGores++)
+						{
+							Gore.NewGore(NPC.GetSource_Death(), NPC.oldPos[0], NPC.velocity, ModContent.Find<ModGore>("Spooky/BoneWorm2Gore" + numGores).Type);
+						}
+					}
+                }
+            }
+        }
 	}
 }

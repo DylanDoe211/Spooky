@@ -18,7 +18,6 @@ namespace Spooky.Content.Projectiles.SpiderCave
 		Vector2[] trailLength = new Vector2[8];
 
         private static Asset<Texture2D> ProjTexture;
-        private static Asset<Texture2D> AuraTexture;
         private static Asset<Texture2D> TrailTexture;
 
         public override void SetStaticDefaults()
@@ -39,7 +38,6 @@ namespace Spooky.Content.Projectiles.SpiderCave
         public override bool PreDraw(ref Color lightColor)
         {
             ProjTexture ??= ModContent.Request<Texture2D>(Texture);
-            AuraTexture ??= ModContent.Request<Texture2D>(Texture + "Aura");
             TrailTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Projectiles/TrailSquare");
 
             Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
@@ -139,7 +137,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
                 };
 
                 Main.EntitySpriteDraw(DrawUtils.ColorSolid(ProjTexture.Value, Color.White), vector + offset, rectangle, 
-                Projectile.GetAlpha(color), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+                Projectile.GetAlpha(color * 0.75f), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
             }
 			
 			Main.EntitySpriteDraw(ProjTexture.Value, vector, rectangle, Projectile.GetAlpha(lightColor), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);

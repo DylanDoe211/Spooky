@@ -15,6 +15,7 @@ namespace Spooky.Content.Tiles.Shipyard.Ambient
             Main.tileSolid[Type] = false;
             Main.tileFrameImportant[Type] = true;
             Main.tileNoFail[Type] = true;
+            TileID.Sets.BreakableWhenPlacing[Type] = true;
             TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
             TileObjectData.newTile.LavaDeath = true;
             TileObjectData.newTile.WaterDeath = false;

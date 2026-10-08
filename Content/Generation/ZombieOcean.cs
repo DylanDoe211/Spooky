@@ -154,8 +154,7 @@ namespace Spooky.Content.Generation
 
 			PlaceDepthsOval(StartPositionX, StartPositionY, SurfaceTileType, 0, (SizeXInt + 3) * 5, (SizeYInt + 3) * 3, 1f, false, false);
 			PlaceDepthsOval(StartPositionX, StartPositionY, ModContent.TileType<OceanSand>(), ModContent.WallType<OceanSandWall>(), SizeXInt * 5, SizeYInt * 3, 1f, true, false);
-			progress.Set(0.5);
-			PlaceDepthsCaves(StartPositionX, StartPositionY, SizeXInt * 5, SizeYInt * 3);
+			PlaceDepthsCaves(progress, StartPositionX, StartPositionY, SizeXInt * 5, SizeYInt * 3);
 			DigOutTunnels(StartPositionX, StartPositionY, SizeX, SizeY);
 			BiomePolish(StartPositionX, StartPositionY, SizeX, SizeY);
 
@@ -186,7 +185,6 @@ namespace Spooky.Content.Generation
 				}
 			}
 
-			progress.Set(1);
 			TileSloping(StartPositionX, StartPositionY, SizeX, SizeY);
 			PlaceAmbience(StartPositionX, StartPositionY, SizeX, SizeY);
 
@@ -302,12 +300,16 @@ namespace Spooky.Content.Generation
 			}
 		}
 
-		public void PlaceDepthsCaves(int X, int Y, int radius, int radiusY)
+		public void PlaceDepthsCaves(GenerationProgress progress, int X, int Y, int radius, int radiusY)
 		{
 			float scale = radiusY / (float)radius;
 			float invertScale = (float)radius / radiusY;
 			for (float j = -radius; j <= radius; j += (invertScale * 0.85f))
 			{
+				int StartValue = -radius;
+				int EndValue = radius;
+				progress.Set((float)(j - StartValue) / (EndValue - StartValue));
+
 				for (int i = -radius; i <= radius; i++)
 				{
 					if (Math.Sqrt(i * i + j * j) <= radius + 0.5)
