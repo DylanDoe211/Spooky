@@ -26,7 +26,7 @@ namespace Spooky.Content.NPCs.Shipyard
 
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[NPC.type] = 18;
+            Main.npcFrameCount[NPC.type] = 19;
             NPCID.Sets.CantTakeLunchMoney[Type] = true;
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
         }
@@ -60,23 +60,23 @@ namespace Spooky.Content.NPCs.Shipyard
 
 			if (CurrentAnimation == AnimationState.Emerge)
 			{
-				if (NPC.frame.Y >= frameHeight * 3)
+				if (NPC.frame.Y >= frameHeight * 7)
 				{
-					NPC.frame.Y = 2 * frameHeight;
+					NPC.frame.Y = 6 * frameHeight;
 				}
 			}
             else if (CurrentAnimation == AnimationState.PrepareThrow)
 			{
-				if (NPC.frame.Y >= frameHeight * 12)
+				if (NPC.frame.Y >= frameHeight * 13)
 				{
-					NPC.frame.Y = 11 * frameHeight;
+					NPC.frame.Y = 12 * frameHeight;
 				}
 			}
             else if (CurrentAnimation == AnimationState.Throw)
 			{
-				if (NPC.frame.Y >= frameHeight * 18)
+				if (NPC.frame.Y >= frameHeight * 19)
 				{
-					NPC.frame.Y = 17 * frameHeight;
+					NPC.frame.Y = 18 * frameHeight;
 				}
 			}
         }
@@ -108,17 +108,17 @@ namespace Spooky.Content.NPCs.Shipyard
 				SoundEngine.PlaySound(SoundID.NPCDeath19, NPC.Center);
 
 				CurrentAnimation = AnimationState.PrepareThrow;
-				NPC.velocity = new Vector2(Main.rand.Next(-3, 4), -11);
+				NPC.velocity = new Vector2(Main.rand.Next(-3, 4), -11f);
                 NPC.netUpdate = true;
             }
 
             if (NPC.ai[0] >= StartSpinning && NPC.ai[0] < BeginThrow + 30)
             {
-                NPC.rotation += (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) * 0.01f;
+				NPC.rotation = spinEasing(StartSpinning, BeginThrow + 30, NPC.ai[0]);
 				NPC.velocity.Y += 0.15f;
 			}
 
-			if (NPC.ai[0] == BeginThrow - 30) 
+			if (NPC.ai[0] == BeginThrow - 24) 
             {
                 CurrentAnimation = AnimationState.Throw;
             }
@@ -163,6 +163,12 @@ namespace Spooky.Content.NPCs.Shipyard
             }
         }
 
+		private float spinEasing(int start, int end, float time)
+		{
+			// (time - start) / (end - start) gives a value between 0 and 1 
+			// implement something from https://easings.net/ 👍
+			return 0;
+		}
         public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
         }
