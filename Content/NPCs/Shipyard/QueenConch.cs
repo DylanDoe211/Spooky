@@ -39,6 +39,8 @@ namespace Spooky.Content.NPCs.Shipyard
 
         private static Asset<Texture2D> NPCTexture;
 
+        public static readonly SoundStyle HitSound = new("Spooky/Content/Sounds/QueenConchHit", SoundType.Sound);
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 13;
@@ -72,7 +74,7 @@ namespace Spooky.Content.NPCs.Shipyard
             NPC.value = Item.buyPrice(0, 0, 50, 0);
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.HitSound = SoundID.Tink with { Pitch = -1.5f };
+            NPC.HitSound = HitSound;
 			NPC.DeathSound = SoundID.NPCDeath6;
             NPC.aiStyle = -1;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.ShipyardBiome>().Type };
@@ -298,12 +300,17 @@ namespace Spooky.Content.NPCs.Shipyard
                     }
                     else
                     {
-                        CurrentAnimation = AnimationState.WiggleStop;
+                        
 
                         float RotateSpeed = 0.05f;
                         NPC.rotation = NPC.rotation.AngleTowards(0f, RotateSpeed);
 
                         NPC.velocity *= 0.96f;
+                    }
+                    
+                    if (NPC.localAI[0] == 180)
+                    {
+                        CurrentAnimation = AnimationState.WiggleStop;
                     }
 
                     if (NPC.localAI[0] >= 260)
@@ -456,9 +463,6 @@ namespace Spooky.Content.NPCs.Shipyard
 
                                 NPC.localAI[1]++;
                                 NPC.netUpdate = true;
-                            }
-                            else
-                            {
                             }
                         }
                     }

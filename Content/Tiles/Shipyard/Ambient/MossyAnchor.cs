@@ -18,7 +18,6 @@ namespace Spooky.Content.Tiles.Shipyard.Ambient
 			Main.tileFrameImportant[Type] = true;
 			Main.tileNoAttach[Type] = true;
 			Main.tileLavaDeath[Type] = true;
-			Main.tileLighted[Type] = true;
 			TileID.Sets.BreakableWhenPlacing[Type] = true;
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
 			TileObjectData.newTile.StyleHorizontal = true;
@@ -32,15 +31,6 @@ namespace Spooky.Content.Tiles.Shipyard.Ambient
 			AddMapEntry(new Color(50, 46, 43));
 			DustType = DustID.Ash;
 			HitSound = SoundID.Dig;
-		}
-		
-		public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
-		{
-			float divide = 1000f;
-
-			r = 54f / divide;
-			g = 199f / divide;
-			b = 191f / divide;
 		}
 	}
 

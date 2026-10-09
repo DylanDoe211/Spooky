@@ -58,11 +58,12 @@ namespace Spooky.Content.NPCs.Shipyard
 				NPC.frameCounter = 0;
 			}
 
+            //emerge frame sits on the ground
 			if (CurrentAnimation == AnimationState.Emerge)
 			{
-				if (NPC.frame.Y >= frameHeight * 7)
+				if (NPC.frame.Y >= frameHeight * 3)
 				{
-					NPC.frame.Y = 6 * frameHeight;
+					NPC.frame.Y = 2 * frameHeight;
 				}
 			}
             else if (CurrentAnimation == AnimationState.PrepareThrow)
@@ -95,7 +96,7 @@ namespace Spooky.Content.NPCs.Shipyard
 		{
 			int StartSpinning = 50;
 			int BeginThrow = 132;
-			int SpawnQueenConch = BeginThrow + 25;
+			int SpawnQueenConch = BeginThrow + 15;
 
 			NPC.ai[0]++;
             if (NPC.ai[0] == 1)
@@ -112,37 +113,47 @@ namespace Spooky.Content.NPCs.Shipyard
                 NPC.netUpdate = true;
             }
 
+            //have it float up while queen conch is throwing the hermit crab
             if (NPC.ai[0] >= StartSpinning && NPC.ai[0] < BeginThrow + 30)
             {
-				NPC.rotation = spinEasing(StartSpinning, BeginThrow + 30, NPC.ai[0]);
 				NPC.velocity.Y += 0.15f;
 			}
+
+            //dont start rotating until the throwing animation begins
+            if (NPC.ai[0] >= StartSpinning + 35)
+            {
+                //this is where the npc should rotate alongside the throwing charge up animation
+                //nothing for now, look into proper ease-in rotation later
+            }
 
 			if (NPC.ai[0] == BeginThrow - 24) 
             {
                 CurrentAnimation = AnimationState.Throw;
+                NPC.netUpdate = true;
             }
             
 			if (NPC.ai[0] == BeginThrow)
 			{
 				SoundEngine.PlaySound(SoundID.DD2_GoblinBomberThrow with { Volume = 3f }, NPC.Center);
 
-				Vector2 CrabLaunchPos = NPC.Center + new Vector2(60, 40).RotatedBy(NPC.rotation);
-                Vector2 CrabLaunchFromPos = NPC.Center + new Vector2(60, 100).RotatedBy(NPC.rotation);
+				Vector2 CrabSpawnPosition = NPC.Center + new Vector2(55, 30).RotatedBy(NPC.rotation);
+                Vector2 CrabLaunchToPosition = NPC.Center + new Vector2(60, 100).RotatedBy(NPC.rotation);
 
-				Vector2 ShootSpeed = CrabLaunchFromPos - NPC.Center;
+				Vector2 ShootSpeed = CrabLaunchToPosition - NPC.Center;
 				ShootSpeed.Normalize();
 				ShootSpeed *= 12f;
 
 				if (Main.netMode != NetmodeID.MultiplayerClient)
 				{
-					int NewNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)CrabLaunchPos.X, (int)CrabLaunchPos.Y, NPCID.Crab);
+					int NewNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)CrabSpawnPosition.X, (int)CrabSpawnPosition.Y, NPCID.Crab);
 					Main.npc[NewNPC].velocity = ShootSpeed;
 					if (Main.netMode == NetmodeID.Server)
 					{
 						NetMessage.SendData(MessageID.SyncNPC, number: NewNPC);
 					}
 				}
+
+                NPC.netUpdate = true;
 			}
 
 			if (NPC.ai[0] == SpawnQueenConch)
@@ -160,24 +171,15 @@ namespace Spooky.Content.NPCs.Shipyard
                 }
 
                 NPC.active = false;
+                NPC.netUpdate = true;
             }
         }
 
-		private float spinEasing(int start, int end, float time)
+        private float spinEasing(int start, int end, float time)
 		{
 			// (time - start) / (end - start) gives a value between 0 and 1 
 			// implement something from https://easings.net/ 👍
 			return 0;
 		}
-        public override void ModifyNPCLoot(NPCLoot npcLoot) 
-        {
-        }
-
-        public override void HitEffect(NPC.HitInfo hit)
-        {
-            if (NPC.life <= 0) 
-            {
-            }
-        }
     }
 }

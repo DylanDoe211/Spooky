@@ -111,14 +111,14 @@ namespace Spooky.Content.Projectiles.Minibiomes.Ocean
 
 				if (Projectile.timeLeft >= 14)
 				{
-					if (Projectile.owner == Main.myPlayer)
+					//if the player has bones, use them as "ammo" and shoot a bone spread
+					if (player.ConsumeItem(ItemID.Cannonball))
 					{
-						//if the player has bones, use them as "ammo" and shoot a bone spread
-						if (player.ConsumeItem(ItemID.Cannonball))
+						SoundEngine.PlaySound(SoundID.Item14 with { Pitch = -0.5f }, Projectile.Center);
+
+						if (Projectile.owner == Main.myPlayer)
 						{
 							Screenshake.ShakeScreenWithIntensity(Projectile.Center, 2.5f, 350f);
-
-							SoundEngine.PlaySound(SoundID.Item14 with { Pitch = -0.5f }, Projectile.Center);
 
 							Vector2 ShootSpeed = Main.MouseWorld - new Vector2(Projectile.Center.X, Projectile.Center.Y);
 							ShootSpeed.Normalize();
@@ -132,11 +132,14 @@ namespace Spooky.Content.Projectiles.Minibiomes.Ocean
 							ShootSpeed.X, ShootSpeed.Y, ProjectileID.CannonballFriendly, Projectile.damage, Projectile.knockBack, Projectile.owner);
 							Main.projectile[CannonBall].penetrate = 1;
 						}
-						//if the player doesnt have bones fire out weak bubbles
-						else
-						{
-							SoundEngine.PlaySound(SoundID.Item54, Projectile.Center);
+					}
+					//if the player doesnt have bones fire out weak bubbles
+					else
+					{
+						SoundEngine.PlaySound(SoundID.Item54, Projectile.Center);
 
+						if (Projectile.owner == Main.myPlayer)
+						{
 							Vector2 ShootSpeed = Main.MouseWorld - new Vector2(Projectile.Center.X, Projectile.Center.Y);
 							ShootSpeed.Normalize();
 							ShootSpeed *= 10;

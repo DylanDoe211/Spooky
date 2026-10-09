@@ -44,6 +44,7 @@ General Changes:
 -Halved cooldown time for the flower armor set bonus pollen ability
 -Creepy dog photo puppy no longer attacks you, it always just attacks enemies
 -Peptobyssmal debuff now causes enemies to spawn bubbles after 10 seconds instead of on death
+-Bainy in a jar no longer has any knockback
 -Backpack chimney projectile damage buffed from 32 -> 40, and it now charges up faster
 -Nerfed crusty gunfish damage from 42 -> 35
 -Old wood staff no longer has amethyst in its recipe, and that has been replaced with 10 glowshrooms instead
@@ -114,3 +115,4 @@ Fixes:
 -Players being able to teleport into both catacomb layers and the nose temple early using teleportation potions
 -Hunter scarf mark and peacock oni mask debuff icons drawing on worm segments or other npcs that are a "child" of another (The debuff is still applied to them in-game)
 -Venomous spiderpoon pulling effect incorrectly pulling worm segments or other npcs that are a "child" of another
+-Sharkbone hand cannon and the dunker not playing shoot sounds for other players in multiplayer

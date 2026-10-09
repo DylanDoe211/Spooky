@@ -58,7 +58,6 @@ namespace Spooky.Content.NPCs.Boss.BigBone
 
         private static Asset<Texture2D> NPCTexture;
         private static Asset<Texture2D> NeckTexture;
-        private static Asset<Texture2D> AuraTexture;
         private static Asset<Texture2D> GlowTexture;
         private static Asset<Texture2D> EyeGlowTexture;
         private static Asset<Texture2D> HeatGlowTexture;
@@ -312,7 +311,6 @@ namespace Spooky.Content.NPCs.Boss.BigBone
             DrawBody(drawColor, false);
 
             NPCTexture ??= ModContent.Request<Texture2D>(Texture);
-            AuraTexture ??= ModContent.Request<Texture2D>("Spooky/Content/NPCs/Boss/BigBone/BigBoneAura");
 
             var effects = SpriteEffects.None;
 

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
+using Spooky.Core;
 using Spooky.Content.Buffs.WhipDebuff;
 
 namespace Spooky.Content.Projectiles.SpookyBiome
@@ -95,7 +96,7 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 
         public override bool PreDraw(ref Color lightColor) 
         {
-			GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
+			ProjTexture ??= ModContent.Request<Texture2D>(Texture);
 
             List<Vector2> list = new();
 			Projectile.FillWhipControlPoints(Projectile, list);
@@ -146,7 +147,7 @@ namespace Spooky.Content.Projectiles.SpookyBiome
             	{
 					Vector2 circular = new Vector2(Main.rand.NextFloat(1f, 5f), Main.rand.NextFloat(1f, 5f)).RotatedBy(MathHelper.ToRadians(circle));
 
-					Main.EntitySpriteDraw(GlowTexture.Value, pos - Main.screenPosition + circular, frame, glowColor, rotation, origin, scale, effects, 0);
+					Main.EntitySpriteDraw(DrawUtils.ColorSolid(ProjTexture.Value, Color.White), pos - Main.screenPosition + circular, frame, glowColor, rotation, origin, scale, effects, 0);
 				}
 
 				pos += diff;
