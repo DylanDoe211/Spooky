@@ -14,7 +14,7 @@ namespace Spooky.Content.UserInterfaces.LittleEyeQuests;
 
 #nullable enable
 
-public readonly record struct CrossmodQuest(Mod Mod, string Name, Asset<Texture2D> Icon, Func<bool> IsActive, Func<bool> CompleteCheck, Func<DialogueChain> Chain,
+public readonly record struct CrossmodQuest(Mod Mod, string Name, Asset<Texture2D> Icon, Func<bool> IsActive, Func<bool> CanComplete, Func<bool> IsComplete, Func<DialogueChain> Chain,
 	Func<DialogueChain> RecoverChain, Func<DialogueChain> CompleteChain, Func<bool>? IsLocked = null);
 
 public class LittleEyeCrossmod : ModSystem
@@ -29,7 +29,7 @@ public class LittleEyeCrossmod : ModSystem
 	{
 		if (objects.Length <= 8)
 			throw new ArgumentException("EyeQuest takes at least 8 parameters (Mod mod, string questName, Asset<Texture2D> icons, Func<bool> isActive, Action<bool> onActivate, " +
-				"Func<bool> completeCheck, (string npcText, string playerText)[] dialogue, (string npcText, string playerText)[] recoverDialogue, " +
+				"Func<bool> canComplete, Func<bool> isComplete, (string npcText, string playerText)[] dialogue, (string npcText, string playerText)[] recoverDialogue, " +
 				"(string npcText, string playerText)[] recoverDialogue, [Func<bool>? isLocked = null]");
 
 		if (objects[0] is not Mod mod)
@@ -47,32 +47,35 @@ public class LittleEyeCrossmod : ModSystem
 		if (objects[4] is not Action<bool> onActivate)
 			throw new ArgumentException(ErrorStart(4) + "must be an Action<bool> (onActivate)!");
 
-		if (objects[5] is not Func<bool> completeCheck)
-			throw new ArgumentException(ErrorStart(5) + "must be a Func<bool> (completeCheck)!");
+		if (objects[5] is not Func<bool> canComplete)
+			throw new ArgumentException(ErrorStart(5) + "must be a Func<bool> (canComplete)!");
 
-		if (objects[6] is not DialoguePair[] dialogue)
-			throw new ArgumentException(ErrorStart(6) + "must be an (string, string)[] (dialogue)! Note that these are the localization keys used, not the localized text.");
+		if (objects[6] is not Func<bool> isComplete)
+			throw new ArgumentException(ErrorStart(6) + "must be a Func<bool> (isComplete)!");
 
-		if (objects[7] is not DialoguePair[] recoverDialogue)
-			throw new ArgumentException(ErrorStart(7) + "must be an (string, string)[] (recoverDialogue)! Note that these are the localization keys used, not the localized text.");
+		if (objects[7] is not DialoguePair[] dialogue)
+			throw new ArgumentException(ErrorStart(7) + "must be an (string, string)[] (dialogue)! Note that these are the localization keys used, not the localized text.");
 
-		if (objects[8] is not DialoguePair[] completeDialogue)
-			throw new ArgumentException(ErrorStart(8) + "must be an (string, string)[] (completeDialogue)! Note that these are the localization keys used, not the localized text.");
+		if (objects[8] is not DialoguePair[] recoverDialogue)
+			throw new ArgumentException(ErrorStart(8) + "must be an (string, string)[] (recoverDialogue)! Note that these are the localization keys used, not the localized text.");
 
-		if (objects[9] is not Action onComplete)
-			throw new ArgumentException(ErrorStart(9) + "must be an Action (onComplete)!");
+		if (objects[9] is not DialoguePair[] completeDialogue)
+			throw new ArgumentException(ErrorStart(9) + "must be an (string, string)[] (completeDialogue)! Note that these are the localization keys used, not the localized text.");
+
+		if (objects[10] is not Action onComplete)
+			throw new ArgumentException(ErrorStart(10) + "must be an Action (onComplete)!");
 
 		Func<bool>? isLocked = null;
 
-		if (objects.Length == 11) 
+		if (objects.Length == 12) 
 		{
-			if (objects[10] is not Func<bool> locked)
-				throw new ArgumentException(ErrorStart(10) + "must be an Func<bool> (isLocked), or be omitted!");
+			if (objects[11] is not Func<bool> locked)
+				throw new ArgumentException(ErrorStart(11) + "must be an Func<bool> (isLocked), or be omitted!");
 			else
 				isLocked = locked;
 		}
 
-		AddQuest(mod, name, icons, isActive, onActivate, completeCheck, dialogue, recoverDialogue, completeDialogue, onComplete, isLocked);
+		AddQuest(mod, name, icons, isActive, onActivate, canComplete, isComplete, dialogue, recoverDialogue, completeDialogue, onComplete, isLocked);
 		return true;
 	}
 
@@ -84,10 +87,10 @@ public class LittleEyeCrossmod : ModSystem
 		CustomQuestCount++;
 	}
 
-	private static void AddQuest(Mod mod, string questName, Asset<Texture2D> icon, Func<bool> isActive, Action<bool> onActivate, Func<bool> completeCheck,
+	private static void AddQuest(Mod mod, string questName, Asset<Texture2D> icon, Func<bool> isActive, Action<bool> onActivate, Func<bool> canComplete, Func<bool> isComplete,
 		DialoguePair[] dialogue, DialoguePair[] recoverDialogue, DialoguePair[] completeDialogue, Action onComplete, Func<bool>? isLocked)
 	{
-		CrossmodQuest quest = new(mod, questName, icon, isActive, completeCheck, Chain, Recover, Complete, isLocked);
+		CrossmodQuest quest = new(mod, questName, icon, isActive, canComplete, isComplete, Chain, Recover, Complete, isLocked);
 		AddQuestDirect(quest);
 		return;
 
