@@ -1,11 +1,11 @@
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Audio;
-using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
+using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace Spooky.Content.NPCs.Shipyard
 {
@@ -49,6 +49,7 @@ namespace Spooky.Content.NPCs.Shipyard
             SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.ShipyardBiome>().Type };
         }
 
+		public bool holdFrame = true;
         public override void FindFrame(int frameHeight)
         {
 			NPC.frameCounter++;
@@ -61,9 +62,15 @@ namespace Spooky.Content.NPCs.Shipyard
             //emerge frame sits on the ground
 			if (CurrentAnimation == AnimationState.Emerge)
 			{
-				if (NPC.frame.Y >= frameHeight * 3)
+				if (NPC.frame.Y >= frameHeight * 3 && holdFrame)
 				{
 					NPC.frame.Y = 2 * frameHeight;
+					NPC.frameCounter = 0;
+					holdFrame = false;
+				}
+				if (NPC.frame.Y >= frameHeight * 7)
+				{
+					NPC.frame.Y = 6 * frameHeight;
 				}
 			}
             else if (CurrentAnimation == AnimationState.PrepareThrow)
@@ -96,7 +103,7 @@ namespace Spooky.Content.NPCs.Shipyard
 		{
 			int StartSpinning = 50;
 			int BeginThrow = 132;
-			int SpawnQueenConch = BeginThrow + 15;
+			int SpawnQueenConch = BeginThrow + 35;
 
 			NPC.ai[0]++;
             if (NPC.ai[0] == 1)
@@ -120,13 +127,33 @@ namespace Spooky.Content.NPCs.Shipyard
 			}
 
             //dont start rotating until the throwing animation begins
-            if (NPC.ai[0] >= StartSpinning + 35)
+            if (NPC.ai[0] >= StartSpinning)
             {
-                //this is where the npc should rotate alongside the throwing charge up animation
-                //nothing for now, look into proper ease-in rotation later
+				//this is where the npc should rotate alongside the throwing charge up animation
+				//nothing for now, look into proper ease-in rotation later
+				if (NPC.ai[0] < BeginThrow -7) NPC.rotation = SpinEasing(StartSpinning, BeginThrow - 7, NPC.ai[0]);
+				else
+				{
+					float progress = 1;
+					if (NPC.ai[0] <= SpawnQueenConch - 8) progress = 0.4118f + (NPC.ai[0] - BeginThrow -7) / (SpawnQueenConch - (BeginThrow +1));					
+					NPC.TargetClosest();
+					Player player = Main.player[NPC.target];
+
+					Vector2 RotateTowards = player.Center - NPC.Center;
+					float RotateDirection = (float)Math.Atan2(RotateTowards.Y, RotateTowards.X) + 4.71f;
+					float targetSpeed = 0.05f;
+					float RotateSpeed = targetSpeed * progress;
+					NPC.rotation = NPC.rotation.AngleTowards(RotateDirection - MathHelper.TwoPi, RotateSpeed);
+
+					float theta = MathHelper.PiOver2 * MathF.Sin(NPC.ai[1] * 12) * 0.4f;
+					Vector2 GoTo = player.Center + new Vector2(0, -280).RotatedBy(theta);
+
+					Vector2 desiredVelocity = NPC.DirectionTo(GoTo) * 12;
+					NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20 * progress);
+				}
             }
 
-			if (NPC.ai[0] == BeginThrow - 24) 
+			if (NPC.ai[0] == BeginThrow - 18) 
             {
                 CurrentAnimation = AnimationState.Throw;
                 NPC.netUpdate = true;
@@ -175,11 +202,13 @@ namespace Spooky.Content.NPCs.Shipyard
             }
         }
 
-        private float spinEasing(int start, int end, float time)
+        private float SpinEasing(int start, int end, float time)
 		{
-			// (time - start) / (end - start) gives a value between 0 and 1 
-			// implement something from https://easings.net/ 👍
-			return 0;
+			double progress = (time - start) / (end - start);
+			double y = 1 + (progress * 0.5);
+			double x = Math.Pow(progress, y);
+			double degrees = 720 * (x < 0.5 ? 2 * x * x : 1 - Math.Pow(-2 * x + 2, 2) / 2);
+			return (float) (degrees * 0.017453292519943295769236907684886); //radians 💅
 		}
     }
 }
