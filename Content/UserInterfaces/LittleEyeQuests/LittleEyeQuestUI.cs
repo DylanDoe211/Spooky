@@ -317,8 +317,8 @@ public class LittleEyeQuestUI : ModSystem
 			{
 				if (inBounds && Main.mouseLeftRelease && Main.mouseLeft && Delay > 20)
 				{
-					// If the quest is active, it has been completed - run the completion code
-					if (!quest.IsComplete())
+					// If the quest is either not completed yet (which means it can be logically), or it can be completed again, re-complete it
+					if (!quest.IsComplete() || quest.CanComplete())
 					{
 						DialogueChain chain = quest.CompleteChain();
 						DialogueUI.Visible = true;
