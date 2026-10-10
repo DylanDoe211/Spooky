@@ -114,14 +114,14 @@ namespace Spooky.Content.Projectiles.Minibiomes.Ocean
 
 				if (Projectile.timeLeft >= 14)
 				{
+					SoundEngine.PlaySound(SoundID.Item14 with { Pitch = -0.5f }, Projectile.Center);
+
 					if (Projectile.owner == Main.myPlayer)
 					{
 						//if the player has bones, use them as "ammo" and shoot a bone spread
 						if (player.ConsumeItem(ItemID.Bone))
 						{
 							Screenshake.ShakeScreenWithIntensity(Projectile.Center, 2.5f, 350f);
-
-							SoundEngine.PlaySound(SoundID.Item14 with { Pitch = -0.5f }, Projectile.Center);
 
 							Vector2 ShootSpeed = Main.MouseWorld - new Vector2(Projectile.Center.X, Projectile.Center.Y);
 							ShootSpeed.Normalize();

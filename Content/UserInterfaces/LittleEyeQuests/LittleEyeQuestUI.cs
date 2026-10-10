@@ -19,8 +19,8 @@ namespace Spooky.Content.UserInterfaces.LittleEyeQuests;
 
 public class LittleEyeQuestUI : ModSystem
 {
-	private readonly record struct TextureOptions(Asset<Texture2D> NotComplete, Asset<Texture2D> Complete, Asset<Texture2D> Locked);
-	private readonly record struct FlagSet(bool IsLocked, bool IsDown, bool InProgress);
+	private readonly record struct TextureOptions(Asset<Texture2D> NotComplete, Asset<Texture2D> Complete);
+	private readonly record struct FlagSet(bool IsDown, bool InProgress);
 	private readonly record struct HookSet(Action Start, Action NewItem, DialogueChain.EndTrigger EndTrigger);
 
 	internal static int Delay = 0;
@@ -45,7 +45,6 @@ public class LittleEyeQuestUI : ModSystem
 
 	// Misc icon textures
 	private static Asset<Texture2D> BountyIconSelectedOutline;
-	private static Asset<Texture2D> BountyIconLocked;
 	private static Asset<Texture2D> BountyIcon5Locked;
 
 	internal static Asset<Texture2D> UITexture;
@@ -79,7 +78,6 @@ public class LittleEyeQuestUI : ModSystem
 
 		//misc icon textures
 		BountyIconSelectedOutline ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/LittleEyeQuests/Icons/BountyIconSelectedOutline");
-		BountyIconLocked ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/LittleEyeQuests/Icons/BountyIconLocked");
 		BountyIcon5Locked ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/LittleEyeQuests/Icons/BountyIcon5Locked");
 
 		UITexture ??= ModContent.Request<Texture2D>("Spooky/Content/UserInterfaces/DialogueUILittleEye");
@@ -93,7 +91,6 @@ public class LittleEyeQuestUI : ModSystem
 			QuestConditionTexts[i] = Language.GetText($"Mods.Spooky.UI.LittleEyeBounties.Bounty{i + 1}Condition");
 
 		QuestIcon5LockedText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.Bounty5Locked");
-		QuestAcceptedText = Language.GetTextValue("Mods.Spooky.UI.LittleEyeBounties.BountyAccepted");
 	}
 
 	//check if little eye is close enough
@@ -399,9 +396,8 @@ public class LittleEyeQuestUI : ModSystem
 
 	private static void Quest4Logic(Player player, Point ButtonTopLeft)
 	{
-		bool locked = !Flags.BountyInProgress4 && (Flags.BountyInProgress1 || Flags.BountyInProgress2 || Flags.BountyInProgress3);
-		var options = new TextureOptions(BountyIconNotDone[3], BountyIconDone[3], BountyIconLocked);
-		var flags = new FlagSet(locked, Flags.LittleEyeBounty4, Flags.BountyInProgress4);
+		var options = new TextureOptions(BountyIconNotDone[3], BountyIconDone[3]);
+		var flags = new FlagSet(Flags.LittleEyeBounty4, Flags.BountyInProgress4);
 		var hooks = new HookSet(EyeQuestDialogue.BountyFour, EyeQuestDialogue.BountyFourNewItem, AcceptFour);
 
 		QuestLogic<SummonItem4>(player, ButtonTopLeft, flags, options, QuestConditionTexts[3].Value, Color.HotPink, hooks);
@@ -409,9 +405,8 @@ public class LittleEyeQuestUI : ModSystem
 
 	private static void Quest3Logic(Player player, Point ButtonTopLeft)
 	{
-		bool locked = !Flags.BountyInProgress3 && (Flags.BountyInProgress1 || Flags.BountyInProgress2 || Flags.BountyInProgress4);
-		var options = new TextureOptions(BountyIconNotDone[2], BountyIconDone[2], BountyIconLocked);
-		var flags = new FlagSet(locked, Flags.LittleEyeBounty3, Flags.BountyInProgress3);
+		var options = new TextureOptions(BountyIconNotDone[2], BountyIconDone[2]);
+		var flags = new FlagSet(Flags.LittleEyeBounty3, Flags.BountyInProgress3);
 		var hooks = new HookSet(EyeQuestDialogue.BountyThree, EyeQuestDialogue.BountyThreeNewItem, AcceptThree);
 
 		QuestLogic<SummonItem3>(player, ButtonTopLeft, flags, options, QuestConditionTexts[2].Value, Color.Chocolate, hooks);
@@ -419,9 +414,8 @@ public class LittleEyeQuestUI : ModSystem
 
 	private static void Quest2Logic(Player player, Point ButtonTopLeft)
 	{
-		bool locked = !Flags.BountyInProgress2 && (Flags.BountyInProgress1 || Flags.BountyInProgress3 || Flags.BountyInProgress4);
-		var options = new TextureOptions(BountyIconNotDone[1], BountyIconDone[1], BountyIconLocked);
-		var flags = new FlagSet(locked, Flags.LittleEyeBounty2, Flags.BountyInProgress2);
+		var options = new TextureOptions(BountyIconNotDone[1], BountyIconDone[1]);
+		var flags = new FlagSet(Flags.LittleEyeBounty2, Flags.BountyInProgress2);
 		var hooks = new HookSet(EyeQuestDialogue.BountyTwo, EyeQuestDialogue.BountyTwoNewItem, AcceptTwo);
 
 		QuestLogic<SummonItem2>(player, ButtonTopLeft, flags, options, QuestConditionTexts[1].Value, Color.SeaGreen, hooks);
@@ -429,9 +423,8 @@ public class LittleEyeQuestUI : ModSystem
 
 	private static void Quest1Logic(Player player, Point buttonTopLeft)
 	{
-		bool locked = !Flags.BountyInProgress1 && (Flags.BountyInProgress2 || Flags.BountyInProgress3 || Flags.BountyInProgress4);
-		var options = new TextureOptions(BountyIconNotDone[0], BountyIconDone[0], BountyIconLocked);
-		var flags = new FlagSet(locked, Flags.LittleEyeBounty1, Flags.BountyInProgress1);
+		var options = new TextureOptions(BountyIconNotDone[0], BountyIconDone[0]);
+		var flags = new FlagSet(Flags.LittleEyeBounty1, Flags.BountyInProgress1);
 		var hooks = new HookSet(EyeQuestDialogue.BountyOne, EyeQuestDialogue.BountyOneNewItem, AcceptOne);
 
 		QuestLogic<SummonItem1>(player, buttonTopLeft, flags, options, QuestConditionTexts[0].Value, Color.OrangeRed, hooks);
@@ -444,7 +437,7 @@ public class LittleEyeQuestUI : ModSystem
 	{
 		Vector2 scale = Vector2.One * Main.UIScale;
 		Vector2 topLeft = uiTopLeft.ToVector2();
-		Texture2D icon = (flags.IsLocked ? textures.Locked : flags.IsDown ? textures.Complete : textures.NotComplete).Value;
+		Texture2D icon = (flags.IsDown ? textures.Complete : textures.NotComplete).Value;
 		DrawIcon(topLeft, icon);
 
 		if (IsMouseOverUI(topLeft, textures.Complete.Value, scale))
@@ -458,11 +451,7 @@ public class LittleEyeQuestUI : ModSystem
 			bounds.Width -= 2;
 			bool inBounds = bounds.Contains(Main.MouseScreen.ToPoint());
 
-			if (flags.IsLocked)
-			{
-				_hoverText = QuestAcceptedText;
-			}
-			else if (flags.IsDown || Flags.PokedLittleEye)
+			if (flags.IsDown || Flags.PokedLittleEye)
 			{
 				//give the player the item again if they wish to rematch the miniboss
 				if (inBounds && Main.mouseLeftRelease && Main.mouseLeft && Delay > 20 && !player.HasItem(ModContent.ItemType<T>()))
@@ -484,10 +473,14 @@ public class LittleEyeQuestUI : ModSystem
 				{
 					//quest accept dialogue
 					if (!flags.InProgress)
+					{
 						hooks.Start();
+					}
 					//if the player needs a new item
 					else
+					{
 						hooks.NewItem();
+					}
 
 					UIOpen = false;
 				}
@@ -506,7 +499,7 @@ public class LittleEyeQuestUI : ModSystem
 		if (Main.netMode != NetmodeID.SinglePlayer)
 			NetMessage.SendData(MessageID.SyncItem, -1, -1, null, newItem, 1f);
 
-		if (!Flags.LittleEyeBounty1)
+		if (!flag)
 		{
 			if (Main.netMode != NetmodeID.SinglePlayer)
 			{
@@ -515,7 +508,9 @@ public class LittleEyeQuestUI : ModSystem
 				packet.Send();
 			}
 			else
+			{
 				flag = true;
+			}
 		}
 
 		DialogueUI.Visible = false;

@@ -13,6 +13,10 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
 {
     public class QueenConchBubble : ModProjectile
     {
+        float Scale = 0.1f;
+
+        private static Asset<Texture2D> ProjTexture;
+
         public override void SetStaticDefaults()
         {
             Main.projFrames[Projectile.type] = 4;
@@ -27,7 +31,24 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
             Projectile.tileCollide = false;
             Projectile.timeLeft = 600;
             Projectile.penetrate = 1;
-            Projectile.scale = 0.1f;
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            ProjTexture ??= ModContent.Request<Texture2D>(Texture);
+
+            Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
+			Vector2 vector = new Vector2(Projectile.Center.X, Projectile.Center.Y) - Main.screenPosition + new Vector2(0, Projectile.gfxOffY);
+			Rectangle rectangle = new(0, ProjTexture.Height() / Main.projFrames[Projectile.type] * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
+
+            if (Scale < 1f)
+            {
+                Scale += 0.01f;
+            }
+            
+            Main.EntitySpriteDraw(ProjTexture.Value, vector, rectangle, lightColor, Projectile.rotation, drawOrigin, Projectile.scale * Scale, SpriteEffects.None, 0);
+
+            return false;
         }
 
 		public override void AI()
@@ -43,21 +64,20 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
                 }
             }
 
-            Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.01f;
-
-            if (Projectile.scale < 1f)
-            {
-                Projectile.scale += 0.01f;
-            }
-
             Projectile.ai[0]++;
-            if (Projectile.ai[0] < 30)
+            if (Projectile.ai[0] < 45)
             {
-                Projectile.velocity.Y -= 0.5f;
+                Projectile.velocity *= 0.96f;
             }
             else
             {
-                Projectile.velocity *= 0.97f;
+                float update = Main.GlobalTimeWrappedHourly * 0.08f + Projectile.identity;
+                Projectile.velocity.X = MathHelper.Lerp(Projectile.velocity.X, Main.windSpeedCurrent * 2, 0.05f) + (float)Math.Sin(update) * 0.01f;
+                
+                if (Projectile.velocity.Y < 4f)
+                {
+                    Projectile.velocity.Y = Projectile.velocity.Y - Main.rand.NextFloat(0f, 0.02f);
+                }
             }
         }
 

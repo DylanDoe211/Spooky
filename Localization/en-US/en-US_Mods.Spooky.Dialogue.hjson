@@ -604,7 +604,7 @@ OldHunterBoss: {
 
 OldHunterDialogue: {
 	//corpse dialogue
-	OldHunterCorpse: It's an old dead skeleton. Perhaps he can revived if his soul is returned to his body.
+	OldHunterCorpse: It's an old dead skeleton. Perhaps he can be revived if his soul is returned to his body.
 	//defeated dialogue
 	Defeat1: Alright, ye've got me over head and ears, least I'm dying with my boots on.
 	PlayerDefeat1: I'm not trying to kill you.

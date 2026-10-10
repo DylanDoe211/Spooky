@@ -34,9 +34,8 @@ namespace Spooky.Content.Projectiles.Cemetery
             Color color = new Color(lightColor.R, lightColor.G, lightColor.B, -Projectile.alpha);
 
             Vector2 drawOrigin = new Vector2(ProjTexture.Width() * 0.5f, ProjTexture.Height() * 0.5f);
-            Vector2 vector = new Vector2(Projectile.Center.X, Projectile.Center.Y) - Main.screenPosition + drawOrigin + new Vector2(0, Projectile.gfxOffY);
 
-            Main.EntitySpriteDraw(ProjTexture.Value, vector, null, color, -Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+            Main.EntitySpriteDraw(ProjTexture.Value, Projectile.Center - Main.screenPosition + new Vector2(0, Projectile.gfxOffY), null, color, -Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
 
             return true;
         }

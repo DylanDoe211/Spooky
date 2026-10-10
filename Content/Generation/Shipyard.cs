@@ -78,6 +78,7 @@ namespace Spooky.Content.Generation
 					if ((WorldGen.SolidOrSlopedTile(leftBound, LeftY) && Cemetery.NoFloatingIsland(leftBound, LeftY)) || LeftY > Main.worldSurface)
 					{
 						foundSurfaceLeft = true;
+						break;
 					}
 					else
 					{
@@ -103,6 +104,7 @@ namespace Spooky.Content.Generation
 					if ((WorldGen.SolidOrSlopedTile(rightBound, RightY) && Cemetery.NoFloatingIsland(rightBound, RightY)) || RightY > Main.worldSurface)
 					{
 						foundSurfaceRight = true;
+						break;
 					}
 					else
 					{
@@ -640,6 +642,19 @@ namespace Spooky.Content.Generation
 						int[] ValidTiles = { ModContent.TileType<BlackSandstoneMoss>() };
 
 						SpookyWorldMethods.PlaceVines(X, Y, ModContent.TileType<BlackSandstoneMossVines>(), ValidTiles);
+					}
+
+					//grow stalactites
+					if (Main.tile[X, Y].HasTile && !tileBelow.HasTile && WorldGen.InWorld(X, Y, 10))
+					{
+						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>())
+						{
+							if (WorldGen.genRand.NextBool())
+							{
+								int Type = WorldGen.genRand.NextBool() ? ModContent.TileType<BlackSandstoneStalactite>() : ModContent.TileType<BlackSandstoneStalactiteSmall>();
+								TileGlobal.PlaceObject(X, Y + 1, Type, true, WorldGen.genRand.Next(0, 3));
+							}
+						}
 					}
 
 					if (Main.tile[X, Y].HasTile && !tileAbove.HasTile && WorldGen.InWorld(X, Y, 10))

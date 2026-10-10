@@ -243,7 +243,7 @@ namespace Spooky.Content.NPCs.Boss.RotGourd
                 {
                     Vector2 vector = Vector2.UnitY.RotatedByRandom(1.57f) * new Vector2(5f, 3f);
 
-					NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center, vector, ModContent.ProjectileType<RotFly>(), NPC.damage, 2f, ai1: NPC.whoAmI);
+					NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center, vector, ModContent.ProjectileType<RotFly>(), NPC.damage, 2f, ai2: NPC.whoAmI);
 				}
 
                 HasSpawnedFlies = true;

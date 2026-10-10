@@ -21,7 +21,6 @@ namespace Spooky.Content.Projectiles.SpiderCave
         float FlashOpacity = 0f;
 
         private static Asset<Texture2D> ProjTexture;
-        private static Asset<Texture2D> FlashTexture;
 
         public static readonly SoundStyle BeepSound = new("Spooky/Content/Sounds/CorklidBombCountdown", SoundType.Sound) { Volume = 0.25f };
 
@@ -39,7 +38,6 @@ namespace Spooky.Content.Projectiles.SpiderCave
         public override bool PreDraw(ref Color lightColor)
         {
             ProjTexture ??= ModContent.Request<Texture2D>(Texture);
-            FlashTexture ??= ModContent.Request<Texture2D>(Texture + "Flash");
 
             Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
 			Vector2 vector = new Vector2(Projectile.Center.X, Projectile.Center.Y) - Main.screenPosition + new Vector2(0, Projectile.gfxOffY);
@@ -49,7 +47,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
             if (FlashOpacity > 0f)
             {
-                Main.EntitySpriteDraw(FlashTexture.Value, vector, rectangle, Color.White * FlashOpacity, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(DrawUtils.ColorSolid(ProjTexture.Value, Color.White), vector, rectangle, Color.White * FlashOpacity, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
             }
 
             return false;

@@ -5,11 +5,14 @@ using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.IO;
 
 namespace Spooky.Content.NPCs.Boss.RotGourd.Projectiles
 {
 	public class RotFly : ModProjectile
 	{
+        Vector2 GoToPosition;
+
         private static Asset<Texture2D> ProjTexture;
 
         public static readonly SoundStyle FlySound = new("Spooky/Content/Sounds/FlyBuzzing", SoundType.Sound);
@@ -19,6 +22,18 @@ namespace Spooky.Content.NPCs.Boss.RotGourd.Projectiles
             Main.projFrames[Projectile.type] = 3;
 		}
 
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+			//vector2 
+			writer.WriteVector2(GoToPosition);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+			//vector2
+			GoToPosition = reader.ReadVector2();
+        }
+
 		public override void SetDefaults()
 		{
 			Projectile.width = 16;
@@ -26,6 +41,7 @@ namespace Spooky.Content.NPCs.Boss.RotGourd.Projectiles
 			Projectile.friendly = false;
             Projectile.hostile = true;
 			Projectile.tileCollide = false;
+            Projectile.netImportant = true;
 			Projectile.timeLeft = 300;
             Projectile.penetrate = -1;
             Projectile.scale = 0.9f;
@@ -59,14 +75,7 @@ namespace Spooky.Content.NPCs.Boss.RotGourd.Projectiles
 
         public override bool CanHitPlayer(Player target)
         {
-            if (Projectile.ai[0] == 1 || Projectile.ai[0] == 3)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return Projectile.ai[0] == 1 || Projectile.ai[0] == 3;
         }
 
         public override void AI()
@@ -82,6 +91,9 @@ namespace Spooky.Content.NPCs.Boss.RotGourd.Projectiles
                 }
             }
 
+            NPC Parent = Main.npc[(int)Projectile.ai[2]];
+            Player target = Main.player[Parent.target];
+
             Projectile.direction = Projectile.spriteDirection = Projectile.velocity.X > 0f ? -1 : 1;
             Projectile.rotation = Projectile.velocity.ToRotation();
 
@@ -89,10 +101,8 @@ namespace Spooky.Content.NPCs.Boss.RotGourd.Projectiles
             {
                 Projectile.rotation += MathHelper.Pi;
             }
-
-            int ParentWhoAmI = (int)Projectile.ai[1];
             
-            if (Main.npc[ParentWhoAmI].active && Main.npc[ParentWhoAmI].type == ModContent.NPCType<RotGourd>())
+            if (Parent.active && Parent.type == ModContent.NPCType<RotGourd>())
             {
                 Projectile.timeLeft = 300;
             }
@@ -103,7 +113,7 @@ namespace Spooky.Content.NPCs.Boss.RotGourd.Projectiles
 
             switch ((int)Projectile.ai[0])
             {
-                //used to store if the fly should fade away
+                //used if the fly should fade away
                 case -1:
                 {
                     Projectile.alpha += 5;
@@ -120,93 +130,88 @@ namespace Spooky.Content.NPCs.Boss.RotGourd.Projectiles
                 //home in on rot gourd if it exists
                 case 0:
                 {
-                    if (Main.npc[ParentWhoAmI].active && Main.npc[ParentWhoAmI].type == ModContent.NPCType<RotGourd>())
+                    if (Projectile.ai[1] % 30 == 0)
                     {
-                        float goToX = Main.npc[ParentWhoAmI].Center.X - Projectile.Center.X + Main.rand.Next(-200, 200);
-                        float goToY = Main.npc[ParentWhoAmI].Center.Y - Projectile.Center.Y + Main.rand.Next(-200, 200);
-
                         //if rot gourd is flying in his desperation phase, make them go to the bottom of him
-                        if (Main.npc[ParentWhoAmI].ai[0] == 6)
+                        if (Parent.ai[0] == 6)
                         {
-                            goToX = Main.npc[ParentWhoAmI].Center.X - Projectile.Center.X + Main.rand.Next(-100, 100);
-                            goToY = Main.npc[ParentWhoAmI].Center.Y - Projectile.Center.Y + Main.rand.Next(35, 100);
+                            GoToPosition.X = Parent.Center.X - Projectile.Center.X + Main.rand.Next(-100, 100);
+                            GoToPosition.Y = Parent.Center.Y - Projectile.Center.Y + Main.rand.Next(35, 100);
                         }
-
                         //if the flies are above the player during cripple phase, then fly above them
-                        if (Main.npc[ParentWhoAmI].ai[0] == 7 && Projectile.localAI[1] == 1)
+                        else if (Parent.ai[0] == 7 && Projectile.localAI[1] == 1)
                         {
-                            goToX = Main.LocalPlayer.Center.X - Projectile.Center.X + Main.rand.Next(-350, 350);
-                            goToY = Main.LocalPlayer.Center.Y - Projectile.Center.Y + Main.rand.Next(-500, -400);
-                        }
-
-                        if (Main.npc[ParentWhoAmI].ai[0] == 7 && Projectile.localAI[1] == 2)
-                        {
-                            goToX = Main.npc[ParentWhoAmI].Center.X - Projectile.Center.X + Main.rand.Next(-200, 200);
-                            goToY = Main.npc[ParentWhoAmI].Center.Y - Projectile.Center.Y + Main.rand.Next(-200, 200);
-                        }
-
-                        float speedLimit = Main.npc[ParentWhoAmI].ai[0] == 6 ? 8f : 5f;
-                        float speed = Main.npc[ParentWhoAmI].ai[0] == 6 ? 0.1f : 0.08f;
-
-                        if (Vector2.Distance(Projectile.Center, Main.npc[ParentWhoAmI].Center) >= 135)
-                        {
-                            speed = speedLimit;
+                            GoToPosition.X = target.Center.X - Projectile.Center.X + Main.rand.Next(-350, 350);
+                            GoToPosition.Y = target.Center.Y - Projectile.Center.Y + Main.rand.Next(-500, -400);
                         }
                         else
                         {
-                            speed = 2f;
-                        }
-
-                        if (speed >= speedLimit)
-                        {
-                            speed = speedLimit;
-                        }
-                        
-                        if (Projectile.velocity.X > speed)
-                        {
-                            Projectile.velocity.X *= 0.98f;
-                        }
-                        if (Projectile.velocity.Y > speed)
-                        {
-                            Projectile.velocity.Y *= 0.98f;
-                        }
-
-                        if (Projectile.velocity.X < goToX)
-                        {
-                            Projectile.velocity.X = Projectile.velocity.X + speed;
-                            if (Projectile.velocity.X < 0f && goToX > 0f)
-                            {
-                                Projectile.velocity.X = Projectile.velocity.X + speed;
-                            }
-                        }
-                        else if (Projectile.velocity.X > goToX)
-                        {
-                            Projectile.velocity.X = Projectile.velocity.X - speed;
-                            if (Projectile.velocity.X > 0f && goToX < 0f)
-                            {
-                                Projectile.velocity.X = Projectile.velocity.X - speed;
-                            }
-                        }
-                        if (Projectile.velocity.Y < goToY)
-                        {
-                            Projectile.velocity.Y = Projectile.velocity.Y + speed;
-                            if (Projectile.velocity.Y < 0f && goToY > 0f)
-                            {
-                                Projectile.velocity.Y = Projectile.velocity.Y + speed;
-                                return;
-                            }
-                        }
-                        else if (Projectile.velocity.Y > goToY)
-                        {
-                            Projectile.velocity.Y = Projectile.velocity.Y - speed;
-                            if (Projectile.velocity.Y > 0f && goToY < 0f)
-                            {
-                                Projectile.velocity.Y = Projectile.velocity.Y - speed;
-                                return;
-                            }
+                            GoToPosition.X = Parent.Center.X - Projectile.Center.X + Main.rand.Next(-200, 200);
+                            GoToPosition.Y = Parent.Center.Y - Projectile.Center.Y + Main.rand.Next(-200, 200);
                         }
 
                         Projectile.netUpdate = true;
+                    }
+
+                    float speedLimit = Parent.ai[0] == 6 ? 8f : 5f;
+                    float speed = Parent.ai[0] == 6 ? 0.1f : 0.08f;
+
+                    if (Vector2.Distance(Projectile.Center, Parent.Center) >= 135)
+                    {
+                        speed = speedLimit;
+                    }
+                    else
+                    {
+                        speed = 2f;
+                    }
+
+                    if (speed >= speedLimit)
+                    {
+                        speed = speedLimit;
+                    }
+                    
+                    if (Projectile.velocity.X > speed)
+                    {
+                        Projectile.velocity.X *= 0.98f;
+                    }
+                    if (Projectile.velocity.Y > speed)
+                    {
+                        Projectile.velocity.Y *= 0.98f;
+                    }
+
+                    if (Projectile.velocity.X < GoToPosition.X)
+                    {
+                        Projectile.velocity.X = Projectile.velocity.X + speed;
+                        if (Projectile.velocity.X < 0f && GoToPosition.X > 0f)
+                        {
+                            Projectile.velocity.X = Projectile.velocity.X + speed;
+                        }
+                    }
+                    else if (Projectile.velocity.X > GoToPosition.X)
+                    {
+                        Projectile.velocity.X = Projectile.velocity.X - speed;
+                        if (Projectile.velocity.X > 0f && GoToPosition.X < 0f)
+                        {
+                            Projectile.velocity.X = Projectile.velocity.X - speed;
+                        }
+                    }
+                    if (Projectile.velocity.Y < GoToPosition.Y)
+                    {
+                        Projectile.velocity.Y = Projectile.velocity.Y + speed;
+                        if (Projectile.velocity.Y < 0f && GoToPosition.Y > 0f)
+                        {
+                            Projectile.velocity.Y = Projectile.velocity.Y + speed;
+                            return;
+                        }
+                    }
+                    else if (Projectile.velocity.Y > GoToPosition.Y)
+                    {
+                        Projectile.velocity.Y = Projectile.velocity.Y - speed;
+                        if (Projectile.velocity.Y > 0f && GoToPosition.Y < 0f)
+                        {
+                            Projectile.velocity.Y = Projectile.velocity.Y - speed;
+                            return;
+                        }
                     }
 
                     break;
@@ -216,7 +221,6 @@ namespace Spooky.Content.NPCs.Boss.RotGourd.Projectiles
                 case 1:
                 {
                     Projectile.localAI[0]++;
-
                     if (Projectile.localAI[0] == 2)
                     {
                         SoundEngine.PlaySound(FlySound, Projectile.Center);
@@ -253,7 +257,6 @@ namespace Spooky.Content.NPCs.Boss.RotGourd.Projectiles
                 case 3:
                 {
                     Projectile.localAI[0]++;
-
                     if (Projectile.localAI[0] == 2)
                     {
                         SoundEngine.PlaySound(FlySound, Projectile.Center);

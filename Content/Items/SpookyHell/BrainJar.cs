@@ -21,7 +21,7 @@ namespace Spooky.Content.Items.SpookyHell
             Item.useTime = 45;
             Item.useAnimation = 45;
             Item.useStyle = ItemUseStyleID.Swing;
-            Item.knockBack = 6;
+            Item.knockBack = 0;
             Item.rare = ItemRarityID.Yellow;
             Item.value = Item.buyPrice(platinum: 1);
             Item.UseSound = SoundID.Item1;

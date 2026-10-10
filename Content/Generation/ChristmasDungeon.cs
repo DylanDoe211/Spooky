@@ -92,25 +92,13 @@ namespace Spooky.Content.Generation
 					if (CanPlaceBiome(X, Y, DungeonWidth, DungeonHeight))
 					{
 						ProceduralRoomsGenerator Generator = new ProceduralRoomsGenerator(X, Y, DungeonWidth, DungeonHeight, maxDungeonSegmentSize, minDungeonSegmentSize, MaxRoomSize, MinRoomSize);
-						Generator.GenerateDungeon();
+						Generator.GenerateDungeon(progress);
 						FillEmptySpaceInbetweenRooms(X, Y, DungeonWidth, DungeonHeight);
-						for (double i = 0; i < 0.5; i += 0.00001)
-						{
-							progress.Set(i);
-						}
-
 						PlaceKrampusRoom(X, Y, 35, 22);
-						DungeonCleanup(X, Y, DungeonWidth, DungeonHeight);
-						for (double i = 0.5; i < 0.75; i += 0.00001)
-						{
-							progress.Set(i);
-						}
 
+						progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.ChrismtasDungeonPolish").Value;
+						DungeonCleanup(progress, X, Y, DungeonWidth, DungeonHeight);
 						DungeonAmbienceAndDetails(X, Y, DungeonWidth, DungeonHeight);
-						for (double i = 0.75; i < 1; i += 0.00001)
-						{
-							progress.Set(i);
-						}
 
 						//get rid of annoying liquid inside the dungeon
 						for (int i = X - (DungeonWidth / 2) - 15; i <= X + (DungeonWidth / 2) + 15; i++)
@@ -300,7 +288,7 @@ namespace Spooky.Content.Generation
 			NPC.NewNPC(null, (int)Flags.KrampusPosition.X, (int)Flags.KrampusPosition.Y, ModContent.NPCType<Krampus>());
 		}
 
-		public void DungeonCleanup(int PositionX, int PositionY, int Width, int Height)
+		public void DungeonCleanup(GenerationProgress progress, int PositionX, int PositionY, int Width, int Height)
 		{
 			void getAttachedPoints(int x, int y, List<Point> points)
 			{
@@ -353,6 +341,10 @@ namespace Spooky.Content.Generation
 
 			for (int i = PositionX - (Width / 2) - 25; i <= PositionX + (Width / 2) + 25; i++)
 			{
+				int StartValue = PositionX - (Width / 2) - 25;
+				int EndValue = PositionX + (Width / 2) + 25;
+				progress.Set((float)(i - StartValue) / (EndValue - StartValue));
+
 				for (int j = PositionY - (Height / 2) - 25; j <= PositionY + (Height / 2) + 25; j++)
 				{
 					//clean up floating clumps of tiles in the dungeon
@@ -1453,20 +1445,24 @@ namespace Spooky.Content.Generation
 			_MinRoomSize = MinRoomSize;
 		}
 
-		public void GenerateDungeon()
+		public void GenerateDungeon(GenerationProgress progress)
 		{
 			DungeonSegment rootDungeonSegment = new DungeonSegment(_positionX - (_width / 2), _positionY - (_height / 2), _width, _height);
 			DungeonSegments.Add(rootDungeonSegment);
 
 			bool SplitDungeon = true;
 
-			//loop through all leaves until they can no longer split successfully
+			//loop through until they can no longer split successfully
 			while (SplitDungeon)
 			{
 				SplitDungeon = false;
 
 				for (int i = 0; i < DungeonSegments.Count; i++)
 				{
+					int StartValue = 0;
+					int EndValue = DungeonSegments.Count;
+					progress.Set((float)(i - StartValue) / (EndValue - StartValue));
+
 					if (DungeonSegments[i].childDungeonSegmentLeft == null && DungeonSegments[i].childDungeonSegmentRight == null)
 					{
 						if ((DungeonSegments[i].DungeonSegmentWidth > _maxDungeonSegmentSize) || (DungeonSegments[i].DungeonSegmentHeight > _maxDungeonSegmentSize))

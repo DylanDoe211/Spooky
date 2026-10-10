@@ -39,6 +39,8 @@ namespace Spooky.Content.NPCs.Shipyard
 
         private static Asset<Texture2D> NPCTexture;
 
+        public static readonly SoundStyle HitSound = new("Spooky/Content/Sounds/QueenConchHit", SoundType.Sound);
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 13;
@@ -72,8 +74,8 @@ namespace Spooky.Content.NPCs.Shipyard
             NPC.value = Item.buyPrice(0, 0, 50, 0);
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.HitSound = SoundID.NPCHit48 with { Pitch = -0.5f };
-            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.HitSound = HitSound;
+			NPC.DeathSound = SoundID.NPCDeath6;
             NPC.aiStyle = -1;
             SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.ShipyardBiome>().Type };
         }
@@ -227,10 +229,8 @@ namespace Spooky.Content.NPCs.Shipyard
                     if (NPC.localAI[0] <= 300)
                     {
                         Vector2 RotateTowards = player.Center - NPC.Center;
-
                         float RotateDirection = (float)Math.Atan2(RotateTowards.Y, RotateTowards.X) + 4.71f;
                         float RotateSpeed = 0.05f;
-
                         NPC.rotation = NPC.rotation.AngleTowards(RotateDirection - MathHelper.TwoPi, RotateSpeed);
 
                         NPC.ai[1] += 0.005f;
@@ -244,6 +244,7 @@ namespace Spooky.Content.NPCs.Shipyard
                     else
                     {
                         NPC.localAI[0] = 0;
+                        NPC.ai[1] = 0;
                         NPC.ai[0] = Main.rand.NextBool() ? 1 : 2;
 
                         NPC.netUpdate = true;
@@ -267,10 +268,8 @@ namespace Spooky.Content.NPCs.Shipyard
                     if (NPC.localAI[0] <= 180)
                     {
                         Vector2 RotateTowards = player.Center - NPC.Center;
-
                         float RotateDirection = (float)Math.Atan2(RotateTowards.Y, RotateTowards.X) + 4.71f;
                         float RotateSpeed = 0.05f;
-
                         NPC.rotation = NPC.rotation.AngleTowards(RotateDirection - MathHelper.TwoPi, RotateSpeed);
 
                         NPC.ai[1] += 0.005f;
@@ -301,10 +300,17 @@ namespace Spooky.Content.NPCs.Shipyard
                     }
                     else
                     {
-                        CurrentAnimation = AnimationState.WiggleStop;
+                        
 
-                        NPC.rotation -= (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) * 0.01f;
+                        float RotateSpeed = 0.05f;
+                        NPC.rotation = NPC.rotation.AngleTowards(0f, RotateSpeed);
+
                         NPC.velocity *= 0.96f;
+                    }
+                    
+                    if (NPC.localAI[0] == 180)
+                    {
+                        CurrentAnimation = AnimationState.WiggleStop;
                     }
 
                     if (NPC.localAI[0] >= 260)
@@ -339,26 +345,24 @@ namespace Spooky.Content.NPCs.Shipyard
                     if (NPC.localAI[0] <= 180)
                     {
                         Vector2 RotateTowards = player.Center - NPC.Center;
-
                         float RotateDirection = (float)Math.Atan2(RotateTowards.Y, RotateTowards.X) + 4.71f;
                         float RotateSpeed = 0.05f;
-
                         NPC.rotation = NPC.rotation.AngleTowards(RotateDirection - MathHelper.TwoPi, RotateSpeed);
 
                         NPC.ai[1] += 0.005f;
 
-                        float theta = MathHelper.PiOver2 * MathF.Sin(NPC.ai[1] * 6) * 0.5f;
+                        float theta = MathHelper.PiOver2 * MathF.Sin(NPC.ai[1] * 6) * 0.75f;
                         Vector2 GoTo = player.Center + new Vector2(0, -330).RotatedBy(theta);
 
                         Vector2 desiredVelocity = NPC.DirectionTo(GoTo) * 12;
                         NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
 
                         //fire off bubbles
-                        if (NPC.localAI[0] % 10 == 0)
+                        if (NPC.localAI[0] % 15 == 0)
                         {
                             SoundEngine.PlaySound(SoundID.Item111 with { Volume = 0.5f }, NPC.Center);
 
-                            Vector2 newVelocity = new Vector2(0, Main.rand.Next(8, 15)).RotatedByRandom(MathHelper.ToRadians(45));
+                            Vector2 newVelocity = new Vector2(0, Main.rand.Next(6, 13)).RotatedByRandom(MathHelper.ToRadians(12));
                             NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center, newVelocity, ModContent.ProjectileType<QueenConchBubble>(), NPC.damage, 4.5f);
                         }
                     }
@@ -367,7 +371,9 @@ namespace Spooky.Content.NPCs.Shipyard
                         CurrentFrameX = 1;
                         CurrentAnimation = AnimationState.Idle;
 
-                        NPC.rotation -= (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) * 0.01f;
+                        float RotateSpeed = 0.05f;
+                        NPC.rotation = NPC.rotation.AngleTowards(0f, RotateSpeed);
+
                         NPC.velocity *= 0.96f;
                     }
 
@@ -415,33 +421,21 @@ namespace Spooky.Content.NPCs.Shipyard
                         if (NPC.localAI[0] >= 50 && NPC.localAI[0] < 180)
                         {
                             Vector2 RotateTowards = player.Center - NPC.Center;
-
-                            float RotateDirection = (float)Math.Atan2(RotateTowards.Y, RotateTowards.X) + 4.71f;
+                            float RotateDirection = (float)Math.Atan2(RotateTowards.Y, RotateTowards.X) - 3.14f;
                             float RotateSpeed = 0.05f;
-
                             NPC.rotation = NPC.rotation.AngleTowards(RotateDirection - MathHelper.TwoPi, RotateSpeed);
 
                             Vector2 desiredVelocity = NPC.DirectionTo(player.Center - new Vector2(0, 320)) * 10f;
                             NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
 
-                            if (NPC.localAI[0] % 30 == 0 && SpinFramerate > 2)
+                            if (NPC.localAI[0] % 30 == 0 && SpinFramerate > 3)
                             {
                                 SpinFramerate--;
                             }
                         }
 
-                        //rotate towards player it will be charging at briefly
-                        if (NPC.localAI[0] >= 180 && NPC.localAI[0] < 220)
-                        {
-                            float RotateSpeed = 0.5f;
-                            NPC.rotation = NPC.rotation.AngleTowards(NPC.velocity.ToRotation(), RotateSpeed);
-
-                            Vector2 desiredVelocity = NPC.DirectionTo(player.Center) * 1f;
-                            NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
-                        }
-
                         //charge at player
-                        if (NPC.localAI[0] == 220)
+                        if (NPC.localAI[0] == 180)
                         {
                             Vector2 ChargeDirection = player.Center - NPC.Center;
                             ChargeDirection.Normalize();
@@ -453,7 +447,7 @@ namespace Spooky.Content.NPCs.Shipyard
                         }
                     
                         //handle stuff when it collides with the ground
-                        if (NPC.localAI[0] > 220)
+                        if (NPC.localAI[0] > 180)
                         {
                             if (NPC.Center.Y >= player.Center.Y - 100 && NPCGlobalHelper.IsCollidingWithFloor(NPC, true))
                             {
@@ -469,11 +463,6 @@ namespace Spooky.Content.NPCs.Shipyard
 
                                 NPC.localAI[1]++;
                                 NPC.netUpdate = true;
-                            }
-                            else
-                            {
-                                float RotateSpeed = 0.15f;
-                                NPC.rotation = NPC.rotation.AngleTowards(NPC.velocity.ToRotation(), RotateSpeed);
                             }
                         }
                     }
@@ -493,9 +482,9 @@ namespace Spooky.Content.NPCs.Shipyard
                         {
                             SoundEngine.PlaySound(SoundID.Item111 with { Volume = 0.5f }, NPC.Center);
 
-                            for (int numProjs = 0; numProjs < 12; numProjs++)
+                            for (int numProjs = 0; numProjs < 8; numProjs++)
 							{
-								Vector2 newVelocity = new Vector2(0, Main.rand.Next(5, 15)).RotatedByRandom(MathHelper.ToRadians(45));
+								Vector2 newVelocity = new Vector2(Main.rand.Next(-2, 3), Main.rand.Next(-2, 0)).RotatedByRandom(MathHelper.ToRadians(45));
                                 NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center, newVelocity, ModContent.ProjectileType<QueenConchBubble>(), NPC.damage, 4.5f);
                             }
                         }

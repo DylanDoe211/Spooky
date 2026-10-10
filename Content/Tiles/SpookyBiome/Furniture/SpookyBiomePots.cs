@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.Localization;
 using Terraria.Audio;
 using Microsoft.Xna.Framework;
@@ -66,7 +67,7 @@ namespace Spooky.Content.Tiles.SpookyBiome.Furniture
 				//bombs
 				case 3:
 				{
-					yield return new Item(ItemID.Bomb, Main.rand.Next(2, 4));
+					yield return new Item(ItemID.Bomb, Main.rand.Next(1, 4));
 					break;
 				}
 				//ammos
@@ -83,6 +84,33 @@ namespace Spooky.Content.Tiles.SpookyBiome.Furniture
 			{
 				yield return new Item(ItemID.SilverCoin, Main.rand.Next(1, 11));
 			}
+		}
+
+		public static void LootTable(int type, Point16 position, ILoot loot)
+		{
+			loot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<SpookyBiomeTorchItem>(), 5, 4, 12));
+
+			int[] RestorePotions = new int[] { ItemID.LesserHealingPotion, ItemID.LesserManaPotion };
+			if (Main.hardMode)
+			{
+				RestorePotions = new int[] { ItemID.HealingPotion, ItemID.ManaPotion };
+			}
+			loot.Add(ItemDropRule.OneFromOptions(5, RestorePotions));
+
+			int[] Potions = new int[] { ItemID.IronskinPotion, ItemID.ShinePotion, ItemID.RegenerationPotion, ItemID.SwiftnessPotion, ItemID.RecallPotion };
+			loot.Add(ItemDropRule.OneFromOptions(5, Potions));
+
+			loot.Add(ItemDropRule.NotScalingWithLuck(ItemID.Bomb, 5, 1, 3));
+
+			IItemDropRule[] Ammos = new IItemDropRule[] 
+			{
+				ItemDropRule.Common(ModContent.ItemType<OldWoodArrow>(), 1, 10, 20),
+				ItemDropRule.Common(ModContent.ItemType<RustedBullet>(), 1, 10, 20),
+				ItemDropRule.Common(Main.hardMode ? ModContent.ItemType<MossyBoulder>() : ModContent.ItemType<MossyPebble>(), 1, 10, 20)
+			};
+			loot.Add(new OneFromRulesRule(5, Ammos));
+
+			loot.Add(ItemDropRule.NotScalingWithLuck(ItemID.SilverCoin, 3, 1, 10));
 		}
 
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
