@@ -181,8 +181,20 @@ public class LittleEyeQuestUI : ModSystem
 
 		//draw the main UI box
 		Main.spriteBatch.Draw(UIBoxTexture, UICenter, null, Color.White, 0f, UIBoxTexture.Size() / 2, scale, SpriteEffects.None, 0f);
+		int crossModQuestCount = 0;
 
-		if (LittleEyeCrossmod.QuestsByMod.Count > 0)
+		foreach (List<CrossmodQuest> quests in LittleEyeCrossmod.QuestsByMod.Values)
+		{
+			foreach (CrossmodQuest quest in quests)
+			{
+				if (quest.IsHidden?.Invoke() == true)
+					continue;
+
+				crossModQuestCount++;
+			}
+		}
+		
+		if (crossModQuestCount > 0)
 		{
 			Texture2D tex = ButtonTex.Value;
 			Vector2 origin = UIBoxTexture.Size() * new Vector2(0.5f, 0);
@@ -200,7 +212,7 @@ public class LittleEyeQuestUI : ModSystem
 
 			Main.spriteBatch.Draw(tex, pos, src, canClick ? Color.White : Color.Gray, 0f, origin, scale, SpriteEffects.FlipHorizontally, 0f);
 
-			canClick = _firstVisibleQuest < LittleEyeCrossmod.CustomQuestCount;
+			canClick = _firstVisibleQuest < crossModQuestCount;
 			pos = UICenter + new Vector2(backWidth + 4, yOff) * Main.UIScale;
 			hover = new Rectangle((int)pos.X - (int)(218 * Main.UIScale), (int)pos.Y, baseSize.X, baseSize.Y).Contains(Main.MouseScreen.ToPoint()) && canClick;
 			src = new Rectangle(hover ? 34 : 0, 0, 32, 90);
@@ -256,6 +268,9 @@ public class LittleEyeQuestUI : ModSystem
 			{
 				foreach (CrossmodQuest quest in quests)
 				{
+					if (quest.IsHidden?.Invoke() == true)
+						continue;
+
 					buttonTopLeft.X += step;
 					HandleCustomQuest(player, buttonTopLeft, quest);
 				}

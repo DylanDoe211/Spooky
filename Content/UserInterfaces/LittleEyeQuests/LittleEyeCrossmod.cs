@@ -15,7 +15,7 @@ namespace Spooky.Content.UserInterfaces.LittleEyeQuests;
 #nullable enable
 
 public readonly record struct CrossmodQuest(Mod Mod, string Name, Asset<Texture2D> Icon, Func<bool> IsActive, Func<bool> CanComplete, Func<bool> IsComplete, Func<DialogueChain> Chain,
-	Func<DialogueChain> RecoverChain, Func<DialogueChain> CompleteChain, Func<bool>? IsLocked = null);
+	Func<DialogueChain> RecoverChain, Func<DialogueChain> CompleteChain, Func<bool>? IsLocked = null, Func<bool>? IsHidden = null);
 
 public class LittleEyeCrossmod : ModSystem
 {
@@ -27,10 +27,10 @@ public class LittleEyeCrossmod : ModSystem
 
 	internal static bool Call(object[] objects)
 	{
-		if (objects.Length <= 8)
-			throw new ArgumentException("EyeQuest takes at least 8 parameters (Mod mod, string questName, Asset<Texture2D> icons, Func<bool> isActive, Action<bool> onActivate, " +
+		if (objects.Length <= 10)
+			throw new ArgumentException("EyeQuest takes at least 11 parameters (Mod mod, string questName, Asset<Texture2D> icons, Func<bool> isActive, Action<bool> onActivate, " +
 				"Func<bool> canComplete, Func<bool> isComplete, (string npcText, string playerText)[] dialogue, (string npcText, string playerText)[] recoverDialogue, " +
-				"(string npcText, string playerText)[] recoverDialogue, [Func<bool>? isLocked = null]");
+				"(string npcText, string playerText)[] recoverDialogue, Action onComplete, [Func<bool>? isLocked = null], [Func<bool>? isHidden = null]");
 
 		if (objects[0] is not Mod mod)
 			throw new ArgumentException(ErrorStart(0) + "must be a Mod (mod)!");
@@ -67,15 +67,29 @@ public class LittleEyeCrossmod : ModSystem
 
 		Func<bool>? isLocked = null;
 
-		if (objects.Length == 12) 
+		if (objects.Length is 12 or 13) 
 		{
-			if (objects[11] is not Func<bool> locked)
-				throw new ArgumentException(ErrorStart(11) + "must be an Func<bool> (isLocked), or be omitted!");
-			else
+			if (objects[11] is Func<bool> locked)
 				isLocked = locked;
+			else if (objects[11] is null)
+				isLocked = null;
+			else
+				throw new ArgumentException(ErrorStart(11) + "must be an Func<bool> (isLocked), or be omitted!");
 		}
 
-		AddQuest(mod, name, icons, isActive, onActivate, canComplete, isComplete, dialogue, recoverDialogue, completeDialogue, onComplete, isLocked);
+		Func<bool>? isHidden = null;
+
+		if (objects.Length == 13) 
+		{
+			if (objects[12] is Func<bool> hidden)
+				isHidden = hidden;
+			else if (objects[12] is null)
+				isLocked = null;
+			else
+				throw new ArgumentException(ErrorStart(12) + "must be an Func<bool> (isHidden), or be omitted!");
+		}
+
+		AddQuest(mod, name, icons, isActive, onActivate, canComplete, isComplete, dialogue, recoverDialogue, completeDialogue, onComplete, isLocked, isHidden);
 		return true;
 	}
 
@@ -88,9 +102,9 @@ public class LittleEyeCrossmod : ModSystem
 	}
 
 	private static void AddQuest(Mod mod, string questName, Asset<Texture2D> icon, Func<bool> isActive, Action<bool> onActivate, Func<bool> canComplete, Func<bool> isComplete,
-		DialoguePair[] dialogue, DialoguePair[] recoverDialogue, DialoguePair[] completeDialogue, Action onComplete, Func<bool>? isLocked)
+		DialoguePair[] dialogue, DialoguePair[] recoverDialogue, DialoguePair[] completeDialogue, Action onComplete, Func<bool>? isLocked, Func<bool>? isHidden)
 	{
-		CrossmodQuest quest = new(mod, questName, icon, isActive, canComplete, isComplete, Chain, Recover, Complete, isLocked);
+		CrossmodQuest quest = new(mod, questName, icon, isActive, canComplete, isComplete, Chain, Recover, Complete, isLocked, isHidden);
 		AddQuestDirect(quest);
 		return;
 
