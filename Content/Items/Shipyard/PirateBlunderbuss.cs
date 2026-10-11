@@ -16,7 +16,7 @@ namespace Spooky.Content.Items.Shipyard
 	{
 		public override void SetDefaults()
 		{
-			Item.damage = 20;
+			Item.damage = 14;
 			Item.DamageType = DamageClass.Ranged;
 			Item.noMelee = true;
 			Item.autoReuse = true;

@@ -291,7 +291,7 @@ public class LittleEyeQuestUI : ModSystem
 		int y = 164;
 		bool locked = !quest.IsLocked?.Invoke() is true;
 
-		if (!quest.CompleteCheck())
+		if (!quest.IsComplete())
 			y = 82;
 		else if (!locked)
 			y = 0;
@@ -313,12 +313,12 @@ public class LittleEyeQuestUI : ModSystem
 			DrawIcon(drawPosition, BountyIconSelectedOutline.Value);
 			bool inBounds = Main.instance.GraphicsDevice.ScissorRectangle.Contains(Main.MouseScreen.ToPoint());
 
-			if (quest.CompleteCheck())
+			if (quest.CanComplete() || quest.IsComplete())
 			{
 				if (inBounds && Main.mouseLeftRelease && Main.mouseLeft && Delay > 20)
 				{
-					// If the quest is active, it has been completed - run the completion code
-					if (quest.IsActive())
+					// If the quest is either not completed yet (which means it can be logically), or it can be completed again, re-complete it
+					if (!quest.IsComplete() || quest.CanComplete())
 					{
 						DialogueChain chain = quest.CompleteChain();
 						DialogueUI.Visible = true;
@@ -536,9 +536,5 @@ public class LittleEyeQuestUI : ModSystem
 		DialogueUI.Add(newDialogue);
 	}
 
-	internal static void Open()
-	{
-		UIOpen = true;
-		_firstVisibleQuest = 0;
-	}
+	internal static void Open() => UIOpen = true;
 }

@@ -32,8 +32,7 @@ namespace Spooky.Content.Tiles.Shipyard
             if (!Above.HasTile && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock) 
             {
 				//grow bleached corals
-                int InWaterChance1 = Above.LiquidAmount <= 0 ? 12 : 6;
-                if (Main.rand.NextBool(InWaterChance1))
+                if (Main.rand.NextBool(6) && Above.LiquidAmount > 0 && Above.LiquidType == LiquidID.Water)
                 {
                     TileGlobal.PlaceObject(i, j - 1, ModContent.TileType<BleachedCoral>(), true, Main.rand.Next(0, 8));
 				}

@@ -11,6 +11,9 @@ namespace Spooky.Content.NPCs.Shipyard
 {
 	public class QueenConchIntro : ModNPC
 	{
+	 	bool holdFrame = true;
+		float progress = 1;
+
         public enum AnimationState
 		{
 			Emerge, PrepareThrow, Throw
@@ -49,7 +52,6 @@ namespace Spooky.Content.NPCs.Shipyard
             SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.ShipyardBiome>().Type };
         }
 
-		public bool holdFrame = true;
         public override void FindFrame(int frameHeight)
         {
 			NPC.frameCounter++;
@@ -129,21 +131,27 @@ namespace Spooky.Content.NPCs.Shipyard
             //dont start rotating until the throwing animation begins
             if (NPC.ai[0] >= StartSpinning)
             {
-				//this is where the npc should rotate alongside the throwing charge up animation
-				//nothing for now, look into proper ease-in rotation later
-				if (NPC.ai[0] < BeginThrow -7) NPC.rotation = SpinEasing(StartSpinning, BeginThrow - 7, NPC.ai[0]);
+				if (NPC.ai[0] < BeginThrow -7) 
+				{
+					NPC.rotation = SpinEasing(StartSpinning, BeginThrow - 7, NPC.ai[0]);
+				}
 				else
 				{
-					float progress = 1;
-					if (NPC.ai[0] <= SpawnQueenConch - 8) progress = 0.4118f + (NPC.ai[0] - BeginThrow -7) / (SpawnQueenConch - (BeginThrow +1));					
 					NPC.TargetClosest();
 					Player player = Main.player[NPC.target];
+
+					if (NPC.ai[0] <= SpawnQueenConch - 8) 
+					{
+						progress = 0.4118f + (NPC.ai[0] - BeginThrow -7) / (SpawnQueenConch - (BeginThrow + 1));
+					}
 
 					Vector2 RotateTowards = player.Center - NPC.Center;
 					float RotateDirection = (float)Math.Atan2(RotateTowards.Y, RotateTowards.X) + 4.71f;
 					float targetSpeed = 0.05f;
 					float RotateSpeed = targetSpeed * progress;
 					NPC.rotation = NPC.rotation.AngleTowards(RotateDirection - MathHelper.TwoPi, RotateSpeed);
+
+					NPC.ai[1] += 0.005f;
 
 					float theta = MathHelper.PiOver2 * MathF.Sin(NPC.ai[1] * 12) * 0.4f;
 					Vector2 GoTo = player.Center + new Vector2(0, -280).RotatedBy(theta);
@@ -187,7 +195,7 @@ namespace Spooky.Content.NPCs.Shipyard
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    int NewNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<QueenConch>());
+                    int NewNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y + NPC.height / 4, ModContent.NPCType<QueenConch>());
                     Main.npc[NewNPC].velocity = NPC.velocity;
                     Main.npc[NewNPC].rotation = NPC.rotation;
                     Main.npc[NewNPC].alpha = 255;

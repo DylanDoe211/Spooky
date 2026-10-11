@@ -54,13 +54,15 @@ General Changes:
 -Removed gourd o' lantern items, breaking a carved gourd with a candle in it now just drops the regular carved gourd and the candle
 -Eye blocks now grow various eye valley ambient objects on them naturally
 -Krampus job application sign tile now lights up with spelunker potions
--Spooky mod chandeliers and lanterns now properly sway in the wind
 -Reduced the size of the tar pits biome
 -Tarrars now play a growling sound when a player gets close to them
+-Spitcher plant spit projectiles now look better, and they now spit quicker and at a greater distance
 -Rot gourd mold spores now home in on the player slower
 -Big bones flower projectiles now move slower due to their increased sprite size
 -Various small tweaks to daffodils fight to fit with her new sprites and size
 -Slightly changed outline visuals and dust particles on some enemies to look nicer
+-Spooky mod chandeliers and lanterns now properly sway in the wind
+-Cemetery street lamps and big bone statues now count as light sources for npc housing
 
 
 Localization Changes:
@@ -116,3 +118,4 @@ Fixes:
 -Hunter scarf mark and peacock oni mask debuff icons drawing on worm segments or other npcs that are a "child" of another (The debuff is still applied to them in-game)
 -Venomous spiderpoon pulling effect incorrectly pulling worm segments or other npcs that are a "child" of another
 -Sharkbone hand cannon and the dunker not playing shoot sounds for other players in multiplayer
+-Issue where some enemies with behavior that changes when they get hit wasn't working properly in multiplayer
