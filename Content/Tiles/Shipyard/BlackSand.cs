@@ -40,15 +40,13 @@ namespace Spooky.Content.Tiles.Shipyard
 				}
 
 				//grow bleached corals
-                int InWaterChance1 = Above.LiquidAmount <= 0 ? 15 : 7;
-                if (Main.rand.NextBool(InWaterChance1))
+                if (Main.rand.NextBool(10) && Above.LiquidAmount > 0 && Above.LiquidType == LiquidID.Water)
                 {
                     TileGlobal.PlaceObject(i, j - 1, ModContent.TileType<BleachedCoral>(), true, Main.rand.Next(0, 8));
 				}
 
                 //giant bleached coral 
-                int InWaterChance2 = Above.LiquidAmount <= 0 ? 25 : 15;
-                if (Main.rand.NextBool(InWaterChance2))
+                if (Main.rand.NextBool(15) && Above.LiquidAmount > 0 && Above.LiquidType == LiquidID.Water)
                 {
                     ushort[] GiantCorals = new ushort[] { (ushort)ModContent.TileType<BleachedCoralGiant1>(), (ushort)ModContent.TileType<BleachedCoralGiant2>(), (ushort)ModContent.TileType<BleachedCoralGiant3>(),
                     (ushort)ModContent.TileType<BleachedCoralGiant4>(), (ushort)ModContent.TileType<BleachedCoralGiant5>(), (ushort)ModContent.TileType<BleachedCoralGiant6>() };

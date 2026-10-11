@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Spooky.Content.Achievements;
 using Spooky.Content.Biomes;
 using Spooky.Content.Buffs.Debuff;
+using Spooky.Content.Items.Costume;
 using Spooky.Content.Items.Fishing;
 using Spooky.Content.Items.Fishing.Crate;
 using Spooky.Content.Items.Pets;
@@ -523,6 +524,12 @@ namespace Spooky.Core
 					{
 						itemDrop = Main.hardMode ? ModContent.ItemType<ShipyardCrate2>() : ModContent.ItemType<ShipyardCrate>();
                     }
+
+                    //urchin head vanity
+                    if (Main.rand.NextBool(3) && attempt.rare)
+					{
+						itemDrop = ModContent.ItemType<UrchinHead>();
+					}
 
                     //bleached tuna
                     if (attempt.rare && Main.rand.NextBool())

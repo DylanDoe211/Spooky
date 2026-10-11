@@ -129,6 +129,7 @@ namespace Spooky.Content.NPCs.Shipyard
 			if (NPC.ai[2] == 0)
             {
                 NPC.ai[2] = 180;
+                Spooky.ManuallySyncNPCAI(NPC.whoAmI);
             }
 		}
 
@@ -137,6 +138,7 @@ namespace Spooky.Content.NPCs.Shipyard
 			if (NPC.ai[2] == 0)
             {
                 NPC.ai[2] = 180;
+                Spooky.ManuallySyncNPCAI(NPC.whoAmI);
             }
 		}
         

@@ -21,22 +21,21 @@ using Spooky.Content.NPCs.Boss.Moco;
 using Spooky.Content.NPCs.Friendly;
 using Spooky.Content.NPCs.Tameable;
 using Spooky.Content.Projectiles.Shipyard;
-using Spooky.Content.Tiles.Cemetery;
-using Spooky.Content.Tiles.Shipyard;
-using Spooky.Content.Tiles.SpookyBiome;
-using Spooky.Content.UserInterfaces.LittleEyeQuests;
-
-using SpiritReforged.Common.WorldGeneration.Ecotones;
-
 using Spooky.Content.Tiles.Catacomb.Furniture;
+using Spooky.Content.Tiles.Cemetery;
 using Spooky.Content.Tiles.Minibiomes.Christmas.Furniture;
 using Spooky.Content.Tiles.Minibiomes.Desert.Furniture;
 using Spooky.Content.Tiles.Minibiomes.Ocean.Furniture;
 using Spooky.Content.Tiles.Minibiomes.Vegetable.Furniture;
 using Spooky.Content.Tiles.NoseTemple.Furniture;
+using Spooky.Content.Tiles.Shipyard;
 using Spooky.Content.Tiles.Shipyard.Furniture;
 using Spooky.Content.Tiles.SpiderCave.Furniture;
+using Spooky.Content.Tiles.SpookyBiome;
 using Spooky.Content.Tiles.SpookyBiome.Furniture;
+using Spooky.Content.UserInterfaces.LittleEyeQuests;
+
+using SpiritReforged.Common.WorldGeneration.Ecotones;
 
 namespace Spooky
 {
@@ -252,11 +251,44 @@ namespace Spooky
 			mod = null;
 		}
 
+		//method to send a packet manually syncing all npcs ai and locaAI values
+		public static void ManuallySyncNPCAI(int npcWhoAmI)
+		{
+			if (Main.netMode != NetmodeID.SinglePlayer)
+			{
+				ModPacket packet = mod.GetPacket();
+				packet.Write((byte)SpookyMessageType.ManuallySyncNPCAI);
+				packet.Write((short)npcWhoAmI);
+				packet.Write(Main.npc[npcWhoAmI].ai[0]);
+				packet.Write(Main.npc[npcWhoAmI].ai[1]);
+				packet.Write(Main.npc[npcWhoAmI].ai[2]);
+				packet.Write(Main.npc[npcWhoAmI].ai[3]);
+				packet.Write(Main.npc[npcWhoAmI].localAI[0]);
+				packet.Write(Main.npc[npcWhoAmI].localAI[1]);
+				packet.Write(Main.npc[npcWhoAmI].localAI[2]);
+				packet.Write(Main.npc[npcWhoAmI].localAI[3]);
+				packet.Send();
+			}
+		}
+
 		public override void HandlePacket(BinaryReader reader, int whoAmI)
 		{
 			SpookyMessageType messageType = (SpookyMessageType)reader.ReadByte();
 			switch (messageType)
 			{
+				case SpookyMessageType.ManuallySyncNPCAI:
+				{
+					int npcID = reader.ReadInt16();
+					Main.npc[npcID].ai[0] = reader.ReadSingle();
+					Main.npc[npcID].ai[1] = reader.ReadSingle();
+					Main.npc[npcID].ai[2] = reader.ReadSingle();
+					Main.npc[npcID].ai[3] = reader.ReadSingle();
+					Main.npc[npcID].localAI[0] = reader.ReadSingle();
+					Main.npc[npcID].localAI[1] = reader.ReadSingle();
+					Main.npc[npcID].localAI[2] = reader.ReadSingle();
+					Main.npc[npcID].localAI[3] = reader.ReadSingle();
+					break;
+				}
 				case SpookyMessageType.SpawnMoco:
 				{
 					NPC.NewNPC(null, (int)Flags.MocoSpawn.X, (int)Flags.MocoSpawn.Y, ModContent.NPCType<MocoSpawner>());
@@ -523,6 +555,7 @@ namespace Spooky
 
 enum SpookyMessageType : byte
 {
+	ManuallySyncNPCAI,
 	SpawnMoco,
 	SpawnOrroboro,
 	SpawnDaffodil,

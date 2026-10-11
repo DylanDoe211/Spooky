@@ -21,7 +21,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2.Projectiles
 
         public override void SetDefaults()
         {
-            Projectile.width = 10;
+            Projectile.width = 14;
             Projectile.height = 14;
             Projectile.friendly = false;
             Projectile.hostile = true;
@@ -38,33 +38,28 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2.Projectiles
 
         public override void AI()       
         {
-            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-            Projectile.rotation += 0f * (float)Projectile.direction;
+            Projectile.rotation += 0.5f * (float)Projectile.direction;
 
             Projectile.velocity.Y = Projectile.velocity.Y + 0.05f;
         }
 
         public override bool PreDraw(ref Color lightColor)
-        {
-            ProjTexture ??= ModContent.Request<Texture2D>(Texture);
-
-            Color color = new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0).MultiplyRGBA(new Color(169, 98, 179) * 0.5f);
+		{
+			ProjTexture ??= ModContent.Request<Texture2D>(Texture);
 
             Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
 
-            float fade = (float)Math.Cos((double)(Main.GlobalTimeWrappedHourly % 2.5f / 2.5f * 6f)) / 2f + 0.5f;
-
             for (int oldPos = 0; oldPos < Projectile.oldPos.Length; oldPos++)
             {
-                var effects = Projectile.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
                 float scale = Projectile.scale * (Projectile.oldPos.Length - oldPos) / Projectile.oldPos.Length * 1f;
                 Vector2 drawPos = Projectile.oldPos[oldPos] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+                Color color = Projectile.GetAlpha(Color.Lerp(Color.Purple, Color.Magenta, oldPos / (float)Projectile.oldPos.Length)) * ((Projectile.oldPos.Length - oldPos) / (float)Projectile.oldPos.Length);
                 Rectangle rectangle = new(0, (ProjTexture.Height() / Main.projFrames[Projectile.type]) * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
-                Main.EntitySpriteDraw(ProjTexture.Value, drawPos, rectangle, color, Projectile.rotation, drawOrigin, scale + (fade / 2), effects, 0);
+                Main.EntitySpriteDraw(ProjTexture.Value, drawPos, rectangle, color, Projectile.rotation, drawOrigin, scale, SpriteEffects.None, 0);
             }
 
-            return false;
-        }
+			return true;
+		}
 
 		public override void OnKill(int timeLeft)
 		{

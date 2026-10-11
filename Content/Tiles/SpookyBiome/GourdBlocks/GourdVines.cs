@@ -20,7 +20,7 @@ namespace Spooky.Content.Tiles.SpookyBiome.GourdBlocks
 			TileID.Sets.IsVine[Type] = true;
             TileID.Sets.VineThreads[Type] = true;
 			TileID.Sets.MultiTileSway[Type] = true;
-			AddMapEntry(new Color(170, 132, 101));
+			AddMapEntry(new Color(0, 147, 64));			
 			DustType = 288;
 			HitSound = SoundID.Grass;
 			MineResist = 0.1f;
@@ -91,21 +91,47 @@ namespace Spooky.Content.Tiles.SpookyBiome.GourdBlocks
 
 	public class GourdVinesLime : GourdVinesGreen
 	{
+		public override void SetStaticDefaults()
+		{			
+			AddMapEntry(new Color(121, 169, 47));
+			base.SetStaticDefaults();
+		}
 	}
 
 	public class GourdVinesOrange : GourdVinesGreen
 	{
+		public override void SetStaticDefaults()
+		{			
+			AddMapEntry(new Color(191, 99, 37));			
+			base.SetStaticDefaults();						
+		}
 	}
 
 	public class GourdVinesRed : GourdVinesGreen
 	{
+		public override void SetStaticDefaults()
+		{
+			AddMapEntry(new Color(184, 54, 42));
+			base.SetStaticDefaults();						
+		}
 	}
 
 	public class GourdVinesWhite : GourdVinesGreen
 	{
+		public override void SetStaticDefaults()
+		{
+
+			AddMapEntry(new Color(144, 146, 148));
+			base.SetStaticDefaults();					
+		}
 	}
 
 	public class GourdVinesYellow : GourdVinesGreen
 	{
+		public override void SetStaticDefaults()
+		{
+			AddMapEntry(new Color(161, 120, 48));
+			base.SetStaticDefaults();					
+		}
 	}
 }
