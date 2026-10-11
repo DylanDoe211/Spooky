@@ -124,6 +124,7 @@ namespace Spooky.Content.NPCs.Shipyard
 			if (Parent.ai[0] == 0)
             {
                 Parent.ai[0]++;
+                Spooky.ManuallySyncNPCAI(Parent.whoAmI);
             }
 		}
 
@@ -133,6 +134,7 @@ namespace Spooky.Content.NPCs.Shipyard
 			if (Parent.ai[0] == 0)
             {
                 Parent.ai[0]++;
+                Spooky.ManuallySyncNPCAI(Parent.whoAmI);
             }
 		}
 
@@ -149,7 +151,7 @@ namespace Spooky.Content.NPCs.Shipyard
                 NPC.localAI[0]++;
 
                 //randomly go to a position around the parent npc
-                if (NPC.localAI[0] == 1 || NPC.localAI[0] % 10 == 0)
+                if (NPC.localAI[0] == 1 || NPC.localAI[0] % 20 == 0)
                 {
                     GoToPosition = new Vector2(Main.rand.Next(-125, 126), Main.rand.Next(-80, 81));
                     NPC.netUpdate = true;

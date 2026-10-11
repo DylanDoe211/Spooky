@@ -68,7 +68,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
             Player player = Main.player[NPC.target];
 
             //jumping animations
-            if (NPC.Distance(player.Center) > 200f || NPC.velocity != Vector2.Zero)
+            if (NPC.Distance(player.Center) > 350f || NPC.velocity != Vector2.Zero)
             {
                 //still frame
                 if (NPC.velocity.Y == 0 && NPC.frame.Y <= frameHeight * 0)
@@ -123,13 +123,13 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
             }
 
             //spitting animation frames
-            if (NPC.Distance(player.Center) <= 200f && NPC.velocity == Vector2.Zero)
+            if (NPC.Distance(player.Center) <= 350f && NPC.velocity == Vector2.Zero)
             {
-                if (NPC.ai[2] < 45)
+                if (NPC.ai[2] < 30)
                 {
                     NPC.frame.Y = 6 * frameHeight;
                 }
-                if (NPC.ai[2] >= 45)
+                else
                 {
                     NPC.frame.Y = 7 * frameHeight;
                 }
@@ -137,13 +137,22 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
         }
 
 		//hitting the pitcher plant with items and projectiles should reset its shooting timer so players dont get unfairly hit at close range
-		public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
+        public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
 		{
-			NPC.ai[2] = 0;
+			if (NPC.ai[2] != 0)
+			{
+				NPC.ai[2] = 0;
+				Spooky.ManuallySyncNPCAI(NPC.whoAmI);
+			}
 		}
+
 		public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
 		{
-			NPC.ai[2] = 0;
+			if (NPC.ai[2] != 0)
+			{
+				NPC.ai[2] = 0;
+				Spooky.ManuallySyncNPCAI(NPC.whoAmI);
+			}
 		}
 
 		public override void AI()
@@ -158,7 +167,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
 
         public void AttackingAI(Player target, int JumpHeight, int SpitType, bool HydraPlant)
         {
-            if (NPC.Distance(target.Center) > 200f)
+            if (NPC.Distance(target.Center) > 350f)
             {
                 //set where the it should be jumping towards
                 Vector2 JumpTo = new(target.Center.X, NPC.Center.Y - JumpHeight);
@@ -198,7 +207,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
                 }
             }
             
-            if (NPC.Distance(target.Center) <= 200f && NPC.velocity == Vector2.Zero)
+            if (NPC.Distance(target.Center) <= 350f && NPC.velocity == Vector2.Zero)
             {
                 NPC.ai[0] = -60;
                 NPC.ai[1] = -60;
@@ -206,7 +215,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
                 NPC.ai[2]++;
 
                 //spit poison
-                if (NPC.ai[2] == 45)
+                if (NPC.ai[2] == 30)
                 {
                     SoundEngine.PlaySound(SoundID.NPCDeath9, NPC.Center);
 
@@ -238,7 +247,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
                 }
 
                 //loop ai
-                if (NPC.ai[2] >= 65)
+                if (NPC.ai[2] >= 40)
                 {
                     NPC.ai[2] = 0;
                 }

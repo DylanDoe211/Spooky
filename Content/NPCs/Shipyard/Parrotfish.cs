@@ -122,8 +122,9 @@ namespace Spooky.Content.NPCs.Shipyard
 		{
 			if (NPC.ai[0] == 0)
             {
-                NPC.ai[0]++;
-            }
+				NPC.ai[0]++;
+				Spooky.ManuallySyncNPCAI(NPC.whoAmI);
+			}
 		}
 
 		public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
@@ -131,7 +132,8 @@ namespace Spooky.Content.NPCs.Shipyard
 			if (NPC.ai[0] == 0)
             {
                 NPC.ai[0]++;
-            }
+				Spooky.ManuallySyncNPCAI(NPC.whoAmI);
+			}
 		}
 
         public override bool CanHitPlayer(Player target, ref int cooldownSlot)
@@ -143,21 +145,24 @@ namespace Spooky.Content.NPCs.Shipyard
         {
             NPC.rotation = NPC.velocity.Y * (NPC.spriteDirection == 1 ? 0.03f : -0.03f);
 
-            if (NPC.ai[2] == 0)
-            {
-                for (int numFish = 0; numFish < 3; numFish++)
-                {
-                    int NewParrotfish = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<ParrotfishBaby>(), ai1: NPC.whoAmI);
+			if (NPC.ai[2] == 0)
+			{
+				if (Main.netMode != NetmodeID.MultiplayerClient)
+				{
+					for (int numFish = 0; numFish < 3; numFish++)
+					{
+						int NewParrotfish = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<ParrotfishBaby>(), ai1: NPC.whoAmI);
 
-                    if (Main.netMode != NetmodeID.SinglePlayer)
-                    {
-                        NetMessage.SendData(MessageID.SyncNPC, number: NewParrotfish);
-                    }
-                }
+						if (Main.netMode != NetmodeID.SinglePlayer)
+						{
+							NetMessage.SendData(MessageID.SyncNPC, number: NewParrotfish);
+						}
+					}
+				}
 
-                NPC.ai[2]++;
-                NPC.netUpdate = true;
-            }
+				NPC.ai[2]++;
+				NPC.netUpdate = true;
+			}
 
             switch ((int)NPC.ai[0])
             {

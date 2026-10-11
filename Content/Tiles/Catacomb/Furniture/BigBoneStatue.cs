@@ -40,6 +40,7 @@ namespace Spooky.Content.Tiles.Catacomb.Furniture
             AddMapEntry(new Color(86, 46, 29));
             DustType = DustID.t_Lihzahrd;
             HitSound = SoundID.Tink;
+			AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTorch);
         }
 
 		public override void NumDust(int i, int j, bool fail, ref int num) 

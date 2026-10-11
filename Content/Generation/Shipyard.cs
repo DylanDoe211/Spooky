@@ -476,31 +476,40 @@ namespace Spooky.Content.Generation
 					(Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSand>() || Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSandGrass>() || 
 					Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSandstone>()|| Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSandstoneMoss>()))
 					{
-						switch (WorldGen.genRand.Next(4))
+						if (WorldGen.genRand.NextBool(8))
 						{
-							case 0:
+							switch (WorldGen.genRand.Next(2))
 							{
-								Vector2 WreckOrigin = new Vector2((int)Position.X - 13, StructureY - 19);
-								StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckGiant" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
-								break;
+								case 0:
+								{
+									Vector2 WreckOrigin = new Vector2((int)Position.X - 13, StructureY - 19);
+									StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckGiant" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
+									break;
+								}
+								case 1:
+								{
+									Vector2 WreckOrigin = new Vector2((int)Position.X - 9, StructureY - 11);
+									StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckMedium" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
+									break;
+								}
 							}
-							case 1:
+						}
+						else
+						{
+							switch (WorldGen.genRand.Next(2))
 							{
-								Vector2 WreckOrigin = new Vector2((int)Position.X - 9, StructureY - 11);
-								StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckMedium" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
-								break;
-							}
-							case 2:
-							{
-								Vector2 WreckOrigin = new Vector2((int)Position.X - 5, StructureY - 6);
-								StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckSmall" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
-								break;
-							}
-							case 3:
-							{
-								Vector2 WreckOrigin = new Vector2((int)Position.X - 2, StructureY - 6);
-								StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckTiny" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
-								break;
+								case 0:
+								{
+									Vector2 WreckOrigin = new Vector2((int)Position.X - 5, StructureY - 6);
+									StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckSmall" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
+									break;
+								}
+								case 1:
+								{
+									Vector2 WreckOrigin = new Vector2((int)Position.X - 2, StructureY - 6);
+									StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckTiny" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
+									break;
+								}
 							}
 						}
 					}
@@ -579,7 +588,8 @@ namespace Spooky.Content.Generation
 
 					if (WorldGen.genRand.NextBool() && WorldGen.InWorld(X, Y, 10) && CanPlaceCoralTree(X, Y) && WorldGen.SolidTile(X, Y) && //make sure the tree can place on a solid tile and not nearby other trees
 					!WorldGen.SolidTile(X, Y - 1) && !WorldGen.SolidTile(X - 1, Y - 1) && !WorldGen.SolidTile(X + 1, Y - 1) && //make sure theres no tiles around where the tree will grow
-					Main.tile[X, Y - 1].LiquidAmount > 0 && Main.tile[X, Y - 1].LiquidType == LiquidID.Water && //must be water above the tile it grows on
+					Main.tile[X, Y - 1].LiquidAmount > 0 && Main.tile[X, Y - 1].LiquidType == LiquidID.Water &&
+					Main.tile[X, Y - 2].LiquidAmount > 0 && Main.tile[X, Y - 2].LiquidType == LiquidID.Water && //must be water above the tile it grows on
 					!Main.tile[X, Y].LeftSlope && !Main.tile[X, Y].RightSlope && !Main.tile[X, Y].IsHalfBlock && //tree cannot be placed on slopes
 					(Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandGrass>() ||
 					Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>()))
@@ -601,21 +611,19 @@ namespace Spooky.Content.Generation
 						Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>())
 						{
 							//conch shells
-							if (WorldGen.genRand.NextBool(6))
+							if (WorldGen.genRand.NextBool(12))
 							{
 								if (Main.tile[X, Y - 1].WallType <= 0)
 								{
 									TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<QueenShell>(), true, WorldGen.genRand.Next(0, 2));
 								}
 							}
-							else
+
+							//mossy giant anchors
+							if (WorldGen.genRand.NextBool(5))
 							{
-								//giant mossy anchors
-								if (WorldGen.genRand.NextBool())
-								{
-									ushort[] Anchors = new ushort[] { (ushort)ModContent.TileType<MossyAnchor1>(), (ushort)ModContent.TileType<MossyAnchor2>(), (ushort)ModContent.TileType<MossyAnchor3>() };
-									TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Anchors), true);
-								}
+								ushort[] Anchors = new ushort[] { (ushort)ModContent.TileType<MossyAnchor1>(), (ushort)ModContent.TileType<MossyAnchor2>(), (ushort)ModContent.TileType<MossyAnchor3>() };
+								TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Anchors), true);
 							}
 						}
 					}
@@ -673,26 +681,23 @@ namespace Spooky.Content.Generation
 						Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>())
 						{
 							//giant bleached coral 
-							int InWaterChance1 = tileAbove.LiquidAmount <= 0 ? 20 : 8;
-							if (WorldGen.genRand.NextBool(InWaterChance1))
+							if (WorldGen.genRand.NextBool(8) && tileAbove.LiquidAmount > 0 && tileAbove.LiquidType == LiquidID.Water)
 							{
 								ushort[] GiantCorals = new ushort[] { (ushort)ModContent.TileType<BleachedCoralGiant1>(), (ushort)ModContent.TileType<BleachedCoralGiant2>(), (ushort)ModContent.TileType<BleachedCoralGiant3>(),
 								(ushort)ModContent.TileType<BleachedCoralGiant4>(), (ushort)ModContent.TileType<BleachedCoralGiant5>(), (ushort)ModContent.TileType<BleachedCoralGiant6>() };
 								TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(GiantCorals), true);
 							}
 
-							//small bleached corals/starfishes
-							int InWaterChance2 = tileAbove.LiquidAmount <= 0 ? 8 : 2;
-							if (WorldGen.genRand.NextBool(InWaterChance2))
+							//small bleached corals
+							if (WorldGen.genRand.NextBool() && tileAbove.LiquidAmount > 0 && tileAbove.LiquidType == LiquidID.Water)
 							{
-								if (WorldGen.genRand.NextBool())
-								{
-									TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<BleachedCoral>(), true, WorldGen.genRand.Next(0, 8));
-								}
-								else
-								{
-									TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<PaleStarfish>(), true, WorldGen.genRand.Next(0, 4));
-								}
+								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<BleachedCoral>(), true, WorldGen.genRand.Next(0, 8));
+							}
+
+							//starfishes
+							if (WorldGen.genRand.NextBool(5))
+							{
+								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<PaleStarfish>(), true, WorldGen.genRand.Next(0, 4));
 							}
 						}
 

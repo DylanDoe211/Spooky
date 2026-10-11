@@ -12,6 +12,7 @@ using Spooky.Content.NPCs.Boss.SpookySpirit.Projectiles;
 using Spooky.Content.NPCs.Cemetery;
 using Spooky.Content.NPCs.Cemetery.Projectiles;
 using Spooky.Content.NPCs.PandoraBox;
+using Spooky.Content.NPCs.Shipyard;
 using Spooky.Content.Tiles.Cemetery.Furniture;
 using Spooky.Content.Tiles.Shipyard.Furniture;
 
@@ -212,11 +213,11 @@ namespace Spooky.Content.Items.BossSummon
 							int left = i - tile.TileFrameX / 18 % 4;
 							int top = j - tile.TileFrameY / 18 % 3;
 
-							if (!NPC.AnyNPCs(ModContent.NPCType<MistGhost>()))
+							if (!NPC.AnyNPCs(ModContent.NPCType<QueenConchIntro>()) && !NPC.AnyNPCs(ModContent.NPCType<QueenConch>())) //&& !NPC.AnyNPCs(ModContent.NPCType<HermitCrab>()))
 							{
 								SoundEngine.PlaySound(BeepSound2, player.Center);
 
-								CustomPopupText.SpawnText(player.Top, Language.GetTextValue("Mods.Spooky.EventsAndBosses.EMFReaderGhost"), Color.Cyan, new Vector2(0, -2), 60);
+								CustomPopupText.SpawnText(player.Top, Language.GetTextValue("Mods.Spooky.EventsAndBosses.EMFReaderGhost"), new Color(211, 118, 255), new Vector2(0, -2), 60);
 
 								int SpawnX = (left * 16) + 35;
 								int SpawnY = (top * 16) + 45;

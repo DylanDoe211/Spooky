@@ -53,6 +53,7 @@ namespace Spooky.Content.NPCs.Shipyard
             //floats
             writer.Write(NPC.localAI[0]);
             writer.Write(NPC.localAI[1]);
+            writer.Write(NPC.localAI[2]);
         }
 
         public override void ReceiveExtraAI(BinaryReader reader)
@@ -60,6 +61,7 @@ namespace Spooky.Content.NPCs.Shipyard
             //floats
             NPC.localAI[0] = reader.ReadSingle();
             NPC.localAI[1] = reader.ReadSingle();
+            NPC.localAI[2] = reader.ReadSingle();
         }
 
         public override void SetDefaults()
@@ -220,10 +222,33 @@ namespace Spooky.Content.NPCs.Shipyard
                 case 0:
                 {
                     NPC.localAI[0]++;
-                    if (NPC.localAI[0] == 1)
+                    
+                    //this does a specific check using LocalAI[2] to set the queen conch animation to emerge, but only when it first spawns in to match the intro
+                    //this does not ever need to be ran more than once beyond it spawning in
+                    if (NPC.localAI[2] == 0)
                     {
-                        CurrentFrameX = 1;
-                        CurrentAnimation = AnimationState.Idle;
+                        if (NPC.localAI[0] == 1)
+                        {
+                            CurrentFrameX = 0;
+                            CurrentAnimation = AnimationState.EmergeFromShell;
+                        }
+                        
+                        if (NPC.localAI[0] >= 30)
+                        {
+                            CurrentFrameX = 1;
+                            CurrentAnimation = AnimationState.Idle;
+
+                            NPC.localAI[2]++;
+                        }
+                    }
+                    //if the queen conch already did the emerge animation after spawning in, just set it to default idle
+                    else
+                    {
+                        if (NPC.localAI[0] == 1)
+                        {
+                            CurrentFrameX = 1;
+                            CurrentAnimation = AnimationState.Idle;
+                        }
                     }
 
                     if (NPC.localAI[0] <= 300)

@@ -111,10 +111,5 @@ namespace Spooky.Content.Projectiles.Shipyard
 				current = previousPosition;
 			}
         }
-
-        public override void OnKill(int timeLeft)
-		{
-            SoundEngine.PlaySound(SoundID.Dig with { Volume = 0.5f }, Projectile.Center);
-        }
     }
 }

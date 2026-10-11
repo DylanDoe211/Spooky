@@ -90,12 +90,20 @@ namespace Spooky.Content.NPCs.SpiderCave
 
 		public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
 		{
-			NPC.ai[1] = 1;
+			if (NPC.ai[1] == 0)
+			{
+				NPC.ai[1] = 1;
+				Spooky.ManuallySyncNPCAI(NPC.whoAmI);
+			}
 		}
 
 		public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
 		{
-			NPC.ai[1] = 1;
+			if (NPC.ai[1] == 0)
+			{
+				NPC.ai[1] = 1;
+				Spooky.ManuallySyncNPCAI(NPC.whoAmI);
+			}
 		}
 
 		public void UpdateSpiderLegs()

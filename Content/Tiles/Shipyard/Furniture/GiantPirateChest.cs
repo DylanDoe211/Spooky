@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Linq;
 using System.Collections.Generic;
 
+using Spooky.Content.Items.Costume;
 using Spooky.Content.Items.Shipyard;
 using Spooky.Content.Projectiles.Shipyard;
 
@@ -120,6 +121,9 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
 		{
 			int[] MainItem = new int[] { ModContent.ItemType<PirateHook>(), ModContent.ItemType<PirateBlunderbuss>(), ModContent.ItemType<PirateShipWheel>(), ModContent.ItemType<PirateInkPen>() };
 			yield return new Item(Main.rand.Next(MainItem));
+
+			int[] VanityPiece = new int[] { ModContent.ItemType<PirateHead>(), ModContent.ItemType<PirateBody>(), ModContent.ItemType<PirateLegs>() };
+			yield return new Item(Main.rand.Next(VanityPiece));
 
 			yield return new Item(ModContent.ItemType<PiratePotion>());
 
