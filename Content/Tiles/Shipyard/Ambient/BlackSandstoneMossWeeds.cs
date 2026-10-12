@@ -24,7 +24,7 @@ namespace Spooky.Content.Tiles.Shipyard.Ambient
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.AnchorValidTiles = new[] { ModContent.TileType<BlackSandstoneMoss>() };
             TileObjectData.addTile(Type);
-            AddMapEntry(new Color(84, 102, 85));
+            AddMapEntry(new Color(32, 62, 26));
             DustType = ModContent.DustType<CemeteryGrassDust>();
             HitSound = SoundID.Grass;
         }

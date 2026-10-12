@@ -88,8 +88,6 @@ namespace Spooky.Content.Generation
             int XMiddle = Catacombs.PositionX;
             int XEdge = Catacombs.PositionX + (BiomeWidth / 2);
 
-			double heightLimit = Main.worldSurface * 0.35f;
-
 			//place the terrain itself and replace blocks with cemetery blocks
 			for (int X = XMiddle - (BiomeWidth / 2) - 20; X <= XMiddle + (BiomeWidth / 2) + 20; X++)
 			{
@@ -100,79 +98,59 @@ namespace Spooky.Content.Generation
 				//non-edge biome stuff so the dithering added later works correctly
 				if (X >= XMiddle - (BiomeWidth / 2) - 12 && X <= XMiddle + (BiomeWidth / 2) + 12)
 				{
-					for (int Y = (int)heightLimit; Y <= Main.worldSurface; Y++)
+					for (int Y = (int)SpookyWorldMethods.WorldSurfaceHeightLimit; Y <= Main.worldSurface; Y++)
 					{
-						if (Y >= (int)heightLimit + 150 || (Y < (int)heightLimit + 150 && NoFloatingIsland(X, Y)))
+						Tile tile = Main.tile[X, Y];
+
+						//place cemetery dirt blocks on crimstone and ebonstone walls because they are annoying
+						if (!tile.HasTile && tile.WallType != WallID.None)
 						{
-							Tile tile = Main.tile[X, Y];
-
-							//place cemetery dirt blocks on crimstone and ebonstone walls because they are annoying
-							if (!tile.HasTile && (tile.WallType == WallID.EbonstoneUnsafe || tile.WallType == WallID.CrimstoneUnsafe))
-							{
-								WorldGen.PlaceTile(X, Y, (ushort)ModContent.TileType<CemeteryDirt>());
-							}
-
-							//convert all tiles into cemetery dirt
-							if (tile.HasTile && tile.TileType != TileID.Cloud && tile.TileType != TileID.RainCloud && tile.TileType != ModContent.TileType<CemeteryDirt>())
-							{
-								tile.TileType = (ushort)ModContent.TileType<CemeteryDirt>();
-							}
-
-							//replace walls with cemetery grass walls
-							if (tile.WallType > 0)
-							{
-								tile.WallType = (ushort)ModContent.WallType<CemeteryDirtWall>();
-							}
-
-							tile.LiquidAmount = 0;
+							tile.HasTile = true;
+							tile.TileType = (ushort)ModContent.TileType<CemeteryDirt>();
 						}
+
+						//convert all tiles into cemetery dirt
+						if (tile.HasTile && tile.TileType != TileID.Cloud && tile.TileType != TileID.RainCloud && tile.TileType != ModContent.TileType<CemeteryDirt>())
+						{
+							tile.TileType = (ushort)ModContent.TileType<CemeteryDirt>();
+						}
+
+						//replace walls with cemetery grass walls
+						if (tile.WallType != WallID.None)
+						{
+							tile.WallType = (ushort)ModContent.WallType<CemeteryDirtWall>();
+						}
+
+						tile.LiquidAmount = 0;
 					}
 
-                    for (int Y = (int)Main.worldSurface - 25; Y <= Main.worldSurface; Y++)
+					//place tiles above a certain surface limit so the catacombs doesnt stick out on the cemetery surface
+                    for (int Y = (int)Main.worldSurface - 32; Y <= Main.worldSurface; Y++)
 					{
                         Tile tile = Main.tile[X, Y];
 
-                        tile.TileType = (ushort)ModContent.TileType<CemeteryDirt>();
-                        WorldGen.PlaceTile(X, Y, ModContent.TileType<CemeteryDirt>());
+                        tile.HasTile = true;
+						tile.TileType = (ushort)ModContent.TileType<CemeteryDirt>();
                     }
 				}
 
-                for (int Y = (int)heightLimit; Y <= Main.worldSurface; Y++)
-                {
-                    if (Y >= (int)heightLimit + 150 || (Y < (int)heightLimit + 150 && NoFloatingIsland(X, Y)))
-                    {
-                        Tile tile = Main.tile[X, Y];
-                        Tile tileAbove = Main.tile[X, Y - 1];
-                        Tile tileBelow = Main.tile[X, Y + 1];
-                        Tile tileLeft = Main.tile[X - 1, Y];
-                        Tile tileRight = Main.tile[X + 1, Y];
-
-                        if (CanPlaceWall(X, Y) && tile.WallType == 0)
-                        {
-                            WorldGen.PlaceWall(X, Y, ModContent.WallType<CemeteryDirtWall>());
-                        }
-                    }
-                }
-
-                for (int Y = (int)heightLimit; Y <= Main.worldSurface; Y++)
+				//replace blocks and walls
+                for (int Y = (int)SpookyWorldMethods.WorldSurfaceHeightLimit; Y <= Main.worldSurface; Y++)
                 {
                     if (WorldGen.genRand.NextBool(2))
                     {
-                        if (Y >= (int)heightLimit + 150 || (Y < (int)heightLimit + 150 && NoFloatingIsland(X, Y)))
+                        Tile tile = Main.tile[X, Y];
+
+                        //place dirt blocks
+                        if (tile.HasTile)
                         {
-                            Tile tile = Main.tile[X, Y];
+                            tile.TileType = (ushort)ModContent.TileType<CemeteryDirt>();
+                        }
 
-                            //place dirt blocks
-                            if (tile.HasTile && tile.TileType != TileID.Cloud && tile.TileType != TileID.RainCloud && tile.TileType != ModContent.TileType<CemeteryDirt>())
-                            {
-                                tile.TileType = (ushort)ModContent.TileType<CemeteryDirt>();
-                            }
-
-                            //reaplce walls with cemetery grass walls
-                            if (tile.WallType > 0 && tile.WallType != ModContent.WallType<CemeteryDirtWall>())
-                            {
-                                tile.WallType = (ushort)ModContent.WallType<CemeteryDirtWall>();
-                            }
+                        //reaplce walls with cemetery grass walls
+                        if (tile.WallType != WallID.None)
+                        {
+                            tile.WallType = (ushort)ModContent.WallType<CemeteryDirtWall>();
                         }
                     }
                 }
@@ -188,14 +166,13 @@ namespace Spooky.Content.Generation
 			bool foundSurfaceLeft = false;
 			int attemptsLeft = 0;
 
-            double SkyHeight = Main.worldSurface * 0.35f;
-            LeftY = (int)SkyHeight;
-            RightY = (int)SkyHeight;
+            LeftY = (int)SpookyWorldMethods.WorldSurfaceHeightLimit;
+            RightY = (int)SpookyWorldMethods.WorldSurfaceHeightLimit;
 
             //get the two surface points at the left and right of the cemetery biome
 			while (!foundSurfaceLeft && attemptsLeft++ < 100000)
 			{
-                if ((!IsCemeteryTile(XStart, LeftY) || !NoFloatingIsland(XStart, LeftY)) && LeftY <= Main.worldSurface)
+                if (!IsCemeteryTile(XStart, LeftY) && LeftY <= Main.worldSurface)
 				{
 					LeftY++;
 				}
@@ -210,7 +187,7 @@ namespace Spooky.Content.Generation
 
 			while (!foundSurfaceRight && attemptsRight++ < 100000)
 			{
-                if ((!IsCemeteryTile(XEdge, RightY) || !NoFloatingIsland(XEdge, RightY)) && RightY <= Main.worldSurface)
+                if (!IsCemeteryTile(XEdge, RightY) && RightY <= Main.worldSurface)
 				{
 					RightY++;
 				}
@@ -224,7 +201,7 @@ namespace Spooky.Content.Generation
 			FlattenSurface(new Vector2(XStart, LeftY), new Vector2(XEdge, RightY), false);
 
 			//tile sloping
-            double heightLimit = Main.worldSurface * 0.35f;
+            double heightLimit = Main.worldSurface * 0.465f;
 
 			for (int X = XMiddle - (BiomeWidth / 2); X <= XMiddle + (BiomeWidth / 2); X++)
             {
@@ -412,7 +389,7 @@ namespace Spooky.Content.Generation
             int XMiddle = Catacombs.PositionX;
             int XEdge = Catacombs.PositionX + (BiomeWidth / 2);
 
-            int StartPosY = PositionY - 100;
+            int StartPosY = (int)SpookyWorldMethods.WorldSurfaceHeightLimit + 25;
 
             //first ruined house
             GenerateStructure((XStart + XMiddle) / 2, StartPosY, "RuinedHouse1", 14, 20);
@@ -454,7 +431,7 @@ namespace Spooky.Content.Generation
 				t = (i + 1) / (float)segments;
                 
                 //destory all tiles above the line to get rid of unwanted hills/mountains
-                double heightLimit = Main.worldSurface * 0.35f;
+                double heightLimit = Main.worldSurface * 0.465f;
 
                 if (!Liquids)
                 {
@@ -486,7 +463,7 @@ namespace Spooky.Content.Generation
                 {
                     for (int Y = (int)heightLimit; Y < (int)Position.Y; Y++)
                     {   
-                        if (Main.tile[(int)Position.X, Y].LiquidAmount > 0 && NoFloatingIsland((int)Position.X, Y))
+                        if (Main.tile[(int)Position.X, Y].LiquidAmount > 0)
                         {
                             Main.tile[(int)Position.X, Y].LiquidAmount = 0;
                         }
@@ -502,11 +479,11 @@ namespace Spooky.Content.Generation
             int attempts = 0;
             while (!placed && attempts++ < 100000)
             {
-                while ((!IsCemeteryTile(startX, startY) || !NoFloatingIsland(startX, startY)) && startY <= Main.worldSurface)
+                while (!IsCemeteryTile(startX, startY) && startY <= Main.worldSurface)
 				{
 					startY++;
 				}
-                if (IsCemeteryTile(startX, startY) && NoFloatingIsland(startX, startY))
+                if (IsCemeteryTile(startX, startY))
                 {
                     //when the cemetery catacomb crypt is placed, save the position for the catacomb entrance
                     if (StructureFile == "CemeteryEntrance")
@@ -532,26 +509,6 @@ namespace Spooky.Content.Generation
 					placed = true;
                 }
             }
-        }
-
-        //check the area around the given position for cloud blocks, to prevent structures from placing on floating islands
-        public static bool NoFloatingIsland(int X, int Y)
-        {
-            for (int i = X - 45; i < X + 45; i++)
-            {
-                for (int j = Y - 45; j < Y + 45; j++)
-                {
-                    if (WorldGen.InWorld(i, j))
-                    {
-                        if (Main.tile[i, j].TileType == TileID.Cloud || Main.tile[i, j].TileType == TileID.RainCloud || Main.tile[i, j].TileType == TileID.Sunplate)
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            return true;
         }
 
 		public bool CanPlaceWall(int X, int Y)

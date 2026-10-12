@@ -144,7 +144,22 @@ namespace Spooky.Content.Generation
 							WorldGen.PlaceTile(X, Y, ModContent.TileType<DampSoil>());
 							WorldGen.PlaceWall(X, Y, ModContent.WallType<DampSoilWall>());
 						}
-                    }
+						else
+						{
+							if (WorldGen.genRand.NextBool())
+							{
+								if (WorldGen.SolidTile(X, Y))
+								{
+									Main.tile[X, Y].TileType = (ushort)ModContent.TileType<DampSoil>();
+								}
+
+								if (Main.tile[X, Y].WallType != WallID.None)
+								{
+									Main.tile[X, Y].WallType = (ushort)ModContent.WallType<DampSoilWall>();
+								}
+							}
+						}
+					}
                 }
             }
 
@@ -239,22 +254,28 @@ namespace Spooky.Content.Generation
                 {
                     if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
                     {
-                        Tile tile = Main.tile[X, Y];
-                        Tile tileAbove = Main.tile[X, Y - 1];
+						float percent = dist / constant;
+						float blurPercent = 0.97f;
 
-                        if (tile.TileType == ModContent.TileType<DampGrass>() && !tileAbove.HasTile)
-                        {
-                            if (WorldGen.genRand.NextBool(120) && CheckForFlatSurface(X, Y, 6, 1))
-                            {
-                                int SizeX = WorldGen.genRand.Next(35, 41);
-                                int SizeY = WorldGen.genRand.Next(35, 41);
+						if (percent < blurPercent)
+						{
+							Tile tile = Main.tile[X, Y];
+							Tile tileAbove = Main.tile[X, Y - 1];
 
-                                int[] ValidTiles = { ModContent.TileType<DampGrass>() };
+							if (tile.TileType == ModContent.TileType<DampGrass>() && !tileAbove.HasTile)
+							{
+								if (WorldGen.genRand.NextBool(115) && CheckForFlatSurface(X, Y, 6, 1))
+								{
+									int SizeX = WorldGen.genRand.Next(35, 41);
+									int SizeY = WorldGen.genRand.Next(35, 41);
 
-                                SpookyWorldMethods.PlaceOval(X, Y - 10, ModContent.TileType<DampMushroomGrass>(), ModContent.WallType<DampSoilWall>(),
-                                SizeX, SizeY, 1f, true, false, true, ValidTiles, false);
-                            }
-                        }
+									int[] ValidTiles = { ModContent.TileType<DampGrass>() };
+
+									SpookyWorldMethods.PlaceOval(X, Y - 10, ModContent.TileType<DampMushroomGrass>(), ModContent.WallType<DampSoilWall>(),
+									SizeX, SizeY, 1f, true, false, true, ValidTiles, false);
+								}
+							}
+						}
                     }
                 }
             }
@@ -361,40 +382,6 @@ namespace Spooky.Content.Generation
                             WorldGen.KillTile(X, Y);
                         }
 					}
-                }
-            }
-
-            progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.SpiderCavePolish").Value;
-
-            //clean out small floating chunks of blocks
-            CleanOutSmallClumps(progress);
-
-            //put dithering around the edge of the biome after all tile chunk removal is done
-            for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
-			{
-				for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
-				{
-					if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
-					{
-                        float percent = dist / constant;
-						float blurPercent = 0.99f;
-
-						if (percent > blurPercent)
-						{
-							if (WorldGen.genRand.NextBool())
-							{
-								if (WorldGen.SolidTile(X, Y))
-								{
-									Main.tile[X, Y].TileType = (ushort)ModContent.TileType<DampSoil>();
-								}
-
-								if (Main.tile[X, Y].WallType > 0)
-								{
-									Main.tile[X, Y].WallType = (ushort)ModContent.WallType<DampSoilWall>();
-								}
-							}
-						}
-                    }
                 }
             }
 
@@ -611,9 +598,15 @@ namespace Spooky.Content.Generation
                 }
             }
 
-            //place ambient tiles
-            for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
+			progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.SpiderCavePolish").Value;
+
+			//place ambient tiles
+			for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
             {
+				int StartValue = origin.X - biomeSize - 2;
+				int EndValue = origin.X + biomeSize + 2;
+				progress.Set((X - StartValue) / (EndValue - StartValue));
+
 				for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
                 {
 					if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
@@ -949,81 +942,6 @@ namespace Spooky.Content.Generation
 				}
 			}
 		}
-
-        //method to clean up small clumps of tiles
-        public static void CleanOutSmallClumps(GenerationProgress progress)
-        {
-            int cutoffLimit = 200;
-            
-            void getAttachedPoints(int x, int y, List<Point> points)
-            {
-                Tile t = Main.tile[x, y];
-                Point p = new(x, y);
-
-                if (!WorldGen.InWorld(x, y))
-                {
-                    t = new Tile();
-                }
-                
-                if (!BlockTypes.Contains(t.TileType) || !t.HasTile || points.Count > cutoffLimit || points.Contains(p))
-                {
-                    return;
-                }
-
-                points.Add(p);
-
-                getAttachedPoints(x + 1, y, points);
-                getAttachedPoints(x - 1, y, points);
-                getAttachedPoints(x, y + 1, points);
-                getAttachedPoints(x, y - 1, points);
-            }
-
-            Point origin = new Point(startPosX, startPosY);
-            Vector2 center = origin.ToVector2() * 16f + new Vector2(8f);
-
-            float angle = MathHelper.Pi * 0.15f;
-            float otherAngle = MathHelper.PiOver2 - angle;
-
-            int InitialSize = Main.maxTilesY >= 1800 ? 240 : 150;
-            int biomeSize = InitialSize + (Main.maxTilesX / 180);
-            float actualSize = biomeSize * 16f;
-            float constant = actualSize * 2f / (float)Math.Sin(angle);
-
-            float biomeSpacing = actualSize * (float)Math.Sin(otherAngle) / (float)Math.Sin(angle);
-            int verticalRadius = (int)(constant / 16f);
-
-            Vector2 biomeOffset = Vector2.UnitY * biomeSpacing;
-            Vector2 biomeTop = center - biomeOffset;
-            Vector2 biomeBottom = center + biomeOffset;
-
-            for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
-            {
-                int StartValue = origin.X - biomeSize - 2;
-				int EndValue = origin.X + biomeSize + 2;
-				progress.Set((float)(X - StartValue) / (EndValue - StartValue));
-
-                for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
-                {
-                    if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
-                    {
-                        //clean up tiles
-                        List<Point> chunkPoints = new();
-                        getAttachedPoints(X, Y, chunkPoints);
-
-                        if (WorldGen.InWorld(X, Y, 10) && chunkPoints.Count >= 1 && chunkPoints.Count < cutoffLimit)
-                        {
-                            foreach (Point p in chunkPoints)
-                            {
-                                WorldUtils.Gen(p, new Shapes.Rectangle(1, 1), Actions.Chain(new GenAction[]
-                                {
-                                    new Actions.ClearTile(true)
-                                }));
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         //determine if theres no snow blocks nearby so the biome doesnt place in the snow biome
         public static bool CanPlaceBiome(int X, int Y)

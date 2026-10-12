@@ -21,7 +21,7 @@ namespace Spooky.Content.Tiles.Shipyard.Ambient
 			TileID.Sets.IsVine[Type] = true;
 			TileID.Sets.VineThreads[Type] = true;
 			TileID.Sets.MultiTileSway[Type] = true;
-			AddMapEntry(new Color(31, 85, 37));
+			AddMapEntry(new Color(32, 62, 26));
 			DustType = ModContent.DustType<CemeteryGrassDust>();
 			HitSound = SoundID.Grass;
 			MineResist = 0.1f;

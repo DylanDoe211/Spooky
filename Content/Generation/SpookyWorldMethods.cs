@@ -4,12 +4,13 @@ using Terraria.WorldBuilding;
 using Microsoft.Xna.Framework;
 using System;
 using System.Linq;
-using System.Collections.Generic;
 
 namespace Spooky.Content.Generation
 {
 	public class SpookyWorldMethods
 	{
+		public static double WorldSurfaceHeightLimit = 0;
+
 		public static void PlaceMound(int X, int Y, int tileType, int halfWidth, int height, bool DestroyOnly)
 		{
 			ShapeData mound = new ShapeData();

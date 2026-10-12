@@ -57,6 +57,11 @@ namespace Spooky.Content.Generation
 
 			int Seed = WorldGen.genRand.Next();
 
+			//since this is the first spooky mod world generation to run, find the absolute minimum position at which floating islands have generated at here
+			//then set SpookyWorldMethods.WorldSurfaceHeightLimit to this value so that all other surface biomes can use this value to not destroy floating islands	
+			//also for the record, this MUST grab the maximum y-value as this is the actual lowest position to the ground in-game, then add an offset to it
+			SpookyWorldMethods.WorldSurfaceHeightLimit = GenVars.floatingIslandHouseY.Max() + 30;
+
 			//decide whether or not to use the alt background
 			Flags.SpookyBackgroundAlt = WorldGen.genRand.NextBool();
 
@@ -98,7 +103,7 @@ namespace Spooky.Content.Generation
 			int SizeX = Main.maxTilesX / 5;
 			int SizeY = Main.maxTilesY / 3;
 
-			PlaceSpookyForestEllipse(PositionX, PositionY, SizeX / 6, SizeY, false, progress);
+			PlaceSpookyForestEllipse(progress, PositionX, PositionY, SizeX / 6, SizeY, false);
 
 			//position where the glowshroom minibiome begins
 			GlowshroomPosY = (int)Main.worldSurface + (Main.maxTilesY / 9);
@@ -247,11 +252,11 @@ namespace Spooky.Content.Generation
 				int x = PositionX > (Main.maxTilesX / 2) ? PositionX + ((Main.maxTilesX / 12) / 6) : PositionX - ((Main.maxTilesX / 12) / 6);
 				int y = PositionY; //start here to not touch floating islands
 
-				while ((!WorldGen.SolidTile(x, y) || !Cemetery.NoFloatingIsland(x, y)) && y <= Main.worldSurface)
+				while (!WorldGen.SolidTile(x, y) && y <= Main.worldSurface)
 				{
 					y++;
 				}
-				if (WorldGen.SolidTile(x, y) && Cemetery.NoFloatingIsland(x, y))
+				if (WorldGen.SolidTile(x, y))
 				{
 					PlaceMineshaft(x, y);
 
@@ -263,7 +268,7 @@ namespace Spooky.Content.Generation
 			}
 
 			//clean out small clusters of tiles
-			CleanOutSmallClumps();
+			//CleanOutSmallClumps();
 
 			//place ores in mossy stone
             ushort OppositeTier1Ore = WorldGen.SavedOreTiers.Copper == TileID.Copper ? TileID.Tin : TileID.Copper;
@@ -318,7 +323,7 @@ namespace Spooky.Content.Generation
 			progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.SpookyForestPolish").Value;
 
 			//add biome dithering
-			PlaceSpookyForestEllipse(PositionX, PositionY, SizeX / 6, SizeY, true, progress);
+			PlaceSpookyForestEllipse(progress, PositionX, PositionY, SizeX / 6, SizeY, true);
 
 			//remove walls that arent surrounded fully by blocks
 			for (int X = PositionX - Main.maxTilesX / 12; X <= PositionX + Main.maxTilesX / 12; X++)
@@ -767,13 +772,13 @@ namespace Spooky.Content.Generation
             {
                 //place starter house
                 int x = PositionX <= (Main.maxTilesX / 2) ? PositionX + ((Main.maxTilesX / 12) / 12) : PositionX - ((Main.maxTilesX / 12) / 12);
-                int y = PositionY; //start here to not touch floating islands
+                int y = (int)SpookyWorldMethods.WorldSurfaceHeightLimit + 25; //start here to not touch floating islands
 
-                while ((!WorldGen.SolidTile(x, y) || Main.tile[x, y].WallType <= 0 || !Cemetery.NoFloatingIsland(x, y)) && y <= Main.worldSurface)
+                while ((!WorldGen.SolidTile(x, y) || Main.tile[x, y].WallType != WallID.None) && y <= Main.worldSurface)
 				{
 					y++;
 				}
-                if ((WorldGen.SolidTile(x, y) || Main.tile[x, y].WallType > 0) && Cemetery.NoFloatingIsland(x, y))
+                if (WorldGen.SolidTile(x, y) || Main.tile[x, y].WallType != WallID.None)
 				{
                     Vector2 origin = new Vector2(x - 10, y - 25);
 
@@ -782,7 +787,7 @@ namespace Spooky.Content.Generation
                     {
                         for (int j = (int)origin.Y - 50; j <= (int)origin.Y + 50; j++)
                         {
-                            if (Main.tile[i, j].TileType == 5)
+                            if (Main.tile[i, j].TileType == TileID.Trees)
                             {
                                 WorldGen.KillTile(i, j);
                             }
@@ -1015,7 +1020,6 @@ namespace Spooky.Content.Generation
 		private static void MineshaftCircle(int i, int j)
 		{
 			int radius = 6;
-
 			for (int y = j - radius; y <= j + radius; y++)
 			{
 				for (int x = i - radius; x <= i + radius; x++)
@@ -1031,7 +1035,7 @@ namespace Spooky.Content.Generation
 								tile.TileType = (ushort)ModContent.TileType<SpookyWood>();
 							}
 
-							if (tile.WallType > 0)
+							if (tile.WallType != WallID.None)
 							{
 								tile.WallType = WorldGen.genRand.NextBool(5) ? (ushort)ModContent.WallType<SpookyStoneWall>() : (ushort)ModContent.WallType<SpookyWoodWall>();
 							}
@@ -1059,7 +1063,7 @@ namespace Spooky.Content.Generation
 			}
 		}
 
-		public static void PlaceSpookyForestEllipse(int X, int Y, int radius, int radiusY, bool Dithering, GenerationProgress progress)
+		public static void PlaceSpookyForestEllipse(GenerationProgress progress, int X, int Y, int radius, int radiusY, bool Dithering)
 		{
 			float scale = radiusY / (float)radius;
 			float invertScale = (float)radius / radiusY;
@@ -1079,11 +1083,9 @@ namespace Spooky.Content.Generation
 						int PositionY = Y + (int)(y * scale);
 						Tile tile = Framing.GetTileSafely(PositionX, PositionY);
 
-						double heightLimit = Main.worldSurface * 0.35f;
-
 						if (!Main.tileDungeon[tile.TileType] && !Main.wallDungeon[tile.WallType])
 						{
-							if (PositionY >= (int)heightLimit + 150 || (PositionY > (int)heightLimit + 80 && PositionY < (int)heightLimit + 150 && Cemetery.NoFloatingIsland(PositionX, PositionY)))
+							if (PositionY >= SpookyWorldMethods.WorldSurfaceHeightLimit)
 							{
 								if (PositionY <= Main.worldSurface)
 								{
@@ -1098,9 +1100,8 @@ namespace Spooky.Content.Generation
 									{
 										if (tile.HasTile || tile.WallType > 0)
 										{
-											WorldGen.KillTile(PositionX, PositionY);
-											tile.TileType = (ushort)ModContent.TileType<SpookyDirt>();
 											tile.HasTile = true;
+											tile.TileType = (ushort)ModContent.TileType<SpookyDirt>();
 											tile.LiquidAmount = 0;
 
 											if (Main.tile[PositionX - 1, PositionY].HasTile && Main.tile[PositionX - 1, PositionY].HasTile &&
@@ -1135,8 +1136,8 @@ namespace Spooky.Content.Generation
 										}
 
 										WorldGen.KillTile(PositionX, PositionY);
-										tile.TileType = (ushort)ModContent.TileType<SpookyStone>();
 										tile.HasTile = true;
+										tile.TileType = (ushort)ModContent.TileType<SpookyStone>();
 										tile.WallType = (ushort)ModContent.WallType<SpookyStoneWall>();
 										tile.LiquidAmount = 0;
 									}

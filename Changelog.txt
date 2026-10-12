@@ -26,16 +26,12 @@ Sprite Updates:
 -Resprited big bones flower attack projectiles for both phases
 -Changed rot gourd mold spore projectile to look like other "spore" projectiles the mod has
 
-
-Biome Noise Generation Changes:
--Spooky mod world generation that utilizes noise have been improved in varying ways
+General Changes:
+-Attempted to optimize a lot of spooky mod world generation, some of it has not yet recieved optimization due to time constraints but I will be fixing the rest of the biomes later in a future patch
 -Spooky forest caves have been changed to be more natural and slighlty less frequent, glowshroom caves are now more vertically open but also a bit less frequent
 -Tar pits caves generally the same with changes to make them a tiny bit bigger, along with the sandstone clusters and walls generation being improved 
 -Fetid farms caves are generally the same but look a bit more natural than before
 -Eye valley flesh block clusters changed to be more natural looking veins, with organic mush still being the dominant block in the biome
-
-
-General Changes:
 -Made some spooky mod world generation tasks fill up the progress bar better to track how far along each biome is done generating
 -Fetid farms no longer has random giant holes in the mud walls, now the entire biome just has mud walls in it
 -Little eye quests no longer become locked when you accept one, you can now just do them all at once if you want
@@ -82,8 +78,8 @@ Localization Changes:
 Added the following new entries to the WorldgenTasks localization:
 Shipyard: Creating shipwrecks
 SpookyForestPolish: Polishing the spooky forest
-EyeValleyPolish: Polishing the eye valley
 SpiderCavePolish: Polishing the spider grotto
+EyeValleyPolish: Polishing the eye valley
 ChrismtasDungeonPolish: Polishing krampus' workshop
 
 

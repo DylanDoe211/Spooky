@@ -103,7 +103,7 @@ namespace Spooky.Content.Generation
 			while (!FoundSurface && attempts++ < 100000)
 			{
 				int TunnelX = StartPositionX + (UnderSulphurSea ? (GenVars.dungeonSide < 0 ? -135 : 135) : 0);
-				int TunnelY = 10;
+				int TunnelY = (int)SpookyWorldMethods.WorldSurfaceHeightLimit;
 
 				while (!WorldGen.SolidTile(TunnelX, TunnelY) && TunnelY <= Main.worldSurface)
 				{
@@ -204,7 +204,7 @@ namespace Spooky.Content.Generation
             while (!placedSurfaceLab && surfaceLabAttempts++ < 100000)
             {
 				int LabX = StartPositionX + (StartPositionX > (Main.maxTilesX / 2) ? -100 : 100);
-				int LabY = 10;
+				int LabY = (int)SpookyWorldMethods.WorldSurfaceHeightLimit;
 
 				while (!WorldGen.SolidTile(LabX, LabY) && LabY <= Main.worldSurface)
 				{

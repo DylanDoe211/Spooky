@@ -20,7 +20,7 @@ namespace Spooky.Content.Projectiles.Shipyard
 
         private static Asset<Texture2D> SpotlightTexture;
 
-        public static readonly SoundStyle OpenSound = new("Spooky/Content/Sounds/PirateChestOpen", SoundType.Sound);
+        public static readonly SoundStyle OpenSound = new("Spooky/Content/Sounds/PirateChestOpen", SoundType.Sound) { Volume = 0.65f };
         public static readonly SoundStyle BreakSound = new("Spooky/Content/Sounds/WoodBreaking", SoundType.Sound);
 
         public override void SetStaticDefaults()
