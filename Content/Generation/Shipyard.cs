@@ -5,7 +5,6 @@ using Terraria.ModLoader;
 using Terraria.Localization;
 using Terraria.WorldBuilding;
 using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
 
 using Spooky.Core;
@@ -17,879 +16,876 @@ using Spooky.Content.Tiles.Shipyard.Tree;
 using Spooky.Content.Tiles.SpookyBiome;
 
 using SpiritReforged.Common.WorldGeneration.Ecotones;
+using Spooky.Content.Generation.GenConfig;
 
-namespace Spooky.Content.Generation
+namespace Spooky.Content.Generation;
+
+[ExtendsFromMod("SpiritReforged")]
+[JITWhenModsEnabled("SpiritReforged")]
+internal class ShipyardEcotone : EcotoneBase
 {
-	[ExtendsFromMod("SpiritReforged")]
-	[JITWhenModsEnabled("SpiritReforged")]
-	internal class ShipyardEcotone : EcotoneBase
+	//can be useful to block ecotone from certain biomes
+	//public override HashSet<string> EcotoneEdgeBlocklist => ["Jungle", "Ocean"];
+
+	//3.4.2.2118163272
+	//3.4.1.1723835072
+
+	public override bool IsLoadingEnabled(Mod mod)
 	{
-		//can be useful to block ecotone from certain biomes
-		//public override HashSet<string> EcotoneEdgeBlocklist => ["Jungle", "Ocean"];
+		return ModLoader.HasMod("SpiritReforged");
+	}
 
-		//3.4.2.2118163272
-		//3.4.1.1723835072
+	protected override EcotoneIcon GetIcon() => EcotoneIcon.FromBiome<ShipyardBiome>();
 
-		public override bool IsLoadingEnabled(Mod mod)
+	public static int LeftY = 0;
+	public static int RightY = 0;
+
+	private static bool IsEvilBiomeWall(int wall) => WallID.Sets.Corrupt[wall] || WallID.Sets.Crimson[wall];
+
+	private static void GenerateShipyard(GenerationProgress progress, (int, int) bounds)
+	{
+		progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.Shipyard").Value;
+
+		Mod SpookyMod = Spooky.mod;
+
+		int Seed = WorldGen.genRand.Next();
+
+		int leftBound = bounds.Item1 - 6;
+		int rightBound = bounds.Item2 + 6;
+
+		bool OceanOnLeft = ((leftBound + rightBound) / 2) < (Main.maxTilesY / 2);
+
+		if (OceanOnLeft)
 		{
-			return ModLoader.HasMod("SpiritReforged");
+			leftBound = WorldGen.beachDistance - 40;
+		}
+		else
+		{
+			rightBound = Main.maxTilesX - (WorldGen.beachDistance - 40);
 		}
 
-		protected override EcotoneIcon GetIcon() => EcotoneIcon.FromBiome<ShipyardBiome>();
+		double heightLimit = Main.worldSurface * 0.35f;
 
-		public static int LeftY = 0;
-		public static int RightY = 0;
-
-		private static bool IsEvilBiomeWall(int wall) => WallID.Sets.Corrupt[wall] || WallID.Sets.Crimson[wall];
-
-		private static void GenerateShipyard(GenerationProgress progress, (int, int) bounds)
+		//when the ocean is on the left side of the world, use the left bound and keep going left until a sand tile on the ground is found
+		if (OceanOnLeft)
 		{
-			progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.Shipyard").Value;
+			bool foundSurfaceLeft = false;
+			int attemptsLeft = 0;
 
-			Mod SpookyMod = Spooky.mod;
-
-			int Seed = WorldGen.genRand.Next();
-
-			int leftBound = bounds.Item1 - 6;
-			int rightBound = bounds.Item2 + 6;
-
-			bool OceanOnLeft = ((leftBound + rightBound) / 2) < (Main.maxTilesY / 2);
-
-			if (OceanOnLeft)
+			//get the two surface points, with one being at the ocean and the other just an edge of the cemetery
+			while (!foundSurfaceLeft && attemptsLeft++ < 100000)
 			{
-				leftBound = WorldGen.beachDistance - 40;
-			}
-			else
-			{
-				rightBound = Main.maxTilesX - (WorldGen.beachDistance - 40);
-			}
-
-			double heightLimit = Main.worldSurface * 0.35f;
-
-			//when the ocean is on the left side of the world, use the left bound and keep going left until a sand tile on the ground is found
-			if (OceanOnLeft)
-			{
-				bool foundSurfaceLeft = false;
-				int attemptsLeft = 0;
-
-				//get the two surface points, with one being at the ocean and the other just an edge of the cemetery
-				while (!foundSurfaceLeft && attemptsLeft++ < 100000)
+				if ((WorldGen.SolidOrSlopedTile(leftBound, LeftY) && Cemetery.NoFloatingIsland(leftBound, LeftY)) || LeftY > Main.worldSurface)
 				{
-					if ((WorldGen.SolidOrSlopedTile(leftBound, LeftY) && Cemetery.NoFloatingIsland(leftBound, LeftY)) || LeftY > Main.worldSurface)
-					{
-						foundSurfaceLeft = true;
-						break;
-					}
-					else
-					{
-						LeftY++;
-					}
+					foundSurfaceLeft = true;
+					break;
+				}
+				else
+				{
+					LeftY++;
 				}
 			}
-			//otherwise just grab the edge of the cemetery
-			else
-			{
-				//this needs to be the opposite, because if ocean is right, then the left edge of the shipyard is the right of the cemetery
-				LeftY = Cemetery.RightY;
-			}
-			
-			//when the ocean is on the right side of the world, use the right bound and keep going right until a sand tile on the ground is found
-			if (!OceanOnLeft)
-			{
-				bool foundSurfaceRight = false;
-				int attemptsRight = 0;
+		}
+		//otherwise just grab the edge of the cemetery
+		else
+		{
+			//this needs to be the opposite, because if ocean is right, then the left edge of the shipyard is the right of the cemetery
+			LeftY = Cemetery.RightY;
+		}
+		
+		//when the ocean is on the right side of the world, use the right bound and keep going right until a sand tile on the ground is found
+		if (!OceanOnLeft)
+		{
+			bool foundSurfaceRight = false;
+			int attemptsRight = 0;
 
-				while (!foundSurfaceRight && attemptsRight++ < 100000)
+			while (!foundSurfaceRight && attemptsRight++ < 100000)
+			{
+				if ((WorldGen.SolidOrSlopedTile(rightBound, RightY) && Cemetery.NoFloatingIsland(rightBound, RightY)) || RightY > Main.worldSurface)
 				{
-					if ((WorldGen.SolidOrSlopedTile(rightBound, RightY) && Cemetery.NoFloatingIsland(rightBound, RightY)) || RightY > Main.worldSurface)
-					{
-						foundSurfaceRight = true;
-						break;
-					}
-					else
-					{
-						RightY++;
-					}
+					foundSurfaceRight = true;
+					break;
+				}
+				else
+				{
+					RightY++;
 				}
 			}
-			//otherwise just grab the edge of the cemetery
-			else
+		}
+		//otherwise just grab the edge of the cemetery
+		else
+		{
+			//this needs to be the opposite, because if ocean is left, then the right edge of the shipyard is the left of the cemetery
+			RightY = Cemetery.LeftY;
+		}
+
+		//create the terrain with bezier curves
+		int segments = 0;
+		for (int i = leftBound; i < rightBound; i++)
+		{
+			segments += 2;
+		}
+
+		Vector2 Start = new Vector2(leftBound, LeftY);
+		Vector2 End = new Vector2(rightBound, RightY);
+
+		Vector2 MiddlePoint = (Start + End) / 2;
+
+		Vector2 p0 = End;
+		Vector2 p1 = new Vector2(MiddlePoint.X - 30, End.Y + WorldGen.genRand.Next(-25, 26));
+		Vector2 p2 = new Vector2(MiddlePoint.X + 30, Start.Y + WorldGen.genRand.Next(-25, 26));
+		Vector2 p3 = Start;
+
+		Vector2 Start2 = !OceanOnLeft ? new Vector2(leftBound, (int)Main.worldSurface) : new Vector2(leftBound, LeftY);
+		Vector2 End2 = !OceanOnLeft ? new Vector2(rightBound, RightY) : new Vector2(rightBound, (int)Main.worldSurface);
+
+		Vector2 p4 = End2;
+		Vector2 p5 = Start2;
+
+		//place terrain
+		for (int i = 0; i < segments; i++)
+		{
+			float t = i / (float)segments;
+			Vector2 Position = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
+			t = (i + 1) / (float)segments;
+
+			float u = i / (float)segments;
+			Vector2 BottomPos = BezierCurveUtil.CalculateBezierPoint(u, p4, p4, p5, p5);
+			u = (i + 1) / (float)segments;
+
+			//create dirt blocks below so that any terrain below the biome is filled in
+			for (int X = (int)Position.X - 15; X <= (int)Position.X + 15; X++)
 			{
-				//this needs to be the opposite, because if ocean is left, then the right edge of the shipyard is the left of the cemetery
-				RightY = Cemetery.LeftY;
-			}
-
-			//create the terrain with bezier curves
-			int segments = 0;
-			for (int i = leftBound; i < rightBound; i++)
-			{
-				segments += 2;
-			}
-
-			Vector2 Start = new Vector2(leftBound, LeftY);
-			Vector2 End = new Vector2(rightBound, RightY);
-
-			Vector2 MiddlePoint = (Start + End) / 2;
-
-			Vector2 p0 = End;
-			Vector2 p1 = new Vector2(MiddlePoint.X - 30, End.Y + WorldGen.genRand.Next(-25, 26));
-			Vector2 p2 = new Vector2(MiddlePoint.X + 30, Start.Y + WorldGen.genRand.Next(-25, 26));
-			Vector2 p3 = Start;
-
-			Vector2 Start2 = !OceanOnLeft ? new Vector2(leftBound, (int)Main.worldSurface) : new Vector2(leftBound, LeftY);
-			Vector2 End2 = !OceanOnLeft ? new Vector2(rightBound, RightY) : new Vector2(rightBound, (int)Main.worldSurface);
-
-			Vector2 p4 = End2;
-			Vector2 p5 = Start2;
-
-			//place terrain
-			for (int i = 0; i < segments; i++)
-			{
-				float t = i / (float)segments;
-				Vector2 Position = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
-				t = (i + 1) / (float)segments;
-
-				float u = i / (float)segments;
-				Vector2 BottomPos = BezierCurveUtil.CalculateBezierPoint(u, p4, p4, p5, p5);
-				u = (i + 1) / (float)segments;
-
-				//create dirt blocks below so that any terrain below the biome is filled in
-				for (int X = (int)Position.X - 15; X <= (int)Position.X + 15; X++)
+				int BottomEndPos = ((int)BottomPos.Y + 50) >= (int)Main.worldSurface ? (int)Main.worldSurface : (int)BottomPos.Y + 50;
+				for (int Y = (int)BottomPos.Y; Y <= (int)Main.worldSurface; Y++)
 				{
-					int BottomEndPos = ((int)BottomPos.Y + 50) >= (int)Main.worldSurface ? (int)Main.worldSurface : (int)BottomPos.Y + 50;
-					for (int Y = (int)BottomPos.Y; Y <= (int)Main.worldSurface; Y++)
+					if (!IsEvilBiomeWall(Main.tile[X, Y].WallType) && WorldGen.SolidTile(X, Y - 1))
 					{
-						if (!IsEvilBiomeWall(Main.tile[X, Y].WallType) && WorldGen.SolidTile(X, Y - 1))
+						//destroy any non-solid tiles
+						if (!WorldGen.SolidTile(X, Y) && Main.tile[X, Y].TileType != ModContent.TileType<BlackSand>())
 						{
-							//destroy any non-solid tiles
-							if (!WorldGen.SolidTile(X, Y) && Main.tile[X, Y].TileType != ModContent.TileType<BlackSand>())
-							{
-								WorldGen.KillTile(X, Y);
-								WorldGen.PlaceTile(X, Y, TileID.Dirt);
-							}
-							//replace empty space with dirt
-							if (Main.tile[X, Y].WallType <= 0)
-							{
-								WorldGen.PlaceTile(X, Y, TileID.Dirt);
-							}
+							WorldGen.KillTile(X, Y);
+							WorldGen.PlaceTile(X, Y, TileID.Dirt);
+						}
+						//replace empty space with dirt
+						if (Main.tile[X, Y].WallType <= WallID.None)
+						{
+							WorldGen.PlaceTile(X, Y, TileID.Dirt);
 						}
 					}
 				}
+			}
 
-				//place tiles below the line to create surface, and use noise to place clusters of black sandstone in the sand
-				for (int Y = (int)Position.Y; Y <= (int)BottomPos.Y; Y++)
+			//place tiles below the line to create surface, and use noise to place clusters of black sandstone in the sand
+			for (int Y = (int)Position.Y; Y <= (int)BottomPos.Y; Y++)
+			{
+				if (/*!IsEvilBiomeWall(Main.tile[(int)Position.X, Y].WallType) && */!InOcean((int)Position.X))
 				{
-					if (/*!IsEvilBiomeWall(Main.tile[(int)Position.X, Y].WallType) && */!InOcean((int)Position.X))
-					{
-						Main.tile[(int)Position.X, Y].ClearEverything();
-						WorldGen.PlaceTile((int)Position.X, Y, ModContent.TileType<BlackSand>());
-						WorldGen.PlaceWall((int)Position.X, Y, ModContent.WallType<BlackSandWall>());
-					}
+					Main.tile[(int)Position.X, Y].ClearEverything();
+					WorldGen.PlaceTile((int)Position.X, Y, ModContent.TileType<BlackSand>());
+					WorldGen.PlaceWall((int)Position.X, Y, ModContent.WallType<BlackSandWall>());
 				}
+			}
 
-				//create dithering on the edges of the biome
-				for (int X = (int)Position.X - 15; X <= (int)Position.X + 15; X++)
+			//create dithering on the edges of the biome
+			for (int X = (int)Position.X - 15; X <= (int)Position.X + 15; X++)
+			{
+				for (int Y = (int)Position.Y; Y <= (int)BottomPos.Y + 10; Y++)
 				{
-					for (int Y = (int)Position.Y; Y <= (int)BottomPos.Y + 10; Y++)
+					if (WorldGen.genRand.NextBool(10)/* && !IsEvilBiomeWall(Main.tile[X, Y].WallType)*/ && !InOcean(X))
 					{
-						if (WorldGen.genRand.NextBool(10)/* && !IsEvilBiomeWall(Main.tile[X, Y].WallType)*/ && !InOcean(X))
+						if (WorldGen.SolidTile(X, Y) && Main.tile[X, Y].TileType != TileID.Sand && Main.tile[X, Y].TileType != ModContent.TileType<BlackSand>())
 						{
-							if (WorldGen.SolidTile(X, Y) && Main.tile[X, Y].TileType != TileID.Sand && Main.tile[X, Y].TileType != ModContent.TileType<BlackSand>())
-							{
-								Main.tile[X, Y].ClearEverything();
-								WorldGen.PlaceTile(X, Y, ModContent.TileType<BlackSand>());
-								WorldGen.PlaceWall(X, Y, ModContent.WallType<BlackSandWall>());
-							}
+							Main.tile[X, Y].ClearEverything();
+							WorldGen.PlaceTile(X, Y, ModContent.TileType<BlackSand>());
+							WorldGen.PlaceWall(X, Y, ModContent.WallType<BlackSandWall>());
 						}
 					}
 				}
+			}
 
-				//clear all tiles above the surface line
-				for (int Y = (int)heightLimit; Y < (int)Position.Y; Y++)
+			//clear all tiles above the surface line
+			for (int Y = (int)heightLimit; Y < (int)Position.Y; Y++)
+			{
+				double SkyIslandCheckLimit = Main.worldSurface * 0.5f;
+
+				if (Y < SkyIslandCheckLimit)
 				{
-					double SkyIslandCheckLimit = Main.worldSurface * 0.5f;
-
-					if (Y < SkyIslandCheckLimit)
-					{
-						if (Cemetery.NoFloatingIsland((int)Position.X, Y))
-						{
-							Main.tile[(int)Position.X, Y].ClearEverything();
-						}
-					}
-					else
+					if (Cemetery.NoFloatingIsland((int)Position.X, Y))
 					{
 						Main.tile[(int)Position.X, Y].ClearEverything();
 					}
 				}
+				else
+				{
+					Main.tile[(int)Position.X, Y].ClearEverything();
+				}
 			}
+		}
 
-			//initial wall cleanup and evil biome tile conversion
-			for (int i = 0; i < segments; i++)
+		//initial wall cleanup and evil biome tile conversion
+		for (int i = 0; i < segments; i++)
+		{
+			float t = i / (float)segments;
+			Vector2 Position = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
+			t = (i + 1) / (float)segments;
+
+			float u = i / (float)segments;
+			Vector2 BottomPos = BezierCurveUtil.CalculateBezierPoint(u, p4, p4, p5, p5);
+			u = (i + 1) / (float)segments;
+
+			//convert any evil blocks/walls into black sandstone
+			for (int Y = (int)Position.Y - 10; Y <= (int)BottomPos.Y + 10; Y++)
 			{
-				float t = i / (float)segments;
-				Vector2 Position = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
-				t = (i + 1) / (float)segments;
-
-				float u = i / (float)segments;
-				Vector2 BottomPos = BezierCurveUtil.CalculateBezierPoint(u, p4, p4, p5, p5);
-				u = (i + 1) / (float)segments;
-
-				//convert any evil blocks/walls into black sandstone
-				for (int Y = (int)Position.Y - 10; Y <= (int)BottomPos.Y + 10; Y++)
+				if (!InOcean((int)Position.X))
 				{
-					if (!InOcean((int)Position.X))
+					if (Main.tile[(int)Position.X, Y].TileType == TileID.Ebonstone || Main.tile[(int)Position.X, Y].TileType == TileID.Crimstone)
 					{
-						if (Main.tile[(int)Position.X, Y].TileType == TileID.Ebonstone || Main.tile[(int)Position.X, Y].TileType == TileID.Crimstone)
-						{
-							Main.tile[(int)Position.X, Y].TileType = (ushort)ModContent.TileType<BlackSandstone>();
-						}
-
-						if (/*IsEvilBiomeWall(Main.tile[(int)Position.X, Y].WallType) && */Main.tile[(int)Position.X, Y].TileType != TileID.Ebonstone && Main.tile[(int)Position.X, Y].TileType != TileID.Crimstone)
-						{
-							Main.tile[(int)Position.X, Y].WallType = (ushort)ModContent.WallType<BlackSandstoneWall>();
-						}
+						Main.tile[(int)Position.X, Y].TileType = (ushort)ModContent.TileType<BlackSandstone>();
 					}
-				}
 
-				for (int Y = (int)Position.Y - 10; Y <= (int)Position.Y + 12; Y++)
-				{
-					//kill walls not surrounded by enough tiles
-					if (ShouldDestroyWall((int)Position.X, Y, 2))
+					if (/*IsEvilBiomeWall(Main.tile[(int)Position.X, Y].WallType) && */Main.tile[(int)Position.X, Y].TileType != TileID.Ebonstone && Main.tile[(int)Position.X, Y].TileType != TileID.Crimstone)
 					{
-						WorldGen.KillWall((int)Position.X, Y);
+						Main.tile[(int)Position.X, Y].WallType = (ushort)ModContent.WallType<BlackSandstoneWall>();
 					}
 				}
 			}
 
-			//generate black sandstone with noise
-			float sandScaleX = 110;
-			float sandScaleY = 60;
+			for (int Y = (int)Position.Y - 10; Y <= (int)Position.Y + 12; Y++)
+			{
+				//kill walls not surrounded by enough tiles
+				if (ShouldDestroyWall((int)Position.X, Y, 2))
+				{
+					WorldGen.KillWall((int)Position.X, Y);
+				}
+			}
+		}
 
-			float sandThreshold = 0.1f;
-			float caveThreshold = 0.01f;
+		//generate black sandstone with noise
+		float sandScaleX = 110;
+		float sandScaleY = 60;
 
+		float sandThreshold = 0.1f;
+		float caveThreshold = 0.01f;
+
+		for (int X = leftBound - 10; X <= rightBound + 10; X++)
+		{
+			for (int Y = 10; Y <= Main.worldSurface; Y++)
+			{
+				if (WorldGen.InWorld(X, Y, 5))
+				{
+					float noiseVal = SimplexNoise.FractalNoise(Seed, X / sandScaleX, Y / sandScaleY);
+					if (noiseVal * noiseVal < sandThreshold)
+					{
+						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>())
+						{
+							Main.tile[X, Y].TileType = (ushort)ModContent.TileType<BlackSandstone>();
+						}
+						if (Main.tile[X, Y].WallType == ModContent.WallType<BlackSandWall>())
+						{
+							Main.tile[X, Y].WallType = (ushort)ModContent.WallType<BlackSandstoneWall>();
+						}
+					}
+				}
+			}
+		}
+
+		//generate caves inside of black sandstone
+		for (int X = leftBound - 10; X <= rightBound + 10; X++)
+		{
+			for (int Y = 10; Y <= Main.worldSurface; Y++)
+			{
+				if (WorldGen.InWorld(X, Y, 5) && Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>())
+				{
+					float noiseVal = SimplexNoise.FractalNoise(Seed, X / sandScaleX, Y / sandScaleY);
+					if (noiseVal * noiseVal <= caveThreshold)
+					{
+						WorldGen.KillTile(X, Y);
+					}
+				}
+			}
+		}
+
+		//cave cleanup
+		for (int l = 0; l < 6; l++)
+		{
 			for (int X = leftBound - 10; X <= rightBound + 10; X++)
 			{
 				for (int Y = 10; Y <= Main.worldSurface; Y++)
 				{
-					if (WorldGen.InWorld(X, Y, 5))
+					int tileType = SpookyWorldMethods.GetNeighboringTileType(X, Y);
+					if (tileType == ModContent.TileType<BlackSand>() || tileType == ModContent.TileType<BlackSandstone>())
 					{
-						float noiseVal = SimplexNoise.FractalNoise(Seed, X / sandScaleX, Y / sandScaleY);
-						if (noiseVal * noiseVal < sandThreshold)
+						int neighborCount = SpookyWorldMethods.GetNeighboringTileCount(X, Y);
+						if (neighborCount > 4)
 						{
-							if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>())
-							{
-								Main.tile[X, Y].TileType = (ushort)ModContent.TileType<BlackSandstone>();
-							}
-							if (Main.tile[X, Y].WallType == ModContent.WallType<BlackSandWall>())
-							{
-								Main.tile[X, Y].WallType = (ushort)ModContent.WallType<BlackSandstoneWall>();
-							}
+							WorldGen.PlaceTile(X, Y, tileType);
 						}
-					}
-				}
-			}
-
-			//generate caves inside of black sandstone
-			for (int X = leftBound - 10; X <= rightBound + 10; X++)
-			{
-				for (int Y = 10; Y <= Main.worldSurface; Y++)
-				{
-					if (WorldGen.InWorld(X, Y, 5) && Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>())
-					{
-						float noiseVal = SimplexNoise.FractalNoise(Seed, X / sandScaleX, Y / sandScaleY);
-						if (noiseVal * noiseVal <= caveThreshold)
+						else if (neighborCount < 4)
 						{
 							WorldGen.KillTile(X, Y);
 						}
 					}
 				}
 			}
+		}
 
-			//cave cleanup
-			for (int l = 0; l < 6; l++)
+		//tile cleanup
+		for (int i = 0; i < segments; i++)
+		{
+			float t = i / (float)segments;
+			Vector2 Position = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
+			t = (i + 1) / (float)segments;
+
+			float u = i / (float)segments;
+			Vector2 BottomPos = BezierCurveUtil.CalculateBezierPoint(u, p4, p4, p5, p5);
+			u = (i + 1) / (float)segments;
+
+			for (int Y = (int)Position.Y - 20; Y <= (int)BottomPos.Y + 10; Y++)
 			{
-				for (int X = leftBound - 10; X <= rightBound + 10; X++)
+ 				// clean tiles that are sticking out (basically tiles only attached to one tile on one side)
+				bool OnlyRight = !Main.tile[(int)Position.X, Y - 1].HasTile && !Main.tile[(int)Position.X, Y + 1].HasTile && !Main.tile[(int)Position.X - 1, Y].HasTile;
+				bool OnlyLeft = !Main.tile[(int)Position.X, Y - 1].HasTile && !Main.tile[(int)Position.X, Y + 1].HasTile && !Main.tile[(int)Position.X + 1, Y].HasTile;
+				bool OnlyDown = !Main.tile[(int)Position.X, Y - 1].HasTile && !Main.tile[(int)Position.X - 1, Y].HasTile && !Main.tile[(int)Position.X + 1, Y].HasTile;
+				bool OnlyUp = !Main.tile[(int)Position.X, Y + 1].HasTile && !Main.tile[(int)Position.X - 1, Y].HasTile && !Main.tile[(int)Position.X + 1, Y].HasTile;
+
+				if (OnlyRight || OnlyLeft || OnlyDown || OnlyUp)
 				{
-					for (int Y = 10; Y <= Main.worldSurface; Y++)
-					{
-						int tileType = SpookyWorldMethods.GetNeighboringTileType(X, Y);
-						if (tileType == ModContent.TileType<BlackSand>() || tileType == ModContent.TileType<BlackSandstone>())
-						{
-							int neighborCount = SpookyWorldMethods.GetNeighboringTileCount(X, Y);
-							if (neighborCount > 4)
-							{
-								WorldGen.PlaceTile(X, Y, tileType);
-							}
-							else if (neighborCount < 4)
-							{
-								WorldGen.KillTile(X, Y);
-							}
-						}
-					}
+					WorldGen.KillTile((int)Position.X, Y);
+				}
+
+				//kill random single floating tiles
+				if (!Main.tile[(int)Position.X, Y - 1].HasTile && !Main.tile[(int)Position.X, Y + 1].HasTile && 
+				!Main.tile[(int)Position.X - 1, Y].HasTile && !Main.tile[(int)Position.X + 1, Y].HasTile)
+				{
+					WorldGen.KillTile((int)Position.X, Y);
+				}
+
+				//kill one block thick surfaces
+				if (Main.tile[(int)Position.X, Y].HasTile && !Main.tile[(int)Position.X, Y - 1].HasTile && !Main.tile[(int)Position.X, Y + 1].HasTile)
+				{
+					WorldGen.KillTile((int)Position.X, Y);
+				}
+
+				//get rid of single tiles on the ground since it looks weird
+				if (Main.tile[(int)Position.X, Y].HasTile && !Main.tile[(int)Position.X - 1, Y].HasTile && !Main.tile[(int)Position.X + 1, Y].HasTile)
+				{
+					WorldGen.KillTile((int)Position.X, Y);
 				}
 			}
+		}
 
-			//tile cleanup
-			for (int i = 0; i < segments; i++)
+		//generate water and moss clusters inside of the cave
+		for (int X = leftBound - 10; X <= rightBound + 10; X++)
+		{
+			for (int Y = 10; Y <= Main.worldSurface; Y++)
 			{
-				float t = i / (float)segments;
-				Vector2 Position = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
-				t = (i + 1) / (float)segments;
+				Tile tile = Main.tile[X, Y];
 
-				float u = i / (float)segments;
-				Vector2 BottomPos = BezierCurveUtil.CalculateBezierPoint(u, p4, p4, p5, p5);
-				u = (i + 1) / (float)segments;
+				if (WorldGen.genRand.NextBool(ShipyardConfiguration.CaveWaterChance) && WorldGen.InWorld(X, Y, 5) && tile.WallType == ModContent.WallType<BlackSandstoneWall>())
+					WorldGen.PlaceLiquid(X, Y, 0, byte.MaxValue);
 
-				for (int Y = (int)Position.Y - 20; Y <= (int)BottomPos.Y + 10; Y++)
+				if (WorldGen.genRand.NextBool(ShipyardConfiguration.MossOvalChance) && WorldGen.InWorld(X, Y, 5) && !WorldGen.SolidTile(X, Y - 1) && tile.TileType == ModContent.TileType<BlackSandstone>())
 				{
- 					//clean tiles that are sticking out (basically tiles only attached to one tile on one side)
-					bool OnlyRight = !Main.tile[(int)Position.X, Y - 1].HasTile && !Main.tile[(int)Position.X, Y + 1].HasTile && !Main.tile[(int)Position.X - 1, Y].HasTile;
-					bool OnlyLeft = !Main.tile[(int)Position.X, Y - 1].HasTile && !Main.tile[(int)Position.X, Y + 1].HasTile && !Main.tile[(int)Position.X + 1, Y].HasTile;
-					bool OnlyDown = !Main.tile[(int)Position.X, Y - 1].HasTile && !Main.tile[(int)Position.X - 1, Y].HasTile && !Main.tile[(int)Position.X + 1, Y].HasTile;
-					bool OnlyUp = !Main.tile[(int)Position.X, Y + 1].HasTile && !Main.tile[(int)Position.X - 1, Y].HasTile && !Main.tile[(int)Position.X + 1, Y].HasTile;
+					int min = ShipyardConfiguration.MossOvalSizeMin;
+					int SizeX = WorldGen.genRand.Next(min, min + ShipyardConfiguration.MossOvalSizeRange);
+                    int SizeY = WorldGen.genRand.Next(min, min + ShipyardConfiguration.MossOvalSizeRange);
+					int[] ValidTiles = { ModContent.TileType<BlackSandstone>() };
 
-					if (OnlyRight || OnlyLeft || OnlyDown || OnlyUp)
-					{
-						WorldGen.KillTile((int)Position.X, Y);
-					}
-
-					//kill random single floating tiles
-					if (!Main.tile[(int)Position.X, Y - 1].HasTile && !Main.tile[(int)Position.X, Y + 1].HasTile && 
-					!Main.tile[(int)Position.X - 1, Y].HasTile && !Main.tile[(int)Position.X + 1, Y].HasTile)
-					{
-						WorldGen.KillTile((int)Position.X, Y);
-					}
-
-					//kill one block thick surfaces
-					if (Main.tile[(int)Position.X, Y].HasTile && !Main.tile[(int)Position.X, Y - 1].HasTile && !Main.tile[(int)Position.X, Y + 1].HasTile)
-					{
-						WorldGen.KillTile((int)Position.X, Y);
-					}
-
-					//get rid of single tiles on the ground since it looks weird
-					if (Main.tile[(int)Position.X, Y].HasTile && !Main.tile[(int)Position.X - 1, Y].HasTile && !Main.tile[(int)Position.X + 1, Y].HasTile)
-					{
-						WorldGen.KillTile((int)Position.X, Y);
-					}
+					SpookyWorldMethods.PlaceOval(X, Y - 10, ModContent.TileType<BlackSandstoneMoss>(), ModContent.WallType<BlackSandWall>(), SizeX, SizeY, 1f, true, false, true, ValidTiles, false);
 				}
 			}
+		}
 
-			//generate water and moss clusters inside of the cave
-			for (int X = leftBound - 10; X <= rightBound + 10; X++)
+		//additional wall cleanup
+		for (int i = 0; i < segments; i++)
+		{
+			float t = i / (float)segments;
+			Vector2 Position = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
+			t = (i + 1) / (float)segments;
+
+			float u = i / (float)segments;
+			Vector2 BottomPos = BezierCurveUtil.CalculateBezierPoint(u, p4, p4, p5, p5);
+			u = (i + 1) / (float)segments;
+
+			for (int Y = (int)Position.Y - 10; Y <= (int)BottomPos.Y + 10; Y++)
 			{
-				for (int Y = 10; Y <= Main.worldSurface; Y++)
-				{
-					if (WorldGen.genRand.NextBool() && WorldGen.InWorld(X, Y, 5) && Main.tile[X, Y].WallType == ModContent.WallType<BlackSandstoneWall>())
-					{
-						WorldGen.PlaceLiquid(X, Y, 0, byte.MaxValue);
-					}
-
-					if (WorldGen.genRand.NextBool(160) && WorldGen.InWorld(X, Y, 5) && !WorldGen.SolidTile(X, Y - 1) && Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>())
-					{
-						int SizeX = WorldGen.genRand.Next(10, 17);
-                        int SizeY = WorldGen.genRand.Next(10, 17);
-
-						int[] ValidTiles = { ModContent.TileType<BlackSandstone>() };
-
-						SpookyWorldMethods.PlaceOval(X, Y - 10, ModContent.TileType<BlackSandstoneMoss>(), ModContent.WallType<BlackSandWall>(),
-						SizeX, SizeY, 1f, true, false, true, ValidTiles, false);
-					}
-				}
-			}
-
-			//additional wall cleanup
-			for (int i = 0; i < segments; i++)
-			{
-				float t = i / (float)segments;
-				Vector2 Position = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
-				t = (i + 1) / (float)segments;
-
-				float u = i / (float)segments;
-				Vector2 BottomPos = BezierCurveUtil.CalculateBezierPoint(u, p4, p4, p5, p5);
-				u = (i + 1) / (float)segments;
-
-				for (int Y = (int)Position.Y - 10; Y <= (int)BottomPos.Y + 10; Y++)
-				{
-					//kill random single floating walls
-					if (Main.tile[(int)Position.X, Y - 1].WallType <= 0 && Main.tile[(int)Position.X, Y + 1].WallType <= 0 && 
+				//kill random single floating walls
+				if (Main.tile[(int)Position.X, Y - 1].WallType <= 0 && Main.tile[(int)Position.X, Y + 1].WallType <= 0 && 
 					Main.tile[(int)Position.X - 1, Y].WallType <= 0 && Main.tile[(int)Position.X + 1, Y].WallType <= 0)
-					{
-						WorldGen.KillWall((int)Position.X, Y);
-					}
+				{
+					WorldGen.KillWall((int)Position.X, Y);
 				}
 			}
+		}
 
-			Vector2 LighthousePos = Vector2.Zero;
+		Vector2 LighthousePos = Vector2.Zero;
 
-			if (!OceanOnLeft)
+		if (!OceanOnLeft)
+		{
+			LighthousePos = new Vector2(rightBound - 20, RightY); 
+		}
+		else
+		{
+			LighthousePos = new Vector2(leftBound + 20, LeftY);
+		}
+
+		//generate lighthouse inbetween the shipyard and ocean
+		Vector2 BottomOrigin = new Vector2((int)LighthousePos.X - 9, (int)LighthousePos.Y - 14);
+		StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/LighthouseBottom.shstruct", BottomOrigin.ToPoint16(), SpookyMod);
+
+		int RandomHeight = WorldGen.genRand.Next(1, 4);
+		Vector2 SegmentOrigin = Vector2.Zero;
+		for (int i = 1; i <= RandomHeight + 1; i++)
+		{
+			SegmentOrigin = new Vector2((int)LighthousePos.X - 9, ((int)LighthousePos.Y - (10 * i)) - 14);
+			StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/LighthouseSegment" + WorldGen.genRand.Next(1, 6) + ".shstruct", SegmentOrigin.ToPoint16(), SpookyMod);
+		}
+
+		Vector2 TopOrigin = new Vector2((int)SegmentOrigin.X - 3, (int)SegmentOrigin.Y - 27);
+		StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/LighthouseTop.shstruct", TopOrigin.ToPoint16(), SpookyMod);
+
+		//generate structures across the surface
+		for (int i = 0; i < segments; i++)
+		{
+			float t = i / (float)segments;
+			Vector2 Position = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
+			t = (i + 1) / (float)segments;
+
+			if (WorldGen.genRand.NextBool(ShipyardConfiguration.StructureChance))
 			{
-				LighthousePos = new Vector2(rightBound - 20, RightY); 
-			}
-			else
-			{
-				LighthousePos = new Vector2(leftBound + 20, LeftY);
-			}
+				int StructureY = (int)Position.Y;
 
-			//generate lighthouse inbetween the shipyard and ocean
-			Vector2 BottomOrigin = new Vector2((int)LighthousePos.X - 9, (int)LighthousePos.Y - 14);
-			StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/LighthouseBottom.shstruct", BottomOrigin.ToPoint16(), SpookyMod);
+				bool validSurface = false;
+				int attemptsToPlace = 0;
 
-			int RandomHeight = WorldGen.genRand.Next(1, 4);
-			Vector2 SegmentOrigin = Vector2.Zero;
-			for (int i = 1; i <= RandomHeight + 1; i++)
-			{
-				SegmentOrigin = new Vector2((int)LighthousePos.X - 9, ((int)LighthousePos.Y - (10 * i)) - 14);
-				StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/LighthouseSegment" + WorldGen.genRand.Next(1, 6) + ".shstruct", SegmentOrigin.ToPoint16(), SpookyMod);
-			}
-
-			Vector2 TopOrigin = new Vector2((int)SegmentOrigin.X - 3, (int)SegmentOrigin.Y - 27);
-			StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/LighthouseTop.shstruct", TopOrigin.ToPoint16(), SpookyMod);
-
-			//generate structures across the surface
-			for (int i = 0; i < segments; i++)
-			{
-				float t = i / (float)segments;
-				Vector2 Position = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
-				t = (i + 1) / (float)segments;
-
-				if (WorldGen.genRand.NextBool(35))
+				while (!validSurface && attemptsToPlace++ < 100000)
 				{
-					int StructureY = (int)Position.Y;
-
-					bool validSurface = false;
-					int attemptsToPlace = 0;
-
-					while (!validSurface && attemptsToPlace++ < 100000)
+					if (!WorldGen.SolidTile((int)Position.X, StructureY))
 					{
-						if (!WorldGen.SolidTile((int)Position.X, StructureY))
-						{
-							StructureY++;
-						}
-						else
-						{
-							validSurface = true;
-						}
+						StructureY++;
 					}
+					else
+					{
+						validSurface = true;
+					}
+				}
 
-					if (CanPlaceShipwreck((int)Position.X, StructureY, 20) && IsFlatSurface((int)Position.X, StructureY, 1) &&
+				if (CanPlaceShipwreck((int)Position.X, StructureY, 20) && IsFlatSurface((int)Position.X, StructureY, 1) &&
 					(Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSand>() || Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSandGrass>() || 
 					Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSandstone>()|| Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSandstoneMoss>()))
+				{
+					if (WorldGen.genRand.NextBool(ShipyardConfiguration.BigStructureChance))
 					{
-						if (WorldGen.genRand.NextBool(8))
+						switch (WorldGen.genRand.Next(2))
 						{
-							switch (WorldGen.genRand.Next(2))
+							case 0:
 							{
-								case 0:
-								{
-									Vector2 WreckOrigin = new Vector2((int)Position.X - 13, StructureY - 19);
-									StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckGiant" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
-									break;
-								}
-								case 1:
-								{
-									Vector2 WreckOrigin = new Vector2((int)Position.X - 9, StructureY - 11);
-									StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckMedium" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
-									break;
-								}
+								Vector2 WreckOrigin = new Vector2((int)Position.X - 13, StructureY - 19);
+								StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckGiant" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
+								break;
+							}
+							case 1:
+							{
+								Vector2 WreckOrigin = new Vector2((int)Position.X - 9, StructureY - 11);
+								StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckMedium" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
+								break;
 							}
 						}
-						else
+					}
+					else
+					{
+						switch (WorldGen.genRand.Next(2))
 						{
-							switch (WorldGen.genRand.Next(2))
+							case 0:
 							{
-								case 0:
-								{
-									Vector2 WreckOrigin = new Vector2((int)Position.X - 5, StructureY - 6);
-									StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckSmall" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
-									break;
-								}
-								case 1:
-								{
-									Vector2 WreckOrigin = new Vector2((int)Position.X - 2, StructureY - 6);
-									StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckTiny" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
-									break;
-								}
+								Vector2 WreckOrigin = new Vector2((int)Position.X - 5, StructureY - 6);
+								StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckSmall" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
+								break;
+							}
+							case 1:
+							{
+								Vector2 WreckOrigin = new Vector2((int)Position.X - 2, StructureY - 6);
+								StructureHelper.API.Generator.GenerateStructure("Content/Structures/Shipyard/WreckTiny" + WorldGen.genRand.Next(1, 3) + ".shstruct", WreckOrigin.ToPoint16(), SpookyMod);
+								break;
 							}
 						}
 					}
 				}
 			}
+		}
 
-			//liquid settling
-			SettleLiquids();
+		//liquid settling
+		SettleLiquids();
 
-			//spread grass on black sandstone and slope blocks
-			for (int X = leftBound - 10; X <= rightBound + 10; X++)
+		//spread grass on black sandstone and slope blocks
+		for (int X = leftBound - 10; X <= rightBound + 10; X++)
+		{
+			for (int Y = 10; Y <= Main.worldSurface; Y++)
 			{
-				for (int Y = 10; Y <= Main.worldSurface; Y++)
+				if (Main.tile[X, Y].TileType != ModContent.TileType<RotWood>())
 				{
-					if (Main.tile[X, Y].TileType != ModContent.TileType<RotWood>())
-					{
-						Tile.SmoothSlope(X, Y);
-					}
-
-					WorldGen.SpreadGrass(X, Y, ModContent.TileType<BlackSand>(), ModContent.TileType<BlackSandGrass>(), false);
+					Tile.SmoothSlope(X, Y);
 				}
-			}
 
-			//place cemetery gravesites
-			for (int X = leftBound - 10; X <= rightBound + 10; X++)
+				WorldGen.SpreadGrass(X, Y, ModContent.TileType<BlackSand>(), ModContent.TileType<BlackSandGrass>(), false);
+			}
+		}
+
+		//place cemetery gravesites
+		for (int X = leftBound - 10; X <= rightBound + 10; X++)
+		{
+			for (int Y = 10; Y <= Main.worldSurface; Y++)
 			{
-				for (int Y = 10; Y <= Main.worldSurface; Y++)
-				{
-					if (WorldGen.genRand.NextBool(55) && IsFlatSurface(X, Y, 2))
+				if (WorldGen.genRand.NextBool(ShipyardConfiguration.FenceChance) && IsFlatSurface(X, Y, 2))
+                {
+                    for (int TombstoneX = X - 10; TombstoneX <= X + 10; TombstoneX++)
                     {
-                        for (int TombstoneX = X - 10; TombstoneX <= X + 10; TombstoneX++)
+                        Tile tile = Main.tile[TombstoneX, Y];
+                        if (IsShipyardTile(TombstoneX, Y) && WorldGen.SolidTile(TombstoneX, Y) && WorldGen.SolidTile(TombstoneX, Y + 1) && !WorldGen.SolidTile(TombstoneX, Y - 1) && tile.WallType <= 0)
                         {
-                            Tile tile = Main.tile[TombstoneX, Y];
-                            if (IsShipyardTile(TombstoneX, Y) && WorldGen.SolidTile(TombstoneX, Y) && WorldGen.SolidTile(TombstoneX, Y + 1) && !WorldGen.SolidTile(TombstoneX, Y - 1) && tile.WallType <= 0)
-                            {
-                                WorldGen.PlaceWall(TombstoneX, Y - 2, ModContent.WallType<SpookyWoodFence>());
-                                WorldGen.PlaceWall(TombstoneX, Y - 1, ModContent.WallType<SpookyWoodFence>());
-                                WorldGen.PlaceWall(TombstoneX, Y, ModContent.WallType<SpookyWoodFence>());
+                            WorldGen.PlaceWall(TombstoneX, Y - 2, ModContent.WallType<SpookyWoodFence>());
+                            WorldGen.PlaceWall(TombstoneX, Y - 1, ModContent.WallType<SpookyWoodFence>());
+                            WorldGen.PlaceWall(TombstoneX, Y, ModContent.WallType<SpookyWoodFence>());
 
-                                if (WorldGen.SolidTile(TombstoneX, Y) && WorldGen.genRand.NextBool())
-                                {
-                                    TileGlobal.PlaceObject(TombstoneX, Y - 1, ModContent.TileType<ShipyardGravestone>(), true, WorldGen.genRand.Next(0, 5));
-                                }
+                            if (WorldGen.SolidTile(TombstoneX, Y) && WorldGen.genRand.NextBool(ShipyardConfiguration.GraveChance))
+                            {
+                                TileGlobal.PlaceObject(TombstoneX, Y - 1, ModContent.TileType<ShipyardGravestone>(), true, WorldGen.genRand.Next(0, 5));
                             }
                         }
                     }
-				}
+                }
 			}
+		}
 
-			//place chests
-			for (int X = leftBound - 10; X <= rightBound + 10; X++)
+		//place chests
+		for (int X = leftBound - 10; X <= rightBound + 10; X++)
+		{
+			for (int Y = 10; Y <= Main.worldSurface; Y++)
 			{
-				for (int Y = 10; Y <= Main.worldSurface; Y++)
-				{
-					if (WorldGen.InWorld(X, Y, 10) && WorldGen.genRand.NextBool(20) && CanPlaceChest(X, Y) && 
+				if (WorldGen.InWorld(X, Y, 10) && WorldGen.genRand.NextBool(ShipyardConfiguration.GiantChestChance) && CanPlaceChest(X, Y) && 
 					(Main.tile[X, Y].WallType == ModContent.WallType<BlackSandWall>() || Main.tile[X, Y].WallType == ModContent.WallType<BlackSandstoneWall>()))
-					{
-						TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<GiantPirateChest>());
-					}
+				{
+					TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<GiantPirateChest>());
 				}
 			}
+		}
 
-			//ambient tiles
-			//first, grow trees and giant corals
-			for (int X = leftBound - 10; X <= rightBound + 10; X++)
+		//ambient tiles
+		//first, grow trees and giant corals
+		for (int X = leftBound - 10; X <= rightBound + 10; X++)
+		{
+			for (int Y = 10; Y <= Main.worldSurface; Y++)
 			{
-				for (int Y = 10; Y <= Main.worldSurface; Y++)
-				{
-					if (WorldGen.genRand.NextBool(5) && WorldGen.InWorld(X, Y, 10) && CanPlaceMangrove(X, Y) && WorldGen.SolidTile(X, Y) &&
+				if (WorldGen.genRand.NextBool(ShipyardConfiguration.MangroveTreeChance) && WorldGen.InWorld(X, Y, 10) && CanPlaceMangrove(X, Y) && WorldGen.SolidTile(X, Y) &&
 					!WorldGen.SolidTile(X, Y - 1) && !WorldGen.SolidTile(X - 1, Y - 1) && !WorldGen.SolidTile(X + 1, Y - 1) &&
 					!Main.tile[X, Y].LeftSlope && !Main.tile[X, Y].RightSlope && !Main.tile[X, Y].IsHalfBlock && Main.tile[X, Y - 1].LiquidAmount <= 0 &&
 					(Main.tile[X, Y].TileType == ModContent.TileType<BlackSandGrass>()))
-					{
-						MangroveTree.Grow(X, Y - 1, 5, 13);
-					}
+				{
+					MangroveTree.Grow(X, Y - 1, 5, 13);
+				}
 
-					if (WorldGen.genRand.NextBool() && WorldGen.InWorld(X, Y, 10) && CanPlaceCoralTree(X, Y) && WorldGen.SolidTile(X, Y) && //make sure the tree can place on a solid tile and not nearby other trees
+				if (WorldGen.genRand.NextBool(ShipyardConfiguration.CoralTreeChance) && WorldGen.InWorld(X, Y, 10) && CanPlaceCoralTree(X, Y) && WorldGen.SolidTile(X, Y) && //make sure the tree can place on a solid tile and not nearby other trees
 					!WorldGen.SolidTile(X, Y - 1) && !WorldGen.SolidTile(X - 1, Y - 1) && !WorldGen.SolidTile(X + 1, Y - 1) && //make sure theres no tiles around where the tree will grow
 					Main.tile[X, Y - 1].LiquidAmount > 0 && Main.tile[X, Y - 1].LiquidType == LiquidID.Water &&
 					Main.tile[X, Y - 2].LiquidAmount > 0 && Main.tile[X, Y - 2].LiquidType == LiquidID.Water && //must be water above the tile it grows on
 					!Main.tile[X, Y].LeftSlope && !Main.tile[X, Y].RightSlope && !Main.tile[X, Y].IsHalfBlock && //tree cannot be placed on slopes
 					(Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandGrass>() ||
 					Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>()))
-					{
-						CoralTree.Grow(X, Y - 1, 5, 8, WorldGen.genRand.Next(0, 6));
-					}
+				{
+					CoralTree.Grow(X, Y - 1, 5, 8, WorldGen.genRand.Next(0, 6));
 				}
 			}
-			//then place the rest of the ambient tiles
-			for (int X = leftBound - 10; X <= rightBound + 10; X++)
+		}
+		//then place the rest of the ambient tiles
+		for (int X = leftBound - 10; X <= rightBound + 10; X++)
+		{
+			for (int Y = 10; Y <= Main.worldSurface; Y++)
 			{
-				for (int Y = 10; Y <= Main.worldSurface; Y++)
+				Tile tileAbove = Main.tile[X, Y - 1];
+
+				if (Main.tile[X, Y].HasTile && !tileAbove.HasTile && WorldGen.InWorld(X, Y, 10))
 				{
-					Tile tileAbove = Main.tile[X, Y - 1];
-
-					if (Main.tile[X, Y].HasTile && !tileAbove.HasTile && WorldGen.InWorld(X, Y, 10))
+					if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandGrass>() ||
+					Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>())
 					{
-						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandGrass>() ||
-						Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>())
+						//conch shells
+						if (WorldGen.genRand.NextBool(ShipyardConfiguration.ShellChance))
 						{
-							//conch shells
-							if (WorldGen.genRand.NextBool(12))
+							if (Main.tile[X, Y - 1].WallType <= 0)
 							{
-								if (Main.tile[X, Y - 1].WallType <= 0)
-								{
-									TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<QueenShell>(), true, WorldGen.genRand.Next(0, 2));
-								}
+								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<QueenShell>(), true, WorldGen.genRand.Next(0, 2));
 							}
+						}
 
-							//mossy giant anchors
-							if (WorldGen.genRand.NextBool(5))
-							{
-								ushort[] Anchors = new ushort[] { (ushort)ModContent.TileType<MossyAnchor1>(), (ushort)ModContent.TileType<MossyAnchor2>(), (ushort)ModContent.TileType<MossyAnchor3>() };
-								TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Anchors), true);
-							}
+						//mossy giant anchors
+						if (WorldGen.genRand.NextBool(ShipyardConfiguration.AnchorChance))
+						{
+							ushort[] Anchors = [(ushort)ModContent.TileType<MossyAnchor1>(), (ushort)ModContent.TileType<MossyAnchor2>(), (ushort)ModContent.TileType<MossyAnchor3>()];
+							TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Anchors), true);
 						}
 					}
 				}
 			}
+		}
 
-			for (int X = leftBound - 10; X <= rightBound + 10; X++)
+		for (int X = leftBound - 10; X <= rightBound + 10; X++)
+		{
+			for (int Y = 10; Y <= Main.worldSurface; Y++)
 			{
-				for (int Y = 10; Y <= Main.worldSurface; Y++)
-				{
-					Tile tileAbove = Main.tile[X, Y - 1];
-					Tile tileBelow = Main.tile[X, Y + 1];
+				Tile tileAbove = Main.tile[X, Y - 1];
+				Tile tileBelow = Main.tile[X, Y + 1];
 
-					if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>() && !tileBelow.HasTile && WorldGen.InWorld(X, Y, 10))
+				if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>() && !tileBelow.HasTile && WorldGen.InWorld(X, Y, 10))
+				{
+					if (WorldGen.genRand.NextBool(ShipyardConfiguration.VineChance))
+						WorldGen.PlaceTile(X, Y + 1, (ushort)ModContent.TileType<BlackSandstoneMossVines>());
+				}
+
+				//grow vines
+				if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMossVines>())
+				{
+					int[] ValidTiles = { ModContent.TileType<BlackSandstoneMoss>() };
+
+					SpookyWorldMethods.PlaceVines(X, Y, ModContent.TileType<BlackSandstoneMossVines>(), ValidTiles);
+				}
+
+				//grow stalactites
+				if (Main.tile[X, Y].HasTile && !tileBelow.HasTile && WorldGen.InWorld(X, Y, 10) && Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>())
+				{
+					if (WorldGen.genRand.NextBool(ShipyardConfiguration.StalactiteChance))
+					{
+						int Type = WorldGen.genRand.NextBool() ? ModContent.TileType<BlackSandstoneStalactite>() : ModContent.TileType<BlackSandstoneStalactiteSmall>();
+						TileGlobal.PlaceObject(X, Y + 1, Type, true, WorldGen.genRand.Next(0, 3));
+					}
+				}
+
+				if (Main.tile[X, Y].HasTile && !tileAbove.HasTile && WorldGen.InWorld(X, Y, 10))
+				{
+					//grow vines and weeds on black sandstone moss
+					if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>())
 					{
 						if (WorldGen.genRand.NextBool())
 						{
-							WorldGen.PlaceTile(X, Y + 1, (ushort)ModContent.TileType<BlackSandstoneMossVines>());
-						}
-					}
-					//grow vines
-					if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMossVines>())
-					{
-						int[] ValidTiles = { ModContent.TileType<BlackSandstoneMoss>() };
-
-						SpookyWorldMethods.PlaceVines(X, Y, ModContent.TileType<BlackSandstoneMossVines>(), ValidTiles);
-					}
-
-					//grow stalactites
-					if (Main.tile[X, Y].HasTile && !tileBelow.HasTile && WorldGen.InWorld(X, Y, 10))
-					{
-						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>())
-						{
-							if (WorldGen.genRand.NextBool())
-							{
-								int Type = WorldGen.genRand.NextBool() ? ModContent.TileType<BlackSandstoneStalactite>() : ModContent.TileType<BlackSandstoneStalactiteSmall>();
-								TileGlobal.PlaceObject(X, Y + 1, Type, true, WorldGen.genRand.Next(0, 3));
-							}
+							TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<BlackSandstoneMossWeeds>(), true, WorldGen.genRand.Next(0, 6));
 						}
 					}
 
-					if (Main.tile[X, Y].HasTile && !tileAbove.HasTile && WorldGen.InWorld(X, Y, 10))
+					//grow bleached corals on all blocks
+					if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandGrass>() ||
+					Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>())
 					{
-						//grow vines and weeds on black sandstone moss
-						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>())
+						//giant bleached coral 
+						if (WorldGen.genRand.NextBool(ShipyardConfiguration.GiantCoralChance) && tileAbove.LiquidAmount > 0 && tileAbove.LiquidType == LiquidID.Water)
 						{
-							if (WorldGen.genRand.NextBool())
-							{
-								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<BlackSandstoneMossWeeds>(), true, WorldGen.genRand.Next(0, 6));
-							}
+							ushort[] GiantCorals = [ (ushort)ModContent.TileType<BleachedCoralGiant1>(), (ushort)ModContent.TileType<BleachedCoralGiant2>(), 
+								(ushort)ModContent.TileType<BleachedCoralGiant3>(), (ushort)ModContent.TileType<BleachedCoralGiant4>(), (ushort)ModContent.TileType<BleachedCoralGiant5>(), 
+								(ushort)ModContent.TileType<BleachedCoralGiant6>() ];
+							TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(GiantCorals), true);
 						}
 
-						//grow bleached corals on all blocks
-						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandGrass>() ||
-						Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>())
+						//small bleached corals
+						if (WorldGen.genRand.NextBool(ShipyardConfiguration.CoralChance) && tileAbove.LiquidAmount > 0 && tileAbove.LiquidType == LiquidID.Water)
 						{
-							//giant bleached coral 
-							if (WorldGen.genRand.NextBool(8) && tileAbove.LiquidAmount > 0 && tileAbove.LiquidType == LiquidID.Water)
-							{
-								ushort[] GiantCorals = new ushort[] { (ushort)ModContent.TileType<BleachedCoralGiant1>(), (ushort)ModContent.TileType<BleachedCoralGiant2>(), (ushort)ModContent.TileType<BleachedCoralGiant3>(),
-								(ushort)ModContent.TileType<BleachedCoralGiant4>(), (ushort)ModContent.TileType<BleachedCoralGiant5>(), (ushort)ModContent.TileType<BleachedCoralGiant6>() };
-								TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(GiantCorals), true);
-							}
-
-							//small bleached corals
-							if (WorldGen.genRand.NextBool() && tileAbove.LiquidAmount > 0 && tileAbove.LiquidType == LiquidID.Water)
-							{
-								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<BleachedCoral>(), true, WorldGen.genRand.Next(0, 8));
-							}
-
-							//starfishes
-							if (WorldGen.genRand.NextBool(5))
-							{
-								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<PaleStarfish>(), true, WorldGen.genRand.Next(0, 4));
-							}
+							TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<BleachedCoral>(), true, WorldGen.genRand.Next(0, 8));
 						}
 
-						//black sand only ambient tiles
-						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>())
+						//starfishes
+						if (WorldGen.genRand.NextBool(ShipyardConfiguration.StarfishChance))
 						{
-							//sand piles, only place above water
-							if (WorldGen.genRand.NextBool(3) && tileAbove.LiquidAmount <= 0)
-							{
-								ushort[] SandPiles = new ushort[] { (ushort)ModContent.TileType<BlackSandPile1>(), (ushort)ModContent.TileType<BlackSandPile2>(), (ushort)ModContent.TileType<BlackSandPile3>() };
-								TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(SandPiles), true);
-							}
-						}
-
-						//black sandstone pebbles
-						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>())
-						{
-							//rock piles
-							if (WorldGen.genRand.NextBool(4))
-							{
-								ushort[] BigRockPiles = new ushort[] { (ushort)ModContent.TileType<BlacksandstoneRock1>(), (ushort)ModContent.TileType<BlacksandstoneRock2>(), 
-								(ushort)ModContent.TileType<BlacksandstoneRock3>(), (ushort)ModContent.TileType<BlacksandstoneRock4>() };
-								TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(BigRockPiles), true);
-							}
-
-							//small pebbles
-							if (WorldGen.genRand.NextBool(3))
-							{
-								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<BlacksandstoneRockSmall>(), true, WorldGen.genRand.Next(0, 5));
-							}
-						}
-
-						//grow pale sea oats
-						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandGrass>())
-						{
-							if (WorldGen.genRand.NextBool() && tileAbove.LiquidAmount <= 0)
-							{
-								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<PaleSeaOats>(), true, WorldGen.genRand.Next(0, 14));
-							}
-						}
-
-						//generate pots after everything else
-						if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandGrass>() || 
-						Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneSlab>() || 
-						Main.tile[X, Y].TileType == ModContent.TileType<RotWood>())
-						{
-							if (WorldGen.genRand.NextBool() && !tileAbove.HasTile)
-							{
-								if (CanPlaceShipwreckPot(X, Y))
-								{
-									TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<ShipyardPotsWood>(), true, WorldGen.genRand.Next(0, 3));
-								}
-								else
-								{
-									TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<ShipyardPots>(), true, WorldGen.genRand.Next(0, 5));
-								}
-							}
+							TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<PaleStarfish>(), true, WorldGen.genRand.Next(0, 4));
 						}
 					}
 
-					//place shelf corals on walls
-					if ((Main.tile[X, Y].WallType == ModContent.WallType<BlackSandstoneWall>() || Main.tile[X, Y].WallType == ModContent.WallType<BlackSandWall>()) && WorldGen.InWorld(X, Y, 10))
+					//black sand only ambient tiles
+					if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>())
 					{
-						if (WorldGen.genRand.NextBool(150))
+						//sand piles, only place above water
+						if (WorldGen.genRand.NextBool(ShipyardConfiguration.CoralChance) && tileAbove.LiquidAmount <= 0)
 						{
-							TileGlobal.PlaceObject(X, Y, ModContent.TileType<ShelfCoralSmall>(), true, WorldGen.genRand.Next(0, 3));
+							ushort[] SandPiles = new ushort[] { (ushort)ModContent.TileType<BlackSandPile1>(), (ushort)ModContent.TileType<BlackSandPile2>(), (ushort)ModContent.TileType<BlackSandPile3>() };
+							TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(SandPiles), true);
 						}
-						if (WorldGen.genRand.NextBool(135))
+					}
+
+					//black sandstone pebbles
+					if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>())
+					{
+						//rock piles
+						if (WorldGen.genRand.NextBool(ShipyardConfiguration.CoralChance))
 						{
-							TileGlobal.PlaceObject(X, Y, ModContent.TileType<ShelfCoralLarge>(), true, WorldGen.genRand.Next(0, 3));
+							ushort[] BigRockPiles = new ushort[] { (ushort)ModContent.TileType<BlacksandstoneRock1>(), (ushort)ModContent.TileType<BlacksandstoneRock2>(), 
+							(ushort)ModContent.TileType<BlacksandstoneRock3>(), (ushort)ModContent.TileType<BlacksandstoneRock4>() };
+							TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(BigRockPiles), true);
+						}
+
+						//small pebbles
+						if (WorldGen.genRand.NextBool(ShipyardConfiguration.PebbleChance))
+						{
+							TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<BlacksandstoneRockSmall>(), true, WorldGen.genRand.Next(0, 5));
+						}
+					}
+
+					//grow pale sea oats
+					if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandGrass>())
+					{
+						if (WorldGen.genRand.NextBool(ShipyardConfiguration.SeaOatChance) && tileAbove.LiquidAmount <= 0)
+						{
+							TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<PaleSeaOats>(), true, WorldGen.genRand.Next(0, 14));
+						}
+					}
+
+					//generate pots after everything else
+					if (Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandGrass>() || 
+					Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>() || Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneSlab>() || 
+					Main.tile[X, Y].TileType == ModContent.TileType<RotWood>())
+					{
+						if (WorldGen.genRand.NextBool(ShipyardConfiguration.PotChance) && !tileAbove.HasTile)
+						{
+							if (CanPlaceShipwreckPot(X, Y))
+							{
+								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<ShipyardPotsWood>(), true, WorldGen.genRand.Next(0, 3));
+							}
+							else
+							{
+								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<ShipyardPots>(), true, WorldGen.genRand.Next(0, 5));
+							}
 						}
 					}
 				}
-			}
-		}
 
-		public static void SettleLiquids()
-		{
-			Liquid.QuickWater(3);
-			WorldGen.WaterCheck();
-			int num = 0;
-			Liquid.quickSettle = true;
-			int num2 = 10;
-			while (num < num2)
-			{
-				int num3 = Liquid.numLiquid + LiquidBuffer.numLiquidBuffer;
-				num++;
-				double num4 = 0.0;
-				int num5 = num3 * 5;
-				while (Liquid.numLiquid > 0)
+				//place shelf corals on walls
+				if ((Main.tile[X, Y].WallType == ModContent.WallType<BlackSandstoneWall>() || Main.tile[X, Y].WallType == ModContent.WallType<BlackSandWall>()) && WorldGen.InWorld(X, Y, 10))
 				{
-					num5--;
-					if (num5 < 0)
+					if (WorldGen.genRand.NextBool(ShipyardConfiguration.ShelfCoralSmallChance))
 					{
-						break;
+						TileGlobal.PlaceObject(X, Y, ModContent.TileType<ShelfCoralSmall>(), true, WorldGen.genRand.Next(0, 3));
 					}
+					if (WorldGen.genRand.NextBool(ShipyardConfiguration.ShelfCoralBigChance))
+					{
+						TileGlobal.PlaceObject(X, Y, ModContent.TileType<ShelfCoralLarge>(), true, WorldGen.genRand.Next(0, 3));
+					}
+				}
+			}
+		}
+	}
 
-					double num6 = (double)(num3 - (Liquid.numLiquid + LiquidBuffer.numLiquidBuffer)) / (double)num3;
-					if (Liquid.numLiquid + LiquidBuffer.numLiquidBuffer > num3)
-					{
-						num3 = Liquid.numLiquid + LiquidBuffer.numLiquidBuffer;
-					}
-
-					if (num6 > num4)
-					{
-						num4 = num6;
-					}
-					else
-					{
-						num6 = num4;
-					}
-
-					int num7 = 10;
-					if (num > num7)
-					{
-						num7 = num;
-					}
-
-					Liquid.UpdateLiquid();
+	public static void SettleLiquids()
+	{
+		Liquid.QuickWater(3);
+		WorldGen.WaterCheck();
+		int num = 0;
+		Liquid.quickSettle = true;
+		int num2 = 10;
+		while (num < num2)
+		{
+			int num3 = Liquid.numLiquid + LiquidBuffer.numLiquidBuffer;
+			num++;
+			double num4 = 0.0;
+			int num5 = num3 * 5;
+			while (Liquid.numLiquid > 0)
+			{
+				num5--;
+				if (num5 < 0)
+				{
+					break;
 				}
 
-				WorldGen.WaterCheck();
+				double num6 = (double)(num3 - (Liquid.numLiquid + LiquidBuffer.numLiquidBuffer)) / (double)num3;
+				if (Liquid.numLiquid + LiquidBuffer.numLiquidBuffer > num3)
+				{
+					num3 = Liquid.numLiquid + LiquidBuffer.numLiquidBuffer;
+				}
+
+				if (num6 > num4)
+				{
+					num4 = num6;
+				}
+				else
+				{
+					num6 = num4;
+				}
+
+				int num7 = 10;
+				if (num > num7)
+				{
+					num7 = num;
+				}
+
+				Liquid.UpdateLiquid();
 			}
 
-			Liquid.quickSettle = false;
+			WorldGen.WaterCheck();
 		}
 
-		private static bool CanGenerate(out (int, int) bounds)
-		{
-			bounds = (0, 0);
+		Liquid.quickSettle = false;
+	}
 
-			//shipyard ecotone should only generate if surrounded by the cemetery and the ocean
-			if (EcotoneSurfaceMapping.FindWhere(x => x.SurroundedBy("Ocean", "Cemetery") &&
+	private static bool CanGenerate(out (int, int) bounds)
+	{
+		bounds = (0, 0);
+
+		//shipyard ecotone should only generate if surrounded by the cemetery and the ocean
+		if (EcotoneSurfaceMapping.FindWhere(x => x.SurroundedBy("Ocean", "Cemetery") &&
 			EcotoneSurfaceMapping.OnSurface(x), false) is EcotoneSurfaceMapping.EcotoneEntry entry &&
 			!entry.Definition.Ecotone)
-			{
-				bounds = (entry.Start.X, entry.End.X);
-				return true;
-			}
-
-			return false;
-		}
-
-		//check if the position is in the ocean
-		public static bool InOcean(int X)
 		{
-			if (X < (WorldGen.beachDistance - 30) || X > Main.maxTilesX - (WorldGen.beachDistance - 30))
-			{
-				return true;
-			}
-			
-			return false;
-		}
-
-		//check if a lake can be placed
-		public static bool CanPlaceNearCemetery(int X, int Y, int Dist, bool LiquidCheck = true)
-		{
-			for (int i = X - Dist; i < X + Dist; i++)
-			{
-				for (int j = Y - Dist; j < Y + Dist; j++)
-				{
-					if (WorldGen.InWorld(i, j))
-					{
-						if ((LiquidCheck && Main.tile[i, j].LiquidAmount > 0) || Cemetery.IsCemeteryTile(i, j))
-						{
-							return false;
-						}
-					}
-				}
-			}
-
+			bounds = (entry.Start.X, entry.End.X);
 			return true;
 		}
 
-		public static bool ShouldDestroyWall(int X, int Y, int Dist)
+		return false;
+	}
+
+	//check if the position is in the ocean
+	public static bool InOcean(int X)
+	{
+		if (X < (WorldGen.beachDistance - 30) || X > Main.maxTilesX - (WorldGen.beachDistance - 30))
 		{
-			for (int i = X - Dist; i <= X + Dist; i++)
+			return true;
+		}
+		
+		return false;
+	}
+
+	//check if a lake can be placed
+	public static bool CanPlaceNearCemetery(int X, int Y, int Dist, bool LiquidCheck = true)
+	{
+		for (int i = X - Dist; i < X + Dist; i++)
+		{
+			for (int j = Y - Dist; j < Y + Dist; j++)
 			{
-				for (int j = Y - Dist; j <= Y + Dist; j++)
+				if (WorldGen.InWorld(i, j))
 				{
-					if (!WorldGen.SolidOrSlopedTile(i, j))
+					if ((LiquidCheck && Main.tile[i, j].LiquidAmount > 0) || Cemetery.IsCemeteryTile(i, j))
 					{
-						return true;
+						return false;
 					}
 				}
 			}
-
-			return false;
 		}
 
-		//dont allow trees to naturally grow too close to each other
-		public static bool CanPlaceMangrove(int X, int Y)
+		return true;
+	}
+
+	public static bool ShouldDestroyWall(int X, int Y, int Dist)
+	{
+		for (int i = X - Dist; i <= X + Dist; i++)
+		{
+			for (int j = Y - Dist; j <= Y + Dist; j++)
+			{
+				if (!WorldGen.SolidOrSlopedTile(i, j))
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	//dont allow trees to naturally grow too close to each other
+	public static bool CanPlaceMangrove(int X, int Y)
         {
             for (int i = X - 4; i < X + 4; i++)
             {
@@ -905,41 +901,41 @@ namespace Spooky.Content.Generation
             return true;
         }
 
-		public static bool IsFlatSurface(int PositionX, int PositionY, int Width)
+	public static bool IsFlatSurface(int PositionX, int PositionY, int Width)
+	{
+		for (int x = PositionX - Width; x <= PositionX + Width; x++)
 		{
-			for (int x = PositionX - Width; x <= PositionX + Width; x++)
+			if (Main.tile[x, PositionY].HasTile && !Main.tile[x, PositionY - 1].HasTile && !Main.tile[x, PositionY - 2].HasTile && !Main.tile[x, PositionY - 3].HasTile && !Main.tile[x, PositionY - 4].HasTile)
 			{
-				if (Main.tile[x, PositionY].HasTile && !Main.tile[x, PositionY - 1].HasTile && !Main.tile[x, PositionY - 2].HasTile && !Main.tile[x, PositionY - 3].HasTile && !Main.tile[x, PositionY - 4].HasTile)
-				{
-					continue;
-				}
-				else
+				continue;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+	
+	public static bool CanPlaceShipwreck(int PositionX, int PositionY, int TileCheckDistance)
+	{
+		for (int x = PositionX - TileCheckDistance; x <= PositionX + TileCheckDistance; x++)
+		{
+			for (int y = PositionY - TileCheckDistance; y <= PositionY + TileCheckDistance; y++)
+			{
+				if (Main.tile[x, y].TileType == ModContent.TileType<RotWood>())
 				{
 					return false;
 				}
 			}
-
-			return true;
-		}
-		
-		public static bool CanPlaceShipwreck(int PositionX, int PositionY, int TileCheckDistance)
-		{
-			for (int x = PositionX - TileCheckDistance; x <= PositionX + TileCheckDistance; x++)
-			{
-				for (int y = PositionY - TileCheckDistance; y <= PositionY + TileCheckDistance; y++)
-				{
-					if (Main.tile[x, y].TileType == ModContent.TileType<RotWood>())
-					{
-						return false;
-					}
-				}
-			}
-
-			return true;
 		}
 
-		//dont allow wooden crate pots to place too far from shipwrecks
-		public static bool CanPlaceShipwreckPot(int X, int Y)
+		return true;
+	}
+
+	//dont allow wooden crate pots to place too far from shipwrecks
+	public static bool CanPlaceShipwreckPot(int X, int Y)
         {
             for (int i = X - 5; i < X + 5; i++)
             {
@@ -955,64 +951,63 @@ namespace Spooky.Content.Generation
             return false;
         }
 
-		//dont allow coral trees to naturally grow too close to each other
-		public static bool CanPlaceCoralTree(int X, int Y)
+	//dont allow coral trees to naturally grow too close to each other
+	public static bool CanPlaceCoralTree(int X, int Y)
+    {
+        for (int i = X - 4; i < X + 4; i++)
         {
-            for (int i = X - 4; i < X + 4; i++)
+            for (int j = Y - 4; j < Y + 4; j++)
             {
-                for (int j = Y - 4; j < Y + 4; j++)
+                if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<CoralTree>())
                 {
-                    if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<CoralTree>())
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
-
-            return true;
         }
 
-		//determine if theres no chests nearby another chest thats about to place
-        public static bool CanPlaceChest(int X, int Y)
+        return true;
+    }
+
+	//determine if theres no chests nearby another chest thats about to place
+    public static bool CanPlaceChest(int X, int Y)
+    {
+        for (int i = X - 20; i < X + 20; i++)
         {
-            for (int i = X - 20; i < X + 20; i++)
+            for (int j = Y - 25; j < Y + 25; j++)
             {
-                for (int j = Y - 25; j < Y + 25; j++)
+                if (WorldGen.InWorld(i, j, 10) && Main.tile[i, j].TileType == ModContent.TileType<GiantPirateChest>())
                 {
-                    if (WorldGen.InWorld(i, j, 10) && Main.tile[i, j].TileType == ModContent.TileType<GiantPirateChest>())
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
-
-            return true;
         }
 
-		public static bool IsShipyardTile(int X, int Y)
-        {
-            return Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || 
-            Main.tile[X, Y].TileType == ModContent.TileType<BlackSandGrass>() ||
-            Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>() || 
-            Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>();
-        }
+        return true;
+    }
 
-		public override void AddTasks(List<GenPass> tasks, List<EcotoneSurfaceMapping.EcotoneEntry> entries)
+	public static bool IsShipyardTile(int X, int Y)
+    {
+        return Main.tile[X, Y].TileType == ModContent.TileType<BlackSand>() || 
+        Main.tile[X, Y].TileType == ModContent.TileType<BlackSandGrass>() ||
+        Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>() || 
+        Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstoneMoss>();
+    }
+
+	public override void AddTasks(List<GenPass> tasks, List<EcotoneSurfaceMapping.EcotoneEntry> entries)
+	{
+		if (tasks.FindIndex(x => x.Name == "Waterfalls") is int index && index != -1)
 		{
-			if (tasks.FindIndex(x => x.Name == "Waterfalls") is int index && index != -1)
-			{
-				tasks.Insert(index, new EcotonePass("Shipyard", Generation, this));
-			}
+			tasks.Insert(index, new EcotonePass("Shipyard", Generation, this));
+		}
+	}
+
+	private static void Generation(GenerationProgress progress, GameConfiguration configuration)
+	{
+		if (!CanGenerate(out var bounds))
+		{
+			return;
 		}
 
-		private static void Generation(GenerationProgress progress, GameConfiguration configuration)
-		{
-			if (!CanGenerate(out var bounds))
-			{
-				return;
-			}
-
-			GenerateShipyard(progress, bounds);
-		}
-	}	
-}
+		GenerateShipyard(progress, bounds);
+	}
+}	
