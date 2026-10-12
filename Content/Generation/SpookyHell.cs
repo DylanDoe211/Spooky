@@ -1,19 +1,8 @@
-using Terraria;
-using Terraria.IO;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.WorldBuilding;
-using Terraria.Localization;
-using Terraria.GameContent.Generation;
 using Microsoft.Xna.Framework;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-
-using Spooky.Core;
 using Spooky.Content.Items.SpookyHell.Misc;
 using Spooky.Content.NPCs.EggEvent;
 using Spooky.Content.NPCs.Friendly;
+using Spooky.Content.Tiles.Catacomb;
 using Spooky.Content.Tiles.NoseTemple;
 using Spooky.Content.Tiles.NoseTemple.Furniture;
 using Spooky.Content.Tiles.Painting;
@@ -21,6 +10,17 @@ using Spooky.Content.Tiles.SpookyHell;
 using Spooky.Content.Tiles.SpookyHell.Ambient;
 using Spooky.Content.Tiles.SpookyHell.Furniture;
 using Spooky.Content.Tiles.SpookyHell.Tree;
+using Spooky.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Terraria;
+using Terraria.GameContent.Generation;
+using Terraria.ID;
+using Terraria.IO;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using Terraria.WorldBuilding;
 
 namespace Spooky.Content.Generation
 {
@@ -70,7 +70,6 @@ namespace Spooky.Content.Generation
                     Tile tile = Main.tile[X, Y];
 
                     tile.ClearEverything();
-                    WorldGen.KillWall(X, Y);
                 }
             }
 
@@ -111,9 +110,11 @@ namespace Spooky.Content.Generation
                 {
                     if (Y > terrainContour[X] && WorldGen.InWorld(X, Y))
                     {
-                        WorldGen.PlaceTile(X, Y, (ushort)ModContent.TileType<SpookyMush>());
-                        WorldGen.KillWall(X, Y);
-                    }
+						Tile tile = Main.tile[X, Y];
+
+						tile.HasTile = true;
+						tile.TileType = (ushort)ModContent.TileType<SpookyMush>();
+					}
                 }
                 
                 for (int Y = Main.maxTilesY - 215; Y <= Main.maxTilesY - 198; Y += 3)

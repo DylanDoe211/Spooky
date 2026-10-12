@@ -10,7 +10,6 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Spooky.Core;
-using Spooky.Content.Items.BossSummon;
 using Spooky.Content.Items.Catacomb;
 using Spooky.Content.Items.Catacomb.Misc;
 using Spooky.Content.Items.Cemetery;
@@ -110,10 +109,14 @@ namespace Spooky.Content.Generation
                 {
                     if (Main.tile[X, Y].TileType != ModContent.TileType<CatacombBrick1Safe>() && Main.tile[X, Y].WallType != ModContent.WallType<CatacombBrickWall1Safe>())
                     {
-                        Main.tile[X, Y].ClearEverything();
-                        WorldGen.PlaceTile(X, Y, ModContent.TileType<CatacombBrick1>());
-                        WorldGen.PlaceWall(X, Y, ModContent.WallType<CatacombBrickWall1>());
-                    }
+						Tile tile = Main.tile[X, Y];
+
+						tile.ClearEverything();
+
+						tile.HasTile = true;
+						tile.TileType = (ushort)ModContent.TileType<CatacombBrick1>();
+						tile.WallType = (ushort)ModContent.WallType<CatacombBrickWall1>();
+					}
                 }
             }
 
@@ -124,33 +127,39 @@ namespace Spooky.Content.Generation
             {
                 for (int Y = DaffodilArenaY - 30; Y <= DaffodilArenaY + 30; Y++)
                 {
-                    Main.tile[X, Y].ClearEverything();
-                    
-                    //place the first layer bricks around the top half of the arena
-                    if (Y <= DaffodilArenaY)
+					Tile tile = Main.tile[X, Y];
+
+					tile.ClearEverything();
+
+					//place the first layer bricks around the top half of the arena
+					if (Y <= DaffodilArenaY)
                     {
-                        WorldGen.PlaceTile(X, Y, ModContent.TileType<CatacombBrick1>());
-                        WorldGen.PlaceWall(X, Y, ModContent.WallType<CatacombBrickWall1>());
-                    }
+						tile.HasTile = true;
+						tile.TileType = (ushort)ModContent.TileType<CatacombBrick1>();
+						tile.WallType = (ushort)ModContent.WallType<CatacombBrickWall1>();
+					}
                     else if (Y > DaffodilArenaY && Y <= DaffodilArenaY + 10)
                     {
                         if (WorldGen.genRand.NextBool())
                         {
-                            WorldGen.PlaceTile(X, Y, ModContent.TileType<CatacombBrick2>());
-                            WorldGen.PlaceWall(X, Y, ModContent.WallType<CatacombBrickWall2>());
-                        }
+							tile.HasTile = true;
+							tile.TileType = (ushort)ModContent.TileType<CatacombBrick2>();
+							tile.WallType = (ushort)ModContent.WallType<CatacombBrickWall2>();
+						}
                         else
                         {
-                            WorldGen.PlaceTile(X, Y, ModContent.TileType<CatacombBrick1>());
-                            WorldGen.PlaceWall(X, Y, ModContent.WallType<CatacombBrickWall1>());
-                        }
+							tile.HasTile = true;
+							tile.TileType = (ushort)ModContent.TileType<CatacombBrick1>();
+							tile.WallType = (ushort)ModContent.WallType<CatacombBrickWall1>();
+						}
                     }
                     //on the bottom half, place the second layer bricks
                     else
                     {
-                        WorldGen.PlaceTile(X, Y, ModContent.TileType<CatacombBrick2>());
-                        WorldGen.PlaceWall(X, Y, ModContent.WallType<CatacombBrickWall2>());
-                    }
+						tile.HasTile = true;
+						tile.TileType = (ushort)ModContent.TileType<CatacombBrick2>();
+						tile.WallType = (ushort)ModContent.WallType<CatacombBrickWall2>();
+					}
                 }
             }
 
@@ -404,10 +413,14 @@ namespace Spooky.Content.Generation
 
 				for (int Y = layer2Start - 45; Y <= (int)Main.worldSurface + layer1Depth + layer2Depth + 30; Y++)
                 {
-                    Main.tile[X, Y].ClearEverything();
-                    WorldGen.PlaceTile(X, Y, ModContent.TileType<CatacombBrick2>());
-                    WorldGen.PlaceWall(X, Y, ModContent.WallType<CatacombBrickWall2>());
-                }
+					Tile tile = Main.tile[X, Y];
+
+					tile.ClearEverything();
+
+					tile.HasTile = true;
+					tile.TileType = (ushort)ModContent.TileType<CatacombBrick2>();
+					tile.WallType = (ushort)ModContent.WallType<CatacombBrickWall2>();
+				}
             }
 
             //place box around where the big bone arena will generate
@@ -418,10 +431,14 @@ namespace Spooky.Content.Generation
             {
                 for (int Y = BigBoneArenaY - 35; Y <= BigBoneArenaY + 70; Y++)
                 {
-                    Main.tile[X, Y].ClearEverything();
-                    WorldGen.PlaceTile(X, Y, ModContent.TileType<CatacombBrick2>());
-                    WorldGen.PlaceWall(X, Y, ModContent.WallType<CatacombBrickWall2>());
-                }
+					Tile tile = Main.tile[X, Y];
+
+					tile.ClearEverything();
+
+					tile.HasTile = true;
+					tile.TileType = (ushort)ModContent.TileType<CatacombBrick2>();
+					tile.WallType = (ushort)ModContent.WallType<CatacombBrickWall2>();
+				}
             }
 
             bool PlacedAvariceRoom = false;
@@ -867,30 +884,36 @@ namespace Spooky.Content.Generation
                     {
                         for (int tunnelY = Y + 15; tunnelY <= (int)Main.worldSurface + layer1Depth + 65; tunnelY++)
                         {
-                            Main.tile[tunnelX, tunnelY].ClearEverything();
-
-                            //place brick walls in the tunnel
-                            WorldGen.PlaceWall(tunnelX, tunnelY, (ushort)ModContent.WallType<CatacombBrickWall1>());
+							WorldGen.KillTile(tunnelX, tunnelY);
 
                             //place platforms at the top of the hole, on the floor in the room
                             if (tunnelY == Y + 15)
                             {
-                                WorldGen.PlaceTile(tunnelX, tunnelY, ModContent.TileType<CatacombBrickPlatform1>());
+								Tile tile = Main.tile[tunnelX, tunnelY];
 
-                                //in the middle of the tunnel, place a chain that goes down
-                                if (tunnelX == X - 1)
-                                {
-                                    WorldGen.PlaceTile(tunnelX, tunnelY - 1, TileID.Chain);
-                                }
-                            }
+								tile.HasTile = true;
+								tile.TileType = (ushort)ModContent.TileType<CatacombBrickPlatform1>();
+
+								//in the middle of the tunnel, place a chain that goes down
+								if (tunnelX == X - 1)
+								{
+									Tile chainTile = Main.tile[tunnelX, tunnelY - 1];
+
+									chainTile.HasTile = true;
+									chainTile.TileType = TileID.Chain;
+								}
+							}
                             //place stuff in the tunnel
                             else
                             {
                                 //in the middle of the tunnel, place a chain that goes down
                                 if (tunnelX == X - 1)
                                 {
-                                    WorldGen.PlaceTile(tunnelX, tunnelY, TileID.Chain);
-                                }
+									Tile chainTile = Main.tile[tunnelX, tunnelY];
+
+									chainTile.HasTile = true;
+									chainTile.TileType = TileID.Chain;
+								}
                             }
                         }
                     }
@@ -914,21 +937,22 @@ namespace Spooky.Content.Generation
 
                 for (int EntranceRealX = EntrancePosX - 5; EntranceRealX <= EntrancePosX + 5; EntranceRealX++)
                 {
-                    Tile tile = Main.tile[EntranceRealX, EntrancePosY];
+					Tile tile = Main.tile[EntranceRealX, EntrancePosY];
 
-                    tile.ClearEverything();
-                    if (EntranceRealX == EntrancePosX - 5 || EntranceRealX == EntrancePosX + 5 ||
+					WorldGen.KillTile(EntranceRealX, EntrancePosY);
+
+					if (EntranceRealX == EntrancePosX - 5 || EntranceRealX == EntrancePosX + 5 ||
                     EntranceRealX == EntrancePosX - 4 || EntranceRealX == EntrancePosX + 4)
                     {
-                        WorldGen.PlaceTile(EntranceRealX, EntrancePosY, ModContent.TileType<CatacombBrick2>());
-                    }
+						tile.HasTile = true;
+						tile.TileType = (ushort)ModContent.TileType<CatacombBrick2>();
+					}
 
                     if (EntranceRealX == EntrancePosX)
                     {
-                        WorldGen.PlaceTile(EntranceRealX, EntrancePosY, TileID.Chain);
-                    }
-
-                    WorldGen.PlaceWall(EntranceRealX, EntrancePosY, ModContent.WallType<CatacombBrickWall2>());
+						tile.HasTile = true;
+						tile.TileType = TileID.Chain;
+					}
                 }
 
                 EntrancePosY++;
@@ -965,28 +989,34 @@ namespace Spooky.Content.Generation
 
                 for (int tunnelY = (int)Main.worldSurface + layer1Depth + layer2Depth + extraDepthForEntrance; tunnelY <= BigBoneArenaY - 36; tunnelY++)
                 {
-                    Main.tile[tunnelX, tunnelY].ClearEverything();
+					WorldGen.KillTile(tunnelX, tunnelY);
 
-                    //place brick walls in the tunnel
-                    WorldGen.PlaceWall(tunnelX, tunnelY, (ushort)ModContent.WallType<CatacombBrickWall2>());
-
-                    if (tunnelY == (int)Main.worldSurface + layer1Depth + layer2Depth + extraDepthForEntrance)
+					if (tunnelY == (int)Main.worldSurface + layer1Depth + layer2Depth + extraDepthForEntrance)
                     {
-                        WorldGen.PlaceTile(tunnelX, tunnelY, ModContent.TileType<OldWoodPlatform>());
+						Tile tile = Main.tile[tunnelX, tunnelY];
 
-                        //place chain above the middle of the platform
-                        if (tunnelX == XMiddle - 1)
+						tile.HasTile = true;
+						tile.TileType = (ushort)ModContent.TileType<CatacombBrickPlatform2>();
+
+						//place chain above the middle of the platform
+						if (tunnelX == XMiddle - 1)
                         {
-                            WorldGen.PlaceTile(tunnelX, tunnelY - 1, TileID.Chain);
-                        }
+							Tile chainTile = Main.tile[tunnelX, tunnelY - 1];
+
+							chainTile.HasTile = true;
+							chainTile.TileType = TileID.Chain;
+						}
                     }
                     else
                     {
                         //in the middle of the tunnel, place a chain that goes down
                         if (tunnelX == XMiddle - 1)
                         {
-                            WorldGen.PlaceTile(tunnelX, tunnelY, TileID.Chain);
-                        }
+							Tile chainTile = Main.tile[tunnelX, tunnelY];
+
+							chainTile.HasTile = true;
+							chainTile.TileType = TileID.Chain;
+						}
                     }
                 }
             }

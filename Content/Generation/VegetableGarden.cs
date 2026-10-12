@@ -39,37 +39,27 @@ namespace Spooky.Content.Generation
 			int Start = JungleOnLeftSide ? GenVars.JungleX + JungleLimitX : GenVars.JungleX - JungleLimitX;
 			int End = JungleOnLeftSide ? GenVars.JungleX - JungleLimitX : GenVars.JungleX + JungleLimitX;
 
-			int Increment = JungleOnLeftSide ? -20 : 20;
+			int Increment = JungleOnLeftSide ? -30 : 30;
 
 			int numBiomes = 0;
 			int maxBiomes = Main.maxTilesX >= 6400 && Main.maxTilesY >= 1800 ? 2 : 1;
-			int delayBeforeNext = 0;
 
 			//find a valid position in the jungle away from other structures
 			for (int X = Start; JungleOnLeftSide ? X >= End : X <= End; X += Increment)
 			{
-				int StartY = numBiomes == 0 ? (int)Main.rockLayer : Main.maxTilesY / 2;
-				int EndY = numBiomes == 0 ? Main.maxTilesY / 2 : Main.maxTilesY - 300;
+				int StartY = numBiomes == 0 ? (int)Main.worldSurface + 50 : Main.maxTilesY / 2;
+				int EndY = numBiomes == 0 ? Main.maxTilesY / 3 : Main.maxTilesY - 300;
 				
-				for (int Y = StartY; Y <= EndY; Y += 20)
+				for (int Y = StartY; Y <= EndY; Y += 30)
 				{
-					if (delayBeforeNext > 0)
-					{
-						delayBeforeNext--;
-					}
-
 					if (CanPlaceBiome(X, Y, Main.maxTilesX / (SizeXInt - 8), Main.maxTilesY / (SizeYInt - 11)))
 					{
-						if (delayBeforeNext == 0)
-						{
-							PlaceOvalCluster(progress, X, Y, Main.maxTilesX / WorldGen.genRand.Next(SizeXInt - 5, SizeXInt + 6), Main.maxTilesY / WorldGen.genRand.Next(SizeYInt - 5, SizeYInt + 6), Main.maxTilesX / 210, Main.maxTilesX / 175);
-							DigOutCaves(X, Y, SizeX, SizeY, CaveNoiseSeed);
-							BiomePolish(X, Y, SizeX, SizeY);
-							PlaceAmbience(X, Y, SizeX, SizeY);
+						PlaceOvalCluster(progress, X, Y, Main.maxTilesX / WorldGen.genRand.Next(SizeXInt - 5, SizeXInt + 6), Main.maxTilesY / WorldGen.genRand.Next(SizeYInt - 5, SizeYInt + 6), Main.maxTilesX / 210, Main.maxTilesX / 175);
+						DigOutCaves(X, Y, SizeX, SizeY, CaveNoiseSeed);
+						BiomePolish(X, Y, SizeX, SizeY);
+						PlaceAmbience(X, Y, SizeX, SizeY);
 
-							numBiomes++;
-							delayBeforeNext = 1200;
-						}
+						numBiomes++;
 
 						if (numBiomes >= maxBiomes)
 						{

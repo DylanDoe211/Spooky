@@ -27,9 +27,9 @@ Sprite Updates:
 -Changed rot gourd mold spore projectile to look like other "spore" projectiles the mod has
 
 General Changes:
--Attempted to optimize a lot of spooky mod world generation, some of it has not yet recieved optimization due to time constraints but I will be fixing the rest of the biomes later in a future patch
+-Noticeably optimized a lot of spooky mod world generation, some of it has not yet recieved optimization due to time constraints and will be fixed later, but most of the biome have recieved optimizations and generate much faster
 -Spooky forest caves have been changed to be more natural and slighlty less frequent, glowshroom caves are now more vertically open but also a bit less frequent
--Tar pits caves generally the same with changes to make them a tiny bit bigger, along with the sandstone clusters and walls generation being improved 
+-Tar pits caves generally the same with changes to make them a tiny bit bigger, along with the sandstone clusters and walls generation being improved
 -Fetid farms caves are generally the same but look a bit more natural than before
 -Eye valley flesh block clusters changed to be more natural looking veins, with organic mush still being the dominant block in the biome
 -Made some spooky mod world generation tasks fill up the progress bar better to track how far along each biome is done generating

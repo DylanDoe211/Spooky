@@ -1,15 +1,46 @@
 ﻿using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 using Microsoft.Xna.Framework;
 using System;
 using System.Linq;
 
+using Spooky.Content.Tiles.Shipyard;
+using Spooky.Content.Tiles.SpiderCave;
+using Spooky.Content.Tiles.SpookyBiome;
+using Spooky.Content.Tiles.SpookyHell;
+
 namespace Spooky.Content.Generation
 {
-	public class SpookyWorldMethods
+	public class SpookyWorldMethods : ModSystem
 	{
 		public static double WorldSurfaceHeightLimit = 0;
+
+		public override void Load()
+		{
+			On_WorldGen.FillWallHolesInColumn += SpookyModWallCleanupPrevention;
+		}
+
+		//prevents certain spooky mod walls from being cleaned up at the end of world generation so certain structures dont look bad
+		private int SpookyModWallCleanupPrevention(On_WorldGen.orig_FillWallHolesInColumn orig, int x, int startY, int endY)
+		{
+			int[] InvalidWalls = { ModContent.WallType<BirchWoodWall>(), ModContent.WallType<SpookyWoodWall>(),
+			ModContent.WallType<RotWoodWall>(), ModContent.WallType<BlackSandstoneSlabWall>(), ModContent.WallType<EyeBlockBrickWall>() };
+
+			int NewX = Utils.Clamp(x, 2, Main.maxTilesX - 1 - 2);
+			int NewStartY = Math.Max(startY, 2);
+			int NewEndY = Math.Min(endY, Main.maxTilesY - 2);
+			for (int i = NewStartY; i < NewEndY; i++)
+			{
+				if (InvalidWalls.Contains(Main.tile[NewX, i].WallType))
+				{
+					return 0;
+				}
+			}
+
+			return orig(x, startY, endY);
+		}
 
 		public static void PlaceMound(int X, int Y, int tileType, int halfWidth, int height, bool DestroyOnly)
 		{
@@ -113,7 +144,7 @@ namespace Spooky.Content.Generation
 								}
 							}
 
-							if (wallType > 0 && tile.WallType > 0)
+							if (wallType > 0 && tile.WallType != WallID.None)
 							{
 								tile.WallType = (ushort)wallType;
 								if (RemoveLiquid)
@@ -133,6 +164,39 @@ namespace Spooky.Content.Generation
 
 		public static void PlaceCircle(int X, int Y, int tileType, int wallType, int radius, bool clearTiles, bool clearWalls)
 		{
+			for (int y = Y - radius; y <= Y + radius; y++)
+			{
+				for (int x = X - radius; x <= X + radius; x++)
+				{
+					Tile tile = Main.tile[x, y];
+
+					if ((int)Vector2.Distance(new Vector2(x, y), new Vector2(X, Y)) <= radius)
+					{
+						if (clearTiles)
+						{
+							WorldGen.KillTile(x, y);
+						}
+						if (tileType > -1)
+						{
+							tile.HasTile = true;
+							tile.TileType = (ushort)tileType;
+						}
+					}
+					if ((int)Vector2.Distance(new Vector2(x, y), new Vector2(X, Y)) <= radius - 1)
+					{
+						if (clearWalls)
+						{
+							WorldGen.KillWall(x, y);
+						}
+						if (wallType > 0)
+						{
+							tile.WallType = (ushort)wallType;
+						}
+					}
+				}
+			}
+
+			/*
 			ShapeData circle = new ShapeData();
 			GenAction blotchMod = new Modifiers.Blotches(2, 0.4);
 			WorldUtils.Gen(new Point(X, Y), new Shapes.Circle(radius), Actions.Chain(new GenAction[]
@@ -183,6 +247,7 @@ namespace Spooky.Content.Generation
 					new Actions.PlaceWall((ushort)wallType)
 				}));
 			}
+			*/
 		}
 
 		public static void PlaceVines(int X, int Y, int vineType, int[] ValidTiles)

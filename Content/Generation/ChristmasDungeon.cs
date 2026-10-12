@@ -1506,9 +1506,13 @@ namespace Spooky.Content.Generation
 				{
 					if (Main.tile[i, j].TileType != ModContent.TileType<ChristmasBrickRed>() && Main.tile[i, j].WallType != ModContent.WallType<ChristmasBrickRedWall>())
 					{
-						Main.tile[i, j].ClearEverything();
-						WorldGen.PlaceTile(i, j, ModContent.TileType<ChristmasBrickRed>());
-						WorldGen.PlaceWall(i, j, ModContent.WallType<ChristmasBrickRedWall>());
+						Tile tile = Main.tile[i, j];
+
+						tile.ClearEverything();
+
+						tile.HasTile = true;
+						tile.TileType = (ushort)ModContent.TileType<ChristmasBrickRed>();
+						tile.WallType = (ushort)ModContent.WallType<ChristmasBrickRedWall>();
 					}
 				}
 			}
@@ -1555,9 +1559,13 @@ namespace Spooky.Content.Generation
 				{
 					if (Main.tile[x, j].TileType != ModContent.TileType<ChristmasBrickRed>() && Main.tile[x, j].WallType != ModContent.WallType<ChristmasBrickRedWall>())
 					{
-						Main.tile[x, j].ClearEverything();
-						WorldGen.PlaceTile(x, j, ModContent.TileType<ChristmasBrickRed>());
-						WorldGen.PlaceWall(x, j, ModContent.WallType<ChristmasBrickRedWall>());
+						Tile tile = Main.tile[x, j];
+
+						tile.ClearEverything();
+
+						tile.HasTile = true;
+						tile.TileType = (ushort)ModContent.TileType<ChristmasBrickRed>();
+						tile.WallType = (ushort)ModContent.WallType<ChristmasBrickRedWall>();
 					}
 				}
 			}
@@ -1580,9 +1588,13 @@ namespace Spooky.Content.Generation
 				{
 					if (Main.tile[i, y].TileType != ModContent.TileType<ChristmasBrickRed>() && Main.tile[i, y].WallType != ModContent.WallType<ChristmasBrickRedWall>())
 					{
-						Main.tile[i, y].ClearEverything();
-						WorldGen.PlaceTile(i, y, ModContent.TileType<ChristmasBrickRed>());
-						WorldGen.PlaceWall(i, y, ModContent.WallType<ChristmasBrickRedWall>());
+						Tile tile = Main.tile[i, y];
+
+						tile.ClearEverything();
+
+						tile.HasTile = true;
+						tile.TileType = (ushort)ModContent.TileType<ChristmasBrickRed>();
+						tile.WallType = (ushort)ModContent.WallType<ChristmasBrickRedWall>();
 					}
 				}
 			}

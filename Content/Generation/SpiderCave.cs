@@ -1,17 +1,5 @@
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.GameContent.Generation;
-using Terraria.WorldBuilding;
-using Terraria.Localization;
-using Terraria.IO;
-using ReLogic.Utilities;
 using Microsoft.Xna.Framework;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-
-using Spooky.Core;
+using ReLogic.Utilities;
 using Spooky.Content.Items.SpiderCave;
 using Spooky.Content.Items.SpiderCave.Misc;
 using Spooky.Content.Tiles.Blooms;
@@ -19,6 +7,18 @@ using Spooky.Content.Tiles.SpiderCave;
 using Spooky.Content.Tiles.SpiderCave.Ambient;
 using Spooky.Content.Tiles.SpiderCave.Furniture;
 using Spooky.Content.Tiles.SpiderCave.Tree;
+using Spooky.Content.Tiles.SpookyHell;
+using Spooky.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Terraria;
+using Terraria.GameContent.Generation;
+using Terraria.ID;
+using Terraria.IO;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using Terraria.WorldBuilding;
 
 namespace Spooky.Content.Generation
 {
@@ -140,9 +140,13 @@ namespace Spooky.Content.Generation
                         //place dirt tiles and walls
 						if (percent < blurPercent)
 						{
-							Main.tile[X, Y].ClearEverything();
-							WorldGen.PlaceTile(X, Y, ModContent.TileType<DampSoil>());
-							WorldGen.PlaceWall(X, Y, ModContent.WallType<DampSoilWall>());
+							Tile tile = Main.tile[X, Y];
+
+							tile.ClearEverything();
+
+							tile.HasTile = true;
+							tile.TileType = (ushort)ModContent.TileType<DampSoil>();
+							tile.WallType = (ushort)ModContent.WallType<DampSoilWall>();
 						}
 						else
 						{
@@ -229,7 +233,7 @@ namespace Spooky.Content.Generation
 				}
 			}
 
-            //spread grass
+            //spread grass and place clusters of mushroom grass
             for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
             {
 				for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
@@ -238,30 +242,15 @@ namespace Spooky.Content.Generation
                     {
                         Tile tile = Main.tile[X, Y];
                         Tile tileAbove = Main.tile[X, Y - 1];
-                        Tile tileBelow = Main.tile[X, Y + 1];
-                        Tile tileLeft = Main.tile[X - 1, Y];
-                        Tile tileRight = Main.tile[X + 1, Y];
 
                         //spread grass onto the dirt blocks throughout the biome
                         WorldGen.SpreadGrass(X, Y, ModContent.TileType<DampSoil>(), ModContent.TileType<DampGrass>(), false);
-                    }
-                }
-            }
-            //place clusters of mushroom grass
-            for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
-            {
-				for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
-                {
-                    if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
-                    {
+
 						float percent = dist / constant;
 						float blurPercent = 0.97f;
 
 						if (percent < blurPercent)
 						{
-							Tile tile = Main.tile[X, Y];
-							Tile tileAbove = Main.tile[X, Y - 1];
-
 							if (tile.TileType == ModContent.TileType<DampGrass>() && !tileAbove.HasTile)
 							{
 								if (WorldGen.genRand.NextBool(115) && CheckForFlatSurface(X, Y, 6, 1))
@@ -276,7 +265,7 @@ namespace Spooky.Content.Generation
 								}
 							}
 						}
-                    }
+					}
                 }
             }
 
@@ -323,7 +312,6 @@ namespace Spooky.Content.Generation
                         float noiseVal = SimplexNoise.Noise(Seed, X / wallScaleX, Y / wallScaleY);
 						if (noiseVal * noiseVal < wallThreshold)
 						{
-                            WorldGen.PlaceWall(X, Y, ModContent.WallType<WebBlockWall>());
                             Main.tile[X, Y].WallType = (ushort)ModContent.WallType<WebBlockWall>();
                         }
                     }
@@ -445,8 +433,14 @@ namespace Spooky.Content.Generation
                 {
 					if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
 					{
-                        WorldGen.PlaceTile(X, Y, ModContent.TileType<DampSoil>());
-                    }
+						Tile tile = Main.tile[X, Y];
+
+						if (tile.HasTile && tile.TileType != ModContent.TileType<DampStone>() && tile.TileType != ModContent.TileType<WebBlock>())
+						{
+							tile.HasTile = true;
+							tile.TileType = (ushort)ModContent.TileType<DampSoil>();
+						}
+					}
                 }
             }
 

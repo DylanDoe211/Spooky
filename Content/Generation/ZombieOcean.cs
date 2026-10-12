@@ -247,7 +247,6 @@ namespace Spooky.Content.Generation
 									if (OnlyPlaceWallsIfTile && tile.HasTile)
 									{
 										tile.WallType = (ushort)wallType;
-										WorldGen.PlaceWall(PositionX, PositionY, (ushort)wallType);
 									}
 
 									if (!OnlyPlaceWallsIfTile)
@@ -263,7 +262,6 @@ namespace Spooky.Content.Generation
 										if (noiseVal * noiseVal > wallThreshold)
 										{
 											tile.WallType = (ushort)wallType;
-											WorldGen.PlaceWall(PositionX, PositionY, (ushort)wallType);
 										}
 									}
 								}
@@ -273,23 +271,21 @@ namespace Spooky.Content.Generation
 									if (ReplaceOnly)
 									{
 										if (tile.HasTile && WorldGen.SolidOrSlopedTile(PositionX, PositionY))
-										{
-											WorldGen.KillTile(PositionX, PositionY);
-											tile.TileType = (ushort)tileType;
+										{ 
 											tile.HasTile = true;
+											tile.TileType = (ushort)tileType;
+											
 										}
 									}
 									else
 									{
-										WorldGen.KillTile(PositionX, PositionY);
-										tile.TileType = (ushort)tileType;
 										tile.HasTile = true;
+										tile.TileType = (ushort)tileType;
 									}
 								}
 								else
 								{
 									WorldGen.KillTile(PositionX, PositionY);
-									tile.HasTile = false;
 									tile.LiquidType = LiquidID.Water;
 									tile.LiquidAmount = 255;
 								}

@@ -389,7 +389,7 @@ namespace Spooky.Content.Generation
             int XMiddle = Catacombs.PositionX;
             int XEdge = Catacombs.PositionX + (BiomeWidth / 2);
 
-            int StartPosY = (int)SpookyWorldMethods.WorldSurfaceHeightLimit + 25;
+            int StartPosY = (int)SpookyWorldMethods.WorldSurfaceHeightLimit;
 
             //first ruined house
             GenerateStructure((XStart + XMiddle) / 2, StartPosY, "RuinedHouse1", 14, 20);
@@ -429,9 +429,6 @@ namespace Spooky.Content.Generation
 				float t = i / (float)segments;
 				Vector2 Position = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
 				t = (i + 1) / (float)segments;
-                
-                //destory all tiles above the line to get rid of unwanted hills/mountains
-                double heightLimit = Main.worldSurface * 0.465f;
 
                 if (!Liquids)
                 {
@@ -446,7 +443,7 @@ namespace Spooky.Content.Generation
                         }
                     }
 
-                    for (int Y = (int)heightLimit; Y < (int)Position.Y; Y++)
+                    for (int Y = (int)SpookyWorldMethods.WorldSurfaceHeightLimit; Y < (int)Position.Y; Y++)
                     {
                         if (IsCemeteryTile((int)Position.X, Y) || Main.tile[(int)Position.X, Y].WallType == ModContent.WallType<CemeteryGrassWall>() || Main.tile[(int)Position.X, Y].WallType == ModContent.WallType<CemeteryDirtWall>())
                         {
@@ -461,7 +458,7 @@ namespace Spooky.Content.Generation
                 }
                 else
                 {
-                    for (int Y = (int)heightLimit; Y < (int)Position.Y; Y++)
+                    for (int Y = (int)SpookyWorldMethods.WorldSurfaceHeightLimit; Y < (int)Position.Y; Y++)
                     {   
                         if (Main.tile[(int)Position.X, Y].LiquidAmount > 0)
                         {
@@ -489,18 +486,6 @@ namespace Spooky.Content.Generation
                     if (StructureFile == "CemeteryEntrance")
                     {
                         Catacombs.EntranceY = startY - 33;
-                    }
-
-                    //place blocks below structure to prevent them from floating
-                    for (int fillX = startX - 10; fillX <= startX + 10; fillX++)
-                    {
-                        for (int fillY = startY + 7; fillY <= (int)Main.worldSurface - 35; fillY++)
-                        {
-                            if (!Main.tile[fillX, fillY].HasTile)
-                            {
-                                SpookyWorldMethods.PlaceCircle(fillX, fillY, WorldGen.genRand.NextBool(5) ? ModContent.TileType<CemeteryStone>() : ModContent.TileType<CemeteryDirt>(), 0, WorldGen.genRand.Next(1, 3), true, true);
-                            }
-                        }
                     }
 
 					Vector2 origin = new Vector2(startX - offsetX, startY - offsetY);

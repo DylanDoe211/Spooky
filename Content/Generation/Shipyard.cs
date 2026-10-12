@@ -157,14 +157,14 @@ namespace Spooky.Content.Generation
 				for (int X = (int)Position.X - 15; X <= (int)Position.X + 15; X++)
 				{
 					int BottomEndPos = ((int)BottomPos.Y + 50) >= (int)Main.worldSurface ? (int)Main.worldSurface : (int)BottomPos.Y + 50;
-					for (int Y = (int)BottomPos.Y; Y <= (int)Main.worldSurface; Y++)
+					for (int Y = (int)BottomPos.Y; Y <= BottomEndPos; Y++)
 					{
 						Tile tile = Main.tile[X, Y];
 
-						if (!IsEvilBiomeWall(Main.tile[X, Y].WallType) && WorldGen.SolidTile(X, Y - 1) && Main.tile[X, Y].TileType != TileID.Sand)
+						if (!IsEvilBiomeWall(Main.tile[X, Y].WallType) && Main.tile[X, Y].TileType != TileID.Sand)
 						{
 							//destroy any non-solid tiles
-							if (!WorldGen.SolidTile(X, Y) && Main.tile[X, Y].TileType != ModContent.TileType<BlackSand>())
+							if (!WorldGen.SolidTile(X, Y) && Main.tile[X, Y - 1].HasTile && Main.tile[X, Y].TileType != ModContent.TileType<BlackSand>() && Main.tile[X, Y].WallType != ModContent.WallType<BlackSandWall>())
 							{
 								tile.HasTile = true;
 								tile.TileType = TileID.Dirt;
@@ -201,9 +201,11 @@ namespace Spooky.Content.Generation
 						{
 							if (WorldGen.SolidTile(X, Y) && Main.tile[X, Y].TileType != TileID.Sand && Main.tile[X, Y].TileType != ModContent.TileType<BlackSand>())
 							{
-								Main.tile[X, Y].ClearEverything();
-								WorldGen.PlaceTile(X, Y, ModContent.TileType<BlackSand>());
-								WorldGen.PlaceWall(X, Y, ModContent.WallType<BlackSandWall>());
+								Tile tile = Main.tile[X, Y];
+
+								tile.HasTile = true;
+								tile.TileType = (ushort)ModContent.TileType<BlackSand>();
+								tile.WallType = (ushort)ModContent.WallType<BlackSandWall>();
 							}
 						}
 					}
