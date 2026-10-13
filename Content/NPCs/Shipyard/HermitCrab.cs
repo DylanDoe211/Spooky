@@ -61,7 +61,6 @@ namespace Spooky.Content.NPCs.Shipyard
         public override void ReceiveExtraAI(BinaryReader reader)
         {
             //floats
-            SpeedModifier = reader.ReadSingle();
             NPC.localAI[0] = reader.ReadSingle();
             NPC.localAI[1] = reader.ReadSingle();
             NPC.localAI[2] = reader.ReadSingle();
