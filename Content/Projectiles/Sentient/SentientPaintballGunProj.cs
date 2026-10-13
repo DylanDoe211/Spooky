@@ -90,7 +90,7 @@ namespace Spooky.Content.Projectiles.Sentient
                 player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, player.itemRotation);
 
                 Projectile.ai[2]++;
-                if (Projectile.ai[2] >= ItemGlobal.ActiveItem(player).useTime)
+                if (Projectile.ai[2] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Ranged)))
                 {
                     SoundEngine.PlaySound(SoundID.Item111 with { Pitch = 0.5f}, Projectile.Center);
 

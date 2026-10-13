@@ -115,7 +115,7 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 
                 Projectile.localAI[0]++;
 
-                if (Projectile.localAI[0] >= ItemGlobal.ActiveItem(player).useTime / 3)
+                if (Projectile.localAI[0] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Ranged)) / 3)
                 {
                     Projectile.frame++;
 

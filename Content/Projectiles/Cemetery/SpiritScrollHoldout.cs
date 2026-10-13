@@ -75,7 +75,8 @@ namespace Spooky.Content.Projectiles.Cemetery
                     Projectile.ai[2]++;
                 }
 
-                if (Projectile.ai[2] >= ItemGlobal.ActiveItem(player).useTime && player.CheckMana(ItemGlobal.ActiveItem(player), ItemGlobal.ActiveItem(player).mana, false, false))
+                if (Projectile.ai[2] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Summon)) && 
+                player.CheckMana(ItemGlobal.ActiveItem(player), ItemGlobal.ActiveItem(player).mana, false, false))
                 {
                     player.statMana -= ItemGlobal.ActiveItem(player).mana;
 

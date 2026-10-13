@@ -66,7 +66,7 @@ namespace Spooky.Content.NPCs.Shipyard
 
         public override void SetDefaults()
         {
-            NPC.lifeMax = 1000;
+            NPC.lifeMax = 850;
             NPC.damage = 35;
             NPC.defense = 15;
             NPC.width = 45;

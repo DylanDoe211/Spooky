@@ -570,8 +570,9 @@ Parrotfish.DisplayName: Parrotfish
 ParrotfishBaby.DisplayName: Baby Parrotfish
 YetiCrab.DisplayName: Yeti Crab
 Batfish.DisplayName: Batfish
+HermitCrab.DisplayName: Hermit Crab
 QueenConch.DisplayName: Queen Conch
-QueenConchIntro.DisplayName: Queen Conch Intro
+QueenConchIntro.DisplayName: ""
 PirateChestVisuals.DisplayName: ""
 
 //tameable

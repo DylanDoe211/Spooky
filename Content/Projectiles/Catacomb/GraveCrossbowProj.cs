@@ -107,7 +107,7 @@ namespace Spooky.Content.Projectiles.Catacomb
 
                 Projectile.localAI[0]++;
 
-                if (Projectile.localAI[0] >= ItemGlobal.ActiveItem(player).useTime && Projectile.frame < 2)
+                if (Projectile.localAI[0] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Ranged)) && Projectile.frame < 2)
                 {
                     Projectile.frame++;
 

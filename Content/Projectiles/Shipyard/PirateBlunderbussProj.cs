@@ -133,7 +133,7 @@ namespace Spooky.Content.Projectiles.Shipyard
                 Projectile.timeLeft = 20;
 
                 Projectile.localAI[0]++;
-                if (Projectile.localAI[0] == ItemGlobal.ActiveItem(player).useTime / 2)
+                if (Projectile.localAI[0] == (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Ranged)) / 2)
                 {
                     SoundEngine.PlaySound(ReloadSound, Projectile.Center);
                     player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.ThreeQuarters, player.itemRotation);
@@ -143,7 +143,7 @@ namespace Spooky.Content.Projectiles.Shipyard
                     player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, player.itemRotation);
                 }
 
-                if (Projectile.localAI[0] >= ItemGlobal.ActiveItem(player).useTime)
+                if (Projectile.localAI[0] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Ranged)))
                 {
                     Projectile.ai[2]++;
                     Projectile.localAI[0] = 0;

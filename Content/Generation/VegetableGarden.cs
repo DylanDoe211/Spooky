@@ -47,8 +47,14 @@ namespace Spooky.Content.Generation
 			//find a valid position in the jungle away from other structures
 			for (int X = Start; JungleOnLeftSide ? X >= End : X <= End; X += Increment)
 			{
-				int StartY = numBiomes == 0 ? (int)Main.worldSurface + 50 : Main.maxTilesY / 2;
-				int EndY = numBiomes == 0 ? Main.maxTilesY / 3 : Main.maxTilesY - 300;
+				int StartY = (int)Main.worldSurface + Main.maxTilesY / 5;
+				int EndY = Main.maxTilesY / 3;
+
+				if (numBiomes != 0)
+				{
+					StartY = Main.maxTilesY / 2;
+					EndY = Main.maxTilesY - 300;
+				}
 				
 				for (int Y = StartY; Y <= EndY; Y += 30)
 				{
@@ -459,20 +465,6 @@ namespace Spooky.Content.Generation
 		public bool CanPlaceBiome(int PositionX, int PositionY, int SizeX, int SizeY)
 		{
 			int numJungleTiles = 0;
-
-			for (int i = PositionX - SizeX * 2; i < PositionX + SizeX * 2; i += 10)
-			{
-				for (int j = PositionY - SizeY * 2; j < PositionY + SizeY * 2; j += 10)
-				{
-					int[] InvalidTiles = { ModContent.TileType<JungleSoilGrass>(), ModContent.TileType<JungleSoil>(), ModContent.TileType<JungleMoss>() };
-
-					if (WorldGen.InWorld(i, j) && Main.tile[i, j].HasTile && InvalidTiles.Contains(Main.tile[i, j].TileType))
-					{
-						return false;
-					}
-				}
-			}
-
 			for (int i = PositionX - SizeX; i < PositionX + SizeX; i += 2)
 			{
 				for (int j = PositionY - SizeY; j < PositionY + SizeY; j += 2)

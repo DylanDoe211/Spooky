@@ -181,14 +181,14 @@ namespace Spooky.Content.Projectiles.SpookyHell
 
             //actual minion exploding ai
             Projectile.ai[0]++;
-            if (Projectile.ai[0] >= 3510 && Projectile.ai[0] < 3600)
+            if (Projectile.ai[0] >= 1700 && Projectile.ai[0] < 1800)
             {
                 Projectile.localAI[0]++;
 				Projectile.localAI[1] += 0.12f;
 				ExtraRotation += MathHelper.Lerp(0, Projectile.localAI[1], MathHelper.Clamp(Projectile.localAI[0] / 60f, 0, 1));
             }
 
-            if (Projectile.ai[0] >= 3600)
+            if (Projectile.ai[0] >= 1800)
             {
                 DrawBrainy(true, Color.White);
 
@@ -232,6 +232,8 @@ namespace Spooky.Content.Projectiles.SpookyHell
 				ExtraRotation = 0;
 
 				Projectile.ai[0] = 0;
+
+                Projectile.netUpdate = true;
             }
         }
 

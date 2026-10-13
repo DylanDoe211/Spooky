@@ -115,7 +115,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
                 Projectile.localAI[0]++;
                 int animationSpeed = Math.Min((int)Projectile.localAI[0] / 40, 3);
-                int initialShootDelay = ItemGlobal.ActiveItem(player).useTime / 3;
+                float initialShootDelay = (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Ranged)) / 3;
                 int shootDelayAdjustmentRate = 5;
 
                 Projectile.localAI[1]++;

@@ -89,11 +89,6 @@ namespace Spooky.Content.Projectiles.SpiderCave
                 Projectile.Kill();
             }
 
-            if (!player.CheckMana(ItemGlobal.ActiveItem(player), ItemGlobal.ActiveItem(player).mana, false, false))
-			{
-				Projectile.Kill();
-			}
-
             if (Projectile.owner == Main.myPlayer)
             {
                 Vector2 ProjDirection = Main.MouseWorld - new Vector2(Projectile.Center.X, Projectile.Center.Y + playerCenterOffset);
@@ -136,7 +131,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
                 Projectile.timeLeft = 2;
 
                 Projectile.localAI[0]++;
-                if (Projectile.localAI[0] >= ItemGlobal.ActiveItem(player).useTime)
+                if (Projectile.localAI[0] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Magic)))
                 {
                     SoundEngine.PlaySound(SoundID.Item34 with { Volume = 0.5f, Pitch = -0.75f }, Projectile.Center);
 

@@ -91,7 +91,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Ocean
 
 				Projectile.localAI[0]++;
 
-				if (Projectile.localAI[0] >= ItemGlobal.ActiveItem(player).useTime / 3)
+				if (Projectile.localAI[0] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Ranged)) / 3)
 				{
 					if (Projectile.frame >= 2)
 					{

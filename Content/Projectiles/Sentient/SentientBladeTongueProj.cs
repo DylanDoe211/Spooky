@@ -4,6 +4,8 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using Microsoft.Xna.Framework;
 
+using Spooky.Core;
+
 namespace Spooky.Content.Projectiles.Sentient
 {
 	public class SentientBladeTongueProj : ModProjectile
@@ -73,7 +75,7 @@ namespace Spooky.Content.Projectiles.Sentient
                 Projectile.ai[2]++;
 
                 //shoot ichor clouds
-                if (Projectile.ai[2] >= 20)
+                if (Projectile.ai[2] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Melee)))
                 {
                     SoundEngine.PlaySound(SoundID.Item171, Projectile.Center);
 

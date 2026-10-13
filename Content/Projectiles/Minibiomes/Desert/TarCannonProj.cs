@@ -75,7 +75,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Desert
 
                 //shoot
                 Projectile.localAI[0]++;
-                if (Projectile.localAI[0] >= ItemGlobal.ActiveItem(player).useTime)
+                if (Projectile.localAI[0] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Ranged)))
                 {
                     SoundEngine.PlaySound(SoundID.Item54 with { Pitch = -1f }, Projectile.Center);
 

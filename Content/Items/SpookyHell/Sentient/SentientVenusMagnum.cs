@@ -21,15 +21,15 @@ namespace Spooky.Content.Items.SpookyHell.Sentient
 			Item.channel = true;
 			Item.width = 58;
 			Item.height = 42;
-            Item.useTime = 50;
-			Item.useAnimation = 50;
+            Item.useTime = 120;
+			Item.useAnimation = 120;
 			Item.useStyle = ItemUseStyleID.Shoot;
 			Item.knockBack = 2;
             Item.rare = ModContent.RarityType<SentientRarity>();
             Item.value = Item.buyPrice(gold: 35);
             Item.shoot = ModContent.ProjectileType<SentientVenusMagnumProj>();
 			Item.useAmmo = AmmoID.Bullet;
-			Item.shootSpeed = 0f;
+			Item.shootSpeed = 15f;
         }
 
         public override bool CanUseItem(Player player)

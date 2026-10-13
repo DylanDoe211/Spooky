@@ -40,9 +40,10 @@ General Changes:
 -Halved cooldown time for the flower armor set bonus pollen ability
 -Creepy dog photo puppy no longer attacks you, it always just attacks enemies
 -Peptobyssmal debuff now causes enemies to spawn bubbles after 10 seconds instead of on death
--Bainy in a jar no longer has any knockback
+-Bainy in a jar now explodes your minions every 30 seconds, and no longer has any knockback
 -Backpack chimney projectile damage buffed from 32 -> 40, and it now charges up faster
 -Nerfed crusty gunfish damage from 42 -> 35
+-Ooze magnum projectile shoot frequency now accelerates more smoothly and works better with attack speed boosts
 -Old wood staff no longer has amethyst in its recipe, and that has been replaced with 10 glowshrooms instead
 -Krampus quest reward presents now need 5 to research for journey mode
 -Krampus quest reward presents now have a separate drop chance for each piece of the krampus helper vanity
@@ -70,6 +71,7 @@ Localization Changes:
 -Renamed thorn stem shirt -> flower stem shirt to be consistent with the other two armor pieces having "Flower" in their names (The internal name for this entry is FlowerBody)
 -Peptobyssmal tooltip modified to remove line about bubbles inflicting debuff since this happens by default, and to account for the new change where the debuff spawns bubbles after 10 seconds instead of on kill
 -Pheremone stinger tooltip changed to just say it increases damage and crit chance with spider minions
+-Brainy in a jar tooltip changed due to brainy now exploding every 30 seconds instead of every minute
 -Fixed mispelling of targeted -> targetted in dave & mikes tooltip
 -Instances of armor set bonuses requiring double tapping to activate now have the name of the key you need to double tap replaced with {0} in the localization to properly format it based on the vanilla config
 -Reworded a bunch of spooky mod configs to be more short and concise
@@ -113,5 +115,6 @@ Fixes:
 -Players being able to teleport into both catacomb layers and the nose temple early using teleportation potions
 -Hunter scarf mark and peacock oni mask debuff icons drawing on worm segments or other npcs that are a "child" of another (The debuff is still applied to them in-game)
 -Venomous spiderpoon pulling effect incorrectly pulling worm segments or other npcs that are a "child" of another
+-Spooky mod hold-out projectiles not scaling their attack speed from your attack speed boosts at all
 -Sharkbone hand cannon and the dunker not playing shoot sounds for other players in multiplayer
 -Issue where some enemies with behavior that changes when they get hit wasn't working properly in multiplayer

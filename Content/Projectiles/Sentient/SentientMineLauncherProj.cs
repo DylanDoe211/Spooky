@@ -87,14 +87,15 @@ namespace Spooky.Content.Projectiles.Sentient
 
             Projectile.position = new Vector2(player.MountedCenter.X - Projectile.width / 2, player.MountedCenter.Y - 7 - Projectile.height / 2);
 
-            Projectile.localAI[0]++;
+            float RealUseSpeed = (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Ranged));
 
-            if (Projectile.localAI[0] >= ItemGlobal.ActiveItem(player).useTime - 20 && Projectile.localAI[0] < ItemGlobal.ActiveItem(player).useTime)
+            Projectile.localAI[0]++;
+            if (Projectile.localAI[0] >= RealUseSpeed / 2 && Projectile.localAI[0] < RealUseSpeed)
             {
                 Projectile.position += Main.rand.NextVector2Square(-5, 5);
             }
 
-            if (Projectile.localAI[0] == ItemGlobal.ActiveItem(player).useTime)
+            if (Projectile.localAI[0] >= RealUseSpeed)
             {
                 SoundEngine.PlaySound(SoundID.NPCDeath13 with { Pitch = 1f }, Projectile.Center);
 

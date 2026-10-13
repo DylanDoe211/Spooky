@@ -135,7 +135,7 @@ namespace Spooky.Content.Projectiles.SpookyHell
 
 				Projectile.ai[0]++;
 
-				if (Projectile.ai[0] >= ItemGlobal.ActiveItem(player).useTime * 2)
+				if (Projectile.ai[0] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Generic)) * 2)
 				{
 					SoundEngine.PlaySound(ScreechSound, Projectile.Center);
 

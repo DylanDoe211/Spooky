@@ -4219,7 +4219,7 @@ BrainJar: {
 	Tooltip:
 		'''
 		Summons brainy the brain to hover around you
-		Every minute brainy will explode all of your minions, dealing a ton of damage
+		Every 30 seconds brainy will explode all of your minions, dealing a ton of damage
 		Each explosions damage will scale further based on each individual minion's damage
 		Brainy does not take up any minion slots
 		'''

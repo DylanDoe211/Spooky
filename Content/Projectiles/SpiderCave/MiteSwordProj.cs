@@ -147,7 +147,7 @@ namespace Spooky.Content.Projectiles.SpiderCave
 		{
 			Player player = Main.player[Projectile.owner];
 
-			int SwingTime = ItemGlobal.ActiveItem(player).useTime;
+			float SwingTime = (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Melee));
 
 			Projectile.velocity = Vector2.Zero;
 			player.itemTime = player.itemAnimation = 5;

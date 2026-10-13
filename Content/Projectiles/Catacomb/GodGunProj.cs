@@ -103,7 +103,7 @@ namespace Spooky.Content.Projectiles.Catacomb
 
                 Projectile.localAI[0]++;
 
-                if (Projectile.localAI[0] >= ItemGlobal.ActiveItem(player).useTime - ExtraUseTime)
+                if (Projectile.localAI[0] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Ranged)) - ExtraUseTime)
                 {
                     Projectile.frame++;
 
@@ -190,7 +190,7 @@ namespace Spooky.Content.Projectiles.Catacomb
                             ShootSpeed.X + Main.rand.Next(-3, 4), ShootSpeed.Y + Main.rand.Next(-3, 4), ProjType, Projectile.damage, knockBack, Projectile.owner);
                         }
 
-                        if (ExtraUseTime < ItemGlobal.ActiveItem(player).useTime - 1)
+                        if (ExtraUseTime < (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Ranged)) - 1)
                         {
                             ExtraUseTime++;
                         }

@@ -44,7 +44,6 @@ namespace Spooky.Content.Projectiles.Minibiomes.Ocean
 			}
 
 			Projectile.ai[0]++;
-
 			if (Projectile.ai[0] % 5 == 0 && player.HasAmmo(ItemGlobal.ActiveItem(player)))
 			{
 				SoundEngine.PlaySound(SoundID.Item11, Projectile.Center);

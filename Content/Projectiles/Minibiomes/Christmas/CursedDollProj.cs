@@ -72,7 +72,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Christmas
                 player.bodyFrame.Y = player.bodyFrame.Height * 3;
 
                 Projectile.ai[2]++;
-                if (Projectile.ai[2] >= ItemGlobal.ActiveItem(player).useTime && player.CheckMana(ItemGlobal.ActiveItem(player)))
+                if (Projectile.ai[2] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Magic)) && player.CheckMana(ItemGlobal.ActiveItem(player)))
                 {
                     player.statMana -= ItemGlobal.ActiveItem(player).mana;
 

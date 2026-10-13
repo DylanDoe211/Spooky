@@ -75,7 +75,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Christmas
 				player.velocity.X *= 0.99f;
 
                 Projectile.ai[2]++;
-                if (Projectile.ai[2] >= ItemGlobal.ActiveItem(player).useTime && player.CheckMana(ItemGlobal.ActiveItem(player), ItemGlobal.ActiveItem(player).mana, false, false))
+                if (Projectile.ai[2] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Magic)) && player.CheckMana(ItemGlobal.ActiveItem(player), ItemGlobal.ActiveItem(player).mana, false, false))
                 {
                     SoundEngine.PlaySound(SoundID.DD2_BookStaffCast with { Pitch = -1f, Volume = 0.5f }, Projectile.Center);
 

@@ -62,7 +62,9 @@ namespace Spooky.Content.Projectiles.Sentient
 			
 			Main.EntitySpriteDraw(ProjTexture.Value, vector, rectangle, Projectile.GetAlpha(lightColor), Projectile.rotation, drawOrigin, Projectile.scale, effects, 0);
 
-            bool Shake = Projectile.localAI[0] >= ItemGlobal.ActiveItem(player).useTime / 2 && Projectile.localAI[0] < ItemGlobal.ActiveItem(player).useTime;
+            float RealUseSpeed = (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Magic));
+
+            bool Shake = Projectile.localAI[0] >= RealUseSpeed / 2 && Projectile.localAI[0] < RealUseSpeed;
 			Main.EntitySpriteDraw(ChickenTexture.Value, vector + (Shake ? Main.rand.NextVector2Square(-5, 5) : Vector2.Zero), rectangle, 
             Projectile.GetAlpha(lightColor), Projectile.rotation, drawOrigin, Projectile.scale, effects, 0);
 			
@@ -112,25 +114,27 @@ namespace Spooky.Content.Projectiles.Sentient
 
             Projectile.timeLeft = 5;
 
+            float RealUseSpeed = (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Magic));
+
             Projectile.localAI[0]++;
 
-            if (Projectile.localAI[0] < ItemGlobal.ActiveItem(player).useTime / 2)
+            if (Projectile.localAI[0] < RealUseSpeed / 2)
             {
                 Projectile.timeLeft = 60;
                 Projectile.frame = 0;
             }
 
-            if (Projectile.localAI[0] == ItemGlobal.ActiveItem(player).useTime / 2)
+            if (Projectile.localAI[0] == RealUseSpeed / 2)
             {
                 SoundEngine.PlaySound(UseSound, Projectile.Center);
             }
 
-            if (Projectile.localAI[0] >= ItemGlobal.ActiveItem(player).useTime / 2 && Projectile.localAI[0] < ItemGlobal.ActiveItem(player).useTime)
+            if (Projectile.localAI[0] >= RealUseSpeed / 2 && Projectile.localAI[0] < RealUseSpeed)
             {
                 Projectile.frame = 1;
             }
 
-            if (Projectile.localAI[0] == ItemGlobal.ActiveItem(player).useTime)
+            if (Projectile.localAI[0] == RealUseSpeed)
             {
 				SoundEngine.PlaySound(SoundID.DD2_BookStaffCast with { Pitch = -0.5f }, Projectile.Center);
 
@@ -159,7 +163,7 @@ namespace Spooky.Content.Projectiles.Sentient
                 }
             }
 
-            if (Projectile.localAI[0] > ItemGlobal.ActiveItem(player).useTime + 10)
+            if (Projectile.localAI[0] > RealUseSpeed + 10)
             {
                 if (player.channel)
                 {

@@ -82,7 +82,7 @@ namespace Spooky.Content.Projectiles.Cemetery
 			ProjTexture ??= ModContent.Request<Texture2D>(Texture);
 
 			//fade out stuff
-			int SwingTime = ItemGlobal.ActiveItem(player).useTime;
+			float SwingTime = (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Melee));
 			float progress = Projectile.localAI[0] / (float)SwingTime;
 			progress = EaseFunction.EaseQuadOut.Ease(progress);
 			float SlashAlpha = 1f - Math.Abs(progress);
@@ -158,7 +158,7 @@ namespace Spooky.Content.Projectiles.Cemetery
 		{
 			Player player = Main.player[Projectile.owner];
 
-			int SwingTime = ItemGlobal.ActiveItem(player).useTime;
+			float SwingTime = (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Melee));
 
 			Projectile.velocity = Vector2.Zero;
 			player.itemTime = player.itemAnimation = 5;
@@ -217,7 +217,7 @@ namespace Spooky.Content.Projectiles.Cemetery
 		{
 			Player player = Main.player[Projectile.owner];
 
-			int SwingTime = ItemGlobal.ActiveItem(player).useTime;
+			float SwingTime = (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Melee));
 
 			float progress = Projectile.localAI[0] / (float)SwingTime;
 			progress = EaseFunction.EaseQuadOut.Ease(progress);

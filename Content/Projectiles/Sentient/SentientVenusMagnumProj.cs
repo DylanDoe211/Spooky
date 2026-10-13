@@ -15,7 +15,7 @@ namespace Spooky.Content.Projectiles.Sentient
 	{
         int playerCenterOffset = 4;
         
-        float ExtraUseTime = 0;
+        float ExtraUseTime = 1;
 
         public override void SetStaticDefaults()
 		{
@@ -92,8 +92,8 @@ namespace Spooky.Content.Projectiles.Sentient
 
 			if (player.channel) 
             {
-                //edit the projectiles usetime so it shoots the giant glob if at max shoot speed
-                if (ExtraUseTime >= 8)
+                //edit the projectiles timeleft so it shoots the giant glob if at max shoot speed
+                if (ExtraUseTime >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Ranged)) / 3)
                 {
                     Projectile.timeLeft = 20;
                 }
@@ -102,12 +102,10 @@ namespace Spooky.Content.Projectiles.Sentient
                     Projectile.timeLeft = 2;
                 }
 
-                Projectile.localAI[0] += 0.25f;
-
-                if (Projectile.localAI[0] >= 8 - ExtraUseTime)
+                Projectile.localAI[0] += ExtraUseTime;
+                if (Projectile.localAI[0] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Ranged)) / 3)
                 {
                     Projectile.frame++;
-
                     if (Projectile.frame > 3)
                     {
                         SoundEngine.PlaySound(SoundID.NPCHit21 with { Pitch = 1f }, Projectile.Center);
@@ -123,7 +121,7 @@ namespace Spooky.Content.Projectiles.Sentient
                         {
                             Vector2 ShootSpeed = Main.MouseWorld - new Vector2(Projectile.Center.X, Projectile.Center.Y - playerCenterOffset);
                             ShootSpeed.Normalize();
-                            ShootSpeed *= 15f;
+                            ShootSpeed *= ItemGlobal.ActiveItem(player).shootSpeed;
 
                             Vector2 muzzleOffset = Vector2.Normalize(new Vector2(ShootSpeed.X, ShootSpeed.Y)) * 50f;
 
@@ -131,7 +129,7 @@ namespace Spooky.Content.Projectiles.Sentient
                             ShootSpeed.X + Main.rand.Next(-1, 2), ShootSpeed.Y + Main.rand.Next(-1, 2), ProjType, Projectile.damage, knockBack, Projectile.owner);
                         }
 
-                        if (ExtraUseTime < 8)
+                        if (ExtraUseTime < (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Ranged)) / 3)
                         {
                             ExtraUseTime += 0.5f;
                         }
@@ -159,7 +157,7 @@ namespace Spooky.Content.Projectiles.Sentient
                     {
                         Vector2 ShootSpeed = Main.MouseWorld - new Vector2(Projectile.Center.X, Projectile.Center.Y - playerCenterOffset);
                         ShootSpeed.Normalize();
-                        ShootSpeed *= 20;
+                        ShootSpeed *= ItemGlobal.ActiveItem(player).shootSpeed + 5f;
 
                         Vector2 muzzleOffset = Vector2.Normalize(new Vector2(ShootSpeed.X, ShootSpeed.Y)) * 50f;
 

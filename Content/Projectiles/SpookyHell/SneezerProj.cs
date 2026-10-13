@@ -81,14 +81,14 @@ namespace Spooky.Content.Projectiles.SpookyHell
 
                 Projectile.localAI[0]++;
 
-                if (Projectile.localAI[0] >= ItemGlobal.ActiveItem(player).useTime / 3 && Projectile.frame < 2)
+                if (Projectile.localAI[0] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Ranged)) / 3 && Projectile.frame < 2)
                 {
                     Projectile.frame++;
 
                     Projectile.localAI[0] = 0;
                 }
 
-                if (Projectile.localAI[0] >= ItemGlobal.ActiveItem(player).useTime / 3 && Projectile.frame >= 2)
+                if (Projectile.localAI[0] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Ranged)) / 3 && Projectile.frame >= 2)
                 {
                     SoundEngine.PlaySound(SoundID.Item167, Projectile.Center);
 

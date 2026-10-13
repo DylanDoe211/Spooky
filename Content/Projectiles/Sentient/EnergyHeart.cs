@@ -11,7 +11,7 @@ namespace Spooky.Content.Projectiles.Sentient
 {
 	public class EnergyHeart : ModProjectile
 	{
-        int NumNPCsTargetted = 0;
+        int NumNPCsTargeted = 0;
 
         public static readonly SoundStyle PumpSound = new("Spooky/Content/Sounds/HeartPump", SoundType.Sound) { Volume = 2f, PitchVariance = 0.7f };
 
@@ -78,17 +78,17 @@ namespace Spooky.Content.Projectiles.Sentient
 
                 Projectile.ai[0]++;
 
-                int ShootTime = 30 + ItemGlobal.ActiveItem(player).useTime / 3;
+                float ShootTime = (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Magic));
                 float MaxDistance = 300f;
 
                 if (Projectile.frame == 1)
                 {
-                    ShootTime = 20 + ItemGlobal.ActiveItem(player).useTime / 3;
+                    ShootTime = (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Magic)) / 2;
                     MaxDistance = 425f;
                 }
                 if (Projectile.frame == 2) 
                 {
-                    ShootTime = 10 + ItemGlobal.ActiveItem(player).useTime / 3;
+                    ShootTime = (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Magic)) / 3;
                     MaxDistance = 550f;
                 }
                 
@@ -100,11 +100,11 @@ namespace Spooky.Content.Projectiles.Sentient
 
 						player.statMana -= ItemGlobal.ActiveItem(player).mana;
 
-						int MaxNPCsTargetted = 3 * (Projectile.frame + 1);
+						int MaxNPCsTargeted = 3 * (Projectile.frame + 1);
                         
                         for (int i = 0; i < Main.maxNPCs; i++)
                         {
-                            if (NumNPCsTargetted < MaxNPCsTargetted)
+                            if (NumNPCsTargeted < MaxNPCsTargeted)
                             {
                                 NPC NPC = Main.npc[i];
                                 if (NPC.active && NPC.CanBeChasedBy(this) && !NPC.friendly && !NPC.dontTakeDamage && !NPCID.Sets.CountsAsCritter[NPC.type] && Projectile.Distance(NPC.Center) <= MaxDistance)
@@ -137,7 +137,7 @@ namespace Spooky.Content.Projectiles.Sentient
                                     Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, ShootSpeed, 
                                     ModContent.ProjectileType<EnergyHeartBolt>(), Projectile.damage, 0, Projectile.owner, ShootSpeed.ToRotation());
 
-                                    NumNPCsTargetted++;
+                                    NumNPCsTargeted++;
                                 }
                             }
                         }
@@ -156,7 +156,7 @@ namespace Spooky.Content.Projectiles.Sentient
                     
                     if (Projectile.ai[1] > 6)
                     {
-                        NumNPCsTargetted = 0;
+                        NumNPCsTargeted = 0;
 
                         Projectile.scale = 1f;
 

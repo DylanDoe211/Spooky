@@ -95,7 +95,8 @@ namespace Spooky.Content.Projectiles.Minibiomes.Ocean
                 Projectile.timeLeft = 2;
 
                 Projectile.ai[2]++;
-                if (Projectile.ai[2] >= ItemGlobal.ActiveItem(player).useTime && player.CheckMana(ItemGlobal.ActiveItem(player), ItemGlobal.ActiveItem(player).mana, false, false))
+                if (Projectile.ai[2] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Magic)) && 
+                player.CheckMana(ItemGlobal.ActiveItem(player), ItemGlobal.ActiveItem(player).mana, false, false))
                 {
                     player.statMana -= ItemGlobal.ActiveItem(player).mana;
 

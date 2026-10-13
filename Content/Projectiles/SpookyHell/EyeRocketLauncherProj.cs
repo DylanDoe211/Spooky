@@ -84,7 +84,7 @@ namespace Spooky.Content.Projectiles.SpookyHell
                 Projectile.localAI[0]++;
 
                 //charge up the rocket launcher
-                if (Projectile.localAI[0] >= ItemGlobal.ActiveItem(player).useTime / 5 && Projectile.frame < 4)
+                if (Projectile.localAI[0] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Ranged)) / 5 && Projectile.frame < 4)
                 {
                     Projectile.frame++;
 
@@ -92,7 +92,7 @@ namespace Spooky.Content.Projectiles.SpookyHell
                 }
 
                 //shoot rocket
-                if (Projectile.localAI[0] >= ItemGlobal.ActiveItem(player).useTime / 5 && Projectile.frame >= 4)
+                if (Projectile.localAI[0] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Ranged)) / 5 && Projectile.frame >= 4)
                 {
                     Screenshake.ShakeScreenWithIntensity(Projectile.Center, 3f, 250f);
 
