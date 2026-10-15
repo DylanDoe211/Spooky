@@ -1,15 +1,12 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using ReLogic.Content;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
 
 using Spooky.Core;
 using Spooky.Content.Backgrounds.Shipyard;
 using Spooky.Content.Tiles.Cemetery.Furniture;
+using Spooky.Content.Tiles.Shipyard.Furniture;
 using Spooky.Content.Tiles.Water;
 
 namespace Spooky.Content.Biomes
@@ -75,6 +72,8 @@ namespace Spooky.Content.Biomes
         public override ModWaterStyle WaterStyle => ModContent.GetInstance<ShipyardWaterStyle>();
 
         public override int BiomeTorchItemType => ModContent.ItemType<CemeteryBiomeTorchItem>();
+
+        public override int BiomeCampfireItemType => ModContent.ItemType<ShipyardCampfireItem>();
 
         //bestiary stuff
         public override string BestiaryIcon => "Spooky/Content/Biomes/ShipyardBiomeIcon";

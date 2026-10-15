@@ -144,8 +144,8 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
                         NPC.ai[2] = 1;
                     }
 
-                    //go to pollinating attack after 5 seconds
-                    if (NPC.ai[1] >= 420)
+                    //go to pollinating attack after 2 seconds
+                    if (NPC.ai[1] >= 180)
                     {
                         NPC.ai[0]++;
                         NPC.ai[1] = 0;
@@ -330,8 +330,8 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
                         NPC.ai[2] = 1;
                     }
 
-                    //go to pollinating attack after 7 seconds
-                    if (NPC.ai[1] >= 420)
+                    //go to pollinating attack after 3 seconds
+                    if (NPC.ai[1] >= 180)
                     {
                         NPC.ai[0]++;
                         NPC.ai[1] = 0;

@@ -47,7 +47,7 @@ namespace Spooky.Content.Backgrounds.Cemetery
 			sunRiseSetFactor = Main.dayTime ? EaseFunction.EaseQuadOut.Ease(sunRiseSetFactor) : EaseFunction.EaseCircularIn.Ease(sunRiseSetFactor);
 
 			var midDayColor = new Color(162, 162, 162, 200);
-			var sunRiseSetColor = new Color(104, 130, 123) * 0.25f;
+			var sunRiseSetColor = new Color(104, 130, 123) * 0.5f;
 
 			var finalColor = Color.Lerp(sunRiseSetColor, midDayColor, EaseFunction.EaseQuadOut.Ease(midDayFactor));
 

@@ -13,8 +13,6 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
 {
     public class QueenConchSludge : ModProjectile
     {
-        public static readonly SoundStyle SplatSound = new("Spooky/Content/Sounds/Splat", SoundType.Sound) { Volume = 0.5f };
-
 		public override void SetStaticDefaults()
 		{
 			Main.projFrames[Projectile.type] = 2;
@@ -37,7 +35,7 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
 		{
 			if (Projectile.ai[1] == 0)
 			{
-				SoundEngine.PlaySound(SplatSound, Projectile.Center);
+				SoundEngine.PlaySound(SoundID.NPCDeath9 with { Pitch = 1f }, Projectile.Center);
 
 				Projectile.velocity.X = 0;
 
@@ -50,6 +48,11 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
         public override void AI()       
         {
 			Projectile.frame = (int)Projectile.ai[1];
+
+			if (Projectile.timeLeft <= 60)
+			{
+				Projectile.alpha += 5;
+			}
 
 			if (Projectile.ai[1] == 0)
 			{
@@ -103,7 +106,7 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
 
 				Projectile.rotation = 0;
 
-				if (Main.rand.NextBool(40))
+				if (Main.rand.NextBool(20))
 				{
 					int DustEffect = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 160, 0f, 0f, 100, default, 2f);
 					Main.dust[DustEffect].position.Y += -10 * 0.05f - 1.5f;

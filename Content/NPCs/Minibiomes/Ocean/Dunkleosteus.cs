@@ -403,6 +403,20 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 
 			NPC.rotation = NPC.rotation.AngleTowards(RotateDirection - MathHelper.TwoPi, RotateSpeed);
 
+			//if there are no active players in the biome then despawn
+			if (!AnyPlayersInBiome())
+			{
+				NPC.ai[0] = 0;
+				NPC.ai[1] = 0;
+				NPC.ai[2] = 0;
+
+				NPC.noTileCollide = true;
+				NPC.velocity.Y += 0.4f;
+				NPC.EncourageDespawn(10);
+
+				return;
+			}
+
 			//if big dunk gets stuck in tiles for any reason, then have him move to the closest node quickly to get un-stuck
 			if (NPCGlobalHelper.IsColliding(NPC, 25, 25) && Main.netMode != NetmodeID.MultiplayerClient)
 			{
@@ -425,6 +439,7 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 				return;
 			}
 
+			//functionality for big dunk eating the bomb
 			if (Aggression > 2)
 			{
 				foreach (var proj in Main.ActiveProjectiles)
@@ -442,6 +457,7 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 							{
 								AteBomb = true;
 								proj.active = false;
+								NPC.netUpdate = true;
 							}
 						}
 					}
@@ -519,19 +535,6 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 
 					Main.player[(int)NPC.localAI[0]].ApplyDamageToNPC(NPC, NPC.lifeMax * 2, 0, 0, false, null, true);
 				}
-
-				return;
-			}
-
-			//if there are no active players in the biome then despawn
-			if (!AnyPlayersInBiome())
-			{
-				NPC.ai[0] = 0;
-				NPC.ai[1] = 0;
-				NPC.ai[2] = 0;
-
-				NPC.velocity.Y += 0.4f;
-				NPC.EncourageDespawn(10);
 
 				return;
 			}

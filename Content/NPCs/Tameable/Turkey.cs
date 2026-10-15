@@ -253,18 +253,10 @@ namespace Spooky.Content.NPCs.Tameable
                     }
                     case 1:
                     {
-                        goto case 0;
-                    }
-                    case 2:
-                    {
                     	EmoteBubble.NewBubble(EmoteID.Hungry, new WorldUIAnchor(NPC), 200);
 						break;
                     }
-                    case 3:
-                    {
-                        goto case 2;
-                    }
-					case 4:
+					case 2:
                     {
                         EmoteBubble.NewBubble(EmoteID.Peckish, new WorldUIAnchor(NPC), 200);
 						break;
@@ -353,7 +345,7 @@ namespace Spooky.Content.NPCs.Tameable
 						Vector2 desiredVelocity = item.DirectionTo(NPC.Center) * 8;
 						item.velocity = Vector2.Lerp(item.velocity, desiredVelocity, 1f / 20);
 
-						if (item.Hitbox.Intersects(NPC.Hitbox) && numSeedsEaten < 5)
+						if (item.Hitbox.Intersects(NPC.Hitbox) && numSeedsEaten < 3)
 						{
 							SoundEngine.PlaySound(SoundID.Item2, NPC.Center);
 
@@ -374,7 +366,7 @@ namespace Spooky.Content.NPCs.Tameable
 					}
 				}
 
-				if (numSeedsEaten >= 5)
+				if (numSeedsEaten >= 3)
 				{
 					SoundEngine.PlaySound(SoundID.ResearchComplete with { Volume = 0.5f }, NPC.Center);
 

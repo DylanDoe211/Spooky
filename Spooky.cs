@@ -15,6 +15,7 @@ using Spooky.Content.Backgrounds;
 using Spooky.Content.Backgrounds.Cemetery;
 using Spooky.Content.Backgrounds.Shipyard;
 using Spooky.Content.Backgrounds.SpiderCave;
+using Spooky.Content.Backgrounds.SpookyBiome;
 using Spooky.Content.Backgrounds.SpookyHell;
 using Spooky.Content.Biomes;
 using Spooky.Content.NPCs.Boss.Moco;
@@ -218,13 +219,13 @@ namespace Spooky
 				Filters.Scene["Spooky:CemeterySky"] = new Filter(new SpookyScreenShader("FilterMiniTower").UseColor(0f, 135f, 35f).UseOpacity(0.001f), EffectPriority.VeryHigh);
 				SkyManager.Instance["Spooky:CemeterySky"] = new CemeterySky();
 
-				Filters.Scene["Spooky:ShipyardSky"] = new Filter(new SpookyScreenShader("FilterMiniTower").UseColor(0f, 0f, 0f).UseOpacity(0f), EffectPriority.VeryHigh);
+				Filters.Scene["Spooky:ShipyardSky"] = new Filter(new SpookyScreenShader("FilterMiniTower").UseColor(135f, 135f, 135f).UseOpacity(0.0005f), EffectPriority.VeryHigh);
 				SkyManager.Instance["Spooky:ShipyardSky"] = new ShipyardSky();
 
 				Filters.Scene["Spooky:RaveyardSky"] = new Filter(new SpookyScreenShader("FilterMiniTower").UseColor(0f, 0f, 0f).UseOpacity(0f), EffectPriority.VeryHigh);
 				SkyManager.Instance["Spooky:RaveyardSky"] = new RaveyardSky();
 
-				Filters.Scene["Spooky:SpookyForestTint"] = new Filter(new SpookyScreenShader("FilterMiniTower").UseColor(255f, 116f, 23f).UseOpacity(0.001f), EffectPriority.VeryHigh);
+				Filters.Scene["Spooky:SpookyBiomeSky"] = new Filter(new SpookyScreenShader("FilterMiniTower").UseColor(255f, 116f, 23f).UseOpacity(0.001f), EffectPriority.VeryHigh);
 
 				Filters.Scene["Spooky:HallucinationEffect"] = new Filter(new SpookyScreenShader("FilterMoonLordShake").UseIntensity(0.5f), EffectPriority.VeryHigh);
 

@@ -14,16 +14,22 @@ using System.IO;
 using System.Collections.Generic;
 
 using Spooky.Core;
+using Spooky.Content.NPCs.Shipyard.Projectiles;
 
 namespace Spooky.Content.NPCs.Shipyard
 {
 	public class HermitCrab : ModNPC
 	{
 		int CurrentFrameX = 0; //0 = walking  1 = snipping, 2 = digging
+		bool SlowDown = false;
+		bool CanDigInTheFloor = false;
+
+		ushort destinationX = 0;
+		ushort destinationY = 0;
 
 		public enum AnimationState
 		{
-			Thrown, Walking, Digging
+			Idle, Thrown, Walking, SnippingClaw, Digging
 		}
 
 		private AnimationState CurrentAnimation
@@ -36,7 +42,7 @@ namespace Spooky.Content.NPCs.Shipyard
 
 		public override void SetStaticDefaults()
 		{
-			Main.npcFrameCount[NPC.type] = 5;
+			Main.npcFrameCount[NPC.type] = 7;
 			NPCID.Sets.ShouldBeCountedAsBoss[NPC.type] = true;
 
 			/*
@@ -52,33 +58,43 @@ namespace Spooky.Content.NPCs.Shipyard
 
 		public override void SendExtraAI(BinaryWriter writer)
         {
+			//ushort
+			writer.Write((ushort)destinationX);
+            writer.Write((ushort)destinationY);
+
             //floats
             writer.Write(NPC.localAI[0]);
             writer.Write(NPC.localAI[1]);
             writer.Write(NPC.localAI[2]);
+			writer.Write(NPC.localAI[3]);
         }
 
         public override void ReceiveExtraAI(BinaryReader reader)
         {
+			//ushort
+			destinationX = reader.ReadUInt16();
+            destinationY = reader.ReadUInt16();
+
             //floats
             NPC.localAI[0] = reader.ReadSingle();
             NPC.localAI[1] = reader.ReadSingle();
             NPC.localAI[2] = reader.ReadSingle();
+			NPC.localAI[3] = reader.ReadSingle();
         }
 
 		public override void SetDefaults()
 		{
-            NPC.lifeMax = 850;
-            NPC.damage = 25;
-            NPC.defense = 10;
-			NPC.width = 32;
-			NPC.height = 32;
+            NPC.lifeMax = 720;
+            NPC.damage = 30;
+            NPC.defense = 0;
+			NPC.width = 52;
+			NPC.height = 52;
             NPC.npcSlots = 1f;
             NPC.knockBackResist = 0f;
 			NPC.noGravity = true;
 			NPC.noTileCollide = true;
-			NPC.HitSound = SoundID.NPCHit29 with { Pitch = -1.5f };
-			NPC.DeathSound = SoundID.NPCDeath31 with { Pitch = -1f };
+			NPC.HitSound = SoundID.NPCHit25;
+			NPC.DeathSound = SoundID.NPCDeath6;
             NPC.aiStyle = -1;
 			SpawnModBiomes = new int[1] { ModContent.GetInstance<Biomes.ShipyardBiome>().Type };
 		}
@@ -94,9 +110,8 @@ namespace Spooky.Content.NPCs.Shipyard
 
 			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
             {
-				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.CorklidQueen"),
-				new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.SpiderWarBiome>().ModBiomeBestiaryInfoElement),
-				new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.SpiderCaveBiome>().ModBiomeBestiaryInfoElement)
+				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.HermitCrab"),
+                new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.ShipyardBiome>().ModBiomeBestiaryInfoElement)
 			});
 		}
 
@@ -106,7 +121,24 @@ namespace Spooky.Content.NPCs.Shipyard
 
 			var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-			spriteBatch.Draw(NPCTexture.Value, NPC.Center - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, NPC.GetNPCColorTintedByBuffs(NPC.GetAlpha(drawColor)), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+			if (!NPC.IsABestiaryIconDummy)
+			{
+                for (int i = 0; i < 4; i++)
+                {
+                    Vector2 offset = i switch
+                    {
+                        1 => new(0, -2),
+                        2 => new(2, 0),
+                        3 => new(0, 2),
+                        _ => new(-2, 0)
+                    };
+
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCTexture.Value, Color.White), NPC.Center + offset - screenPos + new Vector2(0, NPC.gfxOffY + 2), NPC.frame,
+                    NPC.GetAlpha(new Color(211, 118, 255) * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+                }
+            }
+
+			spriteBatch.Draw(NPCTexture.Value, NPC.Center - screenPos + new Vector2(0, NPC.gfxOffY + 2), NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
 
 			return false;
 		}
@@ -120,44 +152,43 @@ namespace Spooky.Content.NPCs.Shipyard
 
 			NPC.frame.X = (int)(NPC.frame.Width * CurrentFrameX);
 
-			//go into the ground, use Xframe 0 and plays animation in reverse
+			if (CurrentAnimation == AnimationState.Idle)
+			{
+				NPC.frame.Y = 0 * frameHeight;
+			}
 			if (CurrentAnimation == AnimationState.Thrown)
 			{
-				NPC.frameCounter++;
-				if (NPC.frameCounter > 4)
-				{
-					NPC.frame.Y = NPC.frame.Y + frameHeight;
-					NPC.frameCounter = 0;
-				}
-				if (NPC.frame.Y >= frameHeight * 4)
+				NPC.frame.Y = 5 * frameHeight;
+			}
+			if (CurrentAnimation == AnimationState.Walking)
+			{
+				if (NPC.velocity.X == 0)
 				{
 					NPC.frame.Y = 0 * frameHeight;
 				}
+				else
+				{
+					NPC.frameCounter++;
+					if (NPC.frameCounter > 4)
+					{
+						NPC.frame.Y = NPC.frame.Y + frameHeight;
+						NPC.frameCounter = 0;
+					}
+					if (NPC.frame.Y >= frameHeight * 7)
+					{
+						NPC.frame.Y = 2 * frameHeight;
+					}
+				}
 			}
-			//emerge out of the ground, use Xframe 0 and plays animation normally
-			else if (CurrentAnimation == AnimationState.Walking)
+			else if (CurrentAnimation == AnimationState.SnippingClaw || CurrentAnimation == AnimationState.Digging)
 			{
 				NPC.frameCounter++;
-				if (NPC.frameCounter > 4)
+				if (NPC.frameCounter > 3)
 				{
 					NPC.frame.Y = NPC.frame.Y + frameHeight;
 					NPC.frameCounter = 0;
 				}
-				if (NPC.frame.Y >= frameHeight * 4)
-				{
-					NPC.frame.Y = 0 * frameHeight;
-				}
-			}
-			//same as above, but it stops at the frame right before its real body comes out of the ground for attacks
-			else if (CurrentAnimation == AnimationState.Digging)
-			{
-				NPC.frameCounter++;
-				if (NPC.frameCounter > 4)
-				{
-					NPC.frame.Y = NPC.frame.Y + frameHeight;
-					NPC.frameCounter = 0;
-				}
-				if (NPC.frame.Y >= frameHeight * 4)
+				if (NPC.frame.Y >= frameHeight * 5)
 				{
 					NPC.frame.Y = 0 * frameHeight;
 				}
@@ -166,7 +197,7 @@ namespace Spooky.Content.NPCs.Shipyard
 
 		public override bool CanHitPlayer(Player target, ref int cooldownSlot)
         {
-            return CurrentAnimation == AnimationState.Digging;
+            return NPC.localAI[3] >= 40;
         }
 
 		public override void AI()
@@ -176,18 +207,93 @@ namespace Spooky.Content.NPCs.Shipyard
 
             NPC.spriteDirection = NPC.direction;
 
+			if (NPC.alpha == 255)
+            {
+                NPC.alpha = 0;
+            }
+
 			switch ((int)NPC.ai[0])
 			{
-				//walk at player
+				//being thrown
 				case 0:
 				{
-					float SpeedModifier = 2.5f;
-					bool SlowDown = false;
+					CurrentFrameX = 2;
+					CurrentAnimation = AnimationState.Thrown;
 
-					if (Math.Abs(NPC.Center.X - player.Center.X) < 50f)
+					NPC.rotation += (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) * 0.025f * NPC.direction;
+
+					NPC.velocity.Y += 0.3f;
+					if (NPC.velocity.Y > 1f)
+					{
+						NPC.velocity.Y += 0.6f;
+					}
+
+					if (NPCGlobalHelper.IsCollidingWithFloor(NPC))
+					{
+						NPC.velocity = Vector2.Zero;
+
+						NPC.ai[0]++;
+						NPC.netUpdate = true;
+					}
+
+					break;
+				}
+
+				//walk at player
+				case 1:
+				{
+					CurrentFrameX = 0;
+					CurrentAnimation = AnimationState.Walking;
+
+					NPC.rotation = 0;
+
+					float SpeedModifier = 2f;
+
+					if (NPC.Distance(player.Center) >= 300)
+					{
+						NPC.localAI[1]++;
+						if (NPC.localAI[1] >= 180)
+						{
+							NPC.localAI[0] = 0;
+							NPC.localAI[1] = 0;
+							NPC.ai[0]++;
+							NPC.netUpdate = true;
+						}
+					}
+
+					if (Math.Abs(NPC.Center.X - player.Center.X) < 45f)
 					{
 						SlowDown = true;
+						if (NPC.velocity.X == 0)
+						{
+							if (NPC.Distance(player.Center) <= 35f)
+							{
+								CurrentFrameX = 1;
+								CurrentAnimation = AnimationState.SnippingClaw;
+
+								NPC.localAI[0]++;
+								if (NPC.localAI[0] % 20 == 0)
+								{
+									NPCGlobalHelper.ShootHostileProjectile(NPC, player.Center, Vector2.Zero, ModContent.ProjectileType<HermitCrabSnip>(), NPC.damage, 0f);
+								}
+							}
+							else
+							{
+								CurrentFrameX = 0;
+								CurrentAnimation = AnimationState.Idle;
+							}
+						}
+						else
+						{
+							CurrentFrameX = 0;
+							CurrentAnimation = AnimationState.Walking;
+						}
 					}
+					else
+					{
+						SlowDown = false;
+					}
+
 					if (SlowDown)
 					{
 						NPC.velocity.X *= 0.9f;
@@ -196,7 +302,7 @@ namespace Spooky.Content.NPCs.Shipyard
 							NPC.velocity.X = 0f;
 						}
 
-						if (Collision.SolidCollision(NPC.position, NPC.width, NPC.height))
+						if (Collision.SolidCollision(new Vector2(NPC.position.X, NPC.Center.Y), NPC.width, NPC.height / 2))
 						{
 							if (NPC.velocity.Y > 0f)
 							{
@@ -258,13 +364,7 @@ namespace Spooky.Content.NPCs.Shipyard
 						{
 							NPC.velocity.Y += 0.5f;
 						}
-						else if ((!Collision.SolidCollision(NPC.position, NPC.width, NPC.height) && !HasLineOfSight) ||
-						(Collision.SolidCollision(NPC.position, NPC.width, NPC.height) && !HasLineOfSight && NPC.Bottom.Y < player.Top.Y))
-						{
-							Vector2 desiredVelocity = NPC.DirectionTo(player.Center) * 10;
-							NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
-						}
-						else if (Collision.SolidCollision(NPC.position, NPC.width, NPC.height))
+						else if (Collision.SolidCollision(new Vector2(NPC.position.X, NPC.Center.Y), NPC.width, NPC.height / 2))
 						{
 							if (NPC.velocity.Y > 0f)
 							{
@@ -307,15 +407,156 @@ namespace Spooky.Content.NPCs.Shipyard
 					break;
 				}
 
-				//shoot up small rockets that come back down above player
-				case 1:
-				{
-					break;
-				}
-
-				//spawn giant homing nuke bomb
+				//dig in ground and jump out elsewhere
 				case 2:
 				{
+					if (NPC.localAI[1] == 0)
+					{
+						NPC.localAI[0]++;
+						if (NPC.localAI[0] == 1)
+						{
+							SoundEngine.PlaySound(SoundID.DD2_JavelinThrowersAttack with { Pitch = 1.2f }, NPC.Center);
+
+							CurrentFrameX = 2;
+							CurrentAnimation = AnimationState.Thrown;
+
+							NPC.velocity.Y = -5f;
+						}
+
+						if (NPC.localAI[0] < 30)
+						{
+							NPC.rotation += (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) * 0.025f * NPC.direction;
+						}
+
+						if (NPC.localAI[0] >= 30)
+						{
+							CurrentAnimation = AnimationState.Digging;
+
+							NPC.rotation = (float)Math.Atan2(NPC.velocity.Y, NPC.velocity.X) - 1.57f;
+
+							NPC.behindTiles = true;
+
+							NPC.velocity.Y += 0.4f;
+							if (NPC.velocity.Y > 2f)
+							{
+								NPC.velocity.Y += 0.8f;
+							}
+
+							if (NPCGlobalHelper.IsCollidingWithFloor(NPC))
+							{
+								for (int TileCheckY = (int)(NPC.Center.Y / 16); TileCheckY < (int)(NPC.Center.Y / 16) + 5; TileCheckY++)
+								{
+									Tile tile = Main.tile[(int)NPC.Center.X / 16, TileCheckY];
+									if (tile.HasTile && Main.tileSolid[tile.TileType])
+									{
+										CanDigInTheFloor = true;
+									}
+								}
+
+								if (CanDigInTheFloor)
+								{
+									NPC.velocity = Vector2.Zero;
+									NPC.rotation = 0;
+									NPC.localAI[1]++;
+									NPC.netUpdate = true;
+								}
+							}
+						}
+					}
+					else
+					{
+						NPC.localAI[1]++;
+						if (NPC.localAI[1] < 60)
+						{
+							if (NPC.localAI[1] % 10 == 0)
+							{
+								SoundEngine.PlaySound(SoundID.Dig, NPC.Center);
+								NPC.velocity.Y = 15f;
+							}
+							else
+							{
+								NPC.velocity = Vector2.Zero;
+							}
+						}
+						else
+						{
+							if (destinationX == 0 && destinationY == 0)
+							{
+								if (Main.netMode != NetmodeID.MultiplayerClient)
+								{
+									Point point = player.Center.ToTileCoordinates();
+									Vector2 chosenTile = Vector2.Zero;
+									if (NPCGlobalHelper.TeleportToSpot(NPC, player, ref chosenTile, point.X, point.Y, 10, 1))
+									{
+										destinationX = (ushort)chosenTile.X;
+										destinationY = (ushort)chosenTile.Y;
+										NPC.netUpdate = true;
+									}
+									else if (NPCGlobalHelper.TeleportToSpot(NPC, player, ref chosenTile, point.X, point.Y, 10, 1, false))
+									{
+										destinationX = (ushort)chosenTile.X;
+										destinationY = (ushort)chosenTile.Y;
+										NPC.netUpdate = true;
+									}
+								}
+							}
+							else
+							{
+								NPC.localAI[2]++;
+								if (NPC.localAI[2] >= 30 && destinationX != 0 && destinationY != 0)
+								{
+									NPC.localAI[3]++;
+									if (NPC.localAI[3] == 1)
+									{
+										NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(destinationX, destinationY) * 16f, Vector2.Zero, ModContent.ProjectileType<HermitCrabGroundEffect>(), 0, 0);
+									}
+									if (NPC.localAI[3] == 40)
+									{
+										CurrentFrameX = 2;
+										CurrentAnimation = AnimationState.Thrown;
+
+										SoundEngine.PlaySound(SoundID.DD2_MonkStaffGroundImpact with { Pitch = 1.2f, Volume = 0.5f }, NPC.Center);
+										Screenshake.ShakeScreenWithIntensity(NPC.Center, 2f, 300f);
+
+										NPC.behindTiles = false;
+										NPC.position.X = destinationX * 16f - (float)(NPC.width / 2) + 8f;
+										NPC.position.Y = destinationY * 16f - (float)NPC.height;
+										NPC.velocity.X = 0f;
+										NPC.velocity.Y = -8f;
+										destinationX = 0;
+										destinationY = 0;
+
+										NPC.netUpdate = true;
+									}
+									if (NPC.localAI[3] > 40)
+									{
+										NPC.rotation += (Math.Abs(NPC.velocity.X) + Math.Abs(NPC.velocity.Y)) * 0.025f * NPC.direction;
+									}
+									if (NPC.localAI[3] > 55)
+									{
+										NPC.velocity.Y += 0.3f;
+										if (NPC.velocity.Y > 1f)
+										{
+											NPC.velocity.Y += 0.6f;
+										}
+
+										if (NPC.velocity.Y >= 0 && NPCGlobalHelper.IsCollidingWithFloor(NPC))
+										{
+											CanDigInTheFloor = false;
+											NPC.localAI[0] = 0;
+											NPC.localAI[1] = 0;
+											NPC.localAI[2] = 0;
+											NPC.localAI[3] = 0;
+											NPC.ai[0] = 0;
+
+											NPC.netUpdate = true;
+										}
+									}
+								}
+							}
+						}
+					}
+
 					break;
 				}
 			}

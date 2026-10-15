@@ -42,6 +42,11 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
             HitSound = SoundID.Tink;
         }
 
+        public override void NumDust(int i, int j, bool fail, ref int num)
+        {
+            num = fail ? 1 : 2;
+        }
+
 		public override void MouseOver(int i, int j)
         {
             Player player = Main.LocalPlayer;

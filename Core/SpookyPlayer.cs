@@ -3,9 +3,12 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.DataStructures;
+using Terraria.Audio;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 
 using Spooky.Content.Achievements;
 using Spooky.Content.Biomes;
@@ -20,7 +23,6 @@ using Spooky.Content.Items.SpookyBiome.Misc;
 using Spooky.Content.Items.SpookyHell.Sentient;
 using Spooky.Content.NPCs.Boss.SpookFishron;
 using Spooky.Content.NPCs.SpookyHell;
-using Spooky.Content.Tiles.Shipyard.Furniture;
 using Spooky.Content.Projectiles.Minibiomes.Ocean;
 using Spooky.Content.Projectiles.Sentient;
 using Spooky.Content.Projectiles.SpiderCave;
@@ -83,11 +85,10 @@ namespace Spooky.Core
 		public bool AlsoDisableEscapeKey = false;
 		public bool RaveyardMonolithEquipped = false;
 		public bool SporeMonolithEquipped = false;
+        public bool CursedConchTeleporting = false;
 
 		//misc timers
         public int SoulDrainCharge = 0;
-		public int PotionSicknessCranberryTimer = 0;
-		public int PotionSicknessLatteTimer = 0;
         public int SpearfishChargeCooldown = 0;
 
 		public Vector2 MocoNoseUIPos = new Vector2(Main.screenWidth / 2 * Main.UIScale, Main.screenHeight / 1.75f * Main.UIScale);
@@ -289,6 +290,31 @@ namespace Spooky.Core
             {
                 Player.buffImmune[BuffID.WindPushed] = true;
             }
+
+			//handle cursed conch teleportation
+			if (CursedConchTeleporting && ItemGlobal.ActiveItem(Player).type == ModContent.ItemType<CursedConch>())
+			{
+				Vector2 vector = Vector2.UnitY.RotatedBy((float)Player.itemAnimation * ((float)Math.PI * 2f) / 30f) * new Vector2(15f, 0f);
+
+				Dust dust = Dust.NewDustPerfect(Player.Bottom + vector, DustID.WitherLightning);
+				dust.velocity.Y *= 0f;
+				dust.velocity.Y -= 4.5f;
+				dust.velocity.X = 0f;
+				dust.scale = 0.8f;
+				dust.alpha = 130;
+				dust.noGravity = true;
+				dust.fadeIn = 1.1f;
+
+				if (Player.itemTime == ItemGlobal.ActiveItem(Player).useTime / 2)
+				{
+					CursedConchTeleport(Player);
+                    SoundEngine.PlaySound(SoundID.Item104, Player.Center);
+				}
+				if (Player.itemTime == 0)
+				{
+					CursedConchTeleporting = false;
+				}
+			}
         }
 
 		public override void SetControls()
@@ -318,26 +344,6 @@ namespace Spooky.Core
 
 		public override void PostUpdateMiscEffects()
 		{
-			if (PotionSicknessCranberryTimer > 0)
-			{
-				PotionSicknessCranberryTimer--;
-			}
-			if (PotionSicknessCranberryTimer == 1)
-			{
-				int Duration = Player.pStone ? (int)(1800 * 0.75) : 1800;
-				Player.AddBuff(BuffID.PotionSickness, Duration);
-			}
-
-			if (PotionSicknessLatteTimer > 0)
-			{
-				PotionSicknessLatteTimer--;
-			}
-			if (PotionSicknessLatteTimer == 1)
-			{
-				int Duration = Player.pStone ? (int)(3600 * 0.75) : 3600;
-				Player.AddBuff(BuffID.PotionSickness, Duration);
-			}
-
             if (Player.ownedProjectileCounts[ModContent.ProjectileType<SpearfishLanceSlashProj>()] > 0 || Player.ownedProjectileCounts[ModContent.ProjectileType<SpearfishLanceMetalSlashProj>()] > 0)
             {
                 Player.noFallDmg = true;
@@ -660,5 +666,178 @@ namespace Spooky.Core
 
             return num20;
         }
+
+		public void CursedConchTeleport(Player player)
+		{
+			bool CanTeleport = false;
+
+			int MiddleOfWorld = Main.maxTilesX / 2;
+			bool PlayerOnLeft = (player.Center.X / 16) <= MiddleOfWorld;
+			float DistanceFromCenterOfWorld = Vector2.Distance(new Vector2(MiddleOfWorld, player.Center.Y / 16), player.Center / 16);
+
+			Vector2 RealDestination = new Vector2(MiddleOfWorld + (PlayerOnLeft ? DistanceFromCenterOfWorld : -DistanceFromCenterOfWorld), player.Center.Y / 16);
+
+			for (int newY = (int)RealDestination.Y; newY <= Main.maxTilesY - 10; newY++)
+			{
+				if (Main.tile[(int)RealDestination.X, newY].HasTile && Main.tileSolid[Main.tile[(int)RealDestination.X, newY].TileType])
+				{
+					RealDestination.Y = newY - 1;
+					break;
+				}
+			}
+
+			int teleportStartX = (int)RealDestination.X;
+			int teleportStartY = (int)RealDestination.Y;
+			int teleportRange = 30;
+			var settings = new Player.RandomTeleportationAttemptSettings
+			{
+				attemptsBeforeGivingUp = 1000,
+				maximumFallDistanceFromOrignalPoint = 30,
+			};
+			Vector2 vector = CursedConchTeleportationSpotCheck(player, ref CanTeleport, teleportStartX, teleportRange, teleportStartY, teleportRange, settings);
+			if (!CanTeleport)
+			{
+				vector = CursedConchTeleportationSpotCheck(player, ref CanTeleport, teleportStartX, teleportRange * 2, teleportStartY, teleportRange, settings);
+			}
+			if (!CanTeleport)
+			{
+				vector = CursedConchTeleportationSpotCheck(player, ref CanTeleport, teleportStartX, teleportRange * 3, teleportStartY, teleportRange * 2, settings);
+			}
+
+			if (CanTeleport && player.statLife >= player.statLifeMax2 / 3)
+			{
+				player.statLife -= player.statLifeMax2 / 3;
+
+				Vector2 newPos = vector;
+				player.Teleport(newPos, 2);
+				player.velocity = Vector2.Zero;
+				if (Main.netMode == NetmodeID.Server)
+				{
+					RemoteClient.CheckSection(player.whoAmI, player.position);
+					NetMessage.SendData(MessageID.TeleportEntity, -1, -1, null, 0, player.whoAmI, newPos.X, newPos.Y, 7);
+				}
+			}
+		}
+
+		public Vector2 CursedConchTeleportationSpotCheck(Player player, ref bool canSpawn, int teleportStartX, int teleportRangeX, int teleportStartY, int teleportRangeY, Player.RandomTeleportationAttemptSettings settings)
+		{
+            List<Vector2> TrapPositions = new List<Vector2>();
+
+            for (int i = teleportStartX - teleportRangeX; i <= teleportStartX + teleportRangeX; i++)
+            {
+                for (int j = teleportStartY - teleportRangeX; j <= teleportStartY + teleportRangeX; j++)
+                {
+                    Tile tileSafely = Framing.GetTileSafely(i, j);
+                    Tile tileAboveSafely = Framing.GetTileSafely(i, j - 1);
+                    if (tileSafely.TileType == TileID.PressurePlates || (!tileAboveSafely.HasTile && tileSafely.TileType == TileID.Detonator))
+                    {
+                        TrapPositions.Add(new Vector2(i, j));
+                        continue;
+                    }
+                }
+            }
+
+            int num = 0;
+			int tileX = 0;
+			int tileY = 0;
+			Vector2 vector = new Vector2(tileX, tileY) * 16f + new Vector2(-player.width / 2 + 8, -player.height);
+			while (!canSpawn && num < settings.attemptsBeforeGivingUp)
+			{
+				num++;
+				tileX = teleportStartX + Main.rand.Next(-teleportRangeX, teleportRangeX + 1);
+				tileY = teleportStartY + Main.rand.Next(-teleportRangeY, teleportRangeY + 1);
+				tileX = (int)MathHelper.Clamp(tileX, 25, Main.maxTilesX - 25);
+				tileY = (int)MathHelper.Clamp(tileY, 25, Main.maxTilesY - 25);
+				vector = new Vector2(tileX, tileY) * 16f + new Vector2(-player.width / 2 + 8, -player.height);
+				if (Collision.SolidCollision(vector, player.width, player.height))
+				{
+					continue;
+				}
+
+				//first, do a wall check to not teleport the player into walls that should not be teleported into
+				Tile tile = Main.tile[tileX, tileY];
+				if ((Main.tile[tileX, tileY].WallType == WallID.LihzahrdBrickUnsafe && (double)tileY > Main.worldSurface && !NPC.downedPlantBoss) ||
+				(Main.wallDungeon[Main.tile[tileX, tileY].WallType] && (double)tileY > Main.worldSurface && !NPC.downedBoss3) ||
+				!WallLoader.CanBeTeleportedTo(tileX, tileY, Main.tile[tileX, tileY].WallType, player, default))
+				{
+					continue;
+				}
+
+				//do a fall distance check
+				int num6 = 0;
+				while (num6 < settings.maximumFallDistanceFromOrignalPoint)
+				{
+					Tile tile2 = Main.tile[tileX, tileY + num6];
+					vector = new Vector2(tileX, tileY + num6) * 16f + new Vector2(-player.width / 2 + 8, -player.height);
+					Collision.SlopeCollision(vector, player.velocity, player.width, player.height, player.gravDir);
+					if (!Collision.SolidCollision(vector, player.width, player.height))
+					{
+						num6++;
+						continue;
+					}
+					if (tile2.HasTile && !tile2.IsActuated && Main.tileSolid[tile2.TileType])
+					{
+						break;
+					}
+					num6++;
+				}
+
+				vector.Y -= 16f;
+				int i = (int)vector.X / 16;
+				int j = (int)vector.Y / 16;
+				int num7 = (int)(vector.X + (float)player.width * 0.5f) / 16;
+				int j2 = (int)(vector.Y + (float)player.height) / 16;
+				Tile tileSafely = Framing.GetTileSafely(i, j);
+				Tile tileSafely2 = Framing.GetTileSafely(num7, j2);
+				Tile tileSafely3 = Framing.GetTileSafely(num7 - 1, j2);
+				Tile tileSafely4 = Framing.GetTileSafely(num7 + 1, j2);
+
+				if (!tileSafely3.HasTile || tileSafely3.IsActuated || !Main.tileSolid[tileSafely3.TileType] || Main.tileSolidTop[tileSafely3.TileType] || !tileSafely4.HasTile || tileSafely4.IsActuated || !Main.tileSolid[tileSafely4.TileType] || Main.tileSolidTop[tileSafely4.TileType])
+				{
+					continue;
+				}
+
+                //Collision.AnyHurtingTiles(vector, player.width, player.height) can be included, but it might be funny to have that be part of the conchs curse
+				if (Collision.LavaCollision(vector, player.width, player.height) || Collision.SolidCollision(vector, player.width, player.height) || num6 >= settings.maximumFallDistanceFromOrignalPoint - 1)
+				{
+					continue;
+				}
+
+				Vector2 vector2 = Vector2.UnitX * 16f;
+				if (Collision.TileCollision(vector - vector2, vector2, player.width, player.height, fallThrough: false, fall2: false, (int)player.gravDir) != vector2)
+				{
+					continue;
+				}
+				vector2 = -Vector2.UnitX * 16f;
+				if (Collision.TileCollision(vector - vector2, vector2, player.width, player.height, fallThrough: false, fall2: false, (int)player.gravDir) != vector2)
+				{
+					continue;
+				}
+
+				vector2 = Vector2.UnitY * 16f;
+
+				if (TrapPositions.Count > 0)
+				{
+					Vector2 pos = Main.rand.Next(TrapPositions);
+                    canSpawn = true;
+                    vector = new Vector2(pos.X, pos.Y - 1) * 16f + new Vector2(-player.width / 2 + 8, -player.height);
+                    break;
+				}
+
+                vector2 = Vector2.UnitY * 16f;
+				if (!(Collision.TileCollision(vector - vector2, vector2, player.width, player.height, fallThrough: false, fall2: false, (int)player.gravDir) != vector2))
+				{
+					vector2 = -Vector2.UnitY * 16f;
+					if (!(Collision.TileCollision(vector - vector2, vector2, player.width, player.height, fallThrough: false, fall2: false, (int)player.gravDir) != vector2))
+					{
+						canSpawn = true;
+						tileY += num6;
+						break;
+					}
+				}
+			}
+
+			return vector;
+		}
 	}
 }

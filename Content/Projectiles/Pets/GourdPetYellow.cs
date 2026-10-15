@@ -92,7 +92,7 @@ namespace Spooky.Content.Projectiles.Pets
 				Projectile.timeLeft = 2;
             }
 
-            Lighting.AddLight(Projectile.Center, 0.5f, 0.5f, 0.3f);
+            Lighting.AddLight(Projectile.Center, 0.5f, 0.3f, 0.15f);
 
             if (!playerFlying)
             {
@@ -235,6 +235,8 @@ namespace Spooky.Content.Projectiles.Pets
             }
             else if (playerFlying)
             {
+                Projectile.tileCollide = false;
+
                 Projectile.ai[0] = 0;
 
                 Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.01f * (float)Projectile.direction;

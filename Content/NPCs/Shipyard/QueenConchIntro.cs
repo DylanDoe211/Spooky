@@ -131,7 +131,7 @@ namespace Spooky.Content.NPCs.Shipyard
             //dont start rotating until the throwing animation begins
             if (NPC.ai[0] >= StartSpinning)
             {
-				if (NPC.ai[0] < BeginThrow -7) 
+				if (NPC.ai[0] < BeginThrow -7)
 				{
 					NPC.rotation = SpinEasing(StartSpinning, BeginThrow - 7, NPC.ai[0]);
 				}
@@ -180,8 +180,9 @@ namespace Spooky.Content.NPCs.Shipyard
 
 				if (Main.netMode != NetmodeID.MultiplayerClient)
 				{
-					int NewNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)CrabSpawnPosition.X, (int)CrabSpawnPosition.Y, NPCID.Crab);
+					int NewNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)CrabSpawnPosition.X, (int)CrabSpawnPosition.Y, ModContent.NPCType<HermitCrab>());
 					Main.npc[NewNPC].velocity = ShootSpeed;
+					Main.npc[NewNPC].alpha = 255;
 					if (Main.netMode == NetmodeID.Server)
 					{
 						NetMessage.SendData(MessageID.SyncNPC, number: NewNPC);

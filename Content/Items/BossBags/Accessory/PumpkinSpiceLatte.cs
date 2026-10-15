@@ -65,7 +65,8 @@ namespace Spooky.Content.Items.BossBags.Accessory
 				player.ConsumeItem(Type, false, false);
 				player.Heal(Item.healLife);
 
-				player.GetModPlayer<SpookyPlayer>().PotionSicknessLatteTimer = 2;
+				int Duration = player.pStone ? (int)(3600 * 0.75) : 3600;
+				player.AddBuff(BuffID.PotionSickness, Duration);
 			}
 		}
 	}

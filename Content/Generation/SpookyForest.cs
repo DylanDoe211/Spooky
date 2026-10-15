@@ -267,9 +267,6 @@ namespace Spooky.Content.Generation
 				}
 			}
 
-			//clean out small clusters of tiles
-			//CleanOutSmallClumps();
-
 			//place ores in mossy stone
             ushort OppositeTier1Ore = WorldGen.SavedOreTiers.Copper == TileID.Copper ? TileID.Tin : TileID.Copper;
             ushort OppositeTier2Ore = WorldGen.SavedOreTiers.Iron == TileID.Iron ? TileID.Lead : TileID.Iron;

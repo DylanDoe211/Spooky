@@ -31,7 +31,7 @@ namespace Spooky.Content.Generation
 		//3.4.1.1723835072
 		//3.4.1.1879069920
 		//3.4.1.1024710096
-
+		
 		public override bool IsLoadingEnabled(Mod mod)
 		{
 			return ModLoader.HasMod("SpiritReforged");
@@ -164,7 +164,8 @@ namespace Spooky.Content.Generation
 						if (!IsEvilBiomeWall(Main.tile[X, Y].WallType) && Main.tile[X, Y].TileType != TileID.Sand)
 						{
 							//destroy any non-solid tiles
-							if (!WorldGen.SolidTile(X, Y) && Main.tile[X, Y - 1].HasTile && Main.tile[X, Y].TileType != ModContent.TileType<BlackSand>() && Main.tile[X, Y].WallType != ModContent.WallType<BlackSandWall>())
+							if (!WorldGen.SolidTile(X, Y) && Main.tile[X, Y - 1].HasTile && Main.tile[X, Y - 2].HasTile && Main.tile[X, Y - 3].HasTile &&
+							Main.tile[X, Y].TileType != ModContent.TileType<BlackSand>() && Main.tile[X, Y].WallType != ModContent.WallType<BlackSandWall>())
 							{
 								tile.HasTile = true;
 								tile.TileType = TileID.Dirt;
@@ -565,7 +566,7 @@ namespace Spooky.Content.Generation
 				for (int Y = 10; Y <= Main.worldSurface; Y++)
 				{
 					if (WorldGen.InWorld(X, Y, 10) && WorldGen.genRand.NextBool(ShipyardConfiguration.GiantChestChance) && CanPlaceChest(X, Y) && 
-					(Main.tile[X, Y].WallType == ModContent.WallType<BlackSandWall>() || Main.tile[X, Y].WallType == ModContent.WallType<BlackSandstoneWall>()))
+					(Main.tile[X, Y - 1].WallType == ModContent.WallType<BlackSandWall>() || Main.tile[X, Y - 1].WallType == ModContent.WallType<BlackSandstoneWall>()))
 					{
 						TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<GiantPirateChest>());
 					}
@@ -999,7 +1000,7 @@ namespace Spooky.Content.Generation
 
 		public override void AddTasks(List<GenPass> tasks, List<EcotoneSurfaceMapping.EcotoneEntry> entries)
 		{
-			int GenIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Waterfalls"));
+			int GenIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Dirt Rock Wall Runner"));
 			if (GenIndex == -1)
 			{
 				return;

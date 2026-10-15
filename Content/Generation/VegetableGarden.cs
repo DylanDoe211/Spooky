@@ -47,16 +47,7 @@ namespace Spooky.Content.Generation
 			//find a valid position in the jungle away from other structures
 			for (int X = Start; JungleOnLeftSide ? X >= End : X <= End; X += Increment)
 			{
-				int StartY = (int)Main.worldSurface + Main.maxTilesY / 5;
-				int EndY = Main.maxTilesY / 3;
-
-				if (numBiomes != 0)
-				{
-					StartY = Main.maxTilesY / 2;
-					EndY = Main.maxTilesY - 300;
-				}
-				
-				for (int Y = StartY; Y <= EndY; Y += 30)
+				for (int Y = (int)Main.rockLayer; Y <= Main.maxTilesY - 200; Y += 30)
 				{
 					if (CanPlaceBiome(X, Y, Main.maxTilesX / (SizeXInt - 8), Main.maxTilesY / (SizeYInt - 11)))
 					{
@@ -65,8 +56,10 @@ namespace Spooky.Content.Generation
 						BiomePolish(X, Y, SizeX, SizeY);
 						PlaceAmbience(X, Y, SizeX, SizeY);
 
-						numBiomes++;
+						Y += Main.maxTilesY / 4;
+						X +=  (Main.maxTilesX / 20) * (WorldGen.genRand.NextBool() ? -1 : 1);
 
+						numBiomes++;
 						if (numBiomes >= maxBiomes)
 						{
 							return;
@@ -469,14 +462,15 @@ namespace Spooky.Content.Generation
 			{
 				for (int j = PositionY - SizeY; j < PositionY + SizeY; j += 2)
 				{
-					int[] ValidTiles = { TileID.JungleGrass, TileID.Mud, TileID.LivingMahogany, TileID.LivingMahoganyLeaves, TileID.Granite, TileID.Marble };
+					int[] ValidTiles = { TileID.JungleGrass, TileID.Mud, TileID.LivingMahogany, TileID.LivingMahoganyLeaves, TileID.JungleVines, TileID.Granite, TileID.Marble };
 
 					if (WorldGen.InWorld(i, j) && Main.tile[i, j].HasTile && ValidTiles.Contains(Main.tile[i, j].TileType))
 					{
 						numJungleTiles++;
 					}
 
-					int[] InvalidTiles = { TileID.LihzahrdBrick, TileID.Hive, TileID.Dirt, ModContent.TileType<CatacombBrick1>(), ModContent.TileType<CatacombBrick2>() };
+					int[] InvalidTiles = { TileID.LihzahrdBrick, TileID.Hive, ModContent.TileType<CatacombBrick1>(), ModContent.TileType<CatacombBrick2>(),
+					ModContent.TileType<JungleSoilGrass>(), ModContent.TileType<JungleSoil>(), ModContent.TileType<JungleMoss>() };
 
 					if (WorldGen.InWorld(i, j) && Main.tile[i, j].HasTile && InvalidTiles.Contains(Main.tile[i, j].TileType))
 					{
@@ -485,7 +479,7 @@ namespace Spooky.Content.Generation
 				}
 			}
 
-			int AmountOfTilesNeeded = (SizeX * SizeY) / 8;
+			int AmountOfTilesNeeded = (SizeX * SizeY) / 2;
 
 			if (numJungleTiles >= AmountOfTilesNeeded)
 			{

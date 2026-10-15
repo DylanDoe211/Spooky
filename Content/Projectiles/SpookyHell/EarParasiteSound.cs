@@ -23,6 +23,8 @@ namespace Spooky.Content.Projectiles.SpookyHell
         {
             Projectile.width = 58;
             Projectile.height = 58;
+            Projectile.localNPCHitCooldown = 45;
+            Projectile.usesLocalNPCImmunity = true;
             Projectile.friendly = true;
             Projectile.tileCollide = false;
             Projectile.timeLeft = 2000;

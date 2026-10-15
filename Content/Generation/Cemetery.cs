@@ -159,9 +159,9 @@ namespace Spooky.Content.Generation
 
 		private void CemeteryFlattening(GenerationProgress progress, GameConfiguration configuration)
 		{
-			int XStart = Catacombs.PositionX - (BiomeWidth / 2);
+			int XStart = Catacombs.PositionX - (BiomeWidth / 2) - 12;
 			int XMiddle = Catacombs.PositionX;
-			int XEdge = Catacombs.PositionX + (BiomeWidth / 2);
+			int XEdge = Catacombs.PositionX + (BiomeWidth / 2) + 12;
 
 			bool foundSurfaceLeft = false;
 			int attemptsLeft = 0;
@@ -565,7 +565,7 @@ namespace Spooky.Content.Generation
 
 		public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
         {
-            int GenIndex1 = tasks.FindIndex(genpass => genpass.Name.Equals("Dirt Rock Wall Runner"));
+            int GenIndex1 = tasks.FindIndex(genpass => genpass.Name.Equals("Pyramids"));
 			if (GenIndex1 == -1)
 			{
 				return;

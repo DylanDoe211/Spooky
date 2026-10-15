@@ -25,7 +25,6 @@ namespace Spooky.Content.Generation
 				int newTempleY = WorldGen.genRand.Next(MinimumY, MaximumY);
 
 				//middle of the where the cemetery/catacombs is
-				int XStart = Catacombs.PositionX - (Cemetery.BiomeWidth / 2);
 				int XMiddle = Catacombs.PositionX;
 
 				//attempt to find a valid position for the jungle temple to place in, just in case it generates far away from the jungle

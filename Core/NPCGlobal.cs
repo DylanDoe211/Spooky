@@ -171,52 +171,44 @@ namespace Spooky.Core
             //draw white aura on an enemy with the bee damage buff
             if (npc.HasBuff(ModContent.BuffType<BeeDamageBuff>()))
             {
-                Vector2 frameOrigin = npc.frame.Size() / 2f;
-                Vector2 drawPos = npc.position - Main.screenPosition + frameOrigin + new Vector2(0f, npc.gfxOffY + 4);
+				Vector2 drawPos = npc.Center - screenPos + new Vector2(0f, npc.gfxOffY + 4);
 
-                float fade = (float)Math.Cos((double)(Main.GlobalTimeWrappedHourly % 2.4f / 2.4f * 6f)) / 2f + 0.5f;
+				var effects = npc.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-                float time = Main.GlobalTimeWrappedHourly;
-
-                time %= 4f;
-                time /= 2f;
-
-                time = time * 0.5f + 0.5f;
-
-                var effects = npc.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-
-                Color color = new Color(125 - npc.alpha, 125 - npc.alpha, 125 - npc.alpha, 0).MultiplyRGBA(Color.White) * 0.5f;
-
-                for (float i = 0f; i < 1f; i += 0.25f)
+				for (int i = 0; i < 4; i++)
                 {
-                    float radians = (i + (fade / 2)) * MathHelper.TwoPi;
-                    spriteBatch.Draw(Terraria.GameContent.TextureAssets.Npc[npc.type].Value, drawPos + new Vector2(0f, 1f).RotatedBy(radians) * time, npc.frame, color, npc.rotation, frameOrigin, npc.scale * 1.2f, effects, 0);
+                    Vector2 offset = i switch
+                    {
+                        1 => new(0, -2),
+                        2 => new(2, 0),
+                        3 => new(0, 2),
+                        _ => new(-2, 0)
+                    };
+
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(Terraria.GameContent.TextureAssets.Npc[npc.type].Value, Color.White), drawPos + offset, 
+					npc.frame, npc.GetAlpha(Color.White * 0.65f), npc.rotation, npc.frame.Size() / 2, npc.scale, effects, 0f);
                 }
 			}
 
             //draw a gold aura on enemies being healed
             if (npc.HasBuff(ModContent.BuffType<BeeHealingBuff>()))
             {
-                Vector2 frameOrigin = npc.frame.Size() / 2f;
-                Vector2 drawPos = npc.position - Main.screenPosition + frameOrigin + new Vector2(0f, npc.gfxOffY + 4);
+                Vector2 drawPos = npc.Center - screenPos + new Vector2(0f, npc.gfxOffY + 4);
 
-                float fade = (float)Math.Cos((double)(Main.GlobalTimeWrappedHourly % 2.4f / 2.4f * 6f)) / 2f + 0.5f;
+				var effects = npc.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-                float time = Main.GlobalTimeWrappedHourly;
-
-                time %= 4f;
-                time /= 2f;
-
-                time = time * 0.5f + 0.5f;
-
-                var effects = npc.direction == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-
-                Color color = new Color(125 - npc.alpha, 125 - npc.alpha, 125 - npc.alpha, 0).MultiplyRGBA(Color.Gold) * 0.5f;
-                
-                for (float i = 0f; i < 1f; i += 0.25f)
+				for (int i = 0; i < 4; i++)
                 {
-                    float radians = (i + (fade / 2)) * MathHelper.TwoPi;
-                    spriteBatch.Draw(Terraria.GameContent.TextureAssets.Npc[npc.type].Value, drawPos + new Vector2(0f, 1f).RotatedBy(radians) * time, npc.frame, color, npc.rotation, frameOrigin, npc.scale * 1.2f, effects, 0);
+                    Vector2 offset = i switch
+                    {
+                        1 => new(0, -2),
+                        2 => new(2, 0),
+                        3 => new(0, 2),
+                        _ => new(-2, 0)
+                    };
+
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(Terraria.GameContent.TextureAssets.Npc[npc.type].Value, Color.White), drawPos + offset, 
+					npc.frame, npc.GetAlpha(Color.Gold * 0.65f), npc.rotation, npc.frame.Size() / 2, npc.scale, effects, 0f);
                 }
 			}
 

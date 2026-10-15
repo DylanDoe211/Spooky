@@ -92,7 +92,7 @@ namespace Spooky.Content.Biomes
         {
             //set isActive to also account for the underground spooky forest to use the tint in both the aboveground and underground biomes
             isActive = player.InModBiome<SpookyBiome>() || player.InModBiome<SpookyBiomeUg>();
-            player.ManageSpecialBiomeVisuals("Spooky:SpookyForestTint", isActive, player.Center);
+            player.ManageSpecialBiomeVisuals("Spooky:SpookyBiomeSky", isActive, player.Center);
         }
 
         public override void OnInBiome(Player player)

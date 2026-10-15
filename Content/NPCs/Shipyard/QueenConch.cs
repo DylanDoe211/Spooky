@@ -24,7 +24,7 @@ namespace Spooky.Content.NPCs.Shipyard
         int SpinFramerate = 5;
         bool ResetFrameToZero = false;
 
-        Vector2 SaveVelocity = Vector2.Zero;
+        Vector2 SavePlayerPosition;
 
         public enum AnimationState
 		{
@@ -38,6 +38,7 @@ namespace Spooky.Content.NPCs.Shipyard
 		}
 
         private static Asset<Texture2D> NPCTexture;
+        private static Asset<Texture2D> ShellTexture;
 
         public static readonly SoundStyle HitSound = new("Spooky/Content/Sounds/QueenConchHit", SoundType.Sound);
 
@@ -50,6 +51,9 @@ namespace Spooky.Content.NPCs.Shipyard
 
         public override void SendExtraAI(BinaryWriter writer)
         {
+            //vector2
+            writer.WriteVector2(SavePlayerPosition);
+
             //floats
             writer.Write(NPC.localAI[0]);
             writer.Write(NPC.localAI[1]);
@@ -58,6 +62,9 @@ namespace Spooky.Content.NPCs.Shipyard
 
         public override void ReceiveExtraAI(BinaryReader reader)
         {
+            //vector2 
+            SavePlayerPosition = reader.ReadVector2();
+
             //floats
             NPC.localAI[0] = reader.ReadSingle();
             NPC.localAI[1] = reader.ReadSingle();
@@ -67,7 +74,7 @@ namespace Spooky.Content.NPCs.Shipyard
         public override void SetDefaults()
         {
             NPC.lifeMax = 850;
-            NPC.damage = 35;
+            NPC.damage = 25;
             NPC.defense = 15;
             NPC.width = 45;
 			NPC.height = 45;
@@ -198,10 +205,29 @@ namespace Spooky.Content.NPCs.Shipyard
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             NPCTexture ??= ModContent.Request<Texture2D>(Texture);
+            ShellTexture ??= ModContent.Request<Texture2D>(Texture + "Shell");
 
             var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-            spriteBatch.Draw(NPCTexture.Value, NPC.Center - screenPos, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+            spriteBatch.Draw(ShellTexture.Value, NPC.Center - screenPos, NPC.frame, NPC.GetAlpha(drawColor), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
+
+            if (!NPC.IsABestiaryIconDummy)
+			{
+                for (int i = 0; i < 3; i++)
+                {
+                    Vector2 offset = i switch
+                    {
+                        1 => new(2, 0),
+                        2 => new(0, 2),
+                        _ => new(-2, 0)
+                    };
+
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCTexture.Value, Color.White), NPC.Center + offset - screenPos, NPC.frame, 
+                    NPC.GetAlpha(Color.Teal * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+                }
+            }
+
+            spriteBatch.Draw(NPCTexture.Value, NPC.Center - screenPos, NPC.frame, NPC.GetAlpha(drawColor * 0.9f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0);
             
             return false;
         }
@@ -338,13 +364,13 @@ namespace Spooky.Content.NPCs.Shipyard
                         CurrentAnimation = AnimationState.WiggleStop;
                     }
 
-                    if (NPC.localAI[0] >= 260)
+                    if (NPC.localAI[0] >= 230)
                     {
                         CurrentFrameX = 1;
                         CurrentAnimation = AnimationState.Idle;
                     }
 
-                    if (NPC.localAI[0] >= 300)
+                    if (NPC.localAI[0] >= 270)
                     {
                         NPC.localAI[0] = 0;
                         NPC.ai[0] = 3;
@@ -443,7 +469,7 @@ namespace Spooky.Content.NPCs.Shipyard
                         }
 
                         //spin while hovering above the player, speed up animation
-                        if (NPC.localAI[0] >= 50 && NPC.localAI[0] < 180)
+                        if (NPC.localAI[0] >= 50 && NPC.localAI[0] < 160)
                         {
                             Vector2 RotateTowards = player.Center - NPC.Center;
                             float RotateDirection = (float)Math.Atan2(RotateTowards.Y, RotateTowards.X) - 3.14f;
@@ -459,10 +485,17 @@ namespace Spooky.Content.NPCs.Shipyard
                             }
                         }
 
+                        if (NPC.localAI[0] == 160)
+                        {
+                            NPC.velocity = Vector2.Zero;
+                            SavePlayerPosition = player.Center;
+                            NPC.netUpdate = true;
+                        }
+
                         //charge at player
                         if (NPC.localAI[0] == 180)
                         {
-                            Vector2 ChargeDirection = player.Center - NPC.Center;
+                            Vector2 ChargeDirection = SavePlayerPosition - NPC.Center;
                             ChargeDirection.Normalize();
                             ChargeDirection *= 25;
                             NPC.velocity.X = ChargeDirection.X;
@@ -474,7 +507,7 @@ namespace Spooky.Content.NPCs.Shipyard
                         //handle stuff when it collides with the ground
                         if (NPC.localAI[0] > 180)
                         {
-                            if (NPC.Center.Y >= player.Center.Y - 100 && NPCGlobalHelper.IsCollidingWithFloor(NPC, true))
+                            if (NPC.Center.Y >= player.Center.Y - 100 && NPCGlobalHelper.IsCollidingWithFloor(NPC))
                             {
                                 CurrentAnimation = AnimationState.Nothing;
                                 ResetFrameToZero = true;
@@ -509,7 +542,7 @@ namespace Spooky.Content.NPCs.Shipyard
 
                             for (int numProjs = 0; numProjs < 8; numProjs++)
 							{
-								Vector2 newVelocity = new Vector2(Main.rand.Next(-2, 3), Main.rand.Next(-2, 0)).RotatedByRandom(MathHelper.ToRadians(45));
+								Vector2 newVelocity = new Vector2(Main.rand.Next(-12, 13), Main.rand.Next(-2, 0)).RotatedByRandom(MathHelper.ToRadians(45));
                                 NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center, newVelocity, ModContent.ProjectileType<QueenConchBubble>(), NPC.damage, 4.5f);
                             }
                         }

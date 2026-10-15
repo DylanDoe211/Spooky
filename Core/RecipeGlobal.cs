@@ -22,6 +22,7 @@ namespace Spooky.Core
             wood.ValidItems.Add(ModContent.ItemType<SpookyWoodItem>());
             wood.ValidItems.Add(ModContent.ItemType<ChristmasWoodItem>());
             wood.ValidItems.Add(ModContent.ItemType<BirchWoodItem>());
+            wood.ValidItems.Add(ModContent.ItemType<RootWoodItem>());
             wood.ValidItems.Add(ModContent.ItemType<RotWoodItem>());
 
             //custom recipe groups

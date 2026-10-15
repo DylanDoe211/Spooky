@@ -2754,6 +2754,80 @@ SummonItem4: {
 		'''
 }
 
+RotWoodBody: {
+	DisplayName: Rotted Wood Chestplate
+	Tooltip: ""
+}
+
+RotWoodHead: {
+	DisplayName: Rotted Wood Helmet
+	Tooltip: ""
+}
+
+RotWoodLegs: {
+	DisplayName: Rotted Wood Leggings
+	Tooltip: ""
+}
+
+BleachedTuna: {
+	DisplayName: Bleached Tuna
+	Tooltip: Rapidly belches out short range bubbles
+}
+
+CursedConch: {
+	DisplayName: Cursed Conch
+	Tooltip:
+		'''
+		Uses a third of your health to teleport you to the opposite side of the world from where you are
+		However, its curse may occasionally teleport you to dangerous and undesirable positions
+		If the position on the opposite world side cannot be teleported to, this item will do nothing
+		You must also have enough health remaining to use this
+		'''
+}
+
+PirateBlunderbuss: {
+	DisplayName: Ghost Busster
+	Tooltip:
+		'''
+		Fires out a massive spread of bullets with a short range
+		Converts all ammo into ghostly bolts that pierce enemies
+		'''
+}
+
+PirateHook: {
+	DisplayName: Garghantuan Hook
+	Tooltip: Spawns short lived phantom hooks
+}
+
+PirateInkPen: {
+	DisplayName: Dead Man's Pen
+	Tooltip: Summons serpent illustrations to fight with you
+}
+
+PiratePotion: {
+	DisplayName: Scallywag Potion
+	Tooltip: Causes enemies to rarely drop gold coins on hit
+}
+
+PirateShipWheel: {
+	DisplayName: Hellship's Helm
+	Tooltip:
+		'''
+		Channel a slow whirlpool that can pull enemies towards it
+		Over time it will grow, increasing its speed and enemy pulling strength and range
+		'''
+}
+
+RotWoodHammer: {
+	DisplayName: Rotted Wood Hammer
+	Tooltip: ""
+}
+
+RotWoodSword: {
+	DisplayName: Rotted Wood Sword
+	Tooltip: ""
+}
+
 BottomlessPebbleBag: {
 	Tooltip: ""
 	DisplayName: Bottomless Pebble Bag
@@ -6225,6 +6299,11 @@ RotWoodWorkBenchItem: {
 	Tooltip: ""
 }
 
+ShipyardCampfireItem: {
+	DisplayName: Shipyard Campfire
+	Tooltip: ""
+}
+
 MangroveSaplingItem: {
 	DisplayName: Mangrove Seedling
 	Tooltip: Plants mangrove saplings
@@ -7496,67 +7575,4 @@ PetCommander: {
 		Click on any nearby tamed turkey while holding this to give it commands
 		Allows the turkey to roam freely, follow you, or stay put
 		'''
-}
-
-BleachedTuna: {
-	DisplayName: Bleached Tuna
-	Tooltip: Rapidly belches out short range bubbles
-}
-
-PirateBlunderbuss: {
-	DisplayName: Ghost Busster
-	Tooltip:
-		'''
-		Fires out a massive spread of bullets with a short range
-		Converts all ammo into ghostly bolts that pierce enemies
-		'''
-}
-
-PirateHook: {
-	DisplayName: Garghantuan Hook
-	Tooltip: Spawns short lived phantom hooks
-}
-
-PirateInkPen: {
-	DisplayName: Dead Man's Pen
-	Tooltip: Summons serpent illustrations to fight with you
-}
-
-PiratePotion: {
-	DisplayName: Scallywag Potion
-	Tooltip: Causes enemies to rarely drop gold coins on hit
-}
-
-PirateShipWheel: {
-	DisplayName: Hellship's Helm
-	Tooltip:
-		'''
-		Channel a slow whirlpool that can pull enemies towards it
-		Over time it will grow, increasing its speed and enemy pulling strength and range
-		'''
-}
-
-RotWoodHammer: {
-	DisplayName: Rotted Wood Hammer
-	Tooltip: ""
-}
-
-RotWoodSword: {
-	DisplayName: Rotted Wood Sword
-	Tooltip: ""
-}
-
-RotWoodBody: {
-	DisplayName: Rotted Wood Chestplate
-	Tooltip: ""
-}
-
-RotWoodHead: {
-	DisplayName: Rotted Wood Helmet
-	Tooltip: ""
-}
-
-RotWoodLegs: {
-	DisplayName: Rotted Wood Leggings
-	Tooltip: ""
 }

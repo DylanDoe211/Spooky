@@ -40,16 +40,21 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
             Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
 			Vector2 vector = new Vector2(Projectile.Center.X, Projectile.Center.Y) - Main.screenPosition + new Vector2(0, Projectile.gfxOffY);
 			Rectangle rectangle = new(0, ProjTexture.Height() / Main.projFrames[Projectile.type] * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
-
-            if (Scale < 1f)
-            {
-                Scale += 0.01f;
-            }
             
             Main.EntitySpriteDraw(ProjTexture.Value, vector, rectangle, lightColor, Projectile.rotation, drawOrigin, Projectile.scale * Scale, SpriteEffects.None, 0);
 
             return false;
         }
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            Projectile.Kill();
+        }
+
+        public override bool? CanDamage()
+		{
+			return Scale >= 1f;
+		}
 
 		public override void AI()
         {
@@ -62,6 +67,11 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
                 {
                     Projectile.frame = 0;
                 }
+            }
+
+            if (Scale < 1f)
+            {
+                Scale += 0.01f;
             }
 
             Projectile.ai[0]++;

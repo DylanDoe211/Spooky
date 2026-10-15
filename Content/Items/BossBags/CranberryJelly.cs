@@ -37,7 +37,8 @@ namespace Spooky.Content.Items.BossBags
 
 		public override bool? UseItem(Player player)
 		{
-			player.GetModPlayer<SpookyPlayer>().PotionSicknessCranberryTimer = 2;
+			int Duration = player.pStone ? (int)(1800 * 0.75) : 1800;
+			player.AddBuff(BuffID.PotionSickness, Duration);
 			return true;
 		}
 
@@ -50,7 +51,8 @@ namespace Spooky.Content.Items.BossBags
 				player.ConsumeItem(Type, false, false);
 				player.Heal(Item.healLife);
 
-				player.GetModPlayer<SpookyPlayer>().PotionSicknessCranberryTimer = 2;
+				int Duration = player.pStone ? (int)(1800 * 0.75) : 1800;
+				player.AddBuff(BuffID.PotionSickness, Duration);
 			}
 		}
 	}
