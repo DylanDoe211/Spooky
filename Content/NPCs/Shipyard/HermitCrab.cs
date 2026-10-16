@@ -14,6 +14,7 @@ using System.IO;
 using System.Collections.Generic;
 
 using Spooky.Core;
+using Spooky.Content.Dusts;
 using Spooky.Content.NPCs.Shipyard.Projectiles;
 
 namespace Spooky.Content.NPCs.Shipyard
@@ -571,9 +572,27 @@ namespace Spooky.Content.NPCs.Shipyard
 
         public override void HitEffect(NPC.HitInfo hit) 
         {
-            if (NPC.life <= 0)
+            if (NPC.life <= 0) 
             {
-			
+                float maxAmount = 20;
+                int currentAmount = 0;
+                while (currentAmount <= maxAmount)
+                {
+                    Vector2 velocity = new Vector2(Main.rand.NextFloat(1f, 3f), Main.rand.NextFloat(1f, 3f));
+                    Vector2 Bounds = new Vector2(Main.rand.NextFloat(1f, 3f), Main.rand.NextFloat(1f, 3f));
+                    float intensity = Main.rand.NextFloat(1f, 3f);
+
+                    Vector2 vector12 = Vector2.UnitX * 0f;
+                    vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;
+                    vector12 = vector12.RotatedBy(velocity.ToRotation(), default);
+
+                    int newDust = Dust.NewDust(NPC.Center, 1, 1, ModContent.DustType<GlowyDust>(), 0f, 0f, 0, new Color(211, 118, 255), 0.2f);
+                    Main.dust[newDust].noGravity = true;
+                    Main.dust[newDust].position = NPC.Center + vector12;
+                    Main.dust[newDust].velocity = velocity * 0f + vector12.SafeNormalize(Vector2.UnitY) * intensity;
+
+                    currentAmount++;
+                }
             }
         }
 	}
