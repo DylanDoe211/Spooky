@@ -157,7 +157,7 @@ namespace Spooky.Content.Generation
 				for (int X = (int)Position.X - 15; X <= (int)Position.X + 15; X++)
 				{
 					int BottomEndPos = ((int)BottomPos.Y + 50) >= (int)Main.worldSurface ? (int)Main.worldSurface : (int)BottomPos.Y + 50;
-					for (int Y = (int)BottomPos.Y; Y <= BottomEndPos; Y++)
+					for (int Y = (int)BottomPos.Y + 5; Y <= BottomEndPos; Y++)
 					{
 						Tile tile = Main.tile[X, Y];
 

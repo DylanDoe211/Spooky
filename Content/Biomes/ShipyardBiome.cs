@@ -84,6 +84,25 @@ namespace Spooky.Content.Biomes
         public override void SpecialVisuals(Player player, bool isActive)
         {
             player.ManageSpecialBiomeVisuals("Spooky:ShipyardSky", isActive, player.Center);
+
+            if (!Main.raining)
+            {
+                if (isActive)
+                {
+                    Main.cloudAlpha += 0.005f;
+                    if (Main.cloudAlpha >= 0.4f)
+                    {
+                        Main.cloudAlpha = 0.4f;
+                    }
+                }
+            }
+            else
+            {
+                if (Main.cloudAlpha < 0.45f)
+                {
+                    Main.cloudAlpha += 0.005f;
+                }
+            }
         }
 
 		public override void OnInBiome(Player player)
@@ -92,7 +111,7 @@ namespace Spooky.Content.Biomes
             if (!player.InModBiome(ModContent.GetInstance<CatacombBiome>()) && !player.InModBiome(ModContent.GetInstance<CatacombBiome2>()))
             {
                 player.ZoneGraveyard = true;
-                Main.GraveyardVisualIntensity = 0.05f;
+                Main.GraveyardVisualIntensity = 0.1f;
             }
         }
 

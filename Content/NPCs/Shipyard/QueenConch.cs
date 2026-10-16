@@ -223,7 +223,7 @@ namespace Spooky.Content.NPCs.Shipyard
                     };
 
                     Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCTexture.Value, Color.White), NPC.Center + offset - screenPos, NPC.frame, 
-                    NPC.GetAlpha(Color.Teal * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
+                    NPC.GetAlpha(Color.Teal * 0.7f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
                 }
             }
 

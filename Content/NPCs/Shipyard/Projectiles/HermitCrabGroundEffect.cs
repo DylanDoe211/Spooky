@@ -11,7 +11,7 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
         public override void SetDefaults()
         {
 			Projectile.width = 52;
-            Projectile.height = 25;
+            Projectile.height = 52;
 			Projectile.friendly = false;
 			Projectile.hostile = true;
             Projectile.tileCollide = false;

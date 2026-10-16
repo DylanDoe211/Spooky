@@ -182,6 +182,7 @@ namespace Spooky.Content.NPCs.Shipyard
 				{
 					int NewNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)CrabSpawnPosition.X, (int)CrabSpawnPosition.Y, ModContent.NPCType<HermitCrab>());
 					Main.npc[NewNPC].velocity = ShootSpeed;
+					Main.npc[NewNPC].ai[0] = -1;
 					Main.npc[NewNPC].alpha = 255;
 					if (Main.netMode == NetmodeID.Server)
 					{

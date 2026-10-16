@@ -300,6 +300,7 @@ namespace Spooky.Core
 				dust.velocity.Y *= 0f;
 				dust.velocity.Y -= 4.5f;
 				dust.velocity.X = 0f;
+                dust.velocity += Player.velocity;
 				dust.scale = 0.8f;
 				dust.alpha = 130;
 				dust.noGravity = true;
