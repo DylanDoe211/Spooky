@@ -39,9 +39,6 @@ namespace Spooky.Content.Generation
 
 		protected override EcotoneIcon GetIcon() => EcotoneIcon.FromBiome<ShipyardBiome>();
 
-		public static int LeftY = 0;
-		public static int RightY = 0;
-
 		private static bool IsEvilBiomeWall(int wall) => WallID.Sets.Corrupt[wall] || WallID.Sets.Crimson[wall];
 
 		private static void GenerateShipyard(GenerationProgress progress, (int, int) bounds)
@@ -55,9 +52,9 @@ namespace Spooky.Content.Generation
 			int leftBound = bounds.Item1 - 6;
 			int rightBound = bounds.Item2 + 6;
 
-			bool CemeteryOnLeft = Catacombs.PositionX < (Main.maxTilesY / 2);
+			bool OceanOnLeft = ((leftBound + rightBound) / 2) < (Main.maxTilesY / 2);
 
-			if (CemeteryOnLeft)
+			if (OceanOnLeft)
 			{
 				leftBound = WorldGen.beachDistance - 40;
 			}
@@ -66,8 +63,11 @@ namespace Spooky.Content.Generation
 				rightBound = Main.maxTilesX - (WorldGen.beachDistance - 40);
 			}
 
+			int LeftY = (int)SpookyWorldMethods.WorldSurfaceHeightLimit;
+            int RightY = (int)SpookyWorldMethods.WorldSurfaceHeightLimit;
+
 			//when the ocean is on the left side of the world, use the left bound and keep going left until a sand tile on the ground is found
-			if (CemeteryOnLeft)
+			if (OceanOnLeft)
 			{
 				bool foundSurfaceLeft = false;
 				int attemptsLeft = 0;
@@ -75,7 +75,7 @@ namespace Spooky.Content.Generation
 				//get the two surface points, with one being at the ocean and the other just an edge of the cemetery
 				while (!foundSurfaceLeft && attemptsLeft++ < 100000)
 				{
-					if ((WorldGen.SolidTile(leftBound, LeftY) && Main.tile[leftBound, LeftY].WallType != WallID.None) || LeftY > Main.worldSurface)
+					if (WorldGen.SolidTile(leftBound, LeftY) || LeftY > Main.worldSurface)
 					{
 						foundSurfaceLeft = true;
 						break;
@@ -94,14 +94,14 @@ namespace Spooky.Content.Generation
 			}
 			
 			//when the ocean is on the right side of the world, use the right bound and keep going right until a sand tile on the ground is found
-			if (!CemeteryOnLeft)
+			if (!OceanOnLeft)
 			{
 				bool foundSurfaceRight = false;
 				int attemptsRight = 0;
 
 				while (!foundSurfaceRight && attemptsRight++ < 100000)
 				{
-					if ((WorldGen.SolidTile(rightBound, RightY) && Main.tile[rightBound, RightY].WallType != WallID.None) || RightY > Main.worldSurface)
+					if (WorldGen.SolidTile(rightBound, RightY) || RightY > Main.worldSurface)
 					{
 						foundSurfaceRight = true;
 						break;
@@ -136,8 +136,8 @@ namespace Spooky.Content.Generation
 			Vector2 p2 = new Vector2(MiddlePoint.X + 30, Start.Y + WorldGen.genRand.Next(-25, 26));
 			Vector2 p3 = Start;
 
-			Vector2 Start2 = !CemeteryOnLeft ? new Vector2(leftBound, (int)Main.worldSurface) : new Vector2(leftBound, LeftY);
-			Vector2 End2 = !CemeteryOnLeft ? new Vector2(rightBound, RightY) : new Vector2(rightBound, (int)Main.worldSurface);
+			Vector2 Start2 = !OceanOnLeft ? new Vector2(leftBound, (int)Main.worldSurface) : new Vector2(leftBound, LeftY);
+			Vector2 End2 = !OceanOnLeft ? new Vector2(rightBound, RightY) : new Vector2(rightBound, (int)Main.worldSurface);
 
 			Vector2 p4 = End2;
 			Vector2 p5 = Start2;
@@ -430,7 +430,7 @@ namespace Spooky.Content.Generation
 
 			Vector2 LighthousePos = Vector2.Zero;
 
-			if (!CemeteryOnLeft)
+			if (!OceanOnLeft)
 			{
 				LighthousePos = new Vector2(rightBound - 20, RightY); 
 			}
