@@ -587,6 +587,8 @@ namespace Spooky.Content.NPCs.Shipyard
         {
             if (NPC.life <= 0) 
             {
+                NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center, Vector2.Zero, ModContent.ProjectileType<QueenConchBubble>(), NPC.damage, 4.5f, ai0: NPC.rotation);
+
                 float maxAmount = 20;
                 int currentAmount = 0;
                 while (currentAmount <= maxAmount)

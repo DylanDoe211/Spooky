@@ -51,6 +51,10 @@ namespace Spooky.Content.Generation
 			(ushort)ModContent.TileType<GourdBlockYellowGreen>()
         };
 
+		public static List<int> FloatingIslandYPositions = new()
+        {
+		};
+
 		private void GenerateSpookyForest(GenerationProgress progress, GameConfiguration configuration)
 		{
 			progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.SpookyForest").Value;
@@ -60,7 +64,10 @@ namespace Spooky.Content.Generation
 			//since this is the first spooky mod world generation to run, find the absolute minimum position at which floating islands have generated at here
 			//then set SpookyWorldMethods.WorldSurfaceHeightLimit to this value so that all other surface biomes can use this value to not destroy floating islands	
 			//also for the record, this MUST grab the maximum y-value as this is the actual lowest position to the ground in-game, then add an offset to it
-			SpookyWorldMethods.WorldSurfaceHeightLimit = GenVars.floatingIslandHouseY.Max() + 30;
+
+			//another note: the way vanilla does floating islands is so bad, you have to loop through the array of islandhouses and THEN check for the y-positions otherwise it just bugs out on small worlds
+			//oh my god bruh
+			SpookyWorldMethods.WorldSurfaceHeightLimit = GenVars.floatingIslandHouseY.Take(GenVars.numIslandHouses).Max() + 30;
 
 			//decide whether or not to use the alt background
 			Flags.SpookyBackgroundAlt = WorldGen.genRand.NextBool();

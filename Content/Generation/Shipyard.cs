@@ -55,9 +55,9 @@ namespace Spooky.Content.Generation
 			int leftBound = bounds.Item1 - 6;
 			int rightBound = bounds.Item2 + 6;
 
-			bool OceanOnLeft = ((leftBound + rightBound) / 2) < (Main.maxTilesY / 2);
+			bool CemeteryOnLeft = Catacombs.PositionX < (Main.maxTilesY / 2);
 
-			if (OceanOnLeft)
+			if (CemeteryOnLeft)
 			{
 				leftBound = WorldGen.beachDistance - 40;
 			}
@@ -67,7 +67,7 @@ namespace Spooky.Content.Generation
 			}
 
 			//when the ocean is on the left side of the world, use the left bound and keep going left until a sand tile on the ground is found
-			if (OceanOnLeft)
+			if (CemeteryOnLeft)
 			{
 				bool foundSurfaceLeft = false;
 				int attemptsLeft = 0;
@@ -75,7 +75,7 @@ namespace Spooky.Content.Generation
 				//get the two surface points, with one being at the ocean and the other just an edge of the cemetery
 				while (!foundSurfaceLeft && attemptsLeft++ < 100000)
 				{
-					if (WorldGen.SolidTile(leftBound, LeftY) || LeftY > Main.worldSurface)
+					if ((WorldGen.SolidTile(leftBound, LeftY) && Main.tile[leftBound, LeftY].WallType != WallID.None) || LeftY > Main.worldSurface)
 					{
 						foundSurfaceLeft = true;
 						break;
@@ -94,14 +94,14 @@ namespace Spooky.Content.Generation
 			}
 			
 			//when the ocean is on the right side of the world, use the right bound and keep going right until a sand tile on the ground is found
-			if (!OceanOnLeft)
+			if (!CemeteryOnLeft)
 			{
 				bool foundSurfaceRight = false;
 				int attemptsRight = 0;
 
 				while (!foundSurfaceRight && attemptsRight++ < 100000)
 				{
-					if (WorldGen.SolidTile(rightBound, RightY) || RightY > Main.worldSurface)
+					if ((WorldGen.SolidTile(rightBound, RightY) && Main.tile[rightBound, RightY].WallType != WallID.None) || RightY > Main.worldSurface)
 					{
 						foundSurfaceRight = true;
 						break;
@@ -136,13 +136,13 @@ namespace Spooky.Content.Generation
 			Vector2 p2 = new Vector2(MiddlePoint.X + 30, Start.Y + WorldGen.genRand.Next(-25, 26));
 			Vector2 p3 = Start;
 
-			Vector2 Start2 = !OceanOnLeft ? new Vector2(leftBound, (int)Main.worldSurface) : new Vector2(leftBound, LeftY);
-			Vector2 End2 = !OceanOnLeft ? new Vector2(rightBound, RightY) : new Vector2(rightBound, (int)Main.worldSurface);
+			Vector2 Start2 = !CemeteryOnLeft ? new Vector2(leftBound, (int)Main.worldSurface) : new Vector2(leftBound, LeftY);
+			Vector2 End2 = !CemeteryOnLeft ? new Vector2(rightBound, RightY) : new Vector2(rightBound, (int)Main.worldSurface);
 
 			Vector2 p4 = End2;
 			Vector2 p5 = Start2;
 
-			//place terrain
+			//place dirt
 			for (int i = 0; i < segments; i++)
 			{
 				float t = i / (float)segments;
@@ -179,6 +179,18 @@ namespace Spooky.Content.Generation
 						}
 					}
 				}
+			}	
+
+			//place terrain
+			for (int i = 0; i < segments; i++)
+			{
+				float t = i / (float)segments;
+				Vector2 Position = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
+				t = (i + 1) / (float)segments;
+
+				float u = i / (float)segments;
+				Vector2 BottomPos = BezierCurveUtil.CalculateBezierPoint(u, p4, p4, p5, p5);
+				u = (i + 1) / (float)segments;
 
 				//place tiles below the line to create surface, and use noise to place clusters of black sandstone in the sand
 				for (int Y = (int)Position.Y; Y <= (int)BottomPos.Y; Y++)
@@ -418,7 +430,7 @@ namespace Spooky.Content.Generation
 
 			Vector2 LighthousePos = Vector2.Zero;
 
-			if (!OceanOnLeft)
+			if (!CemeteryOnLeft)
 			{
 				LighthousePos = new Vector2(rightBound - 20, RightY); 
 			}
@@ -472,7 +484,7 @@ namespace Spooky.Content.Generation
 						}
 					}
 
-					if (CanPlaceShipwreck((int)Position.X, StructureY, 20) && IsFlatSurface((int)Position.X, StructureY, 1) &&
+					if (WorldGen.genRand.NextBool() && CanPlaceShipwreck((int)Position.X, StructureY, 20) && IsFlatSurface((int)Position.X, StructureY, 1) &&
 					(Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSand>() || Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSandGrass>() || 
 					Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSandstone>()|| Main.tile[(int)Position.X, StructureY].TileType == ModContent.TileType<BlackSandstoneMoss>()))
 					{
