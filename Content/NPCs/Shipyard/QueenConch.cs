@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using Spooky.Core;
 using Spooky.Content.Biomes;
 using Spooky.Content.Dusts;
+using Spooky.Content.Items.Shipyard;
 using Spooky.Content.NPCs.Shipyard.Projectiles;
 
 namespace Spooky.Content.NPCs.Shipyard
@@ -55,6 +56,9 @@ namespace Spooky.Content.NPCs.Shipyard
             //vector2
             writer.WriteVector2(SavePlayerPosition);
 
+            //bools
+            writer.Write(ResetFrameToZero);
+
             //floats
             writer.Write(NPC.localAI[0]);
             writer.Write(NPC.localAI[1]);
@@ -65,6 +69,9 @@ namespace Spooky.Content.NPCs.Shipyard
         {
             //vector2 
             SavePlayerPosition = reader.ReadVector2();
+
+            //bools
+            ResetFrameToZero = reader.ReadBoolean();
 
             //floats
             NPC.localAI[0] = reader.ReadSingle();
@@ -579,15 +586,16 @@ namespace Spooky.Content.NPCs.Shipyard
             }
         }
 
-        public override void ModifyNPCLoot(NPCLoot npcLoot) 
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
+			npcLoot.Add(ItemDropRule.ByCondition(new DropConditions.ShouldConchDropLoot(), ModContent.ItemType<CursedConch>(), 1));
         }
 
         public override void HitEffect(NPC.HitInfo hit) 
         {
             if (NPC.life <= 0) 
             {
-                NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center, Vector2.Zero, ModContent.ProjectileType<QueenConchBubble>(), NPC.damage, 4.5f, ai0: NPC.rotation);
+                NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center, NPC.velocity * 0.2f, ModContent.ProjectileType<QueenConchShellFall>(), NPC.damage * 2, 4.5f, ai0: NPC.rotation);
 
                 float maxAmount = 20;
                 int currentAmount = 0;

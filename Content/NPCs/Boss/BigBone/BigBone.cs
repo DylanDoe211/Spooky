@@ -47,7 +47,6 @@ namespace Spooky.Content.NPCs.Boss.BigBone
         
         public bool Phase2 = false;
         public bool Transition = false;
-        public bool FlowersSpawned = false;
         public bool ActuallyDead = false;
         public bool DeathAnimation = false;
         public bool DefaultRotation = true;
@@ -113,7 +112,6 @@ namespace Spooky.Content.NPCs.Boss.BigBone
             //bools
             writer.Write(Phase2);
             writer.Write(Transition);
-            writer.Write(FlowersSpawned);
             writer.Write(ActuallyDead);
             writer.Write(DeathAnimation);
             writer.Write(DefaultRotation);
@@ -150,7 +148,6 @@ namespace Spooky.Content.NPCs.Boss.BigBone
             //bools
             Phase2 = reader.ReadBoolean();
             Transition = reader.ReadBoolean();
-            FlowersSpawned = reader.ReadBoolean();
             ActuallyDead = reader.ReadBoolean();
             DeathAnimation = reader.ReadBoolean();
             DefaultRotation = reader.ReadBoolean();

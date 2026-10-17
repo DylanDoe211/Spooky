@@ -9,6 +9,7 @@ using Spooky.Content.Biomes;
 using Spooky.Content.NPCs.Boss.Daffodil;
 using Spooky.Content.NPCs.Boss.Orroboro;
 using Spooky.Content.NPCs.Boss.SpookySpirit;
+using Spooky.Content.NPCs.Shipyard;
 
 namespace Spooky.Core
 {
@@ -489,6 +490,58 @@ namespace Spooky.Core
             }
         }
 
+        //queen conch drop rules
+        public class ShouldConchDropLoot : IItemDropRuleCondition
+        {
+            public bool CanDrop(DropAttemptInfo info)
+            {
+                if (!info.IsInSimulation)
+                {
+                    if (!NPC.AnyNPCs(ModContent.NPCType<HermitCrab>()))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            public bool CanShowItemDropInUI()
+            {
+                return true;
+            }
+
+            public string GetConditionDescription()
+            {
+                return null;
+            }
+        }
+        //hermit crab drop rule
+        public class ShouldCrabDropLoot : IItemDropRuleCondition
+        {
+            public bool CanDrop(DropAttemptInfo info)
+            {
+                if (!info.IsInSimulation)
+                {
+                    if (!NPC.AnyNPCs(ModContent.NPCType<QueenConch>()))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            public bool CanShowItemDropInUI()
+            {
+                return true;
+            }
+
+            public string GetConditionDescription()
+            {
+                return null;
+            }
+        }
 
         //all the conditions below this point exist because with orro & boro, only the last worm alive should drop items
         //item drop conditions was basically the only way i could get it working (at least that i could think of)

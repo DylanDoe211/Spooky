@@ -294,22 +294,23 @@ namespace Spooky.Core
 			//handle cursed conch teleportation
 			if (CursedConchTeleporting && ItemGlobal.ActiveItem(Player).type == ModContent.ItemType<CursedConch>())
 			{
-				Vector2 vector = Vector2.UnitY.RotatedBy((float)Player.itemAnimation * ((float)Math.PI * 2f) / 30f) * new Vector2(15f, 0f);
+                if (Player.itemTime % 2 == 0)
+                {
+                    Vector2 vector = Vector2.UnitY.RotatedBy((float)Player.itemAnimation * ((float)Math.PI * 2f) / 15f) * new Vector2(15f, 0f);
 
-				Dust dust = Dust.NewDustPerfect(Player.Bottom + vector, DustID.WitherLightning);
-				dust.velocity.Y *= 0f;
-				dust.velocity.Y -= 4.5f;
-				dust.velocity.X = 0f;
-                dust.velocity += Player.velocity;
-				dust.scale = 0.8f;
-				dust.alpha = 130;
-				dust.noGravity = true;
-				dust.fadeIn = 1.1f;
+                    Dust dust = Dust.NewDustPerfect(Player.Bottom + vector, DustID.WitherLightning);
+                    dust.velocity.Y *= 0f;
+                    dust.velocity.Y -= 4.5f;
+                    dust.velocity.X = Main.rand.NextFloat(-0.5f, 0.5f);
+                    dust.scale = 0.8f;
+                    dust.alpha = 130;
+                    dust.noGravity = true;
+                    dust.fadeIn = 1.1f;
+                }
 
 				if (Player.itemTime == ItemGlobal.ActiveItem(Player).useTime / 2)
 				{
 					CursedConchTeleport(Player);
-                    SoundEngine.PlaySound(SoundID.Item104, Player.Center);
 				}
 				if (Player.itemTime == 0)
 				{
@@ -717,6 +718,8 @@ namespace Spooky.Core
 					RemoteClient.CheckSection(player.whoAmI, player.position);
 					NetMessage.SendData(MessageID.TeleportEntity, -1, -1, null, 0, player.whoAmI, newPos.X, newPos.Y, 7);
 				}
+
+                SoundEngine.PlaySound(SoundID.Item104, player.Center);
 			}
 		}
 

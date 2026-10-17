@@ -13,6 +13,7 @@ using Spooky.Content.NPCs.Cemetery;
 using Spooky.Content.NPCs.Cemetery.Projectiles;
 using Spooky.Content.NPCs.PandoraBox;
 using Spooky.Content.NPCs.Shipyard;
+using Spooky.Content.NPCs.Shipyard.Projectiles;
 using Spooky.Content.Tiles.Cemetery.Furniture;
 using Spooky.Content.Tiles.Shipyard.Furniture;
 
@@ -213,7 +214,8 @@ namespace Spooky.Content.Items.BossSummon
 							int left = i - tile.TileFrameX / 18 % 4;
 							int top = j - tile.TileFrameY / 18 % 3;
 
-							if (!NPC.AnyNPCs(ModContent.NPCType<QueenConchIntro>()) && !NPC.AnyNPCs(ModContent.NPCType<QueenConch>())) //&& !NPC.AnyNPCs(ModContent.NPCType<HermitCrab>()))
+							if (!NPC.AnyNPCs(ModContent.NPCType<QueenConchSpawn>()) && !NPC.AnyNPCs(ModContent.NPCType<QueenConchIntro>()) && 
+							!NPC.AnyNPCs(ModContent.NPCType<QueenConch>()) && !NPC.AnyNPCs(ModContent.NPCType<HermitCrab>()))
 							{
 								SoundEngine.PlaySound(BeepSound2, player.Center);
 

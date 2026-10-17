@@ -71,7 +71,7 @@ namespace Spooky.Content.Biomes
         
         public override ModWaterStyle WaterStyle => ModContent.GetInstance<ShipyardWaterStyle>();
 
-        public override int BiomeTorchItemType => ModContent.ItemType<CemeteryBiomeTorchItem>();
+        public override int BiomeTorchItemType => ModContent.ItemType<ShipyardTorchItem>();
 
         public override int BiomeCampfireItemType => ModContent.ItemType<ShipyardCampfireItem>();
 

@@ -47,7 +47,7 @@ namespace Spooky.Content.Generation
 			//find a valid position in the jungle away from other structures
 			for (int X = Start; JungleOnLeftSide ? X >= End : X <= End; X += Increment)
 			{
-				for (int Y = (int)Main.rockLayer; Y <= Main.maxTilesY - 200; Y += 30)
+				for (int Y = (int)Main.rockLayer; Y <= Main.maxTilesY - 250; Y += 30)
 				{
 					if (CanPlaceBiome(X, Y, Main.maxTilesX / (SizeXInt - 8), Main.maxTilesY / (SizeYInt - 11)))
 					{

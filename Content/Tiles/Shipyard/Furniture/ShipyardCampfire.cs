@@ -75,9 +75,9 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
 			{
 				float divide = 300f;
 
-                r = 85f / divide;
-                g = 255f / divide;
-                b = 184f / divide;
+                r = 64f / divide;
+                g = 172f / divide;
+                b = 207f / divide;
 			}
 		}
 

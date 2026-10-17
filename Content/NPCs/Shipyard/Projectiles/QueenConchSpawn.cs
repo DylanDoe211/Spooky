@@ -57,7 +57,7 @@ namespace Spooky.Content.NPCs.Shipyard.Projectiles
 			{
 				if (Main.netMode != NetmodeID.MultiplayerClient)
 				{
-					int NewNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X - 12, (int)NPC.Center.Y + 8, ModContent.NPCType<QueenConchIntro>());
+					int NewNPC = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X - 12, (int)NPC.Center.Y + 14, ModContent.NPCType<QueenConchIntro>());
 					if (Main.netMode == NetmodeID.Server)
 					{
 						NetMessage.SendData(MessageID.SyncNPC, number: NewNPC);

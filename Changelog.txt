@@ -4,15 +4,16 @@ New Biome, Boggy Shipyard:
 -Underground in the caves you can find pirate treasure chests which drop one of four new weapons and a funny new potion
 -It has new fishing content including a new rare weapon, an angler quest fish, and biome crates
 -Contains new ghostly critters like fish and other underwater life, some of them passive, some of them defensive, and some aggressive
--On the biomes surface, you can find gigantic conch shells which can be interacted with using an EMF reader to begin a fun new mini-boss encounter
+-On the biomes surface, you can find gigantic conch shells which can be interacted with using an EMF reader to begin a fun new mini-boss encounter with a unique new drop
+-Due to the atmosphere in the biome, it is always raining there
  
-A FEW THINGS TO NOTE ABOUT THE NEW BIOME
+A FEW THINGS TO NOTE ABOUT THE NEW BIOME:
 -It is not a regular biome, but a spirit reforged ecotone which means the following
 -You MUST have spirit reforged enabled with spooky mod for the biome to generate, otherwise it will never spawn during worldgen
 -It is NOT guaranteed to generate in your world as spirit reforged ecotones are intentionally not guaranteed, you may need to create a few worlds to find one
 -The size of the biome varies HEAVILY, sometimes you may get a big one, and sometimes you may get a really tiny one
--All of the blocks in this biome are obtainable even without spirit reforged enabled, meaning you may build an artificial one through normal spooky mod gameplay
-(You can obtain the blocks and tree saplings from shipyard crates, which can be created by throwing bone crates into shimmer)
+-All of the blocks in this biome are obtainable even without spirit reforged enabled, so you may build an artificial one through normal spooky mod gameplay
+(You can obtain the blocks and tree saplings from shipyard rotten crates, which can be created by throwing bone crates into shimmer)
 
 
 Other New Stuff:
@@ -21,13 +22,13 @@ Other New Stuff:
 -Added new giant living gourds that spawn in the underground spooky forest, each one has a silly new light pet inside!
 -Added sac of flesh as a replacement for just fishing up single blocks in the eye valley, it is a right-clickable consumable item that gives you a bunch of eye valley blocks
 -Added a bunch of new unique pots that generate in all the different spooky mod biomes (Except for the cemetery and eye valley)
--Added a new firefly light pet that drops from spider war minibosses, and a new crab pet gotten from fishing in the spooky forest
+-Added a new firefly light pet that drops from spider war minibosses, and a new crab pet from fishing in the spooky forest
 -Added alternate spook fishron drops for the electric eel whip and kraken yoyo (I know these are not in tmodloader currently, but we have implemented them now so we dont have to worry about them later)
 -Added long skeletoids and zomboid glyphomancers to the upper catacombs
--Added a new game tip to tell players about spooky mods config options
 -Added cooler glowmask to little eye's cauldron
 -Added clentaminator biome spread for blocks and walls that unintentionally didnt have it (Such as spooky mod dirt walls and other newer grass blocks that previously didnt get converted)
 -Added modcalls for various things in spooky mod, which includes: Boss defeated, Event defeated, World generation positions, and even the ability to add new custom little eye quests!
+-Added a new game tip to tell players about spooky mods config options
 
 
 Sprite Updates:

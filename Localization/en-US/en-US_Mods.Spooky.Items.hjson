@@ -2778,9 +2778,10 @@ CursedConch: {
 	DisplayName: Cursed Conch
 	Tooltip:
 		'''
-		Uses a third of your health to teleport you to the opposite side of the world from where you are
-		However, its curse may occasionally teleport you to dangerous and undesirable positions
-		If the position on the opposite world side cannot be teleported to, this item will do nothing
+		If you listen closely, you won't hear anything
+		Uses a third of your health to teleport you to the opposite side of the world
+		However, its curse may occasionally teleport you to undesirable positions
+		If the position on the other side of the world cannot be teleported to, nothing will happen
 		You must also have enough health remaining to use this
 		'''
 }
@@ -6112,6 +6113,15 @@ KrampusPylonItem: {
 		'''
 }
 
+ShipyardPylonItem: {
+	DisplayName: Boggy Shipyard Pylon
+	Tooltip:
+		'''
+		Teleport to another pylon when 2 villagers are nearby
+		You can only place one per type and in the matching biome
+		'''
+}
+
 SpiderCavePylonItem: {
 	DisplayName: Spider Grotto Pylon
 	Tooltip:
@@ -6300,7 +6310,12 @@ RotWoodWorkBenchItem: {
 }
 
 ShipyardCampfireItem: {
-	DisplayName: Shipyard Campfire
+	DisplayName: Boggy Shipyard Campfire
+	Tooltip: ""
+}
+
+ShipyardTorchItem: {
+	DisplayName: Boggy Shipyard Torch
 	Tooltip: ""
 }
 

@@ -15,6 +15,7 @@ using System.Collections.Generic;
 
 using Spooky.Core;
 using Spooky.Content.Dusts;
+using Spooky.Content.Items.Shipyard;
 using Spooky.Content.NPCs.Shipyard.Projectiles;
 
 namespace Spooky.Content.NPCs.Shipyard
@@ -43,17 +44,8 @@ namespace Spooky.Content.NPCs.Shipyard
 		public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[NPC.type] = 7;
-			NPCID.Sets.ShouldBeCountedAsBoss[NPC.type] = true;
-
-			/*
-			NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
-            {
-                CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/CorklidQueenBestiary",
-				Position = new Vector2(35f, 35f),
-				PortraitPositionXOverride = 0f,
-              	PortraitPositionYOverride = 12f
-            };
-			*/
+			NPCID.Sets.CantTakeLunchMoney[Type] = true;
+            NPCGlobal.IsSpookyModMiniboss[Type] = true;
 		}
 
 		public override void SendExtraAI(BinaryWriter writer)
@@ -569,6 +561,11 @@ namespace Spooky.Content.NPCs.Shipyard
 				}
 			}
 		}
+
+		public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+			npcLoot.Add(ItemDropRule.ByCondition(new DropConditions.ShouldCrabDropLoot(), ModContent.ItemType<CursedConch>(), 1));
+        }
 
         public override void HitEffect(NPC.HitInfo hit) 
         {
