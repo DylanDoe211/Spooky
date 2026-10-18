@@ -619,7 +619,7 @@
         <member name="M:SpiritReforged.Common.Misc.MiscExtensions.AddRange``1(Terraria.Utilities.WeightedRandom{``0},System.Double,``0[])">
             <summary> Adds <paramref name="options"/> and distributes <paramref name="weight"/> evenly. </summary>
         </member>
-        <member name="M:SpiritReforged.Common.Misc.MiscExtensions.Common(Terraria.ModLoader.NPCSpawnInfo)">
+        <member name="M:SpiritReforged.Common.Misc.MiscExtensions.EventSafe(Terraria.ModLoader.NPCSpawnInfo)">
             <summary> Whether common NPC spawn conditions related to invasions and events are satisfied. </summary>
         </member>
         <member name="M:SpiritReforged.Common.Misc.ModeUtils.ByMode(System.Int32,System.Int32,System.Int32,System.Int32)">
@@ -1129,70 +1129,6 @@
         </member>
         <member name="M:SpiritReforged.Common.NPCCommon.SummontTagGlobalNPC.ApplySummonTag(System.Int32,System.Int32,System.Boolean)">
             <summary> Applies summon tag to an NPC. Use <see cref="M:SpiritReforged.Common.NPCCommon.NPCHelper.ApplySummonTag(Terraria.NPC,System.Int32,System.Boolean)"/> instead. </summary>
-        </member>
-        <member name="T:SpiritReforged.Common.Particle.Particle">
-            <summary>
-            Represents a particle with a position, velocity, rotation, scale and transparency.
-            TL;DR: Better dust.
-            </summary>
-        </member>
-        <member name="P:SpiritReforged.Common.Particle.Particle.DrawType">
-            <summary>
-            Determines whether the particle is drawn using its default drawing method, the default drawing method with additive color blending, or a custom drawing type.
-            If set to Custom, the CustomDraw method will be called.
-            </summary>
-        </member>
-        <member name="P:SpiritReforged.Common.Particle.Particle.DrawLayer">
-            <summary>
-            Determines which layer the particle is drawn on, i.e. when the drawing is called relative to other vanilla entities.
-            Defaults to before projectiles are drawn.
-            </summary>
-        </member>
-        <member name="M:SpiritReforged.Common.Particle.Particle.Kill">
-            <summary>
-            Call this when you want to clear your particle and remove it from the world.
-            </summary>
-        </member>
-        <member name="M:SpiritReforged.Common.Particle.Particle.Update">
-            <summary>
-            Called every tick. Update your particle in this method.
-            Particle velocity is automatically added to the particle position for you, and TimeAlive is incremented.
-            </summary>
-        </member>
-        <member name="M:SpiritReforged.Common.Particle.Particle.OnKill">
-            <summary>
-            Called when a particle is killed
-            </summary>
-        </member>
-        <member name="M:SpiritReforged.Common.Particle.Particle.CustomDraw(Microsoft.Xna.Framework.Graphics.SpriteBatch)">
-            <summary>
-            Allows you to do custom drawing for your particle. Only called if Particle.UseCustomDrawing is true.
-            </summary>
-        </member>
-        <member name="M:SpiritReforged.Common.Particle.ParticleHandler.SpawnParticle(SpiritReforged.Common.Particle.Particle)">
-            <summary>
-            Spawns the particle instance provided into the world (if the particle limit is not reached).
-            </summary>
-        </member>
-        <member name="M:SpiritReforged.Common.Particle.ParticleHandler.DeleteParticleAtIndex(System.Int32)">
-            <summary>
-            Deletes the particle at the given index. You typically do not have to use this; use Particle.Kill() instead.
-            </summary>
-        </member>
-        <member name="M:SpiritReforged.Common.Particle.ParticleHandler.ClearAllParticles">
-            <summary>
-            Clears all the currently spawned particles.
-            </summary>
-        </member>
-        <member name="M:SpiritReforged.Common.Particle.ParticleHandler.GetTexture(System.Int32)">
-            <summary>
-            Gets the texture of the given particle type.
-            </summary>
-        </member>
-        <member name="M:SpiritReforged.Common.Particle.ParticleHandler.ParticleType``1">
-            <summary>
-            Returns the numeric type of the given particle.
-            </summary>
         </member>
         <member name="M:SpiritReforged.Common.PlayerCommon.CoinLootPlayer.AddMult(System.Int32)">
             <summary> Accepts full percentage values. </summary>
@@ -1998,7 +1934,7 @@
             Allows you to fit additional safety checks between placement like <see cref="M:SpiritReforged.Common.TileCommon.Placer.IsClear(SpiritReforged.Common.TileCommon.PlaceAttempt)"/>. </summary>
         </member>
         <member name="M:SpiritReforged.Common.TileCommon.Placer.IsClear(SpiritReforged.Common.TileCommon.PlaceAttempt)">
-            <summary> Calls <see cref="M:SpiritReforged.Common.WorldGeneration.WorldMethods.AreaClear(System.Int32,System.Int32,System.Int32,System.Int32,System.Boolean)"/> attuned to the tile dimensions of <paramref name="type"/>.<br/>
+            <summary> Calls <see cref="M:SpiritReforged.Common.WorldGeneration.WorldMethods.AreaClear(Microsoft.Xna.Framework.Rectangle,System.Boolean)"/> attuned to the tile dimensions of <paramref name="type"/>.<br/>
             <see cref="F:SpiritReforged.Common.TileCommon.PlaceAttempt.success"/> can be true without providing TileObject data after this method runs. </summary>
         </member>
         <member name="M:SpiritReforged.Common.TileCommon.Placer.Place(SpiritReforged.Common.TileCommon.PlaceAttempt)">
@@ -2321,7 +2257,7 @@
             <returns> Whether the tree was successfully grown. </returns>
         </member>
         <member name="M:SpiritReforged.Common.TileCommon.Tree.CustomTree.GrowTree``1(System.Int32,System.Int32)">
-            <summary> Attempts to grow a custom tree of <see cref="!:&lt;T&gt;"/> at the given coordinates. </summary>
+            <summary> Attempts to grow a custom tree of <typeparamref name="T"/> at the given coordinates. </summary>
             <returns> Whether the tree was successfully grown. </returns>
         </member>
         <member name="M:SpiritReforged.Common.TileCommon.Tree.CustomTree.PreAddObjectData">
@@ -2334,7 +2270,7 @@
             <summary> Used to create effects when the tree is grown, such as leaves. Doubles for shake effects by default. </summary>
         </member>
         <member name="M:SpiritReforged.Common.TileCommon.Tree.CustomTree.DrawTreeFoliage(System.Int32,System.Int32,Microsoft.Xna.Framework.Graphics.SpriteBatch)">
-            <summary> Used to draw treetops and tree branches based on coordinates resulting from <see cref="!:Noise"/>. </summary>
+            <summary> Used to draw treetops and tree branches based on coordinates resulting from <see cref="F:SpiritReforged.Common.WorldGeneration.Noise.NoiseSystem._noise"/>. </summary>
         </member>
         <member name="T:SpiritReforged.Common.TileCommon.Tree.FertilizerGlobalProjectile">
             <summary> Applies the effects of fertilizer to <see cref="T:SpiritReforged.Common.TileCommon.Tree.CustomTree"/> saplings. </summary>
@@ -2560,8 +2496,33 @@
             This should account for all item types and styles; just note it's not 100% tested.
             </summary>
         </member>
+        <member name="M:SpiritReforged.Common.Visuals.Graphics.RequestPath(System.String)">
+            <summary>Requests the asset path of <paramref name="name"/> inside of the <b>local</b> namespace.<para/>
+            Should only be used to initialize static fields or one-time asset caching. Prefer <see cref="M:SpiritReforged.Common.Visuals.Graphics.Path(System.String)"/> if the required path is inside a namespace other than the one calling this method. </summary>
+        </member>
+        <member name="M:SpiritReforged.Common.Visuals.Graphics.Request``1(System.String,ReLogic.Content.AssetRequestMode)">
+            <summary>Requests the asset of <paramref name="name"/> inside of the <b>local</b> namespace.<para/>
+            Should only be used to initialize static fields or one-time asset caching. Prefer <see cref="M:SpiritReforged.Common.Visuals.Graphics.Path(System.String)"/> if the required path is inside a namespace other than the one calling this method. </summary>
+        </member>
+        <member name="M:SpiritReforged.Common.Visuals.Graphics.Path(System.String)">
+            <summary>Converts the provided namespace to file path syntax.</summary>
+        </member>
         <member name="P:SpiritReforged.Common.Visuals.IDrawPixelated.DrawingPixelated">
             <summary> Whether pixelated effects are currently being drawn via <see cref="M:SpiritReforged.Common.Visuals.IDrawPixelated.DrawPixelated(Microsoft.Xna.Framework.Graphics.SpriteBatch)"/>. </summary>
+        </member>
+        <member name="T:SpiritReforged.Common.Visuals.Particle">
+            <summary> Provides alternative utilities over <see cref="T:Terraria.Graphics.Renderers.ABasicParticle"/>.<para/>
+            See <see cref="T:SpiritReforged.Common.Visuals.ParticleRenderers"/> for more info. </summary>
+        </member>
+        <member name="M:SpiritReforged.Common.Visuals.Particle.Update(Terraria.Graphics.Renderers.ParticleRendererSettings@)">
+            <summary> This particle's basic behaviour. By default, updates position by velocity and expires over time. </summary>
+            <param name="settings"></param>
+        </member>
+        <member name="M:SpiritReforged.Common.Visuals.ParticleRenderers.DrawParticles(Microsoft.Xna.Framework.Graphics.SpriteBatch,Terraria.Graphics.Renderers.ParticleRenderer,System.Boolean)">
+            <summary> Draws all particles within the given <paramref name="renderer"/> then calls <see cref="E:SpiritReforged.Common.Visuals.ParticleRenderers.OnDrawParticles"/>. </summary>
+            <param name="spriteBatch"></param>
+            <param name="renderer"></param>
+            <param name="uiLayer"></param>
         </member>
         <member name="P:SpiritReforged.Common.Visuals.Reflections.Enabled">
             <summary> Whether reflection detail is high enough to calculate. </summary>
@@ -3238,6 +3199,15 @@
         <member name="M:SpiritReforged.Common.WorldGeneration.Micropasses.Passes.FishingAreaMicropass.AvoidsMicrobiomes(Terraria.DataStructures.Point16)">
             <summary> Checks whether this structure intersects a marble or granite minibiome. </summary>
         </member>
+        <member name="T:SpiritReforged.Common.WorldGeneration.Micropasses.Passes.GraveyardMicropass.MausoleumTilePalette">
+            <summary> Used to conveniently store mausoleum structure tile types between static methods. </summary>
+        </member>
+        <member name="F:SpiritReforged.Common.WorldGeneration.Micropasses.Passes.GraveyardMicropass.Scale">
+            <summary> The scale of this graveyard, reset after worldgen. </summary>
+        </member>
+        <member name="F:SpiritReforged.Common.WorldGeneration.Micropasses.Passes.GraveyardMicropass.Biome">
+            <summary> The native biome of this graveyard, reset after worldgen. </summary>
+        </member>
         <member name="P:SpiritReforged.Common.WorldGeneration.Micropasses.Passes.NewNeonsMicropass.NeonMossTypes">
             <summary> An array of natural glowing moss types from Spirit and vanilla. </summary>
         </member>
@@ -3866,6 +3836,36 @@
         <member name="T:SpiritReforged.Content.Forest.FairyWhistle.FairyWhistleHeld">
             <summary> Used for controlling <see cref="T:SpiritReforged.Content.Forest.FairyWhistle.FairyWhistle"/> item use visuals. </summary>
         </member>
+        <member name="T:SpiritReforged.Content.Forest.Graveyard.FireflyCloud">
+            <summary> Passively spawns fireflies around graveyard light sources. </summary>
+        </member>
+        <member name="F:SpiritReforged.Content.Forest.Graveyard.PassiveGhost.NPCTracker.queuedByNPC">
+            <summary> Stores town NPC types and whether they are dead. </summary>
+        </member>
+        <member name="M:SpiritReforged.Content.Forest.Graveyard.StonePillar.ChipTile(System.Int32,System.Int32,System.UInt16)">
+            <summary> Applies custom framing, plays audiovisual effects, and syncs the tile if necessary. </summary>
+        </member>
+        <member name="T:SpiritReforged.Content.Forest.Graveyard.UndeadNPC.UndeadDecay">
+            <summary> Handles visuals and sounds for <see cref="T:SpiritReforged.Content.Forest.Graveyard.UndeadNPC"/> death effects. See <see cref="M:SpiritReforged.Content.Forest.Graveyard.UndeadNPC.UndeadDecay.StartEffect(Terraria.NPC)"/> for spawning. </summary>
+        </member>
+        <member name="P:SpiritReforged.Content.Forest.Graveyard.UndeadNPC.UndeadDecay.NPC">
+            <summary> The sample NPC instance corresponding to <see cref="P:SpiritReforged.Content.Forest.Graveyard.UndeadNPC.UndeadDecay.NPCWhoAmI"/>. Should <b>NOT</b> be modified. </summary>
+        </member>
+        <member name="M:SpiritReforged.Content.Forest.Graveyard.UndeadNPC.UndeadDecay.StartIgnite">
+            <summary> Visual and sound effects for burning away. </summary>
+        </member>
+        <member name="M:SpiritReforged.Content.Forest.Graveyard.UndeadNPC.IsUndeadType(System.Int32)">
+            <summary> Checks whether the NPC of the given type is considered "undead". </summary>
+        </member>
+        <member name="M:SpiritReforged.Content.Forest.Graveyard.UndeadNPC.TrackGore(Terraria.On_NPC.orig_HitEffect_HitInfo,Terraria.NPC,Terraria.NPC.HitInfo)">
+            <summary> Tracks on hit gores for removal according to <see cref="M:SpiritReforged.Content.Forest.Graveyard.UndeadNPC.ShouldTrackGore(Terraria.NPC)"/>. </summary>
+        </member>
+        <member name="M:SpiritReforged.Content.Forest.Graveyard.UndeadNPC.StopGore(Terraria.On_Gore.orig_NewGore_IEntitySource_Vector2_Vector2_int_float,Terraria.DataStructures.IEntitySource,Microsoft.Xna.Framework.Vector2,Microsoft.Xna.Framework.Vector2,System.Int32,System.Single)">
+            <summary> Deactivates the spawned gore according to <see cref="M:SpiritReforged.Content.Forest.Graveyard.UndeadNPC.TrackGore(Terraria.On_NPC.orig_HitEffect_HitInfo,Terraria.NPC,Terraria.NPC.HitInfo)"/>. </summary>
+        </member>
+        <member name="M:SpiritReforged.Content.Forest.Graveyard.UndeadNPC.Interaction(Terraria.NPC)">
+            <summary> Returns the index <see cref="F:Terraria.NPC.lastInteraction"/> in singleplayer and <see cref="M:Terraria.NPC.FindClosestPlayer"/> in multiplayer. </summary>
+        </member>
         <member name="M:SpiritReforged.Content.Forest.JinxBow.JinxBowMinion.DoEmpoweredShot(Terraria.NPC)">
             <summary> Handles initial empowered shot visuals and effects. Does <b>NOT</b> set <see cref="P:SpiritReforged.Content.Forest.JinxBow.JinxBowMinion.EmpoweredShotTarget"/>. </summary>
         </member>
@@ -3919,27 +3919,6 @@
         <member name="T:SpiritReforged.Content.Forest.RoguesCrest.BleedTimeData">
             <summary> Syncs <see cref="F:SpiritReforged.Content.Forest.RoguesCrest.OpenWoundsNPC._bleedTime"/>. </summary>
         </member>
-        <member name="T:SpiritReforged.Content.Forest.Safekeeper.UndeadDecay">
-            <summary> Handles visuals and sounds for <see cref="T:SpiritReforged.Content.Forest.Safekeeper.UndeadNPC"/> death effects. See <see cref="M:SpiritReforged.Content.Forest.Safekeeper.UndeadDecay.StartEffect(Terraria.NPC)"/> for spawning. </summary>
-        </member>
-        <member name="P:SpiritReforged.Content.Forest.Safekeeper.UndeadDecay.NPC">
-            <summary> The sample NPC instance corresponding to <see cref="P:SpiritReforged.Content.Forest.Safekeeper.UndeadDecay.NPCWhoAmI"/>. Should <b>NOT</b> be modified. </summary>
-        </member>
-        <member name="M:SpiritReforged.Content.Forest.Safekeeper.UndeadDecay.StartIgnite">
-            <summary> Visual and sound effects for burning away. </summary>
-        </member>
-        <member name="M:SpiritReforged.Content.Forest.Safekeeper.UndeadNPC.IsUndeadType(System.Int32)">
-            <summary> Checks whether the NPC of the given type is considered "undead". </summary>
-        </member>
-        <member name="M:SpiritReforged.Content.Forest.Safekeeper.UndeadNPC.TrackGore(Terraria.On_NPC.orig_HitEffect_HitInfo,Terraria.NPC,Terraria.NPC.HitInfo)">
-            <summary> Tracks on hit gores for removal according to <see cref="M:SpiritReforged.Content.Forest.Safekeeper.UndeadNPC.ShouldTrackGore(Terraria.NPC)"/>. </summary>
-        </member>
-        <member name="M:SpiritReforged.Content.Forest.Safekeeper.UndeadNPC.StopGore(Terraria.On_Gore.orig_NewGore_IEntitySource_Vector2_Vector2_int_float,Terraria.DataStructures.IEntitySource,Microsoft.Xna.Framework.Vector2,Microsoft.Xna.Framework.Vector2,System.Int32,System.Single)">
-            <summary> Deactivates the spawned gore according to <see cref="M:SpiritReforged.Content.Forest.Safekeeper.UndeadNPC.TrackGore(Terraria.On_NPC.orig_HitEffect_HitInfo,Terraria.NPC,Terraria.NPC.HitInfo)"/>. </summary>
-        </member>
-        <member name="M:SpiritReforged.Content.Forest.Safekeeper.UndeadNPC.Interaction(Terraria.NPC)">
-            <summary> Returns the index <see cref="F:Terraria.NPC.lastInteraction"/> in singleplayer and <see cref="M:Terraria.NPC.FindClosestPlayer"/> in multiplayer. </summary>
-        </member>
         <member name="T:SpiritReforged.Content.Forest.Stand.SwordStand.ISwordStandTexture">
             <summary> Indicates that a special texture should be used when placed on a <see cref="T:SpiritReforged.Content.Forest.Stand.SwordStand"/>.<para/>
             This automatically registers a type to <see cref="F:SpiritReforged.Common.SpiritSets.IsSword"/> in <see cref="M:SpiritReforged.Content.Forest.Stand.SwordStand.RegisterIsSword"/>. </summary>
@@ -3954,9 +3933,7 @@
             <summary> Contains all Spirit boss trophies in different styles. </summary>
         </member>
         <member name="T:SpiritReforged.Content.Glyphs.ChromaticWaxShaderDummy">
-            <summary>
-            Empty item used solely to register the appropriate shader.
-            </summary>
+            <summary> Empty item used solely to register the appropriate shader. </summary>
         </member>
         <member name="P:SpiritReforged.Content.Glyphs.ChromaticWax.SpecialColor">
             <summary> A pulsing rainbow color used for visual effects. </summary>
@@ -4182,7 +4159,7 @@
             <summary> Returns whether the provided coordinates are valid for sandy decoration tiles. </summary>
         </member>
         <member name="M:SpiritReforged.Content.Ocean.OceanGeneration.GetOceanSlope(System.Int32)">
-            <summary>Gets the slope of the ocean. Reference: <seealso cref="!:https://www.desmos.com/calculator/xfnsmar79x"/></summary>
+            <summary>Gets the slope of the ocean. Reference: https://www.desmos.com/calculator/xfnsmar79x </summary>
             <param name="tilesFromInnerEdge"></param>
         </member>
         <member name="P:SpiritReforged.Content.Ocean.OceanPlayer.ZoneDeepOcean">
@@ -4207,23 +4184,13 @@
             Sets the given tile's frame Y based on the conditions around it.
             </summary>
         </member>
-        <member name="T:SpiritReforged.Content.Particles.SmokeTargetSystem">
-            <summary>
-            Renders a composite smoke
-            Partially referenced from https://github.com/IbanPlay/FablesRelease/blob/c83ceb82fdf976226619b11ab34f5834b66f3c09/Particles/BlendedSmoke.cs#L119
-            </summary>
+        <member name="T:SpiritReforged.Content.Particles.CompositeRenderer">
+            <summary> Renders a composite smoke effect<br/>
+            Partially referenced from https://github.com/IbanPlay/FablesRelease/blob/c83ceb82fdf976226619b11ab34f5834b66f3c09/Particles/BlendedSmoke.cs#L119 </summary>
         </member>
-        <member name="M:SpiritReforged.Content.Particles.SmokeTargetSystem.DrawCompositeSmoke(System.Int32,System.Boolean)">
-            <summary>
-            Draws the composite smoke with the Y frame dependent on the layer
-            Called in ParticleDetours.cs
-            </summary>
-            <param name="frameY">0-8, corresponds to each layer of ParticleLayer</param>
-        </member>
-        <member name="T:SpiritReforged.Content.Particles.AttachedCompositeSmoke">
-            <summary>
-            Can be attached to an entity
-            </summary>
+        <member name="M:SpiritReforged.Content.Particles.CompositeRenderer.DrawComposite(Terraria.Graphics.Renderers.ParticleRenderer)">
+            <summary> Draws the composite smoke with the Y frame dependent on the layer. <br/>
+            Called in ParticleDetours. </summary>
         </member>
         <member name="P:SpiritReforged.Content.Particles.ImpactLine.NoLight">
             <summary> Whether this particle should actually emit light. </summary>
@@ -4354,6 +4321,12 @@
         </member>
         <member name="M:SpiritReforged.Content.SaltFlats.SaltFlatsEcotone.ConvertPot(System.Int32,System.Int32,System.UInt16,System.Int32)">
             <summary> Converts pots placed atop dull salt into stone stupas. </summary>
+        </member>
+        <member name="M:SpiritReforged.Content.SaltFlats.SaltFlatsEcotone.CreateRoof(Microsoft.Xna.Framework.Rectangle,System.Int32,System.Int32)">
+            <summary> Creates a peaked roof based on <paramref name="length"/>. </summary>
+            <param name="bounds"> The total bounds the roof encompasses. </param>
+            <param name="thickness"> The vertical thickness of the roof. </param>
+            <param name="length"> The flat outer length of the roof. </param>
         </member>
         <member name="T:SpiritReforged.Content.SaltFlats.Tiles.CalmingBell.BellUseData">
             <summary> Used to sync <see cref="T:SpiritReforged.Content.SaltFlats.Tiles.CalmingBell"/> use effects by client-side methods. Should only be recieved by multiplayer clients. </summary>
@@ -4710,7 +4683,7 @@
             <summary> A collection of walls associated with the natural biome. </summary>
         </member>
         <member name="F:SpiritReforged.Content.Ziggurat.Biome.ZigguratBiome.TileTypes">
-            <summary> A collection of tiles associated with the natural biome. Used only for <see cref="!:Common.WorldGeneration.QuickConversion."/> </summary>
+            <summary> A collection of tiles associated with the natural biome. Used only for <see cref="M:SpiritReforged.Common.WorldGeneration.QuickConversion.FindConversionBiome(Terraria.DataStructures.Point16,Terraria.DataStructures.Point16,System.Collections.Generic.Dictionary{SpiritReforged.Common.WorldGeneration.QuickConversion.BiomeType,System.Single})"/> </summary>
         </member>
         <member name="P:SpiritReforged.Content.Ziggurat.NPCs.Robber.Graverobber.Counter">
             <summary> Used to change behaviour at intervals. </summary>
@@ -4723,6 +4696,15 @@
         </member>
         <member name="P:SpiritReforged.Content.Ziggurat.NPCs.Robber.Graverobber.EndFrame">
             <summary> The end frame of the NPC animation mod 3. </summary>
+        </member>
+        <member name="M:SpiritReforged.Content.Ziggurat.NPCs.SpookyMummy.SpookyMummyNPC.SpookyMummyHitEffect(Terraria.NPC,Terraria.NPC.HitInfo,System.Single,System.Single)">
+            <summary>
+            Helper method to spawn dust for the Spooky Mummy and children
+            </summary>
+            <param name="NPC">the NPC</param>
+            <param name="hit">the <see cref="T:Terraria.NPC.HitInfo"/></param>
+            <param name="scale">the scale multiplier of the dust</param>
+            <param name="strength">the strength multiplier of loops (iterations) and velocity</param>
         </member>
         <member name="M:SpiritReforged.Content.Ziggurat.Tiles.Chains.ChainLoop.CreateObject(Terraria.DataStructures.Point16,System.Byte)">
             <summary> Finds a <see cref="T:SpiritReforged.Content.Ziggurat.Tiles.Chains.ChainObject"/> to be associated with this tile. </summary>
@@ -4902,22 +4884,22 @@
         </member>
         <member name="F:ThisAssembly.Git.Commit">
             <summary>
-            843123a5
+            576d8c9d
             </summary>
         </member>
         <member name="F:ThisAssembly.Git.Sha">
             <summary>
-            843123a5dd2592d7d0a5e55333d51e36547590b4
+            576d8c9db5d21e42e4a6c32e54bd8909d8234fb0
             </summary>
         </member>
         <member name="F:ThisAssembly.Git.CommitDate">
             <summary>
-            2026-10-11T15:04:26-05:00
+            2026-10-18T00:23:53-05:00
             </summary>
         </member>
         <member name="F:ThisAssembly.Git.Commits">
             <summary>
-            4967
+            5046
             </summary>
         </member>
         <member name="F:ThisAssembly.Git.Tag">
@@ -4988,7 +4970,7 @@
         </member>
         <member name="F:ThisAssembly.Git.SemVer.Patch">
             <summary>
-            4967
+            5046
             </summary>
         </member>
         <member name="F:ThisAssembly.Git.SemVer.Label">

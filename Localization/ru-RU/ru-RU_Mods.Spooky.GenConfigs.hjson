@@ -128,6 +128,11 @@ Pages: {
 				// DisplayName: "[i:275] Shelf Coral Big Chance"
 				// Tooltip: The chance for big shelf coral ambient tiles to be placed.
 			}
+
+			OverSpawn: {
+				// DisplayName: OverSpawn
+				// Tooltip: OverSpawn
+			}
 		}
 	}
 }

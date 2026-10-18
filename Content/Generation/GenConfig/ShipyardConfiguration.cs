@@ -2,6 +2,9 @@
 
 public class ShipyardConfiguration
 {
+	[BindToGenConfig(true, false, true, false, false, false)]
+	public static bool OverSpawn { get; set; } = true;
+
 	[BindToGenConfig(1, 20, 1, true, true, true)]
 	public static int CaveWaterChance { get; set; } = 2;
 

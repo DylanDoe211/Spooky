@@ -17,6 +17,7 @@ using Spooky.Content.Tiles.SpookyBiome;
 
 using SpiritReforged.Common.WorldGeneration.Ecotones;
 using Spooky.Content.Generation.GenConfig;
+using SpiritReforged.Common.ModCompat.EcotoneMapper;
 
 namespace Spooky.Content.Generation
 {
@@ -41,7 +42,7 @@ namespace Spooky.Content.Generation
 
 		private static bool IsEvilBiomeWall(int wall) => WallID.Sets.Corrupt[wall] || WallID.Sets.Crimson[wall];
 
-		private static void GenerateShipyard(GenerationProgress progress, (int, int) bounds)
+		private static void GenerateShipyard(GenerationProgress progress, (int, int) bounds, bool manualEcotone = false)
 		{
 			progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.Shipyard").Value;
 
@@ -54,36 +55,30 @@ namespace Spooky.Content.Generation
 
 			bool OceanOnLeft = ((leftBound + rightBound) / 2) < (Main.maxTilesY / 2);
 
-			if (OceanOnLeft)
+			// Mapped ecotones would break if they set the edge, this stops that lol
+			if (!manualEcotone)
 			{
-				leftBound = WorldGen.beachDistance - 40;
-			}
-			else
-			{
-				rightBound = Main.maxTilesX - (WorldGen.beachDistance - 40);
+				if (OceanOnLeft)
+					leftBound = WorldGen.beachDistance - 40;
+				else
+					rightBound = Main.maxTilesX - (WorldGen.beachDistance - 40);
 			}
 
 			int LeftY = (int)SpookyWorldMethods.WorldSurfaceHeightLimit;
             int RightY = (int)SpookyWorldMethods.WorldSurfaceHeightLimit;
 
 			//when the ocean is on the left side of the world, use the left bound and keep going left until a sand tile on the ground is found
-			if (OceanOnLeft)
+			if (OceanOnLeft || manualEcotone)
 			{
-				bool foundSurfaceLeft = false;
 				int attemptsLeft = 0;
 
 				//get the two surface points, with one being at the ocean and the other just an edge of the cemetery
-				while (!foundSurfaceLeft && attemptsLeft++ < 100000)
+				while (attemptsLeft++ < 100000)
 				{
 					if (WorldGen.SolidTile(leftBound, LeftY) || LeftY > Main.worldSurface)
-					{
-						foundSurfaceLeft = true;
 						break;
-					}
-					else
-					{
-						LeftY++;
-					}
+				
+					LeftY++;
 				}
 			}
 			//otherwise just grab the edge of the cemetery
@@ -94,22 +89,16 @@ namespace Spooky.Content.Generation
 			}
 			
 			//when the ocean is on the right side of the world, use the right bound and keep going right until a sand tile on the ground is found
-			if (!OceanOnLeft)
+			if (!OceanOnLeft || manualEcotone)
 			{
-				bool foundSurfaceRight = false;
 				int attemptsRight = 0;
 
-				while (!foundSurfaceRight && attemptsRight++ < 100000)
+				while (attemptsRight++ < 100000)
 				{
 					if (WorldGen.SolidTile(rightBound, RightY) || RightY > Main.worldSurface)
-					{
-						foundSurfaceRight = true;
 						break;
-					}
-					else
-					{
-						RightY++;
-					}
+					
+					RightY++;
 				}
 			}
 			//otherwise just grab the edge of the cemetery
@@ -838,14 +827,26 @@ namespace Spooky.Content.Generation
 			Liquid.quickSettle = false;
 		}
 
-		private static bool CanGenerate(out (int, int) bounds)
+		private static bool CanGenerate(out (int, int) bounds, out bool forced)
 		{
+			const int offX = EcotoneSurfaceMapping.TransitionLength + 2; //Removes forest patches on the left side
+
+			forced = false;
 			bounds = (0, 0);
 
+			if (ShipyardConfiguration.OverSpawn)
+			{
+				if (EcotoneSurfaceMapping.FindWhere(EcotoneSurfaceMapping.OverSpawn) is EcotoneSurfaceMapping.EcotoneEntry entry)
+				{
+					bounds = (entry.Start.X - offX, entry.End.X);
+					forced = true;
+					return true;
+				}
+			}
 			//shipyard ecotone should only generate if surrounded by the cemetery and the ocean
-			if (EcotoneSurfaceMapping.FindWhere(x => x.SurroundedBy("Ocean", "Cemetery") &&
-			EcotoneSurfaceMapping.OnSurface(x), false) is EcotoneSurfaceMapping.EcotoneEntry entry &&
-			!entry.Definition.Ecotone)
+			else if (EcotoneSurfaceMapping.FindWhere(x => x.SurroundedBy("Ocean", "Cemetery") &&
+				EcotoneSurfaceMapping.OnSurface(x), false) is EcotoneSurfaceMapping.EcotoneEntry entry &&
+				!entry.Definition.Ecotone)
 			{
 				bounds = (entry.Start.X, entry.End.X);
 				return true;
@@ -1023,12 +1024,20 @@ namespace Spooky.Content.Generation
 
 		private static void Generation(GenerationProgress progress, GameConfiguration configuration)
 		{
-			if (!CanGenerate(out var bounds))
+			if (EcotoneMapperHooks.AnyForced<ShipyardEcotone>())
 			{
+				const int offX = EcotoneSurfaceMapping.TransitionLength + 1;
+
+				foreach (EcotoneMapperHooks.EcotoneEntryPair pair in EcotoneMapperHooks.ForcedEcotones.Values)
+					GenerateShipyard(progress, (pair.Entry.Start.X - offX, pair.Entry.End.X), true);
+
 				return;
 			}
 
-			GenerateShipyard(progress, bounds);
+			if (!CanGenerate(out var bounds, out bool forced))
+				return;
+
+			GenerateShipyard(progress, bounds, forced);
 		}
 	}	
 }

@@ -1,4 +1,4 @@
-﻿Pages: {
+Pages: {
 	Shipyard: {
 		Name: Shipyard
 		Description: Controls aspects of the Shipyard ecotone's generation.
@@ -127,6 +127,11 @@
 			ShelfCoralBigChance: {
 				DisplayName: "[i:275] Shelf Coral Big Chance"
 				Tooltip: The chance for big shelf coral ambient tiles to be placed.
+			}
+
+			OverSpawn: {
+				DisplayName: "[i:50] Over Spawn"
+				Tooltip: Whether the shipyard should generate over spawn.
 			}
 		}
 	}
