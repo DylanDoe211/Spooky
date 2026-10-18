@@ -23,6 +23,7 @@ namespace Spooky.Content.NPCs.Shipyard
         public int SaveDirection = 0;
 
         private static Asset<Texture2D> ShellTexture;
+        private static Asset<Texture2D> NPCNoShellTexture;
         private static Asset<Texture2D> NPCTexture;
 
 		public override void SetStaticDefaults()
@@ -87,6 +88,7 @@ namespace Spooky.Content.NPCs.Shipyard
         {
             //draw aura
             NPCTexture ??= ModContent.Request<Texture2D>(Texture);
+            NPCNoShellTexture ??= ModContent.Request<Texture2D>(Texture + "NoShell");
             ShellTexture ??= ModContent.Request<Texture2D>(Texture + "Shell");
 
             var effects = NPC.spriteDirection == -1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
@@ -104,7 +106,7 @@ namespace Spooky.Content.NPCs.Shipyard
                         _ => new(-2, 0)
                     };
 
-                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCTexture.Value, Color.White), NPC.Center + offset - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, 
+                    Main.EntitySpriteDraw(DrawUtils.ColorSolid(NPCNoShellTexture.Value, Color.White), NPC.Center + offset - screenPos + new Vector2(0, NPC.gfxOffY + 4), NPC.frame, 
                     NPC.GetAlpha(Color.Tan * 0.65f), NPC.rotation, NPC.frame.Size() / 2, NPC.scale, effects, 0f);
                 }
             }

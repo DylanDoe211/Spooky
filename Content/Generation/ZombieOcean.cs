@@ -111,17 +111,6 @@ namespace Spooky.Content.Generation
 				}
 				if (WorldGen.SolidTile(TunnelX, TunnelY))
 				{
-					//do not allow shell piles to be selected, if it is then just use regular sand
-					if (Main.tile[TunnelX, TunnelY].TileType == TileID.ShellPile)
-					{
-						SurfaceTileType = TileID.Sand;
-					}
-					//otherwise save the tile type at the surface for the sake of mod compatibility (mostly for calamity sulphur sea)
-					else
-					{
-						SurfaceTileType = TileID.Sand; //Main.tile[TunnelX, TunnelY].TileType;
-					}
-
 					FoundSurface = true;
 				}
 			}
@@ -139,13 +128,13 @@ namespace Spooky.Content.Generation
 						{
 							if (WorldGen.SolidTile(i, j) || tile.WallType > 0)
 							{
-								tile.TileType = (ushort)SurfaceTileType;
+								tile.TileType = TileID.Sand;
 								tile.HasTile = true;
 							}
 						}
 						else
 						{
-							tile.TileType = (ushort)SurfaceTileType;
+							tile.TileType = TileID.Sand;
 							tile.HasTile = true;
 						}
 					}

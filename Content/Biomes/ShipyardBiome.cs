@@ -85,9 +85,10 @@ namespace Spooky.Content.Biomes
         {
             player.ManageSpecialBiomeVisuals("Spooky:ShipyardSky", isActive, player.Center);
 
-            if (!Main.raining)
+            if (isActive)
             {
-                if (isActive)
+                //if it is not raining, increase cloudalpha to begin rain with a certain threshold
+                if (!Main.raining)
                 {
                     Main.cloudAlpha += 0.005f;
                     if (Main.cloudAlpha >= 0.4f)
@@ -95,12 +96,13 @@ namespace Spooky.Content.Biomes
                         Main.cloudAlpha = 0.4f;
                     }
                 }
-            }
-            else
-            {
-                if (Main.cloudAlpha < 0.45f)
+                //if it is raining, and the cloudalpha is less than the default threshold, keep it there while in the biome
+                else
                 {
-                    Main.cloudAlpha += 0.005f;
+                    if (Main.cloudAlpha < 0.45f)
+                    {
+                        Main.cloudAlpha += 0.005f;
+                    }
                 }
             }
         }

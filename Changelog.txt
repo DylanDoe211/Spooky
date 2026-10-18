@@ -10,7 +10,8 @@ New Biome, Boggy Shipyard:
 A FEW THINGS TO NOTE ABOUT THE NEW BIOME:
 -It is not a regular biome, but a spirit reforged ecotone which means the following
 -You MUST have spirit reforged enabled with spooky mod for the biome to generate, otherwise it will never spawn during worldgen
--It is NOT guaranteed to generate in your world as spirit reforged ecotones are intentionally not guaranteed, you may need to create a few worlds to find one
+-It is NOT guaranteed to generate normally in your world as spirit reforged ecotones are intentionally not guaranteed, you may need to create a few worlds to find one
+-However, you can use spirit reforged's ecotone mapper to place a shipyard anywhere you'd like if you want one in your world
 -The size of the biome varies HEAVILY, sometimes you may get a big one, and sometimes you may get a really tiny one
 -All of the blocks in this biome are obtainable even without spirit reforged enabled, so you may build an artificial one through normal spooky mod gameplay
 (You can obtain the blocks and tree saplings from shipyard rotten crates, which can be created by throwing bone crates into shimmer)

@@ -34,6 +34,7 @@ namespace Spooky.Content.Items.Shipyard
 				{
 					player.ApplyItemTime(Item);
 				}
+				
 				player.GetModPlayer<SpookyPlayer>().CursedConchTeleporting = true;
 			}
 		}

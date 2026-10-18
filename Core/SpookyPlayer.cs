@@ -760,9 +760,8 @@ namespace Spooky.Core
 
 				//first, do a wall check to not teleport the player into walls that should not be teleported into
 				Tile tile = Main.tile[tileX, tileY];
-				if ((Main.tile[tileX, tileY].WallType == WallID.LihzahrdBrickUnsafe && (double)tileY > Main.worldSurface && !NPC.downedPlantBoss) ||
-				(Main.wallDungeon[Main.tile[tileX, tileY].WallType] && (double)tileY > Main.worldSurface && !NPC.downedBoss3) ||
-				!WallLoader.CanBeTeleportedTo(tileX, tileY, Main.tile[tileX, tileY].WallType, player, default))
+				if ((tile.WallType == WallID.LihzahrdBrickUnsafe && !NPC.downedPlantBoss) || (Main.wallDungeon[tile.WallType] && !NPC.downedBoss3) ||
+				!WallLoader.CanBeTeleportedTo(tileX, tileY, tile.WallType, player, default))
 				{
 					continue;
 				}

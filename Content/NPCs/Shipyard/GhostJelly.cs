@@ -111,6 +111,11 @@ namespace Spooky.Content.NPCs.Shipyard
             }
 		}
 
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
+        {
+            target.AddBuff(BuffID.Venom, 120);
+        }
+
         public override void AI()
         {
             NPC.spriteDirection = NPC.direction = NPC.velocity.X < 0 ? -1 : 1;

@@ -32,7 +32,7 @@ namespace Spooky.Content.NPCs.Shipyard
             NPCID.Sets.NPCBestiaryDrawOffset[NPC.type] = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
                 CustomTexturePath = "Spooky/Content/NPCs/NPCDisplayTextures/TrumpetfishBestiary",
-                Position = new Vector2(-20f, 35f),
+                Position = new Vector2(0f, 35f),
                 PortraitPositionXOverride = 0f,
                 PortraitPositionYOverride = 20f
             };

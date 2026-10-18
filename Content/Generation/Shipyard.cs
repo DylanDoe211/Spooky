@@ -59,24 +59,29 @@ namespace Spooky.Content.Generation
 			if (!manualEcotone)
 			{
 				if (OceanOnLeft)
+				{
 					leftBound = WorldGen.beachDistance - 40;
+				}
 				else
+				{
 					rightBound = Main.maxTilesX - (WorldGen.beachDistance - 40);
+				}
 			}
 
 			int LeftY = (int)SpookyWorldMethods.WorldSurfaceHeightLimit;
             int RightY = (int)SpookyWorldMethods.WorldSurfaceHeightLimit;
 
-			//when the ocean is on the left side of the world, use the left bound and keep going left until a sand tile on the ground is found
+			//when the ocean is on the left side of the world, use the left bound and keep going left until a tile on the ground is found
 			if (OceanOnLeft || manualEcotone)
 			{
 				int attemptsLeft = 0;
 
-				//get the two surface points, with one being at the ocean and the other just an edge of the cemetery
 				while (attemptsLeft++ < 100000)
 				{
 					if (WorldGen.SolidTile(leftBound, LeftY) || LeftY > Main.worldSurface)
+					{
 						break;
+					}
 				
 					LeftY++;
 				}
@@ -88,7 +93,7 @@ namespace Spooky.Content.Generation
 				LeftY = Cemetery.RightY;
 			}
 			
-			//when the ocean is on the right side of the world, use the right bound and keep going right until a sand tile on the ground is found
+			//when the ocean is on the right side of the world, use the right bound and keep going right until a tile on the ground is found
 			if (!OceanOnLeft || manualEcotone)
 			{
 				int attemptsRight = 0;
@@ -96,7 +101,9 @@ namespace Spooky.Content.Generation
 				while (attemptsRight++ < 100000)
 				{
 					if (WorldGen.SolidTile(rightBound, RightY) || RightY > Main.worldSurface)
+					{
 						break;
+					}
 					
 					RightY++;
 				}
@@ -128,47 +135,66 @@ namespace Spooky.Content.Generation
 			Vector2 Start2 = !OceanOnLeft ? new Vector2(leftBound, (int)Main.worldSurface) : new Vector2(leftBound, LeftY);
 			Vector2 End2 = !OceanOnLeft ? new Vector2(rightBound, RightY) : new Vector2(rightBound, (int)Main.worldSurface);
 
+			if (manualEcotone)
+			{
+				int ManualLeftY = LeftY + 50;
+				if (LeftY + 50 > (int)Main.worldSurface)
+				{
+					ManualLeftY = (int)Main.worldSurface;
+				}
+
+				int ManualRightY = RightY + 50;
+				if (RightY + 50 > (int)Main.worldSurface)
+				{
+					ManualRightY = (int)Main.worldSurface;
+				}
+
+				Start2 = new Vector2(leftBound, ManualLeftY);
+				End2 = new Vector2(rightBound, ManualRightY);
+			}
+
 			Vector2 p4 = End2;
 			Vector2 p5 = Start2;
 
-			//place dirt
-			for (int i = 0; i < segments; i++)
+			if (!manualEcotone)
 			{
-				float t = i / (float)segments;
-				Vector2 Position = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
-				t = (i + 1) / (float)segments;
-
-				float u = i / (float)segments;
-				Vector2 BottomPos = BezierCurveUtil.CalculateBezierPoint(u, p4, p4, p5, p5);
-				u = (i + 1) / (float)segments;
-
 				//create dirt blocks below so that any terrain below the biome is filled in
-				for (int X = (int)Position.X - 15; X <= (int)Position.X + 15; X++)
+				for (int i = 0; i < segments; i++)
 				{
-					int BottomEndPos = ((int)BottomPos.Y + 50) >= (int)Main.worldSurface ? (int)Main.worldSurface : (int)BottomPos.Y + 50;
-					for (int Y = (int)BottomPos.Y + 5; Y <= BottomEndPos; Y++)
-					{
-						Tile tile = Main.tile[X, Y];
+					float t = i / (float)segments;
+					Vector2 Position = BezierCurveUtil.CalculateBezierPoint(t, p0, p1, p2, p3);
+					t = (i + 1) / (float)segments;
 
-						if (!IsEvilBiomeWall(Main.tile[X, Y].WallType) && Main.tile[X, Y].TileType != TileID.Sand)
+					float u = i / (float)segments;
+					Vector2 BottomPos = BezierCurveUtil.CalculateBezierPoint(u, p4, p4, p5, p5);
+					u = (i + 1) / (float)segments;
+
+					for (int X = (int)Position.X - 15; X <= (int)Position.X + 15; X++)
+					{
+						int BottomEndPos = ((int)BottomPos.Y + 50) >= (int)Main.worldSurface ? (int)Main.worldSurface : (int)BottomPos.Y + 50;
+						for (int Y = (int)BottomPos.Y + 5; Y <= BottomEndPos; Y++)
 						{
-							//destroy any non-solid tiles
-							if (!WorldGen.SolidTile(X, Y) && Main.tile[X, Y - 1].HasTile && Main.tile[X, Y - 2].HasTile && Main.tile[X, Y - 3].HasTile &&
-							Main.tile[X, Y].TileType != ModContent.TileType<BlackSand>() && Main.tile[X, Y].WallType != ModContent.WallType<BlackSandWall>())
+							Tile tile = Main.tile[X, Y];
+
+							if (!IsEvilBiomeWall(tile.WallType) && !Main.tileDungeon[tile.TileType] && !Main.wallDungeon[tile.WallType] && !InOcean(X))
 							{
-								tile.HasTile = true;
-								tile.TileType = TileID.Dirt;
-							}
-							//replace empty space with dirt
-							if (Main.tile[X, Y].WallType == WallID.None)
-							{
-								tile.HasTile = true;
-								tile.TileType = TileID.Dirt;
+								//place dirt on any non-solid tiles
+								if (!WorldGen.SolidTile(X, Y) && Main.tile[X, Y - 1].HasTile && Main.tile[X, Y - 2].HasTile && Main.tile[X, Y - 3].HasTile)
+								{
+									tile.HasTile = true;
+									tile.TileType = TileID.Dirt;
+								}
+								//replace empty space with dirt
+								if (tile.WallType == WallID.None)
+								{
+									tile.HasTile = true;
+									tile.TileType = TileID.Dirt;
+								}
 							}
 						}
 					}
 				}
-			}	
+			}
 
 			//place terrain
 			for (int i = 0; i < segments; i++)
@@ -181,13 +207,13 @@ namespace Spooky.Content.Generation
 				Vector2 BottomPos = BezierCurveUtil.CalculateBezierPoint(u, p4, p4, p5, p5);
 				u = (i + 1) / (float)segments;
 
-				//place tiles below the line to create surface, and use noise to place clusters of black sandstone in the sand
+				//place tiles below the line to create surface
 				for (int Y = (int)Position.Y; Y <= (int)BottomPos.Y; Y++)
 				{
-					if (!InOcean((int)Position.X))
-					{
-						Tile tile = Main.tile[(int)Position.X, Y];
+					Tile tile = Main.tile[(int)Position.X, Y];
 
+					if (!InOcean((int)Position.X) && !Main.tileDungeon[tile.TileType] && !Main.wallDungeon[tile.WallType])
+					{
 						tile.HasTile = true;
 						tile.TileType = (ushort)ModContent.TileType<BlackSand>();
 						tile.WallType = (ushort)ModContent.WallType<BlackSandWall>();
@@ -195,16 +221,15 @@ namespace Spooky.Content.Generation
 				}
 
 				//create dithering on the edges of the biome
-				for (int X = (int)Position.X - 15; X <= (int)Position.X + 15; X++)
+				for (int X = (int)Position.X - 10; X <= (int)Position.X + 10; X++)
 				{
 					for (int Y = (int)Position.Y; Y <= (int)BottomPos.Y + 10; Y++)
 					{
-						if (WorldGen.genRand.NextBool(10) && !InOcean(X))
+						if (WorldGen.genRand.NextBool(10) && ((X <= Position.X || X >= Position.X) || Y >= BottomPos.Y))
 						{
-							if (WorldGen.SolidTile(X, Y) && Main.tile[X, Y].TileType != TileID.Sand && Main.tile[X, Y].TileType != ModContent.TileType<BlackSand>())
+							Tile tile = Main.tile[X, Y];
+							if (WorldGen.SolidTile(X, Y) && !Main.tileDungeon[tile.TileType] && !Main.wallDungeon[tile.WallType])
 							{
-								Tile tile = Main.tile[X, Y];
-
 								tile.HasTile = true;
 								tile.TileType = (ushort)ModContent.TileType<BlackSand>();
 								tile.WallType = (ushort)ModContent.WallType<BlackSandWall>();
@@ -216,7 +241,12 @@ namespace Spooky.Content.Generation
 				//clear all tiles above the surface line
 				for (int Y = (int)SpookyWorldMethods.WorldSurfaceHeightLimit; Y < (int)Position.Y; Y++)
 				{
-					Main.tile[(int)Position.X, Y].ClearEverything();
+					Tile tile = Main.tile[(int)Position.X, Y];
+
+					if (!Main.tileDungeon[tile.TileType] && !Main.wallDungeon[tile.WallType])
+					{
+						Main.tile[(int)Position.X, Y].ClearEverything();
+					}
 				}
 			}
 
@@ -231,27 +261,31 @@ namespace Spooky.Content.Generation
 				Vector2 BottomPos = BezierCurveUtil.CalculateBezierPoint(u, p4, p4, p5, p5);
 				u = (i + 1) / (float)segments;
 
+				/*
 				//convert any evil blocks/walls into black sandstone
 				for (int Y = (int)Position.Y - 10; Y <= (int)BottomPos.Y + 10; Y++)
 				{
+					Tile tile = Main.tile[(int)Position.X, Y];
+
 					if (!InOcean((int)Position.X))
 					{
-						if (Main.tile[(int)Position.X, Y].TileType == TileID.Ebonstone || Main.tile[(int)Position.X, Y].TileType == TileID.Crimstone)
+						if (tile.TileType == TileID.Ebonstone || tile.TileType == TileID.Crimstone)
 						{
-							Main.tile[(int)Position.X, Y].TileType = (ushort)ModContent.TileType<BlackSandstone>();
+							tile.TileType = (ushort)ModContent.TileType<BlackSandstone>();
 						}
 
-						if (Main.tile[(int)Position.X, Y].TileType != TileID.Ebonstone && Main.tile[(int)Position.X, Y].TileType != TileID.Crimstone)
+						if (tile.TileType != TileID.Ebonstone && tile.TileType != TileID.Crimstone && !Main.wallDungeon[tile.WallType])
 						{
-							Main.tile[(int)Position.X, Y].WallType = (ushort)ModContent.WallType<BlackSandstoneWall>();
+							tile.WallType = (ushort)ModContent.WallType<BlackSandstoneWall>();
 						}
 					}
 				}
+				*/
 
 				for (int Y = (int)Position.Y - 10; Y <= (int)Position.Y + 12; Y++)
 				{
 					//kill walls not surrounded by enough tiles
-					if (ShouldDestroyWall((int)Position.X, Y, 2))
+					if (ShouldDestroyWall((int)Position.X, Y, 2) && !Main.wallDungeon[Main.tile[(int)Position.X, Y].WallType])
 					{
 						WorldGen.KillWall((int)Position.X, Y);
 					}
@@ -267,7 +301,7 @@ namespace Spooky.Content.Generation
 
 			for (int X = leftBound - 10; X <= rightBound + 10; X++)
 			{
-				for (int Y = 10; Y <= Main.worldSurface; Y++)
+				for (int Y = 10; Y <= Main.maxTilesY - 200; Y++)
 				{
 					if (WorldGen.InWorld(X, Y, 5))
 					{
@@ -845,8 +879,8 @@ namespace Spooky.Content.Generation
 			}
 			//shipyard ecotone should only generate if surrounded by the cemetery and the ocean
 			else if (EcotoneSurfaceMapping.FindWhere(x => x.SurroundedBy("Ocean", "Cemetery") &&
-				EcotoneSurfaceMapping.OnSurface(x), false) is EcotoneSurfaceMapping.EcotoneEntry entry &&
-				!entry.Definition.Ecotone)
+			EcotoneSurfaceMapping.OnSurface(x), false) is EcotoneSurfaceMapping.EcotoneEntry entry &&
+			!entry.Definition.Ecotone)
 			{
 				bounds = (entry.Start.X, entry.End.X);
 				return true;
