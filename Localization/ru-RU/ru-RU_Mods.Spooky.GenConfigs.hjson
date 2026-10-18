@@ -130,8 +130,8 @@ Pages: {
 			}
 
 			OverSpawn: {
-				// DisplayName: OverSpawn
-				// Tooltip: OverSpawn
+				// DisplayName: "[i:50] Over Spawn"
+				// Tooltip: Whether the shipyard should generate over spawn.
 			}
 		}
 	}
