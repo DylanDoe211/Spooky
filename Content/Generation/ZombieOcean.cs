@@ -141,7 +141,7 @@ namespace Spooky.Content.Generation
 				}
 			}
 
-			PlaceDepthsOval(StartPositionX, StartPositionY, SurfaceTileType, 0, (SizeXInt + 3) * 5, (SizeYInt + 3) * 3, 1f, false, false);
+			PlaceDepthsOval(StartPositionX, StartPositionY, TileID.Sand, 0, (SizeXInt + 3) * 5, (SizeYInt + 3) * 3, 1f, false, false);
 			PlaceDepthsOval(StartPositionX, StartPositionY, ModContent.TileType<OceanSand>(), ModContent.WallType<OceanSandWall>(), SizeXInt * 5, SizeYInt * 3, 1f, true, false);
 			PlaceDepthsCaves(progress, StartPositionX, StartPositionY, SizeXInt * 5, SizeYInt * 3);
 			DigOutTunnels(StartPositionX, StartPositionY, SizeX, SizeY);
