@@ -1,19 +1,18 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.GameContent;
-using Terraria.UI.Chat;
-using Terraria.Localization;
-using Terraria.Audio;
-using ReLogic.Content;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Spooky.Core;
+using ReLogic.Content;
 using Spooky.Content.Items.BossSummon;
 using Spooky.Content.Items.Quest;
+using Spooky.Core;
 using System;
 using System.Collections.Generic;
-using Terraria.GameContent.ItemDropRules;
+using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent;
+using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using Terraria.UI.Chat;
 
 namespace Spooky.Content.UserInterfaces.LittleEyeQuests;
 
