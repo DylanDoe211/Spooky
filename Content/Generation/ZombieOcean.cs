@@ -41,7 +41,6 @@ namespace Spooky.Content.Generation
 		public static int StartPositionY;
 
 		int LabsPlaced = 0;
-		int SurfaceTileType = 0;
 
 		private void DecideZombieOceanPosition(GenerationProgress progress, GameConfiguration configuration)
 		{
@@ -141,8 +140,8 @@ namespace Spooky.Content.Generation
 				}
 			}
 
-			PlaceDepthsOval(StartPositionX, StartPositionY, TileID.Sand, 0, (SizeXInt + 3) * 5, (SizeYInt + 3) * 3, 1f, false, false);
-			PlaceDepthsOval(StartPositionX, StartPositionY, ModContent.TileType<OceanSand>(), ModContent.WallType<OceanSandWall>(), SizeXInt * 5, SizeYInt * 3, 1f, true, false);
+			SpookyWorldMethods.PlaceOval(StartPositionX, StartPositionY, TileID.Sand, 0, (SizeXInt + 3) * 5, (SizeYInt + 3) * 3, 1f, false, false);
+			SpookyWorldMethods.PlaceOval(StartPositionX, StartPositionY, ModContent.TileType<OceanSand>(), ModContent.WallType<OceanSandWall>(), SizeXInt * 5, SizeYInt * 3, 1f, true, false);
 			PlaceDepthsCaves(progress, StartPositionX, StartPositionY, SizeXInt * 5, SizeYInt * 3);
 			DigOutTunnels(StartPositionX, StartPositionY, SizeX, SizeY);
 			BiomePolish(StartPositionX, StartPositionY, SizeX, SizeY);
@@ -209,82 +208,6 @@ namespace Spooky.Content.Generation
 			}
 		}
 
-		public static void PlaceDepthsOval(int X, int Y, int tileType, int wallType, int radius, int radiusY, float thickMult, bool Walls, bool ReplaceOnly, bool OnlyPlaceWallsIfTile = false)
-		{
-			int Seed = WorldGen.genRand.Next();
-
-			float scale = radiusY / (float)radius;
-			float invertScale = (float)radius / radiusY;
-			for (int x = -radius; x <= radius; x++)
-			{
-				for (float y = -radius; y <= radius; y += (invertScale * 0.85f))
-				{
-					float radialMod = WorldGen.genRand.NextFloat(2.5f, 4.5f) * thickMult;
-					if (Math.Sqrt(x * x + y * y) <= radius + 0.5)
-					{
-						int PositionX = X + x;
-						int PositionY = Y + (int)(y * scale);
-						
-						if (WorldGen.InWorld(PositionX, PositionY, 10))
-						{
-							Tile tile = Framing.GetTileSafely(PositionX, PositionY);
-
-							if (!Main.tileDungeon[tile.TileType] && !Main.wallDungeon[tile.WallType])
-							{
-								if (Walls)
-								{
-									if (OnlyPlaceWallsIfTile && tile.HasTile)
-									{
-										tile.WallType = (ushort)wallType;
-									}
-
-									if (!OnlyPlaceWallsIfTile)
-									{
-										WorldGen.KillWall(PositionX, PositionY);
-
-										float wallScaleX = 40;
-										float wallScaleY = 130;
-
-										float wallThreshold = 0.2f;
-
-										float noiseVal = SimplexNoise.Noise(Seed, PositionX / wallScaleX, PositionY / wallScaleY);
-										if (noiseVal * noiseVal > wallThreshold)
-										{
-											tile.WallType = (ushort)wallType;
-										}
-									}
-								}
-
-								if (tileType != -1)
-								{
-									if (ReplaceOnly)
-									{
-										if (tile.HasTile && WorldGen.SolidOrSlopedTile(PositionX, PositionY))
-										{ 
-											tile.HasTile = true;
-											tile.TileType = (ushort)tileType;
-											
-										}
-									}
-									else
-									{
-										tile.HasTile = true;
-										tile.TileType = (ushort)tileType;
-									}
-								}
-								else
-								{
-									WorldGen.KillTile(PositionX, PositionY);
-									tile.LiquidType = LiquidID.Water;
-									tile.LiquidAmount = 255;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-
 		public void PlaceDepthsCaves(GenerationProgress progress, int X, int Y, int radius, int radiusY)
 		{
 			float scale = radiusY / (float)radius;
@@ -332,9 +255,9 @@ namespace Spooky.Content.Generation
 
 									int YOffset = WorldGen.genRand.Next(5, 13);
 
-									SpookyWorldMethods.PlaceOval(PositionX, PositionY + YOffset, -1, 0, OvalSizeX, OvalSizeY, 1f, true, false);
-									PlaceDepthsOval(PositionX, PositionY + YOffset, ModContent.TileType<OceanSand>(), ModContent.WallType<OceanSandWall>(), OvalSizeX + 2, OvalSizeY + 2, 1f, true, true);
-
+									SpookyWorldMethods.PlaceOval(PositionX, PositionY + YOffset, -1, ModContent.WallType<OceanSandWall>(), 
+									OvalSizeX, OvalSizeY, 1f, false, true, RemoveLiquid: false, PlaceLiquid: true);
+									
 									Flags.ZombieBiomePositions.Add(new Vector2(PositionX, PositionY + YOffset));
 								}
 							}
@@ -347,6 +270,8 @@ namespace Spooky.Content.Generation
 		//dig out caverns inside of the area of ovals
 		public void DigOutTunnels(int PositionX, int PositionY, int SizeX, int SizeY)
 		{
+			int Seed = WorldGen.genRand.Next();
+
 			//connect all cave points in the biome in the order they were placed
 			for (int i = 0; i < Flags.ZombieBiomePositions.Count; i++)
 			{
@@ -367,7 +292,7 @@ namespace Spooky.Content.Generation
 				}
 			}
 
-			//place layer of marine rock to prevent breaking through the biome
+			//place layer of marine rock to prevent breaking through the biome, and create wall patterns with noise
 			for (int j = PositionY - SizeY; j < PositionY + SizeY; j++)
 			{
 				for (int i = PositionX - SizeX; i < PositionX + SizeX; i++)
@@ -377,6 +302,20 @@ namespace Spooky.Content.Generation
 						if (BlockTypes.Contains(Main.tile[i, j].TileType) && CanPlaceRock(i, j, 2))
 						{
 							Main.tile[i, j].TileType = (ushort)ModContent.TileType<OceanRock>();
+						}
+
+						if (Main.tile[i, j].WallType == ModContent.WallType<OceanSandWall>())
+						{
+							float wallScaleX = 40;
+							float wallScaleY = 130;
+
+							float wallThreshold = 0.2f;
+
+							float noiseVal = SimplexNoise.Noise(Seed, i / wallScaleX, j / wallScaleY);
+							if (noiseVal * noiseVal > wallThreshold)
+							{
+								WorldGen.KillWall(i, j);
+							}
 						}
 					}
 				}
@@ -458,32 +397,31 @@ namespace Spooky.Content.Generation
 
 						if (i % 2 == 0 && NoDungeonBlocksNearby((int)Position.X, (int)Position.Y, 6, false))
 						{
-							int Size = WorldGen.genRand.Next(9, 11);
-							int SizeY = 0;
-
-							int CaveSize = Size - 4;
-							int CaveSizeY = 0;
+							int SizeX = WorldGen.genRand.Next(9, 11);
+							int SizeY = WorldGen.genRand.Next(7, 11);
+							int CaveSizeX = SizeX - 4;
+							int CaveSizeY = SizeY - 4;
 
 							//randomly increase the pit size for variance
 							if (WorldGen.genRand.NextBool(10) && Position.Y < Main.worldSurface)
 							{
-								Size = WorldGen.genRand.Next(16, 26);
+								SizeX = WorldGen.genRand.Next(16, 26);
 								SizeY = WorldGen.genRand.Next(10, 13);
-								CaveSize = Size - 4;
+								CaveSizeX = SizeX - 4;
 								CaveSizeY = SizeY - 4;
 							}
 
+							//when going to the surface, the caves need to have a layer of sand placed around them
 							if (CanPlaceCave((int)Position.X, (int)Position.Y, 12))
 							{
 								bool UnderSulphurSea = Spooky.Instance.thoriumMod != null && Spooky.Instance.calamityMod != null;
-								int TileTypeToUse = UnderSulphurSea ? SurfaceTileType : ModContent.TileType<OceanSand>();
+								int TileTypeToUse = UnderSulphurSea ? ModContent.TileType<OceanSand>() : TileID.Sand;
 
-								PlaceDepthsOval((int)Position.X, (int)Position.Y, TileTypeToUse, ModContent.WallType<OceanSandWall>(), Size, SizeY == 0 ? Size : SizeY, 1f, true, true, true);
-							}
+								SpookyWorldMethods.PlaceOval((int)Position.X, (int)Position.Y, ModContent.TileType<OceanSand>(), 
+								ModContent.WallType<OceanSandWall>(), SizeX, SizeY, 1f, true, false, RemoveLiquid: false, PlaceLiquid: false);
 
-							if (CanPlaceCave((int)Position.X, (int)Position.Y, 12))
-							{
-								PlaceDepthsOval((int)Position.X, (int)Position.Y, -1, 0, CaveSize, CaveSizeY == 0 ? CaveSize : CaveSizeY, 1f, false, false);
+								SpookyWorldMethods.PlaceOval((int)Position.X, (int)Position.Y, -1, ModContent.WallType<OceanSandWall>(), 
+								CaveSizeX, CaveSizeY, 1f, false, true, RemoveLiquid: false, PlaceLiquid: true);
 							}
 						}
 					}
@@ -502,7 +440,7 @@ namespace Spooky.Content.Generation
 							{
 								int Size = WorldGen.genRand.Next(7, 9);
 
-								PlaceDepthsOval((int)Position.X, (int)Position.Y, -1, 0, Size, Size, 1f, false, false);
+								SpookyWorldMethods.PlaceOval((int)Position.X, (int)Position.Y, -1, ModContent.WallType<OceanSandWall>(), Size, Size, 1f, false, true, RemoveLiquid: false, PlaceLiquid: true);
 							}
 						}
 					}

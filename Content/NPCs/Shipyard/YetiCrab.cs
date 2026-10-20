@@ -48,7 +48,7 @@ namespace Spooky.Content.NPCs.Shipyard
         {
 			bestiaryEntry.Info.AddRange(new List<IBestiaryInfoElement> 
             {
-				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.Nudibranch"),
+				new FlavorTextBestiaryInfoElement("Mods.Spooky.Bestiary.YetiCrab"),
                 BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.DayTime,
                 new BestiaryPortraitBackgroundProviderPreferenceInfoElement(ModContent.GetInstance<Biomes.ShipyardBiome>().ModBiomeBestiaryInfoElement)
 			});

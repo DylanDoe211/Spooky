@@ -83,7 +83,7 @@ namespace Spooky.Content.Generation
 					int randomPositionX = WorldGen.genRand.Next(-SizeForRandom, SizeForRandom);
 					int randomPositionY = WorldGen.genRand.Next(-SizeForRandom, SizeForRandom);
 
-					SpookyWorldMethods.PlaceOval(i + randomPositionX, j + 5 + (randomPositionY / 2), ModContent.TileType<JungleSoil>(), ModContent.WallType<JungleSoilWall>(), SizeX / 2, SizeY / 2, 1f, false, false);
+					SpookyWorldMethods.PlaceOval(i + randomPositionX, j + 5 + (randomPositionY / 2), ModContent.TileType<JungleSoil>(), ModContent.WallType<JungleSoilWall>(), SizeX / 2, SizeY / 2, 1f, false, true);
 				}
 			}
 		}
@@ -101,7 +101,7 @@ namespace Spooky.Content.Generation
 			{
 				for (int j = PositionY - SizeY * 2; j < PositionY + SizeY * 2; j++)
 				{
-					if (Main.tile[i, j].TileType == ModContent.TileType<JungleSoil>())
+					if (Main.tile[i, j].TileType == ModContent.TileType<JungleSoil>() && Main.tile[i, j - 5].TileType == ModContent.TileType<JungleSoil>())
 					{
 						//also remove the caves higher up by 5 tiles so that the bottom of the biome has a floor
 						float noiseVal = SimplexNoise.FractalNoise(Seed, i / caveScaleX, j / caveScaleY);

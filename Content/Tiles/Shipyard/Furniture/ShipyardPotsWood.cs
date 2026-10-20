@@ -45,7 +45,7 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
 				//torches
 				case 0:
 				{
-					yield return new Item(ModContent.ItemType<CemeteryBiomeTorchItem>(), Main.rand.Next(4, 13));
+					yield return new Item(ModContent.ItemType<ShipyardTorchItem>(), Main.rand.Next(4, 13));
 					break;
 				}
 				//healing or mana potions

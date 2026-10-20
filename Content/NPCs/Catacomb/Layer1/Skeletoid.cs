@@ -13,7 +13,6 @@ using Spooky.Core;
 using Spooky.Content.Items.Blooms.Accessory;
 using Spooky.Content.Items.Catacomb.Misc;
 using Spooky.Content.Items.Food;
-using Spooky.Content.NPCs.Boss.Daffodil.Projectiles;
 
 namespace Spooky.Content.NPCs.Catacomb.Layer1
 {

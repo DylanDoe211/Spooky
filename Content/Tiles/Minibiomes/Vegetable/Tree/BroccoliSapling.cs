@@ -37,7 +37,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Vegetable.Tree
 			TileObjectData.addTile(Type);
 			LocalizedText name = CreateMapEntryName();
             AddMapEntry(new Color(168, 58, 96), name);
-            DustType = DustID.Blood;
+            DustType = DustID.Grass;
 			AdjTiles = new int[] { TileID.Saplings };
 		}
 
@@ -71,7 +71,7 @@ namespace Spooky.Content.Tiles.Minibiomes.Vegetable.Tree
             {
 				if (WorldGen.genRand.NextBool(12))
 				{
-					Broccoli.Grow(i, j - 1, 5, 9);
+					Broccoli.Grow(i, j - 1, 5, 9, true);
 				}
             }
 		}

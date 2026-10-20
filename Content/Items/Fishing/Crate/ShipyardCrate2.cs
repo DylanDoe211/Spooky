@@ -63,6 +63,9 @@ namespace Spooky.Content.Items.Fishing.Crate
 
 			itemLoot.Add(ItemDropRule.OneFromOptions(4, Vanity));
 
+			//pirate potion
+			itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<PiratePotion>(), 3));
+
 			//drop vanilla bars
 			IItemDropRule[] oreBars = new IItemDropRule[] 
 			{

@@ -95,6 +95,7 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 			//floats
 			writer.Write(NPC.localAI[0]);
 			writer.Write(NPC.localAI[1]);
+			writer.Write(NPC.localAI[2]);
 
 			//bools
 			writer.Write(BiteAnimation);
@@ -119,6 +120,7 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 			//floats
 			NPC.localAI[0] = reader.ReadSingle();
 			NPC.localAI[1] = reader.ReadSingle();
+			NPC.localAI[2] = reader.ReadSingle();
 
 			//bools
 			BiteAnimation = reader.ReadBoolean();
@@ -455,6 +457,8 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 
 							if (proj.scale <= 0)
 							{
+								NPC.localAI[0] = proj.owner;
+
 								AteBomb = true;
 								proj.active = false;
 								NPC.netUpdate = true;
@@ -471,15 +475,15 @@ namespace Spooky.Content.NPCs.Minibiomes.Ocean
 				NPC.velocity = Vector2.Lerp(NPC.velocity, desiredVelocity, 1f / 20);
 				NPC.velocity *= 0.98f;
 
-				NPC.localAI[0]++;
-				if (NPC.localAI[0] == 2)
+				NPC.localAI[2]++;
+				if (NPC.localAI[2] == 2)
 				{
 					SoundEngine.PlaySound(GulpSound, NPC.Center);
 
 					Screenshake.ShakeScreenWithIntensity(NPC.Center, 2f, 500f);
 				}
 
-				if (NPC.localAI[0] >= 180)
+				if (NPC.localAI[2] >= 180)
 				{
 					NPC.SuperArmor = false;
 					NPC.immortal = false;

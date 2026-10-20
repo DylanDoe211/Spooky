@@ -435,11 +435,14 @@ namespace Spooky.Content.Generation
                     //place tiles below the line to create flattened terrain
                     for (int Y = (int)Position.Y; Y <= Main.worldSurface; Y++)
                     {
-                        if (!Main.tile[(int)Position.X, Y].HasTile)
+                        Tile tile = Main.tile[(int)Position.X, Y];
+                        Tile tileBelow = Main.tile[(int)Position.X, Y + 3];
+
+                        if (!tile.HasTile)
                         {
-                            WorldGen.PlaceTile((int)Position.X, Y, ModContent.TileType<CemeteryDirt>());
-                            WorldGen.PlaceWall((int)Position.X, Y + 3, ModContent.WallType<CemeteryDirtWall>());
-                            Main.tile[(int)Position.X, Y + 3].WallType = (ushort)ModContent.WallType<CemeteryDirtWall>();
+                            tile.HasTile = true;
+                            tile.TileType = (ushort)ModContent.TileType<CemeteryDirt>();
+                            tileBelow.WallType = (ushort)ModContent.WallType<CemeteryDirtWall>();
                         }
                     }
 
@@ -459,7 +462,7 @@ namespace Spooky.Content.Generation
                 else
                 {
                     for (int Y = (int)SpookyWorldMethods.WorldSurfaceHeightLimit; Y < (int)Position.Y; Y++)
-                    {   
+                    {
                         if (Main.tile[(int)Position.X, Y].LiquidAmount > 0)
                         {
                             Main.tile[(int)Position.X, Y].LiquidAmount = 0;

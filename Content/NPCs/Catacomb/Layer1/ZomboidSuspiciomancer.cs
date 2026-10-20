@@ -1,12 +1,15 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.GameContent.Bestiary;
 using ReLogic.Content;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
+using Spooky.Content.Items.Catacomb.Misc;
+using Spooky.Content.Items.Food;
 using Spooky.Content.NPCs.Cemetery;
 
 namespace Spooky.Content.NPCs.Catacomb.Layer1
@@ -81,6 +84,12 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
         public override void AI()
 		{
             NPC.spriteDirection = NPC.direction;
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot) 
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CatacombChestKeyUpper>(), 30));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FrankenMarshmallow>(), 100));
         }
 
         public override void HitEffect(NPC.HitInfo hit) 

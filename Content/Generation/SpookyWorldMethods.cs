@@ -67,7 +67,8 @@ namespace Spooky.Content.Generation
 			}
 		}
 
-		public static void PlaceOval(int X, int Y, int tileType, int wallType, int radius, int radiusY, float thickMult, bool ReplaceOnly, bool DestroyOnly, bool SpreadOnSpecificTiles = false, int[] TypeToSpreadOn = null, bool RemoveLiquid = true)
+		public static void PlaceOval(int X, int Y, int tileType, int wallType, int radius, int radiusY, float thickMult, bool ReplaceExistingTilesOnly, bool DestroyTiles, 
+		bool SpreadOnSpecificTiles = false, int[] TypeToSpreadOn = null, bool RemoveLiquid = true, bool PlaceLiquid = false)
 		{
 			float scale = radiusY / (float)radius;
 			float invertScale = (float)radius / radiusY;
@@ -80,83 +81,90 @@ namespace Spooky.Content.Generation
 					{
 						int PositionX = X + x;
 						int PositionY = Y + (int)(y * scale);
-						Tile tile = Framing.GetTileSafely(PositionX, PositionY);
-						Tile left = Framing.GetTileSafely(PositionX - 1, PositionY);
-						Tile right = Framing.GetTileSafely(PositionX + 1, PositionY);
-						Tile up = Framing.GetTileSafely(PositionX, PositionY - 1);
-						Tile down = Framing.GetTileSafely(PositionX, PositionY + 1);
-						Tile topLeft = Framing.GetTileSafely(PositionX - 1, PositionY - 1);
-						Tile topRight = Framing.GetTileSafely(PositionX + 1, PositionY - 1);
-						Tile bottomLeft = Framing.GetTileSafely(PositionX - 1, PositionY + 1);
-						Tile bottomRight = Framing.GetTileSafely(PositionX + 1, PositionY + 1);
 
-						if (!ReplaceOnly)
+						if (WorldGen.InWorld(PositionX, PositionY, 10))
 						{
-							if (tileType > -1)
-							{
-								WorldGen.KillTile(PositionX, PositionY);
-								tile.TileType = (ushort)tileType;
-								tile.HasTile = true;
-							}
+							Tile tile = Framing.GetTileSafely(PositionX, PositionY);
+							Tile left = Framing.GetTileSafely(PositionX - 1, PositionY);
+							Tile right = Framing.GetTileSafely(PositionX + 1, PositionY);
+							Tile up = Framing.GetTileSafely(PositionX, PositionY - 1);
+							Tile down = Framing.GetTileSafely(PositionX, PositionY + 1);
+							Tile topLeft = Framing.GetTileSafely(PositionX - 1, PositionY - 1);
+							Tile topRight = Framing.GetTileSafely(PositionX + 1, PositionY - 1);
+							Tile bottomLeft = Framing.GetTileSafely(PositionX - 1, PositionY + 1);
+							Tile bottomRight = Framing.GetTileSafely(PositionX + 1, PositionY + 1);
 
-							if (wallType > 0)
+							if (ReplaceExistingTilesOnly)
 							{
-								tile.WallType = (ushort)wallType;
-								if (RemoveLiquid)
+								if (WorldGen.SolidOrSlopedTile(PositionX, PositionY))
 								{
-									tile.LiquidAmount = 0;
-								}
-							}
-
-							if (tileType == -1 && wallType == 0 && DestroyOnly)
-							{
-								WorldGen.KillTile(PositionX, PositionY);
-								if (RemoveLiquid)
-								{
-									tile.LiquidAmount = 0;
-								}
-							}
-						}
-						else
-						{
-							if (WorldGen.SolidOrSlopedTile(PositionX, PositionY))
-							{
-								if (SpreadOnSpecificTiles)
-								{
-									if (!left.HasTile || !right.HasTile || !up.HasTile || !down.HasTile || !topLeft.HasTile || !topRight.HasTile || !bottomLeft.HasTile || !bottomRight.HasTile)
+									if (SpreadOnSpecificTiles)
 									{
-										if (TypeToSpreadOn.Contains(tile.TileType))
+										if (!left.HasTile || !right.HasTile || !up.HasTile || !down.HasTile || !topLeft.HasTile || !topRight.HasTile || !bottomLeft.HasTile || !bottomRight.HasTile)
+										{
+											if (TypeToSpreadOn.Contains(tile.TileType))
+											{
+												tile.TileType = (ushort)tileType;
+											}
+										}
+									}
+									else
+									{
+										if (tileType > -1)
 										{
 											tile.TileType = (ushort)tileType;
 										}
 									}
 								}
-								else
+
+								if (wallType > 0 && tile.WallType != WallID.None)
 								{
-									if (tileType > -1)
+									tile.WallType = (ushort)wallType;
+
+									if (RemoveLiquid)
 									{
-										tile.TileType = (ushort)tileType;
+										tile.LiquidAmount = 0;
 									}
-									else
+									if (PlaceLiquid)
 									{
-										WorldGen.KillTile(PositionX, PositionY);
+										tile.LiquidType = LiquidID.Water;
+										tile.LiquidAmount = 255;
 									}
 								}
 							}
-
-							if (wallType > 0 && tile.WallType != WallID.None)
+							else
 							{
-								tile.WallType = (ushort)wallType;
+								if (DestroyTiles)
+								{
+									tile.ClearEverything();
+								}
+
 								if (RemoveLiquid)
 								{
 									tile.LiquidAmount = 0;
 								}
-							}
-						}
+								if (PlaceLiquid)
+								{
+									tile.LiquidType = LiquidID.Water;
+									tile.LiquidAmount = 255;
+								}
 
-						//if (Math.Sqrt(x * x + y * y) >= radius - radialMod)
-						//{
-						//}
+								if (tileType > -1)
+								{
+									tile.HasTile = true;
+									tile.TileType = (ushort)tileType;
+								}
+
+								if (wallType > 0)
+								{
+									tile.WallType = (ushort)wallType;
+								}
+							}
+
+							//if (Math.Sqrt(x * x + y * y) >= radius - radialMod)
+							//{
+							//}
+						}
 					}
 				}
 			}
@@ -174,7 +182,7 @@ namespace Spooky.Content.Generation
 					{
 						if (clearTiles)
 						{
-							WorldGen.KillTile(x, y);
+							tile.ClearTile();
 						}
 						if (tileType > -1)
 						{
@@ -195,59 +203,6 @@ namespace Spooky.Content.Generation
 					}
 				}
 			}
-
-			/*
-			ShapeData circle = new ShapeData();
-			GenAction blotchMod = new Modifiers.Blotches(2, 0.4);
-			WorldUtils.Gen(new Point(X, Y), new Shapes.Circle(radius), Actions.Chain(new GenAction[]
-			{
-				blotchMod.Output(circle)
-			}));
-
-			//clear tiles
-			if (clearTiles)
-			{
-				WorldUtils.Gen(new Point(X, Y), new ModShapes.All(circle), Actions.Chain(new GenAction[]
-				{
-					new Actions.ClearTile(), new Actions.SetLiquid(0, 0)
-				}));
-			}
-
-			//place tiles for the circle
-			if (tileType > -1)
-			{
-				WorldUtils.Gen(new Point(X, Y), new ModShapes.All(circle), Actions.Chain(new GenAction[]
-				{
-					new Actions.PlaceTile((ushort)tileType)
-				}));
-			}
-
-			//wall placing stuff
-			ShapeData wallCircle = new ShapeData();
-			GenAction wallBlotchMod = new Modifiers.Blotches(2, 0.4);
-			WorldUtils.Gen(new Point(X, Y), new Shapes.Circle(radius - 1), Actions.Chain(new GenAction[]
-			{
-				wallBlotchMod.Output(wallCircle)
-			}));
-
-			//clear walls
-			if (clearWalls)
-			{
-				WorldUtils.Gen(new Point(X, Y), new ModShapes.All(wallCircle), Actions.Chain(new GenAction[]
-				{
-					new Actions.ClearWall()
-				}));
-			}
-
-			//dont place walls if it is not set to place any
-			if (wallType > 0)
-			{
-				WorldUtils.Gen(new Point(X, Y), new ModShapes.All(wallCircle), Actions.Chain(new GenAction[]
-				{
-					new Actions.PlaceWall((ushort)wallType)
-				}));
-			}
-			*/
 		}
 
 		public static void PlaceVines(int X, int Y, int vineType, int[] ValidTiles)

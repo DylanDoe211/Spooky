@@ -59,7 +59,7 @@ namespace Spooky.Content.Items.Shipyard.Armor
 		public override void UpdateArmorSet(Player player) 
 		{
 			player.setBonus = Language.GetTextValue("Mods.Spooky.ArmorSetBonus.RotWoodArmor");
-			player.statDefense += 1;
+			player.statDefense += 2;
 		}
 
 		public override void AddRecipes()

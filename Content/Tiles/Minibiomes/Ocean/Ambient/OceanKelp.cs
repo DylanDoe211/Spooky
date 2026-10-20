@@ -39,11 +39,14 @@ namespace Spooky.Content.Tiles.Minibiomes.Ocean.Ambient
 
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 		{
-			float divide = 1000f;
+            if (Main.tile[i, j].TileFrameY >= 36)
+            {
+                float divide = 1000f;
 
-			r = 255f / divide;
-			g = 196f / divide;
-			b = 0f / divide;
+                r = 255f / divide;
+                g = 196f / divide;
+                b = 0f / divide;
+            }
         }
 
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)

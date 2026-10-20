@@ -15,6 +15,7 @@ using Spooky.Core;
 using Spooky.Content.Dusts;
 using Spooky.Content.Items.Costume;
 using Spooky.Content.Items.Catacomb;
+using Spooky.Content.Items.Catacomb.Misc;
 using Spooky.Content.Items.Food;
 
 namespace Spooky.Content.NPCs.Catacomb.Layer1
@@ -240,6 +241,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
         {
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SkullAmulet>(), 12));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<ZomboidPyromancerHood>(), 5));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CatacombChestKeyUpper>(), 30));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FrankenMarshmallow>(), 100));
         }
 

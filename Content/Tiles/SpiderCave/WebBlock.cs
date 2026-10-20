@@ -38,7 +38,7 @@ namespace Spooky.Content.Tiles.SpiderCave
 
             if (!Main.gamePaused && Main.instance.IsActive && !Below.HasTile && isPlayerNear)
             {
-                if (Main.rand.NextBool(450))
+                if (Main.rand.NextBool(380))
                 {
                     int newDust = Dust.NewDust(new Vector2((i) * 16, (j + 1) * 16), 5, 5, ModContent.DustType<CobwebParticle>());
                     Main.dust[newDust].velocity.Y += 0.09f;

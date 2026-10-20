@@ -56,7 +56,7 @@ namespace Spooky.Content.Generation
 			}
 			else
 			{
-				SpookyWorldMethods.PlaceOval(BiomeX, BiomeY, ModContent.TileType<DesertSandstone>(), ModContent.WallType<DesertSandstoneWall>(), SizeX / 2, SizeY, 2f, false, false);
+				SpookyWorldMethods.PlaceOval(BiomeX, BiomeY, ModContent.TileType<DesertSandstone>(), ModContent.WallType<DesertSandstoneWall>(), SizeX / 2, SizeY, 2f, false, true);
 				DigOutCaves(progress, BiomeX, BiomeY, SizeX, SizeY, CaveNoiseSeed);
 				BiomePolish(BiomeX, BiomeY, SizeX, SizeY);
 				CleanOutSmallClumps(BiomeX, BiomeY, SizeX, SizeY);

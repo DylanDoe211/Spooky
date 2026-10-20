@@ -109,7 +109,7 @@ namespace Spooky.Content.Generation
 			int SizeX = Main.maxTilesX / 5;
 			int SizeY = Main.maxTilesY / 3;
 
-			PlaceSpookyForestEllipse(progress, PositionX, PositionY, SizeX / 6, SizeY, false);
+			PlaceSpookyForestEllipse(progress, PositionX, PositionY, SizeX / 6, SizeY);
 
 			//position where the glowshroom minibiome begins
 			GlowshroomPosY = (int)Main.worldSurface + (Main.maxTilesY / 9);
@@ -178,7 +178,7 @@ namespace Spooky.Content.Generation
 						float noiseVal = SimplexNoise.FractalNoise(Seed, X / forestScaleX, Y / forestScaleY);
 						if (noiseVal * noiseVal > forestThreshold)
 						{
-							WorldGen.KillTile(X, Y);
+							Main.tile[X, Y].ClearTile();
 						}
 					}
 				}
@@ -191,7 +191,7 @@ namespace Spooky.Content.Generation
 						float noiseVal = SimplexNoise.FractalNoise(Seed, X / mushScaleX, Y / mushScaleY);
 						if (noiseVal * noiseVal > mushThreshold)
 						{
-							WorldGen.KillTile(X, Y);
+							Main.tile[X, Y].ClearTile();
 						}
 					}
 				}
@@ -324,9 +324,6 @@ namespace Spooky.Content.Generation
             }
 
 			progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.SpookyForestPolish").Value;
-
-			//add biome dithering
-			PlaceSpookyForestEllipse(progress, PositionX, PositionY, SizeX / 6, SizeY, true);
 
 			//remove walls that arent surrounded fully by blocks
 			for (int X = PositionX - Main.maxTilesX / 12; X <= PositionX + Main.maxTilesX / 12; X++)
@@ -702,7 +699,7 @@ namespace Spooky.Content.Generation
 					}
 					if (WorldGen.genRand.NextBool(3) && IsFlatSurface(X, Y, 3) && !PlacedJobApplication)
 					{
-						WorldGen.PlaceTile(X, Y - 1, (ushort)ModContent.TileType<KrampusJobSign>());
+						TileGlobal.PlaceObject(X, Y - 1, (ushort)ModContent.TileType<KrampusJobSign>());
 					}
 
 					//table
@@ -1066,7 +1063,7 @@ namespace Spooky.Content.Generation
 			}
 		}
 
-		public static void PlaceSpookyForestEllipse(GenerationProgress progress, int X, int Y, int radius, int radiusY, bool Dithering)
+		public static void PlaceSpookyForestEllipse(GenerationProgress progress, int X, int Y, int radius, int radiusY)
 		{
 			float scale = radiusY / (float)radius;
 			float invertScale = (float)radius / radiusY;
@@ -1092,14 +1089,14 @@ namespace Spooky.Content.Generation
 							{
 								if (PositionY <= Main.worldSurface)
 								{
-									if (Math.Sqrt(x * x + y * y) >= radius - radialMod && Dithering)
+									if (Math.Sqrt(x * x + y * y) >= radius - radialMod)
 									{
 										if (WorldGen.genRand.NextBool() && tile.HasTile)
 										{
 											tile.TileType = (ushort)ModContent.TileType<SpookyDirt>();
 										}
 									}
-									if (Math.Sqrt(x * x + y * y) < radius - radialMod && !Dithering)
+									if (Math.Sqrt(x * x + y * y) < radius - radialMod)
 									{
 										if (tile.HasTile || tile.WallType > 0)
 										{
@@ -1119,14 +1116,14 @@ namespace Spooky.Content.Generation
 								}
 								else
 								{
-									if (Math.Sqrt(x * x + y * y) >= radius - radialMod && Dithering)
+									if (Math.Sqrt(x * x + y * y) >= radius - radialMod)
 									{
 										if (WorldGen.genRand.NextBool() && tile.HasTile)
 										{
 											tile.TileType = (ushort)ModContent.TileType<SpookyStone>();
 										}
 									}
-									if (Math.Sqrt(x * x + y * y) < radius - radialMod && !Dithering)
+									if (Math.Sqrt(x * x + y * y) < radius - radialMod)
 									{
 										//add a bit of noise inbetween the underground and surface
 										for (int newY = PositionY - 8; newY <= PositionY; newY++)
@@ -1138,7 +1135,7 @@ namespace Spooky.Content.Generation
 											}
 										}
 
-										WorldGen.KillTile(PositionX, PositionY);
+										tile.ClearEverything();
 										tile.HasTile = true;
 										tile.TileType = (ushort)ModContent.TileType<SpookyStone>();
 										tile.WallType = (ushort)ModContent.WallType<SpookyStoneWall>();
@@ -1146,65 +1143,6 @@ namespace Spooky.Content.Generation
 									}
 								}
 							}
-						}
-					}
-				}
-			}
-		}
-
-		//method to clean up small clumps of tiles
-		public static void CleanOutSmallClumps()
-		{
-			List<ushort> blockTileTypes = new()
-			{
-				(ushort)ModContent.TileType<SpookyStone>(),
-				(ushort)ModContent.TileType<SpookyDirt>(),
-				(ushort)ModContent.TileType<SpookyDirt2>(),
-				(ushort)ModContent.TileType<SpookyWood>(),
-				(ushort)ModContent.TileType<MushroomMoss>(),
-				(ushort)ModContent.TileType<BloomSoil>()
-			};
-
-			int MaxPoints = 100;
-
-			void getAttachedPoints(int x, int y, List<Point> points)
-			{
-				Tile tile = Main.tile[x, y];
-				Point point = new(x, y);
-
-				if (!WorldGen.InWorld(x, y))
-				{
-					tile = new Tile();
-				}
-
-				if (!blockTileTypes.Contains(tile.TileType) || !tile.HasTile || points.Count > MaxPoints || points.Contains(point))
-				{
-					return;
-				}
-
-				points.Add(point);
-
-				getAttachedPoints(x + 1, y, points);
-				getAttachedPoints(x - 1, y, points);
-				getAttachedPoints(x, y + 1, points);
-				getAttachedPoints(x, y - 1, points);
-			}
-
-			for (int X = PositionX - Main.maxTilesX / 12; X <= PositionX + Main.maxTilesX / 12; X++)
-			{
-				for (int Y = 100; Y < Main.maxTilesY - 200; Y++)
-				{
-					List<Point> chunkPoints = new();
-					getAttachedPoints(X, Y, chunkPoints);
-
-					if (chunkPoints.Count <= MaxPoints)
-					{
-						foreach (Point p in chunkPoints)
-						{
-							WorldUtils.Gen(p, new Shapes.Rectangle(1, 1), Actions.Chain(new GenAction[]
-							{
-								new Actions.ClearTile(true)
-							}));
 						}
 					}
 				}

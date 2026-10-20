@@ -1,149 +1,17 @@
-New Biome, Boggy Shipyard:
--This is a brand new cross-mod ecotone that generates inbetween the cemetery and ocean if there is no other biome in the way
--This biome is generally more focused on ambience, building blocks, but still has a couple of new items and things to do
--Underground in the caves you can find pirate treasure chests which drop one of four new weapons and a funny new potion
--It has new fishing content including a new rare weapon, an angler quest fish, and biome crates
--Contains new ghostly critters like fish and other underwater life, some of them passive, some of them defensive, and some aggressive
--On the biomes surface, you can find gigantic conch shells which can be interacted with using an EMF reader to begin a fun new mini-boss encounter with a unique new drop
--Due to the atmosphere in the biome, it is always raining there
- 
-A FEW THINGS TO NOTE ABOUT THE NEW BIOME:
--It is not a regular biome, but a spirit reforged ecotone which means the following
--You MUST have spirit reforged enabled with spooky mod for the biome to generate, otherwise it will never spawn during worldgen
--It is NOT guaranteed to generate normally in your world as spirit reforged ecotones are intentionally not guaranteed, you may need to create a few worlds to find one
--However, you can use spirit reforged's ecotone mapper to place a shipyard anywhere you'd like if you want one in your world
--The size of the biome varies HEAVILY, sometimes you may get a big one, and sometimes you may get a really tiny one
--All of the blocks in this biome are obtainable even without spirit reforged enabled, so you may build an artificial one through normal spooky mod gameplay
-(You can obtain the blocks and tree saplings from shipyard rotten crates, which can be created by throwing bone crates into shimmer)
-
-
-Other New Stuff:
--Added a couple more achievements
--Added krampus helper outfit leggings
--Added new giant living gourds that spawn in the underground spooky forest, each one has a silly new light pet inside!
--Added sac of flesh as a replacement for just fishing up single blocks in the eye valley, it is a right-clickable consumable item that gives you a bunch of eye valley blocks
--Added a bunch of new unique pots that generate in all the different spooky mod biomes (Except for the cemetery and eye valley)
--Added a new firefly light pet that drops from spider war minibosses, and a new crab pet from fishing in the spooky forest
--Added alternate spook fishron drops for the electric eel whip and kraken yoyo (I know these are not in tmodloader currently, but we have implemented them now so we dont have to worry about them later)
--Added long skeletoids and zomboid glyphomancers to the upper catacombs
--Added cooler glowmask to little eye's cauldron
--Added clentaminator biome spread for blocks and walls that unintentionally didnt have it (Such as spooky mod dirt walls and other newer grass blocks that previously didnt get converted)
--Added modcalls for various things in spooky mod, which includes: Boss defeated, Event defeated, World generation positions, and even the ability to add new custom little eye quests!
--Added a new game tip to tell players about spooky mods config options
-
-
-Sprite Updates:
--Daffodil has been entirely resprited
--Daffodil sprite on the spooky mod menu has been updated to match her new in-game sprite
--Fixed issue on the spooky mod menu where one of orro-boro's wings had some missing pixels where a red outline was supposed to be
--Eye valley background sprites now look more accurate to the biome and its ambient tiles
--Resprited bag of magic beans
--Polished sprites for various spooky mod ambient grasses
--Gourd blocks now have cool additional "discolored" clusters (These can be observed more clearly on the new giant gourds in the underground spooky forest)
--Colored gourd wall sprites now has a bit less detail than the blocks to look better as walls
--Changed the colors on spooky forest, cemetery, and spider grotto dirt to look a bit nicer
--Resprited big bones flower attack projectiles for both phases
--Changed rot gourd mold spore projectile to look like other "spore" projectiles the mod has
--Updated spooky mod wood block item sprites to look like vanilla wood block items
-
-General Changes:
--Noticeably optimized a lot of spooky mod world generation, some of it has not yet recieved optimization due to time constraints and will be fixed later, but most of the biome have recieved optimizations and generate much faster
--Spooky forest caves have been changed to be more natural and slighlty less frequent, glowshroom caves are now more vertically open but also a bit less frequent
--Tar pits caves generally the same with changes to make them a tiny bit bigger, along with the sandstone clusters and walls generation being improved
--Fetid farms has a bit more natural looking caves, no longer has random giant holes in the mud walls, and made it so that if multiple fetid farms generate they spawn more spaced out from each other
--Eye valley flesh block clusters changed to be more natural looking veins, with organic mush still being the dominant block in the biome
--Made some spooky mod world generation tasks fill up the progress bar better to track how far along each biome is done generating
--Little eye quests no longer become locked when you accept one, you can now just do them all at once if you want
--Turkies now only need 3 rotten seeds to be tamed instead of 5
--Charm of the flies no longer has a cooldown that prevents flies from spawning after you get hit
--Spi-ops chestplate now gives you a speed boost when you get hit regardless of how much damage you took
--Halved cooldown time for the flower armor set bonus pollen ability
--Creepy dog photo puppy no longer attacks you, it always just attacks enemies
--Peptobyssmal debuff now causes enemies to spawn bubbles after 10 seconds instead of on death
--Bainy in a jar now explodes your minions every 30 seconds, and no longer has any knockback
--Backpack chimney projectile damage buffed from 32 -> 40, and it now charges up faster
--Nerfed crusty gunfish damage from 42 -> 35
--Ooze magnum projectile shoot frequency now accelerates more smoothly and works better with attack speed boosts
--Old wood staff no longer has amethyst in its recipe, and that has been replaced with 10 glowshrooms instead
--Krampus quest reward presents now need 5 to research for journey mode
--Krampus quest reward presents now have a separate drop chance for each piece of the krampus helper vanity
--Removing the lily of rebirth bloom buff off of yourself no longer resets the number of revives you have if you don't have any revives left
--Removed gourd o' lantern items, breaking a carved gourd with a candle in it now just drops the regular carved gourd and the candle
--Eye blocks now grow various eye valley ambient objects on them naturally
--Krampus job application sign tile now lights up with spelunker potions
--Reduced the size of the tar pits biome
--Tarrars now play a growling sound when a player gets close to them
--Spitcher plant spit projectiles now look better, and they now spit quicker and at a greater distance
--Rot gourd mold spores now home in on the player slower
--Big bones flower projectiles now move slower due to their increased sprite size
--Various small tweaks to daffodils fight to fit with her new sprites and size
--Slightly changed outline visuals and dust particles on some enemies to look nicer
--Spooky mod chandeliers and lanterns now properly sway in the wind
--Cemetery street lamps and big bone statues now count as light sources for npc housing
--Root wood blocks now count as wood for crafting recipes that require any wood block
-
-
-Spooky Player Internal Change:
--For those who do not need spooky mods source code for any reason, this change will basically mean nothing to you
--For those who do, spooky mod has had a giant bloated ModPlayer class called SpookyPlayer where every single player related effect was shoved into for multiple years of the mods development
--As of this update, almost every single thing in SpookyPlayer (Regarding armor set bonuses, accessories, ect) have all been moved to their own ModPlayers in the individual code files corresponding to the item or thing that causes it
--This, going forward, will be much better for keeping individual effects more organized, and also so people (Like wiki editors) who browse the source code can have an easier time finding things related to player effects
--To clarify though, SpookyPlayer still exists and now just contains pet variables and random miscellaneous things that dont really fit in an individual file
-
-
-Localization Changes:
--For all new content, localization entries for those are be automatically added, if there is anything I have forgotten please let me know!
--Charm of the flies tooltip modified to remove mention of the now removed cooldown
--Spi-ops chestplate tooltip modified to remove mention of having take a certain amount of damage for the speed boost to activate
--Creepy dog photo tooltip modified to remove the part about the dog becoming aggressive as this is removed now
--Flower armor set bonus tooltip modified to be accurate for the reduced cooldown change (30 seconds -> 15 seconds)
--Renamed thorn stem shirt -> flower stem shirt to be consistent with the other two armor pieces having "Flower" in their names (The internal name for this entry is FlowerBody)
--Peptobyssmal tooltip modified to remove line about bubbles inflicting debuff since this happens by default, and to account for the new change where the debuff spawns bubbles after 10 seconds instead of on kill
--Pheremone stinger tooltip changed to just say it increases damage and crit chance with spider minions
--Brainy in a jar tooltip changed due to brainy now exploding every 30 seconds instead of every minute
--Fixed mispelling of targeted -> targetted in dave & mikes tooltip
--Instances of armor set bonuses requiring double tapping to activate now have the name of the key you need to double tap replaced with {0} in the localization to properly format it based on the vanilla config
--Reworded a bunch of spooky mod configs to be more short and concise
--Due to removal of gourd o' lantern items, localization entries for those have been removed
--Added new entry in the tiles localization for spirit reforged potstiary compatibility with spooky mods new biome pots
-Added the following new entries to the WorldgenTasks localization:
-Shipyard: Creating shipwrecks
-SpookyForestPolish: Polishing the spooky forest
-SpiderCavePolish: Polishing the spider grotto
-EyeValleyPolish: Polishing the eye valley
-ChrismtasDungeonPolish: Polishing krampus' workshop
-
-
-Fixes:
--Config option for teleporting all players into nose temple combat rooms not working
--Tar cactus platforms not being craftable back into tar cactus blocks
--Many spooky mod ambient objects not being destroyable when you build blocks and other stuff on them
--Spooky mod ambient objects destroying other existing ambient objects when growing
--Haunting harold ghost projectiles not doing damage
--Temple of moco combat room idols giving off way too much light on retro/trippy lighting modes
--Spooky mod custom trees breaking one by one when destroyed instead of being fully destroyed immediately
--Multiple spooky mod custom trees/tiles with special effects being blurry, and some of them still having completely incorrect offsets in retro/trippy lighting and snapshot mode
--Orange spooky grass not drawing special merge texture with green grass when sloped
--Mortar jetpack drawing incorrectly offset while the player is on certain mounts
--Grass walls in the catacombs not being considered valid for spawning enemies, causing unintentionally low spawnrates in both catacomb layers
--Bag o' treats candies hitting enemies causing the bag to spawn more candies
--Peacock oni mask effect inflicting its debuff onto town npcs, friendly critters, and invincible/immortal npcs
--Razor radish not having extra hitbox range
--Old wood hammer not having autoswing
--Frogpoon incorrectly dealing melee damage and not ranged damage
--Rot gourd not properly falling through blocks/platforms to get the targetted players level
--Green gourd walls producing wood dust instead of pumpkin gut dust when broken
--Crusty gunfish unintentionally consuming multiple ammo on each use
--The cross accessory sound waves, brainy explosion, and soul sucker aura not having correctly sized hitboxes
--Scorpion deathblow right click not having autofire
--Eye belcher mines not properly dealing double damage while on the ground
--Opalised cannon slimes lagging the game
--Brainy minion vanishing when spawning other minions
--Swampy cemetery ghost enemies having their glowing aura unintentionally drawn in the bestiary
--Spooky glowshroom caves sometimes having random single or double tiles that would be cleared out underneath ores
--Players being able to teleport into both catacomb layers and the nose temple early using teleportation potions
--Hunter scarf mark and peacock oni mask debuff icons drawing on worm segments or other npcs that are a "child" of another (The debuff is still applied to them in-game)
--Venomous spiderpoon pulling effect incorrectly pulling worm segments or other npcs that are a "child" of another
--Spooky mod hold-out projectiles not scaling their attack speed from your attack speed boosts at all
--Sharkbone hand cannon and the dunker not playing shoot sounds for other players in multiplayer
--Issue where some enemies with behavior that changes when they get hit wasn't working properly in multiplayer
+-Optimized more spooky mod world generation, the time it takes to generate a world is now much faster
+-Cobweb particles produced by cobweb blocks now land on tiles instead of just falling through them
+-Long skeletoids now drop bonemeal, candycorn, and upper catacomb chest keys
+-Zomboid pyromancers, necromancers, glyphomancers, and suspiciomancers now drop upper catacomb keys
+-Zomboid suspiciomancers now drop fraken mashmallows
+-Diva dahlia and smelly now drop lower catacomb keys
+-Added sclera blocks to the sac of flesh loot pool
+-Added scallywag potions to shipyard crates loot 
+-Fixed big dunk not blowing up when fed the sea mine
+-Fixed boggy shipyard pots dropping cemetery torches instead of boggy shipyard torches
+-Fixed shipyard prehardmode crates not dropping pirate vanity
+-Fixed broccoli trees not destroying the sapling properly when they grow naturally from one
+-Fixed spider grotto torches not providing light when held in your inventory
+-Fixed yeti crab and isopod not using the correct bestiary entries
+-Fixed capitalization issue in queen conch bestiary
+-Fixed rotted wood armor set bonus not having a localization entry for its tooltip
+-Fixed shiny sea bunny incorrectly saying its caught in the bleached shipyard instead of boggy shipyard (I forgot to change the name from the ecotones old name)

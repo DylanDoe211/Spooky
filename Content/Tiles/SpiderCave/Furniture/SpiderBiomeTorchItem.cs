@@ -34,7 +34,7 @@ namespace Spooky.Content.Tiles.SpiderCave.Furniture
 				Vector2 position = player.RotatedRelativePoint(new Vector2(player.itemLocation.X + 12f * player.direction + player.velocity.X, player.itemLocation.Y - 14f + player.velocity.Y), true);
 				
 				float divide = 300f;
-				Lighting.AddLight(Item.Center, new Vector3(227f / divide, 171f / divide, 13f / divide));
+				Lighting.AddLight(position, new Vector3(227f / divide, 171f / divide, 13f / divide));
 			}
 		}
 

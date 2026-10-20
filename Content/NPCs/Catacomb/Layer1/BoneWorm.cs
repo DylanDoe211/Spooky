@@ -11,6 +11,10 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
+using Spooky.Content.Items.Blooms.Accessory;
+using Spooky.Content.Items.Catacomb.Misc;
+using Spooky.Content.Items.Food;
+
 namespace Spooky.Content.NPCs.Catacomb.Layer1
 {
 	public class BoneWorm1 : ModNPC
@@ -126,6 +130,13 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
 				NPC.oldPos[0].Y = NPC.Center.Y + (float)(Math.Sign(NPC.oldPos[0].Y - NPC.Center.Y) * 10);
 			}
 		}
+
+		public override void ModifyNPCLoot(NPCLoot npcLoot) 
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CatacombChestKeyUpper>(), 30));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Bonemeal>(), 50));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CandyCorn>(), 100));
+        }
 
 		public override void HitEffect(NPC.HitInfo hit) 
         {

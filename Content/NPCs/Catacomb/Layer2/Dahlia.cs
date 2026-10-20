@@ -97,6 +97,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer2
         {
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<PlantChunk>(), 5, 1, 3));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<DragonfruitSeed>(), 2));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CatacombChestKeyLower>(), 30));
         }
 
         public override void HitEffect(NPC.HitInfo hit)

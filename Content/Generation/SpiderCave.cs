@@ -269,6 +269,30 @@ namespace Spooky.Content.Generation
                 }
             }
 
+            //basic cave smoothing
+			for (int l = 0; l < 6; l++)
+			{
+				for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
+                {
+                    for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
+                    {
+                        if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist) && BlockTypes.Contains(Main.tile[X, Y].TileType))
+                        {
+                            int tileType = SpookyWorldMethods.GetNeighboringTileType(X, Y);
+                            int neighborCount = SpookyWorldMethods.GetNeighboringTileCount(X, Y);
+                            if (neighborCount > 4)
+                            {
+                                WorldGen.PlaceTile(X, Y, tileType);
+                            }
+                            else if (neighborCount < 4)
+                            {
+                                WorldGen.KillTile(X, Y);
+                            }
+                        }
+                    }
+				}
+			}
+
             //place grass walls around dirt blocks and dirt walls around stone blocks
             for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
             {
@@ -368,68 +392,6 @@ namespace Spooky.Content.Generation
                 }
             }
 
-            //some small last minute things, mainly clean up before ambient tiles are placed
-            for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
-            {
-				for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
-                {
-                    if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist) && BlockTypes.Contains(Main.tile[X, Y].TileType))
-                    {
-                        //remove any extra liquids that may still be in the biome
-                        Main.tile[X, Y].LiquidAmount = 0;
-
-                        //clean tiles that are sticking out (basically tiles only attached to one tile on one side)
-                        bool OnlyRight = !Main.tile[X, Y - 1].HasTile && !Main.tile[X, Y + 1].HasTile && !Main.tile[X - 1, Y].HasTile;
-                        bool OnlyLeft = !Main.tile[X, Y - 1].HasTile && !Main.tile[X, Y + 1].HasTile && !Main.tile[X + 1, Y].HasTile;
-                        bool OnlyDown = !Main.tile[X, Y - 1].HasTile && !Main.tile[X - 1, Y].HasTile && !Main.tile[X + 1, Y].HasTile;
-                        bool OnlyUp = !Main.tile[X, Y + 1].HasTile && !Main.tile[X - 1, Y].HasTile && !Main.tile[X + 1, Y].HasTile;
-
-                        if (OnlyRight || OnlyLeft || OnlyDown || OnlyUp)
-                        {
-                            WorldGen.KillTile(X, Y);
-                        }
-
-                        //kill random single floating tiles
-                        if (!Main.tile[X, Y - 1].HasTile && !Main.tile[X, Y + 1].HasTile && !Main.tile[X - 1, Y].HasTile && !Main.tile[X + 1, Y].HasTile)
-                        {
-                            WorldGen.KillTile(X, Y);
-                        }
-
-                        //kill one block thick surfaces
-                        if (Main.tile[X, Y].HasTile && !Main.tile[X, Y - 1].HasTile && !Main.tile[X, Y + 1].HasTile)
-                        {
-                            WorldGen.KillTile(X, Y);
-                        }
-
-                        //kill random single floating walls
-                        if (Main.tile[X, Y - 1].WallType <= 0 && Main.tile[X, Y + 1].WallType <= 0 && Main.tile[X - 1, Y].WallType <= 0 && Main.tile[X + 1, Y].WallType <= 0)
-                        {
-                            WorldGen.KillWall(X, Y);
-                        }
-
-                        //get rid of 1x2 tiles on the ground since it looks weird
-                        if (Main.tile[X, Y].HasTile && Main.tile[X - 1, Y].HasTile && !Main.tile[X - 2, Y].HasTile && !Main.tile[X + 1, Y].HasTile)
-                        {
-                            WorldGen.KillTile(X, Y);
-                            WorldGen.KillTile(X - 1, Y);
-                        }
-
-                        //get rid of 1x2 tiles on the ground since it looks weird
-                        if (Main.tile[X, Y].HasTile && Main.tile[X - 1, Y].HasTile && !Main.tile[X - 2, Y].HasTile && !Main.tile[X + 1, Y].HasTile)
-                        {
-                            WorldGen.KillTile(X, Y);
-                            WorldGen.KillTile(X - 1, Y);
-                        }
-
-                        //get rid of single tiles on the ground since it looks weird
-                        if (Main.tile[X, Y].HasTile && !Main.tile[X - 1, Y].HasTile && !Main.tile[X + 1, Y].HasTile)
-                        {
-                            WorldGen.KillTile(X, Y);
-                        }
-					}
-                }
-            }
-
             //place old hunter arena
             Vector2 ArenaOrigin = new Vector2(startPosX - 50, (HunterHousePositionY + (HunterHouseOffsetY / 2)) - 25);
 
@@ -441,8 +403,7 @@ namespace Spooky.Content.Generation
 					if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
 					{
 						Tile tile = Main.tile[X, Y];
-
-						if (tile.HasTile && tile.TileType != ModContent.TileType<DampStone>() && tile.TileType != ModContent.TileType<WebBlock>())
+						if (!tile.HasTile)
 						{
 							tile.HasTile = true;
 							tile.TileType = (ushort)ModContent.TileType<DampSoil>();

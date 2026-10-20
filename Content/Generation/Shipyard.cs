@@ -27,11 +27,6 @@ namespace Spooky.Content.Generation
 	{
 		//can be useful to block ecotone from certain biomes
 		//public override HashSet<string> EcotoneEdgeBlocklist => ["Jungle", "Ocean"];
-
-		//3.4.2.2118163272
-		//3.4.1.1723835072
-		//3.4.1.1879069920
-		//3.4.1.1024710096
 		
 		public override bool IsLoadingEnabled(Mod mod)
 		{
@@ -261,27 +256,6 @@ namespace Spooky.Content.Generation
 				Vector2 BottomPos = BezierCurveUtil.CalculateBezierPoint(u, p4, p4, p5, p5);
 				u = (i + 1) / (float)segments;
 
-				/*
-				//convert any evil blocks/walls into black sandstone
-				for (int Y = (int)Position.Y - 10; Y <= (int)BottomPos.Y + 10; Y++)
-				{
-					Tile tile = Main.tile[(int)Position.X, Y];
-
-					if (!InOcean((int)Position.X))
-					{
-						if (tile.TileType == TileID.Ebonstone || tile.TileType == TileID.Crimstone)
-						{
-							tile.TileType = (ushort)ModContent.TileType<BlackSandstone>();
-						}
-
-						if (tile.TileType != TileID.Ebonstone && tile.TileType != TileID.Crimstone && !Main.wallDungeon[tile.WallType])
-						{
-							tile.WallType = (ushort)ModContent.WallType<BlackSandstoneWall>();
-						}
-					}
-				}
-				*/
-
 				for (int Y = (int)Position.Y - 10; Y <= (int)Position.Y + 12; Y++)
 				{
 					//kill walls not surrounded by enough tiles
@@ -331,7 +305,7 @@ namespace Spooky.Content.Generation
 						float noiseVal = SimplexNoise.FractalNoise(Seed, X / sandScaleX, Y / sandScaleY);
 						if (noiseVal * noiseVal <= caveThreshold)
 						{
-							WorldGen.KillTile(X, Y);
+							Main.tile[X, Y].ClearTile();
 						}
 					}
 				}
@@ -354,7 +328,7 @@ namespace Spooky.Content.Generation
 							}
 							else if (neighborCount < 4)
 							{
-								WorldGen.KillTile(X, Y);
+								Main.tile[X, Y].ClearTile();
 							}
 						}
 					}
@@ -416,7 +390,8 @@ namespace Spooky.Content.Generation
 						WorldGen.PlaceLiquid(X, Y, 0, byte.MaxValue);
 					}
 
-					if (WorldGen.genRand.NextBool(ShipyardConfiguration.MossOvalChance) && WorldGen.InWorld(X, Y, 5) && !WorldGen.SolidTile(X, Y - 1) && Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>())
+					if (WorldGen.genRand.NextBool(ShipyardConfiguration.MossOvalChance) && WorldGen.InWorld(X, Y, 5) && 
+					Main.tile[X, Y - 1].TileType != ModContent.TileType<BlackSandstone>() && Main.tile[X, Y].TileType == ModContent.TileType<BlackSandstone>())
 					{
 						int SizeX = WorldGen.genRand.Next(10, 17);
                         int SizeY = WorldGen.genRand.Next(10, 17);

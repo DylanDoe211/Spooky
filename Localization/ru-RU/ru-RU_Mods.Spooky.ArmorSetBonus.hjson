@@ -1,4 +1,5 @@
 OldWoodArmor: Увеличивает защиту на 1
+// RotWoodArmor: 2 defense
 WizardGangsterArmor:
 	'''
 	Увеличивает магический урон на 2% за каждую золотую монету в вашем инвентаре

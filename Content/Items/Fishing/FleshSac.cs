@@ -40,6 +40,7 @@ namespace Spooky.Content.Items.Fishing
 				ItemDropRule.Common(ModContent.ItemType<LivingFleshItem>(), 1, 25, 55),
 				ItemDropRule.Common(ModContent.ItemType<SpookyMushItem>(), 1, 25, 55),
 				ItemDropRule.Common(ModContent.ItemType<ValleyStoneItem>(), 1, 25, 55),
+				ItemDropRule.Common(ModContent.ItemType<ScleraBlockItem>(), 1, 25, 55),
 				ItemDropRule.Common(ModContent.ItemType<EyeSeed>(), 1, 1, 2)
 			};
 			itemLoot.Add(new FewFromRulesRule(2, 1, Blocks));

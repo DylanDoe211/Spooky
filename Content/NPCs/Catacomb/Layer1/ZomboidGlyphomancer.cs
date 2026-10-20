@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Spooky.Core;
 using Spooky.Content.Dusts;
 using Spooky.Content.Items.Catacomb;
+using Spooky.Content.Items.Catacomb.Misc;
 using Spooky.Content.Items.Food;
 using Spooky.Content.NPCs.Catacomb.Layer1.Projectiles;
 
@@ -170,6 +171,7 @@ namespace Spooky.Content.NPCs.Catacomb.Layer1
         public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<SkullAmulet>(), 12));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CatacombChestKeyUpper>(), 30));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FrankenMarshmallow>(), 100));
         }
 
