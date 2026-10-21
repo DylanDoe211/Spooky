@@ -14,8 +14,8 @@ namespace Spooky.Content.NPCs.SpookyBiome.Projectiles
 
         public override void SetDefaults()
 		{
-			Projectile.width = 20;
-			Projectile.height = 22;
+			Projectile.width = 14;
+			Projectile.height = 20;
 			Projectile.friendly = false;
             Projectile.hostile = true;
 			Projectile.tileCollide = true;
@@ -40,7 +40,7 @@ namespace Spooky.Content.NPCs.SpookyBiome.Projectiles
                     _ => new(-2, 0)
                 };
 
-                Main.EntitySpriteDraw(DrawUtils.ColorSolid(ProjTexture.Value, Color.White), Projectile.Center - Main.screenPosition, rectangle, 
+                Main.EntitySpriteDraw(DrawUtils.ColorSolid(ProjTexture.Value, Color.White), Projectile.Center + offset - Main.screenPosition, rectangle, 
                 Projectile.GetAlpha(Color.Blue * 0.65f), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
             }
 

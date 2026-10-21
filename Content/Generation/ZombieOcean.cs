@@ -116,7 +116,7 @@ namespace Spooky.Content.Generation
 
 			for (int i = Start; i <= End; i++)
 			{
-				for (int j = 100; j <= StartPositionY; j++)
+				for (int j = (int)SpookyWorldMethods.WorldSurfaceHeightLimit; j <= StartPositionY; j++)
 				{
 					Tile tile = Framing.GetTileSafely(i, j);
 

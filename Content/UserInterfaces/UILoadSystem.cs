@@ -159,6 +159,20 @@ public class UILoadSystem : ModSystem
 
 			layers.Insert(EventIndex, NewLayer);
 		}
+
+		if (SpiderWarWorld.SpiderWarActive && SpiderWarWorld.SpiderWarWave > 0 && Main.LocalPlayer.InModBiome(ModContent.GetInstance<SpiderCaveBiome>()))
+		{
+			int EventIndex = layers.FindIndex(layer => layer is not null && layer.Name.Equals("Vanilla: Inventory"));
+			LegacyGameInterfaceLayer NewLayer = new LegacyGameInterfaceLayer("Spooky: Spider War UI",
+			delegate
+			{
+				DrawSpiderWarUI(Main.spriteBatch);
+				return true;
+			},
+			InterfaceScaleType.UI);
+
+			layers.Insert(EventIndex, NewLayer);
+		}
 	}
 
 	public void DrawPandoraBoxUI(SpriteBatch spriteBatch)
@@ -249,5 +263,55 @@ public class UILoadSystem : ModSystem
 		var icon = new Rectangle(descBackground.X + descOffset + 7, descBackground.Y + descOffset, (int)(28 * Scale), (int)(32 * Scale));
 		spriteBatch.Draw(EventIcon, icon, Color.White);
 		Utils.DrawBorderString(spriteBatch, Language.GetTextValue("Mods.Spooky.UI.EggEvent.EggEventBarDisplayName"), new Vector2(barrierBackground.Center.X, barrierBackground.Y - InternalOffset - descSize.Y * 0.5f), Color.White, 0.8f, 0.3f, 0.4f);
+	}
+
+	public void DrawSpiderWarUI(SpriteBatch spriteBatch)
+	{
+		if (SpiderWarWorld.SpiderWarActive && Main.LocalPlayer.InModBiome(ModContent.GetInstance<SpiderCaveBiome>()))
+		{
+			const float Scale = 0.875f;
+			const float Alpha = 0.5f;
+			const int InternalOffset = 6;
+			const int OffsetX = 20;
+			const int OffsetY = 20;
+
+			Texture2D EventIcon = ModContent.Request<Texture2D>("Spooky/Content/Biomes/SpiderCaveBiomeIcon", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+			Color descColor = new Color(130, 92, 58);
+			Color waveColor = new Color(186, 214, 77);
+
+			int width = (int)(200f * Scale);
+			int height = (int)(46f * Scale);
+
+			Rectangle waveBackground = Utils.CenteredRectangle(new Vector2(Main.screenWidth - OffsetX - 100f, Main.screenHeight - OffsetY - 23f), new Vector2(width, height));
+			Utils.DrawInvBG(spriteBatch, waveBackground, new Color(130, 92, 58, 255) * 0.785f);
+
+			string waveText = Language.GetTextValue("Mods.Spooky.UI.SpiderWar.SpiderWarWave") + " " + SpiderWarWorld.SpiderWarWave + ": " + ((SpiderWarWorld.SpiderWarPoints * 100) / SpiderWarWorld.SpiderWarMaxPoints) + "%";
+			if (SpiderWarWorld.SpiderWarWave >= 10)
+			{
+				waveText = Language.GetTextValue("Mods.Spooky.UI.SpiderWar.SpiderWarWave") + " " + 
+				SpiderWarWorld.SpiderWarWave + ": " + SpiderWarWorld.SpiderWarPoints + " " + Language.GetTextValue("Mods.Spooky.UI.SpiderWar.SpiderWarKills");
+			}
+
+			Utils.DrawBorderString(spriteBatch, waveText, new Vector2(waveBackground.Center.X, waveBackground.Y + 5), Color.White, Scale, 0.5f, -0.1f);
+			Rectangle waveProgressBar = Utils.CenteredRectangle(new Vector2(waveBackground.Center.X, waveBackground.Y + waveBackground.Height * 0.75f), TextureAssets.ColorBar.Size());
+
+			if (SpiderWarWorld.SpiderWarWave < 10)
+			{
+				var waveProgressAmount = new Rectangle(0, 0, (int)(TextureAssets.ColorBar.Width() * 0.01f * MathHelper.Clamp(((SpiderWarWorld.SpiderWarDisplayPoints * 100) / SpiderWarWorld.SpiderWarMaxPoints), 0f, 100f)), TextureAssets.ColorBar.Height());
+				var offset = new Vector2((waveProgressBar.Width - (int)(waveProgressBar.Width * Scale)) * 0.5f, (waveProgressBar.Height - (int)(waveProgressBar.Height * Scale)) * 0.5f);
+				spriteBatch.Draw(TextureAssets.ColorBar.Value, waveProgressBar.Location.ToVector2() + offset, null, Color.White * Alpha, 0f, new Vector2(0f), Scale, SpriteEffects.None, 0f);
+				spriteBatch.Draw(TextureAssets.ColorBar.Value, waveProgressBar.Location.ToVector2() + offset, waveProgressAmount, waveColor, 0f, new Vector2(0f), Scale, SpriteEffects.None, 0f);
+			}
+
+			Vector2 descSize = new Vector2(154, 40) * Scale;
+			Rectangle barrierBackground = Utils.CenteredRectangle(new Vector2(Main.screenWidth - OffsetX - 100f, Main.screenHeight - OffsetY - 19f), new Vector2(width, height));
+			Rectangle descBackground = Utils.CenteredRectangle(new Vector2(barrierBackground.Center.X, barrierBackground.Y - InternalOffset - descSize.Y * 0.5f), descSize * 0.9f);
+			Utils.DrawInvBG(spriteBatch, descBackground, descColor * Alpha);
+
+			int descOffset = (descBackground.Height - (int)(32f * Scale)) / 2;
+			var icon = new Rectangle(descBackground.X + descOffset + 7, descBackground.Y + descOffset, (int)(32 * Scale), (int)(32 * Scale));
+			spriteBatch.Draw(EventIcon, icon, Color.White);
+			Utils.DrawBorderString(spriteBatch, Language.GetTextValue("Mods.Spooky.UI.SpiderWar.SpiderWarBarDisplayName"), new Vector2(barrierBackground.Center.X, barrierBackground.Y - InternalOffset - descSize.Y * 0.5f), Color.White, 0.8f, 0.3f, 0.4f);
+		}
 	}
 }

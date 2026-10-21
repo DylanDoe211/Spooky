@@ -1,17 +1,24 @@
 -Optimized more spooky mod world generation, the time it takes to generate a world is now much faster
+-Boggy shipyard lighthouse now generates more inside the biome when using spirit reforged's manual ecotone placer so it doesnt get destroyed if you place another shipyard biome next to it
 -Cobweb particles produced by cobweb blocks now land on tiles instead of just falling through them
 -Long skeletoids now drop bonemeal, candycorn, and upper catacomb chest keys
 -Zomboid pyromancers, necromancers, glyphomancers, and suspiciomancers now drop upper catacomb keys
--Zomboid suspiciomancers now drop fraken mashmallows
+-Zomboid suspiciomancers now drop franken mashmallows
 -Diva dahlia and smelly now drop lower catacomb keys
 -Added sclera blocks to the sac of flesh loot pool
 -Added scallywag potions to shipyard crates loot 
+-Moved spider war event UI localization entries from EventsAndBosses to UI
+-Added localization entry for the spider war event display name to the event's UI
+-Added localization entries to the UI localization for the display names for the staffs different summoning modes
+-Rotted wood armor set bonus buffed from 1 defense -> 2 defense
+-Fixed rotted wood armor set bonus not having a localization entry for its tooltip
 -Fixed big dunk not blowing up when fed the sea mine
+-Fixed ghost busster using 2 ammo on its first use
 -Fixed boggy shipyard pots dropping cemetery torches instead of boggy shipyard torches
 -Fixed shipyard prehardmode crates not dropping pirate vanity
 -Fixed broccoli trees not destroying the sapling properly when they grow naturally from one
--Fixed spider grotto torches not providing light when held in your inventory
+-Fixed spider grotto torches not providing light at the player when held by the player
+-Fixed chunky fungus mushroom spores having an incorrectly sized hitbox
 -Fixed yeti crab and isopod not using the correct bestiary entries
 -Fixed capitalization issue in queen conch bestiary
--Fixed rotted wood armor set bonus not having a localization entry for its tooltip
--Fixed shiny sea bunny incorrectly saying its caught in the bleached shipyard instead of boggy shipyard (I forgot to change the name from the ecotones old name)
+-Fixed shiny sea bunny incorrectly using the old name bleached shipyard and not boggy shipyard

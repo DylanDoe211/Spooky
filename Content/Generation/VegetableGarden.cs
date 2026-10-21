@@ -32,7 +32,7 @@ namespace Spooky.Content.Generation
 			int SizeX = Main.maxTilesX / SizeXInt;
 			int SizeY = Main.maxTilesY / SizeYInt;
 
-			int JungleLimitX = Main.maxTilesX / 18;
+			int JungleLimitX = Main.maxTilesX / 15;
 
 			bool JungleOnLeftSide = GenVars.JungleX < (Main.maxTilesX / 2);
 
@@ -56,8 +56,8 @@ namespace Spooky.Content.Generation
 						BiomePolish(X, Y, SizeX, SizeY);
 						PlaceAmbience(X, Y, SizeX, SizeY);
 
-						Y += Main.maxTilesY / 4;
-						X +=  (Main.maxTilesX / 20) * (WorldGen.genRand.NextBool() ? -1 : 1);
+						Y += Main.maxTilesY / 3;
+						X += (Main.maxTilesX / 25) * (JungleOnLeftSide ? -1 : 1);
 
 						numBiomes++;
 						if (numBiomes >= maxBiomes)

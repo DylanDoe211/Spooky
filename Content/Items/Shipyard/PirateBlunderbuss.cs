@@ -36,6 +36,11 @@ namespace Spooky.Content.Items.Shipyard
 			Item.shootSpeed = 50f;
 		}
 
+		public override bool CanConsumeAmmo(Item ammo, Player player)
+		{
+			return player.ItemUsesThisAnimation != 0;
+		}
+
 		public override bool CanUseItem(Player player)
 		{
 			return player.ownedProjectileCounts[ModContent.ProjectileType<PirateBlunderbussProj>()] < 1;

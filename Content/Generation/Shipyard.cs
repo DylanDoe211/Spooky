@@ -428,13 +428,15 @@ namespace Spooky.Content.Generation
 
 			Vector2 LighthousePos = Vector2.Zero;
 
+			int OffsetValue = manualEcotone ? 60 : 20;
+
 			if (!OceanOnLeft)
 			{
-				LighthousePos = new Vector2(rightBound - 20, RightY); 
+				LighthousePos = new Vector2(rightBound - OffsetValue, RightY);
 			}
 			else
 			{
-				LighthousePos = new Vector2(leftBound + 20, LeftY);
+				LighthousePos = new Vector2(leftBound + OffsetValue, LeftY);
 			}
 
 			//generate lighthouse inbetween the shipyard and ocean

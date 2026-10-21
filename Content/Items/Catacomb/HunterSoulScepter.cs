@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.Localization;
 using Terraria.UI.Chat;
 using Terraria.Audio;
 using Microsoft.Xna.Framework;
@@ -94,19 +95,19 @@ namespace Spooky.Content.Items.Catacomb
                 {
                     case 1:
                     {
-                        SummonDisplay = "Warrior";
+                        SummonDisplay = Language.GetTextValue("Mods.Spooky.UI.HunterScepter.MeleeDisplayMode");
                         Item.shoot = ModContent.ProjectileType<OldHunterMelee>();
                         break;
                     }
                     case 2:
                     {
-                        SummonDisplay = "Ranger";
+                        SummonDisplay = Language.GetTextValue("Mods.Spooky.UI.HunterScepter.RangedDisplayMode");
                         Item.shoot = ModContent.ProjectileType<OldHunterRanged>();
                         break;
                     }
                     case 3:
                     {
-                        SummonDisplay = "Mage";
+                        SummonDisplay = Language.GetTextValue("Mods.Spooky.UI.HunterScepter.MagicDisplayMode");
                         Item.shoot = ModContent.ProjectileType<OldHunterMage>();
                         break;
                     }
