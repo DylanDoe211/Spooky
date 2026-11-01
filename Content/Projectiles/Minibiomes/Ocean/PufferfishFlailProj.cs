@@ -231,7 +231,6 @@ namespace Spooky.Content.Projectiles.Minibiomes.Ocean
                         StateTimer = 0f;
                         Projectile.netUpdate = true;
                         Projectile.velocity *= 0.3f;
-                        // This is also where Drippler Crippler spawns its projectile, see above code.
                     }
                     player.ChangeDir((player.Center.X < Projectile.Center.X) ? 1 : (-1));
                     Projectile.localNPCHitCooldown = movingHitCooldown;
@@ -463,7 +462,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Ocean
 
 				for (int numProjs = 0; numProjs < 4; numProjs++)
 				{
-					int Shard = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(Main.rand.Next(-5, 6), Main.rand.Next(-7, -3)),
+					int Shard = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(Main.rand.Next(-5, 6), Main.rand.Next(-8, -5)),
 					ModContent.ProjectileType<PufferfishFlailShard>(), Projectile.damage / 2, Projectile.knockBack / 3, Projectile.owner);
 					Main.projectile[Shard].frame = numProjs;
 				}

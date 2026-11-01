@@ -146,7 +146,7 @@ namespace Spooky.Content.Backgrounds.SpiderCave
                             }
 
                             BGColor = Color.Lerp(drawColor, darkColor, Utils.GetLerpValue(0f, 1f, DarkenFade));
-                            GlowColor = Color.Lerp(new Color(50, 50, 50), new Color(25, 25, 25), Utils.GetLerpValue(0f, 1f, DarkenFade));
+                            GlowColor = Color.Lerp(new Color(75, 75, 75), new Color(35, 35, 35), Utils.GetLerpValue(0f, 1f, DarkenFade));
                         }
                         //background gets normal light if no events are happening
                         else
@@ -159,7 +159,7 @@ namespace Spooky.Content.Backgrounds.SpiderCave
                             }
 
                             BGColor = Color.Lerp(darkColor, drawColor, Utils.GetLerpValue(0f, 1f, LightenFade));
-                            GlowColor = Color.Lerp(new Color(25, 25, 25), new Color(50, 50, 50), Utils.GetLerpValue(0f, 1f, LightenFade));
+                            GlowColor = Color.Lerp(new Color(35, 35, 35), new Color(75, 75, 75), Utils.GetLerpValue(0f, 1f, LightenFade));
                         }
 
                         Main.spriteBatch.Draw(BGTexture, drawPosition, frame, BGColor * Transparency, 0f, zero, Scale, SpriteEffects.None, 0f);

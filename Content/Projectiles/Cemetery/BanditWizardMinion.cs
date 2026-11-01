@@ -48,6 +48,11 @@ namespace Spooky.Content.Projectiles.Cemetery
             return false;
         }
 
+        public override bool? CanCutTiles()
+        {
+            return false;
+        }
+
         public override bool PreDraw(ref Color lightColor)
         {
             ProjTexture ??= ModContent.Request<Texture2D>(Texture);

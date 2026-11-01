@@ -181,9 +181,9 @@ namespace Spooky.Content.NPCs.SpookyBiome
         {
             if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 12; numGores++)
+                if (Main.netMode != NetmodeID.Server) 
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 12; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, (NPC.velocity * 0.5f) + new Vector2(Main.rand.Next(-3, 3), Main.rand.Next(-3, -1)), ModContent.Find<ModGore>("Spooky/MonsterEyeChunk").Type);
                     }
@@ -309,9 +309,9 @@ namespace Spooky.Content.NPCs.SpookyBiome
         {
             if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 12; numGores++)
+                if (Main.netMode != NetmodeID.Server) 
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 12; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, (NPC.velocity * 0.5f) + new Vector2(Main.rand.Next(-3, 3), Main.rand.Next(-3, -1)), ModContent.Find<ModGore>("Spooky/MonsterEyeChunkFaded").Type);
                     }

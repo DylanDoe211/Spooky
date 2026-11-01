@@ -30,9 +30,11 @@ namespace Spooky.Content.Tiles.SpiderCave.Ambient
 
 		public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 		{
-			r = 227f / 450f;
-            g = 171f / 450f;
-            b = 13f / 450f;
+			float Divide = 450f;
+
+			r = 227f / Divide;
+            g = 171f / Divide;
+            b = 13f / Divide;
         }
 
 		public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)

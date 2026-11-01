@@ -19,6 +19,7 @@ using Spooky.Content.Tiles.NoseTemple.Furniture;
 using Spooky.Content.Tiles.Pylon;
 using Spooky.Content.Tiles.Shipyard.Furniture;
 using Spooky.Content.Tiles.SpiderCave;
+using Spooky.Content.Tiles.SpiderCave.Tree;
 using Spooky.Content.Tiles.SpookyHell.Furniture;
 using Spooky.Content.Tiles.Water;
 
@@ -130,16 +131,27 @@ namespace Spooky.Core
 					}
 				}
 
-				//grotto mushroom trees produce red light at the top
-				if (tile.TileType == TileID.Trees && GetTileTreeIsOn(i, j) == ModContent.TileType<DampMushroomGrass>() && tile.TileFrameX >= 22 && tile.TileFrameY >= 198)
+				if (tile.TileType == TileID.Trees && GetTileTreeIsOn(i, j) == ModContent.TileType<DampMushroomGrass>())
 				{
-					float divide = 300f;
+					int x = i;
+					int y = j;
 
-					float r = 255f / divide;
-					float g = 111f / divide;
-					float b = 111f / divide;
+					if (Framing.GetTileSafely(x - 1, y).TileType == TileID.Trees && Framing.GetTileSafely(x, y + 1).TileType != TileID.Trees && Framing.GetTileSafely(x, y - 1).TileType != TileID.Trees)
+					{
+						x--;
+					}
+					if (Framing.GetTileSafely(x + 1, y).TileType == TileID.Trees && Framing.GetTileSafely(x, y + 1).TileType != TileID.Trees && Framing.GetTileSafely(x, y - 1).TileType != TileID.Trees)
+					{
+						x++;
+					}
 
-					Lighting.AddLight(new Vector2(i, j) * 16, new Vector3(r, g, b));
+					while (WorldGen.InWorld(x, y) && Framing.GetTileSafely(x, y).TileType == TileID.Trees && Framing.GetTileSafely(x, y).HasTile)
+					{
+						y++;
+					}
+
+					WorldGen.KillTile(x, y - 1);
+					SporeShroomTree.Grow(x, y - 1, 3, 15, true);
 				}
 
 				//ice rod blocks should be destroyed immediately in boss arenas
@@ -219,7 +231,7 @@ namespace Spooky.Core
 				for (int j = 0; j < tileData.Height; j++)
 				{
 					//for debugging
-					//WorldGen.PlaceWall(num6 + i, num7 + j, WallID.Dirt);
+					//WorldGen.PlaceWall(ObjectX + i, ObjectY + j, WallID.Dirt);
 
 					Tile tileSafely = Framing.GetTileSafely(ObjectX + i, ObjectY + j);
 					if (tileSafely.HasTile)

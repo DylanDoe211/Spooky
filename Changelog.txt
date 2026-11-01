@@ -1,24 +1,40 @@
--Optimized more spooky mod world generation, the time it takes to generate a world is now much faster
--Boggy shipyard lighthouse now generates more inside the biome when using spirit reforged's manual ecotone placer so it doesnt get destroyed if you place another shipyard biome next to it
--Cobweb particles produced by cobweb blocks now land on tiles instead of just falling through them
--Long skeletoids now drop bonemeal, candycorn, and upper catacomb chest keys
--Zomboid pyromancers, necromancers, glyphomancers, and suspiciomancers now drop upper catacomb keys
--Zomboid suspiciomancers now drop franken mashmallows
--Diva dahlia and smelly now drop lower catacomb keys
--Added sclera blocks to the sac of flesh loot pool
--Added scallywag potions to shipyard crates loot 
--Moved spider war event UI localization entries from EventsAndBosses to UI
--Added localization entry for the spider war event display name to the event's UI
--Added localization entries to the UI localization for the display names for the staffs different summoning modes
--Rotted wood armor set bonus buffed from 1 defense -> 2 defense
--Fixed rotted wood armor set bonus not having a localization entry for its tooltip
--Fixed big dunk not blowing up when fed the sea mine
--Fixed ghost busster using 2 ammo on its first use
--Fixed boggy shipyard pots dropping cemetery torches instead of boggy shipyard torches
--Fixed shipyard prehardmode crates not dropping pirate vanity
--Fixed broccoli trees not destroying the sapling properly when they grow naturally from one
--Fixed spider grotto torches not providing light at the player when held by the player
--Fixed chunky fungus mushroom spores having an incorrectly sized hitbox
--Fixed yeti crab and isopod not using the correct bestiary entries
--Fixed capitalization issue in queen conch bestiary
--Fixed shiny sea bunny incorrectly using the old name bleached shipyard and not boggy shipyard
+-Added brand new spooky mod menu logo sprite, and it now has an outline color change when hovering your mouse over is to let you know its clickable
+-Added new weapons that drop from hardmode spooky forest enemies: Witch's brew, Possessed shotgun, Creepier candelabra, and Sticky putty stick
+-Added new waxcap vanity mushroom trees, you can get saplings to plant them from killing enemies in the spore storm event
+-Added new mushroom tiles and trees to the spider grotto (Thing to note: unfortunately theres no clean solution to transforming a ModTree into a custom tile in the world, so in order to do this I had to make it so the existing trees get destroyed and a new custom mushroom tree will grow in its place, so after this patch if you hear block breaking sounds and see piles of wood on the floor where mushroom trees were, this is why. Sorry about this!)
+-Added cool new mushroom "spot" generation the spider grotto where colored mushrooms now spawn in clusters during world generation, and resprited existing mushroom tiles
+-Added rotted wood platforms
+-Tome of spirits minions no longer destroy cuttable ambient tiles
+-Box o' fist explosion distance is reduced, and its explosion now does half the weapons damage instead of full damage to all surrounding enemies
+-Individual components for the sea mine can now be shimmered into each other (Box of Dynamites -> Metal Plates -> Pressure Sensors -> Mechanical Timer -> Back to Box of Dynamites)
+-Buffed ant spider head shoot range
+-Puffer shatterer bone shards can no longer damage enemies unless they are falling down to prevent hit enemies taking tons of damage immediately
+-Spooky forest and spider grotto torches are now crafted with one of the biomes corresponding wood and one gel to be consistent with wooden torches, and changed their sprites since they are made from that wood now
+-Evil witch potions now look better when thrown, and they have a new gas cloud projectile that looks better and inflicts poison on you
+-Possessed scarecrows no longer shoot vanilla bullets, they now fire out ghostly souls from their gun that look much cooler
+-Updated possessed scarecrow bestiary entry to reflect the new change to its projectiles
+-Changed the colors used for the spore storm fog visual effect
+-Changed daffodil's thorn seeds to have a glowy outline to make them easier to see
+-Changed sprites for the small ambient grass and vines that grow on mycelium grass in the spider grotto
+-Edited the sprites of the glowshroom tree trunks that connect to branches since some of them looked weird and didn't connect with other trunk segments correctly
+-Spooky mod leaf gores are now compatible with paints (Meaning they will be painted the same color as the tile that produces them)
+-Queen conch shells now naturally grow on black sand, black sandstone, and both grass versions of those tiles
+-Removed pre-generated boulder/dart trap rooms from the upper catacombs, and added new randomly generated boulder traps to both catacomb layers
+-Fixed spider war wave localization not being set to the new changed localization from last patch, resulting in missing text
+-Fixed mispelling of "lose" in the lily of rebirth and arcade cabinet tooltips
+-Fixed slight typo in pheromone stingers tooltip
+-Fixed razor radish dealing damage to town npcs
+-Fixed snot-nosed tome not scaling with attack speed boosts
+-Fixed eye belcher shooting projectiles constantly when used
+-Fixed puncturing hornsnake allowing you to use other weapons while it is attached to an enemy
+-Fixed issue where the skull wisp minion would create a giant smear trail across your screen when teleporting to you if its too far away
+-Fixed issue where spooky mod effects that multiply damage against enemies were unintentionally stacking at a multiplicative rate (They still stack but are now additive to make it more balanced)
+-Fixed spooky mod helmets with custom drawing being drawn incorrectly on the players map icon when flipped with gravity potions (Unfortunately there is still an issue where certain helmets are offset a bit but it looks better now)
+-Fixed rotted wood and old birch sofas not using silk in their recipe
+-Fixed upper catacomb sofa using one silk and not two silk in its recipe
+-Fixed possessed crown being reforgable by the goblin tinkerer despite it being unable to get reforges
+-Fixed shipyard campfire being crafted with regular torches instead of shipyard torches, and not having the tooltip about increasing life regeneration
+-Fixed cabbage boulders in the fetid farms having incorrect damage scaling, nerfed base damage from 150 -> 70, and they now glow red with dangersense potions
+-Fixed spooky forest generation sometimes generating with walls sticking out of blocks incorrectly (Especially when the spooky forest at spawn point config is off)
+-Fixed rotten depths overriding dungeon tiles during world generation
+-Attempted to fix issue where the catacombs would still rarely generate over parts of the jungle temple

@@ -13,11 +13,11 @@ namespace Spooky.Content.Items.Costume
 	[AutoloadEquip(EquipType.Head)]
 	public class RotGourdMask : ModItem
 	{
-		private static Asset<Texture2D> TopTexture;
+		private static Asset<Texture2D> HeadTexture;
 
 		public override void Load()
 		{
-			TopTexture = ModContent.Request<Texture2D>(Texture + "Top");
+			HeadTexture = ModContent.Request<Texture2D>(Texture + "_Head");
 		}
 
 		public override void SetDefaults()
@@ -30,24 +30,13 @@ namespace Spooky.Content.Items.Costume
 
 		public override bool ModifyEquipTextureDraw(ref PlayerDrawSet drawInfo, ref DrawData drawData, EquipTexture equipTexture, string methodName)
 		{
-			drawInfo.DrawDataCache.Add(drawData);
+			Rectangle TextureRectangle = new(0, 0, 26, 53);
+			Vector2 origin = TextureRectangle.Size() / 2f;
 
-			//offset values
-			int OffsetY = drawInfo.drawPlayer.gravDir == 1 ? -4 : -8;
-			Vector2 HeadOffset = new Vector2(0, OffsetY) * drawInfo.drawPlayer.Directions;
-
-			//draw hat
-			Rectangle frame = TopTexture.Frame(1, 20, 0, drawInfo.drawPlayer.bodyFrame.Y / drawInfo.drawPlayer.bodyFrame.Height);
-			Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(drawInfo.drawPlayer.width / 2 - frame.Width / 2,
-			drawInfo.drawPlayer.height - frame.Height + 4f) + drawInfo.drawPlayer.headPosition + HeadOffset;
-			drawPos = drawPos.Floor();
-			Vector2 origin = drawInfo.headVect;
-
-			drawData = new DrawData(TopTexture.Value, drawPos.Floor() + origin, frame,
-			drawData.color, drawInfo.drawPlayer.headRotation, origin, 1f, drawInfo.playerEffect);
-			drawData.shader = drawInfo.cHead;
-
-			drawInfo.DrawDataCache.Add(drawData);
+			Player player = drawInfo.drawPlayer;
+			float yOffset = Main.OffsetsPlayerHeadgear[player.bodyFrame.Y / player.bodyFrame.Height].Y * player.gravDir;
+			Vector2 offset = new Vector2(1 * player.direction, (player.gravDir == -1 ? 11 : 0) + yOffset);
+			drawInfo.DrawDataCache.Add(drawData with { texture = HeadTexture.Value, position = drawData.position + offset, sourceRect = TextureRectangle, origin = origin });
 
 			return false;
 		}

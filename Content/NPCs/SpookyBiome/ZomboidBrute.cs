@@ -203,9 +203,9 @@ namespace Spooky.Content.NPCs.SpookyBiome
         {
             if (NPC.life <= 0)
             {
-                for (int numGores = 1; numGores <= 6; numGores++)
+                if (Main.netMode != NetmodeID.Server) 
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 6; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/ZomboidBruteGore" + numGores).Type);
                     }
@@ -241,9 +241,9 @@ namespace Spooky.Content.NPCs.SpookyBiome
                 NPCGlobalHelper.ShootHostileProjectile(NPC, new Vector2(NPC.Center.X, NPC.Center.Y - 10), new Vector2(0, Main.rand.Next(-15, -9)), 
                 ModContent.ProjectileType<ZomboidTomatoHead>(), NPC.damage, 4.5f, ai0: 0);
 
-                for (int numGores = 2; numGores <= 6; numGores++)
+                if (Main.netMode != NetmodeID.Server) 
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 2; numGores <= 6; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/ZomboidBruteGore" + numGores).Type);
                     }

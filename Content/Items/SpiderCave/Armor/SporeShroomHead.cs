@@ -16,11 +16,11 @@ namespace Spooky.Content.Items.SpiderCave.Armor
 	[AutoloadEquip(EquipType.Head)]
 	public class SporeShroomHead : ModItem
 	{
-		private static Asset<Texture2D> TopTexture;
+		private static Asset<Texture2D> HeadTexture;
 
 		public override void Load()
 		{
-			TopTexture = ModContent.Request<Texture2D>(Texture + "Top");
+			HeadTexture = ModContent.Request<Texture2D>(Texture + "Head");
 		}
 
 		public override void SetStaticDefaults()
@@ -38,24 +38,16 @@ namespace Spooky.Content.Items.SpiderCave.Armor
 
 		public override bool ModifyEquipTextureDraw(ref PlayerDrawSet drawInfo, ref DrawData drawData, EquipTexture equipTexture, string methodName)
 		{
+			//manually add drawdata here first so the actual helmet head texture draws
 			drawInfo.DrawDataCache.Add(drawData);
 
-			//offset values
-			int OffsetY = drawInfo.drawPlayer.gravDir == 1 ? -20 : -24;
-			Vector2 HeadOffset = new Vector2(3, OffsetY) * drawInfo.drawPlayer.Directions;
+			Rectangle TextureRectangle = new(0, 0, 46, 97);
+			Vector2 origin = TextureRectangle.Size() / 2f;
 
-			//draw mushroom top
-			Rectangle frame = TopTexture.Frame(1, 20, 0, drawInfo.drawPlayer.bodyFrame.Y / drawInfo.drawPlayer.bodyFrame.Height);
-			Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(drawInfo.drawPlayer.width / 2 - frame.Width / 2,
-			drawInfo.drawPlayer.height - frame.Height + 4f) + drawInfo.drawPlayer.headPosition + HeadOffset;
-			drawPos = drawPos.Floor();
-			Vector2 origin = drawInfo.headVect;
-
-			drawData = new DrawData(TopTexture.Value, drawPos.Floor() + origin, frame,
-			drawData.color, drawInfo.drawPlayer.headRotation, origin, 1f, drawInfo.playerEffect);
-			drawData.shader = drawInfo.cHead;
-
-			drawInfo.DrawDataCache.Add(drawData);
+			Player player = drawInfo.drawPlayer;
+			float yOffset = Main.OffsetsPlayerHeadgear[player.bodyFrame.Y / player.bodyFrame.Height].Y * player.gravDir;
+			Vector2 offset = new Vector2(3 * player.direction, (player.gravDir == -1 ? 11 : 0) + yOffset);
+			drawInfo.DrawDataCache.Add(drawData with { texture = HeadTexture.Value, position = drawData.position + offset, sourceRect = TextureRectangle, origin = origin });
 
 			return false;
 		}

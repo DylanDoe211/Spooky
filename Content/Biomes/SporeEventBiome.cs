@@ -66,28 +66,28 @@ namespace Spooky.Content.Biomes
 					//fog colors
 					List<Color> ColorList1 = new List<Color>
 					{
-						new Color(141, 63, 63),
-						new Color(153, 111, 68),
-						new Color(158, 136, 73), 
-						new Color(70, 114, 66),
-						new Color(61, 92, 110),
-						new Color(78, 58, 104)
+						new Color(255, 255, 255),
+						new Color(153, 68, 255),
+						new Color(86, 255, 51), 
+						new Color(255, 38, 38),
+						new Color(194, 98, 39),
+						new Color(255, 199, 32)
 					};
 					//spore dot colors
 					List<Color> ColorList2 = new List<Color>
 					{
-						new Color(167, 0, 255),
-						new Color(229, 93, 11),
-						new Color(0, 212, 136),
-						new Color(23, 84, 255),
-						new Color(245, 0, 6),
-						new Color(122, 147, 132)
+						new Color(255, 255, 255),
+						new Color(153, 68, 255),
+						new Color(86, 255, 51), 
+						new Color(255, 38, 38),
+						new Color(194, 98, 39),
+						new Color(255, 199, 32)
 					};
 
 					for (int i = 0; i < 3; i++)
 					{
-						int ColorToPutInFoglist = WorldGen.genRand.Next(ColorList1.Count);
-						int ColorToPutInSporelist = WorldGen.genRand.Next(ColorList2.Count);
+						int ColorToPutInFoglist = Main.rand.Next(ColorList1.Count);
+						int ColorToPutInSporelist = Main.rand.Next(ColorList2.Count);
 
 						FogColorList.Add(ColorList1[ColorToPutInFoglist]);
 						SporeColorList.Add(ColorList2[ColorToPutInSporelist]);

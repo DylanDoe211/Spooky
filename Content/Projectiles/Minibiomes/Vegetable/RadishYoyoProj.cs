@@ -49,7 +49,7 @@ namespace Spooky.Content.Projectiles.Minibiomes.Vegetable
 
             foreach (NPC NPC in Main.ActiveNPCs)
             {
-                if (NPC.Distance(Projectile.Center) <= 90f && !NPC.dontTakeDamage && NPC.immune[Projectile.owner] == 0)
+                if (NPC.Distance(Projectile.Center) <= 90f && !NPC.friendly && !NPC.dontTakeDamage && NPC.immune[Projectile.owner] == 0)
                 {
                     int direction = NPC.Center.X < player.Center.X ? -1 : 1;
                     player.ApplyDamageToNPC(NPC, Projectile.damage, Projectile.knockBack, direction, false, null, true);

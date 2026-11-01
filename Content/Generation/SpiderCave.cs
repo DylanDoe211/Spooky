@@ -1,5 +1,17 @@
-using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.GameContent.Generation;
+using Terraria.WorldBuilding;
+using Terraria.Localization;
+using Terraria.IO;
 using ReLogic.Utilities;
+using Microsoft.Xna.Framework;
+using System;
+using System.Linq;
+using System.Collections.Generic;
+
+using Spooky.Core;
 using Spooky.Content.Items.SpiderCave;
 using Spooky.Content.Items.SpiderCave.Misc;
 using Spooky.Content.Tiles.Blooms;
@@ -7,18 +19,6 @@ using Spooky.Content.Tiles.SpiderCave;
 using Spooky.Content.Tiles.SpiderCave.Ambient;
 using Spooky.Content.Tiles.SpiderCave.Furniture;
 using Spooky.Content.Tiles.SpiderCave.Tree;
-using Spooky.Content.Tiles.SpookyHell;
-using Spooky.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Terraria;
-using Terraria.GameContent.Generation;
-using Terraria.ID;
-using Terraria.IO;
-using Terraria.Localization;
-using Terraria.ModLoader;
-using Terraria.WorldBuilding;
 
 namespace Spooky.Content.Generation
 {
@@ -167,8 +167,8 @@ namespace Spooky.Content.Generation
                 }
             }
 
-            int XIncrement = 6400 / 98;
-            int YIncrement = 1800 / 36;
+            int XIncrement = 65;
+            int YIncrement = 50;
 
 			//dig out caves
 			for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X += XIncrement)
@@ -192,6 +192,30 @@ namespace Spooky.Content.Generation
                             CavePatch(NewX, NewY);
 						}
 					}
+				}
+			}
+
+            //basic cave smoothing
+			for (int l = 0; l < 6; l++)
+			{
+				for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
+                {
+                    for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
+                    {
+                        if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist) && BlockTypes.Contains(Main.tile[X, Y].TileType))
+                        {
+                            int tileType = SpookyWorldMethods.GetNeighboringTileType(X, Y);
+                            int neighborCount = SpookyWorldMethods.GetNeighboringTileCount(X, Y);
+                            if (neighborCount > 4)
+                            {
+                                WorldGen.PlaceTile(X, Y, tileType);
+                            }
+                            else if (neighborCount < 4)
+                            {
+                                Main.tile[X, Y].ClearEverything();
+                            }
+                        }
+                    }
 				}
 			}
 
@@ -268,30 +292,6 @@ namespace Spooky.Content.Generation
 					}
                 }
             }
-
-            //basic cave smoothing
-			for (int l = 0; l < 6; l++)
-			{
-				for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
-                {
-                    for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
-                    {
-                        if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist) && BlockTypes.Contains(Main.tile[X, Y].TileType))
-                        {
-                            int tileType = SpookyWorldMethods.GetNeighboringTileType(X, Y);
-                            int neighborCount = SpookyWorldMethods.GetNeighboringTileCount(X, Y);
-                            if (neighborCount > 4)
-                            {
-                                WorldGen.PlaceTile(X, Y, tileType);
-                            }
-                            else if (neighborCount < 4)
-                            {
-                                WorldGen.KillTile(X, Y);
-                            }
-                        }
-                    }
-				}
-			}
 
             //place grass walls around dirt blocks and dirt walls around stone blocks
             for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
@@ -560,7 +560,66 @@ namespace Spooky.Content.Generation
                 }
             }
 
-			progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.SpiderCavePolish").Value;
+            for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
+            {
+				for (int Y = (int)(origin.Y - verticalRadius * 0.4f) - 3; Y <= origin.Y + verticalRadius + 3; Y++)
+                {
+                    if (CheckInsideOval(new Point(X, Y), biomeTop, biomeBottom, constant, center, out float dist))
+					{
+                        Tile tile = Main.tile[X, Y];
+                        Tile tileAbove = Main.tile[X, Y - 1];
+
+                        //remove grass thats entirely surrounded by tiles due to the lakes generating after grass spreads
+                        if (tile.TileType == ModContent.TileType<DampGrass>() || tile.TileType == ModContent.TileType<DampMushroomGrass>())
+                        {
+                            if (WorldGen.SolidOrSlopedTile(X - 1, Y) && WorldGen.SolidOrSlopedTile(X + 1, Y) && WorldGen.SolidOrSlopedTile(X, Y - 1) && WorldGen.SolidOrSlopedTile(X, Y + 1) &&
+                            WorldGen.SolidOrSlopedTile(X - 1, Y - 1) && WorldGen.SolidOrSlopedTile(X + 1, Y + 1) && WorldGen.SolidOrSlopedTile(X - 1, Y + 1) && WorldGen.SolidOrSlopedTile(X + 1, Y - 1))
+                            {
+                                tile.TileType = (ushort)ModContent.TileType<DampSoil>();
+                            }
+                        }
+
+                        //place a random mushroom rock and then place a cluster of small mushrooms of the same color around it
+                        if (((tile.TileType == ModContent.TileType<DampGrass>() && WorldGen.genRand.NextBool(40)) ||
+                        (tile.TileType == ModContent.TileType<DampMushroomGrass>() && WorldGen.genRand.NextBool(4))) && 
+                        tileAbove.LiquidAmount <= 0)
+                        {
+                            ushort[] Mushrooms = new ushort[] { (ushort)ModContent.TileType<MushroomBlue>(), (ushort)ModContent.TileType<MushroomBrown>(),
+                            (ushort)ModContent.TileType<MushroomGreen>(), (ushort)ModContent.TileType<MushroomPurple>(),
+                            (ushort)ModContent.TileType<MushroomRed>(), (ushort)ModContent.TileType<MushroomTeal>(), (ushort)ModContent.TileType<MushroomYellow>() };
+
+                            int TypeToPlaceIndex = WorldGen.genRand.Next(0, Mushrooms.Length);
+
+                            bool Success = TileGlobal.PlaceObject(X, Y - 1, Mushrooms[TypeToPlaceIndex], true, WorldGen.genRand.Next(0, 2));
+                            if (Success)
+                            {
+                                for (int i = X - 10; i <= X + 10; i++)
+                                {
+                                    for (int j = Y - 4; j <= Y + 4; j++)
+                                    {
+                                        Tile tileAbove2 = Main.tile[i, j - 1];
+
+                                        if (WorldGen.genRand.NextBool(4) && tileAbove2.LiquidAmount <= 0 &&
+                                        (tile.TileType == ModContent.TileType<DampGrass>() || tile.TileType == ModContent.TileType<DampMushroomGrass>()))
+                                        {
+                                            TileGlobal.PlaceObject(i, j - 1, ModContent.TileType<MushroomSmall>(), true, (TypeToPlaceIndex * 3) + WorldGen.genRand.Next(0, 2));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        //grow mushroom trees
+                        if (WorldGen.genRand.NextBool(3) && CanGrowSporeShroom(X, Y) && tile.TileType == ModContent.TileType<DampMushroomGrass>() &&
+                        !tile.LeftSlope && !tile.RightSlope && !tile.IsHalfBlock)
+						{
+							SporeShroomTree.Grow(X, Y - 1, 3, 15);
+						}
+                    }
+                }
+            }
+
+            progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.SpiderCavePolish").Value;
 
 			//place ambient tiles
 			for (int X = origin.X - biomeSize - 2; X <= origin.X + biomeSize + 2; X++)
@@ -584,17 +643,7 @@ namespace Spooky.Content.Generation
                             Tile.SmoothSlope(X, Y, true);
                         }
 
-                        //remove grass thats entirely surrounded by tiles due to the lakes generating after grass spreads
-                        if (tile.TileType == ModContent.TileType<DampGrass>() || tile.TileType == ModContent.TileType<DampMushroomGrass>())
-                        {
-                            if (WorldGen.SolidOrSlopedTile(X - 1, Y) && WorldGen.SolidOrSlopedTile(X + 1, Y) && WorldGen.SolidOrSlopedTile(X, Y - 1) && WorldGen.SolidOrSlopedTile(X, Y + 1) &&
-                            WorldGen.SolidOrSlopedTile(X - 1, Y - 1) && WorldGen.SolidOrSlopedTile(X + 1, Y + 1) && WorldGen.SolidOrSlopedTile(X - 1, Y + 1) && WorldGen.SolidOrSlopedTile(X + 1, Y - 1))
-                            {
-                                tile.TileType = (ushort)ModContent.TileType<DampSoil>();
-                            }
-                        }
-
-						//grow grotto trees
+                        //grow grotto trees
 						if (WorldGen.genRand.NextBool() && tile.TileType == ModContent.TileType<DampGrass>())
 						{
 							TreeSettings = new WorldGen.GrowTreeSettings
@@ -602,22 +651,6 @@ namespace Spooky.Content.Generation
 								GroundTest = (_) => true,
 								WallTest = (_) => true,
 								TreeHeightMax = 15,
-								TreeHeightMin = 5,
-								TreeTileType = TileID.Trees,
-								TreeTopPaddingNeeded = 4,
-							};
-
-							WorldGen.GrowTreeWithSettings(X, Y, TreeSettings);
-						}
-
-                        //grow mushroom trees
-                        if (WorldGen.genRand.NextBool(3) && tile.TileType == ModContent.TileType<DampMushroomGrass>())
-						{
-							TreeSettings = new WorldGen.GrowTreeSettings
-							{
-								GroundTest = (_) => true,
-								WallTest = (_) => true,
-								TreeHeightMax = 25,
 								TreeHeightMin = 5,
 								TreeTileType = TileID.Trees,
 								TreeTopPaddingNeeded = 4,
@@ -664,15 +697,6 @@ namespace Spooky.Content.Generation
 								GrowGiantRoot(X, Y, ModContent.TileType<GiantRoot>(), 3, 10);
 							}
 
-							//mushrooms
-							if (WorldGen.genRand.NextBool(15))
-							{
-								ushort[] Mushrooms = new ushort[] { (ushort)ModContent.TileType<MushroomBlue>(), (ushort)ModContent.TileType<MushroomRedBrown>(),
-                                (ushort)ModContent.TileType<MushroomYellow>(), (ushort)ModContent.TileType<MushroomGreen>(), (ushort)ModContent.TileType<MushroomPurple>(),
-                                (ushort)ModContent.TileType<MushroomRed>(), (ushort)ModContent.TileType<MushroomTeal>() };
-								TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Mushrooms), true, WorldGen.genRand.Next(0, 2));
-							}
-
 							//grow weeds
 							if (WorldGen.genRand.NextBool() && !tileAbove.HasTile)
 							{
@@ -683,14 +707,6 @@ namespace Spooky.Content.Generation
                         //mushroom grass only ambient tiles
 						if (tile.TileType == ModContent.TileType<DampMushroomGrass>())
 						{
-							if (WorldGen.genRand.NextBool(3))
-							{
-								ushort[] Mushrooms = new ushort[] { (ushort)ModContent.TileType<MushroomBlue>(), (ushort)ModContent.TileType<MushroomRedBrown>(),
-                                (ushort)ModContent.TileType<MushroomYellow>(), (ushort)ModContent.TileType<MushroomGreen>(), (ushort)ModContent.TileType<MushroomPurple>(),
-                                (ushort)ModContent.TileType<MushroomRed>(), (ushort)ModContent.TileType<MushroomTeal>() };
-								TileGlobal.PlaceObject(X, Y - 1, WorldGen.genRand.Next(Mushrooms), true, WorldGen.genRand.Next(0, 2));
-							}
-
 							if (WorldGen.genRand.NextBool() && !tileAbove.HasTile)
 							{
 								TileGlobal.PlaceObject(X, Y - 1, ModContent.TileType<DampMushroomWeeds>(), true, WorldGen.genRand.Next(0, 21));
@@ -1085,6 +1101,23 @@ namespace Spooky.Content.Generation
             }
 
             GiantRoot.Grow(X, Y + 1, minSize, maxSize);
+
+            return true;
+        }
+
+        //dont allow shroom trees to naturally grow too close to each other
+		public static bool CanGrowSporeShroom(int X, int Y)
+        {
+            for (int i = X - 4; i < X + 4; i++)
+            {
+                for (int j = Y - 4; j < Y + 4; j++)
+                {
+                    if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<SporeShroomTree>())
+                    {
+                        return false;
+                    }
+                }
+            }
 
             return true;
         }

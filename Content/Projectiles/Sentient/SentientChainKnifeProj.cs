@@ -270,6 +270,9 @@ namespace Spooky.Content.Projectiles.Sentient
 					}
 				}
 			}
+
+			player.heldProj = Projectile.whoAmI;
+            player.SetDummyItemTime(2);
 		}
 	}
 }

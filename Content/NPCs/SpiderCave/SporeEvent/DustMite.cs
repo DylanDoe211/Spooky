@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Spooky.Core;
 using Spooky.Content.Items.SpiderCave.Misc;
 using Spooky.Content.Tiles.Blooms;
+using Spooky.Content.Tiles.SpiderCave.Tree;
 
 namespace Spooky.Content.NPCs.SpiderCave.SporeEvent
 {
@@ -143,6 +144,7 @@ namespace Spooky.Content.NPCs.SpiderCave.SporeEvent
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<MiteMandibles>(), 3, 1, 3));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<WaxcapTreeSaplingItem>(), 60));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<FungusSeed>(), 120));
         }
 

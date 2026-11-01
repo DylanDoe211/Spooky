@@ -10,15 +10,13 @@ using System.Collections.Generic;
 
 using Spooky.Core;
 using Spooky.Content.Items.Pets;
+using Spooky.Content.Items.SpookyBiome;
 using Spooky.Content.NPCs.SpookyBiome.Projectiles;
 
 namespace Spooky.Content.NPCs.SpookyBiome
 {
     public class Witch : ModNPC  
     {
-        bool CanShootPotion = false;
-        bool HasThrownPotion = true;
-
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[NPC.type] = 11;
@@ -26,20 +24,12 @@ namespace Spooky.Content.NPCs.SpookyBiome
 
         public override void SendExtraAI(BinaryWriter writer)
         {
-            //bools
-            writer.Write(CanShootPotion);
-            writer.Write(HasThrownPotion);
-
             //floats
             writer.Write(NPC.localAI[0]);
         }
 
         public override void ReceiveExtraAI(BinaryReader reader)
         {
-            //bools
-            CanShootPotion = reader.ReadBoolean();
-            HasThrownPotion = reader.ReadBoolean();
-
             //floats
             NPC.localAI[0] = reader.ReadSingle();
         }
@@ -104,13 +94,8 @@ namespace Spooky.Content.NPCs.SpookyBiome
                     NPC.frame.Y = NPC.frame.Y + frameHeight;
                     NPC.frameCounter = 0;
                 }
-                if (NPC.frame.Y == frameHeight * 8)
-                {
-                    CanShootPotion = true;
-                }
                 if (NPC.frame.Y >= frameHeight * 10)
                 {
-                    HasThrownPotion = false;
                     NPC.frame.Y = 6 * frameHeight;
                 }
             }
@@ -135,7 +120,7 @@ namespace Spooky.Content.NPCs.SpookyBiome
             {
                 NPC.aiStyle = 0;
 
-                if (CanShootPotion && !HasThrownPotion)
+                if (NPC.localAI[0] % 20 == 0)
                 {
                     SoundEngine.PlaySound(SoundID.Item106, NPC.Center);
 
@@ -144,10 +129,6 @@ namespace Spooky.Content.NPCs.SpookyBiome
                     ShootSpeed *= 12f;
 
                     NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center, ShootSpeed, ModContent.ProjectileType<WitchPotion>(), NPC.damage, 4.5f);
-
-                    CanShootPotion = false;
-                    HasThrownPotion = true;
-                    NPC.netUpdate = true;
                 }
             }
 
@@ -159,6 +140,7 @@ namespace Spooky.Content.NPCs.SpookyBiome
 
         public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<WitchesBrew>(), 15));
             npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CatEyes>(), 20));
         }
 
@@ -166,9 +148,9 @@ namespace Spooky.Content.NPCs.SpookyBiome
         {
             if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 3; numGores++)
+                if (Main.netMode != NetmodeID.Server) 
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 3; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/WitchGore" + numGores).Type);
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/WitchClothGore").Type);

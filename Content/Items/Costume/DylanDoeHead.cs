@@ -14,7 +14,7 @@ namespace Spooky.Content.Items.Costume
 
 		public override void Load()
 		{
-			FlipTexture = ModContent.Request<Texture2D>("Spooky/Content/Items/Costume/DylanDoeHead_Head_Flipped");
+			FlipTexture = ModContent.Request<Texture2D>(Texture + "_HeadFlipped");
 		}
 
 		public override void SetDefaults()

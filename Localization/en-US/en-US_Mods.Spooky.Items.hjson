@@ -37,7 +37,7 @@ CemeteryLily: {
 	Tooltip:
 		'''
 		Cuts your maximum health down to a third and gives you 2 revives
-		Upon death you will loose a revive and gain stat buffs for 15 seconds
+		Upon death you will lose a revive and gain stat buffs for 15 seconds
 		3 minute duration
 		'''
 }
@@ -1116,7 +1116,7 @@ PolybiusArcadeGame: {
 	Tooltip:
 		'''
 		Summons a damaging blue spiral on your cursor
-		Stores 5 charges and looses a charge upon hitting an enemy
+		Stores 5 charges and loses a charge upon hitting an enemy
 		Constantly regenerates charges if it hasn't hit an enemy
 		For each lost charge you gain 2% increased critical strike chance
 		'Classified information not to be meddled with'
@@ -3214,7 +3214,7 @@ PheromoneWhip: {
 	Tooltip:
 		'''
 		Your summons will focus struck enemies
-		Causes enemies take 20% more damage and 10% critical strike chance from spider minions
+		Causes enemies to take 20% more damage and 10% critical strike chance from spider minions
 		'''
 }
 
@@ -3521,6 +3521,11 @@ CandyBag: {
 		'''
 }
 
+CreepyCandelabra: {
+	DisplayName: Creepier Candelabra
+	Tooltip: Conjures lingering candles that burn nearby enemies
+}
+
 CreepyCandle: {
 	DisplayName: Creepy Candle
 	Tooltip: Magic attacks will sometimes ignite enemies
@@ -3633,6 +3638,16 @@ OldWoodStaff: {
 OldWoodSword: {
 	DisplayName: Old Wood Sword
 	Tooltip: ""
+}
+
+PumpkinPuttyStick: {
+	DisplayName: Sticky Putty Stick
+	Tooltip: Summons pumpkin putties to fight with you
+}
+
+ScarecrowShotgun: {
+	DisplayName: Possessed Shotgun
+	Tooltip: Fires spreads of the wayward souls trapped in this gun
 }
 
 ShroomFlail: {
@@ -3759,6 +3774,11 @@ WarlockJesterBoots: {
 		The wearer can run super fast
 		Allows you to quadruple jump and auto-jump
 		'''
+}
+
+WitchesBrew: {
+	DisplayName: Witch's Brew
+	Tooltip: A glass flask filled with poisonous gas
 }
 
 EyeBody: {
@@ -6284,6 +6304,11 @@ RotWoodPianoItem: {
 	Tooltip: ""
 }
 
+RotWoodPlatformItem: {
+	DisplayName: Rotted Wood Platform
+	Tooltip: ""
+}
+
 RotWoodSinkItem: {
 	DisplayName: Rotted Wood Sink
 	Tooltip: ""
@@ -6372,6 +6397,16 @@ TintedGlassItem: {
 TintedGlassWallItem: {
 	DisplayName: Tinted Glass Wall
 	Tooltip: ""
+}
+
+SporeShroomTreeSaplingItem: {
+	DisplayName: Shroom Spore
+	Tooltip: Plants sporeshroom saplings
+}
+
+WaxcapTreeSaplingItem: {
+	DisplayName: Waxcap Sapling
+	Tooltip: Plants waxcap mushroom saplings
 }
 
 BirchBathtubItem: {

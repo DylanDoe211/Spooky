@@ -16,6 +16,7 @@ namespace Spooky.Content.Tiles.Shipyard.Furniture
         {
             CreateRecipe()
             .AddIngredient(ModContent.ItemType<RotWoodItem>(), 8)
+            .AddIngredient(ItemID.Silk, 2)
             .AddTile(TileID.WorkBenches)
             .Register();
         }

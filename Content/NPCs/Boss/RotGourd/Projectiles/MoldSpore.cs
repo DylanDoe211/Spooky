@@ -31,9 +31,8 @@ namespace Spooky.Content.NPCs.Boss.RotGourd.Projectiles
 			Rectangle rectangle = new(0, ProjTexture.Height() / Main.projFrames[Projectile.type] * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
 
             Main.EntitySpriteDraw(ProjTexture.Value, vector, rectangle, Projectile.GetAlpha(lightColor) * Projectile.ai[1], Projectile.rotation, drawOrigin, Projectile.scale * Projectile.ai[2], SpriteEffects.None, 0);
-            Main.EntitySpriteDraw(ProjTexture.Value, vector, rectangle, Projectile.GetAlpha(lightColor * 0.65f), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
 
-            return false;
+            return true;
         }
 
         public override void AI()

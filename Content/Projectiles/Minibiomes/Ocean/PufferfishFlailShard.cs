@@ -55,10 +55,17 @@ namespace Spooky.Content.Projectiles.Minibiomes.Ocean
 
 			return false;
 		}
+
+        public override bool? CanDamage()
+		{
+			return Projectile.ai[0] >= 60;
+		}
 		
 		public override void AI()
         {
             Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.01f * (float)Projectile.direction;
+
+            Projectile.ai[0]++;
 
             Projectile.velocity.Y = Projectile.velocity.Y + 0.22f;
 		}

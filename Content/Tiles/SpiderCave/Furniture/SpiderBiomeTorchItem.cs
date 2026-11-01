@@ -50,8 +50,8 @@ namespace Spooky.Content.Tiles.SpiderCave.Furniture
 		public override void AddRecipes()
         {
             CreateRecipe(3)
-			.AddIngredient(ItemID.Torch, 3)
-			.AddIngredient(ModContent.ItemType<WebBlockItem>(), 1)
+			.AddIngredient(ModContent.ItemType<BirchWoodItem>(), 1)
+			.AddIngredient(ItemID.Gel, 1)
             .Register();
         }
 	}

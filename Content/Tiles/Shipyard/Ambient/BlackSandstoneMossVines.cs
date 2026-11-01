@@ -37,11 +37,6 @@ namespace Spooky.Content.Tiles.Shipyard.Ambient
 			return false;
 		}
 
-		public override bool CanDrop(int i, int j)
-        {
-			return false;
-        }
-
 		public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak)
         {
 			int[] ValidTiles = { ModContent.TileType<BlackSandstoneMossVines>(), ModContent.TileType<BlackSandstoneMoss>() };

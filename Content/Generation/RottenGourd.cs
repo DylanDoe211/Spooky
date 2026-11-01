@@ -223,11 +223,19 @@ internal class RottenGourd
 
 					if (tile.WallType == wallType && !tile.HasTile && tileAbove.TileType == tileType)
 					{
-						for (int vineY = 0; vineY <= 10; vineY++)
+						for (int vineY = 0; vineY < 8; vineY++)
 						{
-							if (!Main.tile[i, j + vineY].HasTile)
+							Tile vineTile = Main.tile[i, j + vineY];
+
+							if (!vineTile.HasTile)
 							{
-								WorldGen.PlaceTile(i, j + vineY, vineType);
+								vineTile.TileType = (ushort)vineType;
+								vineTile.HasTile = true;
+								WorldGen.SquareTileFrame(i, j + vineY, true);
+								if (Main.netMode == NetmodeID.Server) 
+								{
+									NetMessage.SendTileSquare(-1, i, j + vineY, 3, TileChangeType.None);
+								}
 							}
 						}
 					}

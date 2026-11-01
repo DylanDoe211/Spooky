@@ -49,6 +49,14 @@ namespace Spooky.Content.Tiles.SpiderCave.Tree
 			num = fail ? 1 : 3;
 		}
 
+		public override void SetSpriteEffects(int i, int j, ref SpriteEffects effects)
+		{
+			if (i % 2 == 1)
+			{
+				effects = SpriteEffects.FlipHorizontally;
+			}
+		}
+
 		public override void RandomUpdate(int i, int j)
 		{
 			if (WorldGen.genRand.Next(12) == 0)
@@ -59,14 +67,6 @@ namespace Spooky.Content.Tiles.SpiderCave.Tree
 				{
 					WorldGen.TreeGrowFXCheck(i, j);
 				}
-			}
-		}
-
-		public override void SetSpriteEffects(int i, int j, ref SpriteEffects effects)
-		{
-			if (i % 2 == 1)
-			{
-				effects = SpriteEffects.FlipHorizontally;
 			}
 		}
 	}

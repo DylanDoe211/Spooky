@@ -186,9 +186,9 @@ namespace Spooky.Content.NPCs.SpookyBiome
 			{
 				if (NPC.localAI[2] == 0)
 				{
-					for (int numGores = 1; numGores <= 6; numGores++)
+					if (Main.netMode != NetmodeID.Server) 
 					{
-						if (Main.netMode != NetmodeID.Server)
+						for (int numGores = 1; numGores <= 6; numGores++)
 						{
 							Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/ZomboidArmoredGore" + numGores).Type);
 						}

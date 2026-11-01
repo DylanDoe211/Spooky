@@ -1,4 +1,5 @@
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent;
 using Terraria.DataStructures;
@@ -8,14 +9,11 @@ namespace Spooky.Content.Gores.Misc
 {
 	public class LeafGreen : ModGore
 	{
-		public override void OnSpawn(Gore gore, IEntitySource source)
+		public override void SetStaticDefaults()
 		{
-			ChildSafety.SafeGore[gore.type] = true;
-			gore.velocity = new Vector2(Main.rand.NextFloat() - 0.5f, Main.rand.NextFloat() * MathHelper.TwoPi);
-			gore.numFrames = 8;
-			gore.frame = (byte)Main.rand.Next(8);
-			gore.frameCounter = (byte)Main.rand.Next(8);
-			UpdateType = 910;
+			ChildSafety.SafeGore[Type] = true;
+			GoreID.Sets.SpecialAI[Type] = 3;
+			GoreID.Sets.PaintedFallingLeaf[Type] = true;
 		}
 	}
 

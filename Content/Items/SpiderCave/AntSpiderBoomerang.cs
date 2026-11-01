@@ -26,7 +26,7 @@ namespace Spooky.Content.Items.SpiderCave
             Item.value = Item.buyPrice(gold: 3);
             Item.UseSound = SoundID.Item1;
             Item.shoot = ModContent.ProjectileType<AntSpiderBoomerangProj>();  
-            Item.shootSpeed = 10f;
+            Item.shootSpeed = 13f;
         }
 
         public override bool CanUseItem(Player player)

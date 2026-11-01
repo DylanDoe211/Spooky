@@ -6,6 +6,11 @@ namespace Spooky.Content.Items.Minibiomes.Ocean
 {
 	public class MineTimer : ModItem
 	{
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<MineDynamite>();
+        }
+        
 		public override void SetDefaults()
         {
             Item.width = 42;

@@ -234,6 +234,27 @@ namespace Spooky.Content.Generation
 				}
 			}
 
+			//remove walls that arent surrounded fully by blocks
+			for (int X = PositionX - Main.maxTilesX / 12; X <= PositionX + Main.maxTilesX / 12; X++)
+			{
+				for (int Y = (int)SpookyWorldMethods.WorldSurfaceHeightLimit; Y < Main.maxTilesY - 200; Y++)
+				{
+					if (Main.tile[X, Y].TileType == ModContent.TileType<SpookyStone>() && !Main.tile[X, Y - 1].HasTile && !Main.tile[X, Y + 1].HasTile)
+					{
+						WorldGen.KillTile(X, Y);
+					}
+
+					if (!(Main.tile[X - 1, Y].HasTile && Main.tile[X - 1, Y].HasTile &&
+					Main.tile[X, Y - 1].HasTile && Main.tile[X, Y + 1].HasTile &&
+					Main.tile[X - 1, Y - 1].HasTile && Main.tile[X - 1, Y + 1].HasTile &&
+					Main.tile[X + 1, Y - 1].HasTile && Main.tile[X + 1, Y + 1].HasTile) &&
+					Main.tile[X, Y].WallType == ModContent.WallType<SpookyDirtWall>() && Y < (int)Main.worldSurface)
+					{
+						WorldGen.KillWall(X, Y);
+					}
+				}
+			}
+
 			//place clumps of bloom soil throughout the biome
 			for (int Rocks = 0; Rocks < (int)((double)(Main.maxTilesX * Main.maxTilesY * 27) * 8E-05); Rocks++)
 			{
@@ -324,28 +345,6 @@ namespace Spooky.Content.Generation
             }
 
 			progress.Message = Language.GetOrRegister("Mods.Spooky.WorldgenTasks.SpookyForestPolish").Value;
-
-			//remove walls that arent surrounded fully by blocks
-			for (int X = PositionX - Main.maxTilesX / 12; X <= PositionX + Main.maxTilesX / 12; X++)
-			{
-				for (int Y = PositionY - 100; Y < Main.maxTilesY - 200; Y++)
-				{
-					if (Main.tile[X, Y].TileType == ModContent.TileType<SpookyStone>() && !Main.tile[X, Y - 1].HasTile && !Main.tile[X, Y + 1].HasTile)
-					{
-						WorldGen.KillTile(X, Y);
-					}
-
-					if (!(Main.tile[X - 1, Y].HasTile && Main.tile[X - 1, Y].HasTile &&
-					Main.tile[X, Y - 1].HasTile && Main.tile[X, Y + 1].HasTile &&
-					Main.tile[X - 1, Y - 1].HasTile && Main.tile[X - 1, Y + 1].HasTile &&
-					Main.tile[X + 1, Y - 1].HasTile && Main.tile[X + 1, Y + 1].HasTile) &&
-					Main.tile[X, Y].TileType == ModContent.TileType<SpookyDirt>() &&
-					Main.tile[X, Y].WallType == ModContent.WallType<SpookyDirtWall>() && Y < (int)Main.worldSurface)
-					{
-						WorldGen.KillWall(X, Y);
-					}
-				}
-			}
 
 			//place wall dithering at the entrance to the underground for a nicer transition
 			for (int X = PositionX - Main.maxTilesX / 12; X <= PositionX + Main.maxTilesX / 12; X++)
@@ -1081,65 +1080,64 @@ namespace Spooky.Content.Generation
 					{
 						int PositionX = X + x;
 						int PositionY = Y + (int)(y * scale);
-						Tile tile = Framing.GetTileSafely(PositionX, PositionY);
 
-						if (!Main.tileDungeon[tile.TileType] && !Main.wallDungeon[tile.WallType])
+						if (WorldGen.InWorld(PositionX, PositionY))
 						{
-							if (PositionY >= SpookyWorldMethods.WorldSurfaceHeightLimit)
+							Tile tile = Framing.GetTileSafely(PositionX, PositionY);
+
+							if (!Main.tileDungeon[tile.TileType] && !Main.wallDungeon[tile.WallType])
 							{
-								if (PositionY <= Main.worldSurface)
+								if (PositionY >= SpookyWorldMethods.WorldSurfaceHeightLimit)
 								{
-									if (Math.Sqrt(x * x + y * y) >= radius - radialMod)
+									//surface generation
+									if (PositionY <= Main.worldSurface)
 									{
-										if (WorldGen.genRand.NextBool() && tile.HasTile)
+										if (Math.Sqrt(x * x + y * y) >= radius - radialMod)
 										{
-											tile.TileType = (ushort)ModContent.TileType<SpookyDirt>();
+											if (WorldGen.genRand.NextBool() && tile.HasTile)
+											{
+												tile.TileType = (ushort)ModContent.TileType<SpookyDirt>();
+											}
+										}
+										if (Math.Sqrt(x * x + y * y) < radius - radialMod)
+										{
+											if (tile.HasTile || tile.WallType > 0)
+											{
+												tile.HasTile = true;
+												tile.TileType = (ushort)ModContent.TileType<SpookyDirt>();
+												tile.WallType = (ushort)ModContent.WallType<SpookyDirtWall>();
+												tile.LiquidAmount = 0;
+											}
 										}
 									}
-									if (Math.Sqrt(x * x + y * y) < radius - radialMod)
+									//underground fills with stone
+									else
 									{
-										if (tile.HasTile || tile.WallType > 0)
+										if (Math.Sqrt(x * x + y * y) >= radius - radialMod)
 										{
+											if (WorldGen.genRand.NextBool() && tile.HasTile)
+											{
+												tile.TileType = (ushort)ModContent.TileType<SpookyStone>();
+											}
+										}
+										if (Math.Sqrt(x * x + y * y) < radius - radialMod)
+										{
+											//add a bit of noise inbetween the underground and surface
+											for (int newY = PositionY - 8; newY <= PositionY; newY++)
+											{
+												if (WorldGen.genRand.NextBool(3))
+												{
+													Main.tile[PositionX, newY].TileType = (ushort)ModContent.TileType<SpookyStone>();
+													Main.tile[PositionX, newY].WallType = (ushort)ModContent.WallType<SpookyStoneWall>();
+												}
+											}
+
+											tile.ClearEverything();
 											tile.HasTile = true;
-											tile.TileType = (ushort)ModContent.TileType<SpookyDirt>();
-											tile.LiquidAmount = 0;
-
-											if (Main.tile[PositionX - 1, PositionY].HasTile && Main.tile[PositionX - 1, PositionY].HasTile &&
-											Main.tile[PositionX, PositionY - 1].HasTile && Main.tile[PositionX, PositionY + 1].HasTile &&
-											Main.tile[PositionX - 1, PositionY - 1].HasTile && Main.tile[PositionX - 1, PositionY + 1].HasTile &&
-											Main.tile[PositionX + 1, PositionY - 1].HasTile && Main.tile[PositionX + 1, PositionY + 1].HasTile)
-											{
-												Main.tile[PositionX, PositionY].WallType = (ushort)ModContent.WallType<SpookyDirtWall>();
-											}
-										}
-									}
-								}
-								else
-								{
-									if (Math.Sqrt(x * x + y * y) >= radius - radialMod)
-									{
-										if (WorldGen.genRand.NextBool() && tile.HasTile)
-										{
 											tile.TileType = (ushort)ModContent.TileType<SpookyStone>();
+											tile.WallType = (ushort)ModContent.WallType<SpookyStoneWall>();
+											tile.LiquidAmount = 0;
 										}
-									}
-									if (Math.Sqrt(x * x + y * y) < radius - radialMod)
-									{
-										//add a bit of noise inbetween the underground and surface
-										for (int newY = PositionY - 8; newY <= PositionY; newY++)
-										{
-											if (WorldGen.genRand.NextBool(3))
-											{
-												Main.tile[PositionX, newY].TileType = (ushort)ModContent.TileType<SpookyStone>();
-												Main.tile[PositionX, newY].WallType = (ushort)ModContent.WallType<SpookyStoneWall>();
-											}
-										}
-
-										tile.ClearEverything();
-										tile.HasTile = true;
-										tile.TileType = (ushort)ModContent.TileType<SpookyStone>();
-										tile.WallType = (ushort)ModContent.WallType<SpookyStoneWall>();
-										tile.LiquidAmount = 0;
 									}
 								}
 							}

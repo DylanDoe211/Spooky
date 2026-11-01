@@ -87,9 +87,9 @@ namespace Spooky.Content.NPCs.SpookyBiome
         {
             if (NPC.life <= 0) 
             {
-                for (int numGores = 1; numGores <= 2; numGores++)
+                if (Main.netMode != NetmodeID.Server) 
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 2; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/ZomboidClarinetGore" + numGores).Type);
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/ZomboidClarinetGore3").Type);

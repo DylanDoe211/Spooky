@@ -7,11 +7,15 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
+using Spooky.Core;
+
 namespace Spooky.Content.NPCs.Boss.Daffodil.Projectiles
 {
     public class ThornPillarSeed : ModProjectile
     {
         Vector2 GoToPosition = Vector2.Zero;
+
+        private static Asset<Texture2D> ProjTexture;
 
         public static readonly SoundStyle ThornSpawnSound = new("Spooky/Content/Sounds/Daffodil/SeedThorn", SoundType.Sound);
 
@@ -23,6 +27,34 @@ namespace Spooky.Content.NPCs.Boss.Daffodil.Projectiles
             Projectile.tileCollide = false;
             Projectile.timeLeft = 1200;
             Projectile.penetrate = 1;
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+			ProjTexture ??= ModContent.Request<Texture2D>(Texture);
+
+			Vector2 drawOrigin = new(ProjTexture.Width() * 0.5f, Projectile.height * 0.5f);
+			Vector2 vector = new Vector2(Projectile.Center.X, Projectile.Center.Y) - Main.screenPosition + new Vector2(0, Projectile.gfxOffY);
+			Rectangle rectangle = new(0, ProjTexture.Height() / Main.projFrames[Projectile.type] * Projectile.frame, ProjTexture.Width(), ProjTexture.Height() / Main.projFrames[Projectile.type]);
+
+			//draw aura
+            for (int i = 0; i < 4; i++)
+            {
+                Vector2 offset = i switch
+                {
+                    1 => new(0, -2),
+                    2 => new(2, 0),
+                    3 => new(0, 2),
+                    _ => new(-2, 0)
+                };
+
+                Main.EntitySpriteDraw(DrawUtils.ColorSolid(ProjTexture.Value, Color.White), vector + offset, rectangle, 
+                Projectile.GetAlpha(Color.Lime * 0.35f), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+            }
+
+			Main.EntitySpriteDraw(ProjTexture.Value, vector, rectangle, Projectile.GetAlpha(lightColor), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+
+            return false;
         }
 
         public override bool? CanDamage()

@@ -10,9 +10,8 @@ using System.IO;
 using System.Collections.Generic;
 
 using Spooky.Core;
-using Spooky.Content.Buffs.Debuff;
-using Spooky.Content.Items.Cemetery;
-using Spooky.Content.Projectiles.Cemetery;
+using Spooky.Content.Items.SpookyBiome;
+using Spooky.Content.NPCs.SpookyBiome.Projectiles;
 
 namespace Spooky.Content.NPCs.SpookyBiome
 {
@@ -83,7 +82,7 @@ namespace Spooky.Content.NPCs.SpookyBiome
             {
                 //walking animation
                 NPC.frameCounter++;
-                if (NPC.frameCounter > 6)
+                if (NPC.frameCounter > 4)
                 {
                     NPC.frame.Y = NPC.frame.Y + frameHeight;
                     NPC.frameCounter = 0;
@@ -179,20 +178,17 @@ namespace Spooky.Content.NPCs.SpookyBiome
                         }
                     }
 
-                    for (int numProjectiles = 0; numProjectiles < 4; numProjectiles++)
+                    Vector2 ShootSpeed = player.Center - NPC.Center;
+                    ShootSpeed.Normalize();
+                    ShootSpeed *= 25f;
+
+                    Vector2 newVelocity = ShootSpeed.RotatedByRandom(MathHelper.ToRadians(10));
+
+                    bool lineOfSight = Collision.CanHitLine(NPC.position, NPC.width, NPC.height, positonToShootFrom - new Vector2(NPC.width / 2, NPC.height / 2), NPC.width, NPC.height);
+
+                    if (lineOfSight)
                     {
-                        Vector2 ShootSpeed = player.Center - NPC.Center;
-                        ShootSpeed.Normalize();
-                        ShootSpeed *= 25f;
-
-                        Vector2 newVelocity = ShootSpeed.RotatedByRandom(MathHelper.ToRadians(10));
-
-                        bool lineOfSight = Collision.CanHitLine(NPC.position, NPC.width, NPC.height, positonToShootFrom - new Vector2(NPC.width / 2, NPC.height / 2), NPC.width, NPC.height);
-
-                        if (lineOfSight)
-                        {
-                            NPCGlobalHelper.ShootHostileProjectile(NPC, positonToShootFrom, newVelocity, ProjectileID.BulletSnowman, NPC.damage, 4.5f);
-                        }
+                        NPCGlobalHelper.ShootHostileProjectile(NPC, positonToShootFrom, newVelocity, ModContent.ProjectileType<ScarecrowBullet>(), NPC.damage, 4.5f);
                     }
                 }
                 
@@ -212,6 +208,11 @@ namespace Spooky.Content.NPCs.SpookyBiome
             }
         }
 
+        public override void ModifyNPCLoot(NPCLoot npcLoot) 
+        {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<ScarecrowShotgun>(), 15));
+        }
+
         public override void HitEffect(NPC.HitInfo hit) 
         {
             if (NPC.life <= 0) 
@@ -223,9 +224,9 @@ namespace Spooky.Content.NPCs.SpookyBiome
                     Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity / 2, GoreID.Smoke3);
                 }
 
-                for (int numGores = 1; numGores <= 7; numGores++)
+                if (Main.netMode != NetmodeID.Server) 
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 7; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/ScarecrowGore" + numGores).Type);
                     }

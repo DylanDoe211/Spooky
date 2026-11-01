@@ -153,6 +153,11 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 			//go to the player if they are too fars
 			if (Projectile.Distance(player.Center) > 1200f)
 			{
+				for (int i = 0; i < trailLength.Length; i++)
+				{
+					trailLength[i] = Vector2.Zero;
+				}
+
 				Projectile.position.X = player.Center.X - (float)(Projectile.width / 2);
 				Projectile.position.Y = player.Center.Y - (float)(Projectile.height / 2);
 				Projectile.netUpdate = true;

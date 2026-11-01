@@ -34,11 +34,10 @@ namespace Spooky.Content.Tiles.SpiderCave
 		public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
         {
             bool isPlayerNear = WorldGen.PlayerLOS(i, j);
-            Tile Below = Framing.GetTileSafely(i, j + 1);
 
-            if (!Main.gamePaused && Main.instance.IsActive && !Below.HasTile && isPlayerNear)
+            if (!Main.gamePaused && Main.instance.IsActive && !WorldGen.SolidTile(i, j + 1) && isPlayerNear)
             {
-                if (Main.rand.NextBool(380))
+                if (Main.rand.NextBool(600))
                 {
                     int newDust = Dust.NewDust(new Vector2((i) * 16, (j + 1) * 16), 5, 5, ModContent.DustType<CobwebParticle>());
                     Main.dust[newDust].velocity.Y += 0.09f;

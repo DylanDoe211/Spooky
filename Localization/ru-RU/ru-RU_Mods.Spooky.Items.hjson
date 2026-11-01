@@ -3528,6 +3528,11 @@ CandyBag: {
 		'''
 }
 
+CreepyCandelabra: {
+	// DisplayName: Creepier Candelabra
+	// Tooltip: Conjures lingering candles that burn nearby enemies
+}
+
 CreepyCandle: {
 	DisplayName: Страшная свеча
 	Tooltip: Магические снаряды иногда поджигают врагов
@@ -3640,6 +3645,16 @@ OldWoodStaff: {
 OldWoodSword: {
 	DisplayName: Меч из старой древесины
 	Tooltip: ""
+}
+
+PumpkinPuttyStick: {
+	// DisplayName: Sticky Putty Stick
+	// Tooltip: Summons pumpkin putties to fight with you
+}
+
+ScarecrowShotgun: {
+	// DisplayName: Possessed Shotgun
+	// Tooltip: Fires spreads of the wayward souls trapped in this gun
 }
 
 ShroomFlail: {
@@ -3766,6 +3781,11 @@ WarlockJesterBoots: {
 		Позволяет очень быстро бегать
 		Позволяет совершать четверной прыжок и автоматически прыгать
 		'''
+}
+
+WitchesBrew: {
+	// DisplayName: Witch's Brew
+	// Tooltip: A glass flask filled with poisonous gas
 }
 
 EyeBody: {
@@ -6298,6 +6318,11 @@ RotWoodPianoItem: {
 	// Tooltip: ""
 }
 
+RotWoodPlatformItem: {
+	// DisplayName: Rotted Wood Platform
+	// Tooltip: ""
+}
+
 RotWoodSinkItem: {
 	// DisplayName: Rotted Wood Sink
 	// Tooltip: ""
@@ -6386,6 +6411,16 @@ TintedGlassItem: {
 TintedGlassWallItem: {
 	// DisplayName: Tinted Glass Wall
 	// Tooltip: ""
+}
+
+SporeShroomTreeSaplingItem: {
+	// DisplayName: Shroom Spore
+	// Tooltip: Plants sporeshroom saplings
+}
+
+WaxcapTreeSaplingItem: {
+	// DisplayName: Waxcap Sapling
+	// Tooltip: Plants waxcap mushroom saplings
 }
 
 BirchBathtubItem: {

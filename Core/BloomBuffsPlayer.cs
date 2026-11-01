@@ -523,7 +523,7 @@ namespace Spooky.Core
 				{
 					Player.statLife = Player.statLifeMax2;
 
-					if (CemeteryLilyRevives > 0)
+					if (CemeteryLilyRevives > 1)
 					{
 						SoundEngine.PlaySound(SoundID.Item103, Player.Center);
 						Player.AddBuff(ModContent.BuffType<CemeteryLilyBuff>(), 900);
