@@ -124,90 +124,47 @@ namespace Spooky.Content.NPCs.Shipyard
             NPC.frame.X = (int)(NPC.frame.Width * CurrentFrameX);
 
             NPC.frameCounter++;
-
-            if (CurrentAnimation == AnimationState.EmergeFromShell)
+			
+			switch (CurrentAnimation)
 			{
-				if (NPC.frameCounter > 7)
+				case AnimationState.EmergeFromShell:
+					FrameHandler(8, 4, 4);					
+					break;
+				case AnimationState.HideInShell:
+					FrameHandler(8, 8, 8, 5);					
+					break;
+				case AnimationState.Idle:
+					FrameHandler(6, 3);												
+					break;
+				case AnimationState.Wiggle:
+					FrameHandler(6, 9, 5);
+					break;
+				case AnimationState.WiggleStop:
+					FrameHandler(6, 12, 12);
+					break;
+				case AnimationState.Spin:
+					FrameHandler(SpinFramerate + 1, 6);					
+					break;
+			}
+			void FrameHandler(int framerate, int cap, int setFrame = 0, int min = 0)
+			{
+				if (setFrame == -1) setFrame = cap;
+				if (NPC.frameCounter >= framerate)
 				{
 					NPC.frame.Y = NPC.frame.Y + frameHeight;
 					NPC.frameCounter = 0;
 				}
 
-				if (NPC.frame.Y >= frameHeight * 5)
+				if (NPC.frame.Y < frameHeight * min)
 				{
-					NPC.frame.Y = 4 * frameHeight;
-				}
-            }
-            else if (CurrentAnimation == AnimationState.HideInShell)
-			{
-				if (NPC.frameCounter > 7)
-				{
-					NPC.frame.Y = NPC.frame.Y + frameHeight;
-					NPC.frameCounter = 0;
+					NPC.frame.Y = (min) * frameHeight;
 				}
 
-                if (NPC.frame.Y < frameHeight * 5)
+				if (NPC.frame.Y > frameHeight * cap)
 				{
-					NPC.frame.Y = 4 * frameHeight;
+					NPC.frame.Y = setFrame * frameHeight;
 				}
-
-				if (NPC.frame.Y >= frameHeight * 9)
-				{
-					NPC.frame.Y = 8 * frameHeight;
-				}
-            }
-            else if (CurrentAnimation == AnimationState.Idle)
-			{
-				if (NPC.frameCounter > 5)
-				{
-					NPC.frame.Y = NPC.frame.Y + frameHeight;
-					NPC.frameCounter = 0;
-				}
-
-				if (NPC.frame.Y >= frameHeight * 4)
-				{
-					NPC.frame.Y = 0 * frameHeight;
-				}
-            }
-            else if (CurrentAnimation == AnimationState.Wiggle)
-			{
-				if (NPC.frameCounter > 5)
-				{
-					NPC.frame.Y = NPC.frame.Y + frameHeight;
-					NPC.frameCounter = 0;
-				}
-
-				if (NPC.frame.Y >= frameHeight * 10)
-				{
-					NPC.frame.Y = 5 * frameHeight;
-				}
-            }
-            else if (CurrentAnimation == AnimationState.WiggleStop)
-			{
-				if (NPC.frameCounter > 5)
-				{
-					NPC.frame.Y = NPC.frame.Y + frameHeight;
-					NPC.frameCounter = 0;
-				}
-
-				if (NPC.frame.Y >= frameHeight * 13)
-				{
-					NPC.frame.Y = 12 * frameHeight;
-				}
-            }
-            else if (CurrentAnimation == AnimationState.Spin)
-			{
-				if (NPC.frameCounter > SpinFramerate)
-				{
-					NPC.frame.Y = NPC.frame.Y + frameHeight;
-					NPC.frameCounter = 0;
-				}
-
-				if (NPC.frame.Y >= frameHeight * 7)
-				{
-					NPC.frame.Y = 0 * frameHeight;
-				}
-            }
+			}
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
