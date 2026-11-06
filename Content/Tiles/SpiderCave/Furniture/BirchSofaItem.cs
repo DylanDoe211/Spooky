@@ -16,6 +16,7 @@ namespace Spooky.Content.Tiles.SpiderCave.Furniture
         {
             CreateRecipe()
             .AddIngredient(ModContent.ItemType<BirchWoodItem>(), 8)
+            .AddIngredient(ItemID.Silk, 2)
             .AddTile(TileID.WorkBenches)
             .Register();
         }

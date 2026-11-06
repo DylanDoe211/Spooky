@@ -28,7 +28,7 @@ namespace Spooky.Content.Tiles.SpiderCave
 			Main.tileSolid[Type] = true;
 			Main.tileBlockLight[Type] = true;
             Main.tileLighted[Type] = true;
-            AddMapEntry(new Color(204, 223, 216));
+            AddMapEntry(new Color(173, 167, 185));
             RegisterItemDrop(ModContent.ItemType<DampSoilItem>());
             DustType = DustID.Smoke;
 			MineResist = 0.1f;
@@ -36,11 +36,11 @@ namespace Spooky.Content.Tiles.SpiderCave
 
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 		{
-			float divide = 700f;
+			float divide = 650f;
 
-			r = 204f / divide;
-			g = 223f / divide;
-			b = 216f / divide;
+			r = 217f / divide;
+			g = 213f / divide;
+			b = 230f / divide;
         }
 
         public override bool HasWalkDust() 
@@ -92,10 +92,16 @@ namespace Spooky.Content.Tiles.SpiderCave
                     TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<DampMushroomWeeds>(), true, Main.rand.Next(0, 21));
 				}
 
-                //mushrooms 
-                if (Main.rand.NextBool(25))
+                //grow small mushrooms
+                if (Main.rand.NextBool(15))
                 {
-                    ushort[] Mushrooms = new ushort[] { (ushort)ModContent.TileType<MushroomBlue>(), (ushort)ModContent.TileType<MushroomRedBrown>(),
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<MushroomSmall>(), true, Main.rand.Next(0, 21));
+				}
+
+                //mushrooms 
+                if (Main.rand.NextBool(50))
+                {
+                    ushort[] Mushrooms = new ushort[] { (ushort)ModContent.TileType<MushroomBlue>(), (ushort)ModContent.TileType<MushroomBrown>(),
                     (ushort)ModContent.TileType<MushroomYellow>(), (ushort)ModContent.TileType<MushroomGreen>(), (ushort)ModContent.TileType<MushroomPurple>(),
                     (ushort)ModContent.TileType<MushroomRed>(), (ushort)ModContent.TileType<MushroomTeal>() };
                     TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Mushrooms), true, WorldGen.genRand.Next(0, 2));

@@ -24,24 +24,24 @@ namespace Spooky.Content.Tiles.SpiderCave.Ambient
             TileObjectData.newTile.StyleHorizontal = true;
             TileObjectData.newTile.AnchorValidTiles = new[] { ModContent.TileType<DampMushroomGrass>() };
             TileObjectData.addTile(Type);
-            AddMapEntry(new Color(160, 185, 176));
+            AddMapEntry(new Color(131, 126, 140));
             DustType = DustID.Smoke;
             HitSound = SoundID.Grass;
         }
 
         public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
 		{
-			float divide = 700f;
+			float divide = 650f;
 
-			r = 204f / divide;
-			g = 223f / divide;
-			b = 216f / divide;
+			r = 217f / divide;
+			g = 213f / divide;
+			b = 230f / divide;
         }
 
         public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY)
         {
-            offsetY = -30;
-            height = 72;
+            offsetY = -4;
+            height = 24;
         }
 
         public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects)

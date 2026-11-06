@@ -58,75 +58,59 @@ namespace Spooky.Content.Tiles.SpookyBiome.Furniture
             }
         }
 
-        public override LocalizedText DefaultContainerName(int frameX, int frameY)
-        {
-            int option = frameX / 36;
-            return this.GetLocalization("MapEntry" + option);
-        }
+        private static Point GetMultiTilePos(int i, int j)
+		{
+			Tile tile = Framing.GetTileSafely(i, j);
+
+			int left = i;
+			int top = j;
+			if (tile.TileFrameX % 36 != 0)
+				left--;
+			if (tile.TileFrameY != 0)
+				top--;
+
+			return new Point(left, top);
+		}
+
+		public static string MapChestName(string name, int i, int j)
+		{
+			(i, j) = (GetMultiTilePos(i, j).X, GetMultiTilePos(i, j).Y);
+
+			int chest = Chest.FindChest(i, j);
+			if (chest < 0)
+				return Language.GetTextValue("LegacyChestType.0");
+
+			if (Main.chest[chest].name == string.Empty)
+				return name;
+
+			return name + ": " + Main.chest[chest].name;
+		}
+
+		public override LocalizedText DefaultContainerName(int frameX, int frameY) => this.GetLocalization("MapEntry0");
+
+		public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
+
+		public override void NumDust(int i, int j, bool fail, ref int num) => num = 1;
+
+		public override void KillMultiTile(int i, int j, int frameX, int frameY) => Chest.DestroyChest(i, j);
 
         public override ushort GetMapOption(int i, int j) => (ushort)(Main.tile[i, j].TileFrameX / 36);
-
-        public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings)
-        {
-			return true;
-        }
 
         public override bool IsLockedChest(int i, int j) => Main.tile[i, j].TileFrameX / 36 == 1;
 
 		public override bool UnlockChest(int i, int j, ref short frameXAdjustment, ref int dustType, ref bool manual) 
 		{
-			if (!NPC.downedPlantBoss)
-			{
-				return false;
-			}
-
 			return true;
 		}
 
-		public static string MapChestName(string name, int i, int j) 
+		public override bool RightClick(int i, int j)
 		{
-			int left = i;
-			int top = j;
-			Tile tile = Main.tile[i, j];
-			if (tile.TileFrameX % 36 != 0) 
-			{
-				left--;
-			}
+			(i, j) = (GetMultiTilePos(i, j).X, GetMultiTilePos(i, j).Y);
 
-			if (tile.TileFrameY != 0) 
-			{
-				top--;
-			}
-
-			int chest = Chest.FindChest(left, top);
-			if (chest < 0) 
-			{
-				return Language.GetTextValue("LegacyChestType.0");
-			}
-
-			if (Main.chest[chest].name == "") 
-			{
-				return name;
-			}
-
-			return name + ": " + Main.chest[chest].name;
-		}
-
-		public override void NumDust(int i, int j, bool fail, ref int num) 
-		{
-			num = 1;
-		}
-
-		public override void KillMultiTile(int i, int j, int frameX, int frameY) 
-		{
-			Chest.DestroyChest(i, j);
-		}
-
-		public override bool RightClick(int i, int j) 
-		{
 			Player player = Main.LocalPlayer;
 			Tile tile = Main.tile[i, j];
 			Main.mouseRightRelease = false;
+
 			int left = i;
 			int top = j;
 			if (tile.TileFrameX % 36 != 0) 
@@ -138,128 +122,100 @@ namespace Spooky.Content.Tiles.SpookyBiome.Furniture
 			{
 				top--;
 			}
-
-			if (player.sign >= 0) 
-			{
-				SoundEngine.PlaySound(SoundID.MenuClose);
-				player.sign = -1;
-				Main.editSign = false;
-				Main.npcChatText = "";
-			}
-
-			if (Main.editChest) 
-			{
-				SoundEngine.PlaySound(SoundID.MenuTick);
-				Main.editChest = false;
-				Main.npcChatText = "";
-			}
-
-			if (player.editedChestName) 
-			{
-				NetMessage.SendData(MessageID.SyncPlayerChest, -1, -1, NetworkText.FromLiteral(Main.chest[player.chest].name), player.chest, 1f);
-				player.editedChestName = false;
-			}
-
 			bool isLocked = IsLockedChest(left, top);
-			if (Main.netMode == NetmodeID.MultiplayerClient && !isLocked) 
+			if (isLocked)
 			{
-				if (left == player.chestX && top == player.chestY && player.chest >= 0) 
+				if (NPC.downedPlantBoss)
 				{
-					player.chest = -1;
-					Recipe.FindRecipes();
-					SoundEngine.PlaySound(SoundID.MenuClose);
-				}
-				else 
-				{
-					NetMessage.SendData(MessageID.RequestChestOpen, -1, -1, null, left, top);
-					Main.stackSplit = 600;
+					int key = ModContent.ItemType<SpookyBiomeKey>();
+
+					if (player.ConsumeItem(key) && Chest.Unlock(left, top))
+					{
+						if (Main.netMode == NetmodeID.MultiplayerClient) 
+						{
+							NetMessage.SendData(MessageID.LockAndUnlock, -1, -1, null, player.whoAmI, 1f, left, top);
+						}
+					}
 				}
 			}
 			else 
 			{
-				if (isLocked) 
-				{
-					int key = ModContent.ItemType<SpookyBiomeKey>();
+				player.CloseSign();
+				player.SetTalkNPC(-1);
+				Main.npcChatCornerItem = 0;
+				Main.npcChatText = string.Empty;
 
-					if (NPC.downedPlantBoss)
+				if (Main.editChest)
+				{
+					SoundEngine.PlaySound(SoundID.MenuTick);
+					Main.editChest = false;
+					Main.npcChatText = string.Empty;
+				}
+				if (player.editedChestName)
+				{
+					NetMessage.SendData(MessageID.SyncPlayerChest, -1, -1, NetworkText.FromLiteral(Main.chest[player.chest].name), player.chest, 1f);
+					player.editedChestName = false;
+				}
+				if (Main.netMode == NetmodeID.MultiplayerClient)
+				{
+					if (i == player.chestX && j == player.chestY && player.chest >= 0)
 					{
-						if (player.ConsumeItem(key) && Chest.Unlock(left, top))
-						{
-							if (Main.netMode != NetmodeID.Server)
-							{
-								ModContent.GetInstance<MiscAchievementBiomeChest>().BiomeChestCondition.Complete();
-							}
-							if (Main.netMode == NetmodeID.MultiplayerClient) 
-							{
-								NetMessage.SendData(MessageID.LockAndUnlock, -1, -1, null, player.whoAmI, 1f, left, top);
-							}
-						}
+						player.chest = -1;
+						Recipe.FindRecipes();
+						SoundEngine.PlaySound(SoundID.MenuClose);
+					}
+					else
+					{
+						NetMessage.SendData(MessageID.RequestChestOpen, -1, -1, null, i, j);
+						Main.stackSplit = 600;
 					}
 				}
-				else 
+				else
 				{
-					int chest = Chest.FindChest(left, top);
+					int chest = Chest.FindChest(i, j);
 					if (chest >= 0)
 					{
 						Main.stackSplit = 600;
-						if (chest == player.chest) 
+						if (chest == player.chest)
 						{
 							player.chest = -1;
 							SoundEngine.PlaySound(SoundID.MenuClose);
 						}
-						else 
+						else
 						{
-							player.chest = chest;
-							Main.playerInventory = true;
-							Main.recBigList = false;
-							player.chestX = left;
-							player.chestY = top;
 							SoundEngine.PlaySound(player.chest < 0 ? SoundID.MenuOpen : SoundID.MenuTick);
+							player.OpenChest(i, j, chest);
 						}
 
 						Recipe.FindRecipes();
 					}
 				}
 			}
-
 			return true;
 		}
 
-		public override void MouseOver(int i, int j) 
+		public override void MouseOver(int i, int j)
 		{
+			(i, j) = (GetMultiTilePos(i, j).X, GetMultiTilePos(i, j).Y);
+
 			Player player = Main.LocalPlayer;
-			Tile tile = Main.tile[i, j];
-			int left = i;
-			int top = j;
-			if (tile.TileFrameX % 36 != 0) 
-			{
-				left--;
-			}
+			int chest = Chest.FindChest(i, j);
+			bool isLocked = IsLockedChest(i, j);
+			player.cursorItemIconID = -1;
 
-			if (tile.TileFrameY != 0) 
-			{
-				top--;
-			}
-
-			int chest = Chest.FindChest(left, top);
-			if (chest < 0) 
+			if (chest < 0)
 			{
 				player.cursorItemIconText = Language.GetTextValue("LegacyChestType.0");
 			}
-			else 
+			else
 			{
+				Tile tile = Framing.GetTileSafely(i, j);
 				string defaultName = TileLoader.DefaultContainerName(tile.TileType, tile.TileFrameX, tile.TileFrameY);
 
 				player.cursorItemIconText = Main.chest[chest].name.Length > 0 ? Main.chest[chest].name : defaultName;
 				if (player.cursorItemIconText == defaultName)
 				{
-					player.cursorItemIconID = ModContent.ItemType<SpookyBiomeChestItem>();
-
-					if (Main.tile[left, top].TileFrameX / 36 == 1) 
-					{
-						player.cursorItemIconID = ModContent.ItemType<SpookyBiomeKey>();
-					}
-
+					player.cursorItemIconID = isLocked ? ModContent.ItemType<SpookyBiomeKey>() : ModContent.ItemType<SpookyBiomeChestItem>();
 					player.cursorItemIconText = string.Empty;
 				}
 			}
@@ -268,11 +224,12 @@ namespace Spooky.Content.Tiles.SpookyBiome.Furniture
 			player.cursorItemIconEnabled = true;
 		}
 
-		public override void MouseOverFar(int i, int j) 
+		public override void MouseOverFar(int i, int j)
 		{
 			MouseOver(i, j);
+
 			Player player = Main.LocalPlayer;
-			if (player.cursorItemIconText == string.Empty) 
+			if (player.cursorItemIconText == string.Empty)
 			{
 				player.cursorItemIconEnabled = false;
 				player.cursorItemIconID = 0;

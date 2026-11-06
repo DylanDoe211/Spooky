@@ -16,7 +16,7 @@ namespace Spooky.Content.Tiles.Catacomb.Furniture
         {
             CreateRecipe()
             .AddIngredient(ModContent.ItemType<CatacombBrick1Item>(), 5)
-            .AddIngredient(ItemID.Silk)
+            .AddIngredient(ItemID.Silk, 2)
             .AddTile(TileID.WorkBenches)
             .Register();
         }

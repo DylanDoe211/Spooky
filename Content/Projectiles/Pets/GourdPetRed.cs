@@ -52,8 +52,6 @@ namespace Spooky.Content.Projectiles.Pets
 
             for (int i = 0; i < 360; i += 90)
             {
-                Color color = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(new Color(254, 125, 13));
-
 				Vector2 circular = new Vector2(Main.rand.NextFloat(0.2f, 0.8f), Main.rand.NextFloat(0.2f, 0.8f)).RotatedBy(MathHelper.ToRadians(i));
 
                 Main.EntitySpriteDraw(GlowTexture.Value, Projectile.Center - Main.screenPosition + new Vector2(0, Projectile.gfxOffY + 4) + circular, rectangle,

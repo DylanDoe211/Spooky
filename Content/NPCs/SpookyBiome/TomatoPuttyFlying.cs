@@ -161,9 +161,9 @@ namespace Spooky.Content.NPCs.SpookyBiome
             {
                 NPCGlobalHelper.ShootHostileProjectile(NPC, NPC.Center, new Vector2(0, Main.rand.Next(-15, -9)), ModContent.ProjectileType<TomatoPuttyFlyingFalling>(), NPC.damage, 4.5f);
 
-                for (int numGores = 1; numGores <= 2; numGores++)
+                if (Main.netMode != NetmodeID.Server) 
                 {
-                    if (Main.netMode != NetmodeID.Server) 
+                    for (int numGores = 1; numGores <= 2; numGores++)
                     {
                         Gore.NewGore(NPC.GetSource_Death(), NPC.Center, NPC.velocity, ModContent.Find<ModGore>("Spooky/TomatoPuttyFlyingGore").Type);
                     }

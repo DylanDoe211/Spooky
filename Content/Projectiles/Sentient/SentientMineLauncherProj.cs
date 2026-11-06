@@ -95,7 +95,7 @@ namespace Spooky.Content.Projectiles.Sentient
                 Projectile.position += Main.rand.NextVector2Square(-5, 5);
             }
 
-            if (Projectile.localAI[0] >= RealUseSpeed)
+            if (Projectile.localAI[0] >= RealUseSpeed && Projectile.localAI[1] == 0)
             {
                 SoundEngine.PlaySound(SoundID.NPCDeath13 with { Pitch = 1f }, Projectile.Center);
 
@@ -121,6 +121,8 @@ namespace Spooky.Content.Projectiles.Sentient
                 }
 
                 Projectile.timeLeft = 20;
+                Projectile.localAI[1] = 1;
+                Projectile.netUpdate = true;
             }
 
             if (direction.X > 0) 

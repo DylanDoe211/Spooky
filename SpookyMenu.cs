@@ -30,6 +30,7 @@ namespace Spooky
         
         public override ModSurfaceBackgroundStyle MenuBackgroundStyle => null;
 
+        private static Asset<Texture2D> LogoOutlineTexture;
         private static Asset<Texture2D> MenuTexture;
         private static Asset<Texture2D> RotGourdTexture;
         private static Asset<Texture2D> SpookySpiritTexture;
@@ -135,9 +136,16 @@ namespace Spooky
             spriteBatch.Draw(SpookFishronOutlineTexture.Value, drawOffset, null, Color.White * LogoSquishIntensity, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
 
             //draw the actual menu logo
-            logoCenter = logoDrawCenter;
+            logoCenter = logoDrawCenter + new Vector2(0, 15);
             Main.EntitySpriteDraw(Logo.Value, logoDrawCenter, new Rectangle(0, 0, Utils.Width(Logo), Utils.Height(Logo)), Color.White, 
-            logoRotation, Utils.Size(Logo) / 2f, new Vector2(0.85f + LogoSquishIntensity, 0.85f - LogoSquishIntensity), SpriteEffects.None, 0);
+            logoRotation, Utils.Size(Logo) / 2f, new Vector2(1f + LogoSquishIntensity, 1f - LogoSquishIntensity), SpriteEffects.None, 0);
+
+            LogoOutlineTexture ??= ModContent.Request<Texture2D>("Spooky/MenuAssets/SpookyMenuLogoOutline");
+            if (Math.Abs(Main.MouseScreen.X - logoCenter.X) < 280f && Math.Abs(Main.MouseScreen.Y - logoCenter.Y) < 70f)
+            {
+                Main.EntitySpriteDraw(LogoOutlineTexture.Value, logoDrawCenter, new Rectangle(0, 0, Utils.Width(Logo), Utils.Height(Logo)), Color.White, 
+                logoRotation, Utils.Size(Logo) / 2f, new Vector2(1f + LogoSquishIntensity, 1f - LogoSquishIntensity), SpriteEffects.None, 0);
+            }
 
             return false;
         }
@@ -145,7 +153,7 @@ namespace Spooky
         public override void Update(bool isOnTitleScreen)
         {
             LogoSquishIntensity *= 0.9f;
-            if (Main.mouseLeft && !HasClicked && Math.Abs(Main.MouseScreen.X - logoCenter.X) < 300f && Math.Abs(Main.MouseScreen.Y - logoCenter.Y) < 70f)
+            if (Main.mouseLeft && !HasClicked && Math.Abs(Main.MouseScreen.X - logoCenter.X) < 280f && Math.Abs(Main.MouseScreen.Y - logoCenter.Y) < 70f)
             {
                 LogoSquishIntensity = 0.85f;
 

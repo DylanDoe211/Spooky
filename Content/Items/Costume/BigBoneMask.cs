@@ -19,8 +19,8 @@ namespace Spooky.Content.Items.Costume
 
 		public override void Load()
 		{
-			HeadTexture = ModContent.Request<Texture2D>(Texture + "Head");
-			FlippedTexture = ModContent.Request<Texture2D>(Texture + "HeadFlipped");
+			HeadTexture = ModContent.Request<Texture2D>(Texture + "_Head");
+			FlippedTexture = ModContent.Request<Texture2D>(Texture + "_HeadFlipped");
 		}
 
 		public override void SetDefaults()
@@ -33,24 +33,16 @@ namespace Spooky.Content.Items.Costume
 
 		public override bool ModifyEquipTextureDraw(ref PlayerDrawSet drawInfo, ref DrawData drawData, EquipTexture equipTexture, string methodName)
 		{
-			Rectangle frame = HeadTexture.Frame(1, 20, 0, drawInfo.drawPlayer.bodyFrame.Y / drawInfo.drawPlayer.bodyFrame.Height);
-			Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(drawInfo.drawPlayer.width / 2 - frame.Width / 2,
-			drawInfo.drawPlayer.height - frame.Height + 4f) + drawInfo.drawPlayer.headPosition;
-			drawPos = drawPos.Floor();
-			Vector2 origin = drawInfo.headVect;
+			Rectangle TextureRectangle = new(0, 0, 52, 49);
+			Vector2 origin = TextureRectangle.Size() / 2f;
 
-			drawData = new DrawData(HeadTexture.Value, drawPos.Floor() + origin, frame,
-			drawData.color, drawInfo.drawPlayer.headRotation, origin, 1f, drawInfo.playerEffect);
-			drawData.shader = drawInfo.cHead;
+			Player player = drawInfo.drawPlayer;
+			float yOffset = Main.OffsetsPlayerHeadgear[player.bodyFrame.Y / player.bodyFrame.Height].Y * player.gravDir;
+			Vector2 offset = new Vector2(0, (player.gravDir == -1 ? 11 : 0) + yOffset);
 
-			if (drawInfo.drawPlayer.direction == -1)
-			{
-				drawInfo.DrawDataCache.Add(drawData with { texture = FlippedTexture.Value });
-			}
-			else
-			{
-				drawInfo.DrawDataCache.Add(drawData with { texture = HeadTexture.Value });
-			}
+			Texture2D texToUse = drawInfo.drawPlayer.direction == -1 ? FlippedTexture.Value : HeadTexture.Value;
+
+			drawInfo.DrawDataCache.Add(drawData with { texture = texToUse, position = drawData.position + offset, sourceRect = TextureRectangle, origin = origin });
 
 			return false;
 		}

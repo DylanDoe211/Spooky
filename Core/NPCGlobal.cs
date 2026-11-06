@@ -420,30 +420,39 @@ namespace Spooky.Core
 
 		public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
 		{
-			//if the glass eye is staring at an enemy they take 15% more damage
-			if (npc.HasBuff(ModContent.BuffType<GlassEyeDebuff>()))
-			{
-				modifiers.FinalDamage *= 1.15f;
-			}
+			//Keep in mind this makes damage multipliers additive! For example, instead of doing 1.25 for 25% more damage, do TotalDamageMultiplier += 0.25 instead!
+			float TotalDamageMultiplier = 1f;
+
 			//enemies inflicted with the cursed doll effect take 15% more damage from magic attacks
 			if (npc.HasBuff(ModContent.BuffType<CursedDollDebuff>()) && modifiers.DamageType == DamageClass.Magic)
 			{
-				modifiers.FinalDamage *= 1.15f;
-			}
-			//enemies inflicted with hunter mark take 25% more damage
-			if (npc.HasBuff(ModContent.BuffType<HunterScarfMark>()))
-			{
-				modifiers.FinalDamage *= 1.25f;
-			}
-			//samsons cuff makes enemies take 25% more damage
-			if (npc.HasBuff(ModContent.BuffType<SamsonCuffDebuff>()))
-			{
-				modifiers.FinalDamage *= 1.25f;
+				TotalDamageMultiplier += 0.15f;
 			}
 			//peacock spider intimidate makes enemies take 15% more damage
 			if (npc.HasBuff(ModContent.BuffType<PeacockSpiderMaskDebuff>()))
 			{
-				modifiers.FinalDamage *= 1.15f;
+				TotalDamageMultiplier += 0.15f;
+			}
+			//if the glass eye is staring at an enemy they take 15% more damage
+			if (npc.HasBuff(ModContent.BuffType<GlassEyeDebuff>()))
+			{
+				TotalDamageMultiplier += 0.15f;
+			}
+			//enemies inflicted with hunter mark take 25% more damage
+			if (npc.HasBuff(ModContent.BuffType<HunterScarfMark>()))
+			{
+				TotalDamageMultiplier += 0.25f;
+			}
+			//samsons cuff makes enemies take 25% more damage
+			if (npc.HasBuff(ModContent.BuffType<SamsonCuffDebuff>()))
+			{
+				TotalDamageMultiplier += 0.25f;
+			}
+
+			//dont know if this would conflict with damage multipliers in other mods, so to be safe just check if the damage multiplier value is greater than 1f before multiplying damage
+			if (TotalDamageMultiplier > 1f)
+			{
+				modifiers.FinalDamage *= TotalDamageMultiplier;
 			}
 		}
 

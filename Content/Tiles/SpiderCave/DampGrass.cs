@@ -75,10 +75,16 @@ namespace Spooky.Content.Tiles.SpiderCave
                     TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<SpiderCaveWeeds>(), true, Main.rand.Next(0, 36));
 				}
 
-                //mushrooms 
-                if (Main.rand.NextBool(45))
+                //grow small mushrooms
+                if (Main.rand.NextBool(30))
                 {
-                    ushort[] Mushrooms = new ushort[] { (ushort)ModContent.TileType<MushroomBlue>(), (ushort)ModContent.TileType<MushroomRedBrown>(),
+                    TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<MushroomSmall>(), true, Main.rand.Next(0, 21));
+				}
+
+                //mushrooms 
+                if (Main.rand.NextBool(50))
+                {
+                    ushort[] Mushrooms = new ushort[] { (ushort)ModContent.TileType<MushroomBlue>(), (ushort)ModContent.TileType<MushroomBrown>(),
                     (ushort)ModContent.TileType<MushroomYellow>(), (ushort)ModContent.TileType<MushroomGreen>(), (ushort)ModContent.TileType<MushroomPurple>(),
                     (ushort)ModContent.TileType<MushroomRed>(), (ushort)ModContent.TileType<MushroomTeal>() };
                     TileGlobal.PlaceObject(i, j - 1, Main.rand.Next(Mushrooms), true, WorldGen.genRand.Next(0, 2));

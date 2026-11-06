@@ -35,9 +35,9 @@ namespace Spooky.Content.Projectiles.SpookyBiome
 
             for (int i = 0; i < 360; i += 90)
             {
-                Color color1 = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(Color.OrangeRed);
-                Color color2 = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(Color.Orange);
-                Color color3 = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(Color.Gold);
+                Color color1 = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(new Color(Color.OrangeRed.R, Color.OrangeRed.G, Color.OrangeRed.B, 0));
+                Color color2 = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(new Color(Color.Orange.R, Color.Orange.G, Color.Orange.B, 0));
+                Color color3 = new Color(125 - Projectile.alpha, 125 - Projectile.alpha, 125 - Projectile.alpha, 0).MultiplyRGBA(new Color(Color.Gold.R, Color.Gold.G, Color.Gold.B, 0));
                 
                 Vector2 circular = new Vector2(Main.rand.NextFloat(1f, 12f), Main.rand.NextFloat(1f, 12f)).RotatedBy(MathHelper.ToRadians(i));
 

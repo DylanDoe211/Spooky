@@ -11,6 +11,11 @@ namespace Spooky.Content.Items.SpiderCave
 {
     public class PossessedCrown : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.CanGetPrefixes[Type] = false;
+        }
+
         public override void SetDefaults()
         {
             Item.damage = 0;

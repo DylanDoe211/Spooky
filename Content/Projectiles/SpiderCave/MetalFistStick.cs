@@ -123,9 +123,9 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
             foreach (NPC npc in Main.ActiveNPCs)
             {
-                if (npc.Distance(Projectile.Center) <= 300f && !npc.friendly && !npc.dontTakeDamage)
+                if (npc.Distance(Projectile.Center) <= 200f && !npc.friendly && !npc.dontTakeDamage)
                 {
-                    player.ApplyDamageToNPC(npc, Projectile.damage, Projectile.knockBack, 0, false, null, true);
+                    player.ApplyDamageToNPC(npc, Projectile.damage / 2, Projectile.knockBack, 0, false, null, true);
                 }
             }
 
@@ -133,9 +133,9 @@ namespace Spooky.Content.Projectiles.SpiderCave
             int currentAmount = 0;
             while (currentAmount <= maxAmount)
             {
-                Vector2 velocity = new Vector2(Main.rand.NextFloat(2f, 55f), Main.rand.NextFloat(2f, 55f));
-                Vector2 Bounds = new Vector2(Main.rand.NextFloat(2f, 55f), Main.rand.NextFloat(2f, 55f));
-                float intensity = Main.rand.NextFloat(2f, 55f);
+                Vector2 velocity = new Vector2(Main.rand.NextFloat(2f, 35f), Main.rand.NextFloat(2f, 35f));
+                Vector2 Bounds = new Vector2(Main.rand.NextFloat(2f, 35f), Main.rand.NextFloat(2f, 35f));
+                float intensity = Main.rand.NextFloat(2f, 35f);
 
                 Vector2 vector12 = Vector2.UnitX * 0f;
                 vector12 += -Vector2.UnitY.RotatedBy((double)(currentAmount * (6f / maxAmount)), default) * Bounds;

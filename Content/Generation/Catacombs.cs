@@ -175,7 +175,6 @@ namespace Spooky.Content.Generation
                     Vector2 origin = new Vector2(X - 18, Y - 18);
 
                     int WoodenRoomChance = Main.maxTilesY >= 2400 ? 9 : (Main.maxTilesY >= 1800 ? 8 : 6);
-                    int TrapRoomChance = Main.maxTilesY >= 2400 ? 6 : (Main.maxTilesY >= 1800 ? 5 : 4);
                     int MineRoomChance = Main.maxTilesY >= 2400 ? 8 : (Main.maxTilesY >= 1800 ? 7 : 6);
 
                     //painting or library room room
@@ -247,11 +246,6 @@ namespace Spooky.Content.Generation
                             }
                         }
                     }
-                    //trap rooms
-                    else if (WorldGen.genRand.NextBool(TrapRoomChance))
-                    {
-                        StructureHelper.API.Generator.GenerateStructure("Content/Structures/CatacombLayer1/TrapRoom" + WorldGen.genRand.Next(1, 3) + ".shstruct", origin.ToPoint16(), Mod);
-                    }
                     //default room
                     else
                     {
@@ -270,10 +264,7 @@ namespace Spooky.Content.Generation
                     {
 						int[] RandomYCoord = new int[]
 						{
-							0, 
-                            45, 
-                            45 * 2, 
-                            45 * 3
+							0, 45, 45 * 2, 45 * 3
 						};
 
 						if (Main.maxTilesY >= 1800)
@@ -728,103 +719,7 @@ namespace Spooky.Content.Generation
             }
 
 
-            //EXTRA STUFF
-
-            //place catacomb platform shelves
-            for (int X = XMiddle - 300; X <= XMiddle + 300; X++)
-            {
-                for (int Y = (int)Main.worldSurface - 10; Y <= BigBoneArenaY - 30; Y++)
-				{
-                    //randomly place paintings in the catacombs
-                    if (WorldGen.genRand.NextBool(550) && !Main.tile[X, Y].HasTile)
-					{
-                        if (Main.tile[X, Y].WallType == ModContent.WallType<CatacombBrickWall1>())
-                        {
-                            if (CanPlacePainting(X, Y, PaintingsLayer1))
-                            {
-                                TileGlobal.PlaceObject(X, Y, WorldGen.genRand.Next(PaintingsLayer1));
-                            }
-                        }
-                        if (Main.tile[X, Y].WallType == ModContent.WallType<CatacombBrickWall2>())
-                        {
-                            if (CanPlacePainting(X, Y, PaintingsLayer2))
-                            {
-                                TileGlobal.PlaceObject(X, Y, WorldGen.genRand.Next(PaintingsLayer2));
-                            }
-                        }
-					}
-
-					//place catacomb platform shelves with stuff on them
-					if (WorldGen.genRand.NextBool(20))
-					{
-						int Length = WorldGen.genRand.Next(3, 5);
-
-						if (WorldGen.SolidTile(X, Y) && !Main.tile[X + 1, Y].HasTile && Main.tile[X, Y - 1].HasTile && Main.tile[X, Y + 1].HasTile)
-						{
-							if (CanPlacePlatform(X, Y, Length, false))
-							{
-								for (int x = X + 1; x <= X + Length; x++)
-								{
-									WorldGen.PlaceTile(x, Y, Main.tile[x, Y].WallType == ModContent.WallType<CatacombBrickWall1>() ? ModContent.TileType<CatacombBrickPlatform1>() : ModContent.TileType<CatacombBrickPlatform2>());
-
-                                    if (WorldGen.genRand.NextBool(10))
-									{
-										int Type = Main.tile[x, Y].WallType == ModContent.WallType<CatacombBrickWall1>() ? ModContent.TileType<UpperCatacombCandle>() : ModContent.TileType<LowerCatacombCandle>();
-										TileGlobal.PlaceObject(x, Y - 1, Type);
-									}
-									else if (WorldGen.genRand.NextBool(5))
-									{
-										TileGlobal.PlaceObject(x, Y - 1, TileID.ClayPot);
-										if (WorldGen.genRand.NextBool(3))
-                                        {
-										    TileGlobal.PlaceObject(x, Y - 2, TileID.BloomingHerbs, true, WorldGen.genRand.Next(0, 7));
-                                        }
-									}
-									else
-									{	
-										TileGlobal.PlaceObject(x, Y - 1, TileID.Books, true, WorldGen.genRand.Next(0, 5));
-									}
-								}
-							}
-						}
-					}
-
-					if (WorldGen.genRand.NextBool(20))
-					{
-						int Length = WorldGen.genRand.Next(3, 5);
-
-						if (WorldGen.SolidTile(X, Y) && !Main.tile[X - 1, Y].HasTile && Main.tile[X, Y - 1].HasTile && Main.tile[X, Y + 1].HasTile)
-						{
-							if (CanPlacePlatform(X, Y, Length, true))
-							{
-								for (int x = X - Length; x <= X - 1; x++)
-								{
-									WorldGen.PlaceTile(x, Y, Main.tile[x, Y].WallType == ModContent.WallType<CatacombBrickWall1>() ? ModContent.TileType<CatacombBrickPlatform1>() : ModContent.TileType<CatacombBrickPlatform2>());
-
-									if (WorldGen.genRand.NextBool(10))
-									{
-                                        int Type = Main.tile[x, Y].WallType == ModContent.WallType<CatacombBrickWall1>() ? ModContent.TileType<UpperCatacombCandle>() : ModContent.TileType<LowerCatacombCandle>();
-										TileGlobal.PlaceObject(x, Y - 1, Type);
-									}
-									else if (WorldGen.genRand.NextBool(5))
-									{
-										TileGlobal.PlaceObject(x, Y - 1, TileID.ClayPot);
-                                        if (WorldGen.genRand.NextBool(3))
-                                        {
-										    TileGlobal.PlaceObject(x, Y - 2, TileID.BloomingHerbs, true, WorldGen.genRand.Next(0, 7));
-                                        }
-									}
-									else
-									{	
-										TileGlobal.PlaceObject(x, Y - 1, TileID.Books, true, WorldGen.genRand.Next(0, 5));
-									}
-								}
-							}
-						}
-					}
-                }
-            }
-
+			//EXTRA STUFF
             //place the entrance to the catacombs from the bottom of the cemetery crypt building
             int EntrancePosX = XMiddle - 1;
             int EntrancePosY = EntranceY + 61;
@@ -1021,6 +916,243 @@ namespace Spooky.Content.Generation
                 }
             }
 
+            //place boulder traps in both layers before anything else so they dont generate less due to ambient tiles that are placed later
+			for (int X = XMiddle - 300; X <= XMiddle + 300; X++)
+			{
+                //upper catacombs boulder
+				for (int Y = (int)Main.worldSurface - 10; Y <= DaffodilArenaY - 20; Y++)
+				{
+					if (WorldGen.genRand.NextBool(40) && WorldGen.SolidTile(X, Y) && !Main.tile[X, Y - 1].HasTile &&
+                    WorldGen.SolidTile(X + 1, Y) && !Main.tile[X + 1, Y - 1].HasTile && Main.tile[X, Y].WallType == ModContent.WallType<CatacombBrickWall1>())
+					{
+						int CheckY = Y - 1;
+						int GapCount = 0;
+						bool FoundCeiling = false;
+						while (!FoundCeiling)
+						{
+							CheckY--;
+							if (WorldGen.SolidTile(X, CheckY))
+							{
+								FoundCeiling = true;
+								break;
+							}
+							else
+							{
+								GapCount++;
+							}
+						}
+
+						if (GapCount >= 8 && GapCount <= 15 && CanPlaceBoulderTrapLayer1(X, CheckY))
+						{
+							//this point is where the pressure plate will be connected to
+							WorldGen.PlaceActuator(X, CheckY - 1);
+
+							//these have wires manually placed on them since only one point needs to connect to the pressure plate
+							WorldGen.PlaceActuator(X + 1, CheckY - 1);
+							WorldGen.PlaceWire4(X + 1, CheckY - 1);
+							WorldGen.PlaceActuator(X, CheckY);
+							WorldGen.PlaceWire4(X, CheckY);
+							WorldGen.PlaceActuator(X + 1, CheckY);
+							WorldGen.PlaceWire4(X + 1, CheckY);
+
+                            int RandomOffset = WorldGen.genRand.Next(0, 2);
+
+							WorldGen.PlaceTile(X + RandomOffset, Y - 1, TileID.PressurePlates, true, true, -1, 2);
+							WireLine(new Point(X + RandomOffset, Y - 1), new Point(X, CheckY - 1));
+
+							WorldGen.KillTile(X, CheckY - 3);
+							WorldGen.KillTile(X + 1, CheckY - 3);
+							WorldGen.KillTile(X, CheckY - 2);
+							WorldGen.KillTile(X + 1, CheckY - 2);
+
+							TileGlobal.PlaceObject(X, CheckY - 2, ModContent.TileType<CatacombBoulder>(), true, WorldGen.genRand.Next(0, 4));
+						}
+					}
+				}
+
+                //lower catacombs boulders
+				for (int Y = DaffodilArenaY - 30; Y <= BigBoneArenaY + 60; Y++)
+				{
+					if (Main.tile[X, Y].WallType == ModContent.WallType<CatacombBrickWall2>())
+					{
+						//left side trap (Place pressure plate to the right)
+						if (WorldGen.genRand.NextBool(18) && WorldGen.SolidTile(X - 1, Y) && !Main.tile[X, Y].HasTile && CanPlaceBoulderTrapLayer2(X - 1, Y, -1))
+						{
+							int CheckY = Y;
+							int GapCount = 0;
+							bool FoundFloor = false;
+							while (!FoundFloor)
+							{
+								CheckY++;
+								if (WorldGen.SolidTile(X + 7, CheckY) || GapCount > 7)
+								{
+									FoundFloor = true;
+									break;
+								}
+								else
+								{
+									GapCount++;
+								}
+							}
+
+							if (GapCount <= 7)
+							{
+								//this point is where the pressure plate will be connected to
+								WorldGen.PlaceActuator(X - 1, Y);
+								//these have wires manually placed on them since only one point needs to connect to the pressure plate
+								WorldGen.PlaceActuator(X - 1, Y - 1);
+								WorldGen.PlaceWire4(X - 1, Y - 1);
+
+								WorldGen.PlaceTile(X + 7, CheckY - 1, TileID.PressurePlates, true, true, -1, 2);
+								WireLine(new Point(X - 1, Y), new Point(X + 7, CheckY - 1));
+
+								WorldGen.KillTile(X - 2, Y);
+								WorldGen.KillTile(X - 2, Y - 1);
+								WorldGen.KillTile(X - 3, Y);
+								WorldGen.KillTile(X - 3, Y - 1);
+
+								TileGlobal.PlaceObject(X - 3, Y, ModContent.TileType<CatacombBoulder2>(), true, WorldGen.genRand.Next(0, 4));
+							}
+						}
+						//left side trap (Place pressure plate to the left)
+						if (WorldGen.genRand.NextBool(18) && WorldGen.SolidTile(X + 1, Y) && !Main.tile[X, Y].HasTile && CanPlaceBoulderTrapLayer2(X + 1, Y, 1))
+						{
+							int CheckY = Y;
+							int GapCount = 0;
+							bool FoundFloor = false;
+							while (!FoundFloor)
+							{
+								CheckY++;
+								if (WorldGen.SolidTile(X - 7, CheckY) || GapCount > 7)
+								{
+									FoundFloor = true;
+									break;
+								}
+								else
+								{
+									GapCount++;
+								}
+							}
+
+							if (GapCount <= 7)
+							{
+								//this point is where the pressure plate will be connected to
+								WorldGen.PlaceActuator(X + 1, Y);
+								//these have wires manually placed on them since only one point needs to connect to the pressure plate
+								WorldGen.PlaceActuator(X + 1, Y - 1);
+								WorldGen.PlaceWire4(X + 1, Y - 1);
+
+								WorldGen.PlaceTile(X - 7, CheckY - 1, TileID.PressurePlates, true, true, -1, 2);
+								WireLine(new Point(X + 1, Y), new Point(X - 7, CheckY - 1));
+
+								WorldGen.KillTile(X + 2, Y);
+								WorldGen.KillTile(X + 2, Y - 1);
+								WorldGen.KillTile(X + 3, Y);
+								WorldGen.KillTile(X + 3, Y - 1);
+
+								TileGlobal.PlaceObject(X + 2, Y, ModContent.TileType<CatacombBoulder2>(), true, WorldGen.genRand.Next(0, 4));
+							}
+						}
+					}
+				}
+			}
+
+            //place catacomb platform shelves
+            for (int X = XMiddle - 300; X <= XMiddle + 300; X++)
+            {
+                for (int Y = (int)Main.worldSurface - 10; Y <= BigBoneArenaY - 30; Y++)
+				{
+                    //randomly place paintings in the catacombs
+                    if (WorldGen.genRand.NextBool(550) && !Main.tile[X, Y].HasTile)
+					{
+                        if (Main.tile[X, Y].WallType == ModContent.WallType<CatacombBrickWall1>())
+                        {
+                            if (CanPlacePainting(X, Y, PaintingsLayer1))
+                            {
+                                TileGlobal.PlaceObject(X, Y, WorldGen.genRand.Next(PaintingsLayer1));
+                            }
+                        }
+                        if (Main.tile[X, Y].WallType == ModContent.WallType<CatacombBrickWall2>())
+                        {
+                            if (CanPlacePainting(X, Y, PaintingsLayer2))
+                            {
+                                TileGlobal.PlaceObject(X, Y, WorldGen.genRand.Next(PaintingsLayer2));
+                            }
+                        }
+					}
+
+					//place catacomb platform shelves with stuff on them
+					if (WorldGen.genRand.NextBool(20))
+					{
+						int Length = WorldGen.genRand.Next(3, 5);
+
+						if (WorldGen.SolidTile(X, Y) && !Main.tile[X, Y].HasActuator && !Main.tile[X + 1, Y].HasTile && Main.tile[X, Y - 1].HasTile && Main.tile[X, Y + 1].HasTile)
+						{
+							if (CanPlacePlatform(X, Y, Length, false))
+							{
+								for (int x = X + 1; x <= X + Length; x++)
+								{
+									WorldGen.PlaceTile(x, Y, Main.tile[x, Y].WallType == ModContent.WallType<CatacombBrickWall1>() ? ModContent.TileType<CatacombBrickPlatform1>() : ModContent.TileType<CatacombBrickPlatform2>());
+
+                                    if (WorldGen.genRand.NextBool(10))
+									{
+										int Type = Main.tile[x, Y].WallType == ModContent.WallType<CatacombBrickWall1>() ? ModContent.TileType<UpperCatacombCandle>() : ModContent.TileType<LowerCatacombCandle>();
+										TileGlobal.PlaceObject(x, Y - 1, Type);
+									}
+									else if (WorldGen.genRand.NextBool(5))
+									{
+										TileGlobal.PlaceObject(x, Y - 1, TileID.ClayPot);
+										if (WorldGen.genRand.NextBool(3))
+                                        {
+										    TileGlobal.PlaceObject(x, Y - 2, TileID.BloomingHerbs, true, WorldGen.genRand.Next(0, 7));
+                                        }
+									}
+									else
+									{	
+										TileGlobal.PlaceObject(x, Y - 1, TileID.Books, true, WorldGen.genRand.Next(0, 5));
+									}
+								}
+							}
+						}
+					}
+
+					if (WorldGen.genRand.NextBool(20))
+					{
+						int Length = WorldGen.genRand.Next(3, 5);
+
+						if (WorldGen.SolidTile(X, Y) && !Main.tile[X, Y].HasActuator && !Main.tile[X - 1, Y].HasTile && Main.tile[X, Y - 1].HasTile && Main.tile[X, Y + 1].HasTile)
+						{
+							if (CanPlacePlatform(X, Y, Length, true))
+							{
+								for (int x = X - Length; x <= X - 1; x++)
+								{
+									WorldGen.PlaceTile(x, Y, Main.tile[x, Y].WallType == ModContent.WallType<CatacombBrickWall1>() ? ModContent.TileType<CatacombBrickPlatform1>() : ModContent.TileType<CatacombBrickPlatform2>());
+
+									if (WorldGen.genRand.NextBool(10))
+									{
+                                        int Type = Main.tile[x, Y].WallType == ModContent.WallType<CatacombBrickWall1>() ? ModContent.TileType<UpperCatacombCandle>() : ModContent.TileType<LowerCatacombCandle>();
+										TileGlobal.PlaceObject(x, Y - 1, Type);
+									}
+									else if (WorldGen.genRand.NextBool(5))
+									{
+										TileGlobal.PlaceObject(x, Y - 1, TileID.ClayPot);
+                                        if (WorldGen.genRand.NextBool(3))
+                                        {
+										    TileGlobal.PlaceObject(x, Y - 2, TileID.BloomingHerbs, true, WorldGen.genRand.Next(0, 7));
+                                        }
+									}
+									else
+									{	
+										TileGlobal.PlaceObject(x, Y - 1, TileID.Books, true, WorldGen.genRand.Next(0, 5));
+									}
+								}
+							}
+						}
+					}
+                }
+            }
+
+            //place furniture
             for (int X = XMiddle - 300; X <= XMiddle + 300; X++)
             {
                 //furniture tiles for layer 1
@@ -1860,8 +1992,135 @@ namespace Spooky.Content.Generation
 			return true;
 		}
 
-        //determine if theres no jungle blocks nearby so the biome doesnt place in the jungle biome
-        public static bool NoJungleNearby(int X, int Y)
+        //determine if theres no chests nearby another chest thats about to place
+        public static bool CanPlaceBoulderTrapLayer1(int X, int Y)
+        {
+			for (int i = X - 20; i <= X + 20; i++)
+			{
+				for (int j = Y - 20; j <= Y + 20; j++)
+				{
+					if (Main.tile[i, j].TileType == ModContent.TileType<CatacombBoulder>())
+					{
+						return false;
+					}
+				}
+			}
+
+			for (int i = X - 1; i <= X + 2; i++)
+            {
+                for (int j = Y - 6; j <= Y; j++)
+                {
+                    if (!WorldGen.SolidTile(i, j))
+                    {
+                        return false;
+                    }
+                }
+                
+                if (Main.tile[i, Y + 1].HasTile)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+		public static bool CanPlaceBoulderTrapLayer2(int X, int Y, int Side)
+		{
+			for (int i = X - 20; i <= X + 20; i++)
+			{
+				for (int j = Y - 20; j <= Y + 20; j++)
+				{
+					if (Main.tile[i, j].TileType == ModContent.TileType<CatacombBoulder>() || Main.tile[i, j].HasActuator)
+					{
+						return false;
+					}
+				}
+			}
+
+            //left side
+			if (Side == -1)
+			{
+                if (Main.tile[X + 8, Y].HasTile)
+                {
+                    return false;
+                }
+
+				for (int i = X - 3; i <= X; i++)
+				{
+					for (int j = Y - 3; j <= Y + 2; j++)
+					{
+						if (!WorldGen.SolidTile(i, j))
+						{
+							return false;
+						}
+					}
+				}
+
+				for (int j = Y - 1; j <= Y + 3; j++)
+				{
+					if (Main.tile[X + 1, j].HasTile)
+					{
+						return false;
+					}
+				}
+			}
+            //right side
+			else if (Side == 1)
+			{
+                if (Main.tile[X - 8, Y].HasTile)
+                {
+                    return false;
+                }
+
+				for (int i = X; i <= X + 3; i++)
+				{
+					for (int j = Y - 3; j <= Y + 2; j++)
+					{
+						if (!WorldGen.SolidTile(i, j))
+						{
+							return false;
+						}
+					}
+				}
+
+				for (int j = Y - 1; j <= Y + 3; j++)
+				{
+					if (Main.tile[X - 1, j].HasTile)
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+
+		//wireline but modified to place yellow wire as to not intefere with other traps in the catacombs
+		public static void WireLine(Point start, Point end)
+		{
+			Point point = start;
+			Point point2 = end;
+			if (end.X < start.X)
+			{
+				Utils.Swap(ref end.X, ref start.X);
+			}
+			if (end.Y < start.Y)
+			{
+				Utils.Swap(ref end.Y, ref start.Y);
+			}
+			for (int i = start.X; i <= end.X; i++)
+			{
+				WorldGen.PlaceWire4(i, point.Y);
+			}
+			for (int j = start.Y; j <= end.Y; j++)
+			{
+				WorldGen.PlaceWire4(point2.X, j);
+			}
+		}
+
+		//determine if theres no jungle blocks nearby so the biome doesnt place in the jungle biome
+		public static bool NoJungleNearby(int X, int Y)
         {
             for (int i = X - 50; i < X + 50; i++)
             {

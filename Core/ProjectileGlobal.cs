@@ -245,9 +245,18 @@ namespace Spooky.Core
 								MangroveTree.Grow(i, j + 1, 5, 13, true, FrameToUse);
 							}
 
+							if (tile.TileType == ModContent.TileType<SporeShroomTreeSapling>())
+							{
+								SporeShroomTree.Grow(i, j + 1, 3, 15, true);
+							}
+
+							if (tile.TileType == ModContent.TileType<WaxcapTreeSapling>())
+							{
+								WaxcapTree.Grow(i, j + 1, 3, 15, true);
+							}
+
 							if (tile.TileType == ModContent.TileType<SpookySapling>() || tile.TileType == ModContent.TileType<SpookySaplingGreen>() ||
-							tile.TileType == ModContent.TileType<GrottoTreeSapling>() || tile.TileType == ModContent.TileType<SporeShroomTreeSapling>() ||
-							tile.TileType == ModContent.TileType<CemeterySapling>())
+							tile.TileType == ModContent.TileType<GrottoTreeSapling>() || tile.TileType == ModContent.TileType<CemeterySapling>())
 							{
 								bool isPlayerNear = WorldGen.PlayerLOS(i, j);
 								bool success = WorldGen.GrowTree(i, j);

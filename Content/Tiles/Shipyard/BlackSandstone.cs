@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 
 using Spooky.Core;
 using Spooky.Content.Tiles.Shipyard.Ambient;
+using Spooky.Content.Tiles.Shipyard.Furniture;
 
 namespace Spooky.Content.Tiles.Shipyard
 {
@@ -31,6 +32,12 @@ namespace Spooky.Content.Tiles.Shipyard
 
             if (!Above.HasTile && !Tile.BottomSlope && !Tile.TopSlope && !Tile.IsHalfBlock) 
             {
+				//conch shell
+				if (Main.rand.NextBool(15))
+                {
+					TileGlobal.PlaceObject(i, j - 1, (ushort)ModContent.TileType<QueenShell>(), true, Main.rand.Next(0, 2));
+				}
+
 				//grow bleached corals
                 if (Main.rand.NextBool(6) && Above.LiquidAmount > 0 && Above.LiquidType == LiquidID.Water)
                 {

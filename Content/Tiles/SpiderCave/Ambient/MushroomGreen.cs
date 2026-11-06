@@ -40,19 +40,19 @@ namespace Spooky.Content.Tiles.SpiderCave.Ambient
 		{
 			float divide = 450f;
 
-			r = 165f / divide;
-			g = 206f / divide;
-			b = 125f / divide;
+			r = 128f / divide;
+			g = 185f / divide;
+			b = 100f / divide;
         }
 
 		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {
-            GlowTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/SpiderCave/Ambient/MushroomGreenGlow");
+            GlowTexture ??= ModContent.Request<Texture2D>(Texture + "Glow");
 
             Tile tile = Framing.GetTileSafely(i, j);
             Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange);
             int yOffset = TileObjectData.GetTileData(tile).DrawYOffset;
-            spriteBatch.Draw(GlowTexture.Value, new Vector2(i * 16, j * 16 + yOffset) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Color.White * 0.1f);
+            spriteBatch.Draw(GlowTexture.Value, new Vector2(i * 16, j * 16 + yOffset) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Color.White * 0.5f);
         }
 
 		public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
@@ -60,58 +60,7 @@ namespace Spooky.Content.Tiles.SpiderCave.Ambient
 			if (Flags.SporeEventHappening && Main.rand.NextBool(75) && !Main.tile[i, j - 1].HasTile && !Main.gamePaused && Main.instance.IsActive)
 			{
 				int newDust = Dust.NewDust(new Vector2((i) * 16, (j + 1) * 16), 1, 1, ModContent.DustType<MushroomSpore>());
-				Main.dust[newDust].color = new Color(38, 255, 30);
-			}
-		}
-	}
-
-	public class MushroomPurple : ModTile
-	{
-		private Asset<Texture2D> GlowTexture;
-
-        public override void SetStaticDefaults()
-		{
-			Main.tileFrameImportant[Type] = true;
-			Main.tileNoAttach[Type] = true;
-			Main.tileLighted[Type] = true;
-			TileID.Sets.BreakableWhenPlacing[Type] = true;
-			TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
-			TileObjectData.newTile.Height = 3;
-			TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };
-			TileObjectData.newTile.Origin = new Point16(1, 2);
-			TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile | AnchorType.SolidWithTop | AnchorType.SolidSide, TileObjectData.newTile.Width, 0);
-			TileObjectData.newTile.DrawYOffset = 2;
-			TileObjectData.addTile(Type);
-			AddMapEntry(new Color(128, 81, 183));
-			DustType = 288;
-            HitSound = SoundID.Dig;
-		}
-
-		public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
-		{
-			float divide = 450f;
-
-			r = 173f / divide;
-			g = 139f / divide;
-			b = 215f / divide;
-        }
-
-		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-        {
-            GlowTexture ??= ModContent.Request<Texture2D>("Spooky/Content/Tiles/SpiderCave/Ambient/MushroomPurpleGlow");
-
-            Tile tile = Framing.GetTileSafely(i, j);
-            Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange);
-            int yOffset = TileObjectData.GetTileData(tile).DrawYOffset;
-            spriteBatch.Draw(GlowTexture.Value, new Vector2(i * 16, j * 16 + yOffset) - Main.screenPosition + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), Color.White * 0.1f);
-        }
-
-		public override void DrawEffects(int i, int j, SpriteBatch spriteBatch, ref TileDrawInfo drawData)
-		{
-			if (Flags.SporeEventHappening && Main.rand.NextBool(75) && !Main.tile[i, j - 1].HasTile && !Main.gamePaused && Main.instance.IsActive)
-			{
-				int newDust = Dust.NewDust(new Vector2((i) * 16, (j + 1) * 16), 1, 1, ModContent.DustType<MushroomSpore>());
-				Main.dust[newDust].color = new Color(201, 0, 255);
+				Main.dust[newDust].color = new Color(128, 185, 100);
 			}
 		}
 	}

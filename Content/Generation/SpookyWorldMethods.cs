@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Linq;
 
+using Spooky.Content.Tiles.Catacomb;
 using Spooky.Content.Tiles.Shipyard;
 using Spooky.Content.Tiles.SpiderCave;
 using Spooky.Content.Tiles.SpookyBiome;
@@ -26,7 +27,8 @@ namespace Spooky.Content.Generation
 		private int SpookyModWallCleanupPrevention(On_WorldGen.orig_FillWallHolesInColumn orig, int x, int startY, int endY)
 		{
 			int[] InvalidWalls = { ModContent.WallType<BirchWoodWall>(), ModContent.WallType<SpookyWoodWall>(),
-			ModContent.WallType<RotWoodWall>(), ModContent.WallType<BlackSandstoneSlabWall>(), ModContent.WallType<EyeBlockBrickWall>() };
+			ModContent.WallType<RotWoodWall>(), ModContent.WallType<BlackSandstoneSlabWall>(), ModContent.WallType<EyeBlockBrickWall>(),
+			ModContent.WallType<CatacombBrickWall1Safe>() };
 
 			int NewX = Utils.Clamp(x, 2, Main.maxTilesX - 1 - 2);
 			int NewStartY = Math.Max(startY, 2);
@@ -82,7 +84,7 @@ namespace Spooky.Content.Generation
 						int PositionX = X + x;
 						int PositionY = Y + (int)(y * scale);
 
-						if (WorldGen.InWorld(PositionX, PositionY, 10))
+						if (WorldGen.InWorld(PositionX, PositionY))
 						{
 							Tile tile = Framing.GetTileSafely(PositionX, PositionY);
 							Tile left = Framing.GetTileSafely(PositionX - 1, PositionY);
@@ -94,32 +96,52 @@ namespace Spooky.Content.Generation
 							Tile bottomLeft = Framing.GetTileSafely(PositionX - 1, PositionY + 1);
 							Tile bottomRight = Framing.GetTileSafely(PositionX + 1, PositionY + 1);
 
-							if (ReplaceExistingTilesOnly)
+							if (!Main.tileDungeon[tile.TileType] && !Main.wallDungeon[tile.WallType])
 							{
-								if (WorldGen.SolidOrSlopedTile(PositionX, PositionY))
+								if (ReplaceExistingTilesOnly)
 								{
-									if (SpreadOnSpecificTiles)
+									if (WorldGen.SolidOrSlopedTile(PositionX, PositionY))
 									{
-										if (!left.HasTile || !right.HasTile || !up.HasTile || !down.HasTile || !topLeft.HasTile || !topRight.HasTile || !bottomLeft.HasTile || !bottomRight.HasTile)
+										if (SpreadOnSpecificTiles)
 										{
-											if (TypeToSpreadOn.Contains(tile.TileType))
+											if (!left.HasTile || !right.HasTile || !up.HasTile || !down.HasTile || !topLeft.HasTile || !topRight.HasTile || !bottomLeft.HasTile || !bottomRight.HasTile)
+											{
+												if (TypeToSpreadOn.Contains(tile.TileType))
+												{
+													tile.TileType = (ushort)tileType;
+												}
+											}
+										}
+										else
+										{
+											if (tileType > -1)
 											{
 												tile.TileType = (ushort)tileType;
 											}
 										}
 									}
-									else
+
+									if (wallType > 0 && tile.WallType != WallID.None)
 									{
-										if (tileType > -1)
+										tile.WallType = (ushort)wallType;
+
+										if (RemoveLiquid)
 										{
-											tile.TileType = (ushort)tileType;
+											tile.LiquidAmount = 0;
+										}
+										if (PlaceLiquid)
+										{
+											tile.LiquidType = LiquidID.Water;
+											tile.LiquidAmount = 255;
 										}
 									}
 								}
-
-								if (wallType > 0 && tile.WallType != WallID.None)
+								else
 								{
-									tile.WallType = (ushort)wallType;
+									if (DestroyTiles)
+									{
+										tile.ClearEverything();
+									}
 
 									if (RemoveLiquid)
 									{
@@ -130,41 +152,24 @@ namespace Spooky.Content.Generation
 										tile.LiquidType = LiquidID.Water;
 										tile.LiquidAmount = 255;
 									}
+
+									if (tileType > -1)
+									{
+										tile.HasTile = true;
+										tile.TileType = (ushort)tileType;
+									}
+
+									if (wallType > 0)
+									{
+										tile.WallType = (ushort)wallType;
+									}
 								}
+
+								//if (Math.Sqrt(x * x + y * y) >= radius - radialMod)
+								//{
+								//}
 							}
-							else
-							{
-								if (DestroyTiles)
-								{
-									tile.ClearEverything();
-								}
-
-								if (RemoveLiquid)
-								{
-									tile.LiquidAmount = 0;
-								}
-								if (PlaceLiquid)
-								{
-									tile.LiquidType = LiquidID.Water;
-									tile.LiquidAmount = 255;
-								}
-
-								if (tileType > -1)
-								{
-									tile.HasTile = true;
-									tile.TileType = (ushort)tileType;
-								}
-
-								if (wallType > 0)
-								{
-									tile.WallType = (ushort)wallType;
-								}
-							}
-
-							//if (Math.Sqrt(x * x + y * y) >= radius - radialMod)
-							//{
-							//}
-						}
+						}	
 					}
 				}
 			}

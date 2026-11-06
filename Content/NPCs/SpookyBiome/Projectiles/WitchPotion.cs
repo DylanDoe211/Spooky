@@ -3,6 +3,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 using Microsoft.Xna.Framework;
+using System;
+
+using Spooky.Content.NPCs.EggEvent.Projectiles;
 
 namespace Spooky.Content.NPCs.SpookyBiome.Projectiles
 {
@@ -12,6 +15,7 @@ namespace Spooky.Content.NPCs.SpookyBiome.Projectiles
         {
             Projectile.width = 18;
             Projectile.height = 26;
+            Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.tileCollide = true;
 			Projectile.ignoreWater = false;
@@ -21,7 +25,7 @@ namespace Spooky.Content.NPCs.SpookyBiome.Projectiles
 
         public override void AI()
         {
-			Projectile.rotation += Projectile.velocity.X * 0.08f;
+			Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.02f * (float)Projectile.direction;
 
             Projectile.ai[0]++;
             if (Projectile.ai[0] >= 20)
@@ -34,14 +38,18 @@ namespace Spooky.Content.NPCs.SpookyBiome.Projectiles
 		{
             SoundEngine.PlaySound(SoundID.Shatter, Projectile.Center);
 
-            for (int numProjectile = 0; numProjectile < 3; numProjectile++)
+            //spawn splatter
+            for (int i = 0; i < 6; i++)
+            {
+                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(Main.rand.Next(-4, 5), Main.rand.Next(-4, -1)), ModContent.ProjectileType<GreenSplatter>(), 0, 0f);
+            }
+
+            for (int numProjectile = 0; numProjectile <= 5; numProjectile++)
             {
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    int FlaskCloud = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center.X, Projectile.Center.Y, Main.rand.Next(-2, 3), 
-                    Main.rand.Next(-3, 4), ProjectileID.ToxicCloud2, Projectile.damage, 0f, Main.myPlayer);
-                    Main.projectile[FlaskCloud].friendly = false;
-                    Main.projectile[FlaskCloud].hostile = true;
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, new Vector2(Main.rand.Next(-2, 3), Main.rand.Next(-3, 4)), 
+                    ModContent.ProjectileType<WitchPotionMist>(), Projectile.damage, 0f, Main.myPlayer);
                 }
             }
 

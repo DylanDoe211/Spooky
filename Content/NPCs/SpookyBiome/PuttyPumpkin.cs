@@ -9,6 +9,8 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
+using Spooky.Content.Items.SpookyBiome;
+
 namespace Spooky.Content.NPCs.SpookyBiome
 {
 	public class PuttyPumpkin : ModNPC
@@ -56,6 +58,7 @@ namespace Spooky.Content.NPCs.SpookyBiome
 		public override void ModifyNPCLoot(NPCLoot npcLoot) 
         {
             npcLoot.Add(ItemDropRule.Common(ItemID.Gel, 1, 1, 3));
+			npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<PumpkinPuttyStick>(), 15));
         }
 
 		public override void HitEffect(NPC.HitInfo hit) 

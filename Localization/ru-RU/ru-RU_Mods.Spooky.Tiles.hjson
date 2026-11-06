@@ -164,11 +164,9 @@ TubeWorm.MapEntry: Трубчатый червь
 LabSafe.MapEntry: Ржавый сейф
 EyeTreeShort.MapEntry: Глазной стебель
 LittleSpiderJar.MapEntry: Банка с паучком
-GrottoTree1.MapEntry: Дерево грота
-GrottoTree2.MapEntry: Дерево грота
-GrottoTree3.MapEntry: Дерево грота
 GrottoTreeSapling.MapEntry: Саженец
 SporeShroomTreeSapling.MapEntry: Саженец
+// SporeShroomTree.MapEntry: Giant Spore Shroom
 BirchChest.MapEntry: Старый берёзовый сундук
 BroccoliSapling.MapEntry: Саженец брокколи
 TubeWormSapling.MapEntry: Полип трубчатого червя
@@ -180,3 +178,5 @@ TarCactusChest.MapEntry: Сундук из битумного кактуса
 // GiantPirateChest.MapEntry: Pirate's Treasure
 // RotWoodChest.MapEntry: Rotted Wood Chest
 // ShipyardPylon.MapEntry: Shipyard Pylon
+// WaxcapTreeSapling.MapEntry: Waxcap Sapling
+// WaxcapTree.MapEntry: Giant Waxcap

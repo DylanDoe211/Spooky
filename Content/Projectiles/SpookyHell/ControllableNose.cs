@@ -96,7 +96,8 @@ namespace Spooky.Content.Projectiles.SpookyHell
                 Projectile.Center = new Vector2(player.Center.X, player.Center.Y - 60);
 
                 Projectile.ai[2]++;
-                if (Projectile.ai[2] >= ItemGlobal.ActiveItem(player).useTime && player.CheckMana(ItemGlobal.ActiveItem(player), ItemGlobal.ActiveItem(player).mana, false, false))
+                if (Projectile.ai[2] >= (ItemGlobal.ActiveItem(player).useTime / player.GetTotalAttackSpeed(DamageClass.Magic)) && 
+                player.CheckMana(ItemGlobal.ActiveItem(player), ItemGlobal.ActiveItem(player).mana, false, false))
                 {
                     SoundEngine.PlaySound(SoundID.Item171, Projectile.Center);
 

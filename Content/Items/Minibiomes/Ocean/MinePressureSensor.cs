@@ -6,6 +6,11 @@ namespace Spooky.Content.Items.Minibiomes.Ocean
 {
 	public class MinePressureSensor : ModItem
 	{
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<MineTimer>();
+        }
+
 		public override void SetDefaults()
         {
             Item.width = 30;

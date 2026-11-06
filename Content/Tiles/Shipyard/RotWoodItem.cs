@@ -3,6 +3,8 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent.Creative;
 
+using Spooky.Content.Tiles.Shipyard.Furniture;
+
 namespace Spooky.Content.Tiles.Shipyard
 {
     public class RotWoodItem : ModItem
@@ -23,6 +25,11 @@ namespace Spooky.Content.Tiles.Shipyard
         {
             CreateRecipe()
             .AddIngredient(ModContent.ItemType<RotWoodWallItem>(), 4)
+            .AddTile(TileID.WorkBenches)
+            .Register();
+
+            CreateRecipe()
+            .AddIngredient(ModContent.ItemType<RotWoodPlatformItem>(), 2)
             .AddTile(TileID.WorkBenches)
             .Register();
         }

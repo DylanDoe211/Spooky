@@ -217,56 +217,56 @@ namespace Spooky.Core
 							case 1:
 							{
 								SpiderWarMaxPoints = 1;
-								Main.NewText(Language.GetTextValue("Mods.Spooky.EventsAndBosses.SpiderWarWave") + " " + SpiderWarWave + ": " + 
+								Main.NewText(Language.GetTextValue("Mods.Spooky.UI.SpiderWar.SpiderWarWave") + " " + SpiderWarWave + ": " + 
 								Language.GetTextValue("Mods.Spooky.NPCs.OgreKing.DisplayName"), TextColor);
 								break;
 							}
 							case 2:
 							{
 								SpiderWarMaxPoints = 1;
-								Main.NewText(Language.GetTextValue("Mods.Spooky.EventsAndBosses.SpiderWarWave") + " " + SpiderWarWave + ": " + 
+								Main.NewText(Language.GetTextValue("Mods.Spooky.UI.SpiderWar.SpiderWarWave") + " " + SpiderWarWave + ": " + 
 								Language.GetTextValue("Mods.Spooky.NPCs.EmperorMortar.DisplayName"), TextColor);
 								break;
 							}
 							case 3:
 							{
 								SpiderWarMaxPoints = 1;
-								Main.NewText(Language.GetTextValue("Mods.Spooky.EventsAndBosses.SpiderWarWave") + " " + SpiderWarWave + ": " + 
+								Main.NewText(Language.GetTextValue("Mods.Spooky.UI.SpiderWar.SpiderWarWave") + " " + SpiderWarWave + ": " + 
 								Language.GetTextValue("Mods.Spooky.NPCs.CorklidQueen.DisplayName"), TextColor);
 								break;
 							}
 							case 4:
 							{
 								SpiderWarMaxPoints = 2;
-								Main.NewText(Language.GetTextValue("Mods.Spooky.EventsAndBosses.SpiderWarWave") + " " + SpiderWarWave + ": " + 
+								Main.NewText(Language.GetTextValue("Mods.Spooky.UI.SpiderWar.SpiderWarWave") + " " + SpiderWarWave + ": " + 
 								Language.GetTextValue("Mods.Spooky.NPCs.OgreKing.DisplayName") + ", " + Language.GetTextValue("Mods.Spooky.NPCs.EmperorMortar.DisplayName"), TextColor);
 								break;
 							}
 							case 5:
 							{
 								SpiderWarMaxPoints = 2;
-								Main.NewText(Language.GetTextValue("Mods.Spooky.EventsAndBosses.SpiderWarWave") + " " + SpiderWarWave + ": " + 
+								Main.NewText(Language.GetTextValue("Mods.Spooky.UI.SpiderWar.SpiderWarWave") + " " + SpiderWarWave + ": " + 
 								Language.GetTextValue("Mods.Spooky.NPCs.CamelColonel.DisplayName"), TextColor);
 								break;
 							}
 							case 6:
 							{
 								SpiderWarMaxPoints = 2;
-								Main.NewText(Language.GetTextValue("Mods.Spooky.EventsAndBosses.SpiderWarWave") + " " + SpiderWarWave + ": " + 
+								Main.NewText(Language.GetTextValue("Mods.Spooky.UI.SpiderWar.SpiderWarWave") + " " + SpiderWarWave + ": " + 
 								Language.GetTextValue("Mods.Spooky.NPCs.EmpressJoro.DisplayName"), TextColor);
 								break;
 							}
 							case 7:
 							{
 								SpiderWarMaxPoints = 3;
-								Main.NewText(Language.GetTextValue("Mods.Spooky.EventsAndBosses.SpiderWarWave") + " " + SpiderWarWave + ": " + 
+								Main.NewText(Language.GetTextValue("Mods.Spooky.UI.SpiderWar.SpiderWarWave") + " " + SpiderWarWave + ": " + 
 								Language.GetTextValue("Mods.Spooky.NPCs.CamelColonel.DisplayName") + ", " + Language.GetTextValue("Mods.Spooky.NPCs.EmpressJoro.DisplayName"), TextColor);
 								break;
 							}
 							case 8:
 							{
 								SpiderWarMaxPoints = 5;
-								Main.NewText(Language.GetTextValue("Mods.Spooky.EventsAndBosses.SpiderWarWave") + " " + SpiderWarWave + ": " + 
+								Main.NewText(Language.GetTextValue("Mods.Spooky.UI.SpiderWar.SpiderWarWave") + " " + SpiderWarWave + ": " + 
 								Language.GetTextValue("Mods.Spooky.NPCs.OgreKing.DisplayName") + ", " + Language.GetTextValue("Mods.Spooky.NPCs.EmperorMortar.DisplayName") + ", " +
 								Language.GetTextValue("Mods.Spooky.NPCs.CamelColonel.DisplayName"), TextColor);
 								break;
@@ -274,7 +274,7 @@ namespace Spooky.Core
 							case 9:
 							{
 								SpiderWarMaxPoints = 5;
-								Main.NewText(Language.GetTextValue("Mods.Spooky.EventsAndBosses.SpiderWarWave") + " " + SpiderWarWave + ": " + 
+								Main.NewText(Language.GetTextValue("Mods.Spooky.UI.SpiderWar.SpiderWarWave") + " " + SpiderWarWave + ": " + 
 								Language.GetTextValue("Mods.Spooky.NPCs.EmperorMortar.DisplayName") + ", " + Language.GetTextValue("Mods.Spooky.NPCs.CorklidQueen.DisplayName") + ", " +
 								Language.GetTextValue("Mods.Spooky.NPCs.EmpressJoro.DisplayName"), TextColor);
 								break;
@@ -282,7 +282,7 @@ namespace Spooky.Core
 							case 10:
 							{
 								SpiderWarMaxPoints = int.MaxValue;
-								Main.NewText(Language.GetTextValue("Mods.Spooky.EventsAndBosses.SpiderWarFinalWave") + ": " + 
+								Main.NewText(Language.GetTextValue("Mods.Spooky.UI.SpiderWar.SpiderWarFinalWave") + ": " + 
 								Language.GetTextValue("Mods.Spooky.NPCs.OgreKing.DisplayName") + ", " + Language.GetTextValue("Mods.Spooky.NPCs.EmperorMortar.DisplayName") + ", " +
 								Language.GetTextValue("Mods.Spooky.NPCs.CorklidQueen.DisplayName") + ", " + Language.GetTextValue("Mods.Spooky.NPCs.CamelColonel.DisplayName") + ", " +
 								Language.GetTextValue("Mods.Spooky.NPCs.EmpressJoro.DisplayName"), TextColor);
