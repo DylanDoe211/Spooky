@@ -513,7 +513,7 @@ namespace Spooky.Content.Generation
                             //place mounds of web blocks on the floor
                             if (WorldGen.genRand.NextBool(45) && Main.tile[X, Y].TileType == ModContent.TileType<DampGrass>() && !Main.tile[X, Y - 1].HasTile)
                             {
-                                SpookyWorldMethods.PlaceMound(X, Y + 1, ModContent.TileType<WebBlock>(), WorldGen.genRand.Next(3, 6), WorldGen.genRand.Next(3, 6), false);
+                                SpookyWorldMethods.PlaceMound(X, Y + 1, ModContent.TileType<WebBlock>(), 0, WorldGen.genRand.Next(3, 6), WorldGen.genRand.Next(3, 6));
                             }
 
                             //place smaller chunks of web blocks on the ceiling
@@ -1055,10 +1055,6 @@ namespace Spooky.Content.Generation
                         {
                             WorldGen.PlaceTile(PositionX, PositionY, ModContent.TileType<DampStone>());
                             Main.tile[PositionX, PositionY].TileType = (ushort)ModContent.TileType<DampStone>();
-                        }
-                        else
-                        {
-
                         }
 
 						if (Math.Sqrt(x * x + y * y) < radius - radialMod)

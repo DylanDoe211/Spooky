@@ -1,9 +1,10 @@
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.GameContent.Generation;
 using Terraria.WorldBuilding;
+using Terraria.GameContent.Generation;
 using ReLogic.Utilities;
 using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 
 namespace Spooky.Content.Generation
@@ -13,17 +14,11 @@ namespace Spooky.Content.Generation
 		public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
 		{
 			//re-locate the jungle temple so it doesnt get generated over by the catacombs
+			//almost all of this is copied from vanilla jungle temple generation, but its modified to clamp the X-value so it doesnt generate too close to where the catacombs is
+			//sorry im too lazy to change all the decompiler variable names
 			int JungleTempleIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Jungle Temple"));
 			tasks[JungleTempleIndex] = new PassLegacy("Jungle Temple", (progress, config) =>
 			{
-				int MinimumY = (int)Main.rockLayer;
-				int MaximumY = Main.maxTilesY - 500;
-				if (MinimumY > MaximumY - 1)
-				{
-					MinimumY = MaximumY - 1;
-				}
-				int newTempleY = WorldGen.genRand.Next(MinimumY, MaximumY);
-
 				//middle of the where the cemetery/catacombs is
 				int XMiddle = Catacombs.PositionX;
 
@@ -34,20 +29,112 @@ namespace Spooky.Content.Generation
 				//keep moving towards the center of the world until a valid position in the jungle is found
 				while (!foundValidPosition && attempts++ < 100000)
 				{
-					while (Catacombs.NoJungleNearby(XMiddle, newTempleY))
+					while (Catacombs.NoJungleNearby(XMiddle, (int)Main.rockLayer))
 					{
 						XMiddle += (XMiddle > (Main.maxTilesX / 2) ? -100 : 100);
 					}
-					if (!Catacombs.NoJungleNearby(XMiddle, newTempleY))
+					if (!Catacombs.NoJungleNearby(XMiddle, (int)Main.rockLayer))
 					{
 						foundValidPosition = true;
 					}
 				}
 
-				//define the x-position and then place the temple after finding a valid position
-				int newTempleX = XMiddle < (Main.maxTilesX / 2) ? XMiddle + 550 : XMiddle - 550;
+				int num648 = 0;
+				long num649 = 0L;
+				double num650 = 0.25;
+				bool flag38 = false;
+				while (true)
+				{
+					int num651 = (int)Main.rockLayer;
+					int num652 = Main.maxTilesY - 500;
+					if (num651 > num652 - 1)
+					{
+						num651 = num652 - 1;
+					}
+					int num653 = WorldGen.genRand.Next(num651, num652);
+					int num654 = (int)(((WorldGen.genRand.NextDouble() * num650 + 0.1) * (double)(-GenVars.dungeonSide) + 0.5) * (double)Main.maxTilesX);
+					if (WorldGen.remixWorldGen)
+					{
+						if (WorldGen.notTheBees)
+						{
+							num654 = ((GenVars.dungeonSide <= 0) ? WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.6), (int)((double)Main.maxTilesX * 0.8)) : WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.2), (int)((double)Main.maxTilesX * 0.4)));
+						}
+						else
+						{
+							num654 = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.2), (int)((double)Main.maxTilesX * 0.8));
+							while ((double)num654 > (double)Main.maxTilesX * 0.4 && (double)num654 < (double)Main.maxTilesX * 0.6)
+							{
+								num654 = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.2), (int)((double)Main.maxTilesX * 0.8));
+							}
+						}
+						while (Main.tile[num654, num653].HasTile || Main.tile[num654, num653].WallType > 0 || (double)num653 > Main.worldSurface - 5.0)
+						{
+							num653--;
+						}
+						num653++;
+						if (Main.tile[num654, num653].HasTile && (Main.tile[num654, num653].TileType == 60 || Main.tile[num654, num653].TileType == 59))
+						{
+							int num655 = 10;
+							bool flag39 = false;
+							for (int num656 = num654 - num655; num656 <= num656 + num655; num656++)
+							{
+								for (int num657 = num653 - num655; num657 < num655; num657++)
+								{
+									if (Main.tile[num656, num657].TileType == 191 || Main.tileDungeon[Main.tile[num656, num657].TileType])
+									{
+										flag39 = true;
+									}
+								}
+							}
+							if (!flag39)
+							{
+								flag38 = true;
+								num653 -= 10 + WorldGen.genRand.Next(10);
+								int Start = XMiddle < (Main.maxTilesX / 2) ? XMiddle + 550 : 0;
+								int End = XMiddle < (Main.maxTilesX / 2) ? Main.maxTilesX : XMiddle - 550;
+								int newTempleX = (int)MathHelper.Clamp(num654, Start, End);
+								WorldGen.makeTemple(newTempleX, num653);
+								break;
+							}
+						}
+					}
+					else if (Main.tile[num654, num653].HasTile && Main.tile[num654, num653].TileType == 60)
+					{
+						flag38 = true;
+						int Start = XMiddle < (Main.maxTilesX / 2) ? XMiddle + 550 : 0;
+						int End = XMiddle < (Main.maxTilesX / 2) ? Main.maxTilesX : XMiddle - 550;
+						int newTempleX = (int)MathHelper.Clamp(num654, Start, End);
+						WorldGen.makeTemple(newTempleX, num653);
+						break;
+					}
+					if (num649++ > 2000000)
+					{
+						if (num650 == 0.35)
+						{
+							num648++;
+							if (num648 > 10)
+							{
+								break;
+							}
+						}
+						num650 = Math.Min(0.35, num650 + 0.05);
+						num649 = 0L;
+					}
+				}
+				if (!flag38)
+				{
+					int x14 = Main.maxTilesX - GenVars.dungeonX;
+					int y14 = (int)Main.rockLayer + 100;
+					if (WorldGen.remixWorldGen)
+					{
+						x14 = ((!WorldGen.notTheBees) ? ((GenVars.dungeonSide > 0) ? ((int)((double)Main.maxTilesX * 0.4)) : ((int)((double)Main.maxTilesX * 0.6))) : ((GenVars.dungeonSide > 0) ? ((int)((double)Main.maxTilesX * 0.3)) : ((int)((double)Main.maxTilesX * 0.7))));
+					}
 
-				WorldGen.makeTemple(newTempleX, newTempleY);
+					int Start = XMiddle < (Main.maxTilesX / 2) ? XMiddle + 550 : 0;
+					int End = XMiddle < (Main.maxTilesX / 2) ? Main.maxTilesX : XMiddle - 550;
+					int newTempleX = (int)MathHelper.Clamp(x14, Start, End);
+					WorldGen.makeTemple(newTempleX, y14);
+				}
 			});
 
 			//re-locate the shimmer to be closer to the edge of the world so it also never gets generated over by the catacombs or rotten depths when necessary

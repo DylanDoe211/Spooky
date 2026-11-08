@@ -30,7 +30,6 @@ namespace Spooky.Content.Tiles.Shipyard
 
             CreateRecipe()
             .AddIngredient(ModContent.ItemType<RotWoodPlatformItem>(), 2)
-            .AddTile(TileID.WorkBenches)
             .Register();
         }
     }

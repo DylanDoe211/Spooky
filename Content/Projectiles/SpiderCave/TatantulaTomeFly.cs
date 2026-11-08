@@ -73,63 +73,13 @@ namespace Spooky.Content.Projectiles.SpiderCave
 
                 if (Projectile.owner == Main.myPlayer)
                 {
-                    float goToX = Main.MouseWorld.X - Projectile.Center.X + Main.rand.Next(-200, 200);
-                    float goToY = Main.MouseWorld.Y - Projectile.Center.Y + Main.rand.Next(-200, 200);
+                    float goToX = Main.MouseWorld.X + Main.rand.Next(-200, 200);
+                    float goToY = Main.MouseWorld.Y + Main.rand.Next(-200, 200);
 
-                    float speed = 0.15f;
+                    Vector2 GoTo = new Vector2(goToX, goToY);
 
-                    if (Vector2.Distance(Projectile.Center, Main.MouseWorld) >= 140)
-                    {
-                        speed = 0.5f;
-                    }
-                    else
-                    {
-                        speed = 0.3f;
-                    }
-
-                    if (Projectile.velocity.X > speed || Projectile.velocity.X < -speed)
-                    {
-                        Projectile.velocity.X *= 0.98f;
-                    }
-                    if (Projectile.velocity.Y > speed || Projectile.velocity.Y < -speed)
-                    {
-                        Projectile.velocity.Y *= 0.98f;
-                    }
-
-                    if (Projectile.velocity.X < goToX)
-                    {
-                        Projectile.velocity.X = Projectile.velocity.X + speed;
-                        if (Projectile.velocity.X < 0f && goToX > 0f)
-                        {
-                            Projectile.velocity.X = Projectile.velocity.X + speed;
-                        }
-                    }
-                    else if (Projectile.velocity.X > goToX)
-                    {
-                        Projectile.velocity.X = Projectile.velocity.X - speed;
-                        if (Projectile.velocity.X > 0f && goToX < 0f)
-                        {
-                            Projectile.velocity.X = Projectile.velocity.X - speed;
-                        }
-                    }
-                    if (Projectile.velocity.Y < goToY)
-                    {
-                        Projectile.velocity.Y = Projectile.velocity.Y + speed;
-                        if (Projectile.velocity.Y < 0f && goToY > 0f)
-                        {
-                            Projectile.velocity.Y = Projectile.velocity.Y + speed;
-                            return;
-                        }
-                    }
-                    else if (Projectile.velocity.Y > goToY)
-                    {
-                        Projectile.velocity.Y = Projectile.velocity.Y - speed;
-                        if (Projectile.velocity.Y > 0f && goToY < 0f)
-                        {
-                            Projectile.velocity.Y = Projectile.velocity.Y - speed;
-                            return;
-                        }
-                    }
+                    float vel = MathHelper.Clamp(Projectile.Distance(GoTo) / 12, 0, 12);
+                    Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(GoTo) * vel, 0.08f);
                 }
 
                 //prevent projectiles clumping together

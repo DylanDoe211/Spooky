@@ -99,7 +99,7 @@ namespace Spooky.Content.Projectiles.Pets
             
             Projectile.spriteDirection = -player.direction;
             
-            Lighting.AddLight(Projectile.Center, 1f, 1f, 1f);
+            Lighting.AddLight(Projectile.Center + new Vector2(0, 45), 1f, 1f, 1f);
             
             if (Projectile.Distance(player.Center) >= 1000f)
             {

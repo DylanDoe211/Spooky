@@ -1,16 +1,16 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.WorldBuilding;
-using Microsoft.Xna.Framework;
-using System;
-using System.Linq;
-
+﻿using Microsoft.Xna.Framework;
 using Spooky.Content.Tiles.Catacomb;
 using Spooky.Content.Tiles.Shipyard;
 using Spooky.Content.Tiles.SpiderCave;
 using Spooky.Content.Tiles.SpookyBiome;
 using Spooky.Content.Tiles.SpookyHell;
+using System;
+using System.Linq;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.WorldBuilding;
+using static Terraria.GameContent.Animations.IL_Actions.Sprites;
 
 namespace Spooky.Content.Generation
 {
@@ -44,7 +44,7 @@ namespace Spooky.Content.Generation
 			return orig(x, startY, endY);
 		}
 
-		public static void PlaceMound(int X, int Y, int tileType, int halfWidth, int height, bool DestroyOnly)
+		public static void PlaceMound(int X, int Y, int tileType, int wallType, int halfWidth, int height, bool Destroy = false)
 		{
 			ShapeData mound = new ShapeData();
 			GenAction blotchMod = new Modifiers.Blotches(2, 0.4);
@@ -53,19 +53,83 @@ namespace Spooky.Content.Generation
 				blotchMod.Output(mound)
 			}));
 
-			if (!DestroyOnly)
+			if (Destroy)
+			{
+				WorldUtils.Gen(new Point(X, Y), new ModShapes.All(mound), Actions.Chain(new GenAction[]
+				{
+					new Actions.ClearTile(), new Actions.ClearWall()
+				}));
+			}
+
+			if (tileType != -1)
 			{
 				WorldUtils.Gen(new Point(X, Y), new ModShapes.All(mound), Actions.Chain(new GenAction[]
 				{
 					new Actions.ClearTile(), new Actions.PlaceTile((ushort)tileType)
 				}));
 			}
-			else
+			if (wallType != 0)
 			{
 				WorldUtils.Gen(new Point(X, Y), new ModShapes.All(mound), Actions.Chain(new GenAction[]
 				{
-					new Actions.ClearTile()
+					new Actions.ClearWall(), new Actions.PlaceWall((ushort)wallType)
 				}));
+			}
+		}
+
+		public static void PlaceCircle(int X, int Y, int tileType, int wallType, int radius, bool clearTiles, bool clearWalls, bool replaceOnly = false)
+		{
+			for (int y = Y - radius; y <= Y + radius; y++)
+			{
+				for (int x = X - radius; x <= X + radius; x++)
+				{
+					Tile tile = Main.tile[x, y];
+
+					if ((int)Vector2.Distance(new Vector2(x, y), new Vector2(X, Y)) <= radius)
+					{
+						if (clearTiles)
+						{
+							tile.ClearTile();
+						}
+						if (tileType > -1)
+						{
+							if (!replaceOnly)
+							{
+								tile.HasTile = true;
+								tile.TileType = (ushort)tileType;
+							}
+							else
+							{
+								if (tile.HasTile)
+								{
+									tile.HasTile = true;
+									tile.TileType = (ushort)tileType;
+								}
+							}
+						}
+					}
+					if ((int)Vector2.Distance(new Vector2(x, y), new Vector2(X, Y)) <= radius - 1)
+					{
+						if (clearWalls)
+						{
+							WorldGen.KillWall(x, y);
+						}
+						if (wallType > 0)
+						{
+							if (!replaceOnly)
+							{
+								tile.WallType = (ushort)wallType;
+							}
+							else
+							{
+								if (tile.WallType != WallID.None)
+								{
+									tile.WallType = (ushort)wallType;
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 
@@ -170,41 +234,6 @@ namespace Spooky.Content.Generation
 								//}
 							}
 						}	
-					}
-				}
-			}
-		}
-
-		public static void PlaceCircle(int X, int Y, int tileType, int wallType, int radius, bool clearTiles, bool clearWalls)
-		{
-			for (int y = Y - radius; y <= Y + radius; y++)
-			{
-				for (int x = X - radius; x <= X + radius; x++)
-				{
-					Tile tile = Main.tile[x, y];
-
-					if ((int)Vector2.Distance(new Vector2(x, y), new Vector2(X, Y)) <= radius)
-					{
-						if (clearTiles)
-						{
-							tile.ClearTile();
-						}
-						if (tileType > -1)
-						{
-							tile.HasTile = true;
-							tile.TileType = (ushort)tileType;
-						}
-					}
-					if ((int)Vector2.Distance(new Vector2(x, y), new Vector2(X, Y)) <= radius - 1)
-					{
-						if (clearWalls)
-						{
-							WorldGen.KillWall(x, y);
-						}
-						if (wallType > 0)
-						{
-							tile.WallType = (ushort)wallType;
-						}
 					}
 				}
 			}

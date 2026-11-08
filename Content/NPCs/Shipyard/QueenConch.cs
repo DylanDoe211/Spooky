@@ -128,13 +128,13 @@ namespace Spooky.Content.NPCs.Shipyard
 			switch (CurrentAnimation)
 			{
 				case AnimationState.EmergeFromShell:
-					FrameHandler(8, 4, 4);					
+					FrameHandler(8, 4, 4);
 					break;
 				case AnimationState.HideInShell:
-					FrameHandler(8, 8, 8, 5);					
+					FrameHandler(8, 8, 8, 5);
 					break;
 				case AnimationState.Idle:
-					FrameHandler(6, 3);												
+					FrameHandler(6, 3);
 					break;
 				case AnimationState.Wiggle:
 					FrameHandler(6, 9, 5);
@@ -148,7 +148,6 @@ namespace Spooky.Content.NPCs.Shipyard
 			}
 			void FrameHandler(int framerate, int cap, int setFrame = 0, int min = 0)
 			{
-				if (setFrame == -1) setFrame = cap;
 				if (NPC.frameCounter >= framerate)
 				{
 					NPC.frame.Y = NPC.frame.Y + frameHeight;
