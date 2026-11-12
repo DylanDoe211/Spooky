@@ -38,6 +38,21 @@ namespace Spooky.Content.Generation
 			int SizeX = Main.maxTilesX / 55;
 			int NumRows = Main.maxTilesY / 300;
 
+			bool foundValidPosition = false;
+            int Attempts = 0;
+
+            while (!foundValidPosition && Attempts++ < 100000)
+            {
+				while (!CanPlaceBiome(BiomeX, BiomeY, SizeX, NumRows))
+                {
+                    BiomeY -= 20;
+                }
+                if (CanPlaceBiome(BiomeX, BiomeY, SizeX, NumRows))
+                {
+                    foundValidPosition = true;
+                }
+			}
+
 			for (int i = BiomeX - SizeX; i < BiomeX + SizeX; i += 3)
 			{
 				for (int j = BiomeY; j < BiomeY + (30 * NumRows) - 10; j += 3)
@@ -241,10 +256,14 @@ namespace Spooky.Content.Generation
 				}
 			}
 
-			//ambient tiles
-			for (int i = BiomeX - SizeX - 50; i < BiomeX + SizeX + 50; i++)
+			BiomeAmbience(BiomeX, BiomeY, SizeX, NumRows);
+		}
+
+		public void BiomeAmbience(int PositionX, int PositionY, int SizeX, int SizeY)
+		{
+			for (int i = PositionX - SizeX - 50; i < PositionX + SizeX + 50; i++)
 			{
-				for (int j = BiomeY - 50; j < BiomeY + (30 * NumRows) + 50; j++)
+				for (int j = PositionY - 50; j < PositionY + (30 * SizeY) + 50; j++)
 				{
 					if (Main.tile[i, j].TileType == ModContent.TileType<DesertSand>() || Main.tile[i, j].TileType == ModContent.TileType<DesertSandstone>())
 					{
@@ -377,7 +396,7 @@ namespace Spooky.Content.Generation
 				StructureHelper.API.Generator.GenerateStructure("Content/Structures/TarPits/Mineshaft" + WorldGen.genRand.Next(1, 9) + ".shstruct", Origin2.ToPoint16(), Mod);
 
 				int ExtraFluff = Minecart ? 2 : 1;
-				for (int i = start.X - ExtraFluff; i <= end.X + ExtraFluff; i++)
+				for (int i = start.X - ExtraFluff; i <= end.X + ExtraFluff + 1; i++)
 				{
 					if (Minecart)
 					{
@@ -510,12 +529,12 @@ namespace Spooky.Content.Generation
 			return true;
 		}
 
-		public bool CanPlaceBiome(int PositionX, int PositionY, int SizeX, int SizeY)
+		public bool CanPlaceBiome(int PositionX, int PositionY, int SizeX, int NumRows)
 		{
 			int numDesertTiles = 0;
 			for (int i = PositionX - SizeX; i < PositionX + SizeX; i++)
 			{
-				for (int j = PositionY - SizeY; j < PositionY + SizeY; j++)
+				for (int j = PositionY; j < PositionY + (30 * NumRows) - 10; j++)
 				{
 					int[] ValidWalls = { WallID.Sandstone, WallID.HardenedSand };
 
@@ -523,10 +542,17 @@ namespace Spooky.Content.Generation
 					{ 
 						numDesertTiles++;
 					}
+
+					int[] InvalidTiles = { ModContent.TileType<CatacombBrick1>(), ModContent.TileType<CatacombBrick2>(), ModContent.TileType<CatacombBrick3>() };
+
+					if (WorldGen.InWorld(i, j) && Main.tile[i, j].HasTile && InvalidTiles.Contains(Main.tile[i, j].TileType))
+					{
+						return false;
+					}
 				}
 			}
 
-			int AmountOfTilesNeeded = (SizeX * SizeY) / 2;
+			int AmountOfTilesNeeded = (SizeX * (30 * NumRows)) / 2;
 
 			if (numDesertTiles >= AmountOfTilesNeeded)
 			{
