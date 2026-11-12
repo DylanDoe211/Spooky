@@ -543,7 +543,7 @@ namespace Spooky.Content.Generation
 						numDesertTiles++;
 					}
 
-					int[] InvalidTiles = { ModContent.TileType<CatacombBrick1>(), ModContent.TileType<CatacombBrick2>(), ModContent.TileType<CatacombBrick3>() };
+					int[] InvalidTiles = { ModContent.TileType<CatacombBrick1>(), ModContent.TileType<CatacombBrick2>() };
 
 					if (WorldGen.InWorld(i, j) && Main.tile[i, j].HasTile && InvalidTiles.Contains(Main.tile[i, j].TileType))
 					{
